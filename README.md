@@ -1,16 +1,18 @@
-# instrumental_qx
+# Quirofapp
 
-A new Flutter project.
+App Android (Flutter) para que las enfermeras de quirófano aprendan el instrumental quirúrgico de forma interactiva.
 
-## Getting Started
+## Funcionalidades
 
-This project is a starting point for a Flutter application.
+- **Catálogo**: instrumental organizado por categoría, con descripción, uso y tips.
+- **Flashcards**: tarjetas de repaso con nombre/uso.
+- **Quiz**: preguntas de opción múltiple con mejor puntuación guardada.
+- **Progreso**: seguimiento de instrumentos aprendidos por categoría.
+- **Tarjetas de preferencia**: instrumental específico por cirujano y procedimiento, compartido entre enfermeras del mismo hospital vía Supabase (ver `supabase/schema.sql`).
 
-A few resources to get you started if this is your first Flutter project:
+## Desarrollo
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+flutter pub get
+flutter run
+```
