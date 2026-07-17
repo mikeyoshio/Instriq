@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -123,6 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _MenuCard extends StatelessWidget {
+
   final IconData icon;
   final String title;
   final String subtitle;
