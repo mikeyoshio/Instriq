@@ -30,6 +30,7 @@ class PreferenceCard {
   final String procedureName;
   final List<PreferenceCardItem> items;
   final String? generalNotes;
+  final bool validated;
 
   const PreferenceCard({
     required this.id,
@@ -37,6 +38,7 @@ class PreferenceCard {
     required this.procedureName,
     required this.items,
     this.generalNotes,
+    this.validated = false,
   });
 
   PreferenceCard copyWith({
@@ -44,6 +46,7 @@ class PreferenceCard {
     String? procedureName,
     List<PreferenceCardItem>? items,
     String? generalNotes,
+    bool? validated,
   }) {
     return PreferenceCard(
       id: id,
@@ -51,26 +54,31 @@ class PreferenceCard {
       procedureName: procedureName ?? this.procedureName,
       items: items ?? this.items,
       generalNotes: generalNotes ?? this.generalNotes,
+      validated: validated ?? this.validated,
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'surgeonName': surgeonName,
-        'procedureName': procedureName,
+  /// Payload para insert/update en Supabase (sin id ni columnas gestionadas por la BD).
+  Map<String, dynamic> toRow({required String hospitalId}) => {
+        'hospital_id': hospitalId,
+        'surgeon_name': surgeonName,
+        'procedure_name': procedureName,
         'items': items.map((i) => i.toJson()).toList(),
-        'generalNotes': generalNotes,
+        'general_notes': generalNotes,
+        'validated': validated,
       };
 
-  factory PreferenceCard.fromJson(Map<String, dynamic> json) {
+  factory PreferenceCard.fromRow(Map<String, dynamic> row) {
+    final rawItems = row['items'] as List<dynamic>? ?? [];
     return PreferenceCard(
-      id: json['id'] as String,
-      surgeonName: json['surgeonName'] as String? ?? '',
-      procedureName: json['procedureName'] as String? ?? '',
-      items: (json['items'] as List<dynamic>? ?? [])
+      id: row['id'] as String,
+      surgeonName: row['surgeon_name'] as String? ?? '',
+      procedureName: row['procedure_name'] as String? ?? '',
+      items: rawItems
           .map((e) => PreferenceCardItem.fromJson(e as Map<String, dynamic>))
           .toList(),
-      generalNotes: json['generalNotes'] as String?,
+      generalNotes: row['general_notes'] as String?,
+      validated: row['validated'] as bool? ?? false,
     );
   }
 }

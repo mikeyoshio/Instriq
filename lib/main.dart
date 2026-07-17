@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'screens/home_screen.dart';
-import 'services/preference_card_service.dart';
+import 'screens/auth/auth_gate.dart';
 import 'services/progress_service.dart';
+import 'services/supabase_config.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ProgressService.instance.init();
-  await PreferenceCardService.instance.init();
-  runApp(const InstrumentalApp());
+  await Supabase.initialize(url: supabaseUrl, publishableKey: supabaseAnonKey);
+  runApp(const InstriqApp());
 }
 
-class InstrumentalApp extends StatelessWidget {
-  const InstrumentalApp({super.key});
+class InstriqApp extends StatelessWidget {
+  const InstriqApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Instrumental Qx',
+      title: 'Instriq',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorSchemeSeed: Colors.teal,
@@ -28,7 +29,7 @@ class InstrumentalApp extends StatelessWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const AuthGate(),
     );
   }
 }

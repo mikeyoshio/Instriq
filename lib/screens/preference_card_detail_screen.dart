@@ -43,6 +43,12 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
     }
   }
 
+  Future<void> _toggleValidated() async {
+    final newValue = !_card.validated;
+    await PreferenceCardService.instance.setValidated(_card.id, newValue);
+    setState(() => _card = _card.copyWith(validated: newValue));
+  }
+
   Future<void> _delete() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -78,8 +84,21 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
             children: [
               const Icon(Icons.person),
               const SizedBox(width: 8),
-              Text(_card.surgeonName, style: Theme.of(context).textTheme.titleMedium),
+              Expanded(
+                child: Text(_card.surgeonName, style: Theme.of(context).textTheme.titleMedium),
+              ),
+              if (_card.validated)
+                const Chip(
+                  avatar: Icon(Icons.verified, color: Colors.green, size: 18),
+                  label: Text('Validado por el cirujano'),
+                ),
             ],
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _toggleValidated,
+            icon: Icon(_card.validated ? Icons.close : Icons.verified_outlined),
+            label: Text(_card.validated ? 'Quitar validación' : 'Marcar como validado por el cirujano'),
           ),
           if (_card.generalNotes != null) ...[
             const SizedBox(height: 12),

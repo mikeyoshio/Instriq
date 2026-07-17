@@ -1,4 +1,4 @@
-package com.olalahomes.instrumental_qx
+package com.instriq.app
 
 import io.flutter.embedding.android.FlutterActivity
 

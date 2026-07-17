@@ -14,9 +14,55 @@ class PreferenceCardsScreen extends StatefulWidget {
 
 class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
   String _query = '';
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      await PreferenceCardService.instance.fetchCards();
+    } catch (e) {
+      _error = 'No se pudieron cargar las tarjetas: $e';
+    }
+    if (mounted) setState(() => _loading = false);
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Tarjetas de preferencia')),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (_error != null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Tarjetas de preferencia')),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(_error!, textAlign: TextAlign.center),
+                const SizedBox(height: 12),
+                FilledButton(onPressed: _load, child: const Text('Reintentar')),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     final cards = PreferenceCardService.instance.cards.where((c) {
       if (_query.isEmpty) return true;
       final q = _query.toLowerCase();
@@ -37,7 +83,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
           final saved = await Navigator.of(context).push<bool>(
             MaterialPageRoute(builder: (_) => const PreferenceCardFormScreen()),
           );
-          if (saved == true) setState(() {});
+          if (saved == true) _load();
         },
         icon: const Icon(Icons.add),
         label: const Text('Nueva tarjeta'),
@@ -81,14 +127,24 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                             return ListTile(
                               title: Text(card.procedureName),
                               subtitle: Text('${card.items.length} instrumentos'),
-                              trailing: const Icon(Icons.chevron_right),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (card.validated)
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 4),
+                                      child: Icon(Icons.verified, color: Colors.green, size: 18),
+                                    ),
+                                  const Icon(Icons.chevron_right),
+                                ],
+                              ),
                               onTap: () async {
                                 await Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => PreferenceCardDetailScreen(card: card),
                                   ),
                                 );
-                                setState(() {});
+                                _load();
                               },
                             );
                           }).toList(),

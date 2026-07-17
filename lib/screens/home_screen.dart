@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/auth_service.dart';
 import '../services/progress_service.dart';
 import 'catalog_screen.dart';
 import 'flashcards_screen.dart';
@@ -21,7 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final progress = ProgressService.instance;
     return Scaffold(
-      appBar: AppBar(title: const Text('Instrumental Qx')),
+      appBar: AppBar(
+        title: const Text('Instriq'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => AuthService.instance.signOut(),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),

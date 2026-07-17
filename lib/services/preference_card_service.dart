@@ -1,28 +1,15 @@
-import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/preference_card.dart';
+import 'profile_service.dart';
 
 class PreferenceCardService {
   PreferenceCardService._();
   static final PreferenceCardService instance = PreferenceCardService._();
 
-  static const _cardsKey = 'preference_cards';
+  SupabaseClient get _client => Supabase.instance.client;
 
-  SharedPreferences? _prefs;
   List<PreferenceCard> _cards = [];
-
-  Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
-    final raw = _prefs?.getString(_cardsKey);
-    if (raw != null && raw.isNotEmpty) {
-      final decoded = jsonDecode(raw) as List<dynamic>;
-      _cards = decoded
-          .map((e) => PreferenceCard.fromJson(e as Map<String, dynamic>))
-          .toList();
-    }
-  }
 
   List<PreferenceCard> get cards => List.unmodifiable(_cards);
 
@@ -36,23 +23,54 @@ class PreferenceCardService {
     return _cards.where((c) => c.surgeonName == surgeonName).toList();
   }
 
-  Future<void> _persist() async {
-    final encoded = jsonEncode(_cards.map((c) => c.toJson()).toList());
-    await _prefs?.setString(_cardsKey, encoded);
+  /// Trae las tarjetas del hospital del usuario actual (filtrado por RLS en el servidor).
+  Future<void> fetchCards() async {
+    final rows = await _client
+        .from('preference_cards')
+        .select()
+        .order('surgeon_name')
+        .order('procedure_name');
+    _cards = (rows as List<dynamic>)
+        .map((r) => PreferenceCard.fromRow(r as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> upsertCard(PreferenceCard card) async {
-    final index = _cards.indexWhere((c) => c.id == card.id);
-    if (index == -1) {
-      _cards.add(card);
-    } else {
-      _cards[index] = card;
+    final hospitalId = ProfileService.instance.hospitalId;
+    if (hospitalId == null) {
+      throw StateError('El usuario no pertenece a ningún hospital todavía.');
     }
-    await _persist();
+    final row = card.toRow(hospitalId: hospitalId);
+    if (card.id.isEmpty) {
+      final inserted = await _client.from('preference_cards').insert(row).select().single();
+      _cards.add(PreferenceCard.fromRow(inserted));
+    } else {
+      final updated = await _client
+          .from('preference_cards')
+          .update(row)
+          .eq('id', card.id)
+          .select()
+          .single();
+      final index = _cards.indexWhere((c) => c.id == card.id);
+      final saved = PreferenceCard.fromRow(updated);
+      if (index == -1) {
+        _cards.add(saved);
+      } else {
+        _cards[index] = saved;
+      }
+    }
+  }
+
+  Future<void> setValidated(String id, bool validated) async {
+    await _client.from('preference_cards').update({'validated': validated}).eq('id', id);
+    final index = _cards.indexWhere((c) => c.id == id);
+    if (index != -1) {
+      _cards[index] = _cards[index].copyWith(validated: validated);
+    }
   }
 
   Future<void> deleteCard(String id) async {
+    await _client.from('preference_cards').delete().eq('id', id);
     _cards.removeWhere((c) => c.id == id);
-    await _persist();
   }
 }

@@ -1,4 +1,4 @@
-# Quirofapp
+# Instriq
 
 App Android (Flutter) para que las enfermeras de quirófano aprendan el instrumental quirúrgico de forma interactiva.
 

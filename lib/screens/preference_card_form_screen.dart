@@ -128,17 +128,22 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
       );
       return;
     }
-    final id = widget.existingCard?.id ??
-        'card_${DateTime.now().microsecondsSinceEpoch}';
     final card = PreferenceCard(
-      id: id,
+      id: widget.existingCard?.id ?? '',
       surgeonName: surgeon,
       procedureName: procedure,
       items: _items,
       generalNotes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      validated: widget.existingCard?.validated ?? false,
     );
-    await PreferenceCardService.instance.upsertCard(card);
-    if (mounted) Navigator.of(context).pop(true);
+    try {
+      await PreferenceCardService.instance.upsertCard(card);
+      if (mounted) Navigator.of(context).pop(true);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al guardar: $e')));
+      }
+    }
   }
 
   @override
