@@ -34,7 +34,13 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Chip(label: Text(instrument.category.label)),
+            Wrap(
+              spacing: 8,
+              children: [
+                Chip(label: Text(instrument.specialty.label)),
+                Chip(label: Text(instrument.category.label)),
+              ],
+            ),
             const SizedBox(height: 16),
             if (instrument.aliases.isNotEmpty) ...[
               Text('También conocido como', style: Theme.of(context).textTheme.labelLarge),
