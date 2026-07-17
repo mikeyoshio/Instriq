@@ -15,7 +15,8 @@ class CatalogScreen extends StatefulWidget {
 
 class _CatalogScreenState extends State<CatalogScreen> {
   String _query = '';
-  InstrumentCategory? _filter;
+  InstrumentCategory? _categoryFilter;
+  Specialty? _specialtyFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +24,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
       final matchesQuery = _query.isEmpty ||
           i.name.toLowerCase().contains(_query.toLowerCase()) ||
           i.aliases.any((a) => a.toLowerCase().contains(_query.toLowerCase()));
-      final matchesCategory = _filter == null || i.category == _filter;
-      return matchesQuery && matchesCategory;
+      final matchesCategory = _categoryFilter == null || i.category == _categoryFilter;
+      final matchesSpecialty = _specialtyFilter == null || i.specialty == _specialtyFilter;
+      return matchesQuery && matchesCategory && matchesSpecialty;
     }).toList();
 
     return Scaffold(
@@ -36,10 +38,17 @@ class _CatalogScreenState extends State<CatalogScreen> {
             child: TextField(
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                hintText: 'Buscar instrumento...',
+                hintText: 'Buscar instrumento o marca comercial...',
                 border: OutlineInputBorder(),
               ),
               onChanged: (v) => setState(() => _query = v),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Especialidad', style: Theme.of(context).textTheme.labelMedium),
             ),
           ),
           SizedBox(
@@ -48,18 +57,50 @@ class _CatalogScreenState extends State<CatalogScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
-                _CategoryChip(
+                _FilterChip(
                   label: 'Todas',
-                  selected: _filter == null,
-                  onTap: () => setState(() => _filter = null),
+                  selected: _specialtyFilter == null,
+                  onTap: () => setState(() => _specialtyFilter = null),
+                ),
+                ...Specialty.values.map(
+                  (s) => Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: _FilterChip(
+                      label: s.label,
+                      selected: _specialtyFilter == s,
+                      onTap: () => setState(() => _specialtyFilter = s),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Categoría', style: Theme.of(context).textTheme.labelMedium),
+            ),
+          ),
+          SizedBox(
+            height: 44,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: [
+                _FilterChip(
+                  label: 'Todas',
+                  selected: _categoryFilter == null,
+                  onTap: () => setState(() => _categoryFilter = null),
                 ),
                 ...InstrumentCategory.values.map(
                   (c) => Padding(
                     padding: const EdgeInsets.only(left: 8),
-                    child: _CategoryChip(
+                    child: _FilterChip(
                       label: c.label,
-                      selected: _filter == c,
-                      onTap: () => setState(() => _filter = c),
+                      selected: _categoryFilter == c,
+                      onTap: () => setState(() => _categoryFilter = c),
                     ),
                   ),
                 ),
@@ -85,7 +126,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                             size: 48,
                           ),
                           title: Text(instrument.name),
-                          subtitle: Text(instrument.category.label),
+                          subtitle: Text('${instrument.specialty.label} · ${instrument.category.label}'),
                           trailing: learned
                               ? const Icon(Icons.check_circle, color: Colors.green)
                               : const Icon(Icons.chevron_right),
@@ -109,12 +150,12 @@ class _CatalogScreenState extends State<CatalogScreen> {
   }
 }
 
-class _CategoryChip extends StatelessWidget {
+class _FilterChip extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
-  const _CategoryChip({
+  const _FilterChip({
     required this.label,
     required this.selected,
     required this.onTap,
