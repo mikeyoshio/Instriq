@@ -13,6 +13,12 @@ const List<Instrument> kInstruments = [
     use:
         'Apertura de piel y tejidos blandos. Se entrega al cirujano con la hoja hacia abajo, nunca directamente a la mano.',
     tip: 'La hoja nº 10 es la más usada en incisiones grandes; la nº 15 en incisiones pequeñas y precisas.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Scalpel_00.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'SnowBink, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Scalpel_00.jpg',
+    ),
   ),
   Instrument(
     id: 'tijera-mayo',
@@ -24,6 +30,12 @@ const List<Instrument> kInstruments = [
         'Tijera robusta de punta roma, recta o curva, con hojas gruesas.',
     use: 'Corte de tejidos resistentes: fascia, suturas gruesas, material de sutura.',
     tip: 'La curva se usa para tejido profundo; la recta para superficial y para cortar suturas.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/5/58/Mayo_scissors.jpg',
+      license: 'CC0 1.0',
+      attribution: 'Saltanat ebli, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Mayo_scissors.jpg',
+    ),
   ),
   Instrument(
     id: 'tijera-metzenbaum',
@@ -34,6 +46,12 @@ const List<Instrument> kInstruments = [
     description: 'Tijera de hojas finas y delicadas, más larga y estrecha que la de Mayo.',
     use: 'Disección fina de tejidos delicados (fascia, vasos, tejido subcutáneo).',
     tip: 'Nunca se usa para cortar suturas: las hojas finas se desafilan y pierden precisión.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Metzenbaum_scissors.jpg',
+      license: 'CC0 1.0',
+      attribution: 'Saltanat ebli, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Metzenbaum_scissors.jpg',
+    ),
   ),
   Instrument(
     id: 'tijera-iris',
@@ -43,6 +61,12 @@ const List<Instrument> kInstruments = [
     icon: 'cut',
     description: 'Tijera pequeña de punta fina, recta o curva.',
     use: 'Cirugía de precisión en espacios reducidos: oftalmología, microcirugía, disección superficial fina.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Iris_scissors_by_Roboz_Tech_Surgical_.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'RobozTech, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Iris_scissors_by_Roboz_Tech_Surgical_.jpg',
+    ),
   ),
 
   // ---- DISECCIÓN / PRENSIÓN ----
@@ -55,6 +79,12 @@ const List<Instrument> kInstruments = [
     description: 'Pinza de agarre con dientes finos en la punta (tipo "ratón").',
     use: 'Sujeción firme de tejidos resistentes: piel, fascia, aponeurosis.',
     tip: 'No se usa en tejidos delicados porque los dientes pueden lesionarlos.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/66/Adson_00.jpg',
+      license: 'CC0 1.0',
+      attribution: 'SnowBink, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Adson_00.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-diseccion-sin-dientes',
@@ -73,6 +103,12 @@ const List<Instrument> kInstruments = [
     icon: 'pinch',
     description: 'Pinza hemostática recta o curva con dientes en la punta (1x2) y ramas estriadas.',
     use: 'Sujeción firme de tejidos gruesos y aponeurosis; menos usada para hemostasia por ser traumática.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Kocher_clamp_01.JPG',
+      license: 'CC0 1.0',
+      attribution: 'Armin, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Kocher_clamp_01.JPG',
+    ),
   ),
   Instrument(
     id: 'pinza-kelly',
@@ -82,6 +118,12 @@ const List<Instrument> kInstruments = [
     icon: 'pinch',
     description: 'Pinza hemostática recta o curva, sin dientes, con estrías transversales.',
     use: 'Hemostasia (pinzamiento de vasos sangrantes) y disección roma.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Kelly_Forceps.svg/500px-Kelly_Forceps.svg.png',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Stevegray; conversión Syed, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Kelly_Forceps.svg',
+    ),
   ),
   Instrument(
     id: 'pinza-mosquito',
@@ -100,6 +142,12 @@ const List<Instrument> kInstruments = [
     icon: 'pinch',
     description: 'Pinza de agarre con dientes múltiples finos y romos en la punta.',
     use: 'Sujeción de tejidos para tracción sin aplastarlos en exceso: intestino, mama, piel.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Allis_clamp_01.JPG',
+      license: 'CC0 1.0',
+      attribution: 'Armin, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Allis_clamp_01.JPG',
+    ),
   ),
   Instrument(
     id: 'pinza-babcock',
@@ -109,6 +157,12 @@ const List<Instrument> kInstruments = [
     icon: 'pinch',
     description: 'Pinza de puntas curvas y anchas, atraumática, sin dientes.',
     use: 'Sujeción de estructuras delicadas y tubulares: intestino, trompas, uréter, apéndice.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Babcock.JPG',
+      license: 'CC0 1.0',
+      attribution: 'Armin, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Babcock.JPG',
+    ),
   ),
   Instrument(
     id: 'pinza-foerster',
@@ -118,6 +172,12 @@ const List<Instrument> kInstruments = [
     icon: 'pinch',
     description: 'Pinza larga con extremo en anillo, con o sin dientes.',
     use: 'Sujeción de gasas o torundas para antisepsia de campo; también para tracción de tejidos.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Foerster_clamp_02.JPG',
+      license: 'CC0 1.0',
+      attribution: 'Armin, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Foerster_clamp_02.JPG',
+    ),
   ),
   Instrument(
     id: 'pinza-backhaus',
@@ -127,6 +187,12 @@ const List<Instrument> kInstruments = [
     icon: 'pinch',
     description: 'Pinza con puntas afiladas curvas que se cruzan, tipo clip.',
     use: 'Fijación de paños de campo quirúrgico entre sí y a la piel.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Backhaus_clamp.svg/500px-Backhaus_clamp.svg.png',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Olek Remesz (Orem), Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Backhaus_clamp.svg',
+    ),
   ),
 
   // ---- SUJECIÓN / SUTURA ----
@@ -139,6 +205,12 @@ const List<Instrument> kInstruments = [
     description: 'Instrumento tipo pinza con mordida corta y estriada, sin filo.',
     use: 'Sujetar la aguja de sutura para realizar puntos y anudado.',
     tip: 'La aguja se carga en la punta, nunca en el centro de la mordida.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Naaldvoerder_Mayo-hegar.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Rschiedon, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Naaldvoerder_Mayo-hegar.jpg',
+    ),
   ),
   Instrument(
     id: 'portaagujas-webster',
@@ -159,6 +231,12 @@ const List<Instrument> kInstruments = [
     icon: 'expand',
     description: 'Separador manual en forma de "S", de doble hoja curva.',
     use: 'Retracción manual de bordes de la herida para exponer el campo quirúrgico.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Farabeuf_retractor.svg/500px-Farabeuf_retractor.svg.png',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Olek Remesz (Orem), Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Farabeuf_retractor.svg',
+    ),
   ),
   Instrument(
     id: 'separador-weitlaner',
@@ -168,6 +246,12 @@ const List<Instrument> kInstruments = [
     icon: 'expand',
     description: 'Separador autoestático con ramas curvas y cremallera de fijación.',
     use: 'Mantener abierta la herida sin necesidad de ayudante, en cirugías superficiales.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Weitlaner_Retraktor.jpg',
+      license: 'CC BY 3.0',
+      attribution: 'MacPiek, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Weitlaner_Retraktor.jpg',
+    ),
   ),
   Instrument(
     id: 'valva-doyen',
@@ -177,6 +261,12 @@ const List<Instrument> kInstruments = [
     icon: 'expand',
     description: 'Separador curvo en forma de "raqueta", manual.',
     use: 'Retracción de la vejiga o el útero en cirugía abdominal y pélvica.',
+    image: InstrumentImage(
+      url: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Doyen%27s_Retractor.jpg",
+      license: 'CC BY-SA 3.0',
+      attribution: 'Sarindam7, Wikimedia Commons',
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:Doyen's_Retractor.jpg",
+    ),
   ),
   Instrument(
     id: 'separador-richardson',
@@ -197,6 +287,12 @@ const List<Instrument> kInstruments = [
     icon: 'suction',
     description: 'Cánula rígida de aspiración con punta perforada y curva.',
     use: 'Aspiración de sangre, secreciones y humo quirúrgico del campo operatorio.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Yankauer_Suction_Tip.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Thomasrive, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Yankauer_Suction_Tip.jpg',
+    ),
   ),
   Instrument(
     id: 'canula-poole',
@@ -217,6 +313,12 @@ const List<Instrument> kInstruments = [
     icon: 'tool',
     description: 'Instrumento romo con un canal longitudinal en toda su superficie.',
     use: 'Guía protegida para cortar con bisturí sin lesionar estructuras subyacentes (p. ej. abrir fístulas).',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Sonde_cannel%C3%A9e_-_mus%C3%A9e_HCL_-_instruments_chirurgicaux.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Joséphine Bitat, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Sonde_cannelée_-_musée_HCL_-_instruments_chirurgicaux.jpg',
+    ),
   ),
   Instrument(
     id: 'legra',
@@ -226,6 +328,12 @@ const List<Instrument> kInstruments = [
     icon: 'tool',
     description: 'Instrumento con extremo en forma de cuchara o aro afilado.',
     use: 'Raspado y limpieza de tejido de cavidades (hueso, útero, quistes).',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Uterine_Curette_01.jpg',
+      license: 'CC0 1.0',
+      attribution: 'SnowBink, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Uterine_Curette_01.jpg',
+    ),
   ),
   Instrument(
     id: 'electrobisturi',
@@ -254,6 +362,12 @@ const List<Instrument> kInstruments = [
     icon: 'tool',
     description: 'Instrumento puntiagudo con camisa hueca para crear un acceso a una cavidad.',
     use: 'Creación de puertos de entrada en cirugía laparoscópica para introducir la óptica e instrumental.',
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Disposable_Trocars.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Magnus1313, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Disposable_Trocars.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-rochester-pean',

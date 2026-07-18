@@ -54,12 +54,21 @@ flutter run -d chrome        # navegador
 2. En el SQL Editor, ejecuta en orden: `supabase/schema.sql`, `supabase/schema_v2_hospital_admin.sql`, `supabase/schema_v3_fix_rls_recursion.sql`.
 3. Copia la URL y la **publishable key** (Project Settings → API) a `lib/services/supabase_config.dart`. Es pública/segura de commitear — la seguridad real la da Row Level Security, no el secreto de esta key.
 
-## Despliegue web (Vercel)
+## Despliegue
 
-El repo incluye `vercel.json` + `vercel_build.sh`: como Vercel no trae Flutter preinstalado, el script clona el SDK stable en cada build y compila con `flutter build web --release`. Basta con importar el repo en Vercel (framework preset "Other") y conectar el dominio desde tu proveedor DNS (ej. Cloudflare) con un CNAME a `cname.vercel-dns.com`.
+- **App** (`app.instriq.org`): Vercel. El repo incluye `vercel.json` + `vercel_build.sh` — como Vercel no trae Flutter preinstalado, el script clona el SDK stable en cada build y compila con `flutter build web --release`. Basta con importar el repo en Vercel (framework preset "Other") y conectar el subdominio desde Cloudflare con un CNAME a `cname.vercel-dns.com`.
+- **Landing** (`instriq.org`): carpeta `landing/`, HTML estático sin build — pensada para Cloudflare Pages (directorio raíz `landing/`). Incluye la política de privacidad (`landing/privacidad.html`).
+
+## Licencias
+
+- **Código**: [AGPL-3.0](LICENSE).
+- **Documentación**: CC BY-SA 4.0.
+- **Fotos de instrumental**: Wikimedia Commons con licencia libre verificada (CC0/CC-BY/CC-BY-SA); la atribución de cada una se muestra en la propia app, junto a la imagen.
 
 ## Estado / roadmap
 
-- [ ] Landing informativa + política de privacidad en `instriq.org`
-- [ ] Fotos reales de instrumental (actualmente iconos genéricos por categoría)
+- [x] Fotos reales de instrumental con licencia libre (19/70, resto sigue con icono por categoría)
+- [x] Landing informativa + política de privacidad en `instriq.org`
 - [ ] Exportar/eliminar cuenta (GDPR)
+- [ ] Analítica de comunidad agregada y anónima (instrumental más consultado, especialidades con más actividad)
+- [ ] Sistema de donaciones transparente
