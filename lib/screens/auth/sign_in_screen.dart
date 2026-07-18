@@ -26,8 +26,8 @@ class _SignInScreenState extends State<SignInScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-      // AuthGate reacciona al cambio de sesión; volvemos a la raíz para que se vea.
-      if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
+      // HospitalConnectFlow reacciona al cambio de sesión y se refresca solo.
+      if (mounted) Navigator.of(context).pop();
     } catch (e) {
       setState(() => _error = 'No se pudo iniciar sesión: $e');
     } finally {

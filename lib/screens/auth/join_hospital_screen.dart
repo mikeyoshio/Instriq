@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
-import '../home_screen.dart';
 import 'register_hospital_screen.dart';
 
 enum _Mode { choose, join }
@@ -34,10 +33,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
       if (hospital == null) {
         setState(() => _error = 'Código de invitación no válido');
       } else if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-          (route) => false,
-        );
+        Navigator.of(context).pop();
       }
     } catch (e) {
       setState(() => _error = 'Error al unirse: $e');
@@ -51,10 +47,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
       MaterialPageRoute(builder: (_) => const RegisterHospitalScreen()),
     );
     if (created == true && mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-        (route) => false,
-      );
+      Navigator.of(context).pop();
     }
   }
 

@@ -5,6 +5,7 @@ import '../services/profile_service.dart';
 import '../services/progress_service.dart';
 import '../services/theme_service.dart';
 import 'admin/manage_hospital_screen.dart';
+import 'auth/hospital_connect_flow.dart';
 import 'catalog_screen.dart';
 import 'learn_screen.dart';
 import 'preference_cards_screen.dart';
@@ -19,6 +20,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   void _refresh() => setState(() {});
+
+  bool get _isConnected =>
+      AuthService.instance.currentUser != null && ProfileService.instance.hasHospital;
+
+  Future<void> _openHospitalConnectFlow() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const HospitalConnectFlow()),
+    );
+    _refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onPressed: () => ThemeService.instance.toggle(Theme.of(context).brightness),
           ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => AuthService.instance.signOut(),
-          ),
+          if (AuthService.instance.currentUser != null)
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () async {
+                await AuthService.instance.signOut();
+                _refresh();
+              },
+            ),
         ],
       ),
       body: SafeArea(
@@ -91,18 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 12),
               _MenuCard(
-                icon: Icons.assignment_ind,
-                title: 'Tarjetas de preferencia',
-                subtitle: 'Instrumental específico por cirujano y procedimiento',
-                onTap: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const PreferenceCardsScreen()),
-                  );
-                  _refresh();
-                },
-              ),
-              const SizedBox(height: 12),
-              _MenuCard(
                 icon: Icons.bar_chart,
                 title: 'Mi progreso',
                 subtitle: 'Revisa tu avance por categoría',
@@ -113,20 +116,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   _refresh();
                 },
               ),
-              if (ProfileService.instance.isAdmin) ...[
-                const SizedBox(height: 12),
+              const SizedBox(height: 24),
+              Text('Mi hospital', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              if (_isConnected) ...[
                 _MenuCard(
-                  icon: Icons.admin_panel_settings,
-                  title: 'Administrar hospital',
-                  subtitle: 'Código de invitación y miembros',
+                  icon: Icons.assignment_ind,
+                  title: 'Tarjetas de preferencia',
+                  subtitle: ProfileService.instance.hospitalName ??
+                      'Instrumental específico por cirujano y procedimiento',
                   onTap: () async {
                     await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ManageHospitalScreen()),
+                      MaterialPageRoute(builder: (_) => const PreferenceCardsScreen()),
                     );
                     _refresh();
                   },
                 ),
-              ],
+                if (ProfileService.instance.isAdmin) ...[
+                  const SizedBox(height: 12),
+                  _MenuCard(
+                    icon: Icons.admin_panel_settings,
+                    title: 'Administrar hospital',
+                    subtitle: 'Código de invitación y miembros',
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const ManageHospitalScreen()),
+                      );
+                      _refresh();
+                    },
+                  ),
+                ],
+              ] else
+                _MenuCard(
+                  icon: Icons.local_hospital,
+                  title: 'Conecta con tu hospital',
+                  subtitle: 'Únete con un código o crea el tuyo para compartir tarjetas de preferencia',
+                  onTap: _openHospitalConnectFlow,
+                ),
             ],
           ),
         ),
@@ -136,7 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _MenuCard extends StatelessWidget {
-
   final IconData icon;
   final String title;
   final String subtitle;

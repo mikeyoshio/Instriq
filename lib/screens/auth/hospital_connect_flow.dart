@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
-import '../home_screen.dart';
 import 'join_hospital_screen.dart';
 import 'welcome_screen.dart';
 
-/// Decide qué pantalla mostrar según el estado de sesión y de hospital del usuario.
-class AuthGate extends StatefulWidget {
-  const AuthGate({super.key});
+/// Flujo para conectar con (o crear) el hospital del usuario. Se empuja
+/// desde el Home cuando alguien pulsa "Mi hospital" sin estar conectado, y
+/// se cierra solo (pop) en cuanto detecta sesión + hospital, devolviendo el
+/// control a quien lo empujó.
+class HospitalConnectFlow extends StatefulWidget {
+  const HospitalConnectFlow({super.key});
 
   @override
-  State<AuthGate> createState() => _AuthGateState();
+  State<HospitalConnectFlow> createState() => _HospitalConnectFlowState();
 }
 
-class _AuthGateState extends State<AuthGate> {
+class _HospitalConnectFlowState extends State<HospitalConnectFlow> {
   bool _loading = true;
   bool _hasSession = false;
   bool _hasHospital = false;
+  String? _error;
 
   @override
   void initState() {
@@ -25,8 +28,6 @@ class _AuthGateState extends State<AuthGate> {
     _refresh();
     AuthService.instance.authStateChanges.listen((_) => _refresh());
   }
-
-  String? _error;
 
   Future<void> _refresh() async {
     final user = AuthService.instance.currentUser;
@@ -44,12 +45,18 @@ class _AuthGateState extends State<AuthGate> {
     try {
       await ProfileService.instance.loadProfile();
       if (mounted) {
+        final connected = ProfileService.instance.hasHospital;
         setState(() {
           _loading = false;
           _hasSession = true;
-          _hasHospital = ProfileService.instance.hasHospital;
+          _hasHospital = connected;
           _error = null;
         });
+        if (connected) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) Navigator.of(context).pop();
+          });
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -63,7 +70,7 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
+    if (_loading || (_hasSession && _hasHospital)) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     if (_error != null) {
@@ -87,6 +94,10 @@ class _AuthGateState extends State<AuthGate> {
                   onPressed: () => AuthService.instance.signOut(),
                   child: const Text('Cerrar sesión'),
                 ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancelar'),
+                ),
               ],
             ),
           ),
@@ -94,7 +105,6 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
     if (!_hasSession) return const WelcomeScreen();
-    if (!_hasHospital) return const JoinHospitalScreen();
-    return const HomeScreen();
+    return const JoinHospitalScreen();
   }
 }

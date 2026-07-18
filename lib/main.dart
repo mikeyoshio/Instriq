@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'screens/auth/auth_gate.dart';
+import 'screens/app_root.dart';
 import 'services/progress_service.dart';
 import 'services/supabase_config.dart';
 import 'services/theme_service.dart';
@@ -35,7 +35,7 @@ class InstriqApp extends StatelessWidget {
             brightness: Brightness.dark,
             useMaterial3: true,
           ),
-          home: const AuthGate(),
+          home: const AppRoot(),
         );
       },
     );
