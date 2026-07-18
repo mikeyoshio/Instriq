@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
+import '../services/profile_service.dart';
 import '../services/progress_service.dart';
+import '../services/theme_service.dart';
+import 'admin/manage_hospital_screen.dart';
 import 'catalog_screen.dart';
-import 'flashcards_screen.dart';
+import 'learn_screen.dart';
 import 'preference_cards_screen.dart';
 import 'progress_screen.dart';
-import 'quiz_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Instriq'),
         actions: [
+          IconButton(
+            tooltip: 'Cambiar tema claro/oscuro',
+            icon: Icon(
+              Theme.of(context).brightness == Brightness.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
+            onPressed: () => ThemeService.instance.toggle(Theme.of(context).brightness),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => AuthService.instance.signOut(),
@@ -68,24 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 12),
               _MenuCard(
-                icon: Icons.style,
-                title: 'Flashcards',
-                subtitle: 'Estudia con tarjetas de repaso',
+                icon: Icons.school,
+                title: 'Aprende',
+                subtitle: 'Flashcards y quiz para repasar el instrumental',
                 onTap: () async {
                   await Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const FlashcardsScreen()),
-                  );
-                  _refresh();
-                },
-              ),
-              const SizedBox(height: 12),
-              _MenuCard(
-                icon: Icons.quiz,
-                title: 'Quiz',
-                subtitle: 'Ponte a prueba con preguntas rápidas',
-                onTap: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const QuizScreen()),
+                    MaterialPageRoute(builder: (_) => const LearnScreen()),
                   );
                   _refresh();
                 },
@@ -114,6 +113,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   _refresh();
                 },
               ),
+              if (ProfileService.instance.isAdmin) ...[
+                const SizedBox(height: 12),
+                _MenuCard(
+                  icon: Icons.admin_panel_settings,
+                  title: 'Administrar hospital',
+                  subtitle: 'Código de invitación y miembros',
+                  onTap: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const ManageHospitalScreen()),
+                    );
+                    _refresh();
+                  },
+                ),
+              ],
             ],
           ),
         ),
