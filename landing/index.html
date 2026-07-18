@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instriq — Conocimiento quirúrgico abierto, para todo el bloque quirúrgico</title>
+<meta name="description" content="Instriq es un proyecto open source creado por profesionales para profesionales del bloque quirúrgico: catálogo de instrumental, protocolos y tarjetas de preferencia compartidas.">
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+  :root {
+    --navy: #162B56;
+    --navy-dark: #0d1a37;
+    --teal: #14b8a6;
+    --teal-dark: #0d9488;
+    --bg: #f4f8f7;
+    --surface: #ffffff;
+    --text: #14202b;
+    --text-muted: #4a5a68;
+    --border: #dbe4e6;
+    --radius: 14px;
+    --max-w: 1080px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1220;
+      --surface: #121b2e;
+      --text: #eef3f6;
+      --text-muted: #a7b6c2;
+      --border: #223049;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1220;
+    --surface: #121b2e;
+    --text: #eef3f6;
+    --text-muted: #a7b6c2;
+    --border: #223049;
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f8f7;
+    --surface: #ffffff;
+    --text: #14202b;
+    --text-muted: #4a5a68;
+    --border: #dbe4e6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--teal-dark); }
+  @media (prefers-color-scheme: dark) { a { color: var(--teal); } }
+  :root[data-theme="dark"] a { color: var(--teal); }
+  img { max-width: 100%; display: block; }
+
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+  header.site {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--text); }
+  .brand .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--teal); }
+  .nav-links { display: flex; gap: 22px; align-items: center; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; }
+  .nav-links a:hover { color: var(--text); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 20px; border-radius: 999px; font-weight: 600; font-size: 0.95rem;
+    text-decoration: none; border: 1px solid transparent; cursor: pointer;
+  }
+  .btn-primary { background: var(--teal); color: #06231f; }
+  .btn-primary:hover { background: var(--teal-dark); }
+  .btn-ghost { background: transparent; border-color: var(--border); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--teal); }
+
+  section { padding: 72px 0; }
+  section.tight { padding: 48px 0; }
+  h1 { font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; margin: 0 0 18px; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 12px; }
+  h3 { font-size: 1.15rem; margin: 0 0 8px; }
+  p { color: var(--text-muted); margin: 0 0 16px; }
+  .lede { font-size: 1.15rem; max-width: 640px; }
+  .eyebrow {
+    display: inline-block; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--teal-dark); margin-bottom: 10px;
+  }
+  :root[data-theme="dark"] .eyebrow, @media (prefers-color-scheme: dark) { .eyebrow { color: var(--teal); } }
+
+  .hero { text-align: center; padding: 96px 0 64px; }
+  .hero .wrap { display: flex; flex-direction: column; align-items: center; }
+  .hero p.lede { margin-left: auto; margin-right: auto; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+
+  .grid { display: grid; gap: 20px; }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 860px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px;
+  }
+  .card h3 { margin-top: 0; }
+  .card p { margin-bottom: 0; }
+
+  .stat-row { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; margin: 32px 0 0; }
+  .stat { text-align: center; }
+  .stat .num { font-size: 2.2rem; font-weight: 800; color: var(--navy); }
+  :root[data-theme="dark"] .stat .num, @media (prefers-color-scheme: dark) { .stat .num { color: var(--teal); } }
+  .stat .label { color: var(--text-muted); font-size: 0.9rem; }
+
+  .band { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .roadmap-note {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: color-mix(in srgb, var(--teal) 10%, var(--surface));
+    border: 1px dashed var(--teal-dark);
+    border-radius: var(--radius); padding: 16px 18px; margin-top: 16px;
+  }
+  .roadmap-note .badge {
+    flex-shrink: 0; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    background: var(--teal); color: #06231f; padding: 3px 10px; border-radius: 999px;
+  }
+
+  ul.checklist { list-style: none; padding: 0; margin: 0; }
+  ul.checklist li { padding-left: 28px; position: relative; margin-bottom: 10px; color: var(--text-muted); }
+  ul.checklist li::before { content: "✓"; position: absolute; left: 0; color: var(--teal-dark); font-weight: 700; }
+
+  .changelog-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .changelog-item:last-child { border-bottom: none; }
+  .changelog-date { flex-shrink: 0; width: 110px; color: var(--text-muted); font-size: 0.85rem; padding-top: 2px; }
+  .changelog-text strong { color: var(--text); }
+
+  .license-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 20px; }
+  @media (max-width: 700px) { .license-grid { grid-template-columns: 1fr; } }
+  .license-row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 0.92rem; }
+  .license-row .k { color: var(--text-muted); }
+  .license-row .v { font-weight: 600; text-align: right; }
+
+  footer.site { padding: 48px 0 32px; border-top: 1px solid var(--border); }
+  footer.site .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: flex-start; }
+  footer.site .col h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0 0 10px; }
+  footer.site .col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.92rem; margin-bottom: 6px; }
+  footer.site .col a:hover { color: var(--text); }
+  .fine { font-size: 0.82rem; color: var(--text-muted); margin-top: 32px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="#" class="brand"><span class="dot"></span>Instriq</a>
+    <nav class="nav-links">
+      <a href="#mision">Misión</a>
+      <a href="#hoy">Hoy</a>
+      <a href="#colabora">Colabora</a>
+      <a href="#transparencia">Transparencia</a>
+      <a href="https://github.com/mikeyoshio/Instriq">GitHub</a>
+      <a href="https://app.instriq.org" class="btn btn-primary">Abrir la app</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Open source · bloque quirúrgico</span>
+    <h1>El conocimiento de quirófano,<br>abierto y compartido entre profesionales.</h1>
+    <p class="lede">
+      Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo
+      lugar, accesible desde cualquier tablet o móvil — para que aprender a moverse en quirófano
+      no dependa de una carpeta de papel desactualizada.
+    </p>
+    <div class="hero-actions">
+      <a href="https://app.instriq.org" class="btn btn-primary">Abrir la app →</a>
+      <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost">Ver el código en GitHub</a>
+    </div>
+  </div>
+</section>
+
+<section id="mision" class="tight">
+  <div class="wrap grid grid-2">
+    <div>
+      <span class="eyebrow">Misión</span>
+      <h2>Reducir la curva de aprendizaje en quirófano.</h2>
+      <p>
+        Incorporarse a un bloque quirúrgico exige adquirir muchísimo conocimiento práctico en
+        poco tiempo. Instriq existe para que cualquier instrumentista, enfermera, auxiliar o
+        miembro del equipo quirúrgico encuentre información fiable, actualizada y basada en la
+        experiencia real de otros profesionales — no en un manual genérico.
+      </p>
+    </div>
+    <div>
+      <span class="eyebrow">Visión</span>
+      <h2>La plataforma de referencia del bloque quirúrgico.</h2>
+      <p>
+        A largo plazo, que Instriq sea el lugar donde el conocimiento compartido, la colaboración
+        entre profesionales y la tecnología abierta ayuden a mejorar la formación, la seguridad
+        del paciente, la práctica clínica y la investigación médica en hospitales de todo el mundo.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <span class="eyebrow">Valores open source</span>
+    <h2>La fuerza de Instriq es la inteligencia colectiva.</h2>
+    <p class="lede">Cada aportación construye una base de conocimiento más completa y revisada para toda la comunidad. Cuantas más personas compartan su experiencia, mejor la información disponible para todas.</p>
+    <div class="grid grid-4" style="margin-top: 28px;">
+      <div class="card">
+        <h3>Acceso libre</h3>
+        <p>El catálogo y el aprendizaje básico no requieren cuenta ni pago. Nadie se queda fuera por no tener presupuesto.</p>
+      </div>
+      <div class="card">
+        <h3>Transparencia</h3>
+        <p>Código abierto, decisiones públicas y, a futuro, cuentas claras de cómo se usa cada donación.</p>
+      </div>
+      <div class="card">
+        <h3>Colaboración real</h3>
+        <p>Construido con profesionales sanitarios y desarrolladores voluntarios, no por una empresa cerrada.</p>
+      </div>
+      <div class="card">
+        <h3>Estándares abiertos</h3>
+        <p>Buscamos alinearnos con estándares reconocidos del sector (HL7, FHIR, DICOM) según el proyecto lo necesite.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hoy">
+  <div class="wrap">
+    <span class="eyebrow">Lo que ya puedes usar hoy</span>
+    <h2>Sin cuenta, sin fricción.</h2>
+    <p class="lede">El aprendizaje básico funciona como invitado. Solo hace falta cuenta si tu hospital quiere compartir sus propias tarjetas de preferencia.</p>
+    <div class="grid grid-3" style="margin-top: 24px;">
+      <div class="card">
+        <h3>Catálogo</h3>
+        <p>+70 instrumentos organizados por 9 especialidades y por categoría funcional, con nombres comerciales y fabricante.</p>
+      </div>
+      <div class="card">
+        <h3>Aprende</h3>
+        <p>Flashcards y quiz de repaso, con progreso guardado en tu propio dispositivo.</p>
+      </div>
+      <div class="card">
+        <h3>Tarjetas de preferencia</h3>
+        <p>Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu hospital.</p>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="num">70+</div><div class="label">instrumentos documentados</div></div>
+      <div class="stat"><div class="num">9</div><div class="label">especialidades cubiertas</div></div>
+      <div class="stat"><div class="num">3</div><div class="label">plataformas: Android, iOS y web</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <span class="eyebrow">Novedades recientes</span>
+    <h2>Construido en abierto, en público.</h2>
+    <div class="card" style="margin-top: 20px;">
+      <div class="changelog-item">
+        <div class="changelog-date">Reciente</div>
+        <div class="changelog-text"><strong>Login opcional</strong> — el catálogo, flashcards, quiz y progreso ya no requieren cuenta.</div>
+      </div>
+      <div class="changelog-item">
+        <div class="changelog-date">Reciente</div>
+        <div class="changelog-text"><strong>Alta de hospital por autoservicio</strong> — cualquier equipo puede registrar su hospital y compartir tarjetas de preferencia.</div>
+      </div>
+      <div class="changelog-item">
+        <div class="changelog-date">Reciente</div>
+        <div class="changelog-text"><strong>Catálogo ampliado a 9 especialidades</strong> — de cirugía general a robótica, neurocirugía, cardiovascular, ORL y más.</div>
+      </div>
+      <div class="changelog-item">
+        <div class="changelog-date">Reciente</div>
+        <div class="changelog-text"><strong>App web</strong> — Instriq ya funciona también desde el navegador, sin instalar nada.</div>
+      </div>
+    </div>
+    <div class="roadmap-note">
+      <span class="badge">Próximamente</span>
+      <p style="margin: 0;">Fotos reales verificadas con licencia libre para más instrumental, y un histórico de cambios público y navegable.</p>
+    </div>
+  </div>
+</section>
+
+<section id="colabora" class="band">
+  <div class="wrap">
+    <span class="eyebrow">Cómo colaborar</span>
+    <h2>Instriq crece con quien lo usa.</h2>
+    <div class="grid grid-2" style="margin-top: 24px;">
+      <div class="card">
+        <h3>Eres profesional sanitario</h3>
+        <p>Comparte el instrumental y las técnicas de tu equipo dentro de tu hospital, ayúdanos a revisar contenido del catálogo, o dinos qué protocolo o guía te falta.</p>
+        <ul class="checklist" style="margin-top: 16px;">
+          <li>Crea o únete al espacio de tu hospital desde la app</li>
+          <li>Propón correcciones o instrumental nuevo</li>
+          <li>Cuéntanos qué guías necesitas — nos ayuda a priorizar</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Eres desarrolladora/or</h3>
+        <p>El código es público. Flutter (Android/iOS/Web) + Supabase. Empieza por el README del repo.</p>
+        <ul class="checklist" style="margin-top: 16px;">
+          <li>Clona el repo y levanta el proyecto en minutos</li>
+          <li>Revisa los issues abiertos en GitHub</li>
+          <li>Propón mejoras vía pull request</li>
+        </ul>
+        <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" style="margin-top: 18px;">Ir al repositorio →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <span class="eyebrow">Equipo</span>
+    <h2>Un equipo pequeño, con vocación de comunidad.</h2>
+    <p class="lede">
+      Instriq lo impulsa un pequeño equipo inicial, pero su crecimiento depende de una red de
+      profesionales sanitarios, docentes, investigadores y desarrolladores que colaboran de forma
+      voluntaria y sin ánimo de lucro. Si quieres formar parte, escríbenos.
+    </p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <span class="eyebrow">Analítica de comunidad</span>
+    <h2>Datos para priorizar, sin vigilar a nadie.</h2>
+    <p class="lede">Cuando haya suficiente actividad, publicaremos aquí de forma agregada y anónima: el instrumental más consultado, las especialidades con más actividad, los protocolos más leídos, y las guías que la comunidad más está pidiendo.</p>
+    <div class="roadmap-note">
+      <span class="badge">Próximamente</span>
+      <p style="margin: 0;">Instriq acaba de empezar — todavía no hay datos de uso que mostrar. Sé de las primeras personas en construir esta comunidad. Cuando exista este apartado, será agregado y respetuoso con la privacidad: nunca datos individuales de una persona o un hospital concretos.</p>
+    </div>
+  </div>
+</section>
+
+<section id="transparencia">
+  <div class="wrap">
+    <span class="eyebrow">Transparencia y licencias</span>
+    <h2>Abierto también en las condiciones.</h2>
+    <div class="license-grid">
+      <div class="license-row"><span class="k">Código</span><span class="v">AGPL-3.0</span></div>
+      <div class="license-row"><span class="k">Documentación</span><span class="v">CC BY-SA 4.0</span></div>
+      <div class="license-row"><span class="k">APIs</span><span class="v">Abiertas y documentadas</span></div>
+      <div class="license-row"><span class="k">Estándares de referencia</span><span class="v">HL7 · FHIR · DICOM</span></div>
+    </div>
+    <p style="margin-top: 16px; font-size: 0.85rem;">
+      El nombre y la marca "Instriq" quedan reservados para proteger la identidad del proyecto y evitar
+      usos que confundan a la comunidad — el código en sí es libre bajo AGPL-3.0.
+    </p>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <span class="eyebrow">Donaciones</span>
+    <h2>Un sistema de financiación transparente.</h2>
+    <p class="lede">
+      A largo plazo habilitaremos donaciones completamente transparentes, con el destino de cada
+      aportación publicado: mantener la infraestructura y los dominios, cubrir servidores, desarrollar
+      nuevas funcionalidades, integrar estándares e inteligencia artificial, y apoyar proyectos de
+      investigación médica y biomédica que repercutan en una mejor atención a los pacientes.
+    </p>
+    <div class="roadmap-note">
+      <span class="badge">Próximamente</span>
+      <p style="margin: 0;">Todavía no hay un sistema de donaciones activo. Cuando lo haya, la distribución de fondos será pública, indicando el destino de cada aportación y las investigaciones apoyadas.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="col">
+      <h4>Instriq</h4>
+      <a href="https://app.instriq.org">Abrir la app</a>
+      <a href="https://github.com/mikeyoshio/Instriq">GitHub</a>
+    </div>
+    <div class="col">
+      <h4>Proyecto</h4>
+      <a href="#mision">Misión y visión</a>
+      <a href="#colabora">Cómo colaborar</a>
+      <a href="#transparencia">Licencias</a>
+    </div>
+    <div class="col">
+      <h4>Legal</h4>
+      <a href="/privacidad.html">Política de privacidad</a>
+      <a href="https://github.com/mikeyoshio/Instriq/blob/main/LICENSE">Licencia (AGPL-3.0)</a>
+    </div>
+  </div>
+  <p class="fine">Instriq® — proyecto open source por y para el bloque quirúrgico. Código bajo AGPL-3.0.</p>
+</footer>
+
+</body>
+</html>

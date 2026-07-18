@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
@@ -27,12 +28,55 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: InstrumentIcon(
-                iconKey: instrument.icon,
-                category: instrument.category,
-                size: 120,
-              ),
+              child: instrument.image != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        instrument.image!.url,
+                        height: 200,
+                        fit: BoxFit.contain,
+                        loadingBuilder: (context, child, progress) {
+                          if (progress == null) return child;
+                          return SizedBox(
+                            height: 200,
+                            child: Center(
+                              child: InstrumentIcon(
+                                iconKey: instrument.icon,
+                                category: instrument.category,
+                                size: 120,
+                              ),
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stack) => InstrumentIcon(
+                          iconKey: instrument.icon,
+                          category: instrument.category,
+                          size: 120,
+                        ),
+                      ),
+                    )
+                  : InstrumentIcon(
+                      iconKey: instrument.icon,
+                      category: instrument.category,
+                      size: 120,
+                    ),
             ),
+            if (instrument.image != null) ...[
+              const SizedBox(height: 6),
+              Center(
+                child: GestureDetector(
+                  onTap: () => launchUrl(Uri.parse(instrument.image!.sourceUrl)),
+                  child: Text(
+                    'Foto: ${instrument.image!.attribution} · ${instrument.image!.license}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(decoration: TextDecoration.underline),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 20),
             Wrap(
               spacing: 8,

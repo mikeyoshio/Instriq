@@ -63,6 +63,23 @@ extension SpecialtyLabel on Specialty {
   }
 }
 
+/// Foto real de referencia con licencia libre verificada (Wikimedia Commons).
+/// [attribution] y [sourceUrl] deben mostrarse junto a la imagen: la mayoría
+/// de licencias CC exigen atribución visible, no solo en un fichero aparte.
+class InstrumentImage {
+  final String url;
+  final String license;
+  final String attribution;
+  final String sourceUrl;
+
+  const InstrumentImage({
+    required this.url,
+    required this.license,
+    required this.attribution,
+    required this.sourceUrl,
+  });
+}
+
 class Instrument {
   final String id;
   final String name;
@@ -73,6 +90,7 @@ class Instrument {
   final String description;
   final String use;
   final String? tip;
+  final InstrumentImage? image;
 
   const Instrument({
     required this.id,
@@ -84,5 +102,6 @@ class Instrument {
     required this.description,
     required this.use,
     this.tip,
+    this.image,
   });
 }
