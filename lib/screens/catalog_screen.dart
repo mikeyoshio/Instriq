@@ -15,8 +15,29 @@ class CatalogScreen extends StatefulWidget {
 
 class _CatalogScreenState extends State<CatalogScreen> {
   String _query = '';
-  InstrumentCategory? _categoryFilter;
-  Specialty? _specialtyFilter;
+  final Set<InstrumentCategory> _categoryFilters = {};
+  final Set<Specialty> _specialtyFilters = {};
+
+  int get _activeFilterCount => _categoryFilters.length + _specialtyFilters.length;
+
+  void _toggleSpecialty(Specialty s) {
+    setState(() {
+      if (!_specialtyFilters.add(s)) _specialtyFilters.remove(s);
+    });
+  }
+
+  void _toggleCategory(InstrumentCategory c) {
+    setState(() {
+      if (!_categoryFilters.add(c)) _categoryFilters.remove(c);
+    });
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _specialtyFilters.clear();
+      _categoryFilters.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +45,25 @@ class _CatalogScreenState extends State<CatalogScreen> {
       final matchesQuery = _query.isEmpty ||
           i.name.toLowerCase().contains(_query.toLowerCase()) ||
           i.aliases.any((a) => a.toLowerCase().contains(_query.toLowerCase()));
-      final matchesCategory = _categoryFilter == null || i.category == _categoryFilter;
-      final matchesSpecialty = _specialtyFilter == null || i.specialty == _specialtyFilter;
+      final matchesCategory = _categoryFilters.isEmpty || _categoryFilters.contains(i.category);
+      final matchesSpecialty = _specialtyFilters.isEmpty || _specialtyFilters.contains(i.specialty);
       return matchesQuery && matchesCategory && matchesSpecialty;
     }).toList();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Catálogo')),
+      appBar: AppBar(
+        title: const Text('Catálogo'),
+        actions: [
+          if (_activeFilterCount > 0)
+            TextButton(
+              onPressed: _clearFilters,
+              child: Text(
+                'Limpiar ($_activeFilterCount)',
+                style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              ),
+            ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
@@ -48,7 +81,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('Especialidad', style: Theme.of(context).textTheme.labelMedium),
+              child: Text(
+                'Especialidad — toca varias a la vez',
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
             ),
           ),
           SizedBox(
@@ -57,18 +93,13 @@ class _CatalogScreenState extends State<CatalogScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
-                _FilterChip(
-                  label: 'Todas',
-                  selected: _specialtyFilter == null,
-                  onTap: () => setState(() => _specialtyFilter = null),
-                ),
                 ...Specialty.values.map(
                   (s) => Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: _FilterChip(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: _MultiFilterChip(
                       label: s.label,
-                      selected: _specialtyFilter == s,
-                      onTap: () => setState(() => _specialtyFilter = s),
+                      selected: _specialtyFilters.contains(s),
+                      onTap: () => _toggleSpecialty(s),
                     ),
                   ),
                 ),
@@ -89,18 +120,13 @@ class _CatalogScreenState extends State<CatalogScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
-                _FilterChip(
-                  label: 'Todas',
-                  selected: _categoryFilter == null,
-                  onTap: () => setState(() => _categoryFilter = null),
-                ),
                 ...InstrumentCategory.values.map(
                   (c) => Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: _FilterChip(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: _MultiFilterChip(
                       label: c.label,
-                      selected: _categoryFilter == c,
-                      onTap: () => setState(() => _categoryFilter = c),
+                      selected: _categoryFilters.contains(c),
+                      onTap: () => _toggleCategory(c),
                     ),
                   ),
                 ),
@@ -108,9 +134,31 @@ class _CatalogScreenState extends State<CatalogScreen> {
             ),
           ),
           const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '${filtered.length} instrumento${filtered.length == 1 ? '' : 's'}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
           Expanded(
             child: filtered.isEmpty
-                ? const Center(child: Text('Sin resultados'))
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Sin resultados con estos filtros'),
+                        if (_activeFilterCount > 0) ...[
+                          const SizedBox(height: 8),
+                          TextButton(onPressed: _clearFilters, child: const Text('Limpiar filtros')),
+                        ],
+                      ],
+                    ),
+                  )
                 : ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: filtered.length,
@@ -150,12 +198,12 @@ class _CatalogScreenState extends State<CatalogScreen> {
   }
 }
 
-class _FilterChip extends StatelessWidget {
+class _MultiFilterChip extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
-  const _FilterChip({
+  const _MultiFilterChip({
     required this.label,
     required this.selected,
     required this.onTap,
@@ -163,10 +211,11 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChoiceChip(
+    return FilterChip(
       label: Text(label),
       selected: selected,
       onSelected: (_) => onTap(),
+      showCheckmark: true,
     );
   }
 }

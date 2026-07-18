@@ -16,6 +16,44 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _loading = false;
   String? _error;
 
+  Future<void> _forgotPassword() async {
+    final email = await showDialog<String>(
+      context: context,
+      builder: (ctx) {
+        final controller = TextEditingController(text: _emailController.text.trim());
+        return AlertDialog(
+          title: const Text('Recuperar contraseña'),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+              child: const Text('Enviar enlace'),
+            ),
+          ],
+        );
+      },
+    );
+    if (email == null || email.isEmpty) return;
+    try {
+      await AuthService.instance.resetPasswordForEmail(email);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Si el email existe, te llegará un enlace para restablecer la contraseña.')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
+    }
+  }
+
   Future<void> _signIn() async {
     setState(() {
       _loading = true;
@@ -77,6 +115,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 MaterialPageRoute(builder: (_) => const SignUpScreen()),
               ),
               child: const Text('¿No tienes cuenta? Regístrate'),
+            ),
+            TextButton(
+              onPressed: _forgotPassword,
+              child: const Text('¿Olvidaste tu contraseña?'),
             ),
           ],
         ),

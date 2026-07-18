@@ -16,7 +16,7 @@ El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. S
 - **Aprende**: flashcards y quiz de opción múltiple con mejor puntuación guardada.
 - **Progreso**: seguimiento local de instrumentos aprendidos por categoría.
 - **Tarjetas de preferencia**: instrumental específico por cirujano y procedimiento, compartido entre el personal del mismo hospital vía Supabase, con marca de "validado por el cirujano".
-- **Alta de hospital por autoservicio**: cualquier persona puede registrar su hospital (con CIF, validado por formato/checksum) y queda como administradora — puede regenerar el código de invitación y gestionar miembros.
+- **Alta de hospital por autoservicio**: cualquier persona (jefa de quirófano o quien quiera) puede registrar su hospital o grupo y queda como administradora — puede regenerar el código de invitación y gestionar miembros.
 - **Modo claro/oscuro** con toggle manual persistente.
 
 ## Stack técnico
@@ -36,7 +36,7 @@ lib/
     auth/       # Bienvenida, login/registro, alta de hospital, flujo de conexión
     admin/      # Gestión de hospital (código, miembros)
     ...         # Catálogo, Aprende (flashcards/quiz), progreso, tarjetas
-  utils/        # Validador de CIF, generador de código de invitación
+  utils/        # Generador de código de invitación
 supabase/       # Esquema SQL (ejecutar en orden: schema.sql, schema_v2, schema_v3)
 ```
 

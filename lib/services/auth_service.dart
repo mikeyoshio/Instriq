@@ -21,4 +21,12 @@ class AuthService {
   Future<void> signOut() async {
     await _client.auth.signOut();
   }
+
+  Future<void> resetPasswordForEmail(String email) async {
+    await _client.auth.resetPasswordForEmail(email.trim());
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    await _client.auth.updateUser(UserAttributes(password: newPassword));
+  }
 }

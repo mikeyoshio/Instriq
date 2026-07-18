@@ -5,7 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Instriq — Conocimiento quirúrgico abierto, para todo el bloque quirúrgico</title>
 <meta name="description" content="Instriq es un proyecto open source creado por profesionales para profesionales del bloque quirúrgico: catálogo de instrumental, protocolos y tarjetas de preferencia compartidas.">
+<link rel="canonical" href="https://instriq.org/">
 <link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://instriq.org/">
+<meta property="og:site_name" content="Instriq">
+<meta property="og:title" content="Instriq — Conocimiento quirúrgico abierto, para todo el bloque quirúrgico">
+<meta property="og:description" content="Catálogo de instrumental, protocolos y tarjetas de preferencia compartidas entre profesionales del bloque quirúrgico. Open source.">
+<meta property="og:image" content="https://instriq.org/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_ES">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Instriq — Conocimiento quirúrgico abierto, para todo el bloque quirúrgico">
+<meta name="twitter:description" content="Catálogo de instrumental, protocolos y tarjetas de preferencia compartidas entre profesionales del bloque quirúrgico. Open source.">
+<meta name="twitter:image" content="https://instriq.org/og-image.png">
 <style>
   :root {
     --navy: #162B56;
@@ -45,6 +64,8 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 76px; }
   body {
     background: var(--bg);
     color: var(--text);
@@ -72,8 +93,12 @@
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--text); }
   .brand .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--teal); }
   .nav-links { display: flex; gap: 22px; align-items: center; }
-  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; white-space: nowrap; }
   .nav-links a:hover { color: var(--text); }
+  @media (max-width: 760px) {
+    .nav-links a:not(.btn) { display: none; }
+    .nav-links { gap: 12px; }
+  }
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 11px 20px; border-radius: 999px; font-weight: 600; font-size: 0.95rem;
@@ -97,10 +122,22 @@
   }
   :root[data-theme="dark"] .eyebrow, @media (prefers-color-scheme: dark) { .eyebrow { color: var(--teal); } }
 
-  .hero { text-align: center; padding: 96px 0 64px; }
+  .hero { text-align: center; padding: 72px 0 64px; }
   .hero .wrap { display: flex; flex-direction: column; align-items: center; }
+  .hero-icon { width: 88px; height: 88px; border-radius: 22px; margin-bottom: 24px; box-shadow: 0 12px 32px -8px rgba(20,32,43,0.35); }
   .hero p.lede { margin-left: auto; margin-right: auto; }
   .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+  .platform-row { display: flex; gap: 18px; justify-content: center; align-items: center; margin-top: 28px; color: var(--text-muted); font-size: 0.85rem; flex-wrap: wrap; }
+  .platform-row span { display: flex; align-items: center; gap: 6px; }
+
+  .showcase {
+    display: flex; align-items: center; gap: 48px; margin-top: 40px;
+  }
+  .showcase img {
+    border-radius: 18px; border: 1px solid var(--border);
+    box-shadow: 0 24px 60px -20px rgba(20,32,43,0.4);
+  }
+  @media (max-width: 860px) { .showcase { flex-direction: column; } }
 
   .grid { display: grid; gap: 20px; }
   .grid-2 { grid-template-columns: repeat(2, 1fr); }
@@ -177,6 +214,7 @@
 
 <section class="hero">
   <div class="wrap">
+    <img src="favicon.png" alt="" class="hero-icon">
     <span class="eyebrow">Open source · bloque quirúrgico</span>
     <h1>El conocimiento de quirófano,<br>abierto y compartido entre profesionales.</h1>
     <p class="lede">
@@ -187,6 +225,12 @@
     <div class="hero-actions">
       <a href="https://app.instriq.org" class="btn btn-primary">Abrir la app →</a>
       <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost">Ver el código en GitHub</a>
+    </div>
+    <div class="platform-row">
+      <span>📱 Android</span>
+      <span>🍎 iOS</span>
+      <span>🌐 Web</span>
+      <span>🔓 Sin cuenta para empezar</span>
     </div>
   </div>
 </section>
@@ -243,10 +287,20 @@
 
 <section id="hoy">
   <div class="wrap">
-    <span class="eyebrow">Lo que ya puedes usar hoy</span>
-    <h2>Sin cuenta, sin fricción.</h2>
-    <p class="lede">El aprendizaje básico funciona como invitado. Solo hace falta cuenta si tu hospital quiere compartir sus propias tarjetas de preferencia.</p>
-    <div class="grid grid-3" style="margin-top: 24px;">
+    <div class="showcase">
+      <div>
+        <span class="eyebrow">Lo que ya puedes usar hoy</span>
+        <h2>Sin cuenta, sin fricción.</h2>
+        <p class="lede">El aprendizaje básico funciona como invitado. Solo hace falta cuenta si tu hospital quiere compartir sus propias tarjetas de preferencia.</p>
+        <div class="stat-row" style="justify-content: flex-start;">
+          <div class="stat"><div class="num">70+</div><div class="label">instrumentos documentados</div></div>
+          <div class="stat"><div class="num">9</div><div class="label">especialidades cubiertas</div></div>
+          <div class="stat"><div class="num">3</div><div class="label">plataformas</div></div>
+        </div>
+      </div>
+      <img src="screenshots/catalogo.png" alt="Catálogo de instrumental filtrado por especialidad en la app Instriq" width="280">
+    </div>
+    <div class="grid grid-3" style="margin-top: 40px;">
       <div class="card">
         <h3>Catálogo</h3>
         <p>+70 instrumentos organizados por 9 especialidades y por categoría funcional, con nombres comerciales y fabricante.</p>
@@ -259,11 +313,6 @@
         <h3>Tarjetas de preferencia</h3>
         <p>Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu hospital.</p>
       </div>
-    </div>
-    <div class="stat-row">
-      <div class="stat"><div class="num">70+</div><div class="label">instrumentos documentados</div></div>
-      <div class="stat"><div class="num">9</div><div class="label">especialidades cubiertas</div></div>
-      <div class="stat"><div class="num">3</div><div class="label">plataformas: Android, iOS y web</div></div>
     </div>
   </div>
 </section>

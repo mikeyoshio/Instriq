@@ -80,20 +80,12 @@ class ProfileService {
   }
 
   /// Registra un hospital nuevo (autoservicio) y lo liga como admin al usuario actual.
-  /// Lanza [StateError] si el CIF ya está registrado.
   Future<Hospital> registerHospital({
     required String name,
-    required String cif,
     String? displayName,
   }) async {
     final user = AuthService.instance.currentUser;
     if (user == null) throw StateError('No hay sesión activa.');
-
-    final normalizedCif = cif.trim().toUpperCase();
-    final existing = await _client.from('hospitals').select().eq('cif', normalizedCif).maybeSingle();
-    if (existing != null) {
-      throw StateError('Ya existe un hospital registrado con ese CIF.');
-    }
 
     String code = generateInviteCode();
     Map<String, dynamic>? inserted;
@@ -103,7 +95,6 @@ class ProfileService {
             .from('hospitals')
             .insert({
               'name': name.trim(),
-              'cif': normalizedCif,
               'invite_code': code,
               'created_by': user.id,
             })

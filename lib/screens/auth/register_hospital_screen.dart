@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../services/profile_service.dart';
-import '../../utils/cif_validator.dart';
 
 class RegisterHospitalScreen extends StatefulWidget {
   const RegisterHospitalScreen({super.key});
@@ -13,22 +12,14 @@ class RegisterHospitalScreen extends StatefulWidget {
 class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
   final _nameController = TextEditingController();
   final _adminNameController = TextEditingController();
-  final _cifController = TextEditingController();
   bool _loading = false;
   String? _error;
   String? _createdCode;
 
-  bool get _cifLooksValid => isValidCif(_cifController.text);
-
   Future<void> _register() async {
     final name = _nameController.text.trim();
-    final cif = _cifController.text.trim();
     if (name.isEmpty) {
-      setState(() => _error = 'Indica el nombre del hospital');
-      return;
-    }
-    if (!isValidCif(cif)) {
-      setState(() => _error = 'El CIF no tiene un formato válido');
+      setState(() => _error = 'Indica el nombre del hospital o grupo');
       return;
     }
     setState(() {
@@ -38,7 +29,6 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
     try {
       final hospital = await ProfileService.instance.registerHospital(
         name: name,
-        cif: cif,
         displayName: _adminNameController.text.trim(),
       );
       setState(() => _createdCode = hospital.inviteCode);
@@ -98,7 +88,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
-                'Registra tu hospital con su CIF. Se generará un código de invitación único para que tus compañeras se unan.',
+                'Se generará un código de invitación único para que tus compañeras se unan.',
               ),
               const SizedBox(height: 20),
               TextField(
@@ -112,24 +102,8 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
               TextField(
                 controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: 'Nombre del hospital',
+                  labelText: 'Nombre del hospital o grupo',
                   border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _cifController,
-                textCapitalization: TextCapitalization.characters,
-                onChanged: (_) => setState(() {}),
-                decoration: InputDecoration(
-                  labelText: 'CIF',
-                  border: const OutlineInputBorder(),
-                  suffixIcon: _cifController.text.isEmpty
-                      ? null
-                      : Icon(
-                          _cifLooksValid ? Icons.check_circle : Icons.error_outline,
-                          color: _cifLooksValid ? Colors.green : Colors.red,
-                        ),
                 ),
               ),
               if (_error != null) ...[
