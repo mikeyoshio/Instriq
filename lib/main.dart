@@ -1,8 +1,14 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'screens/app_root.dart';
 import 'screens/auth/reset_password_screen.dart';
+import 'services/app_version_service.dart';
 import 'services/auth_service.dart';
 import 'services/progress_service.dart';
 import 'services/supabase_config.dart';
@@ -36,6 +42,54 @@ class _InstriqAppState extends State<InstriqApp> {
         );
       }
     });
+    if (!kIsWeb) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _checkForUpdate());
+    }
+  }
+
+  Future<void> _checkForUpdate() async {
+    try {
+      final config = await AppVersionService.instance.fetchConfig();
+      if (config == null) return;
+      final current = await AppVersionService.instance.currentVersion();
+      if (!AppVersionService.instance.isOlderThan(current, config.latestVersion)) return;
+
+      final prefs = await SharedPreferences.getInstance();
+      final dismissedKey = 'dismissed_version_notice_${config.latestVersion}';
+      if (prefs.getBool(dismissedKey) == true) return;
+
+      final context = _navigatorKey.currentContext;
+      if (context == null || !context.mounted) return;
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Nueva versión disponible'),
+          content: Text(
+            config.message ?? 'Hay una versión más reciente de Instriq disponible.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                prefs.setBool(dismissedKey, true);
+                Navigator.pop(ctx);
+              },
+              child: const Text('Ahora no'),
+            ),
+            FilledButton(
+              onPressed: () {
+                final url = Platform.isAndroid ? config.androidUrl : config.iosUrl;
+                if (url != null) launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                Navigator.pop(ctx);
+              },
+              child: const Text('Actualizar'),
+            ),
+          ],
+        ),
+      );
+    } catch (_) {
+      // Si falla la comprobación (sin red, tabla no disponible, etc.) no
+      // interrumpimos el arranque de la app por esto.
+    }
   }
 
   @override
