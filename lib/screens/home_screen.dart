@@ -4,6 +4,7 @@ import '../services/auth_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
 import '../services/theme_service.dart';
+import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'auth/hospital_connect_flow.dart';
 import 'catalog_screen.dart';
@@ -50,9 +51,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           if (AuthService.instance.currentUser != null)
             IconButton(
+              tooltip: 'Mi cuenta y privacidad',
+              icon: const Icon(Icons.privacy_tip_outlined),
+              onPressed: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const AccountPrivacyScreen()),
+                );
+                _refresh();
+              },
+            ),
+          if (AuthService.instance.currentUser != null)
+            IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () async {
                 await AuthService.instance.signOut();
+                // loadProfile() detecta que ya no hay sesión y limpia el
+                // caché de grupo/espacios; sin esto quedaba en memoria.
+                await ProfileService.instance.loadProfile();
                 _refresh();
               },
             ),
