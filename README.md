@@ -1,8 +1,8 @@
 # Instriq
 
-App multiplataforma (Flutter: Android, iOS, Web) para que el personal de quirófano aprenda el instrumental quirúrgico de forma interactiva, y para que un hospital o grupo comparta sus propias tarjetas de preferencia de cirujano — sustituyendo las carpetas de papel desactualizadas por algo que se lleva en la tablet o el móvil.
+Plataforma profesional de conocimiento colaborativo para el bloque quirúrgico (Flutter: Android, iOS, Web). Reúne instrumental, técnicas, protocolos y la experiencia real del equipo en un solo lugar, y permite a cualquier grupo (un hospital, un bloque quirúrgico, un servicio, un equipo de instrumentistas, un centro de formación...) documentar su propia forma de trabajar — sustituyendo las carpetas de papel desactualizadas por algo que se lleva en la tablet o el móvil.
 
-El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. Solo hace falta iniciar sesión si quieres unirte o crear el espacio compartido de tu hospital.
+El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. Solo hace falta iniciar sesión si quieres unirte o crear el espacio compartido de tu grupo.
 
 ## Capturas
 
@@ -15,8 +15,8 @@ El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. S
 - **Catálogo**: instrumental organizado por especialidad (cirugía general, laparoscopia/energía avanzada, robótica, ortopedia/trauma, neurocirugía, cardiovascular, ginecología/obstetricia, urología, ORL) y por categoría funcional (corte, disección, sutura, separación, succión, especiales). Cada instrumento incluye nombres comerciales y fabricante como alias (ej. "LigaSure" de Medtronic, "Harmonic" de Ethicon).
 - **Aprende**: flashcards y quiz de opción múltiple con mejor puntuación guardada.
 - **Progreso**: seguimiento local de instrumentos aprendidos por categoría.
-- **Tarjetas de preferencia**: instrumental específico por cirujano y procedimiento, compartido entre el personal del mismo hospital vía Supabase, con marca de "validado por el cirujano".
-- **Alta de hospital por autoservicio**: cualquier persona (jefa de quirófano o quien quiera) puede registrar su hospital o grupo y queda como administradora — puede regenerar el código de invitación y gestionar miembros.
+- **Tarjetas de preferencia**: instrumental específico por cirujano y procedimiento, compartido entre el personal del mismo grupo vía Supabase, con marca de "validado por el cirujano".
+- **Alta de grupo por autoservicio**: cualquier persona (jefa de quirófano o quien quiera) puede registrar su grupo y queda como administradora — puede regenerar el código de invitación y gestionar miembros.
 - **Modo claro/oscuro** con toggle manual persistente.
 
 ## Stack técnico
@@ -29,15 +29,15 @@ El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. S
 
 ```
 lib/
-  models/       # Instrument, PreferenceCard, Hospital, HospitalMember
+  models/       # Instrument, PreferenceCard, Hospital (= grupo), HospitalMember
   data/         # Catálogo de instrumental (const, ~70 instrumentos)
-  services/     # Supabase, auth, perfil/hospital, progreso, tema
+  services/     # Supabase, auth, perfil/grupo, progreso, tema
   screens/
-    auth/       # Bienvenida, login/registro, alta de hospital, flujo de conexión
-    admin/      # Gestión de hospital (código, miembros)
+    auth/       # Bienvenida, login/registro, alta de grupo, flujo de conexión
+    admin/      # Gestión del grupo (código, miembros)
     ...         # Catálogo, Aprende (flashcards/quiz), progreso, tarjetas
   utils/        # Generador de código de invitación
-supabase/       # Esquema SQL (ejecutar en orden: schema.sql, schema_v2, schema_v3)
+supabase/       # Esquema SQL (ejecutar en orden: schema.sql, schema_v2, schema_v3, schema_v4)
 ```
 
 ## Desarrollo
@@ -51,7 +51,7 @@ flutter run -d chrome        # navegador
 ### Backend (Supabase)
 
 1. Crea un proyecto en [supabase.com](https://supabase.com).
-2. En el SQL Editor, ejecuta en orden: `supabase/schema.sql`, `supabase/schema_v2_hospital_admin.sql`, `supabase/schema_v3_fix_rls_recursion.sql`.
+2. En el SQL Editor, ejecuta en orden: `supabase/schema.sql`, `supabase/schema_v2_hospital_admin.sql`, `supabase/schema_v3_fix_rls_recursion.sql`, `supabase/schema_v4_group_documents.sql`.
 3. Copia la URL y la **publishable key** (Project Settings → API) a `lib/services/supabase_config.dart`. Es pública/segura de commitear — la seguridad real la da Row Level Security, no el secreto de esta key.
 
 ## Despliegue

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/group_document.dart';
 import '../services/auth_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
@@ -7,6 +8,7 @@ import '../services/theme_service.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'auth/hospital_connect_flow.dart';
 import 'catalog_screen.dart';
+import 'group_document_list_screen.dart';
 import 'learn_screen.dart';
 import 'preference_cards_screen.dart';
 import 'progress_screen.dart';
@@ -117,9 +119,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               const SizedBox(height: 24),
-              Text('Mi hospital', style: Theme.of(context).textTheme.titleMedium),
+              Text('Mi grupo', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               if (_isConnected) ...[
+                _MenuCard(
+                  icon: Icons.menu_book_outlined,
+                  title: 'Técnicas quirúrgicas',
+                  subtitle: 'Documenta cómo trabaja tu equipo, paso a paso',
+                  onTap: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const GroupDocumentListScreen(kind: DocumentKind.technique),
+                      ),
+                    );
+                    _refresh();
+                  },
+                ),
+                const SizedBox(height: 12),
+                _MenuCard(
+                  icon: Icons.fact_check_outlined,
+                  title: 'Protocolos',
+                  subtitle: 'Checklists y protocolos internos del grupo',
+                  onTap: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const GroupDocumentListScreen(kind: DocumentKind.protocol),
+                      ),
+                    );
+                    _refresh();
+                  },
+                ),
+                const SizedBox(height: 12),
                 _MenuCard(
                   icon: Icons.assignment_ind,
                   title: 'Tarjetas de preferencia',
@@ -136,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 12),
                   _MenuCard(
                     icon: Icons.admin_panel_settings,
-                    title: 'Administrar hospital',
+                    title: 'Administrar grupo',
                     subtitle: 'Código de invitación y miembros',
                     onTap: () async {
                       await Navigator.of(context).push(
@@ -148,9 +178,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ] else
                 _MenuCard(
-                  icon: Icons.local_hospital,
-                  title: 'Conecta con tu hospital',
-                  subtitle: 'Únete con un código o crea el tuyo para compartir tarjetas de preferencia',
+                  icon: Icons.groups_outlined,
+                  title: 'Conecta con tu grupo',
+                  subtitle: 'Únete con un código o crea el tuyo para compartir conocimiento con tu equipo',
                   onTap: _openHospitalConnectFlow,
                 ),
             ],

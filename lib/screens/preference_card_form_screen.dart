@@ -4,6 +4,7 @@ import '../data/instruments_data.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
 import '../services/preference_card_service.dart';
+import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
 
 class PreferenceCardFormScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
     final selected = await showModalBottomSheet<Instrument>(
       context: context,
       isScrollControlled: true,
-      builder: (context) => const _CatalogPickerSheet(),
+      builder: (context) => const CatalogPickerSheet(),
     );
     if (selected != null) {
       setState(() {
@@ -266,68 +267,6 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _CatalogPickerSheet extends StatefulWidget {
-  const _CatalogPickerSheet();
-
-  @override
-  State<_CatalogPickerSheet> createState() => _CatalogPickerSheetState();
-}
-
-class _CatalogPickerSheetState extends State<_CatalogPickerSheet> {
-  String _query = '';
-
-  @override
-  Widget build(BuildContext context) {
-    final filtered = kInstruments
-        .where((i) => _query.isEmpty || i.name.toLowerCase().contains(_query.toLowerCase()))
-        .toList();
-    return DraggableScrollableSheet(
-      initialChildSize: 0.8,
-      minChildSize: 0.5,
-      maxChildSize: 0.95,
-      expand: false,
-      builder: (context, scrollController) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Buscar instrumento...',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (v) => setState(() => _query = v),
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: filtered.length,
-                  itemBuilder: (context, index) {
-                    final instrument = filtered[index];
-                    return ListTile(
-                      leading: InstrumentIcon(
-                        iconKey: instrument.icon,
-                        category: instrument.category,
-                        size: 40,
-                      ),
-                      title: Text(instrument.name),
-                      subtitle: Text(instrument.category.label),
-                      onTap: () => Navigator.of(context).pop(instrument),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

@@ -69,7 +69,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
       builder: (ctx) => AlertDialog(
         title: const Text('Quitar del hospital'),
         content: Text(
-          '¿Quitar a ${member.displayName?.isNotEmpty == true ? member.displayName : 'esta persona'} del hospital? Perderá acceso a las tarjetas de preferencia compartidas.',
+          '¿Quitar a ${member.displayName?.isNotEmpty == true ? member.displayName : 'esta persona'} del grupo? Perderá acceso al contenido compartido.',
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
@@ -92,7 +92,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
   Widget build(BuildContext context) {
     final profile = ProfileService.instance;
     return Scaffold(
-      appBar: AppBar(title: const Text('Administrar hospital')),
+      appBar: AppBar(title: const Text('Administrar grupo')),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -101,10 +101,6 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                 padding: const EdgeInsets.all(20),
                 children: [
                   Text(profile.hospitalName ?? '', style: Theme.of(context).textTheme.headlineSmall),
-                  if (profile.hospitalCif != null) ...[
-                    const SizedBox(height: 4),
-                    Text('CIF: ${profile.hospitalCif}'),
-                  ],
                   const SizedBox(height: 20),
                   Card(
                     child: Padding(
