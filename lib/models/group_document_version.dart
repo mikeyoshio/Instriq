@@ -90,10 +90,15 @@ class GroupDocumentVersion {
         'comment': comment,
       };
 
+  /// [clearSpecialty]/[clearContent]: al ser campos nullable, pasar `null`
+  /// en [specialty]/[content] no basta para vaciarlos (se confundiría con
+  /// "no lo toques") — hay que pedirlo explícitamente.
   GroupDocumentVersion copyWith({
     String? title,
     String? specialty,
+    bool clearSpecialty = false,
     String? content,
+    bool clearContent = false,
     List<String>? steps,
     List<String>? relatedInstrumentIds,
     String? comment,
@@ -104,8 +109,8 @@ class GroupDocumentVersion {
       versionNumber: versionNumber,
       status: status,
       title: title ?? this.title,
-      specialty: specialty ?? this.specialty,
-      content: content ?? this.content,
+      specialty: clearSpecialty ? null : (specialty ?? this.specialty),
+      content: clearContent ? null : (content ?? this.content),
       steps: steps ?? this.steps,
       relatedInstrumentIds: relatedInstrumentIds ?? this.relatedInstrumentIds,
       authorId: authorId,

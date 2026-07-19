@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../data/surgical_specialties.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
@@ -32,7 +33,7 @@ class GroupDocumentFormScreen extends StatefulWidget {
 
 class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   late final TextEditingController _titleController;
-  late final TextEditingController _specialtyController;
+  String? _specialty;
   late final TextEditingController _contentController;
   late final TextEditingController _commentController;
   late List<String> _steps;
@@ -46,7 +47,6 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   void initState() {
     super.initState();
     _titleController = TextEditingController();
-    _specialtyController = TextEditingController();
     _contentController = TextEditingController();
     _commentController = TextEditingController();
     _steps = [];
@@ -75,7 +75,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   void _applyDraft(GroupDocumentVersion draft) {
     _draft = draft;
     _titleController.text = draft.title;
-    _specialtyController.text = draft.specialty ?? '';
+    _specialty = draft.specialty;
     _contentController.text = draft.content ?? '';
     _steps = List.of(draft.steps);
     _relatedInstrumentIds = List.of(draft.relatedInstrumentIds);
@@ -84,7 +84,6 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   @override
   void dispose() {
     _titleController.dispose();
-    _specialtyController.dispose();
     _contentController.dispose();
     _commentController.dispose();
     super.dispose();
@@ -133,8 +132,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     final title = _titleController.text.trim();
     return _draft!.copyWith(
       title: title,
-      specialty: _specialtyController.text.trim().isEmpty ? null : _specialtyController.text.trim(),
+      specialty: _specialty,
+      clearSpecialty: _specialty == null,
       content: _contentController.text.trim().isEmpty ? null : _contentController.text.trim(),
+      clearContent: _contentController.text.trim().isEmpty,
       steps: _steps,
       relatedInstrumentIds: _relatedInstrumentIds,
       comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
@@ -161,6 +162,26 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  Widget _buildSpecialtyDropdown() {
+    final legacyValue =
+        _specialty != null && !kSurgicalSpecialties.contains(_specialty) ? _specialty : null;
+    return DropdownButtonFormField<String?>(
+      value: _specialty,
+      isExpanded: true,
+      decoration: const InputDecoration(
+        labelText: 'Especialidad',
+        border: OutlineInputBorder(),
+      ),
+      items: [
+        const DropdownMenuItem<String?>(value: null, child: Text('Sin especialidad concreta')),
+        if (legacyValue != null)
+          DropdownMenuItem<String?>(value: legacyValue, child: Text('$legacyValue (anterior, no estándar)')),
+        ...kSurgicalSpecialties.map((s) => DropdownMenuItem<String?>(value: s, child: Text(s))),
+      ],
+      onChanged: (value) => setState(() => _specialty = value),
+    );
   }
 
   @override
@@ -190,13 +211,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
               decoration: const InputDecoration(labelText: 'Título', border: OutlineInputBorder()),
             ),
             const SizedBox(height: 12),
-            TextField(
-              controller: _specialtyController,
-              decoration: const InputDecoration(
-                labelText: 'Especialidad (opcional)',
-                border: OutlineInputBorder(),
-              ),
-            ),
+            _buildSpecialtyDropdown(),
             const SizedBox(height: 12),
             TextField(
               controller: _contentController,
