@@ -9,7 +9,7 @@ const List<Instrument> kInstruments = [
     aliases: ['Mango de bisturí', 'Scalpel'],
     icon: 'cut',
     description:
-        'Instrumento de corte formado por un mango (nº 3 o nº 4 los más comunes) y una hoja desechable (nº 10, 11, 15, 20...). Se usa para incisiones cutáneas y disección fina.',
+        'Instrumento de corte formado por un mango y una hoja desechable. El mango nº 3 monta hojas del 10 al 15 (no existe la hoja nº 14); el mango nº 4, hojas más grandes, del 18 al 24.',
     use:
         'Apertura de piel y tejidos blandos. Se entrega al cirujano con la hoja hacia abajo, nunca directamente a la mano.',
     tip: 'La hoja nº 10 es la más usada en incisiones grandes; la nº 15 en incisiones pequeñas y precisas.',
@@ -27,8 +27,8 @@ const List<Instrument> kInstruments = [
     aliases: ['Mayo scissors'],
     icon: 'cut',
     description:
-        'Tijera robusta de punta roma, recta o curva, con hojas gruesas.',
-    use: 'Corte de tejidos resistentes: fascia, suturas gruesas, material de sutura.',
+        'Tijera robusta de punta roma, recta o curva, con hojas gruesas. Existe también en versión larga.',
+    use: 'Corte de tejidos resistentes: fascia, suturas gruesas, material de sutura. La curva larga se usa sobre todo en laparotomía o cirugía abierta profunda.',
     tip: 'La curva se usa para tejido profundo; la recta para superficial y para cortar suturas.',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/5/58/Mayo_scissors.jpg',
@@ -43,7 +43,7 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.corte,
     aliases: ['Metzenbaum scissors'],
     icon: 'cut',
-    description: 'Tijera de hojas finas y delicadas, más larga y estrecha que la de Mayo.',
+    description: 'Tijera de hojas finas y delicadas, más larga y estrecha que la de Mayo. Existe en longitud corta y larga.',
     use: 'Disección fina de tejidos delicados (fascia, vasos, tejido subcutáneo).',
     tip: 'Nunca se usa para cortar suturas: las hojas finas se desafilan y pierden precisión.',
     image: InstrumentImage(
@@ -57,10 +57,10 @@ const List<Instrument> kInstruments = [
     id: 'tijera-iris',
     name: 'Tijera de Iris',
     category: InstrumentCategory.corte,
-    aliases: ['Iris scissors'],
+    aliases: ['Iris scissors', 'Tijera de plástica'],
     icon: 'cut',
-    description: 'Tijera pequeña de punta fina, recta o curva.',
-    use: 'Cirugía de precisión en espacios reducidos: oftalmología, microcirugía, disección superficial fina.',
+    description: 'Tijera pequeña de punta fina, recta o curva. También usada en cirugía plástica.',
+    use: 'Cirugía de precisión en espacios reducidos y muy fina: oftalmología, cirugía plástica, microcirugía, disección superficial fina.',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Iris_scissors_by_Roboz_Tech_Surgical_.jpg',
       license: 'CC BY-SA 4.0',
@@ -101,7 +101,7 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Kocher forceps'],
     icon: 'pinch',
-    description: 'Pinza hemostática recta o curva con dientes en la punta (1x2) y ramas estriadas.',
+    description: 'Pinza hemostática recta o curva, con dientes en la punta (1x2) y ramas estriadas, o en versión sin dientes.',
     use: 'Sujeción firme de tejidos gruesos y aponeurosis; menos usada para hemostasia por ser traumática.',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Kocher_clamp_01.JPG',
@@ -114,9 +114,9 @@ const List<Instrument> kInstruments = [
     id: 'pinza-kelly',
     name: 'Pinza de Kelly',
     category: InstrumentCategory.diseccion,
-    aliases: ['Kelly forceps'],
+    aliases: ['Kelly forceps', 'Pinza de Crile', 'Crile forceps'],
     icon: 'pinch',
-    description: 'Pinza hemostática recta o curva, sin dientes, con estrías transversales.',
+    description: 'Pinza hemostática recta o curva (como una Kocher curva), normalmente sin dientes, con estrías transversales. Muy similar a la pinza de Crile.',
     use: 'Hemostasia (pinzamiento de vasos sangrantes) y disección roma.',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Kelly_Forceps.svg/500px-Kelly_Forceps.svg.png',
@@ -168,10 +168,10 @@ const List<Instrument> kInstruments = [
     id: 'pinza-foerster',
     name: 'Pinza de anillos (Foerster)',
     category: InstrumentCategory.diseccion,
-    aliases: ['Pinza de aro', 'Sponge forceps'],
+    aliases: ['Pinza de aro', 'Sponge forceps', 'Pinza Foster (común)'],
     icon: 'pinch',
-    description: 'Pinza larga con extremo en anillo, con o sin dientes.',
-    use: 'Sujeción de gasas o torundas para antisepsia de campo; también para tracción de tejidos.',
+    description: 'Pinza larga con extremo en anillo, con o sin dientes. Conocida coloquialmente como "Foster".',
+    use: 'Sujeción de gasas o torundas para antisepsia de campo; tracción de tejidos; también para extraer piedras de la vesícula en colecistectomía laparoscópica.',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Foerster_clamp_02.JPG',
       license: 'CC0 1.0',
@@ -183,7 +183,7 @@ const List<Instrument> kInstruments = [
     id: 'pinza-backhaus',
     name: 'Pinza de Backhaus',
     category: InstrumentCategory.diseccion,
-    aliases: ['Pinza de campo', 'Towel clamp'],
+    aliases: ['Pinza de campo', 'Pinza para paños', 'Towel clamp', 'Towel forceps'],
     icon: 'pinch',
     description: 'Pinza con puntas afiladas curvas que se cruzan, tipo clip.',
     use: 'Fijación de paños de campo quirúrgico entre sí y a la piel.',
@@ -220,6 +220,24 @@ const List<Instrument> kInstruments = [
     icon: 'needle',
     description: 'Portaagujas pequeño y delicado, sin cremallera de bloqueo.',
     use: 'Sutura de precisión en cirugía fina y microcirugía.',
+  ),
+  Instrument(
+    id: 'portaagujas-vascular',
+    name: 'Portaagujas vascular',
+    category: InstrumentCategory.sutura,
+    aliases: ['Vascular needle holder'],
+    icon: 'needle',
+    description: 'Portaagujas fino y delicado, con o sin cremallera, para suturas de calibre muy pequeño.',
+    use: 'Anastomosis y sutura de vasos sanguíneos en cirugía vascular.',
+  ),
+  Instrument(
+    id: 'portaagujas-castroviejo',
+    name: 'Portaagujas de Castroviejo (microcirugía)',
+    category: InstrumentCategory.sutura,
+    aliases: ['Castroviejo needle holder'],
+    icon: 'needle',
+    description: 'Portaagujas muy fino, tipo resorte (sin anillas para los dedos), de precisión milimétrica.',
+    use: 'Microcirugía: oftalmología, cirugía vascular y de nervios, anastomosis muy finas.',
   ),
 
   // ---- SEPARACIÓN / EXPOSICIÓN ----
@@ -261,12 +279,6 @@ const List<Instrument> kInstruments = [
     icon: 'expand',
     description: 'Separador curvo en forma de "raqueta", manual.',
     use: 'Retracción de la vejiga o el útero en cirugía abdominal y pélvica.',
-    image: InstrumentImage(
-      url: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Doyen%27s_Retractor.jpg",
-      license: 'CC BY-SA 3.0',
-      attribution: 'Sarindam7, Wikimedia Commons',
-      sourceUrl: "https://commons.wikimedia.org/wiki/File:Doyen's_Retractor.jpg",
-    ),
   ),
   Instrument(
     id: 'separador-richardson',
@@ -285,7 +297,7 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.succion,
     aliases: ['Yankauer suction tip'],
     icon: 'suction',
-    description: 'Cánula rígida de aspiración con punta perforada y curva.',
+    description: 'Cánula rígida de aspiración con punta perforada y curva. Existe en calibre fino y grueso.',
     use: 'Aspiración de sangre, secreciones y humo quirúrgico del campo operatorio.',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Yankauer_Suction_Tip.jpg',
@@ -298,9 +310,9 @@ const List<Instrument> kInstruments = [
     id: 'canula-poole',
     name: 'Cánula de Poole',
     category: InstrumentCategory.succion,
-    aliases: ['Poole suction tip'],
+    aliases: ['Poole suction tip', 'Cánula multiperforada'],
     icon: 'suction',
-    description: 'Cánula de aspiración con múltiples orificios laterales protegidos por una carcasa.',
+    description: 'Cánula de aspiración con múltiples orificios laterales protegidos por una carcasa. Conocida vulgarmente como "multiperforada".',
     use: 'Aspiración de líquido abundante en cavidades (ascitis, lavados peritoneales) evitando succionar tejido.',
   ),
 
@@ -312,7 +324,7 @@ const List<Instrument> kInstruments = [
     aliases: ['Grooved director'],
     icon: 'tool',
     description: 'Instrumento romo con un canal longitudinal en toda su superficie.',
-    use: 'Guía protegida para cortar con bisturí sin lesionar estructuras subyacentes (p. ej. abrir fístulas).',
+    use: 'Guía protegida para cortar con bisturí sin lesionar estructuras subyacentes; muy usada en la liberación del túnel carpiano.',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Sonde_cannel%C3%A9e_-_mus%C3%A9e_HCL_-_instruments_chirurgicaux.jpg',
       license: 'CC BY-SA 4.0',
@@ -327,7 +339,7 @@ const List<Instrument> kInstruments = [
     aliases: ['Curette'],
     icon: 'tool',
     description: 'Instrumento con extremo en forma de cuchara o aro afilado.',
-    use: 'Raspado y limpieza de tejido de cavidades (hueso, útero, quistes).',
+    use: 'Raspado y limpieza de tejido de cavidades (hueso, quistes); en ginecología, legrado uterino (restos ovulares, abortos incompletos).',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Uterine_Curette_01.jpg',
       license: 'CC0 1.0',
@@ -360,7 +372,7 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.especiales,
     aliases: ['Trocar laparoscópico'],
     icon: 'tool',
-    description: 'Instrumento puntiagudo con camisa hueca para crear un acceso a una cavidad.',
+    description: 'Instrumento puntiagudo con camisa hueca para crear un acceso a una cavidad. Gran variedad: punta cortante o romba, distintos grosores (5, 10, 12 mm...) y longitudes, incluidos modelos pediátricos.',
     use: 'Creación de puertos de entrada en cirugía laparoscópica para introducir la óptica e instrumental.',
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Disposable_Trocars.jpg',
