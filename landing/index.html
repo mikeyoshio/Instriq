@@ -127,8 +127,12 @@
   .hero-icon { width: 88px; height: 88px; border-radius: 22px; margin-bottom: 24px; box-shadow: 0 12px 32px -8px rgba(20,32,43,0.35); }
   .hero p.lede { margin-left: auto; margin-right: auto; }
   .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
-  .platform-row { display: flex; gap: 18px; justify-content: center; align-items: center; margin-top: 28px; color: var(--text-muted); font-size: 0.85rem; flex-wrap: wrap; }
-  .platform-row span { display: flex; align-items: center; gap: 6px; }
+  .platform-row {
+    display: flex; gap: 14px; justify-content: center; align-items: center; margin-top: 28px;
+    color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+  .platform-row span:not(:last-child)::after { content: "·"; margin-left: 14px; color: var(--border); }
 
   .showcase {
     display: flex; align-items: center; gap: 48px; margin-top: 40px;
@@ -227,10 +231,10 @@
       <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost">Ver el código en GitHub</a>
     </div>
     <div class="platform-row">
-      <span>📱 Android</span>
-      <span>🍎 iOS</span>
-      <span>🌐 Web</span>
-      <span>🔓 Sin cuenta para empezar</span>
+      <span>Android</span>
+      <span>iOS</span>
+      <span>Web</span>
+      <span>Sin cuenta para empezar</span>
     </div>
   </div>
 </section>
