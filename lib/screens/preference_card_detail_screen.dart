@@ -35,7 +35,9 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
 
   Future<void> _edit() async {
     final saved = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => PreferenceCardFormScreen(existingCard: _card)),
+      MaterialPageRoute(
+        builder: (_) => PreferenceCardFormScreen(workspaceId: _card.workspaceId, existingCard: _card),
+      ),
     );
     if (saved == true) {
       final updated = PreferenceCardService.instance.cards.firstWhere((c) => c.id == _card.id);

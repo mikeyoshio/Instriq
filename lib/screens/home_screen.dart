@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../models/group_document.dart';
 import '../services/auth_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
@@ -8,11 +7,10 @@ import '../services/theme_service.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'auth/hospital_connect_flow.dart';
 import 'catalog_screen.dart';
-import 'group_document_list_screen.dart';
 import 'group_document_review_queue_screen.dart';
 import 'learn_screen.dart';
-import 'preference_cards_screen.dart';
 import 'progress_screen.dart';
+import 'workspace_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -124,41 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 8),
               if (_isConnected) ...[
                 _MenuCard(
-                  icon: Icons.menu_book_outlined,
-                  title: 'Técnicas quirúrgicas',
-                  subtitle: 'Documenta cómo trabaja tu equipo, paso a paso',
-                  onTap: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const GroupDocumentListScreen(kind: DocumentKind.technique),
-                      ),
-                    );
-                    _refresh();
-                  },
-                ),
-                const SizedBox(height: 12),
-                _MenuCard(
-                  icon: Icons.fact_check_outlined,
-                  title: 'Protocolos',
-                  subtitle: 'Checklists y protocolos internos del grupo',
-                  onTap: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const GroupDocumentListScreen(kind: DocumentKind.protocol),
-                      ),
-                    );
-                    _refresh();
-                  },
-                ),
-                const SizedBox(height: 12),
-                _MenuCard(
-                  icon: Icons.assignment_ind,
-                  title: 'Tarjetas de preferencia',
+                  icon: Icons.workspaces_outlined,
+                  title: 'Espacios',
                   subtitle: ProfileService.instance.hospitalName ??
-                      'Instrumental específico por cirujano y procedimiento',
+                      'Técnicas, protocolos y tarjetas de preferencia por especialidad o servicio',
                   onTap: () async {
                     await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const PreferenceCardsScreen()),
+                      MaterialPageRoute(builder: (_) => const WorkspaceListScreen()),
                     );
                     _refresh();
                   },

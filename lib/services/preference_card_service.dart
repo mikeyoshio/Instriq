@@ -23,11 +23,12 @@ class PreferenceCardService {
     return _cards.where((c) => c.surgeonName == surgeonName).toList();
   }
 
-  /// Trae las tarjetas del hospital del usuario actual (filtrado por RLS en el servidor).
-  Future<void> fetchCards() async {
+  /// Trae las tarjetas del espacio indicado (el hospital ya lo filtra RLS en el servidor).
+  Future<void> fetchCards(String workspaceId) async {
     final rows = await _client
         .from('preference_cards')
         .select()
+        .eq('workspace_id', workspaceId)
         .order('surgeon_name')
         .order('procedure_name');
     _cards = (rows as List<dynamic>)

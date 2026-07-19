@@ -21,19 +21,23 @@ class GroupDocumentService {
 
   List<GroupDocument> _documents = [];
 
-  List<GroupDocument> documentsOfKind(DocumentKind kind) =>
-      _documents.where((d) => d.kind == kind).toList();
+  List<GroupDocument> documentsOfKind(DocumentKind kind, String workspaceId) =>
+      _documents.where((d) => d.kind == kind && d.workspaceId == workspaceId).toList();
 
-  Future<void> fetchDocuments(DocumentKind kind) async {
+  Future<void> fetchDocuments(DocumentKind kind, String workspaceId) async {
     final rows = await _client
         .from('group_documents')
         .select(_publishedJoin)
-        .eq('kind', kind.dbValue);
+        .eq('kind', kind.dbValue)
+        .eq('workspace_id', workspaceId);
     final fetched = (rows as List<dynamic>)
         .map((r) => GroupDocument.fromRow(r as Map<String, dynamic>))
         .toList();
     fetched.sort((a, b) => (a.publishedVersion?.title ?? '').compareTo(b.publishedVersion?.title ?? ''));
-    _documents = [..._documents.where((d) => d.kind != kind), ...fetched];
+    _documents = [
+      ..._documents.where((d) => !(d.kind == kind && d.workspaceId == workspaceId)),
+      ...fetched,
+    ];
   }
 
   GroupDocument? documentById(String id) {
@@ -60,13 +64,13 @@ class GroupDocumentService {
   }
 
   /// Crea un documento nuevo con su primera versión en borrador.
-  Future<GroupDocumentVersion> createDocument(DocumentKind kind) async {
+  Future<GroupDocumentVersion> createDocument(DocumentKind kind, String workspaceId) async {
     final hospitalId = ProfileService.instance.hospitalId;
     final userId = AuthService.instance.currentUser?.id;
     if (hospitalId == null || userId == null) {
       throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
-    final document = GroupDocument(id: '', kind: kind);
+    final document = GroupDocument(id: '', kind: kind, workspaceId: workspaceId);
     final savedDocument = await _client
         .from('group_documents')
         .insert(document.toRow(hospitalId: hospitalId))
@@ -178,6 +182,24 @@ class GroupDocumentService {
     return (rows as List<dynamic>)
         .map((r) => GroupDocumentVersion.fromRow(r as Map<String, dynamic>))
         .toList();
+  }
+
+  /// Nombre del espacio de cada documento, para mostrar contexto en la cola de revisión.
+  Future<Map<String, String>> fetchWorkspaceNamesForDocuments(List<String> documentIds) async {
+    if (documentIds.isEmpty) return {};
+    final rows = await _client
+        .from('group_documents')
+        .select('id, workspaces(name)')
+        .inFilter('id', documentIds);
+    final result = <String, String>{};
+    for (final r in (rows as List<dynamic>)) {
+      final row = r as Map<String, dynamic>;
+      final workspaceRow = row['workspaces'] as Map<String, dynamic>?;
+      if (workspaceRow?['name'] != null) {
+        result[row['id'] as String] = workspaceRow!['name'] as String;
+      }
+    }
+    return result;
   }
 
   Future<void> deleteDocument(String id) async {

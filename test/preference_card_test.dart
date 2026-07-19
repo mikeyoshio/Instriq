@@ -20,6 +20,7 @@ void main() {
   test('PreferenceCard toRow includes hospital scoping', () {
     const card = PreferenceCard(
       id: 'card-1',
+      workspaceId: 'workspace-1',
       surgeonName: 'Dr. Pérez',
       procedureName: 'Colecistectomía',
       items: [PreferenceCardItem(customName: 'Trócar')],
@@ -28,6 +29,7 @@ void main() {
     final row = card.toRow(hospitalId: 'hospital-1');
 
     expect(row['hospital_id'], 'hospital-1');
+    expect(row['workspace_id'], 'workspace-1');
     expect(row['surgeon_name'], 'Dr. Pérez');
     expect(row['validated'], false);
   });

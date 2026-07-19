@@ -14,12 +14,14 @@ import '../widgets/category_icon.dart';
 /// aprobación (ver GroupDocumentService).
 class GroupDocumentFormScreen extends StatefulWidget {
   final DocumentKind kind;
+  final String workspaceId;
   final GroupDocument? existingDocument;
   final GroupDocumentVersion? existingDraft;
 
   const GroupDocumentFormScreen({
     super.key,
     required this.kind,
+    required this.workspaceId,
     this.existingDocument,
     this.existingDraft,
   });
@@ -60,7 +62,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       } else if (widget.existingDocument != null) {
         draft = await GroupDocumentService.instance.startEditing(widget.existingDocument!);
       } else {
-        draft = await GroupDocumentService.instance.createDocument(widget.kind);
+        draft = await GroupDocumentService.instance.createDocument(widget.kind, widget.workspaceId);
       }
       _applyDraft(draft);
     } catch (e) {
