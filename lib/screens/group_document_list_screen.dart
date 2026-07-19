@@ -71,7 +71,9 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
 
     final documents = GroupDocumentService.instance
         .documentsOfKind(widget.kind)
-        .where((d) => _query.isEmpty || d.title.toLowerCase().contains(_query.toLowerCase()))
+        .where((d) =>
+            _query.isEmpty ||
+            (d.publishedVersion?.title ?? '').toLowerCase().contains(_query.toLowerCase()))
         .toList();
 
     return Scaffold(
@@ -115,10 +117,11 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
                     itemCount: documents.length,
                     itemBuilder: (context, index) {
                       final doc = documents[index];
+                      final published = doc.publishedVersion;
                       return Card(
                         child: ListTile(
-                          title: Text(doc.title),
-                          subtitle: doc.specialty != null ? Text(doc.specialty!) : null,
+                          title: Text(published?.title ?? 'Sin publicar'),
+                          subtitle: published?.specialty != null ? Text(published!.specialty!) : null,
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () async {
                             await Navigator.of(context).push(
