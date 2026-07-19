@@ -2,16 +2,27 @@ import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
 import '../models/group_document.dart';
+import '../models/group_document_version.dart';
 import '../models/instrument.dart';
 import '../services/group_document_service.dart';
 import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
 
+/// Edita el borrador de una versión ([existingDraft]) o crea un documento
+/// nuevo. Nunca edita directamente el contenido publicado: guardar solo
+/// persiste el borrador, "Enviar a revisión" además dispara el workflow de
+/// aprobación (ver GroupDocumentService).
 class GroupDocumentFormScreen extends StatefulWidget {
   final DocumentKind kind;
   final GroupDocument? existingDocument;
+  final GroupDocumentVersion? existingDraft;
 
-  const GroupDocumentFormScreen({super.key, required this.kind, this.existingDocument});
+  const GroupDocumentFormScreen({
+    super.key,
+    required this.kind,
+    this.existingDocument,
+    this.existingDraft,
+  });
 
   @override
   State<GroupDocumentFormScreen> createState() => _GroupDocumentFormScreenState();
@@ -21,20 +32,51 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   late final TextEditingController _titleController;
   late final TextEditingController _specialtyController;
   late final TextEditingController _contentController;
+  late final TextEditingController _commentController;
   late List<String> _steps;
   late List<String> _relatedInstrumentIds;
+  GroupDocumentVersion? _draft;
+  bool _loading = true;
   bool _saving = false;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    final doc = widget.existingDocument;
-    _titleController = TextEditingController(text: doc?.title ?? '');
-    _specialtyController = TextEditingController(text: doc?.specialty ?? '');
-    _contentController = TextEditingController(text: doc?.content ?? '');
-    _steps = List.of(doc?.steps ?? const []);
-    _relatedInstrumentIds = List.of(doc?.relatedInstrumentIds ?? const []);
+    _titleController = TextEditingController();
+    _specialtyController = TextEditingController();
+    _contentController = TextEditingController();
+    _commentController = TextEditingController();
+    _steps = [];
+    _relatedInstrumentIds = [];
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      GroupDocumentVersion draft;
+      if (widget.existingDraft != null) {
+        draft = widget.existingDraft!;
+      } else if (widget.existingDocument != null) {
+        draft = await GroupDocumentService.instance.startEditing(widget.existingDocument!);
+      } else {
+        draft = await GroupDocumentService.instance.createDocument(widget.kind);
+      }
+      _applyDraft(draft);
+    } catch (e) {
+      setState(() => _error = 'No se pudo preparar el borrador: $e');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  void _applyDraft(GroupDocumentVersion draft) {
+    _draft = draft;
+    _titleController.text = draft.title;
+    _specialtyController.text = draft.specialty ?? '';
+    _contentController.text = draft.content ?? '';
+    _steps = List.of(draft.steps);
+    _relatedInstrumentIds = List.of(draft.relatedInstrumentIds);
   }
 
   @override
@@ -42,6 +84,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     _titleController.dispose();
     _specialtyController.dispose();
     _contentController.dispose();
+    _commentController.dispose();
     super.dispose();
   }
 
@@ -84,9 +127,20 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     }
   }
 
-  Future<void> _save() async {
+  GroupDocumentVersion _draftWithFormValues() {
     final title = _titleController.text.trim();
-    if (title.isEmpty) {
+    return _draft!.copyWith(
+      title: title,
+      specialty: _specialtyController.text.trim().isEmpty ? null : _specialtyController.text.trim(),
+      content: _contentController.text.trim().isEmpty ? null : _contentController.text.trim(),
+      steps: _steps,
+      relatedInstrumentIds: _relatedInstrumentIds,
+      comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
+    );
+  }
+
+  Future<void> _saveDraft({bool andSubmit = false}) async {
+    if (_titleController.text.trim().isEmpty) {
       setState(() => _error = 'Indica un título');
       return;
     }
@@ -95,16 +149,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       _error = null;
     });
     try {
-      final doc = GroupDocument(
-        id: widget.existingDocument?.id ?? '',
-        kind: widget.kind,
-        title: title,
-        specialty: _specialtyController.text.trim().isEmpty ? null : _specialtyController.text.trim(),
-        content: _contentController.text.trim().isEmpty ? null : _contentController.text.trim(),
-        steps: _steps,
-        relatedInstrumentIds: _relatedInstrumentIds,
-      );
-      await GroupDocumentService.instance.upsertDocument(doc);
+      final updated = await GroupDocumentService.instance.saveDraft(_draftWithFormValues());
+      if (andSubmit) {
+        await GroupDocumentService.instance.submitForReview(updated.id);
+      }
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       setState(() => _error = 'Error al guardar: $e');
@@ -115,10 +163,22 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isEditing = widget.existingDocument != null;
     final kindLabel = widget.kind.label;
+    if (_loading) {
+      return Scaffold(
+        appBar: AppBar(title: Text(kindLabel)),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (_draft == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text(kindLabel)),
+        body: Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error ?? 'Error'))),
+      );
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Editar $kindLabel' : 'Nuevo/a $kindLabel')),
+      appBar: AppBar(title: Text('Editar borrador · $kindLabel')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(20),
@@ -215,16 +275,31 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 ),
               );
             }),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _commentController,
+              decoration: const InputDecoration(
+                labelText: 'Comentario del cambio (opcional)',
+                border: OutlineInputBorder(),
+                alignLabelWithHint: true,
+              ),
+              maxLines: 2,
+            ),
             if (_error != null) ...[
               const SizedBox(height: 12),
               Text(_error!, style: const TextStyle(color: Colors.red)),
             ],
             const SizedBox(height: 24),
             FilledButton(
-              onPressed: _saving ? null : _save,
+              onPressed: _saving ? null : () => _saveDraft(andSubmit: true),
               child: _saving
                   ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                  : Text('Guardar $kindLabel'),
+                  : const Text('Enviar a revisión'),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: _saving ? null : () => _saveDraft(),
+              child: const Text('Guardar como borrador'),
             ),
           ],
         ),
