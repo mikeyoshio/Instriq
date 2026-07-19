@@ -8,9 +8,10 @@ import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
 
 class PreferenceCardFormScreen extends StatefulWidget {
+  final String workspaceId;
   final PreferenceCard? existingCard;
 
-  const PreferenceCardFormScreen({super.key, this.existingCard});
+  const PreferenceCardFormScreen({super.key, required this.workspaceId, this.existingCard});
 
   @override
   State<PreferenceCardFormScreen> createState() => _PreferenceCardFormScreenState();
@@ -131,6 +132,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
     }
     final card = PreferenceCard(
       id: widget.existingCard?.id ?? '',
+      workspaceId: widget.existingCard?.workspaceId ?? widget.workspaceId,
       surgeonName: surgeon,
       procedureName: procedure,
       items: _items,

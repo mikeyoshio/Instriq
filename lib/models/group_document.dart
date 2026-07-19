@@ -25,6 +25,7 @@ extension DocumentKindLabel on DocumentKind {
 class GroupDocument {
   final String id;
   final DocumentKind kind;
+  final String workspaceId;
   final String? createdBy;
   final DateTime? createdAt;
   final String? publishedVersionId;
@@ -33,6 +34,7 @@ class GroupDocument {
   const GroupDocument({
     required this.id,
     required this.kind,
+    required this.workspaceId,
     this.createdBy,
     this.createdAt,
     this.publishedVersionId,
@@ -41,6 +43,7 @@ class GroupDocument {
 
   Map<String, dynamic> toRow({required String hospitalId}) => {
         'hospital_id': hospitalId,
+        'workspace_id': workspaceId,
         'kind': kind.dbValue,
       };
 
@@ -51,6 +54,7 @@ class GroupDocument {
     return GroupDocument(
       id: id,
       kind: kind,
+      workspaceId: workspaceId,
       createdBy: createdBy,
       createdAt: createdAt,
       publishedVersionId: publishedVersionId ?? this.publishedVersionId,
@@ -63,6 +67,7 @@ class GroupDocument {
     return GroupDocument(
       id: row['id'] as String,
       kind: DocumentKindLabel.fromDb(row['kind'] as String),
+      workspaceId: row['workspace_id'] as String,
       createdBy: row['created_by'] as String?,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
       publishedVersionId: row['published_version_id'] as String?,
