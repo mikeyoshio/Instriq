@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/group_document.dart';
 import '../models/workspace.dart';
+import '../models/workspace_role.dart';
 import '../services/group_document_service.dart';
 import 'group_document_detail_screen.dart';
 import 'group_document_form_screen.dart';
@@ -10,8 +11,14 @@ import 'group_document_form_screen.dart';
 class GroupDocumentListScreen extends StatefulWidget {
   final DocumentKind kind;
   final Workspace workspace;
+  final WorkspaceRole? myRole;
 
-  const GroupDocumentListScreen({super.key, required this.kind, required this.workspace});
+  const GroupDocumentListScreen({
+    super.key,
+    required this.kind,
+    required this.workspace,
+    required this.myRole,
+  });
 
   @override
   State<GroupDocumentListScreen> createState() => _GroupDocumentListScreenState();
@@ -78,20 +85,24 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
             (d.publishedVersion?.title ?? '').toLowerCase().contains(_query.toLowerCase()))
         .toList();
 
+    final canEdit = widget.myRole?.canEdit ?? false;
     return Scaffold(
       appBar: AppBar(title: Text(_titlePlural)),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          final saved = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(
-              builder: (_) => GroupDocumentFormScreen(kind: widget.kind, workspaceId: widget.workspace.id),
-            ),
-          );
-          if (saved == true) _load();
-        },
-        icon: const Icon(Icons.add),
-        label: Text('Nuevo/a ${widget.kind.label.toLowerCase()}'),
-      ),
+      floatingActionButton: canEdit
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                final saved = await Navigator.of(context).push<bool>(
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        GroupDocumentFormScreen(kind: widget.kind, workspaceId: widget.workspace.id),
+                  ),
+                );
+                if (saved == true) _load();
+              },
+              icon: const Icon(Icons.add),
+              label: Text('Nuevo/a ${widget.kind.label.toLowerCase()}'),
+            )
+          : null,
       body: Column(
         children: [
           Padding(
@@ -130,7 +141,8 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
                           onTap: () async {
                             await Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => GroupDocumentDetailScreen(document: doc),
+                                builder: (_) =>
+                                    GroupDocumentDetailScreen(document: doc, myRole: widget.myRole),
                               ),
                             );
                             _load();

@@ -18,12 +18,16 @@ class ProfileService {
   String? _hospitalCif;
   String? _inviteCode;
   bool _isAdmin = false;
+  bool _isOwner = false;
+  String? _ownerId;
 
   String? get hospitalId => _hospitalId;
   String? get hospitalName => _hospitalName;
   String? get hospitalCif => _hospitalCif;
   String? get inviteCode => _inviteCode;
   bool get isAdmin => _isAdmin;
+  bool get isOwner => _isOwner;
+  String? get ownerId => _ownerId;
   bool get hasHospital => _hospitalId != null;
 
   Future<void> loadProfile() async {
@@ -34,7 +38,7 @@ class ProfileService {
     }
     final row = await _client
         .from('profiles')
-        .select('hospital_id, is_admin, hospitals(name, cif, invite_code)')
+        .select('hospital_id, is_admin, hospitals(name, cif, invite_code, owner_id)')
         .eq('id', user.id)
         .maybeSingle();
     final newHospitalId = row?['hospital_id'] as String?;
@@ -47,6 +51,8 @@ class ProfileService {
     _hospitalName = hospitalRow?['name'] as String?;
     _hospitalCif = hospitalRow?['cif'] as String?;
     _inviteCode = hospitalRow?['invite_code'] as String?;
+    _ownerId = hospitalRow?['owner_id'] as String?;
+    _isOwner = _ownerId == user.id;
   }
 
   void _resetHospitalState() {
@@ -55,6 +61,8 @@ class ProfileService {
     _hospitalCif = null;
     _inviteCode = null;
     _isAdmin = false;
+    _isOwner = false;
+    _ownerId = null;
     _clearGroupContentCaches();
   }
 
@@ -94,7 +102,9 @@ class ProfileService {
     _hospitalName = hospital.name;
     _hospitalCif = hospital.cif;
     _inviteCode = hospital.inviteCode;
+    _ownerId = hospital.ownerId;
     _isAdmin = false;
+    _isOwner = false;
     return hospital;
   }
 
@@ -116,6 +126,7 @@ class ProfileService {
               'name': name.trim(),
               'invite_code': code,
               'created_by': user.id,
+              'owner_id': user.id,
             })
             .select()
             .single();
@@ -144,7 +155,9 @@ class ProfileService {
     _hospitalName = hospital.name;
     _hospitalCif = hospital.cif;
     _inviteCode = hospital.inviteCode;
+    _ownerId = hospital.ownerId;
     _isAdmin = true;
+    _isOwner = true;
     return hospital;
   }
 
@@ -182,5 +195,12 @@ class ProfileService {
   /// Expulsa a un miembro del hospital (solo admin, vía RLS).
   Future<void> removeMember(String userId) async {
     await _client.from('profiles').update({'hospital_id': null, 'is_admin': false}).eq('id', userId);
+  }
+
+  /// Transfiere la propiedad del grupo a otro miembro (solo la propietaria/el
+  /// propietario actual, vía función security definer).
+  Future<void> transferOwnership(String newOwnerUserId) async {
+    await _client.rpc('transfer_hospital_ownership', params: {'new_owner_id': newOwnerUserId});
+    _isOwner = false;
   }
 }

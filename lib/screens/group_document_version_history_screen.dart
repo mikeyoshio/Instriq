@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
+import '../models/workspace_role.dart';
 import '../services/group_document_service.dart';
-import '../services/profile_service.dart';
 import 'group_document_diff_screen.dart';
 
 class GroupDocumentVersionHistoryScreen extends StatefulWidget {
   final GroupDocument document;
+  final WorkspaceRole? myRole;
 
-  const GroupDocumentVersionHistoryScreen({super.key, required this.document});
+  const GroupDocumentVersionHistoryScreen({super.key, required this.document, required this.myRole});
 
   @override
   State<GroupDocumentVersionHistoryScreen> createState() => _GroupDocumentVersionHistoryScreenState();
@@ -95,7 +96,7 @@ class _GroupDocumentVersionHistoryScreenState extends State<GroupDocumentVersion
 
   @override
   Widget build(BuildContext context) {
-    final canRestore = ProfileService.instance.isAdmin;
+    final canRestore = widget.myRole?.canEdit ?? false;
     return Scaffold(
       appBar: AppBar(title: const Text('Historial de versiones')),
       body: _loading
