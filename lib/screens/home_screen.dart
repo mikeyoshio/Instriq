@@ -9,6 +9,7 @@ import 'admin/manage_hospital_screen.dart';
 import 'auth/hospital_connect_flow.dart';
 import 'catalog_screen.dart';
 import 'group_document_list_screen.dart';
+import 'group_document_review_queue_screen.dart';
 import 'learn_screen.dart';
 import 'preference_cards_screen.dart';
 import 'progress_screen.dart';
@@ -171,6 +172,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () async {
                       await Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const ManageHospitalScreen()),
+                      );
+                      _refresh();
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _MenuCard(
+                    icon: Icons.rate_review_outlined,
+                    title: 'Revisar cambios pendientes',
+                    subtitle: 'Aprueba o rechaza técnicas y protocolos en revisión',
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const GroupDocumentReviewQueueScreen()),
                       );
                       _refresh();
                     },
