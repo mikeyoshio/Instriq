@@ -19,7 +19,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
   Future<void> _register() async {
     final name = _nameController.text.trim();
     if (name.isEmpty) {
-      setState(() => _error = 'Indica el nombre del hospital o grupo');
+      setState(() => _error = 'Indica el nombre del grupo');
       return;
     }
     setState(() {
@@ -43,7 +43,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
   Widget build(BuildContext context) {
     if (_createdCode != null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Hospital creado')),
+        appBar: AppBar(title: const Text('Grupo creado')),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -52,7 +52,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
               const Icon(Icons.check_circle, color: Colors.green, size: 64),
               const SizedBox(height: 16),
               const Text(
-                'Tu hospital ya está registrado. Comparte este código con tus compañeras para que se unan:',
+                'Tu grupo ya está registrado. Comparte este código con tu equipo para que se unan:',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
@@ -65,7 +65,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Como creadora, eres la administradora: podrás regenerar este código o quitar miembros desde "Administrar hospital".',
+                'Como creadora, eres la administradora: podrás regenerar este código o quitar miembros desde "Administrar grupo".',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -80,7 +80,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear mi hospital')),
+      appBar: AppBar(title: const Text('Crear mi grupo')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -88,7 +88,9 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
-                'Se generará un código de invitación único para que tus compañeras se unan.',
+                'Un grupo puede ser un hospital, un bloque quirúrgico, un servicio, un equipo de '
+                'instrumentistas o un centro de formación. Se generará un código de invitación único '
+                'para que tu equipo se una.',
               ),
               const SizedBox(height: 20),
               TextField(
@@ -102,7 +104,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
               TextField(
                 controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: 'Nombre del hospital o grupo',
+                  labelText: 'Nombre del grupo',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -116,7 +118,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                 child: _loading
                     ? const SizedBox(
                         height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Registrar hospital'),
+                    : const Text('Registrar grupo'),
               ),
             ],
           ),

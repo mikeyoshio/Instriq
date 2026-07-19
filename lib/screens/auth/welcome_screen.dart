@@ -20,14 +20,14 @@ class WelcomeScreen extends StatelessWidget {
               Text('Instriq', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: 24),
               Text(
-                '¿Trabajas en un hospital o tienes un grupo?',
+                '¿Formas parte de un equipo o quieres crear el tuyo?',
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               const Text(
-                'Crea el tuyo y agiliza el aprendizaje con las técnicas de cirujano de tu equipo: '
-                'catálogo de instrumental, flashcards, quiz y tarjetas de preferencia compartidas.',
+                'Crea el grupo de tu bloque quirúrgico, servicio o equipo y documenta cómo trabajáis: '
+                'catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidas.',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),

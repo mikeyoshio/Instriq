@@ -83,16 +83,16 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.local_hospital, size: 64),
+        const Icon(Icons.groups_outlined, size: 64),
         const SizedBox(height: 16),
         Text(
-          'Conecta con tu hospital',
+          'Conecta con tu grupo',
           style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
         const Text(
-          'Únete con el código de tu hospital, o regístralo si eres la primera persona en darlo de alta.',
+          'Únete con el código de tu grupo, o créalo si eres la primera persona en darlo de alta.',
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
@@ -110,7 +110,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
           child: OutlinedButton.icon(
             onPressed: _goRegister,
             icon: const Icon(Icons.add_business),
-            label: const Text('Crear mi hospital'),
+            label: const Text('Crear mi grupo'),
           ),
         ),
       ],
@@ -124,7 +124,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
         const Icon(Icons.vpn_key, size: 56),
         const SizedBox(height: 16),
         const Text(
-          'Introduce el código de invitación de tu hospital.',
+          'Introduce el código de invitación de tu grupo.',
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
