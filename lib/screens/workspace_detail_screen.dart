@@ -2,64 +2,122 @@ import 'package:flutter/material.dart';
 
 import '../models/group_document.dart';
 import '../models/workspace.dart';
+import '../models/workspace_role.dart';
+import '../services/workspace_service.dart';
 import 'group_document_list_screen.dart';
+import 'manage_workspace_members_screen.dart';
 import 'preference_cards_screen.dart';
 
 /// Colecciones disponibles dentro de un espacio: técnicas, protocolos y
 /// tarjetas de preferencia. El instrumental (catálogo) es global y no
 /// cuelga de ningún espacio.
-class WorkspaceDetailScreen extends StatelessWidget {
+class WorkspaceDetailScreen extends StatefulWidget {
   final Workspace workspace;
 
   const WorkspaceDetailScreen({super.key, required this.workspace});
 
   @override
+  State<WorkspaceDetailScreen> createState() => _WorkspaceDetailScreenState();
+}
+
+class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
+  WorkspaceRole? _myRole;
+  bool _loadingRole = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRole();
+  }
+
+  Future<void> _loadRole() async {
+    try {
+      _myRole = await WorkspaceService.instance.fetchMyRole(widget.workspace.id);
+    } catch (_) {
+      _myRole = null;
+    }
+    if (mounted) setState(() => _loadingRole = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final canManage = _myRole == WorkspaceRole.administrator;
     return Scaffold(
-      appBar: AppBar(title: Text(workspace.name)),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            if (workspace.description != null) ...[
-              Text(workspace.description!, style: Theme.of(context).textTheme.bodyMedium),
-              const SizedBox(height: 20),
-            ],
-            _CollectionCard(
-              icon: Icons.menu_book_outlined,
-              title: 'Técnicas quirúrgicas',
-              subtitle: 'Documenta cómo trabaja tu equipo, paso a paso',
-              onTap: () => Navigator.of(context).push(
+      appBar: AppBar(
+        title: Text(widget.workspace.name),
+        actions: [
+          if (canManage)
+            IconButton(
+              icon: const Icon(Icons.group_outlined),
+              tooltip: 'Miembros del espacio',
+              onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) =>
-                      GroupDocumentListScreen(kind: DocumentKind.technique, workspace: workspace),
+                  builder: (_) => ManageWorkspaceMembersScreen(workspace: widget.workspace),
                 ),
               ),
             ),
-            const SizedBox(height: 12),
-            _CollectionCard(
-              icon: Icons.fact_check_outlined,
-              title: 'Protocolos',
-              subtitle: 'Checklists y protocolos internos del espacio',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) =>
-                      GroupDocumentListScreen(kind: DocumentKind.protocol, workspace: workspace),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            _CollectionCard(
-              icon: Icons.assignment_ind,
-              title: 'Tarjetas de preferencia',
-              subtitle: 'Instrumental específico por cirujano y procedimiento',
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => PreferenceCardsScreen(workspace: workspace)),
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
+      body: _loadingRole
+          ? const Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: ListView(
+                padding: const EdgeInsets.all(20),
+                children: [
+                  if (widget.workspace.description != null) ...[
+                    Text(widget.workspace.description!, style: Theme.of(context).textTheme.bodyMedium),
+                    const SizedBox(height: 20),
+                  ],
+                  if (_myRole == null)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Text('No tienes acceso a este espacio todavía.'),
+                    )
+                  else ...[
+                    _CollectionCard(
+                      icon: Icons.menu_book_outlined,
+                      title: 'Técnicas quirúrgicas',
+                      subtitle: 'Documenta cómo trabaja tu equipo, paso a paso',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => GroupDocumentListScreen(
+                            kind: DocumentKind.technique,
+                            workspace: widget.workspace,
+                            myRole: _myRole,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _CollectionCard(
+                      icon: Icons.fact_check_outlined,
+                      title: 'Protocolos',
+                      subtitle: 'Checklists y protocolos internos del espacio',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => GroupDocumentListScreen(
+                            kind: DocumentKind.protocol,
+                            workspace: widget.workspace,
+                            myRole: _myRole,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _CollectionCard(
+                      icon: Icons.assignment_ind,
+                      title: 'Tarjetas de preferencia',
+                      subtitle: 'Instrumental específico por cirujano y procedimiento',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => PreferenceCardsScreen(workspace: widget.workspace, myRole: _myRole),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
     );
   }
 }

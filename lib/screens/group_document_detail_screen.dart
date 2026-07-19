@@ -4,6 +4,7 @@ import '../data/instruments_data.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
+import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/group_document_service.dart';
 import '../widgets/category_icon.dart';
@@ -13,8 +14,9 @@ import 'instrument_detail_screen.dart';
 
 class GroupDocumentDetailScreen extends StatefulWidget {
   final GroupDocument document;
+  final WorkspaceRole? myRole;
 
-  const GroupDocumentDetailScreen({super.key, required this.document});
+  const GroupDocumentDetailScreen({super.key, required this.document, required this.myRole});
 
   @override
   State<GroupDocumentDetailScreen> createState() => _GroupDocumentDetailScreenState();
@@ -79,7 +81,9 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
 
   Future<void> _openHistory() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => GroupDocumentVersionHistoryScreen(document: _document)),
+      MaterialPageRoute(
+        builder: (_) => GroupDocumentVersionHistoryScreen(document: _document, myRole: widget.myRole),
+      ),
     );
     _loadOwnDraft();
   }
@@ -106,13 +110,15 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final published = _document.publishedVersion;
+    final canEdit = widget.myRole?.canEdit ?? false;
+    final canApprove = widget.myRole?.canApprove ?? false;
     return Scaffold(
       appBar: AppBar(
         title: Text(published?.title ?? 'Sin publicar'),
         actions: [
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: 'Historial'),
-          IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
-          IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),
+          if (canEdit) IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
+          if (canApprove) IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),
         ],
       ),
       body: ListView(

@@ -63,6 +63,32 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
     }
   }
 
+  Future<void> _transferOwnership(HospitalMember member) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Transferir propiedad'),
+        content: Text(
+          '¿Convertir a ${member.displayName?.isNotEmpty == true ? member.displayName : 'esta persona'} '
+          'en propietaria/o del grupo? Dejarás de serlo tú.',
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Transferir')),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await ProfileService.instance.transferOwnership(member.id);
+      if (mounted) setState(() {});
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
+    }
+  }
+
   Future<void> _removeMember(HospitalMember member) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -138,6 +164,8 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                   if (_error != null) Text(_error!, style: const TextStyle(color: Colors.red)),
                   ..._members.map((m) {
                     final isMe = m.id == AuthService.instance.currentUser?.id;
+                    final isOwner = m.id == profile.ownerId;
+                    final canTransferTo = profile.isOwner && m.isAdmin && !isMe;
                     return Card(
                       child: ListTile(
                         leading: const Icon(Icons.person),
@@ -145,13 +173,28 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                           (m.displayName?.isNotEmpty == true ? m.displayName! : 'Sin nombre') +
                               (isMe ? ' (tú)' : ''),
                         ),
-                        subtitle: m.isAdmin ? const Text('Administradora') : null,
-                        trailing: isMe || m.isAdmin
-                            ? null
-                            : IconButton(
+                        subtitle: (isOwner || m.isAdmin)
+                            ? Text([
+                                if (isOwner) 'Propietaria/o',
+                                if (m.isAdmin) 'Administradora/or',
+                              ].join(' · '))
+                            : null,
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (canTransferTo)
+                              IconButton(
+                                icon: const Icon(Icons.workspace_premium_outlined),
+                                tooltip: 'Transferir propiedad',
+                                onPressed: () => _transferOwnership(m),
+                              ),
+                            if (!isMe && !m.isAdmin)
+                              IconButton(
                                 icon: const Icon(Icons.person_remove_outlined),
                                 onPressed: () => _removeMember(m),
                               ),
+                          ],
+                        ),
                       ),
                     );
                   }),

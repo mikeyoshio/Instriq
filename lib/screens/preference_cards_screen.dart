@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../models/preference_card.dart';
 import '../models/workspace.dart';
+import '../models/workspace_role.dart';
 import '../services/preference_card_service.dart';
 import 'preference_card_detail_screen.dart';
 import 'preference_card_form_screen.dart';
 
 class PreferenceCardsScreen extends StatefulWidget {
   final Workspace workspace;
+  final WorkspaceRole? myRole;
 
-  const PreferenceCardsScreen({super.key, required this.workspace});
+  const PreferenceCardsScreen({super.key, required this.workspace, required this.myRole});
 
   @override
   State<PreferenceCardsScreen> createState() => _PreferenceCardsScreenState();
@@ -79,18 +81,23 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
     }
     final surgeons = bySurgeon.keys.toList()..sort();
 
+    final canEdit = widget.myRole?.canEdit ?? false;
     return Scaffold(
       appBar: AppBar(title: const Text('Tarjetas de preferencia')),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          final saved = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(builder: (_) => PreferenceCardFormScreen(workspaceId: widget.workspace.id)),
-          );
-          if (saved == true) _load();
-        },
-        icon: const Icon(Icons.add),
-        label: const Text('Nueva tarjeta'),
-      ),
+      floatingActionButton: canEdit
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                final saved = await Navigator.of(context).push<bool>(
+                  MaterialPageRoute(
+                    builder: (_) => PreferenceCardFormScreen(workspaceId: widget.workspace.id),
+                  ),
+                );
+                if (saved == true) _load();
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Nueva tarjeta'),
+            )
+          : null,
       body: Column(
         children: [
           Padding(
@@ -144,7 +151,8 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                               onTap: () async {
                                 await Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => PreferenceCardDetailScreen(card: card),
+                                    builder: (_) =>
+                                        PreferenceCardDetailScreen(card: card, myRole: widget.myRole),
                                   ),
                                 );
                                 _load();

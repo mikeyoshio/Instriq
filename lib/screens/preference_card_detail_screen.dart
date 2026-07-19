@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import '../data/instruments_data.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
+import '../models/workspace_role.dart';
 import '../services/preference_card_service.dart';
 import '../widgets/category_icon.dart';
 import 'preference_card_form_screen.dart';
 
 class PreferenceCardDetailScreen extends StatefulWidget {
   final PreferenceCard card;
+  final WorkspaceRole? myRole;
 
-  const PreferenceCardDetailScreen({super.key, required this.card});
+  const PreferenceCardDetailScreen({super.key, required this.card, required this.myRole});
 
   @override
   State<PreferenceCardDetailScreen> createState() => _PreferenceCardDetailScreenState();
@@ -71,12 +73,14 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    final canEdit = widget.myRole?.canEdit ?? false;
+    final canApprove = widget.myRole?.canApprove ?? false;
     return Scaffold(
       appBar: AppBar(
         title: Text(_card.procedureName),
         actions: [
-          IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
-          IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),
+          if (canEdit) IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
+          if (canApprove) IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),
         ],
       ),
       body: ListView(
@@ -96,12 +100,14 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
                 ),
             ],
           ),
-          const SizedBox(height: 8),
-          OutlinedButton.icon(
-            onPressed: _toggleValidated,
-            icon: Icon(_card.validated ? Icons.close : Icons.verified_outlined),
-            label: Text(_card.validated ? 'Quitar validación' : 'Marcar como validado por el cirujano'),
-          ),
+          if (canEdit) ...[
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _toggleValidated,
+              icon: Icon(_card.validated ? Icons.close : Icons.verified_outlined),
+              label: Text(_card.validated ? 'Quitar validación' : 'Marcar como validado por el cirujano'),
+            ),
+          ],
           if (_card.generalNotes != null) ...[
             const SizedBox(height: 12),
             Card(
