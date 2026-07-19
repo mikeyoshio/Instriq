@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../models/preference_card.dart';
+import '../models/workspace.dart';
 import '../services/preference_card_service.dart';
 import 'preference_card_detail_screen.dart';
 import 'preference_card_form_screen.dart';
 
 class PreferenceCardsScreen extends StatefulWidget {
-  const PreferenceCardsScreen({super.key});
+  final Workspace workspace;
+
+  const PreferenceCardsScreen({super.key, required this.workspace});
 
   @override
   State<PreferenceCardsScreen> createState() => _PreferenceCardsScreenState();
@@ -29,7 +32,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
       _error = null;
     });
     try {
-      await PreferenceCardService.instance.fetchCards();
+      await PreferenceCardService.instance.fetchCards(widget.workspace.id);
     } catch (e) {
       _error = 'No se pudieron cargar las tarjetas: $e';
     }
@@ -81,7 +84,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final saved = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(builder: (_) => const PreferenceCardFormScreen()),
+            MaterialPageRoute(builder: (_) => PreferenceCardFormScreen(workspaceId: widget.workspace.id)),
           );
           if (saved == true) _load();
         },

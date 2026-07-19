@@ -61,6 +61,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
       MaterialPageRoute(
         builder: (_) => GroupDocumentFormScreen(
           kind: _document.kind,
+          workspaceId: _document.workspaceId,
           existingDocument: _document,
           existingDraft: _ownPendingDraft?.status == GroupDocumentVersionStatus.draft
               ? _ownPendingDraft
@@ -69,7 +70,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
       ),
     );
     if (saved == true && mounted) {
-      await GroupDocumentService.instance.fetchDocuments(_document.kind);
+      await GroupDocumentService.instance.fetchDocuments(_document.kind, _document.workspaceId);
       final updated = GroupDocumentService.instance.documentById(_document.id);
       setState(() => _document = updated ?? _document);
       _loadOwnDraft();

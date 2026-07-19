@@ -18,6 +18,7 @@ class _GroupDocumentReviewQueueScreenState extends State<GroupDocumentReviewQueu
   bool _loading = true;
   String? _error;
   List<GroupDocumentVersion> _queue = [];
+  Map<String, String> _workspaceNames = {};
 
   @override
   void initState() {
@@ -32,6 +33,8 @@ class _GroupDocumentReviewQueueScreenState extends State<GroupDocumentReviewQueu
     });
     try {
       _queue = await GroupDocumentService.instance.fetchReviewQueue();
+      _workspaceNames = await GroupDocumentService.instance
+          .fetchWorkspaceNamesForDocuments(_queue.map((v) => v.documentId).toSet().toList());
     } catch (e) {
       _error = 'No se pudo cargar la cola de revisión: $e';
     }
@@ -128,6 +131,13 @@ class _GroupDocumentReviewQueueScreenState extends State<GroupDocumentReviewQueu
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(version.title, style: Theme.of(context).textTheme.titleMedium),
+                                if (_workspaceNames[version.documentId] != null) ...[
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    _workspaceNames[version.documentId]!,
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ],
                                 if (version.comment != null) ...[
                                   const SizedBox(height: 4),
                                   Text(version.comment!, style: Theme.of(context).textTheme.bodyMedium),

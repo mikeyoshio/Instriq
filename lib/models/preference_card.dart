@@ -26,6 +26,7 @@ class PreferenceCardItem {
 
 class PreferenceCard {
   final String id;
+  final String workspaceId;
   final String surgeonName;
   final String procedureName;
   final List<PreferenceCardItem> items;
@@ -34,6 +35,7 @@ class PreferenceCard {
 
   const PreferenceCard({
     required this.id,
+    required this.workspaceId,
     required this.surgeonName,
     required this.procedureName,
     required this.items,
@@ -50,6 +52,7 @@ class PreferenceCard {
   }) {
     return PreferenceCard(
       id: id,
+      workspaceId: workspaceId,
       surgeonName: surgeonName ?? this.surgeonName,
       procedureName: procedureName ?? this.procedureName,
       items: items ?? this.items,
@@ -61,6 +64,7 @@ class PreferenceCard {
   /// Payload para insert/update en Supabase (sin id ni columnas gestionadas por la BD).
   Map<String, dynamic> toRow({required String hospitalId}) => {
         'hospital_id': hospitalId,
+        'workspace_id': workspaceId,
         'surgeon_name': surgeonName,
         'procedure_name': procedureName,
         'items': items.map((i) => i.toJson()).toList(),
@@ -72,6 +76,7 @@ class PreferenceCard {
     final rawItems = row['items'] as List<dynamic>? ?? [];
     return PreferenceCard(
       id: row['id'] as String,
+      workspaceId: row['workspace_id'] as String,
       surgeonName: row['surgeon_name'] as String? ?? '',
       procedureName: row['procedure_name'] as String? ?? '',
       items: rawItems

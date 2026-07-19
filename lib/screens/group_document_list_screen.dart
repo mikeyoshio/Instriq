@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../models/group_document.dart';
+import '../models/workspace.dart';
 import '../services/group_document_service.dart';
 import 'group_document_detail_screen.dart';
 import 'group_document_form_screen.dart';
 
-/// Lista de técnicas quirúrgicas o protocolos del grupo (según [kind]).
+/// Lista de técnicas quirúrgicas o protocolos de un espacio (según [kind]).
 class GroupDocumentListScreen extends StatefulWidget {
   final DocumentKind kind;
+  final Workspace workspace;
 
-  const GroupDocumentListScreen({super.key, required this.kind});
+  const GroupDocumentListScreen({super.key, required this.kind, required this.workspace});
 
   @override
   State<GroupDocumentListScreen> createState() => _GroupDocumentListScreenState();
@@ -35,7 +37,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
       _error = null;
     });
     try {
-      await GroupDocumentService.instance.fetchDocuments(widget.kind);
+      await GroupDocumentService.instance.fetchDocuments(widget.kind, widget.workspace.id);
     } catch (e) {
       _error = 'No se pudo cargar: $e';
     }
@@ -70,7 +72,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
     }
 
     final documents = GroupDocumentService.instance
-        .documentsOfKind(widget.kind)
+        .documentsOfKind(widget.kind, widget.workspace.id)
         .where((d) =>
             _query.isEmpty ||
             (d.publishedVersion?.title ?? '').toLowerCase().contains(_query.toLowerCase()))
@@ -81,7 +83,9 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final saved = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(builder: (_) => GroupDocumentFormScreen(kind: widget.kind)),
+            MaterialPageRoute(
+              builder: (_) => GroupDocumentFormScreen(kind: widget.kind, workspaceId: widget.workspace.id),
+            ),
           );
           if (saved == true) _load();
         },
