@@ -38,6 +38,33 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
     if (mounted) setState(() => _loading = false);
   }
 
+  Future<void> _renameWorkspace(Workspace workspace) async {
+    final controller = TextEditingController(text: workspace.name);
+    final name = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Renombrar espacio'),
+        content: TextField(controller: controller, autofocus: true),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+            child: const Text('Guardar'),
+          ),
+        ],
+      ),
+    );
+    if (name == null || name.isEmpty || name == workspace.name) return;
+    try {
+      await WorkspaceService.instance.renameWorkspace(workspace.id, name);
+      _load();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al renombrar: $e')));
+      }
+    }
+  }
+
   Future<void> _createWorkspace() async {
     final controller = TextEditingController();
     final name = await showDialog<String>(
@@ -95,7 +122,19 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
                         leading: const Icon(Icons.workspaces_outlined),
                         title: Text(workspace.name),
                         subtitle: workspace.description != null ? Text(workspace.description!) : null,
-                        trailing: const Icon(Icons.chevron_right),
+                        trailing: canManage
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit_outlined),
+                                    tooltip: 'Renombrar',
+                                    onPressed: () => _renameWorkspace(workspace),
+                                  ),
+                                  const Icon(Icons.chevron_right),
+                                ],
+                              )
+                            : const Icon(Icons.chevron_right),
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => WorkspaceDetailScreen(workspace: workspace)),
                         ),
