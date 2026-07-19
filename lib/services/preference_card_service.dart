@@ -13,6 +13,12 @@ class PreferenceCardService {
 
   List<PreferenceCard> get cards => List.unmodifiable(_cards);
 
+  /// Limpia el caché en memoria. Debe llamarse al cambiar de grupo o cerrar
+  /// sesión: si no, una tarjeta de un grupo anterior puede quedar cacheada.
+  void clear() {
+    _cards = [];
+  }
+
   List<String> get surgeonNames {
     final names = _cards.map((c) => c.surgeonName).toSet().toList();
     names.sort();

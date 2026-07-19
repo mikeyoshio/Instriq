@@ -21,6 +21,12 @@ class GroupDocumentService {
 
   List<GroupDocument> _documents = [];
 
+  /// Limpia el caché en memoria. Debe llamarse al cambiar de grupo o cerrar
+  /// sesión: si no, un documento de un grupo anterior puede quedar cacheado.
+  void clear() {
+    _documents = [];
+  }
+
   List<GroupDocument> documentsOfKind(DocumentKind kind, String workspaceId) =>
       _documents.where((d) => d.kind == kind && d.workspaceId == workspaceId).toList();
 

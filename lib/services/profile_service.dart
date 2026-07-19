@@ -3,6 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/hospital.dart';
 import '../utils/invite_code.dart';
 import 'auth_service.dart';
+import 'group_document_service.dart';
+import 'preference_card_service.dart';
+import 'workspace_service.dart';
 
 class ProfileService {
   ProfileService._();
@@ -34,7 +37,11 @@ class ProfileService {
         .select('hospital_id, is_admin, hospitals(name, cif, invite_code)')
         .eq('id', user.id)
         .maybeSingle();
-    _hospitalId = row?['hospital_id'] as String?;
+    final newHospitalId = row?['hospital_id'] as String?;
+    if (newHospitalId != _hospitalId) {
+      _clearGroupContentCaches();
+    }
+    _hospitalId = newHospitalId;
     _isAdmin = row?['is_admin'] as bool? ?? false;
     final hospitalRow = row?['hospitals'] as Map<String, dynamic>?;
     _hospitalName = hospitalRow?['name'] as String?;
@@ -48,6 +55,17 @@ class ProfileService {
     _hospitalCif = null;
     _inviteCode = null;
     _isAdmin = false;
+    _clearGroupContentCaches();
+  }
+
+  /// Al cambiar de grupo (unirse, crear uno nuevo, cerrar sesión) hay que
+  /// limpiar el caché en memoria de todo el contenido del grupo anterior:
+  /// si no, un espacio/documento/tarjeta del grupo previo puede quedar
+  /// cacheado y usarse por error junto con el hospital_id del grupo nuevo.
+  void _clearGroupContentCaches() {
+    WorkspaceService.instance.clear();
+    GroupDocumentService.instance.clear();
+    PreferenceCardService.instance.clear();
   }
 
   /// Busca el hospital por código de invitación y liga el perfil del usuario actual.
@@ -71,6 +89,7 @@ class ProfileService {
       'is_admin': false,
       if (displayName != null && displayName.isNotEmpty) 'display_name': displayName,
     });
+    _clearGroupContentCaches();
     _hospitalId = hospital.id;
     _hospitalName = hospital.name;
     _hospitalCif = hospital.cif;
@@ -120,6 +139,7 @@ class ProfileService {
       'is_admin': true,
       if (displayName != null && displayName.isNotEmpty) 'display_name': displayName,
     });
+    _clearGroupContentCaches();
     _hospitalId = hospital.id;
     _hospitalName = hospital.name;
     _hospitalCif = hospital.cif;

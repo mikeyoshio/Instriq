@@ -13,6 +13,13 @@ class WorkspaceService {
 
   List<Workspace> get workspaces => List.unmodifiable(_workspaces);
 
+  /// Limpia el caché en memoria. Debe llamarse al cambiar de grupo o cerrar
+  /// sesión: si no, un espacio de un grupo anterior puede quedar cacheado y
+  /// usarse por error con el hospital_id del grupo nuevo.
+  void clear() {
+    _workspaces = [];
+  }
+
   Future<void> fetchWorkspaces() async {
     final rows = await _client.from('workspaces').select().order('name');
     _workspaces =
