@@ -1,0 +1,12 @@
+{
+  "@@locale": "en",
+  "appTitle": "Instriq",
+  "languageDialogTitle": "Language",
+  "languageCatalan": "Catalan",
+  "languageSpanish": "Spanish",
+  "languageEnglish": "English",
+  "newVersionAvailableTitle": "New version available",
+  "newVersionDefaultMessage": "A newer version of Instriq is available.",
+  "notNow": "Not now",
+  "update": "Update"
+}

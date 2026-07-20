@@ -2,14 +2,17 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'l10n/app_localizations.dart';
 import 'screens/app_root.dart';
 import 'screens/auth/reset_password_screen.dart';
 import 'services/app_version_service.dart';
 import 'services/auth_service.dart';
+import 'services/locale_service.dart';
 import 'services/progress_service.dart';
 import 'services/supabase_config.dart';
 import 'services/theme_service.dart';
@@ -18,6 +21,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ProgressService.instance.init();
   await ThemeService.instance.init();
+  await LocaleService.instance.init();
   await Supabase.initialize(url: supabaseUrl, publishableKey: supabaseAnonKey);
   runApp(const InstriqApp());
 }
@@ -60,20 +64,19 @@ class _InstriqAppState extends State<InstriqApp> {
 
       final context = _navigatorKey.currentContext;
       if (context == null || !context.mounted) return;
+      final l10n = AppLocalizations.of(context)!;
       await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Nueva versión disponible'),
-          content: Text(
-            config.message ?? 'Hay una versión más reciente de Instriq disponible.',
-          ),
+          title: Text(l10n.newVersionAvailableTitle),
+          content: Text(config.message ?? l10n.newVersionDefaultMessage),
           actions: [
             TextButton(
               onPressed: () {
                 prefs.setBool(dismissedKey, true);
                 Navigator.pop(ctx);
               },
-              child: const Text('Ahora no'),
+              child: Text(l10n.notNow),
             ),
             FilledButton(
               onPressed: () {
@@ -81,7 +84,7 @@ class _InstriqAppState extends State<InstriqApp> {
                 if (url != null) launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
                 Navigator.pop(ctx);
               },
-              child: const Text('Actualizar'),
+              child: Text(l10n.update),
             ),
           ],
         ),
@@ -97,21 +100,34 @@ class _InstriqAppState extends State<InstriqApp> {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: ThemeService.instance.themeMode,
       builder: (context, mode, _) {
-        return MaterialApp(
-          navigatorKey: _navigatorKey,
-          title: 'Instriq',
-          debugShowCheckedModeBanner: false,
-          themeMode: mode,
-          theme: ThemeData(
-            colorSchemeSeed: Colors.teal,
-            useMaterial3: true,
-          ),
-          darkTheme: ThemeData(
-            colorSchemeSeed: Colors.teal,
-            brightness: Brightness.dark,
-            useMaterial3: true,
-          ),
-          home: const AppRoot(),
+        return ValueListenableBuilder<Locale>(
+          valueListenable: LocaleService.instance.locale,
+          builder: (context, locale, _) {
+            return MaterialApp(
+              navigatorKey: _navigatorKey,
+              onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+              debugShowCheckedModeBanner: false,
+              themeMode: mode,
+              theme: ThemeData(
+                colorSchemeSeed: Colors.teal,
+                useMaterial3: true,
+              ),
+              darkTheme: ThemeData(
+                colorSchemeSeed: Colors.teal,
+                brightness: Brightness.dark,
+                useMaterial3: true,
+              ),
+              locale: locale,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: const AppRoot(),
+            );
+          },
         );
       },
     );

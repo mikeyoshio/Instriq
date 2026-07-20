@@ -3,6 +3,11 @@
 *.log
 *.pyc
 *.swp
+
+# Localization: generated from lib/l10n/*.arb via `flutter gen-l10n`
+# (runs automatically on pub get/build since l10n.yaml has generate: true).
+lib/l10n/app_localizations.dart
+lib/l10n/app_localizations_*.dart
 .DS_Store
 .atom/
 .build/
