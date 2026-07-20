@@ -13,4 +13,5 @@ export PATH="$PATH:$FLUTTER_DIR/bin"
 
 flutter config --enable-web
 flutter pub get
+flutter gen-l10n
 flutter build web --release
