@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import 'sign_in_screen.dart';
 import 'sign_up_screen.dart';
 
@@ -8,6 +9,7 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -20,16 +22,12 @@ class WelcomeScreen extends StatelessWidget {
               Text('Instriq', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: 24),
               Text(
-                '¿Formas parte de un equipo o quieres crear el tuyo?',
+                l10n.welcomeQuestion,
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Crea el grupo de tu bloque quirúrgico, servicio o equipo y documenta cómo trabajáis: '
-                'catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidas.',
-                textAlign: TextAlign.center,
-              ),
+              Text(l10n.welcomeBody, textAlign: TextAlign.center),
               const SizedBox(height: 40),
               SizedBox(
                 width: double.infinity,
@@ -37,7 +35,7 @@ class WelcomeScreen extends StatelessWidget {
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const SignUpScreen()),
                   ),
-                  child: const Text('Crear cuenta'),
+                  child: Text(l10n.createAccount),
                 ),
               ),
               const SizedBox(height: 12),
@@ -47,7 +45,7 @@ class WelcomeScreen extends StatelessWidget {
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const SignInScreen()),
                   ),
-                  child: const Text('Ya tengo cuenta — iniciar sesión'),
+                  child: Text(l10n.alreadyHaveAccount),
                 ),
               ),
             ],

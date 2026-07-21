@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../data/instruments_data.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
@@ -41,6 +42,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final filtered = kInstruments.where((i) {
       final matchesQuery = _query.isEmpty ||
           i.name.toLowerCase().contains(_query.toLowerCase()) ||
@@ -52,13 +54,13 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Catálogo'),
+        title: Text(l10n.catalogTitle),
         actions: [
           if (_activeFilterCount > 0)
             TextButton(
               onPressed: _clearFilters,
               child: Text(
-                'Limpiar ($_activeFilterCount)',
+                l10n.clearWithCount(_activeFilterCount),
                 style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               ),
             ),
@@ -69,10 +71,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                hintText: 'Buscar instrumento o marca comercial...',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: l10n.catalogSearchHint,
+                border: const OutlineInputBorder(),
               ),
               onChanged: (v) => setState(() => _query = v),
             ),
@@ -82,7 +84,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Especialidad — toca varias a la vez',
+                l10n.specialtyFilterLabel,
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ),
@@ -111,7 +113,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('Categoría', style: Theme.of(context).textTheme.labelMedium),
+              child: Text(l10n.categoryFilterLabel, style: Theme.of(context).textTheme.labelMedium),
             ),
           ),
           SizedBox(
@@ -139,7 +141,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '${filtered.length} instrumento${filtered.length == 1 ? '' : 's'}',
+                l10n.instrumentsCount(filtered.length),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -151,10 +153,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text('Sin resultados con estos filtros'),
+                        Text(l10n.noResultsFilters),
                         if (_activeFilterCount > 0) ...[
                           const SizedBox(height: 8),
-                          TextButton(onPressed: _clearFilters, child: const Text('Limpiar filtros')),
+                          TextButton(onPressed: _clearFilters, child: Text(l10n.clearFilters)),
                         ],
                       ],
                     ),

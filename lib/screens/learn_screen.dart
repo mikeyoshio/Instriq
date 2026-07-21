@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import 'flashcards_screen.dart';
 import 'quiz_screen.dart';
 
@@ -8,8 +9,9 @@ class LearnScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Aprende')),
+      appBar: AppBar(title: Text(l10n.learnTitle)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -17,14 +19,14 @@ class LearnScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Elige cómo quieres repasar el instrumental',
+                l10n.chooseReviewMode,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 20),
               _LearnCard(
                 icon: Icons.style,
-                title: 'Flashcards',
-                subtitle: 'Estudia con tarjetas de repaso',
+                title: l10n.flashcardsTitle,
+                subtitle: l10n.flashcardsSubtitle,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const FlashcardsScreen()),
                 ),
@@ -32,8 +34,8 @@ class LearnScreen extends StatelessWidget {
               const SizedBox(height: 12),
               _LearnCard(
                 icon: Icons.quiz,
-                title: 'Quiz',
-                subtitle: 'Ponte a prueba con preguntas rápidas',
+                title: l10n.quizTitle,
+                subtitle: l10n.quizSubtitle,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const QuizScreen()),
                 ),

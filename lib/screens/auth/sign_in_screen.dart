@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 import 'sign_up_screen.dart';
 
@@ -17,23 +18,24 @@ class _SignInScreenState extends State<SignInScreen> {
   String? _error;
 
   Future<void> _forgotPassword() async {
+    final l10n = AppLocalizations.of(context)!;
     final email = await showDialog<String>(
       context: context,
       builder: (ctx) {
         final controller = TextEditingController(text: _emailController.text.trim());
         return AlertDialog(
-          title: const Text('Recuperar contraseña'),
+          title: Text(l10n.forgotDialogTitle),
           content: TextField(
             controller: controller,
             autofocus: true,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+            decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
+            TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-              child: const Text('Enviar enlace'),
+              child: Text(l10n.sendLink),
             ),
           ],
         );
@@ -43,13 +45,11 @@ class _SignInScreenState extends State<SignInScreen> {
     try {
       await AuthService.instance.resetPasswordForEmail(email);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Si el email existe, te llegará un enlace para restablecer la contraseña.')),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.forgotSnackbar)));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError(e.toString()))));
       }
     }
   }
@@ -67,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
       // HospitalConnectFlow reacciona al cambio de sesión y se refresca solo.
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      setState(() => _error = 'No se pudo iniciar sesión: $e');
+      setState(() => _error = AppLocalizations.of(context)!.signInError(e.toString()));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -75,8 +75,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar sesión')),
+      appBar: AppBar(title: Text(l10n.signInTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -87,13 +88,13 @@ class _SignInScreenState extends State<SignInScreen> {
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+              decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(labelText: 'Contraseña', border: OutlineInputBorder()),
+              decoration: InputDecoration(labelText: l10n.password, border: const OutlineInputBorder()),
             ),
             if (_error != null) ...[
               const SizedBox(height: 12),
@@ -107,18 +108,18 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: _loading
                     ? const SizedBox(
                         height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Entrar'),
+                    : Text(l10n.enter),
               ),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const SignUpScreen()),
               ),
-              child: const Text('¿No tienes cuenta? Regístrate'),
+              child: Text(l10n.noAccountSignUp),
             ),
             TextButton(
               onPressed: _forgotPassword,
-              child: const Text('¿Olvidaste tu contraseña?'),
+              child: Text(l10n.forgotPassword),
             ),
           ],
         ),
