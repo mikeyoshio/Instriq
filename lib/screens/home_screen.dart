@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
+import '../services/locale_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
 import '../services/theme_service.dart';
@@ -33,15 +35,46 @@ class _HomeScreenState extends State<HomeScreen> {
     _refresh();
   }
 
+  Future<void> _pickLanguage() async {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = await showDialog<Locale>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: Text(l10n.languageDialogTitle),
+        children: [
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, const Locale('ca')),
+            child: Text(l10n.languageCatalan),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, const Locale('es')),
+            child: Text(l10n.languageSpanish),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, const Locale('en')),
+            child: Text(l10n.languageEnglish),
+          ),
+        ],
+      ),
+    );
+    if (locale != null) await LocaleService.instance.setLocale(locale);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final progress = ProgressService.instance;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Instriq'),
         actions: [
           IconButton(
-            tooltip: 'Cambiar tema claro/oscuro',
+            tooltip: l10n.languageTooltip,
+            icon: const Icon(Icons.language),
+            onPressed: _pickLanguage,
+          ),
+          IconButton(
+            tooltip: l10n.themeToggleTooltip,
             icon: Icon(
               Theme.of(context).brightness == Brightness.dark
                   ? Icons.light_mode
@@ -51,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           if (AuthService.instance.currentUser != null)
             IconButton(
-              tooltip: 'Mi cuenta y privacidad',
+              tooltip: l10n.accountTooltip,
               icon: const Icon(Icons.privacy_tip_outlined),
               onPressed: () async {
                 await Navigator.of(context).push(
@@ -80,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Aprende el instrumental de quirófano',
+                l10n.learnInstrumentsHeadline,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 16),
@@ -93,14 +126,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                '${progress.learnedCount} de ${progress.totalCount} instrumentos aprendidos',
+                l10n.progressCount(progress.learnedCount, progress.totalCount),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 32),
               _MenuCard(
                 icon: Icons.menu_book,
-                title: 'Catálogo',
-                subtitle: 'Explora todo el instrumental por categoría',
+                title: l10n.catalogTitle,
+                subtitle: l10n.catalogSubtitle,
                 onTap: () async {
                   await Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const CatalogScreen()),
@@ -111,8 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 12),
               _MenuCard(
                 icon: Icons.school,
-                title: 'Aprende',
-                subtitle: 'Flashcards y quiz para repasar el instrumental',
+                title: l10n.learnTitle,
+                subtitle: l10n.learnSubtitle,
                 onTap: () async {
                   await Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const LearnScreen()),
@@ -123,8 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 12),
               _MenuCard(
                 icon: Icons.bar_chart,
-                title: 'Mi progreso',
-                subtitle: 'Revisa tu avance por categoría',
+                title: l10n.myProgressTitle,
+                subtitle: l10n.myProgressSubtitle,
                 onTap: () async {
                   await Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const ProgressScreen()),
@@ -133,14 +166,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               const SizedBox(height: 24),
-              Text('Mi grupo', style: Theme.of(context).textTheme.titleMedium),
+              Text(l10n.myGroup, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               if (_isConnected) ...[
                 _MenuCard(
                   icon: Icons.workspaces_outlined,
-                  title: 'Espacios',
-                  subtitle: ProfileService.instance.hospitalName ??
-                      'Técnicas, protocolos y tarjetas de preferencia por especialidad o servicio',
+                  title: l10n.spacesTitle,
+                  subtitle: ProfileService.instance.hospitalName ?? l10n.spacesSubtitleDefault,
                   onTap: () async {
                     await Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const WorkspaceListScreen()),
@@ -152,8 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 12),
                   _MenuCard(
                     icon: Icons.admin_panel_settings,
-                    title: 'Administrar grupo',
-                    subtitle: 'Código de invitación y miembros',
+                    title: l10n.manageGroupTitle,
+                    subtitle: l10n.manageGroupSubtitle,
                     onTap: () async {
                       await Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const ManageHospitalScreen()),
@@ -164,8 +196,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 12),
                   _MenuCard(
                     icon: Icons.rate_review_outlined,
-                    title: 'Revisar cambios pendientes',
-                    subtitle: 'Aprueba o rechaza técnicas y protocolos en revisión',
+                    title: l10n.reviewQueueTitle,
+                    subtitle: l10n.reviewQueueSubtitle,
                     onTap: () async {
                       await Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const GroupDocumentReviewQueueScreen()),
@@ -177,8 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ] else
                 _MenuCard(
                   icon: Icons.groups_outlined,
-                  title: 'Conecta con tu grupo',
-                  subtitle: 'Únete con un código o crea el tuyo para compartir conocimiento con tu equipo',
+                  title: l10n.connectGroupTitle,
+                  subtitle: l10n.connectGroupSubtitle,
                   onTap: _openHospitalConnectFlow,
                 ),
             ],

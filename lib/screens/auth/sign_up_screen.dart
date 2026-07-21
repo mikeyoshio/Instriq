@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -28,10 +29,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _passwordController.text,
       );
       setState(() {
-        _info = 'Cuenta creada. Si tu proyecto requiere confirmación por email, revisa tu bandeja.';
+        _info = AppLocalizations.of(context)!.signUpInfo;
       });
     } catch (e) {
-      setState(() => _error = 'No se pudo registrar: $e');
+      setState(() => _error = AppLocalizations.of(context)!.signUpError(e.toString()));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -39,8 +40,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear cuenta')),
+      appBar: AppBar(title: Text(l10n.signUpTitle)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -49,15 +51,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+              decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Contraseña (mín. 6 caracteres)',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.passwordMinChars,
+                border: const OutlineInputBorder(),
               ),
             ),
             if (_error != null) ...[
@@ -76,7 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: _loading
                     ? const SizedBox(
                         height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Registrarme'),
+                    : Text(l10n.signUpSubmit),
               ),
             ),
           ],
