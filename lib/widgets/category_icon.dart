@@ -36,6 +36,8 @@ Color colorForCategory(InstrumentCategory category) {
       return Colors.blueAccent;
     case InstrumentCategory.especiales:
       return Colors.green;
+    case InstrumentCategory.equipos:
+      return Colors.indigo;
   }
 }
 
