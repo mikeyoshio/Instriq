@@ -5,6 +5,7 @@ enum InstrumentCategory {
   separacion,
   succion,
   especiales,
+  equipos,
 }
 
 extension InstrumentCategoryLabel on InstrumentCategory {
@@ -22,6 +23,8 @@ extension InstrumentCategoryLabel on InstrumentCategory {
         return 'Succión';
       case InstrumentCategory.especiales:
         return 'Especiales';
+      case InstrumentCategory.equipos:
+        return 'Equipos y máquinas';
     }
   }
 }
@@ -36,6 +39,13 @@ enum Specialty {
   ginecologiaObstetricia,
   urologia,
   otorrino,
+  vascular,
+  maxilofacial,
+  pediatrica,
+  plastica,
+  toracica,
+  dermatologia,
+  oftalmologia,
 }
 
 extension SpecialtyLabel on Specialty {
@@ -59,6 +69,20 @@ extension SpecialtyLabel on Specialty {
         return 'Urología';
       case Specialty.otorrino:
         return 'Otorrinolaringología';
+      case Specialty.vascular:
+        return 'Angiología y Cirugía Vascular';
+      case Specialty.maxilofacial:
+        return 'Cirugía Oral y Maxilofacial';
+      case Specialty.pediatrica:
+        return 'Cirugía Pediátrica';
+      case Specialty.plastica:
+        return 'Cirugía Plástica, Estética y Reparadora';
+      case Specialty.toracica:
+        return 'Cirugía Torácica';
+      case Specialty.dermatologia:
+        return 'Dermatología Médico-Quirúrgica y Venereología';
+      case Specialty.oftalmologia:
+        return 'Oftalmología';
     }
   }
 }
