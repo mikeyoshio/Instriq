@@ -58,12 +58,19 @@ begin
           -- Una fila por documento con contenido pendiente (borrador o en
           -- revision). Se toma la version pendiente mas reciente de cada
           -- documento para no contar el mismo documento varias veces.
-          select distinct on (gd.id) gd.id as doc_id, gdv.specialty as specialty_key, 'draft_review' as kind_flag
-          from group_documents gd
-          join group_document_versions gdv on gdv.document_id = gd.id
-          where gd.hospital_id = p_hospital_id
-            and gdv.status in ('draft', 'in_review')
-          order by gd.id, gdv.version_number desc
+          -- IMPORTANTE: el DISTINCT ON + ORDER BY va en su propia subconsulta
+          -- entre parentesis -- sin ellos, Postgres aplica ese ORDER BY al
+          -- UNION ALL completo, donde gd/gdv ya no estan en scope (error
+          -- 42P01 "missing FROM-clause entry for table gd").
+          select doc_id, specialty_key, 'draft_review' as kind_flag
+          from (
+            select distinct on (gd.id) gd.id as doc_id, gdv.specialty as specialty_key
+            from group_documents gd
+            join group_document_versions gdv on gdv.document_id = gd.id
+            where gd.hospital_id = p_hospital_id
+              and gdv.status in ('draft', 'in_review')
+            order by gd.id, gdv.version_number desc
+          ) latest_pending
         ) x
         group by specialty_key
       ) t
