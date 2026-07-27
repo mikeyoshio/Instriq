@@ -1,5 +1,40 @@
 enum GroupDocumentVersionStatus { draft, inReview, published, archived }
 
+/// Un paso de un protocolo/técnica, con categoría de texto libre opcional
+/// (ej. "Preoperatorio", "Anestesia"...). No es un enum: Instriq documenta
+/// tanto checklists de seguridad (categorías tipo OMS) como técnicas
+/// quirúrgicas paso a paso donde esas categorías fijas no encajan.
+///
+/// Compatibilidad hacia atrás: el jsonb de `steps` guardaba antes un array
+/// de strings planos. [ProtocolStep.fromDynamic] interpreta ese formato
+/// antiguo como un paso sin categoría, así que el contenido existente en
+/// Supabase sigue funcionando sin migración ni pérdida de datos.
+class ProtocolStep {
+  final String? category;
+  final String text;
+
+  const ProtocolStep({this.category, required this.text});
+
+  Map<String, dynamic> toJson() => {
+        'category': category,
+        'text': text,
+      };
+
+  factory ProtocolStep.fromDynamic(dynamic value) {
+    if (value is String) {
+      return ProtocolStep(text: value);
+    }
+    if (value is Map) {
+      final map = value.cast<String, dynamic>();
+      return ProtocolStep(
+        category: map['category'] as String?,
+        text: map['text'] as String? ?? '',
+      );
+    }
+    return ProtocolStep(text: value.toString());
+  }
+}
+
 extension GroupDocumentVersionStatusLabel on GroupDocumentVersionStatus {
   String get label {
     switch (this) {
@@ -54,7 +89,7 @@ class GroupDocumentVersion {
   final String title;
   final String? specialty;
   final String? content;
-  final List<String> steps;
+  final List<ProtocolStep> steps;
   final List<String> relatedInstrumentIds;
   final String? authorId;
   final String? comment;
@@ -85,7 +120,7 @@ class GroupDocumentVersion {
         'title': title,
         'specialty': specialty,
         'content': content,
-        'steps': steps,
+        'steps': steps.map((s) => s.toJson()).toList(),
         'related_instrument_ids': relatedInstrumentIds,
         'comment': comment,
       };
@@ -99,7 +134,7 @@ class GroupDocumentVersion {
     bool clearSpecialty = false,
     String? content,
     bool clearContent = false,
-    List<String>? steps,
+    List<ProtocolStep>? steps,
     List<String>? relatedInstrumentIds,
     String? comment,
   }) {
@@ -131,7 +166,7 @@ class GroupDocumentVersion {
       title: row['title'] as String? ?? '',
       specialty: row['specialty'] as String?,
       content: row['content'] as String?,
-      steps: (row['steps'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
+      steps: (row['steps'] as List<dynamic>? ?? []).map(ProtocolStep.fromDynamic).toList(),
       relatedInstrumentIds:
           (row['related_instrument_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
       authorId: row['author_id'] as String?,

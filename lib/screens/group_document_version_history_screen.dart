@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/workspace_role.dart';
@@ -28,6 +29,7 @@ class _GroupDocumentVersionHistoryScreenState extends State<GroupDocumentVersion
   }
 
   Future<void> _load() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -35,7 +37,7 @@ class _GroupDocumentVersionHistoryScreenState extends State<GroupDocumentVersion
     try {
       _versions = await GroupDocumentService.instance.fetchVersionHistory(widget.document.id);
     } catch (e) {
-      _error = 'No se pudo cargar el historial: $e';
+      _error = l10n.versionHistoryLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -54,17 +56,15 @@ class _GroupDocumentVersionHistoryScreenState extends State<GroupDocumentVersion
   }
 
   Future<void> _restore(GroupDocumentVersion version) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Restaurar versión'),
-        content: Text(
-          'Se creará un nuevo borrador con el contenido de la versión ${version.versionNumber}. '
-          'No se pierde el historial existente.',
-        ),
+        title: Text(l10n.restoreVersionTitle),
+        content: Text(l10n.restoreVersionBody(version.versionNumber)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Restaurar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.restore)),
         ],
       ),
     );
@@ -73,13 +73,14 @@ class _GroupDocumentVersionHistoryScreenState extends State<GroupDocumentVersion
       await GroupDocumentService.instance.restore(version.id);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Se creó un borrador nuevo a partir de esta versión')),
+          SnackBar(content: Text(l10n.restoreSuccessSnackbar)),
         );
       }
       _load();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al restaurar: $e')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.restoreError(e.toString()))));
       }
     }
   }
@@ -96,9 +97,10 @@ class _GroupDocumentVersionHistoryScreenState extends State<GroupDocumentVersion
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final canRestore = widget.myRole?.canEdit ?? false;
     return Scaffold(
-      appBar: AppBar(title: const Text('Historial de versiones')),
+      appBar: AppBar(title: Text(l10n.versionHistoryTitle)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
@@ -111,7 +113,7 @@ class _GroupDocumentVersionHistoryScreenState extends State<GroupDocumentVersion
                     return Card(
                       color: _statusColor(version.status, context),
                       child: ListTile(
-                        title: Text('Versión ${version.versionNumber} · ${version.title}'),
+                        title: Text(l10n.versionNumberTitle(version.versionNumber, version.title)),
                         subtitle: Text(
                           '${version.status.label}'
                           '${version.comment != null ? ' — ${version.comment}' : ''}',
@@ -122,9 +124,9 @@ class _GroupDocumentVersionHistoryScreenState extends State<GroupDocumentVersion
                             if (value == 'restore') _restore(version);
                           },
                           itemBuilder: (context) => [
-                            const PopupMenuItem(value: 'diff', child: Text('Comparar con la publicada')),
+                            PopupMenuItem(value: 'diff', child: Text(l10n.compareWithPublished)),
                             if (canRestore)
-                              const PopupMenuItem(value: 'restore', child: Text('Restaurar')),
+                              PopupMenuItem(value: 'restore', child: Text(l10n.restore)),
                           ],
                         ),
                       ),

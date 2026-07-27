@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
 import '../widgets/category_icon.dart';
@@ -14,28 +15,29 @@ class ProgressScreen extends StatefulWidget {
 class _ProgressScreenState extends State<ProgressScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final progress = ProgressService.instance;
     final bestQuiz = progress.quizBestScore(null);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mi progreso')),
+      appBar: AppBar(title: Text(l10n.myProgressTitle)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Text('Progreso general', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.overallProgressLabel, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(value: progress.overallProgress, minHeight: 12),
           ),
           const SizedBox(height: 6),
-          Text('${progress.learnedCount} de ${progress.totalCount} instrumentos'),
+          Text(l10n.progressCount(progress.learnedCount, progress.totalCount)),
           const SizedBox(height: 24),
-          Text('Mejor puntuación en quiz', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.bestQuizScoreLabel, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 4),
-          Text('$bestQuiz / 10'),
+          Text(l10n.scoreOutOfTen(bestQuiz)),
           const SizedBox(height: 24),
-          Text('Por categoría', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.byCategoryLabel, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 12),
           ...InstrumentCategory.values.map((c) {
             final learned = progress.learnedCountForCategory(c);
@@ -65,7 +67,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                           child: LinearProgressIndicator(value: value, minHeight: 8),
                         ),
                         const SizedBox(height: 2),
-                        Text('$learned / $total'),
+                        Text(l10n.learnedFraction(learned, total)),
                       ],
                     ),
                   ),
@@ -79,11 +81,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
               final confirmed = await showDialog<bool>(
                 context: context,
                 builder: (ctx) => AlertDialog(
-                  title: const Text('Reiniciar progreso'),
-                  content: const Text('Se borrará todo lo aprendido y las puntuaciones. ¿Continuar?'),
+                  title: Text(l10n.resetProgressTitle),
+                  content: Text(l10n.resetProgressBody),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-                    TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Reiniciar')),
+                    TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+                    TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.resetLabel)),
                   ],
                 ),
               );
@@ -93,7 +95,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               }
             },
             icon: const Icon(Icons.restart_alt),
-            label: const Text('Reiniciar progreso'),
+            label: Text(l10n.resetProgressTitle),
           ),
         ],
       ),

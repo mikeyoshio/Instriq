@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/workspace.dart';
 import '../services/profile_service.dart';
 import '../services/workspace_service.dart';
@@ -26,6 +27,7 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
   }
 
   Future<void> _load() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -33,23 +35,24 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
     try {
       await WorkspaceService.instance.fetchWorkspaces();
     } catch (e) {
-      _error = 'No se pudieron cargar los espacios: $e';
+      _error = l10n.workspaceListLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
 
   Future<void> _renameWorkspace(Workspace workspace) async {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: workspace.name);
     final name = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Renombrar espacio'),
+        title: Text(l10n.workspaceRenameTitle),
         content: TextField(controller: controller, autofocus: true),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: const Text('Guardar'),
+            child: Text(l10n.save),
           ),
         ],
       ),
@@ -60,27 +63,29 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
       _load();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al renombrar: $e')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.workspaceRenameError(e.toString()))));
       }
     }
   }
 
   Future<void> _createWorkspace() async {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     final name = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Nuevo espacio'),
+        title: Text(l10n.workspaceNewTitle),
         content: TextField(
           controller: controller,
           autofocus: true,
-          decoration: const InputDecoration(hintText: 'p. ej. Traumatología, Formación...'),
+          decoration: InputDecoration(hintText: l10n.workspaceNameHint),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: const Text('Crear'),
+            child: Text(l10n.create),
           ),
         ],
       ),
@@ -91,21 +96,23 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
       _load();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al crear: $e')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.workspaceCreateError(e.toString()))));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final canManage = ProfileService.instance.isAdmin;
     return Scaffold(
-      appBar: AppBar(title: const Text('Espacios')),
+      appBar: AppBar(title: Text(l10n.spacesTitle)),
       floatingActionButton: canManage
           ? FloatingActionButton.extended(
               onPressed: _createWorkspace,
               icon: const Icon(Icons.add),
-              label: const Text('Nuevo espacio'),
+              label: Text(l10n.workspaceNewTitle),
             )
           : null,
       body: _loading
@@ -128,7 +135,7 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
                                 children: [
                                   IconButton(
                                     icon: const Icon(Icons.edit_outlined),
-                                    tooltip: 'Renombrar',
+                                    tooltip: l10n.workspaceRenameTooltip,
                                     onPressed: () => _renameWorkspace(workspace),
                                   ),
                                   const Icon(Icons.chevron_right),

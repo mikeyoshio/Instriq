@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/group_document_version.dart';
 import '../services/group_document_service.dart';
 import 'group_document_diff_screen.dart';
@@ -27,6 +28,7 @@ class _GroupDocumentReviewQueueScreenState extends State<GroupDocumentReviewQueu
   }
 
   Future<void> _load() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -36,7 +38,7 @@ class _GroupDocumentReviewQueueScreenState extends State<GroupDocumentReviewQueu
       _workspaceNames = await GroupDocumentService.instance
           .fetchWorkspaceNamesForDocuments(_queue.map((v) => v.documentId).toSet().toList());
     } catch (e) {
-      _error = 'No se pudo cargar la cola de revisión: $e';
+      _error = l10n.reviewQueueLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -53,40 +55,43 @@ class _GroupDocumentReviewQueueScreenState extends State<GroupDocumentReviewQueu
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No se pudo comparar: $e')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.compareLoadError(e.toString()))));
       }
     }
   }
 
   Future<void> _approve(GroupDocumentVersion version) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       await GroupDocumentService.instance.approve(version.id);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cambio aprobado y publicado')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.changeApprovedSnackbar)));
       }
       _load();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al aprobar: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.approveError(e.toString()))));
       }
     }
   }
 
   Future<void> _reject(GroupDocumentVersion version) async {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     final comment = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Rechazar cambio'),
+        title: Text(l10n.rejectChangeTitle),
         content: TextField(
           controller: controller,
           autofocus: true,
           maxLines: 3,
-          decoration: const InputDecoration(labelText: 'Motivo (visible para el autor)'),
+          decoration: InputDecoration(labelText: l10n.rejectReasonLabel),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: const Text('Rechazar')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: Text(l10n.reject)),
         ],
       ),
     );
@@ -94,29 +99,30 @@ class _GroupDocumentReviewQueueScreenState extends State<GroupDocumentReviewQueu
     try {
       await GroupDocumentService.instance.reject(version.id, comment: comment.isEmpty ? null : comment);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cambio devuelto al autor')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.changeReturnedSnackbar)));
       }
       _load();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al rechazar: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.rejectError(e.toString()))));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Cambios pendientes de revisión')),
+      appBar: AppBar(title: Text(l10n.reviewQueueTitle)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
               ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
               : _queue.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Padding(
-                        padding: EdgeInsets.all(24),
-                        child: Text('No hay cambios pendientes de revisión.'),
+                        padding: const EdgeInsets.all(24),
+                        child: Text(l10n.noPendingReviews),
                       ),
                     )
                   : ListView.builder(
@@ -147,17 +153,17 @@ class _GroupDocumentReviewQueueScreenState extends State<GroupDocumentReviewQueu
                                   children: [
                                     TextButton(
                                       onPressed: () => _openDiff(version),
-                                      child: const Text('Comparar'),
+                                      child: Text(l10n.compare),
                                     ),
                                     const Spacer(),
                                     TextButton(
                                       onPressed: () => _reject(version),
-                                      child: const Text('Rechazar'),
+                                      child: Text(l10n.reject),
                                     ),
                                     const SizedBox(width: 8),
                                     FilledButton(
                                       onPressed: () => _approve(version),
-                                      child: const Text('Aprobar'),
+                                      child: Text(l10n.approve),
                                     ),
                                   ],
                                 ),

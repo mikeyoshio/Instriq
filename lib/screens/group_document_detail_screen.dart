@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
@@ -51,6 +52,23 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     if (mounted) setState(() => _loadingHistory = false);
   }
 
+  /// Agrupa los pasos por categoría, en el orden de primera aparición
+  /// (no alfabético). Los pasos sin categoría van bajo una clave `null`
+  /// que se muestra como "General"/"Sin categoría".
+  List<MapEntry<String?, List<ProtocolStep>>> _groupedSteps(List<ProtocolStep> steps) {
+    final order = <String?>[];
+    final byCategory = <String?, List<ProtocolStep>>{};
+    for (final step in steps) {
+      final key = step.category;
+      if (!byCategory.containsKey(key)) {
+        order.add(key);
+        byCategory[key] = [];
+      }
+      byCategory[key]!.add(step);
+    }
+    return order.map((key) => MapEntry(key, byCategory[key]!)).toList();
+  }
+
   Instrument? _instrumentFor(String id) {
     for (final i in kInstruments) {
       if (i.id == id) return i;
@@ -89,15 +107,16 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
   }
 
   Future<void> _delete() async {
+    final l10n = AppLocalizations.of(context)!;
     final title = _document.publishedVersion?.title ?? '';
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Eliminar ${_document.kind.label.toLowerCase()}'),
-        content: Text('¿Eliminar "$title"? No se puede deshacer.'),
+        title: Text(l10n.deleteKindTitle(_document.kind.label.toLowerCase())),
+        content: Text(l10n.deleteDocConfirmBody(title)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Eliminar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.deleteAction)),
         ],
       ),
     );
@@ -109,14 +128,15 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final published = _document.publishedVersion;
     final canEdit = widget.myRole?.canEdit ?? false;
     final canApprove = widget.myRole?.canApprove ?? false;
     return Scaffold(
       appBar: AppBar(
-        title: Text(published?.title ?? 'Sin publicar'),
+        title: Text(published?.title ?? l10n.unpublished),
         actions: [
-          IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: 'Historial'),
+          IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
           if (canApprove) IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),
         ],
@@ -131,19 +151,19 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                 leading: const Icon(Icons.pending_actions),
                 title: Text(
                   _ownPendingDraft!.status == GroupDocumentVersionStatus.inReview
-                      ? 'Tienes cambios pendientes de revisión'
-                      : 'Tienes un borrador sin enviar',
+                      ? l10n.pendingReviewTitle
+                      : l10n.pendingDraftTitle,
                 ),
-                subtitle: const Text('Este contenido publicado no cambiará hasta que se apruebe'),
+                subtitle: Text(l10n.pendingDraftSubtitle),
                 onTap: _edit,
               ),
             ),
             const SizedBox(height: 16),
           ],
           if (published == null)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 24),
-              child: Text('Este documento todavía no tiene una versión publicada.'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Text(l10n.docNotPublishedYet),
             )
           else ...[
             if (published.specialty != null) ...[
@@ -151,26 +171,35 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               const SizedBox(height: 16),
             ],
             if (published.content != null) ...[
-              Text('Descripción', style: Theme.of(context).textTheme.labelLarge),
+              Text(l10n.descriptionLabel, style: Theme.of(context).textTheme.labelLarge),
               const SizedBox(height: 4),
               Text(published.content!, style: Theme.of(context).textTheme.bodyLarge),
               const SizedBox(height: 20),
             ],
             if (published.steps.isNotEmpty) ...[
-              Text('Pasos', style: Theme.of(context).textTheme.titleMedium),
+              Text(l10n.stepsLabel, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
-              ...published.steps.asMap().entries.map((entry) {
-                return Card(
-                  child: ListTile(
-                    leading: CircleAvatar(child: Text('${entry.key + 1}')),
-                    title: Text(entry.value),
+              ..._groupedSteps(published.steps).expand((group) {
+                final categoryLabel = group.key ?? l10n.stepsUncategorizedGroup;
+                return [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
+                    child: Text(categoryLabel, style: Theme.of(context).textTheme.labelLarge),
                   ),
-                );
+                  ...group.value.asMap().entries.map((entry) {
+                    return Card(
+                      child: ListTile(
+                        leading: CircleAvatar(child: Text('${entry.key + 1}')),
+                        title: Text(entry.value.text),
+                      ),
+                    );
+                  }),
+                ];
               }),
               const SizedBox(height: 20),
             ],
             if (published.relatedInstrumentIds.isNotEmpty) ...[
-              Text('Instrumental relacionado', style: Theme.of(context).textTheme.titleMedium),
+              Text(l10n.relatedInstrumentsLabel, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               ...published.relatedInstrumentIds.map((id) {
                 final instrument = _instrumentFor(id);

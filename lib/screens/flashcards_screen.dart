@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
 import '../widgets/category_icon.dart';
@@ -39,16 +40,17 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final cards = _cards;
     if (cards.isEmpty) {
-      return const Scaffold(body: Center(child: Text('Sin tarjetas')));
+      return Scaffold(body: Center(child: Text(l10n.noCards)));
     }
     final card = cards[min(_index, cards.length - 1)];
     final learned = ProgressService.instance.isLearned(card.id);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flashcards'),
+        title: Text(l10n.flashcardsTitle),
         actions: [
           PopupMenuButton<InstrumentCategory?>(
             icon: const Icon(Icons.filter_list),
@@ -58,7 +60,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
               _showBack = false;
             }),
             itemBuilder: (context) => [
-              const PopupMenuItem(value: null, child: Text('Todas')),
+              PopupMenuItem(value: null, child: Text(l10n.allCategoriesLabel)),
               ...InstrumentCategory.values.map(
                 (c) => PopupMenuItem(value: c, child: Text(c.label)),
               ),
@@ -71,7 +73,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Text('${_index + 1} / ${cards.length}'),
+              Text(l10n.cardCounter(_index + 1, cards.length)),
               const SizedBox(height: 16),
               Expanded(
                 child: GestureDetector(
@@ -94,7 +96,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                _showBack ? 'Toca para ver el nombre' : 'Toca la tarjeta para ver el detalle',
+                _showBack ? l10n.tapToSeeName : l10n.tapCardToSeeDetail,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 16),
@@ -104,7 +106,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
                     child: OutlinedButton.icon(
                       onPressed: _prev,
                       icon: const Icon(Icons.chevron_left),
-                      label: const Text('Anterior'),
+                      label: Text(l10n.previous),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -112,7 +114,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
                     child: FilledButton.icon(
                       onPressed: _next,
                       icon: const Icon(Icons.chevron_right),
-                      label: const Text('Siguiente'),
+                      label: Text(l10n.next),
                     ),
                   ),
                 ],
@@ -124,7 +126,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
                   setState(() {});
                 },
                 icon: Icon(learned ? Icons.check_circle : Icons.check_circle_outline),
-                label: Text(learned ? 'Aprendido' : 'Marcar como aprendido'),
+                label: Text(learned ? l10n.learned : l10n.markAsLearned),
               ),
             ],
           ),
@@ -165,15 +167,16 @@ class _CardBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Descripción', style: Theme.of(context).textTheme.labelLarge),
+          Text(l10n.descriptionLabel, style: Theme.of(context).textTheme.labelLarge),
           Text(instrument.description),
           const SizedBox(height: 12),
-          Text('Uso', style: Theme.of(context).textTheme.labelLarge),
+          Text(l10n.useLabel, style: Theme.of(context).textTheme.labelLarge),
           Text(instrument.use),
         ],
       ),

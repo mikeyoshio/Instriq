@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/workspace.dart';
 import '../models/workspace_member.dart';
 import '../models/workspace_role.dart';
@@ -29,6 +30,7 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
   }
 
   Future<void> _load() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -36,7 +38,7 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
     try {
       _members = await WorkspaceService.instance.fetchMembers(widget.workspace.id);
     } catch (e) {
-      _error = 'No se pudieron cargar los miembros: $e';
+      _error = l10n.manageMembersLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -51,15 +53,17 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
       _load();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.genericError(e.toString()))));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text('Miembros de ${widget.workspace.name}')),
+      appBar: AppBar(title: Text(l10n.manageMembersTitle(widget.workspace.name))),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
@@ -72,17 +76,17 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
                     return Card(
                       child: ListTile(
                         leading: const Icon(Icons.person),
-                        title: Text(member.displayName?.isNotEmpty == true ? member.displayName! : 'Sin nombre'),
-                        subtitle: member.isHospitalAdmin ? const Text('Administradora/or del grupo') : null,
+                        title: Text(member.displayName?.isNotEmpty == true ? member.displayName! : l10n.noName),
+                        subtitle: member.isHospitalAdmin ? Text(l10n.manageMembersAdminLabel) : null,
                         trailing: member.isHospitalAdmin
-                            ? const Chip(label: Text('Acceso total'))
+                            ? Chip(label: Text(l10n.manageMembersFullAccess))
                             : DropdownButton<WorkspaceRole?>(
                                 value: member.role,
-                                hint: const Text('Sin acceso'),
+                                hint: Text(l10n.manageMembersNoAccess),
                                 items: [
-                                  const DropdownMenuItem<WorkspaceRole?>(
+                                  DropdownMenuItem<WorkspaceRole?>(
                                     value: null,
-                                    child: Text('Sin acceso'),
+                                    child: Text(l10n.manageMembersNoAccess),
                                   ),
                                   ...WorkspaceRole.values
                                       .where((r) => r != WorkspaceRole.administrator)

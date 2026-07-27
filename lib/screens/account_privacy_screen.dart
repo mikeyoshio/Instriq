@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/app_localizations.dart';
 import '../services/account_service.dart';
 import '../services/auth_service.dart';
 
@@ -41,7 +42,7 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
       const encoder = JsonEncoder.withIndent('  ');
       setState(() => _exportedJson = encoder.convert(data));
     } catch (e) {
-      setState(() => _exportError = 'No se pudo generar la exportación: $e');
+      setState(() => _exportError = AppLocalizations.of(context)!.exportError(e.toString()));
     } finally {
       if (mounted) setState(() => _exporting = false);
     }
@@ -52,31 +53,29 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
     await Clipboard.setData(ClipboardData(text: _exportedJson!));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Copiado al portapapeles')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.copiedToClipboard)),
       );
     }
   }
 
   Future<void> _confirmDelete() async {
+    final l10n = AppLocalizations.of(context)!;
     final email = AuthService.instance.currentUser?.email;
     if (_confirmEmailController.text.trim().toLowerCase() != email?.toLowerCase()) {
-      setState(() => _deleteError = 'El email no coincide con el de tu cuenta.');
+      setState(() => _deleteError = l10n.emailMismatch);
       return;
     }
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Eliminar cuenta'),
-        content: const Text(
-          'Esto es irreversible. Se borran tus datos personales; el contenido que hayas '
-          'creado o aprobado se conserva para tu equipo, mostrado como "Usuario eliminado".',
-        ),
+        title: Text(l10n.deleteAccountDialogTitle),
+        content: Text(l10n.deleteAccountDialogBody),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Eliminar definitivamente'),
+            child: Text(l10n.deletePermanently),
           ),
         ],
       ),
@@ -101,21 +100,22 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Mi cuenta y privacidad')),
+      appBar: AppBar(title: Text(l10n.accountPrivacyTitle)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Text('Exportar mis datos', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.exportMyDataTitle, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
-          const Text('Descarga una copia de los datos que guarda Instriq sobre tu cuenta.'),
+          Text(l10n.exportMyDataBody),
           const SizedBox(height: 12),
           OutlinedButton.icon(
             onPressed: _exporting ? null : _export,
             icon: _exporting
                 ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
                 : const Icon(Icons.download_outlined),
-            label: const Text('Generar exportación'),
+            label: Text(l10n.generateExport),
           ),
           if (_exportError != null) ...[
             const SizedBox(height: 8),
@@ -135,23 +135,18 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
             OutlinedButton.icon(
               onPressed: _copyExport,
               icon: const Icon(Icons.copy_outlined),
-              label: const Text('Copiar'),
+              label: Text(l10n.copy),
             ),
           ],
           const SizedBox(height: 32),
-          Text('Eliminar mi cuenta', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.deleteMyAccountTitle, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
-          const Text(
-            'Se borran tus datos personales (perfil, email). El contenido que hayas creado o '
-            'aprobado se conserva para tu equipo, anonimizado como "Usuario eliminado". Si eres '
-            'propietaria/o de un grupo con más miembros, primero debes transferir la propiedad '
-            'desde Administrar grupo.',
-          ),
+          Text(l10n.deleteAccountBody),
           const SizedBox(height: 12),
           TextField(
             controller: _confirmEmailController,
             decoration: InputDecoration(
-              labelText: 'Escribe tu email para confirmar',
+              labelText: l10n.confirmEmailLabel,
               hintText: AuthService.instance.currentUser?.email,
               border: const OutlineInputBorder(),
             ),
@@ -167,7 +162,7 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
             icon: _deleting
                 ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
                 : const Icon(Icons.delete_forever_outlined),
-            label: const Text('Eliminar mi cuenta'),
+            label: Text(l10n.deleteMyAccountTitle),
           ),
         ],
       ),

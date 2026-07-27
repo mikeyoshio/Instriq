@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
@@ -41,6 +42,7 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final canManage = _myRole == WorkspaceRole.administrator;
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +51,7 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
           if (canManage)
             IconButton(
               icon: const Icon(Icons.group_outlined),
-              tooltip: 'Miembros del espacio',
+              tooltip: l10n.workspaceMembersTooltip,
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ManageWorkspaceMembersScreen(workspace: widget.workspace),
@@ -69,15 +71,15 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
                     const SizedBox(height: 20),
                   ],
                   if (_myRole == null)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Text('No tienes acceso a este espacio todavía.'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Text(l10n.workspaceNoAccess),
                     )
                   else ...[
                     _CollectionCard(
                       icon: Icons.menu_book_outlined,
-                      title: 'Técnicas quirúrgicas',
-                      subtitle: 'Documenta cómo trabaja tu equipo, paso a paso',
+                      title: l10n.techniquesTitle,
+                      subtitle: l10n.techniquesSubtitle,
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => GroupDocumentListScreen(
@@ -91,8 +93,8 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
                     const SizedBox(height: 12),
                     _CollectionCard(
                       icon: Icons.fact_check_outlined,
-                      title: 'Protocolos',
-                      subtitle: 'Checklists y protocolos internos del espacio',
+                      title: l10n.protocolsTitle,
+                      subtitle: l10n.protocolsSubtitle,
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => GroupDocumentListScreen(
@@ -106,8 +108,8 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
                     const SizedBox(height: 12),
                     _CollectionCard(
                       icon: Icons.assignment_ind,
-                      title: 'Tarjetas de preferencia',
-                      subtitle: 'Instrumental específico por cirujano y procedimiento',
+                      title: l10n.preferenceCardsTitle,
+                      subtitle: l10n.preferenceCardsSubtitle,
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => PreferenceCardsScreen(workspace: widget.workspace, myRole: _myRole),

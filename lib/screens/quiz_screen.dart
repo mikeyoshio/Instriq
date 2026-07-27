@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
 import '../widgets/category_icon.dart';
@@ -91,10 +92,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (_finished) {
       final best = ProgressService.instance.quizBestScore(null);
       return Scaffold(
-        appBar: AppBar(title: const Text('Resultado')),
+        appBar: AppBar(title: Text(l10n.resultTitle)),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -104,21 +106,21 @@ class _QuizScreenState extends State<QuizScreen> {
                 Icon(Icons.emoji_events, size: 72, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(height: 16),
                 Text(
-                  '$_score / ${_questions.length}',
+                  l10n.scoreFraction(_score, _questions.length),
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 8),
-                Text('Mejor puntuación: $best / ${_questions.length}'),
+                Text(l10n.bestScoreLabel(best, _questions.length)),
                 const SizedBox(height: 24),
                 FilledButton.icon(
                   onPressed: _restart,
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Repetir quiz'),
+                  label: Text(l10n.repeatQuiz),
                 ),
                 const SizedBox(height: 8),
                 OutlinedButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Volver al inicio'),
+                  child: Text(l10n.backToHome),
                 ),
               ],
             ),
@@ -130,7 +132,7 @@ class _QuizScreenState extends State<QuizScreen> {
     final question = _questions[_current];
 
     return Scaffold(
-      appBar: AppBar(title: Text('Pregunta ${_current + 1} / ${_questions.length}')),
+      appBar: AppBar(title: Text(l10n.questionCounter(_current + 1, _questions.length))),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -148,7 +150,7 @@ class _QuizScreenState extends State<QuizScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                '¿Qué instrumento es este?',
+                l10n.whatInstrumentIsThis,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
@@ -181,7 +183,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 FilledButton(
                   onPressed: _next,
                   child: Text(
-                    _current == _questions.length - 1 ? 'Ver resultado' : 'Siguiente',
+                    _current == _questions.length - 1 ? l10n.seeResult : l10n.next,
                   ),
                 ),
             ],

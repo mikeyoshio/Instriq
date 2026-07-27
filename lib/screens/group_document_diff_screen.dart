@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/group_document_version.dart';
 
 /// Comparación campo a campo entre dos versiones: qué cambió, no un diff de
@@ -13,8 +14,11 @@ class GroupDocumentDiffScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final addedSteps = newVersion.steps.where((s) => !oldVersion.steps.contains(s)).toList();
-    final removedSteps = oldVersion.steps.where((s) => !newVersion.steps.contains(s)).toList();
+    final l10n = AppLocalizations.of(context)!;
+    final oldStepTexts = oldVersion.steps.map((s) => s.text).toSet();
+    final newStepTexts = newVersion.steps.map((s) => s.text).toSet();
+    final addedSteps = newVersion.steps.where((s) => !oldStepTexts.contains(s.text)).toList();
+    final removedSteps = oldVersion.steps.where((s) => !newStepTexts.contains(s.text)).toList();
     final addedInstruments = newVersion.relatedInstrumentIds
         .where((s) => !oldVersion.relatedInstrumentIds.contains(s))
         .toList();
@@ -24,32 +28,32 @@ class GroupDocumentDiffScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Versión ${oldVersion.versionNumber} → ${newVersion.versionNumber}'),
+        title: Text(l10n.versionRangeTitle(oldVersion.versionNumber, newVersion.versionNumber)),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          _FieldDiff(label: 'Título', oldValue: oldVersion.title, newValue: newVersion.title),
+          _FieldDiff(label: l10n.titleFieldLabel, oldValue: oldVersion.title, newValue: newVersion.title),
           _FieldDiff(
-            label: 'Especialidad',
+            label: l10n.specialtyLabel,
             oldValue: oldVersion.specialty ?? '—',
             newValue: newVersion.specialty ?? '—',
           ),
           _FieldDiff(
-            label: 'Descripción',
+            label: l10n.descriptionLabel,
             oldValue: oldVersion.content ?? '—',
             newValue: newVersion.content ?? '—',
           ),
           const SizedBox(height: 20),
-          Text('Pasos', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.stepsLabel, style: Theme.of(context).textTheme.titleMedium),
           if (addedSteps.isEmpty && removedSteps.isEmpty)
-            const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Text('Sin cambios')),
-          ...addedSteps.map((s) => _ChangeTile(icon: Icons.add, color: Colors.green, text: s)),
-          ...removedSteps.map((s) => _ChangeTile(icon: Icons.remove, color: Colors.red, text: s)),
+            Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text(l10n.noChanges)),
+          ...addedSteps.map((s) => _ChangeTile(icon: Icons.add, color: Colors.green, text: s.text)),
+          ...removedSteps.map((s) => _ChangeTile(icon: Icons.remove, color: Colors.red, text: s.text)),
           const SizedBox(height: 20),
-          Text('Instrumental relacionado', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.relatedInstrumentsLabel, style: Theme.of(context).textTheme.titleMedium),
           if (addedInstruments.isEmpty && removedInstruments.isEmpty)
-            const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Text('Sin cambios')),
+            Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text(l10n.noChanges)),
           ...addedInstruments.map((s) => _ChangeTile(icon: Icons.add, color: Colors.green, text: s)),
           ...removedInstruments.map((s) => _ChangeTile(icon: Icons.remove, color: Colors.red, text: s)),
         ],

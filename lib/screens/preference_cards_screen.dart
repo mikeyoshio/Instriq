@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/preference_card.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
@@ -29,6 +30,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
   }
 
   Future<void> _load() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -36,22 +38,23 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
     try {
       await PreferenceCardService.instance.fetchCards(widget.workspace.id);
     } catch (e) {
-      _error = 'No se pudieron cargar las tarjetas: $e';
+      _error = l10n.preferenceCardsLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (_loading) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Tarjetas de preferencia')),
+        appBar: AppBar(title: Text(l10n.preferenceCardsTitle)),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
     if (_error != null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Tarjetas de preferencia')),
+        appBar: AppBar(title: Text(l10n.preferenceCardsTitle)),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -60,7 +63,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
               children: [
                 Text(_error!, textAlign: TextAlign.center),
                 const SizedBox(height: 12),
-                FilledButton(onPressed: _load, child: const Text('Reintentar')),
+                FilledButton(onPressed: _load, child: Text(l10n.retry)),
               ],
             ),
           ),
@@ -83,7 +86,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
 
     final canEdit = widget.myRole?.canEdit ?? false;
     return Scaffold(
-      appBar: AppBar(title: const Text('Tarjetas de preferencia')),
+      appBar: AppBar(title: Text(l10n.preferenceCardsTitle)),
       floatingActionButton: canEdit
           ? FloatingActionButton.extended(
               onPressed: () async {
@@ -95,7 +98,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                 if (saved == true) _load();
               },
               icon: const Icon(Icons.add),
-              label: const Text('Nueva tarjeta'),
+              label: Text(l10n.newCardLabel),
             )
           : null,
       body: Column(
@@ -103,21 +106,21 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                hintText: 'Buscar por cirujano o procedimiento...',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: l10n.searchSurgeonProcedureHint,
+                border: const OutlineInputBorder(),
               ),
               onChanged: (v) => setState(() => _query = v),
             ),
           ),
           Expanded(
             child: surgeons.isEmpty
-                ? const Center(
+                ? Center(
                     child: Padding(
-                      padding: EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(24),
                       child: Text(
-                        'Aún no hay tarjetas de preferencia. Crea la primera con el botón +.',
+                        l10n.noCardsYet,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -132,11 +135,11 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                         child: ExpansionTile(
                           leading: const Icon(Icons.person),
                           title: Text(surgeon, style: const TextStyle(fontWeight: FontWeight.bold)),
-                          subtitle: Text('${surgeonCards.length} procedimiento(s)'),
+                          subtitle: Text(l10n.procedureCount(surgeonCards.length)),
                           children: surgeonCards.map((card) {
                             return ListTile(
                               title: Text(card.procedureName),
-                              subtitle: Text('${card.items.length} instrumentos'),
+                              subtitle: Text(l10n.instrumentsCount(card.items.length)),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [

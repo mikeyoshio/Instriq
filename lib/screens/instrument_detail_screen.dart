@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
 import '../widgets/category_icon.dart';
@@ -17,6 +18,7 @@ class InstrumentDetailScreen extends StatefulWidget {
 class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final instrument = widget.instrument;
     final learned = ProgressService.instance.isLearned(instrument.id);
 
@@ -67,7 +69,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                 child: GestureDetector(
                   onTap: () => launchUrl(Uri.parse(instrument.image!.sourceUrl)),
                   child: Text(
-                    'Foto: ${instrument.image!.attribution} · ${instrument.image!.license}',
+                    l10n.photoAttribution(instrument.image!.attribution, instrument.image!.license),
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
@@ -87,16 +89,16 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
             ),
             const SizedBox(height: 16),
             if (instrument.aliases.isNotEmpty) ...[
-              Text('También conocido como', style: Theme.of(context).textTheme.labelLarge),
+              Text(l10n.alsoKnownAs, style: Theme.of(context).textTheme.labelLarge),
               const SizedBox(height: 4),
               Text(instrument.aliases.join(', ')),
               const SizedBox(height: 16),
             ],
-            Text('Descripción', style: Theme.of(context).textTheme.labelLarge),
+            Text(l10n.descriptionLabel, style: Theme.of(context).textTheme.labelLarge),
             const SizedBox(height: 4),
             Text(instrument.description, style: Theme.of(context).textTheme.bodyLarge),
             const SizedBox(height: 16),
-            Text('Uso principal', style: Theme.of(context).textTheme.labelLarge),
+            Text(l10n.mainUseLabel, style: Theme.of(context).textTheme.labelLarge),
             const SizedBox(height: 4),
             Text(instrument.use, style: Theme.of(context).textTheme.bodyLarge),
             if (instrument.tip != null) ...[
@@ -121,7 +123,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
               width: double.infinity,
               child: FilledButton.icon(
                 icon: Icon(learned ? Icons.check_circle : Icons.check_circle_outline),
-                label: Text(learned ? 'Aprendido' : 'Marcar como aprendido'),
+                label: Text(learned ? l10n.learned : l10n.markAsLearned),
                 onPressed: () async {
                   await ProgressService.instance.toggleLearned(instrument.id);
                   setState(() {});

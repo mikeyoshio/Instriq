@@ -92,20 +92,27 @@ class WorkspaceService {
     }).toList();
   }
 
-  /// Asigna (o cambia) el rol de un usuario en un espacio.
+  /// Asigna (o cambia) el rol de un usuario en un espacio. Va vía función
+  /// `security definer` (ver supabase/schema_v10_audit.sql) para que el
+  /// cambio quede registrado en el log de auditoría.
   Future<void> setMemberRole(String workspaceId, String userId, WorkspaceRole role) async {
     if (role == WorkspaceRole.administrator) {
       throw ArgumentError('El rol de administrador no se asigna por espacio.');
     }
-    await _client.from('workspace_members').upsert({
-      'workspace_id': workspaceId,
-      'user_id': userId,
-      'role': role.dbValue,
+    await _client.rpc('set_workspace_member_role', params: {
+      'p_workspace_id': workspaceId,
+      'p_user_id': userId,
+      'p_role': role.dbValue,
     });
   }
 
-  /// Quita el acceso de un usuario a un espacio (no toca su rol de admin del hospital).
+  /// Quita el acceso de un usuario a un espacio (no toca su rol de admin del
+  /// hospital). Va vía función `security definer` para que quede registrado
+  /// en el log de auditoría.
   Future<void> removeMemberRole(String workspaceId, String userId) async {
-    await _client.from('workspace_members').delete().eq('workspace_id', workspaceId).eq('user_id', userId);
+    await _client.rpc('remove_workspace_member_role', params: {
+      'p_workspace_id': workspaceId,
+      'p_user_id': userId,
+    });
   }
 }
