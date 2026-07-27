@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
 import 'register_hospital_screen.dart';
@@ -21,6 +22,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
   String? _error;
 
   Future<void> _join() async {
+    final l10n = AppLocalizations.of(context)!;
     final code = _codeController.text.trim();
     if (code.isEmpty) return;
     setState(() {
@@ -31,12 +33,12 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
       final hospital = await ProfileService.instance
           .joinHospitalWithCode(code, displayName: _nameController.text.trim());
       if (hospital == null) {
-        setState(() => _error = 'Código de invitación no válido');
+        setState(() => _error = l10n.invalidInviteCode);
       } else if (mounted) {
         Navigator.of(context).pop();
       }
     } catch (e) {
-      setState(() => _error = 'Error al unirse: $e');
+      setState(() => _error = l10n.joinError(e.toString()));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -53,9 +55,10 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Instriq'),
+        title: Text(l10n.appTitle),
         leading: _mode == _Mode.join
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -80,19 +83,20 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
   }
 
   Widget _buildChoice(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Icon(Icons.groups_outlined, size: 64),
         const SizedBox(height: 16),
         Text(
-          'Conecta con tu grupo',
+          l10n.connectGroupTitle,
           style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
-        const Text(
-          'Únete con el código de tu grupo, o créalo si eres la primera persona en darlo de alta.',
+        Text(
+          l10n.joinChooseBody,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
@@ -101,7 +105,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
           child: FilledButton.icon(
             onPressed: () => setState(() => _mode = _Mode.join),
             icon: const Icon(Icons.vpn_key),
-            label: const Text('Conectarme con un código'),
+            label: Text(l10n.connectWithCode),
           ),
         ),
         const SizedBox(height: 12),
@@ -110,7 +114,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
           child: OutlinedButton.icon(
             onPressed: _goRegister,
             icon: const Icon(Icons.add_business),
-            label: const Text('Crear mi grupo'),
+            label: Text(l10n.createMyGroup),
           ),
         ),
       ],
@@ -118,30 +122,31 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
   }
 
   Widget _buildJoinForm(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Icon(Icons.vpn_key, size: 56),
         const SizedBox(height: 16),
-        const Text(
-          'Introduce el código de invitación de tu grupo.',
+        Text(
+          l10n.enterInviteCodeBody,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
         TextField(
           controller: _nameController,
-          decoration: const InputDecoration(
-            labelText: 'Tu nombre',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: l10n.yourNameLabel,
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 12),
         TextField(
           controller: _codeController,
           textCapitalization: TextCapitalization.characters,
-          decoration: const InputDecoration(
-            labelText: 'Código de invitación',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: l10n.inviteCodeLabel,
+            border: const OutlineInputBorder(),
           ),
         ),
         if (_error != null) ...[
@@ -156,7 +161,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
             child: _loading
                 ? const SizedBox(
                     height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                : const Text('Unirse'),
+                : Text(l10n.join),
           ),
         ),
       ],

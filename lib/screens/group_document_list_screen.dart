@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
@@ -29,8 +30,10 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
   String? _error;
   String _query = '';
 
-  String get _titlePlural =>
-      widget.kind == DocumentKind.technique ? 'Técnicas quirúrgicas' : 'Protocolos';
+  String get _titlePlural {
+    final l10n = AppLocalizations.of(context)!;
+    return widget.kind == DocumentKind.technique ? l10n.techniquesTitle : l10n.protocolsTitle;
+  }
 
   @override
   void initState() {
@@ -39,6 +42,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
   }
 
   Future<void> _load() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -46,13 +50,14 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
     try {
       await GroupDocumentService.instance.fetchDocuments(widget.kind, widget.workspace.id);
     } catch (e) {
-      _error = 'No se pudo cargar: $e';
+      _error = l10n.groupDocLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (_loading) {
       return Scaffold(
         appBar: AppBar(title: Text(_titlePlural)),
@@ -70,7 +75,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
               children: [
                 Text(_error!, textAlign: TextAlign.center),
                 const SizedBox(height: 12),
-                FilledButton(onPressed: _load, child: const Text('Reintentar')),
+                FilledButton(onPressed: _load, child: Text(l10n.retry)),
               ],
             ),
           ),
@@ -100,7 +105,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
                 if (saved == true) _load();
               },
               icon: const Icon(Icons.add),
-              label: Text('Nuevo/a ${widget.kind.label.toLowerCase()}'),
+              label: Text(l10n.newKindLabel(widget.kind.label.toLowerCase())),
             )
           : null,
       body: Column(
@@ -110,7 +115,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
             child: TextField(
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
-                hintText: 'Buscar $_titlePlural...'.toLowerCase(),
+                hintText: l10n.searchHint(_titlePlural).toLowerCase(),
                 border: const OutlineInputBorder(),
               ),
               onChanged: (v) => setState(() => _query = v),
@@ -122,7 +127,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(24),
                       child: Text(
-                        'Todavía no hay contenido. Crea el primero con el botón +.',
+                        l10n.groupDocEmptyState,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -135,7 +140,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
                       final published = doc.publishedVersion;
                       return Card(
                         child: ListTile(
-                          title: Text(published?.title ?? 'Sin publicar'),
+                          title: Text(published?.title ?? l10n.unpublished),
                           subtitle: published?.specialty != null ? Text(published!.specialty!) : null,
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () async {

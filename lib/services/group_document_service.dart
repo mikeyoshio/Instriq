@@ -69,33 +69,20 @@ class GroupDocumentService {
         .toList();
   }
 
-  /// Crea un documento nuevo con su primera versión en borrador.
+  /// Crea un documento nuevo con su primera versión en borrador. Va vía
+  /// función `security definer` (ver supabase/schema_v10_audit.sql) para que
+  /// la creación quede registrada en el log de auditoría.
   Future<GroupDocumentVersion> createDocument(DocumentKind kind, String workspaceId) async {
     final hospitalId = ProfileService.instance.hospitalId;
     final userId = AuthService.instance.currentUser?.id;
     if (hospitalId == null || userId == null) {
       throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
-    final document = GroupDocument(id: '', kind: kind, workspaceId: workspaceId);
-    final savedDocument = await _client
-        .from('group_documents')
-        .insert(document.toRow(hospitalId: hospitalId))
-        .select()
-        .single();
-    final documentId = savedDocument['id'] as String;
-
-    final versionRow = await _client
-        .from('group_document_versions')
-        .insert({
-          'document_id': documentId,
-          'version_number': 1,
-          'status': GroupDocumentVersionStatus.draft.dbValue,
-          'title': '',
-          'author_id': userId,
-        })
-        .select()
-        .single();
-    return GroupDocumentVersion.fromRow(versionRow);
+    final versionRow = await _client.rpc('create_group_document', params: {
+      'p_kind': kind.dbValue,
+      'p_workspace_id': workspaceId,
+    });
+    return GroupDocumentVersion.fromRow(versionRow as Map<String, dynamic>);
   }
 
   /// Devuelve el borrador propio en curso para [document] si existe, o crea
@@ -135,7 +122,7 @@ class GroupDocumentService {
           'title': published.title,
           'specialty': published.specialty,
           'content': published.content,
-          'steps': published.steps,
+          'steps': published.steps.map((s) => s.toJson()).toList(),
           'related_instrument_ids': published.relatedInstrumentIds,
           'author_id': userId,
           'based_on_version_id': published.id,
@@ -208,8 +195,10 @@ class GroupDocumentService {
     return result;
   }
 
+  /// Va vía función `security definer` para que el borrado quede registrado
+  /// en el log de auditoría.
   Future<void> deleteDocument(String id) async {
-    await _client.from('group_documents').delete().eq('id', id);
+    await _client.rpc('delete_group_document', params: {'p_document_id': id});
     _documents.removeWhere((d) => d.id == id);
   }
 }

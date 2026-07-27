@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import 'category_icon.dart';
 
@@ -19,6 +20,7 @@ class _CatalogPickerSheetState extends State<CatalogPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final filtered = kInstruments
         .where((i) => _query.isEmpty || i.name.toLowerCase().contains(_query.toLowerCase()))
         .toList();
@@ -34,10 +36,10 @@ class _CatalogPickerSheetState extends State<CatalogPickerSheet> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextField(
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Buscar instrumento...',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  hintText: l10n.searchInstrumentHint,
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (v) => setState(() => _query = v),
               ),

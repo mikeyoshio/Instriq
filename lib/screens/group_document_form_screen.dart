@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
 import '../data/surgical_specialties.dart';
+import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
@@ -36,7 +37,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   String? _specialty;
   late final TextEditingController _contentController;
   late final TextEditingController _commentController;
-  late List<String> _steps;
+  late List<ProtocolStep> _steps;
   late List<String> _relatedInstrumentIds;
   GroupDocumentVersion? _draft;
   bool _loading = true;
@@ -66,7 +67,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       }
       _applyDraft(draft);
     } catch (e) {
-      setState(() => _error = 'No se pudo preparar el borrador: $e');
+      setState(() => _error = AppLocalizations.of(context)!.formPrepareDraftError(e.toString()));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -96,24 +97,76 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     return null;
   }
 
+  List<String> _stepCategorySuggestions(AppLocalizations l10n) => [
+        l10n.stepCategoryPreop,
+        l10n.stepCategoryAnesthesia,
+        l10n.stepCategoryEquipment,
+        l10n.stepCategoryInstruments,
+        l10n.stepCategorySafety,
+      ];
+
   Future<void> _addStep() async {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
+    final suggestions = _stepCategorySuggestions(l10n);
+    const otherValue = '__other__';
+    String? category;
+    final otherController = TextEditingController();
     final step = await showDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Añadir paso'),
-        content: TextField(controller: controller, autofocus: true, maxLines: 3),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: const Text('Añadir'),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text(l10n.addStepTitle),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(controller: controller, autofocus: true, maxLines: 3),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String?>(
+                  value: category,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: l10n.stepCategoryLabel,
+                    border: const OutlineInputBorder(),
+                  ),
+                  items: [
+                    DropdownMenuItem<String?>(value: null, child: Text(l10n.stepCategoryNone)),
+                    ...suggestions.map((s) => DropdownMenuItem<String?>(value: s, child: Text(s))),
+                    DropdownMenuItem<String?>(value: otherValue, child: Text(l10n.stepCategoryOther)),
+                  ],
+                  onChanged: (value) => setDialogState(() => category = value),
+                ),
+                if (category == otherValue) ...[
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: otherController,
+                    decoration: InputDecoration(
+                      labelText: l10n.stepCategoryOtherFieldLabel,
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
-        ],
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+              child: Text(l10n.addAction),
+            ),
+          ],
+        ),
       ),
     );
     if (step != null && step.isNotEmpty) {
-      setState(() => _steps.add(step));
+      final resolvedCategory = category == otherValue ? otherController.text.trim() : category;
+      setState(() => _steps.add(ProtocolStep(
+            category: (resolvedCategory == null || resolvedCategory.isEmpty) ? null : resolvedCategory,
+            text: step,
+          )));
     }
   }
 
@@ -143,8 +196,9 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   }
 
   Future<void> _saveDraft({bool andSubmit = false}) async {
+    final l10n = AppLocalizations.of(context)!;
     if (_titleController.text.trim().isEmpty) {
-      setState(() => _error = 'Indica un título');
+      setState(() => _error = l10n.titleRequired);
       return;
     }
     setState(() {
@@ -158,26 +212,26 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       }
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
-      setState(() => _error = 'Error al guardar: $e');
+      setState(() => _error = l10n.saveError(e.toString()));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
   }
 
-  Widget _buildSpecialtyDropdown() {
+  Widget _buildSpecialtyDropdown(AppLocalizations l10n) {
     final legacyValue =
         _specialty != null && !kSurgicalSpecialties.contains(_specialty) ? _specialty : null;
     return DropdownButtonFormField<String?>(
       value: _specialty,
       isExpanded: true,
-      decoration: const InputDecoration(
-        labelText: 'Especialidad',
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        labelText: l10n.specialtyLabel,
+        border: const OutlineInputBorder(),
       ),
       items: [
-        const DropdownMenuItem<String?>(value: null, child: Text('Sin especialidad concreta')),
+        DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
         if (legacyValue != null)
-          DropdownMenuItem<String?>(value: legacyValue, child: Text('$legacyValue (anterior, no estándar)')),
+          DropdownMenuItem<String?>(value: legacyValue, child: Text(l10n.legacySpecialtySuffix(legacyValue))),
         ...kSurgicalSpecialties.map((s) => DropdownMenuItem<String?>(value: s, child: Text(s))),
       ],
       onChanged: (value) => setState(() => _specialty = value),
@@ -186,6 +240,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final kindLabel = widget.kind.label;
     if (_loading) {
       return Scaffold(
@@ -196,28 +251,28 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     if (_draft == null) {
       return Scaffold(
         appBar: AppBar(title: Text(kindLabel)),
-        body: Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error ?? 'Error'))),
+        body: Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error ?? l10n.errorLabel))),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Editar borrador · $kindLabel')),
+      appBar: AppBar(title: Text(l10n.editDraftAppBarTitle(kindLabel))),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Título', border: OutlineInputBorder()),
+              decoration: InputDecoration(labelText: l10n.titleFieldLabel, border: const OutlineInputBorder()),
             ),
             const SizedBox(height: 12),
-            _buildSpecialtyDropdown(),
+            _buildSpecialtyDropdown(l10n),
             const SizedBox(height: 12),
             TextField(
               controller: _contentController,
-              decoration: const InputDecoration(
-                labelText: 'Descripción',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.descriptionLabel,
+                border: const OutlineInputBorder(),
                 alignLabelWithHint: true,
               ),
               maxLines: 5,
@@ -225,19 +280,19 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
             const SizedBox(height: 20),
             Row(
               children: [
-                Text('Pasos', style: Theme.of(context).textTheme.titleMedium),
+                Text(l10n.stepsLabel, style: Theme.of(context).textTheme.titleMedium),
                 const Spacer(),
                 TextButton.icon(
                   onPressed: _addStep,
                   icon: const Icon(Icons.add),
-                  label: const Text('Añadir paso'),
+                  label: Text(l10n.addStepTitle),
                 ),
               ],
             ),
             if (_steps.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: Text('Sin pasos todavía'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(l10n.noStepsYet),
               ),
             ReorderableListView.builder(
               shrinkWrap: true,
@@ -251,10 +306,12 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 });
               },
               itemBuilder: (context, index) {
+                final step = _steps[index];
                 return ListTile(
-                  key: ValueKey('step_${index}_${_steps[index]}'),
+                  key: ValueKey('step_${index}_${step.category}_${step.text}'),
                   leading: CircleAvatar(child: Text('${index + 1}')),
-                  title: Text(_steps[index]),
+                  title: Text(step.text),
+                  subtitle: step.category != null ? Text(step.category!) : null,
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline),
                     onPressed: () => setState(() => _steps.removeAt(index)),
@@ -265,19 +322,19 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
             const SizedBox(height: 20),
             Row(
               children: [
-                Text('Instrumental relacionado', style: Theme.of(context).textTheme.titleMedium),
+                Text(l10n.relatedInstrumentsLabel, style: Theme.of(context).textTheme.titleMedium),
                 const Spacer(),
                 TextButton.icon(
                   onPressed: _addInstrument,
                   icon: const Icon(Icons.add),
-                  label: const Text('Añadir'),
+                  label: Text(l10n.addAction),
                 ),
               ],
             ),
             if (_relatedInstrumentIds.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: Text('Sin instrumental enlazado'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(l10n.noInstrumentsLinked),
               ),
             ..._relatedInstrumentIds.map((id) {
               final instrument = _instrumentFor(id);
@@ -295,9 +352,9 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
             const SizedBox(height: 20),
             TextField(
               controller: _commentController,
-              decoration: const InputDecoration(
-                labelText: 'Comentario del cambio (opcional)',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.changeCommentLabel,
+                border: const OutlineInputBorder(),
                 alignLabelWithHint: true,
               ),
               maxLines: 2,
@@ -311,12 +368,12 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
               onPressed: _saving ? null : () => _saveDraft(andSubmit: true),
               child: _saving
                   ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Text('Enviar a revisión'),
+                  : Text(l10n.submitForReview),
             ),
             const SizedBox(height: 8),
             OutlinedButton(
               onPressed: _saving ? null : () => _saveDraft(),
-              child: const Text('Guardar como borrador'),
+              child: Text(l10n.saveAsDraft),
             ),
           ],
         ),

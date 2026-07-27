@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
 import '../services/preference_card_service.dart';
@@ -63,21 +64,22 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
   }
 
   Future<void> _addCustom() async {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     final name = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Añadir instrumento personalizado'),
+        title: Text(l10n.addCustomInstrumentTitle),
         content: TextField(
           controller: controller,
           autofocus: true,
-          decoration: const InputDecoration(hintText: 'Nombre del instrumento'),
+          decoration: InputDecoration(hintText: l10n.instrumentNameHint),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: const Text('Añadir'),
+            child: Text(l10n.addAction),
           ),
         ],
       ),
@@ -90,21 +92,22 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
   }
 
   Future<void> _editNote(int index) async {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: _items[index].note ?? '');
     final note = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Nota del instrumento'),
+        title: Text(l10n.instrumentNoteTitle),
         content: TextField(
           controller: controller,
           autofocus: true,
-          decoration: const InputDecoration(hintText: 'p. ej. tamaño, marca, colocación...'),
+          decoration: InputDecoration(hintText: l10n.noteHint),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: const Text('Guardar'),
+            child: Text(l10n.save),
           ),
         ],
       ),
@@ -122,11 +125,12 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context)!;
     final surgeon = _surgeonController.text.trim();
     final procedure = _procedureController.text.trim();
     if (surgeon.isEmpty || procedure.isEmpty || _items.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Indica cirujano, procedimiento y al menos un instrumento')),
+        SnackBar(content: Text(l10n.missingFieldsSnackbar)),
       );
       return;
     }
@@ -144,16 +148,17 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al guardar: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isEditing = widget.existingCard != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Editar tarjeta' : 'Nueva tarjeta')),
+      appBar: AppBar(title: Text(isEditing ? l10n.editCardTitle : l10n.newCardLabel)),
       body: SafeArea(
         child: Column(
           children: [
@@ -163,25 +168,25 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
                 children: [
                   TextField(
                     controller: _surgeonController,
-                    decoration: const InputDecoration(
-                      labelText: 'Cirujano',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l10n.surgeonLabel,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: _procedureController,
-                    decoration: const InputDecoration(
-                      labelText: 'Procedimiento',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l10n.procedureLabel,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: _notesController,
-                    decoration: const InputDecoration(
-                      labelText: 'Notas generales (opcional)',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l10n.generalNotesLabel,
+                      border: const OutlineInputBorder(),
                     ),
                     maxLines: 2,
                   ),
@@ -192,7 +197,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
                         child: OutlinedButton.icon(
                           onPressed: _addFromCatalog,
                           icon: const Icon(Icons.search),
-                          label: const Text('Del catálogo'),
+                          label: Text(l10n.fromCatalog),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -200,7 +205,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
                         child: OutlinedButton.icon(
                           onPressed: _addCustom,
                           icon: const Icon(Icons.add),
-                          label: const Text('Personalizado'),
+                          label: Text(l10n.customLabel),
                         ),
                       ),
                     ],
@@ -211,7 +216,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
             const Divider(height: 24),
             Expanded(
               child: _items.isEmpty
-                  ? const Center(child: Text('Añade instrumental a la tarjeta'))
+                  ? Center(child: Text(l10n.addInstrumentsToCard))
                   : ReorderableListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       itemCount: _items.length,
@@ -262,7 +267,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
                 child: FilledButton.icon(
                   onPressed: _save,
                   icon: const Icon(Icons.save),
-                  label: const Text('Guardar tarjeta'),
+                  label: Text(l10n.saveCardButton),
                 ),
               ),
             ),

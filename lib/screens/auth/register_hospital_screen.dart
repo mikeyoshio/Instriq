@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/profile_service.dart';
 
 class RegisterHospitalScreen extends StatefulWidget {
@@ -17,9 +18,10 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
   String? _createdCode;
 
   Future<void> _register() async {
+    final l10n = AppLocalizations.of(context)!;
     final name = _nameController.text.trim();
     if (name.isEmpty) {
-      setState(() => _error = 'Indica el nombre del grupo');
+      setState(() => _error = l10n.groupNameRequired);
       return;
     }
     setState(() {
@@ -33,7 +35,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
       );
       setState(() => _createdCode = hospital.inviteCode);
     } catch (e) {
-      setState(() => _error = e is StateError ? e.message : 'Error al registrar: $e');
+      setState(() => _error = e is StateError ? e.message : l10n.registerError(e.toString()));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -41,9 +43,10 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (_createdCode != null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Grupo creado')),
+        appBar: AppBar(title: Text(l10n.groupCreatedTitle)),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -51,8 +54,8 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
             children: [
               const Icon(Icons.check_circle, color: Colors.green, size: 64),
               const SizedBox(height: 16),
-              const Text(
-                'Tu grupo ya está registrado. Comparte este código con tu equipo para que se unan:',
+              Text(
+                l10n.groupCreatedBody,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
@@ -64,14 +67,14 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                     ?.copyWith(fontWeight: FontWeight.bold, letterSpacing: 4),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Como creadora, eres la administradora: podrás regenerar este código o quitar miembros desde "Administrar grupo".',
+              Text(
+                l10n.ownerHint,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
               FilledButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Continuar'),
+                child: Text(l10n.continueLabel),
               ),
             ],
           ),
@@ -80,32 +83,28 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear mi grupo')),
+      appBar: AppBar(title: Text(l10n.createMyGroup)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Un grupo puede ser un hospital, un bloque quirúrgico, un servicio, un equipo de '
-                'instrumentistas o un centro de formación. Se generará un código de invitación único '
-                'para que tu equipo se una.',
-              ),
+              Text(l10n.createGroupExplainer),
               const SizedBox(height: 20),
               TextField(
                 controller: _adminNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Tu nombre',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.yourNameLabel,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nombre del grupo',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.groupNameFieldLabel,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               if (_error != null) ...[
@@ -118,7 +117,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                 child: _loading
                     ? const SizedBox(
                         height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Registrar grupo'),
+                    : Text(l10n.registerGroupButton),
               ),
             ],
           ),

@@ -8,9 +8,11 @@ import '../services/progress_service.dart';
 import '../services/theme_service.dart';
 import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
+import 'audit_log_screen.dart';
 import 'auth/hospital_connect_flow.dart';
 import 'catalog_screen.dart';
 import 'group_document_review_queue_screen.dart';
+import 'knowledge_dashboard_screen.dart';
 import 'learn_screen.dart';
 import 'progress_screen.dart';
 import 'workspace_list_screen.dart';
@@ -201,6 +203,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () async {
                       await Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const GroupDocumentReviewQueueScreen()),
+                      );
+                      _refresh();
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _MenuCard(
+                    icon: Icons.insights_outlined,
+                    title: l10n.knowledgeDashboardTitle,
+                    subtitle: l10n.knowledgeDashboardSubtitle,
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const KnowledgeDashboardScreen()),
+                      );
+                      _refresh();
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _MenuCard(
+                    icon: Icons.history_outlined,
+                    title: l10n.auditLogTitle,
+                    subtitle: l10n.auditLogSubtitle,
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => AuditLogScreen(hospitalId: ProfileService.instance.hospitalId),
+                        ),
                       );
                       _refresh();
                     },

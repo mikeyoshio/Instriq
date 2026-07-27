@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../models/hospital.dart';
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
@@ -24,6 +25,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
   }
 
   Future<void> _load() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -31,22 +33,21 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
     try {
       _members = await ProfileService.instance.fetchMembers();
     } catch (e) {
-      _error = 'No se pudieron cargar los miembros: $e';
+      _error = l10n.manageMembersLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
 
   Future<void> _regenerateCode() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Regenerar código'),
-        content: const Text(
-          'El código actual dejará de funcionar. Tendrás que compartir el nuevo con quien aún no se haya unido.',
-        ),
+        title: Text(l10n.regenerateCodeTitle),
+        content: Text(l10n.regenerateCodeBody),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Regenerar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.regenerate)),
         ],
       ),
     );
@@ -56,7 +57,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
       await ProfileService.instance.regenerateInviteCode();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError(e.toString()))));
       }
     } finally {
       if (mounted) setState(() => _regenerating = false);
@@ -64,17 +65,19 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
   }
 
   Future<void> _transferOwnership(HospitalMember member) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Transferir propiedad'),
+        title: Text(l10n.transferOwnershipTitle),
         content: Text(
-          '¿Convertir a ${member.displayName?.isNotEmpty == true ? member.displayName : 'esta persona'} '
-          'en propietaria/o del grupo? Dejarás de serlo tú.',
+          l10n.transferOwnershipBody(
+            member.displayName?.isNotEmpty == true ? member.displayName! : l10n.thisPerson,
+          ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Transferir')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.transfer)),
         ],
       ),
     );
@@ -84,22 +87,25 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
       if (mounted) setState(() {});
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError(e.toString()))));
       }
     }
   }
 
   Future<void> _removeMember(HospitalMember member) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Quitar del hospital'),
+        title: Text(l10n.removeFromHospitalTitle),
         content: Text(
-          '¿Quitar a ${member.displayName?.isNotEmpty == true ? member.displayName : 'esta persona'} del grupo? Perderá acceso al contenido compartido.',
+          l10n.removeMemberBody(
+            member.displayName?.isNotEmpty == true ? member.displayName! : l10n.thisPerson,
+          ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Quitar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.remove)),
         ],
       ),
     );
@@ -109,16 +115,17 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
       _load();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError(e.toString()))));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final profile = ProfileService.instance;
     return Scaffold(
-      appBar: AppBar(title: const Text('Administrar grupo')),
+      appBar: AppBar(title: Text(l10n.manageGroupTitle)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -134,7 +141,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Código de invitación', style: Theme.of(context).textTheme.labelLarge),
+                          Text(l10n.inviteCodeLabel, style: Theme.of(context).textTheme.labelLarge),
                           const SizedBox(height: 8),
                           SelectableText(
                             profile.inviteCode ?? '—',
@@ -152,14 +159,14 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                                     width: 16,
                                     child: CircularProgressIndicator(strokeWidth: 2))
                                 : const Icon(Icons.refresh),
-                            label: const Text('Regenerar código'),
+                            label: Text(l10n.regenerateCodeTitle),
                           ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Text('Miembros (${_members.length})', style: Theme.of(context).textTheme.titleMedium),
+                  Text(l10n.membersCountTitle(_members.length), style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 8),
                   if (_error != null) Text(_error!, style: const TextStyle(color: Colors.red)),
                   ..._members.map((m) {
@@ -170,13 +177,15 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                       child: ListTile(
                         leading: const Icon(Icons.person),
                         title: Text(
-                          (m.displayName?.isNotEmpty == true ? m.displayName! : 'Sin nombre') +
-                              (isMe ? ' (tú)' : ''),
+                          isMe
+                              ? l10n.memberNameWithYou(
+                                  m.displayName?.isNotEmpty == true ? m.displayName! : l10n.noName)
+                              : (m.displayName?.isNotEmpty == true ? m.displayName! : l10n.noName),
                         ),
                         subtitle: (isOwner || m.isAdmin)
                             ? Text([
-                                if (isOwner) 'Propietaria/o',
-                                if (m.isAdmin) 'Administradora/or',
+                                if (isOwner) l10n.ownerLabel,
+                                if (m.isAdmin) l10n.adminLabel,
                               ].join(' · '))
                             : null,
                         trailing: Row(
@@ -185,7 +194,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                             if (canTransferTo)
                               IconButton(
                                 icon: const Icon(Icons.workspace_premium_outlined),
-                                tooltip: 'Transferir propiedad',
+                                tooltip: l10n.transferOwnershipTitle,
                                 onPressed: () => _transferOwnership(m),
                               ),
                             if (!isMe && !m.isAdmin)

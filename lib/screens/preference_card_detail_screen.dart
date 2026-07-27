@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
 import '../models/workspace_role.dart';
@@ -54,14 +55,15 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
   }
 
   Future<void> _delete() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Eliminar tarjeta'),
-        content: Text('¿Eliminar la tarjeta de ${_card.procedureName} de ${_card.surgeonName}?'),
+        title: Text(l10n.deleteCardTitle),
+        content: Text(l10n.deleteCardBody(_card.procedureName, _card.surgeonName)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Eliminar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.deleteAction)),
         ],
       ),
     );
@@ -73,6 +75,7 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final canEdit = widget.myRole?.canEdit ?? false;
     final canApprove = widget.myRole?.canApprove ?? false;
     return Scaffold(
@@ -94,9 +97,9 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
                 child: Text(_card.surgeonName, style: Theme.of(context).textTheme.titleMedium),
               ),
               if (_card.validated)
-                const Chip(
-                  avatar: Icon(Icons.verified, color: Colors.green, size: 18),
-                  label: Text('Validado por el cirujano'),
+                Chip(
+                  avatar: const Icon(Icons.verified, color: Colors.green, size: 18),
+                  label: Text(l10n.validatedBySurgeon),
                 ),
             ],
           ),
@@ -105,7 +108,7 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
             OutlinedButton.icon(
               onPressed: _toggleValidated,
               icon: Icon(_card.validated ? Icons.close : Icons.verified_outlined),
-              label: Text(_card.validated ? 'Quitar validación' : 'Marcar como validado por el cirujano'),
+              label: Text(_card.validated ? l10n.removeValidation : l10n.markValidatedBySurgeon),
             ),
           ],
           if (_card.generalNotes != null) ...[
@@ -119,7 +122,7 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
             ),
           ],
           const SizedBox(height: 20),
-          Text('Instrumental (${_card.items.length})', style: Theme.of(context).textTheme.titleMedium),
+          Text(l10n.instrumentsCountTitle(_card.items.length), style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           ..._card.items.asMap().entries.map((entry) {
             final index = entry.key;

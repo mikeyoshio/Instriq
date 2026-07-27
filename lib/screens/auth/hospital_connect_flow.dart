@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
 import 'join_hospital_screen.dart';
@@ -62,7 +63,7 @@ class _HospitalConnectFlowState extends State<HospitalConnectFlow> {
       if (mounted) {
         setState(() {
           _loading = false;
-          _error = 'No se pudo cargar tu perfil: $e';
+          _error = AppLocalizations.of(context)!.loadProfileError(e.toString());
         });
       }
     }
@@ -74,6 +75,7 @@ class _HospitalConnectFlowState extends State<HospitalConnectFlow> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     if (_error != null) {
+      final l10n = AppLocalizations.of(context)!;
       return Scaffold(
         body: Center(
           child: Padding(
@@ -88,15 +90,15 @@ class _HospitalConnectFlowState extends State<HospitalConnectFlow> {
                     setState(() => _loading = true);
                     _refresh();
                   },
-                  child: const Text('Reintentar'),
+                  child: Text(l10n.retry),
                 ),
                 TextButton(
                   onPressed: () => AuthService.instance.signOut(),
-                  child: const Text('Cerrar sesión'),
+                  child: Text(l10n.signOut),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancelar'),
+                  child: Text(l10n.cancel),
                 ),
               ],
             ),
