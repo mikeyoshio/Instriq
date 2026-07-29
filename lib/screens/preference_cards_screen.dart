@@ -5,6 +5,7 @@ import '../models/preference_card.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/preference_card_service.dart';
+import '../widgets/offline_banner.dart';
 import 'preference_card_detail_screen.dart';
 import 'preference_card_form_screen.dart';
 
@@ -22,6 +23,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
   String _query = '';
   bool _loading = true;
   String? _error;
+  bool _fromCache = false;
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
     });
     try {
       await PreferenceCardService.instance.fetchCards(widget.workspace.id);
+      _fromCache = PreferenceCardService.instance.cardsFromCache;
     } catch (e) {
       _error = l10n.preferenceCardsLoadError(e.toString());
     }
@@ -103,6 +106,11 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
           : null,
       body: Column(
         children: [
+          if (_fromCache)
+            const Padding(
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: OfflineBanner(),
+            ),
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
@@ -143,6 +151,11 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  if (card.pendingSync)
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 4),
+                                      child: PendingSyncChip(),
+                                    ),
                                   if (card.validated)
                                     const Padding(
                                       padding: EdgeInsets.only(right: 4),

@@ -98,6 +98,12 @@ class GroupDocumentVersion {
   final DateTime? approvedAt;
   final DateTime? createdAt;
 
+  /// true si esta versión solo existe localmente todavía: se creó/editó sin
+  /// conexión y está esperando en [SyncQueueService] a subirse. No se envía
+  /// nunca al servidor (no aparece en [toRow]) — es puramente informativo
+  /// para que la UI muestre el aviso "Pendiente de sincronizar".
+  final bool pendingSync;
+
   const GroupDocumentVersion({
     required this.id,
     required this.documentId,
@@ -114,6 +120,7 @@ class GroupDocumentVersion {
     this.approvedBy,
     this.approvedAt,
     this.createdAt,
+    this.pendingSync = false,
   });
 
   Map<String, dynamic> toRow() => {
@@ -137,6 +144,7 @@ class GroupDocumentVersion {
     List<ProtocolStep>? steps,
     List<String>? relatedInstrumentIds,
     String? comment,
+    bool? pendingSync,
   }) {
     return GroupDocumentVersion(
       id: id,
@@ -154,9 +162,13 @@ class GroupDocumentVersion {
       approvedBy: approvedBy,
       approvedAt: approvedAt,
       createdAt: createdAt,
+      pendingSync: pendingSync ?? this.pendingSync,
     );
   }
 
+  /// Formato usado tanto por las filas de Supabase como por
+  /// [OfflineCacheService] (que cachea la misma forma en `shared_preferences`
+  /// para no duplicar lógica de parseo).
   factory GroupDocumentVersion.fromRow(Map<String, dynamic> row) {
     return GroupDocumentVersion(
       id: row['id'] as String,
@@ -175,6 +187,29 @@ class GroupDocumentVersion {
       approvedBy: row['approved_by'] as String?,
       approvedAt: row['approved_at'] != null ? DateTime.tryParse(row['approved_at'] as String) : null,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
+      pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }
+
+  /// Fila completa para cachear en [OfflineCacheService] (a diferencia de
+  /// [toRow], incluye también los campos identificadores/gestionados por la
+  /// BD para poder reconstruir el objeto entero al leer de caché).
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'document_id': documentId,
+        'version_number': versionNumber,
+        'status': status.dbValue,
+        'title': title,
+        'specialty': specialty,
+        'content': content,
+        'steps': steps.map((s) => s.toJson()).toList(),
+        'related_instrument_ids': relatedInstrumentIds,
+        'author_id': authorId,
+        'comment': comment,
+        'based_on_version_id': basedOnVersionId,
+        'approved_by': approvedBy,
+        'approved_at': approvedAt?.toIso8601String(),
+        'created_at': createdAt?.toIso8601String(),
+        'pending_sync': pendingSync,
+      };
 }

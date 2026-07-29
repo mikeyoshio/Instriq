@@ -3,7 +3,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import 'auth_service.dart';
+import 'connectivity_service.dart';
+import 'offline_cache_service.dart';
 import 'profile_service.dart';
+import 'sync_queue_service.dart';
 
 /// CRUD y workflow (borrador -> en revisión -> publicada -> archivada) de
 /// técnicas quirúrgicas y protocolos. Cada edición crea una [GroupDocumentVersion]
@@ -21,6 +24,12 @@ class GroupDocumentService {
 
   List<GroupDocument> _documents = [];
 
+  /// true si el último [fetchDocuments] sirvió de [OfflineCacheService] en
+  /// vez de red (sin conexión, o la petición falló por un problema de red).
+  /// La UI la lee justo después para decidir si mostrar el aviso offline.
+  bool documentsFromCache = false;
+  DateTime? documentsCachedAt;
+
   /// Limpia el caché en memoria. Debe llamarse al cambiar de grupo o cerrar
   /// sesión: si no, un documento de un grupo anterior puede quedar cacheado.
   void clear() {
@@ -31,19 +40,45 @@ class GroupDocumentService {
       _documents.where((d) => d.kind == kind && d.workspaceId == workspaceId).toList();
 
   Future<void> fetchDocuments(DocumentKind kind, String workspaceId) async {
-    final rows = await _client
-        .from('group_documents')
-        .select(_publishedJoin)
-        .eq('kind', kind.dbValue)
-        .eq('workspace_id', workspaceId);
-    final fetched = (rows as List<dynamic>)
-        .map((r) => GroupDocument.fromRow(r as Map<String, dynamic>))
-        .toList();
-    fetched.sort((a, b) => (a.publishedVersion?.title ?? '').compareTo(b.publishedVersion?.title ?? ''));
-    _documents = [
-      ..._documents.where((d) => !(d.kind == kind && d.workspaceId == workspaceId)),
-      ...fetched,
-    ];
+    Future<void> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedDocuments(workspaceId);
+      documentsFromCache = true;
+      documentsCachedAt = cached?.cachedAt;
+      final fetched = (cached?.data ?? []).where((d) => d.kind == kind).toList();
+      _documents = [
+        ..._documents.where((d) => !(d.kind == kind && d.workspaceId == workspaceId)),
+        ...fetched,
+      ];
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) {
+      await fallbackToCache();
+      return;
+    }
+    try {
+      final rows = await _client
+          .from('group_documents')
+          .select(_publishedJoin)
+          .eq('kind', kind.dbValue)
+          .eq('workspace_id', workspaceId);
+      final fetched = (rows as List<dynamic>)
+          .map((r) => GroupDocument.fromRow(r as Map<String, dynamic>))
+          .toList();
+      fetched.sort((a, b) => (a.publishedVersion?.title ?? '').compareTo(b.publishedVersion?.title ?? ''));
+      documentsFromCache = false;
+      documentsCachedAt = null;
+      _documents = [
+        ..._documents.where((d) => !(d.kind == kind && d.workspaceId == workspaceId)),
+        ...fetched,
+      ];
+      // Se cachea la lista completa del workspace (ambos tipos de documento
+      // que ya están en memoria), no solo el kind recién traído.
+      await OfflineCacheService.instance
+          .cacheDocuments(workspaceId, _documents.where((d) => d.workspaceId == workspaceId).toList());
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await fallbackToCache();
+    }
   }
 
   GroupDocument? documentById(String id) {
@@ -54,25 +89,47 @@ class GroupDocumentService {
   }
 
   Future<GroupDocument> fetchDocument(String id) async {
-    final row = await _client.from('group_documents').select(_publishedJoin).eq('id', id).single();
-    return GroupDocument.fromRow(row);
+    if (ConnectivityService.instance.isOnline.value) {
+      try {
+        final row = await _client.from('group_documents').select(_publishedJoin).eq('id', id).single();
+        return GroupDocument.fromRow(row);
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+      }
+    }
+    final cached = documentById(id);
+    if (cached != null) return cached;
+    throw StateError('Sin conexión y sin datos cacheados para este documento.');
   }
 
   Future<List<GroupDocumentVersion>> fetchVersionHistory(String documentId) async {
-    final rows = await _client
-        .from('group_document_versions')
-        .select()
-        .eq('document_id', documentId)
-        .order('version_number', ascending: false);
-    return (rows as List<dynamic>)
-        .map((r) => GroupDocumentVersion.fromRow(r as Map<String, dynamic>))
-        .toList();
+    if (ConnectivityService.instance.isOnline.value) {
+      try {
+        final rows = await _client
+            .from('group_document_versions')
+            .select()
+            .eq('document_id', documentId)
+            .order('version_number', ascending: false);
+        final versions = (rows as List<dynamic>)
+            .map((r) => GroupDocumentVersion.fromRow(r as Map<String, dynamic>))
+            .toList();
+        await OfflineCacheService.instance.cacheVersionHistory(documentId, versions);
+        return versions;
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+      }
+    }
+    final cached = await OfflineCacheService.instance.getCachedVersionHistory(documentId);
+    return cached?.data ?? [];
   }
 
   /// Crea un documento nuevo con su primera versión en borrador. Va vía
   /// función `security definer` (ver supabase/schema_v10_audit.sql) para que
   /// la creación quede registrada en el log de auditoría.
   Future<GroupDocumentVersion> createDocument(DocumentKind kind, String workspaceId) async {
+    if (!ConnectivityService.instance.isOnline.value) {
+      return SyncQueueService.instance.queueCreateDocument(kind, workspaceId);
+    }
     final hospitalId = ProfileService.instance.hospitalId;
     final userId = AuthService.instance.currentUser?.id;
     if (hospitalId == null || userId == null) {
@@ -133,17 +190,36 @@ class GroupDocumentService {
   }
 
   Future<GroupDocumentVersion> saveDraft(GroupDocumentVersion version) async {
-    final row = await _client
-        .from('group_document_versions')
-        .update(version.toRow())
-        .eq('id', version.id)
-        .select()
-        .single();
-    return GroupDocumentVersion.fromRow(row);
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(version.id)) {
+      // Un id "local_..." significa que ni el documento llegó a crearse en
+      // el servidor todavía (createDocument también está en cola): no hay
+      // fila real que actualizar, así que esto también se encola.
+      return SyncQueueService.instance.queueSaveDraft(version);
+    }
+    try {
+      final row = await _client
+          .from('group_document_versions')
+          .update(version.toRow())
+          .eq('id', version.id)
+          .select()
+          .single();
+      return GroupDocumentVersion.fromRow(row);
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return SyncQueueService.instance.queueSaveDraft(version);
+    }
   }
 
   Future<void> submitForReview(String versionId) async {
-    await _client.rpc('submit_group_document_version_for_review', params: {'p_version_id': versionId});
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(versionId)) {
+      return SyncQueueService.instance.queueSubmitForReview(versionId);
+    }
+    try {
+      await _client.rpc('submit_group_document_version_for_review', params: {'p_version_id': versionId});
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await SyncQueueService.instance.queueSubmitForReview(versionId);
+    }
   }
 
   Future<void> approve(String versionId, {String? comment}) async {

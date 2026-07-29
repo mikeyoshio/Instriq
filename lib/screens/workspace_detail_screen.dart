@@ -5,13 +5,16 @@ import '../models/group_document.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/workspace_service.dart';
+import 'custom_instruments_screen.dart';
 import 'group_document_list_screen.dart';
 import 'manage_workspace_members_screen.dart';
 import 'preference_cards_screen.dart';
 
-/// Colecciones disponibles dentro de un espacio: técnicas, protocolos y
-/// tarjetas de preferencia. El instrumental (catálogo) es global y no
-/// cuelga de ningún espacio.
+/// Colecciones disponibles dentro de un espacio: técnicas, protocolos,
+/// tarjetas de preferencia e instrumental propio del equipo. El catálogo
+/// global de instrumentos es aparte y no cuelga de ningún espacio; el
+/// instrumental personalizado de esta pantalla sí, y nunca se mezcla con
+/// el catálogo global (ver supabase/schema_v13_custom_instruments.sql).
 class WorkspaceDetailScreen extends StatefulWidget {
   final Workspace workspace;
 
@@ -113,6 +116,18 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => PreferenceCardsScreen(workspace: widget.workspace, myRole: _myRole),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _CollectionCard(
+                      icon: Icons.precision_manufacturing_outlined,
+                      title: l10n.customInstrumentsTitle,
+                      subtitle: l10n.customInstrumentsSubtitle,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              CustomInstrumentsScreen(workspaceId: widget.workspace.id, myRole: _myRole),
                         ),
                       ),
                     ),

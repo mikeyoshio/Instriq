@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
+import '../services/connectivity_service.dart';
 import '../services/group_document_service.dart';
 import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
@@ -206,11 +207,20 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       _error = null;
     });
     try {
+      final wasOffline = !ConnectivityService.instance.isOnline.value;
       final updated = await GroupDocumentService.instance.saveDraft(_draftWithFormValues());
       if (andSubmit) {
         await GroupDocumentService.instance.submitForReview(updated.id);
       }
-      if (mounted) Navigator.of(context).pop(true);
+      if (mounted) {
+        if (wasOffline) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(l10n.savedOfflineSnackbar)));
+          await Future.delayed(const Duration(milliseconds: 900));
+        }
+        if (mounted) Navigator.of(context).pop(true);
+      }
     } catch (e) {
       setState(() => _error = l10n.saveError(e.toString()));
     } finally {
