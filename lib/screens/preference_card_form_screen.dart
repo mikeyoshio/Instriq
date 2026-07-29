@@ -4,6 +4,7 @@ import '../data/instruments_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
+import '../services/connectivity_service.dart';
 import '../services/preference_card_service.dart';
 import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
@@ -144,8 +145,17 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
       validated: widget.existingCard?.validated ?? false,
     );
     try {
+      final wasOffline = !ConnectivityService.instance.isOnline.value;
       await PreferenceCardService.instance.upsertCard(card);
-      if (mounted) Navigator.of(context).pop(true);
+      if (mounted) {
+        if (wasOffline) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(l10n.savedOfflineSnackbar)));
+          await Future.delayed(const Duration(milliseconds: 900));
+        }
+        if (mounted) Navigator.of(context).pop(true);
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));

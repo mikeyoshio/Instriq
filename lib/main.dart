@@ -12,9 +12,11 @@ import 'screens/app_root.dart';
 import 'screens/auth/reset_password_screen.dart';
 import 'services/app_version_service.dart';
 import 'services/auth_service.dart';
+import 'services/connectivity_service.dart';
 import 'services/locale_service.dart';
 import 'services/progress_service.dart';
 import 'services/supabase_config.dart';
+import 'services/sync_queue_service.dart';
 import 'services/theme_service.dart';
 
 Future<void> main() async {
@@ -22,7 +24,9 @@ Future<void> main() async {
   await ProgressService.instance.init();
   await ThemeService.instance.init();
   await LocaleService.instance.init();
+  await ConnectivityService.instance.init();
   await Supabase.initialize(url: supabaseUrl, publishableKey: supabaseAnonKey);
+  await SyncQueueService.instance.init();
   runApp(const InstriqApp());
 }
 

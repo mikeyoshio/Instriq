@@ -1,7 +1,10 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/preference_card.dart';
+import 'connectivity_service.dart';
+import 'offline_cache_service.dart';
 import 'profile_service.dart';
+import 'sync_queue_service.dart';
 
 class PreferenceCardService {
   PreferenceCardService._();
@@ -10,6 +13,11 @@ class PreferenceCardService {
   SupabaseClient get _client => Supabase.instance.client;
 
   List<PreferenceCard> _cards = [];
+
+  /// true si el último [fetchCards] sirvió de [OfflineCacheService] en vez de
+  /// red. La UI la lee justo después para decidir si mostrar el aviso offline.
+  bool cardsFromCache = false;
+  DateTime? cardsCachedAt;
 
   List<PreferenceCard> get cards => List.unmodifiable(_cards);
 
@@ -31,39 +39,79 @@ class PreferenceCardService {
 
   /// Trae las tarjetas del espacio indicado (el hospital ya lo filtra RLS en el servidor).
   Future<void> fetchCards(String workspaceId) async {
-    final rows = await _client
-        .from('preference_cards')
-        .select()
-        .eq('workspace_id', workspaceId)
-        .order('surgeon_name')
-        .order('procedure_name');
-    _cards = (rows as List<dynamic>)
-        .map((r) => PreferenceCard.fromRow(r as Map<String, dynamic>))
-        .toList();
+    Future<void> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedCards(workspaceId);
+      cardsFromCache = true;
+      cardsCachedAt = cached?.cachedAt;
+      _cards = cached?.data ?? [];
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) {
+      await fallbackToCache();
+      return;
+    }
+    try {
+      final rows = await _client
+          .from('preference_cards')
+          .select()
+          .eq('workspace_id', workspaceId)
+          .order('surgeon_name')
+          .order('procedure_name');
+      _cards = (rows as List<dynamic>)
+          .map((r) => PreferenceCard.fromRow(r as Map<String, dynamic>))
+          .toList();
+      cardsFromCache = false;
+      cardsCachedAt = null;
+      await OfflineCacheService.instance.cacheCards(workspaceId, _cards);
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await fallbackToCache();
+    }
   }
 
   Future<void> upsertCard(PreferenceCard card) async {
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(card.id)) {
+      final pending = await SyncQueueService.instance.queueUpsertCard(card);
+      final index = _cards.indexWhere((c) => c.id == card.id);
+      if (index == -1) {
+        _cards.add(pending);
+      } else {
+        _cards[index] = pending;
+      }
+      return;
+    }
     final hospitalId = ProfileService.instance.hospitalId;
     if (hospitalId == null) {
       throw StateError('El usuario no pertenece a ningún hospital todavía.');
     }
     final row = card.toRow(hospitalId: hospitalId);
-    if (card.id.isEmpty) {
-      final inserted = await _client.from('preference_cards').insert(row).select().single();
-      _cards.add(PreferenceCard.fromRow(inserted));
-    } else {
-      final updated = await _client
-          .from('preference_cards')
-          .update(row)
-          .eq('id', card.id)
-          .select()
-          .single();
-      final index = _cards.indexWhere((c) => c.id == card.id);
-      final saved = PreferenceCard.fromRow(updated);
-      if (index == -1) {
-        _cards.add(saved);
+    try {
+      if (card.id.isEmpty) {
+        final inserted = await _client.from('preference_cards').insert(row).select().single();
+        _cards.add(PreferenceCard.fromRow(inserted));
       } else {
-        _cards[index] = saved;
+        final updated = await _client
+            .from('preference_cards')
+            .update(row)
+            .eq('id', card.id)
+            .select()
+            .single();
+        final index = _cards.indexWhere((c) => c.id == card.id);
+        final saved = PreferenceCard.fromRow(updated);
+        if (index == -1) {
+          _cards.add(saved);
+        } else {
+          _cards[index] = saved;
+        }
+      }
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      final pending = await SyncQueueService.instance.queueUpsertCard(card);
+      final index = _cards.indexWhere((c) => c.id == card.id);
+      if (index == -1) {
+        _cards.add(pending);
+      } else {
+        _cards[index] = pending;
       }
     }
   }

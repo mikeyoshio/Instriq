@@ -74,4 +74,16 @@ class GroupDocument {
       publishedVersion: versionRow != null ? GroupDocumentVersion.fromRow(versionRow) : null,
     );
   }
+
+  /// Fila completa para [OfflineCacheService] — misma forma que devuelve
+  /// Supabase (con `published_version` anidado), reutilizable con [fromRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'kind': kind.dbValue,
+        'workspace_id': workspaceId,
+        'created_by': createdBy,
+        'created_at': createdAt?.toIso8601String(),
+        'published_version_id': publishedVersionId,
+        'published_version': publishedVersion?.toCacheRow(),
+      };
 }

@@ -9,6 +9,7 @@ import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/group_document_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/offline_banner.dart';
 import 'group_document_form_screen.dart';
 import 'group_document_version_history_screen.dart';
 import 'instrument_detail_screen.dart';
@@ -155,6 +156,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                       : l10n.pendingDraftTitle,
                 ),
                 subtitle: Text(l10n.pendingDraftSubtitle),
+                trailing: _ownPendingDraft!.pendingSync ? const PendingSyncChip() : null,
                 onTap: _edit,
               ),
             ),

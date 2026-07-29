@@ -33,6 +33,11 @@ class PreferenceCard {
   final String? generalNotes;
   final bool validated;
 
+  /// true si la tarjeta se creó/editó sin conexión y está esperando en
+  /// [SyncQueueService] a subirse. Nunca se envía al servidor (no aparece en
+  /// [toRow]) — es solo para que la UI muestre "Pendiente de sincronizar".
+  final bool pendingSync;
+
   const PreferenceCard({
     required this.id,
     required this.workspaceId,
@@ -41,6 +46,7 @@ class PreferenceCard {
     required this.items,
     this.generalNotes,
     this.validated = false,
+    this.pendingSync = false,
   });
 
   PreferenceCard copyWith({
@@ -49,6 +55,7 @@ class PreferenceCard {
     List<PreferenceCardItem>? items,
     String? generalNotes,
     bool? validated,
+    bool? pendingSync,
   }) {
     return PreferenceCard(
       id: id,
@@ -58,6 +65,7 @@ class PreferenceCard {
       items: items ?? this.items,
       generalNotes: generalNotes ?? this.generalNotes,
       validated: validated ?? this.validated,
+      pendingSync: pendingSync ?? this.pendingSync,
     );
   }
 
@@ -84,6 +92,20 @@ class PreferenceCard {
           .toList(),
       generalNotes: row['general_notes'] as String?,
       validated: row['validated'] as bool? ?? false,
+      pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }
+
+  /// Fila completa para [OfflineCacheService] (a diferencia de [toRow],
+  /// incluye `id` y `pending_sync` para poder reconstruir el objeto entero).
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'workspace_id': workspaceId,
+        'surgeon_name': surgeonName,
+        'procedure_name': procedureName,
+        'items': items.map((i) => i.toJson()).toList(),
+        'general_notes': generalNotes,
+        'validated': validated,
+        'pending_sync': pendingSync,
+      };
 }

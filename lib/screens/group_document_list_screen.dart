@@ -5,6 +5,7 @@ import '../models/group_document.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/group_document_service.dart';
+import '../widgets/offline_banner.dart';
 import 'group_document_detail_screen.dart';
 import 'group_document_form_screen.dart';
 
@@ -29,6 +30,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
   bool _loading = true;
   String? _error;
   String _query = '';
+  bool _fromCache = false;
 
   String get _titlePlural {
     final l10n = AppLocalizations.of(context)!;
@@ -49,6 +51,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
     });
     try {
       await GroupDocumentService.instance.fetchDocuments(widget.kind, widget.workspace.id);
+      _fromCache = GroupDocumentService.instance.documentsFromCache;
     } catch (e) {
       _error = l10n.groupDocLoadError(e.toString());
     }
@@ -110,6 +113,11 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
           : null,
       body: Column(
         children: [
+          if (_fromCache)
+            const Padding(
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: OfflineBanner(),
+            ),
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
