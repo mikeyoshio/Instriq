@@ -9,6 +9,7 @@ import 'custom_instruments_screen.dart';
 import 'group_document_list_screen.dart';
 import 'manage_workspace_members_screen.dart';
 import 'preference_cards_screen.dart';
+import 'trays_screen.dart';
 
 /// Colecciones disponibles dentro de un espacio: técnicas, protocolos,
 /// tarjetas de preferencia e instrumental propio del equipo. El catálogo
@@ -128,6 +129,17 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
                         MaterialPageRoute(
                           builder: (_) =>
                               CustomInstrumentsScreen(workspaceId: widget.workspace.id, myRole: _myRole),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _CollectionCard(
+                      icon: Icons.inventory_2_outlined,
+                      title: l10n.traysTitle,
+                      subtitle: l10n.traysSubtitle,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => TraysScreen(workspace: widget.workspace, myRole: _myRole),
                         ),
                       ),
                     ),
