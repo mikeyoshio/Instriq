@@ -404,5 +404,28 @@
 
   "offlineBannerMessage": "Offline — showing the last synced version",
   "pendingSyncBadge": "Pending sync",
-  "savedOfflineSnackbar": "Offline: saved locally, it will sync automatically once you're back online."
+  "savedOfflineSnackbar": "Offline: saved locally, it will sync automatically once you're back online.",
+
+  "saveAction": "Save",
+  "traysTitle": "Instrument trays",
+  "traysSubtitle": "Instrument sets with checklist, versioning and approval",
+  "trayLoadError": "Couldn't load trays: {error}",
+  "@trayLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "trayEmptyState": "No trays in this workspace yet.",
+  "newTrayLabel": "New tray",
+  "trayTitle": "Tray",
+  "trayNameLabel": "Tray name",
+  "trayItemsLabel": "Tray instruments",
+  "trayNoItemsYet": "No instruments yet",
+  "trayPhotosLabel": "Photos",
+  "trayNoPhotosYet": "No photos yet",
+  "trayObservationsLabel": "Observations",
+  "expectedQtyLabel": "Expected quantity",
+  "expectedQtyValue": "{qty} units",
+  "@expectedQtyValue": {"placeholders": {"qty": {"type": "int"}}},
+  "instrumentSourceCatalogTab": "Catalog",
+  "instrumentSourceCustomTab": "Custom instruments",
+  "deleteTrayTitle": "Delete tray",
+  "deleteTrayConfirmBody": "Delete \"{name}\"? This cannot be undone.",
+  "@deleteTrayConfirmBody": {"placeholders": {"name": {"type": "String"}}}
 }

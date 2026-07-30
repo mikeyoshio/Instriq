@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: l10n.reviewQueueSubtitle,
                     onTap: () async {
                       await Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const GroupDocumentReviewQueueScreen()),
+                        MaterialPageRoute(builder: (_) => const ReviewQueueScreen()),
                       );
                       _refresh();
                     },

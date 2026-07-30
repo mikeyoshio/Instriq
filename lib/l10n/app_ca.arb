@@ -404,5 +404,28 @@
 
   "offlineBannerMessage": "Sense connexió — mostrant l'última versió sincronitzada",
   "pendingSyncBadge": "Pendent de sincronitzar",
-  "savedOfflineSnackbar": "Sense connexió: guardat en local, se sincronitzarà sol quan tornis a tenir xarxa."
+  "savedOfflineSnackbar": "Sense connexió: guardat en local, se sincronitzarà sol quan tornis a tenir xarxa.",
+
+  "saveAction": "Desar",
+  "traysTitle": "Safates d'instrumental",
+  "traysSubtitle": "Sets d'instrumental amb checklist, versionat i aprovació",
+  "trayLoadError": "No s'han pogut carregar les safates: {error}",
+  "@trayLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "trayEmptyState": "Encara no hi ha safates en aquest espai.",
+  "newTrayLabel": "Nova safata",
+  "trayTitle": "Safata",
+  "trayNameLabel": "Nom de la safata",
+  "trayItemsLabel": "Instrumental de la safata",
+  "trayNoItemsYet": "Sense instrumental encara",
+  "trayPhotosLabel": "Fotos",
+  "trayNoPhotosYet": "Sense fotos encara",
+  "trayObservationsLabel": "Observacions",
+  "expectedQtyLabel": "Quantitat esperada",
+  "expectedQtyValue": "{qty} unitats",
+  "@expectedQtyValue": {"placeholders": {"qty": {"type": "int"}}},
+  "instrumentSourceCatalogTab": "Catàleg",
+  "instrumentSourceCustomTab": "Instrumental propi",
+  "deleteTrayTitle": "Eliminar safata",
+  "deleteTrayConfirmBody": "Vols eliminar \"{name}\"? No es pot desfer.",
+  "@deleteTrayConfirmBody": {"placeholders": {"name": {"type": "String"}}}
 }

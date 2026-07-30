@@ -404,5 +404,28 @@
 
   "offlineBannerMessage": "Sin conexión — mostrando la última versión sincronizada",
   "pendingSyncBadge": "Pendiente de sincronizar",
-  "savedOfflineSnackbar": "Sin conexión: guardado en local, se sincronizará solo cuando vuelva la red."
+  "savedOfflineSnackbar": "Sin conexión: guardado en local, se sincronizará solo cuando vuelva la red.",
+
+  "saveAction": "Guardar",
+  "traysTitle": "Bandejas de instrumental",
+  "traysSubtitle": "Sets de instrumental con checklist, versionado y aprobación",
+  "trayLoadError": "No se pudieron cargar las bandejas: {error}",
+  "@trayLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "trayEmptyState": "Todavía no hay bandejas en este espacio.",
+  "newTrayLabel": "Nueva bandeja",
+  "trayTitle": "Bandeja",
+  "trayNameLabel": "Nombre de la bandeja",
+  "trayItemsLabel": "Instrumental de la bandeja",
+  "trayNoItemsYet": "Sin instrumental todavía",
+  "trayPhotosLabel": "Fotos",
+  "trayNoPhotosYet": "Sin fotos todavía",
+  "trayObservationsLabel": "Observaciones",
+  "expectedQtyLabel": "Cantidad esperada",
+  "expectedQtyValue": "{qty} unidades",
+  "@expectedQtyValue": {"placeholders": {"qty": {"type": "int"}}},
+  "instrumentSourceCatalogTab": "Catálogo",
+  "instrumentSourceCustomTab": "Instrumental propio",
+  "deleteTrayTitle": "Eliminar bandeja",
+  "deleteTrayConfirmBody": "¿Eliminar \"{name}\"? No se puede deshacer.",
+  "@deleteTrayConfirmBody": {"placeholders": {"name": {"type": "String"}}}
 }

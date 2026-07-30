@@ -6,6 +6,7 @@ import '../utils/invite_code.dart';
 import 'auth_service.dart';
 import 'group_document_service.dart';
 import 'preference_card_service.dart';
+import 'tray_service.dart';
 import 'workspace_service.dart';
 
 class ProfileService {
@@ -98,6 +99,7 @@ class ProfileService {
     WorkspaceService.instance.clear();
     GroupDocumentService.instance.clear();
     PreferenceCardService.instance.clear();
+    TrayService.instance.clear();
   }
 
   /// Busca el hospital por código de invitación y liga el perfil del usuario actual.
