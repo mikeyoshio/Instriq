@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/hospital.dart';
+import '../models/professional_profile.dart';
 import '../utils/invite_code.dart';
 import 'auth_service.dart';
 import 'group_document_service.dart';
@@ -20,6 +21,7 @@ class ProfileService {
   bool _isAdmin = false;
   bool _isOwner = false;
   String? _ownerId;
+  Set<ProfessionalProfile> _professionalProfiles = {};
 
   String? get hospitalId => _hospitalId;
   String? get hospitalName => _hospitalName;
@@ -29,6 +31,7 @@ class ProfileService {
   bool get isOwner => _isOwner;
   String? get ownerId => _ownerId;
   bool get hasHospital => _hospitalId != null;
+  Set<ProfessionalProfile> get professionalProfiles => Set.unmodifiable(_professionalProfiles);
 
   Future<void> loadProfile() async {
     final user = AuthService.instance.currentUser;
@@ -38,7 +41,7 @@ class ProfileService {
     }
     final row = await _client
         .from('profiles')
-        .select('hospital_id, is_admin, hospitals(name, cif, invite_code, owner_id)')
+        .select('hospital_id, is_admin, professional_profiles, hospitals(name, cif, invite_code, owner_id)')
         .eq('id', user.id)
         .maybeSingle();
     final newHospitalId = row?['hospital_id'] as String?;
@@ -53,6 +56,26 @@ class ProfileService {
     _inviteCode = hospitalRow?['invite_code'] as String?;
     _ownerId = hospitalRow?['owner_id'] as String?;
     _isOwner = _ownerId == user.id;
+    _professionalProfiles = _parseProfessionalProfiles(row?['professional_profiles']);
+  }
+
+  Set<ProfessionalProfile> _parseProfessionalProfiles(dynamic raw) {
+    if (raw is! List) return {};
+    return raw
+        .map((v) => ProfessionalProfileLabel.fromDb(v as String))
+        .whereType<ProfessionalProfile>()
+        .toSet();
+  }
+
+  /// Guarda la preferencia de perfil profesional (update directo a
+  /// `profiles`, sin RPC ni auditoría: es solo una preferencia de
+  /// visualización, no una acción sensible — ver schema_v15).
+  Future<void> setProfessionalProfiles(Set<ProfessionalProfile> profiles) async {
+    final user = AuthService.instance.currentUser;
+    if (user == null) return;
+    final values = profiles.map((p) => p.dbValue).toList();
+    await _client.from('profiles').update({'professional_profiles': values}).eq('id', user.id);
+    _professionalProfiles = Set.of(profiles);
   }
 
   void _resetHospitalState() {
@@ -63,6 +86,7 @@ class ProfileService {
     _isAdmin = false;
     _isOwner = false;
     _ownerId = null;
+    _professionalProfiles = {};
     _clearGroupContentCaches();
   }
 

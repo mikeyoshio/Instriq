@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../models/professional_profile.dart';
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
+import '../../widgets/professional_profile_picker.dart';
 import 'register_hospital_screen.dart';
 
 enum _Mode { choose, join }
@@ -18,6 +20,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
   _Mode _mode = _Mode.choose;
   final _codeController = TextEditingController();
   final _nameController = TextEditingController();
+  Set<ProfessionalProfile> _selectedProfiles = {};
   bool _loading = false;
   String? _error;
 
@@ -35,7 +38,11 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
       if (hospital == null) {
         setState(() => _error = l10n.invalidInviteCode);
       } else if (mounted) {
-        Navigator.of(context).pop();
+        final navigator = Navigator.of(context);
+        if (_selectedProfiles.isNotEmpty) {
+          await ProfileService.instance.setProfessionalProfiles(_selectedProfiles);
+        }
+        if (mounted) navigator.pop();
       }
     } catch (e) {
       setState(() => _error = l10n.joinError(e.toString()));
@@ -148,6 +155,15 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
             labelText: l10n.inviteCodeLabel,
             border: const OutlineInputBorder(),
           ),
+        ),
+        const SizedBox(height: 20),
+        Text(l10n.professionalProfileSectionTitle, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 4),
+        Text(l10n.professionalProfileSectionSubtitle, style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
+        const SizedBox(height: 8),
+        ProfessionalProfilePicker(
+          selected: _selectedProfiles,
+          onChanged: (next) => setState(() => _selectedProfiles = next),
         ),
         if (_error != null) ...[
           const SizedBox(height: 12),
