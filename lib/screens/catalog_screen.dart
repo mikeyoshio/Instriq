@@ -123,24 +123,15 @@ class _CatalogScreenState extends State<CatalogScreen> {
               ),
             ),
           ),
-          SizedBox(
-            height: 44,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              children: [
-                ...Specialty.values.map(
-                  (s) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: _MultiFilterChip(
-                      label: s.label,
-                      selected: _specialtyFilters.contains(s),
-                      onTap: () => _toggleSpecialty(s),
-                    ),
-                  ),
+          _FilterChipRow(
+            chips: [
+              for (final s in Specialty.values)
+                _MultiFilterChip(
+                  label: s.label,
+                  selected: _specialtyFilters.contains(s),
+                  onTap: () => _toggleSpecialty(s),
                 ),
-              ],
-            ),
+            ],
           ),
           const SizedBox(height: 8),
           Padding(
@@ -150,24 +141,15 @@ class _CatalogScreenState extends State<CatalogScreen> {
               child: Text(l10n.categoryFilterLabel, style: Theme.of(context).textTheme.labelMedium),
             ),
           ),
-          SizedBox(
-            height: 44,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              children: [
-                ...InstrumentCategory.values.map(
-                  (c) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: _MultiFilterChip(
-                      label: c.label,
-                      selected: _categoryFilters.contains(c),
-                      onTap: () => _toggleCategory(c),
-                    ),
-                  ),
+          _FilterChipRow(
+            chips: [
+              for (final c in InstrumentCategory.values)
+                _MultiFilterChip(
+                  label: c.label,
+                  selected: _categoryFilters.contains(c),
+                  onTap: () => _toggleCategory(c),
                 ),
-              ],
-            ),
+            ],
           ),
           const SizedBox(height: 8),
           Padding(
@@ -246,6 +228,47 @@ class _CatalogScreenState extends State<CatalogScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Fila de chips de filtro: en ample d'escriptori (mateix llindar que
+/// `app_shell.dart`) es reparteixen en `Wrap` perquè es vegin tots sense
+/// necessitat de descobrir que es pot arrossegar horitzontalment — en
+/// mòbil, on el gest de swipe és obvi, es manté el `ListView` horitzontal
+/// original per no perdre espai vertical.
+class _FilterChipRow extends StatelessWidget {
+  static const _tabletBreakpoint = 840.0;
+
+  final List<Widget> chips;
+
+  const _FilterChipRow({required this.chips});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= _tabletBreakpoint) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: chips,
+            ),
+          );
+        }
+        return SizedBox(
+          height: 44,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            children: [
+              for (final chip in chips) Padding(padding: const EdgeInsets.only(right: 8), child: chip),
+            ],
+          ),
+        );
+      },
     );
   }
 }
