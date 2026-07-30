@@ -63,6 +63,17 @@
   "connectGroupTitle": "Connecta amb el teu grup",
   "connectGroupSubtitle": "Uneix-te amb un codi o crea el teu per compartir coneixement amb el teu equip",
 
+  "navHome": "Inici",
+  "navSearch": "Cercar",
+  "navLibrary": "Biblioteca",
+  "navActivity": "Activitat",
+  "navProfile": "Perfil",
+  "libraryCollectionsHeader": "Col·leccions de l'espai",
+  "libraryDocumentsTitle": "Documents i protocols",
+  "libraryDocumentsSubtitle": "Tècniques quirúrgiques i protocols del teu espai",
+  "activityAdminOnly": "Només les persones administradores del grup veuen l'activitat.",
+  "profilePreferencesHeader": "Preferències",
+
   "catalogSearchHint": "Cerca instrument o marca comercial...",
   "clearWithCount": "Netejar ({count})",
   "@clearWithCount": {"placeholders": {"count": {"type": "int"}}},

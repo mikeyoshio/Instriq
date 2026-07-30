@@ -63,6 +63,17 @@
   "connectGroupTitle": "Conecta con tu grupo",
   "connectGroupSubtitle": "Únete con un código o crea el tuyo para compartir conocimiento con tu equipo",
 
+  "navHome": "Inicio",
+  "navSearch": "Buscar",
+  "navLibrary": "Biblioteca",
+  "navActivity": "Actividad",
+  "navProfile": "Perfil",
+  "libraryCollectionsHeader": "Colecciones del espacio",
+  "libraryDocumentsTitle": "Documentos y protocolos",
+  "libraryDocumentsSubtitle": "Técnicas quirúrgicas y protocolos de tu espacio",
+  "activityAdminOnly": "Solo las personas administradoras del grupo ven la actividad.",
+  "profilePreferencesHeader": "Preferencias",
+
   "catalogSearchHint": "Buscar instrumento o marca comercial...",
   "clearWithCount": "Limpiar ({count})",
   "@clearWithCount": {"placeholders": {"count": {"type": "int"}}},
