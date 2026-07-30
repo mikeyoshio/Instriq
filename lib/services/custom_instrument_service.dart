@@ -46,6 +46,14 @@ class CustomInstrumentService {
     return null;
   }
 
+  /// Fetch puntual por id (sin pasar por el caché de workspace) — usado por
+  /// [RecentActivityService]/[FavoritesService] para resolver un ref a título
+  /// humano sin haber cargado antes todo el workspace al que pertenece.
+  Future<CustomInstrument> fetchById(String id) async {
+    final row = await _client.from('custom_instruments').select().eq('id', id).single();
+    return CustomInstrument.fromRow(row);
+  }
+
   Future<CustomInstrument> create(CustomInstrument instrument) async {
     final hospitalId = ProfileService.instance.hospitalId;
     if (hospitalId == null) {

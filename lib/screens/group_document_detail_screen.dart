@@ -7,7 +7,9 @@ import '../models/group_document_version.dart';
 import '../models/instrument.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
+import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
+import '../services/recent_activity_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/offline_banner.dart';
 import 'group_document_form_screen.dart';
@@ -25,15 +27,34 @@ class GroupDocumentDetailScreen extends StatefulWidget {
 }
 
 class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
+  static const String _refType = 'group_document';
+
   late GroupDocument _document;
   GroupDocumentVersion? _ownPendingDraft;
   bool _loadingHistory = true;
+  bool _isFavorite = false;
 
   @override
   void initState() {
     super.initState();
     _document = widget.document;
     _loadOwnDraft();
+    if (AuthService.instance.currentUser != null) {
+      RecentActivityService.instance.recordView(_refType, _document.id);
+      _loadFavoriteState();
+    }
+  }
+
+  Future<void> _loadFavoriteState() async {
+    final isFavorite = await FavoritesService.instance.isFavorite(_refType, _document.id);
+    if (!mounted) return;
+    setState(() => _isFavorite = isFavorite);
+  }
+
+  Future<void> _toggleFavorite() async {
+    await FavoritesService.instance.toggleFavorite(_refType, _document.id);
+    if (!mounted) return;
+    setState(() => _isFavorite = !_isFavorite);
   }
 
   Future<void> _loadOwnDraft() async {
@@ -137,6 +158,12 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
       appBar: AppBar(
         title: Text(published?.title ?? l10n.unpublished),
         actions: [
+          if (AuthService.instance.currentUser != null)
+            IconButton(
+              icon: Icon(_isFavorite ? Icons.star : Icons.star_border),
+              tooltip: l10n.favoriteToggleTooltip,
+              onPressed: _toggleFavorite,
+            ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
           if (canApprove) IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),

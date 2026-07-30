@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../l10n/app_localizations.dart';
-import '../models/professional_profile.dart';
+import '../models/work_mode.dart';
 import '../services/account_service.dart';
 import '../services/auth_service.dart';
 import '../services/profile_service.dart';
-import '../widgets/professional_profile_picker.dart';
+import '../widgets/work_mode_picker.dart';
 
 /// Derechos GDPR sobre la cuenta propia: exportar los datos personales y
 /// eliminar la cuenta. Disponible siempre que haya sesión, pertenezca o no
@@ -29,13 +29,13 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
   String? _deleteError;
   final _confirmEmailController = TextEditingController();
 
-  late Set<ProfessionalProfile> _selectedProfiles;
+  late WorkMode? _selectedWorkMode;
   bool _savingProfiles = false;
 
   @override
   void initState() {
     super.initState();
-    _selectedProfiles = Set.of(ProfileService.instance.professionalProfiles);
+    _selectedWorkMode = ProfileService.instance.activeWorkModeNotifier.value;
   }
 
   @override
@@ -44,13 +44,13 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
     super.dispose();
   }
 
-  Future<void> _saveProfessionalProfiles(Set<ProfessionalProfile> next) async {
+  Future<void> _saveActiveWorkMode(WorkMode? next) async {
     setState(() {
-      _selectedProfiles = next;
+      _selectedWorkMode = next;
       _savingProfiles = true;
     });
     try {
-      await ProfileService.instance.setProfessionalProfiles(next);
+      await ProfileService.instance.setActiveWorkMode(next);
     } finally {
       if (mounted) setState(() => _savingProfiles = false);
     }
@@ -133,18 +133,18 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
           Row(
             children: [
               Expanded(
-                child: Text(l10n.professionalProfileSectionTitle, style: Theme.of(context).textTheme.titleMedium),
+                child: Text(l10n.workModeSectionTitle, style: Theme.of(context).textTheme.titleMedium),
               ),
               if (_savingProfiles)
                 const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2)),
             ],
           ),
           const SizedBox(height: 8),
-          Text(l10n.professionalProfileSectionSubtitle),
+          Text(l10n.workModeSectionSubtitle),
           const SizedBox(height: 12),
-          ProfessionalProfilePicker(
-            selected: _selectedProfiles,
-            onChanged: _saveProfessionalProfiles,
+          WorkModePicker(
+            selected: _selectedWorkMode,
+            onChanged: _saveActiveWorkMode,
           ),
           const SizedBox(height: 32),
           Text(l10n.exportMyDataTitle, style: Theme.of(context).textTheme.titleMedium),
