@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/app_root.dart';
 import 'screens/auth/reset_password_screen.dart';
@@ -15,6 +17,7 @@ import 'services/auth_service.dart';
 import 'services/connectivity_service.dart';
 import 'services/locale_service.dart';
 import 'services/progress_service.dart';
+import 'services/push_notification_service.dart';
 import 'services/supabase_config.dart';
 import 'services/sync_queue_service.dart';
 import 'services/theme_service.dart';
@@ -27,6 +30,12 @@ Future<void> main() async {
   await ConnectivityService.instance.init();
   await Supabase.initialize(url: supabaseUrl, publishableKey: supabaseAnonKey);
   await SyncQueueService.instance.init();
+  try {
+    // Las notificaciones son un extra: si Firebase no está disponible en
+    // esta plataforma/entorno (p. ej. Windows de escritorio en desarrollo),
+    // no debe impedir que la app arranque.
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  } catch (_) {}
   runApp(const InstriqApp());
 }
 
@@ -48,6 +57,13 @@ class _InstriqAppState extends State<InstriqApp> {
         _navigatorKey.currentState?.push(
           MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
         );
+      }
+      if (state.event == AuthChangeEvent.signedIn ||
+          state.event == AuthChangeEvent.initialSession) {
+        if (state.session != null) PushNotificationService.instance.initForCurrentUser();
+      }
+      if (state.event == AuthChangeEvent.signedOut) {
+        PushNotificationService.instance.unregisterCurrentToken();
       }
     });
     if (!kIsWeb) {
