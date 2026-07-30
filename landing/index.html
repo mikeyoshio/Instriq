@@ -234,6 +234,10 @@
     <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="hoy.lede">L'aprenentatge bàsic funciona com a convidat. Només cal compte si el teu grup vol compartir el seu propi coneixement.</p>
     <div class="showcase">
       <figure>
+        <img src="screenshots/home.png" alt="Pantalla d'inici amb cercador global" width="260">
+        <figcaption data-i18n="hoy.fig0">Inici centrat en un cercador global.</figcaption>
+      </figure>
+      <figure>
         <img src="screenshots/catalogo.png" alt="Catàleg d'instrumental filtrat per especialitat" width="260">
         <figcaption data-i18n="hoy.fig1">Catàleg amb fotos reals per especialitat.</figcaption>
       </figure>
@@ -266,7 +270,7 @@
         <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
         <div class="timeline-track-wrap">
           <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
-          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="25" value="0" step="1" aria-label="Línia del temps d'Instriq">
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="27" value="0" step="1" aria-label="Línia del temps d'Instriq">
         </div>
         <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
       </div>
@@ -429,7 +433,7 @@
       "valores.c4t": "Estándares abiertos", "valores.c4p": "Buscamos alinearnos con estándares reconocidos del sector (HL7, FHIR, DICOM) según el proyecto lo necesite.",
       "hoy.eyebrow": "Disponible hoy", "hoy.h1": "Sin cuenta, sin fricción.",
       "hoy.lede": "El aprendizaje básico funciona como invitado. Solo hace falta cuenta si tu grupo quiere compartir su propio conocimiento.",
-      "hoy.fig1": "Catálogo con fotos reales por especialidad.", "hoy.fig2": "Ficha de instrumental con foto y nombres comerciales.",
+      "hoy.fig0": "Inicio centrado en un buscador global.", "hoy.fig1": "Catálogo con fotos reales por especialidad.", "hoy.fig2": "Ficha de instrumental con foto y nombres comerciales.",
       "hoy.c1t": "Catálogo", "hoy.c1p": "+70 instrumentos organizados por 9 especialidades y por categoría funcional, con nombres comerciales y fabricante.",
       "hoy.c2t": "Aprende", "hoy.c2p": "Flashcards y quiz de repaso, con progreso guardado en tu propio dispositivo.",
       "hoy.c3t": "Tarjetas de preferencia", "hoy.c3p": "Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu grupo.",
@@ -483,7 +487,7 @@
       "valores.c4t": "Open standards", "valores.c4p": "We aim to align with recognized industry standards (HL7, FHIR, DICOM) as the project needs.",
       "hoy.eyebrow": "Available today", "hoy.h1": "No account, no friction.",
       "hoy.lede": "Basic learning works as a guest. An account is only needed if your group wants to share its own knowledge.",
-      "hoy.fig1": "Catalog with real photos by specialty.", "hoy.fig2": "Instrument entry with photo and trade names.",
+      "hoy.fig0": "A home screen centered on global search.", "hoy.fig1": "Catalog with real photos by specialty.", "hoy.fig2": "Instrument entry with photo and trade names.",
       "hoy.c1t": "Catalog", "hoy.c1p": "70+ instruments organized by 9 specialties and by functional category, with trade names and manufacturer.",
       "hoy.c2t": "Learn", "hoy.c2p": "Flashcards and review quizzes, with progress saved on your own device.",
       "hoy.c3t": "Preference cards", "hoy.c3p": "Instruments specific to surgeon and procedure, shared and validated within your group.",
@@ -525,8 +529,8 @@
   });
   CA_DEFAULTS['meta.title'] = document.title;
 
-  // Timeline interactiu de novetats: 1 origen + 21 desplegaments + 4 previstos.
-  var TIMELINE_SHIPPED = 22; // origen (índex 0) + 21 novetats (índexs 1-21)
+  // Timeline interactiu de novetats: 1 origen + 23 desplegaments + 4 previstos.
+  var TIMELINE_SHIPPED = 24; // origen (índex 0) + 23 novetats (índexs 1-23)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -551,6 +555,8 @@
       { badge: '#19', text: '<strong>Perfil professional</strong> — tria instrumentista, supervisió, esterilització, infermeria, cirurgià, estudiant o docent, i la fitxa de cada instrument reordena el que et interessa veure primer, sense amagar res.' },
       { badge: '#20', text: '<strong>Esterilització estructurada</strong> — cada instrument pot portar un o diversos mètodes d\'esterilització amb els seus paràmetres, més fitxa tècnica (fabricant, IFU, manteniment, vida útil).' },
       { badge: '#21', text: '<strong>Bandejes d\'instrumental</strong> — sets de material amb checklist de quantitats, fotos, versionat i aprovació, per verificar caixes completes després del rentat i l\'esterilització.' },
+      { badge: '#22', text: '<strong>Disseny propi i navegació responsive</strong> — nou sistema visual (tipografia, color, espaiats) i una única experiència amb barra lateral a l\'escriptori i navegació inferior al mòbil, la mateixa a totes les pantalles.' },
+      { badge: '#23', text: '<strong>Mode de Treball i inici centrat en la cerca</strong> — el perfil professional dona pas a un mode de treball únic i actiu, canviable a l\'instant des de la capçalera; la pantalla d\'inici ara comença per un cercador global, amb activitat recent i favorits.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
       { badge: 'Previst', future: true, text: 'Mode sense connexió per a les bandejes.' },
@@ -579,6 +585,8 @@
       { badge: '#19', text: '<strong>Perfil profesional</strong> — elige instrumentista, supervisión, esterilización, enfermería, cirujano, estudiante o docente, y la ficha de cada instrumento reordena lo que más te interesa ver primero, sin ocultar nada.' },
       { badge: '#20', text: '<strong>Esterilización estructurada</strong> — cada instrumento puede llevar uno o varios métodos de esterilización con sus parámetros, más ficha técnica (fabricante, IFU, mantenimiento, vida útil).' },
       { badge: '#21', text: '<strong>Bandejas de instrumental</strong> — sets de material con checklist de cantidades, fotos, versionado y aprobación, para verificar cajas completas tras el lavado y la esterilización.' },
+      { badge: '#22', text: '<strong>Diseño propio y navegación responsive</strong> — nuevo sistema visual (tipografía, color, espaciados) y una única experiencia con barra lateral en escritorio y navegación inferior en móvil, la misma en todas las pantallas.' },
+      { badge: '#23', text: '<strong>Modo de Trabajo e inicio centrado en la búsqueda</strong> — el perfil profesional da paso a un modo de trabajo único y activo, cambiable al instante desde la cabecera; la pantalla de inicio ahora empieza con un buscador global, con actividad reciente y favoritos.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
       { badge: 'Previsto', future: true, text: 'Modo sin conexión para las bandejas.' },
@@ -607,6 +615,8 @@
       { badge: '#19', text: '<strong>Professional profile</strong> — choose scrub nurse, supervision, sterilization, nursing, surgeon, student or teacher, and each instrument\'s page reorders what matters most to you first, without hiding anything.' },
       { badge: '#20', text: '<strong>Structured sterilization</strong> — each instrument can carry one or more sterilization methods with their own parameters, plus technical info (manufacturer, IFU, maintenance, useful life).' },
       { badge: '#21', text: '<strong>Instrument trays</strong> — sets of equipment with a quantity checklist, photos, versioning and approval, to verify complete trays after washing and sterilization.' },
+      { badge: '#22', text: '<strong>Own design system and responsive navigation</strong> — a new visual system (typography, color, spacing) and a single experience with a sidebar on desktop and bottom navigation on mobile, the same on every screen.' },
+      { badge: '#23', text: '<strong>Work Mode and a search-first home</strong> — the professional profile gives way to a single active work mode, switchable instantly from the header; the home screen now opens with a global search bar, recent activity and favorites.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
       { badge: 'Planned', future: true, text: 'Offline mode for trays.' },
