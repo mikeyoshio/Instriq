@@ -25,12 +25,18 @@ El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. S
 - **GDPR**: exportar los propios datos (perfil, contenido creado/aprobado, roles) como JSON, y eliminar la cuenta — el contenido que se haya creado o aprobado se conserva anonimizado para el equipo ("Usuario eliminado"), no se pierde el conocimiento compartido.
 - **Aviso de actualización** (Android/iOS): comprueba si hay una versión más reciente publicada y lo notifica sin bloquear el uso.
 - **Multiidioma**: català por defecto, castellano e inglés seleccionables desde un icono en el propio Home, con la elección guardada en el dispositivo. La landing pública sigue el mismo criterio.
+- **Instrumental personalizado del equipo**: cada espacio de trabajo puede dar de alta su propio instrumental (con variantes y foto), privado a ese hospital/espacio — nunca se mezcla con el catálogo global ni es visible fuera de tu equipo. Cada foto subida por un equipo lleva un aviso explícito de que no está verificada por Instriq (a diferencia de las del catálogo global, con licencia libre comprobada).
+- **Modo sin conexión**: técnicas, protocolos y tarjetas de preferencia se cachean localmente y se pueden consultar sin red; crear o editar contenido sin conexión se encola y se sincroniza solo al recuperarla.
+- **Notificaciones push**: aviso cuando un contenido entra en revisión, se aprueba o se rechaza (Firebase Cloud Messaging), sin depender de abrir la app para enterarse.
 - **Modo claro/oscuro** con toggle manual persistente.
 
 ## Stack técnico
 
 - **Flutter** (Dart) — Android, iOS y Web desde el mismo código.
-- **Supabase** — Auth (email/contraseña), Postgres con Row Level Security, API REST autogenerada.
+- **Supabase** — Auth (email/contraseña), Postgres con Row Level Security, Storage (fotos de instrumental personalizado), Edge Functions, API REST autogenerada.
+- **Firebase Cloud Messaging** — envío de notificaciones push (disparadas por un Database Webhook sobre el log de auditoría).
+- **Resend** — email transaccional de Supabase Auth (confirmación de cuenta, recuperar contraseña) desde `hola@instriq.org`.
+- **connectivity_plus + shared_preferences** — detección de conexión y caché/cola de sincronización para el modo sin conexión (sin base de datos local nueva).
 - **shared_preferences** para progreso y preferencia de tema local (funciona sin cuenta).
 
 ## Estructura del proyecto
@@ -39,17 +45,20 @@ El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. S
 lib/
   l10n/         # ARB (català/castellano/inglés) + AppLocalizations generado (flutter gen-l10n)
   models/       # Instrument, PreferenceCard, GroupDocument(Version, ProtocolStep), Workspace(Role/Member),
-                # Hospital (= grupo), AuditEntry, HospitalContentStats
+                # Hospital (= grupo), AuditEntry, HospitalContentStats, CustomInstrument(Variant)
   data/         # Catálogo de instrumental (110) y especialidades quirúrgicas estándar
   services/     # Supabase, auth, perfil/grupo, espacios, progreso, tema, idioma, cuenta (GDPR),
-                # versión de la app, auditoría, analítica
+                # versión de la app, auditoría, analítica, instrumental personalizado,
+                # conectividad, caché/cola de sincronización offline, notificaciones push
   screens/
     auth/       # Bienvenida, login/registro, alta de grupo, flujo de conexión
     admin/      # Gestión del grupo (código, miembros, propiedad)
     ...         # Catálogo, Aprende, progreso, espacios, técnicas/protocolos, tarjetas, cuenta y privacidad,
-                # auditoría, cobertura de conocimiento
+                # auditoría, cobertura de conocimiento, instrumental personalizado del equipo
   utils/        # Generador de código de invitación
-supabase/       # Esquema SQL (ejecutar en orden: schema.sql → schema_v11_analytics.sql, ver más abajo)
+supabase/
+  schema_v*.sql    # Esquema SQL (ejecutar en orden: schema.sql → schema_v14_security_hardening.sql)
+  functions/       # Edge Functions (send-push: envía notificaciones vía FCM a partir del log de auditoría)
 ```
 
 ## Desarrollo
@@ -64,8 +73,11 @@ flutter run -d chrome        # navegador
 
 1. Crea un proyecto en [supabase.com](https://supabase.com).
 2. En el SQL Editor, ejecuta en orden todos los `supabase/schema_v*.sql` (y `schema.sql` primero):
-   `schema.sql` → `schema_v2_hospital_admin.sql` → `schema_v3_fix_rls_recursion.sql` → `schema_v4_group_documents.sql` → `schema_v5_group_document_versions.sql` → `schema_v6_workspaces.sql` → `schema_v7_roles.sql` → `schema_v8_app_config.sql` → `schema_v9_gdpr.sql` → `schema_v10_audit.sql` → `schema_v11_analytics.sql`.
+   `schema.sql` → `schema_v2_hospital_admin.sql` → `schema_v3_fix_rls_recursion.sql` → `schema_v4_group_documents.sql` → `schema_v5_group_document_versions.sql` → `schema_v6_workspaces.sql` → `schema_v7_roles.sql` → `schema_v8_app_config.sql` → `schema_v9_gdpr.sql` → `schema_v10_audit.sql` → `schema_v11_analytics.sql` → `schema_v12_push_notifications.sql` → `schema_v13_custom_instruments.sql` → `schema_v14_security_hardening.sql`.
 3. Copia la URL y la **publishable key** (Project Settings → API) a `lib/services/supabase_config.dart`. Es pública/segura de commitear — la seguridad real la da Row Level Security, no el secreto de esta key.
+4. Para las notificaciones push: despliega `supabase/functions/send-push` (`supabase functions deploy send-push`), añade el secret `FCM_SERVICE_ACCOUNT_JSON` (JSON del service account de Firebase) en Edge Functions → Secrets, y confirma que exista un Database Webhook o trigger que llame a esa función en cada `insert` sobre `audit_log` (`schema_v12` ya deja el trigger listo si tu proyecto tiene `pg_net`).
+5. Para el instrumental personalizado: confirma que el bucket privado `custom-instrument-photos` existe en Storage (la migración `schema_v13` lo crea; en algunos proyectos hay que crearlo a mano desde el dashboard con el mismo nombre).
+6. Ejecuta `flutterfire configure` (requiere un proyecto Firebase) para generar `lib/firebase_options.dart` y el `google-services.json`/`GoogleService-Info.plist` de cada plataforma.
 
 ## Despliegue
 
@@ -90,6 +102,14 @@ flutter run -d chrome        # navegador
 - [x] Interfaz en catalán (por defecto), castellano e inglés — app y landing
 - [x] Auditoría de acciones sensibles (aprobar/rechazar, roles, propiedad, crear/borrar documentos)
 - [x] Cobertura de conocimiento documentado por especialidad (contenido, no uso — no hay tracking de qué se consulta)
+- [x] Instrumental personalizado del equipo, con fotos y variantes, privado por espacio
+- [x] Modo sin conexión con cola de sincronización
+- [x] Notificaciones push (Firebase Cloud Messaging)
+- [ ] Publicación en Google Play (Android)
 - [ ] Progreso de aprendizaje sincronizado en Supabase (hoy solo local por dispositivo) — requisito previo para analítica de uso real
 - [ ] Red de conocimiento (instrumental ↔ técnicas ↔ protocolos)
 - [ ] Sistema de donaciones transparente
+
+## Contacto
+
+[hola@instriq.org](mailto:hola@instriq.org)
