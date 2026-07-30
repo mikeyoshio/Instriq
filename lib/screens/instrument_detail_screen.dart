@@ -8,11 +8,13 @@ import '../l10n/app_localizations.dart';
 import '../models/catalog_community_photo.dart';
 import '../models/instrument.dart';
 import '../models/instrument_sterilization.dart';
-import '../models/professional_profile.dart';
+import '../models/work_mode.dart';
 import '../services/auth_service.dart';
 import '../services/catalog_community_photo_service.dart';
+import '../services/favorites_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
+import '../services/recent_activity_service.dart';
 import '../services/sterilization_service.dart';
 import '../widgets/category_icon.dart';
 
@@ -36,6 +38,8 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   CatalogCommunityPhoto? _approvedCommunityPhoto;
   CatalogCommunityPhoto? _ownPendingPhoto;
 
+  bool _isFavorite = false;
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +49,24 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     } else {
       _loadingCommunityPhoto = false;
     }
+    if (AuthService.instance.currentUser != null) {
+      // Fire-and-forget: no debe bloquear ni fallar visiblemente si el
+      // usuario es invitado o la RLS lo deniega (ver FavoritesService).
+      RecentActivityService.instance.recordView(_refType, widget.instrument.id);
+      _loadFavoriteState();
+    }
+  }
+
+  Future<void> _loadFavoriteState() async {
+    final isFavorite = await FavoritesService.instance.isFavorite(_refType, widget.instrument.id);
+    if (!mounted) return;
+    setState(() => _isFavorite = isFavorite);
+  }
+
+  Future<void> _toggleFavorite() async {
+    await FavoritesService.instance.toggleFavorite(_refType, widget.instrument.id);
+    if (!mounted) return;
+    setState(() => _isFavorite = !_isFavorite);
   }
 
   Future<void> _loadCommunityPhotoState() async {
@@ -129,12 +151,16 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       'technical': (context) => _buildTechnicalSection(context, l10n),
     };
 
-    final order = sectionPriorityOrder(ProfileService.instance.professionalProfiles);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(instrument.name),
         actions: [
+          if (AuthService.instance.currentUser != null)
+            IconButton(
+              icon: Icon(_isFavorite ? Icons.star : Icons.star_border),
+              tooltip: l10n.favoriteToggleTooltip,
+              onPressed: _toggleFavorite,
+            ),
           if (ProfileService.instance.isAdmin)
             IconButton(
               icon: const Icon(Icons.edit_note),
@@ -148,9 +174,21 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            for (final key in order) ...[
-              builders[key]!(context),
-            ],
+            // Reactivo al ValueNotifier: si el usuario cambia de modo de
+            // trabajo desde la capçalera mientras tiene esta ficha abierta,
+            // el orden de secciones se reordena a l'instant.
+            ValueListenableBuilder<WorkMode?>(
+              valueListenable: ProfileService.instance.activeWorkModeNotifier,
+              builder: (context, mode, _) {
+                final order = sectionPriorityOrder(mode);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final key in order) builders[key]!(context),
+                  ],
+                );
+              },
+            ),
             const SizedBox(height: 28),
             SizedBox(
               width: double.infinity,

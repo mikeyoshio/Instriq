@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../l10n/app_localizations.dart';
 import 'router.dart';
+import 'work_mode_header.dart';
 
 /// Breakpoint tablet: por debajo, bottom nav (`NavigationBar`); a partir de
 /// aquí, rail fijo a la izquierda (`NavigationRail`). Mismo umbral que usa
@@ -50,13 +51,25 @@ class AppShell extends StatelessWidget {
                   ],
                 ),
                 const VerticalDivider(width: 1),
-                Expanded(child: navigationShell),
+                Expanded(
+                  child: Column(
+                    children: [
+                      const WorkModeHeader(),
+                      Expanded(child: navigationShell),
+                    ],
+                  ),
+                ),
               ],
             ),
           );
         }
         return Scaffold(
-          body: navigationShell,
+          body: Column(
+            children: [
+              const WorkModeHeader(),
+              Expanded(child: navigationShell),
+            ],
+          ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: navigationShell.currentIndex,
             onDestinationSelected: _onDestinationSelected,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../models/professional_profile.dart';
+import '../../models/work_mode.dart';
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
-import '../../widgets/professional_profile_picker.dart';
+import '../../widgets/work_mode_picker.dart';
 import 'register_hospital_screen.dart';
 
 enum _Mode { choose, join }
@@ -20,7 +20,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
   _Mode _mode = _Mode.choose;
   final _codeController = TextEditingController();
   final _nameController = TextEditingController();
-  Set<ProfessionalProfile> _selectedProfiles = {};
+  WorkMode? _selectedWorkMode;
   bool _loading = false;
   String? _error;
 
@@ -39,8 +39,8 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
         setState(() => _error = l10n.invalidInviteCode);
       } else if (mounted) {
         final navigator = Navigator.of(context);
-        if (_selectedProfiles.isNotEmpty) {
-          await ProfileService.instance.setProfessionalProfiles(_selectedProfiles);
+        if (_selectedWorkMode != null) {
+          await ProfileService.instance.setActiveWorkMode(_selectedWorkMode);
         }
         if (mounted) navigator.pop();
       }
@@ -157,13 +157,13 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
           ),
         ),
         const SizedBox(height: 20),
-        Text(l10n.professionalProfileSectionTitle, style: Theme.of(context).textTheme.titleSmall),
+        Text(l10n.workModeOnboardingQuestion, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 4),
         Text(l10n.professionalProfileSectionSubtitle, style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
         const SizedBox(height: 8),
-        ProfessionalProfilePicker(
-          selected: _selectedProfiles,
-          onChanged: (next) => setState(() => _selectedProfiles = next),
+        WorkModePicker(
+          selected: _selectedWorkMode,
+          onChanged: (next) => setState(() => _selectedWorkMode = next),
         ),
         if (_error != null) ...[
           const SizedBox(height: 12),

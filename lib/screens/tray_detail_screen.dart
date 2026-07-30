@@ -7,6 +7,8 @@ import '../models/tray.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
+import '../services/favorites_service.dart';
+import '../services/recent_activity_service.dart';
 import '../services/tray_service.dart';
 import 'tray_form_screen.dart';
 import 'tray_version_history_screen.dart';
@@ -24,17 +26,36 @@ class TrayDetailScreen extends StatefulWidget {
 }
 
 class _TrayDetailScreenState extends State<TrayDetailScreen> {
+  static const String _refType = 'tray';
+
   late Tray _tray;
   TrayVersion? _ownPendingDraft;
   List<CustomInstrument> _customInstruments = [];
   final Map<String, String> _photoUrls = {};
   bool _loading = true;
+  bool _isFavorite = false;
 
   @override
   void initState() {
     super.initState();
     _tray = widget.tray;
     _load();
+    if (AuthService.instance.currentUser != null) {
+      RecentActivityService.instance.recordView(_refType, _tray.id);
+      _loadFavoriteState();
+    }
+  }
+
+  Future<void> _loadFavoriteState() async {
+    final isFavorite = await FavoritesService.instance.isFavorite(_refType, _tray.id);
+    if (!mounted) return;
+    setState(() => _isFavorite = isFavorite);
+  }
+
+  Future<void> _toggleFavorite() async {
+    await FavoritesService.instance.toggleFavorite(_refType, _tray.id);
+    if (!mounted) return;
+    setState(() => _isFavorite = !_isFavorite);
   }
 
   Future<void> _load() async {
@@ -117,6 +138,12 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
       appBar: AppBar(
         title: Text(published?.name ?? l10n.unpublished),
         actions: [
+          if (AuthService.instance.currentUser != null)
+            IconButton(
+              icon: Icon(_isFavorite ? Icons.star : Icons.star_border),
+              tooltip: l10n.favoriteToggleTooltip,
+              onPressed: _toggleFavorite,
+            ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
           if (canApprove) IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../models/professional_profile.dart';
+import '../../models/work_mode.dart';
 import '../../services/profile_service.dart';
-import '../../widgets/professional_profile_picker.dart';
+import '../../widgets/work_mode_picker.dart';
 
 class RegisterHospitalScreen extends StatefulWidget {
   const RegisterHospitalScreen({super.key});
@@ -15,7 +15,7 @@ class RegisterHospitalScreen extends StatefulWidget {
 class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
   final _nameController = TextEditingController();
   final _adminNameController = TextEditingController();
-  Set<ProfessionalProfile> _selectedProfiles = {};
+  WorkMode? _selectedWorkMode;
   bool _loading = false;
   String? _error;
   String? _createdCode;
@@ -36,8 +36,8 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
         name: name,
         displayName: _adminNameController.text.trim(),
       );
-      if (_selectedProfiles.isNotEmpty) {
-        await ProfileService.instance.setProfessionalProfiles(_selectedProfiles);
+      if (_selectedWorkMode != null) {
+        await ProfileService.instance.setActiveWorkMode(_selectedWorkMode);
       }
       setState(() => _createdCode = hospital.inviteCode);
     } catch (e) {
@@ -118,9 +118,9 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
               const SizedBox(height: 4),
               Text(l10n.professionalProfileSectionSubtitle, style: Theme.of(context).textTheme.bodySmall),
               const SizedBox(height: 8),
-              ProfessionalProfilePicker(
-                selected: _selectedProfiles,
-                onChanged: (next) => setState(() => _selectedProfiles = next),
+              WorkModePicker(
+                selected: _selectedWorkMode,
+                onChanged: (next) => setState(() => _selectedWorkMode = next),
               ),
               if (_error != null) ...[
                 const SizedBox(height: 12),

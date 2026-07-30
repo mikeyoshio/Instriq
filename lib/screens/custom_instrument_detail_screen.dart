@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/workspace_role.dart';
+import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
+import '../services/favorites_service.dart';
+import '../services/recent_activity_service.dart';
 import 'custom_instrument_form_screen.dart';
 
 /// Vista de lectura de un instrumento personalizado: sus variantes con foto
@@ -20,15 +23,34 @@ class CustomInstrumentDetailScreen extends StatefulWidget {
 }
 
 class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScreen> {
+  static const String _refType = 'custom';
+
   late CustomInstrument _instrument;
   final Map<String, String> _photoUrls = {};
   bool _loadingPhotos = true;
+  bool _isFavorite = false;
 
   @override
   void initState() {
     super.initState();
     _instrument = widget.instrument;
     _loadPhotos();
+    if (AuthService.instance.currentUser != null) {
+      RecentActivityService.instance.recordView(_refType, _instrument.id);
+      _loadFavoriteState();
+    }
+  }
+
+  Future<void> _loadFavoriteState() async {
+    final isFavorite = await FavoritesService.instance.isFavorite(_refType, _instrument.id);
+    if (!mounted) return;
+    setState(() => _isFavorite = isFavorite);
+  }
+
+  Future<void> _toggleFavorite() async {
+    await FavoritesService.instance.toggleFavorite(_refType, _instrument.id);
+    if (!mounted) return;
+    setState(() => _isFavorite = !_isFavorite);
   }
 
   Future<void> _loadPhotos() async {
@@ -71,6 +93,12 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
       appBar: AppBar(
         title: Text(_instrument.name),
         actions: [
+          if (AuthService.instance.currentUser != null)
+            IconButton(
+              icon: Icon(_isFavorite ? Icons.star : Icons.star_border),
+              tooltip: l10n.favoriteToggleTooltip,
+              onPressed: _toggleFavorite,
+            ),
           if (canEdit)
             IconButton(
               icon: const Icon(Icons.edit_outlined),
