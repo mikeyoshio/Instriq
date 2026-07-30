@@ -112,14 +112,27 @@
   .card { background: var(--surface); border-radius: 14px; padding: 30px; box-shadow: var(--shadow-soft); }
   .card h3 { color: var(--ink); }
   .card p { margin-bottom: 0; }
-  .log { display: flex; flex-direction: column; gap: 22px; margin-top: 40px; max-width: var(--measure); }
-  .log-item { display: flex; gap: 20px; align-items: baseline; }
-  .log-tag { flex-shrink: 0; width: 92px; font-family: var(--display); font-size: 0.78rem; text-transform: uppercase; color: var(--accent); letter-spacing: 0.03em; }
-  .log-text strong { color: var(--ink); }
-  .log-text { color: var(--ink-muted); }
-  .notice { border-radius: 14px; padding: 24px 28px; margin: 28px auto 0; max-width: var(--measure); text-align: left; background: var(--accent-soft); }
-  .notice .tag { font-family: var(--display); font-size: 0.75rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 10px; }
-  .notice p { margin: 0; color: var(--ink); opacity: 0.85; }
+  /* Timeline interactiu de novetats */
+  .timeline { max-width: var(--measure); margin: 44px auto 0; text-align: left; }
+  .timeline-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 32px 34px; box-shadow: var(--shadow-soft); min-height: 168px; display: flex; flex-direction: column; justify-content: center; }
+  .timeline-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .timeline-badge { font-family: var(--display); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); padding: 4px 10px; border: 1px solid var(--accent); border-radius: 999px; }
+  .timeline-badge.is-future { color: var(--ink-muted); border-color: var(--rule); border-style: dashed; }
+  .timeline-index { font-family: var(--display); font-size: 0.75rem; color: var(--ink-muted); }
+  .timeline-text { margin: 0; color: var(--ink-muted); font-size: 1.05rem; }
+  .timeline-text strong { color: var(--ink); }
+  .timeline-controls { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
+  .timeline-btn { flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s ease, color 0.15s ease; }
+  .timeline-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .timeline-btn:disabled { opacity: 0.35; cursor: default; }
+  .timeline-track-wrap { flex: 1; position: relative; height: 38px; display: flex; align-items: center; }
+  .timeline-rail { position: absolute; left: 0; right: 0; height: 4px; border-radius: 999px; background: var(--rule); overflow: hidden; }
+  .timeline-fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--accent); border-radius: 999px; }
+  .timeline-slider { position: relative; width: 100%; appearance: none; background: transparent; margin: 0; cursor: pointer; }
+  .timeline-slider::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--accent); }
+  .timeline-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--accent); }
+  .timeline-slider::-moz-range-track { background: transparent; }
+  .timeline-origin-mark { text-align: center; font-family: var(--display); font-size: 0.72rem; color: var(--ink-muted); margin-top: 10px; }
   ul.checklist { list-style: none; padding: 0; margin: 18px 0 0; }
   ul.checklist li { padding-left: 26px; position: relative; margin-bottom: 12px; color: var(--ink-muted); }
   ul.checklist li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-family: var(--display); }
@@ -228,32 +241,23 @@
   <div class="wrap center">
     <span class="eyebrow" data-i18n="novedades.eyebrow">Novetats</span>
     <h2 data-i18n="novedades.h1">Construït en obert, en públic.</h2>
-    <div class="log" style="margin-left:auto;margin-right:auto;text-align:left;">
-      <div class="log-item"><div class="log-tag">#21</div><div class="log-text" data-i18n="novedades.n19"><strong>Bandejes d'instrumental</strong> — sets de material amb checklist de quantitats, fotos, versionat i aprovació, per verificar caixes completes després del rentat i l'esterilització.</div></div>
-      <div class="log-item"><div class="log-tag">#20</div><div class="log-text" data-i18n="novedades.n20"><strong>Esterilització estructurada</strong> — cada instrument pot portar un o diversos mètodes d'esterilització amb els seus paràmetres, més fitxa tècnica (fabricant, IFU, manteniment, vida útil).</div></div>
-      <div class="log-item"><div class="log-tag">#19</div><div class="log-text" data-i18n="novedades.n21"><strong>Perfil professional</strong> — tria instrumentista, supervisió, esterilització, infermeria, cirurgià, estudiant o docent, i la fitxa de cada instrument reordena el que et interessa veure primer, sense amagar res.</div></div>
-      <div class="log-item"><div class="log-tag">#18</div><div class="log-text" data-i18n="novedades.n16"><strong>Notificacions push</strong> — avís quan un contingut entra en revisió, s'aprova o es rebutja, sense haver d'obrir l'app per comprovar-ho.</div></div>
-      <div class="log-item"><div class="log-tag">#17</div><div class="log-text" data-i18n="novedades.n17"><strong>Mode sense connexió</strong> — tècniques, protocols i targetes de preferència es poden consultar i editar sense xarxa; els canvis es sincronitzen sols en recuperar-la.</div></div>
-      <div class="log-item"><div class="log-tag">#16</div><div class="log-text" data-i18n="novedades.n18"><strong>Instrumental personalitzat de l'equip</strong> — cada equip pot donar d'alta el seu propi instrumental, amb variants i fotos, privat i mai compartit fora del vostre espai.</div></div>
-      <div class="log-item"><div class="log-tag">#15</div><div class="log-text" data-i18n="novedades.n11"><strong>Interfície en català, castellà i anglès</strong> — l'app i la web funcionen en català per defecte, amb selector d'idioma que recorda la teva elecció.</div></div>
-      <div class="log-item"><div class="log-tag">#14</div><div class="log-text" data-i18n="novedades.n12"><strong>Catàleg ampliat a 16 especialitats (110 instruments)</strong> — s'hi afegeixen angiologia i cirurgia vascular, cirurgia oral i maxil·lofacial, pediàtrica, plàstica i reparadora, toràcica, dermatologia i oftalmologia.</div></div>
-      <div class="log-item"><div class="log-tag">#13</div><div class="log-text" data-i18n="novedades.n13"><strong>Auditoria d'accions sensibles</strong> — registre de qui ha fet què i quan (aprovacions, canvis de rol, transferència de propietat), visible per a qui administra el grup.</div></div>
-      <div class="log-item"><div class="log-tag">#12</div><div class="log-text" data-i18n="novedades.n14"><strong>Cobertura de coneixement documentat</strong> — un tauler agregat mostra quantes tècniques i protocols hi ha per especialitat, publicats i pendents de revisió.</div></div>
-      <div class="log-item"><div class="log-tag">#11</div><div class="log-text" data-i18n="novedades.n15"><strong>Passos de protocol categoritzables</strong> — organitza un checklist per blocs (Preoperatori, Anestèsia, Equipament, Instrumental, Seguretat), a l'estil de la llista de verificació de seguretat quirúrgica de l'OMS.</div></div>
-      <div class="log-item"><div class="log-tag">#10</div><div class="log-text" data-i18n="novedades.n1"><strong>Exportar i eliminar compte (GDPR)</strong> — descarrega les teves dades en qualsevol moment; si elimines el teu compte, les teves dades personals desapareixen i el contingut que hagis creat o aprovat es conserva anonimitzat per al teu equip.</div></div>
-      <div class="log-item"><div class="log-tag">#9</div><div class="log-text" data-i18n="novedades.n2"><strong>Rols granulars per espai</strong> — Owner i Administrator a nivell de grup; Approver, Editor i Reader assignats per espai, amb transferència de propietat inclosa.</div></div>
-      <div class="log-item"><div class="log-tag">#8</div><div class="log-text" data-i18n="novedades.n3"><strong>Espais de treball</strong> — un grup es pot organitzar en diversos espais (per especialitat, servei, formació...), cadascun amb les seves pròpies tècniques, protocols i targetes de preferència.</div></div>
-      <div class="log-item"><div class="log-tag">#7</div><div class="log-text" data-i18n="novedades.n4"><strong>Especialitat estandarditzada</strong> — el camp d'especialitat de tècniques i protocols usa ja el catàleg oficial d'especialitats quirúrgiques (Reial Decret 183/2008), no text lliure.</div></div>
-      <div class="log-item"><div class="log-tag">#6</div><div class="log-text" data-i18n="novedades.n5"><strong>Versionat i flux d'aprovació</strong> — cada canvi en una tècnica o protocol crea un esborrany; qui aprova el revisa, el compara i l'aprova abans de publicar-se. Res se sobreescriu: tot l'historial queda disponible i és restaurable.</div></div>
-      <div class="log-item"><div class="log-tag">#5</div><div class="log-text" data-i18n="novedades.n6"><strong>Tècniques quirúrgiques i protocols</strong> — nou contingut propi del grup, més enllà de les targetes de preferència: documenta pas a pas com treballa el teu equip i enllaça'l a l'instrumental relacionat.</div></div>
-      <div class="log-item"><div class="log-tag">#4</div><div class="log-text" data-i18n="novedades.n7"><strong>Inici de sessió opcional</strong> — el catàleg, flashcards, qüestionari i progrés ja no requereixen compte.</div></div>
-      <div class="log-item"><div class="log-tag">#3</div><div class="log-text" data-i18n="novedades.n8"><strong>Alta de grup per autoservei</strong> — qualsevol equip pot registrar el seu hospital, bloc quirúrgic o servei i compartir coneixement.</div></div>
-      <div class="log-item"><div class="log-tag">#2</div><div class="log-text" data-i18n="novedades.n9"><strong>Catàleg ampliat a 9 especialitats</strong> — de cirurgia general a robòtica, neurocirurgia, cardiovascular, ORL i més.</div></div>
-      <div class="log-item"><div class="log-tag">#1</div><div class="log-text" data-i18n="novedades.n10"><strong>App web</strong> — Instriq ja funciona també des del navegador, sense instal·lar res.</div></div>
-    </div>
-    <div class="notice">
-      <span class="tag" data-i18n="novedades.proxTag">Properament</span>
-      <p data-i18n="novedades.prox">Publicació a Google Play; sincronitzar el progrés d'aprenentatge al núvol; mode sense connexió per a les bandejes; i un sistema de donacions transparent.</p>
+    <div class="timeline">
+      <div class="timeline-card">
+        <div class="timeline-meta">
+          <span class="timeline-badge" id="tlBadge">Origen</span>
+          <span class="timeline-index" id="tlIndex">1 / 26</span>
+        </div>
+        <p class="timeline-text" id="tlText"></p>
+      </div>
+      <div class="timeline-controls">
+        <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
+        <div class="timeline-track-wrap">
+          <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="25" value="0" step="1" aria-label="Línia del temps d'Instriq">
+        </div>
+        <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
+      </div>
+      <div class="timeline-origin-mark" id="tlFutureLabel">Passat ← → Previst</div>
     </div>
   </div>
 </section>
@@ -389,28 +393,6 @@
       "hoy.c2t": "Aprende", "hoy.c2p": "Flashcards y quiz de repaso, con progreso guardado en tu propio dispositivo.",
       "hoy.c3t": "Tarjetas de preferencia", "hoy.c3p": "Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu grupo.",
       "novedades.eyebrow": "Novedades", "novedades.h1": "Construido en abierto, en público.",
-      "novedades.n1": "<strong>Exportar y eliminar cuenta (GDPR)</strong> — descarga tus datos en cualquier momento; si eliminas tu cuenta, tus datos personales desaparecen y el contenido que hayas creado o aprobado se conserva anonimizado para tu equipo.",
-      "novedades.n2": "<strong>Roles granulares por espacio</strong> — Owner y Administrator a nivel de grupo; Approver, Editor y Reader asignados por espacio, con transferencia de propiedad incluida.",
-      "novedades.n3": "<strong>Espacios de trabajo</strong> — un grupo puede organizarse en varios espacios (por especialidad, servicio, formación...), cada uno con sus propias técnicas, protocolos y tarjetas de preferencia.",
-      "novedades.n4": "<strong>Especialidad estandarizada</strong> — el campo de especialidad de técnicas y protocolos usa ya el catálogo oficial de especialidades quirúrgicas (Real Decreto 183/2008), no texto libre.",
-      "novedades.n5": "<strong>Versionado y flujo de aprobación</strong> — cada cambio en una técnica o protocolo crea un borrador; quien aprueba lo revisa, compara y aprueba antes de publicarse. Nada se sobrescribe: todo el historial queda disponible y es restaurable.",
-      "novedades.n6": "<strong>Técnicas quirúrgicas y protocolos</strong> — nuevo contenido propio del grupo, más allá de las tarjetas de preferencia: documenta paso a paso cómo trabaja tu equipo y enlázalo al instrumental relacionado.",
-      "novedades.n7": "<strong>Login opcional</strong> — el catálogo, flashcards, quiz y progreso ya no requieren cuenta.",
-      "novedades.n8": "<strong>Alta de grupo por autoservicio</strong> — cualquier equipo puede registrar su hospital, bloque quirúrgico o servicio y compartir conocimiento.",
-      "novedades.n9": "<strong>Catálogo ampliado a 9 especialidades</strong> — de cirugía general a robótica, neurocirugía, cardiovascular, ORL y más.",
-      "novedades.n10": "<strong>App web</strong> — Instriq ya funciona también desde el navegador, sin instalar nada.",
-      "novedades.n11": "<strong>Interfaz en catalán, castellano e inglés</strong> — la app y la web funcionan en catalán por defecto, con selector de idioma que recuerda tu elección.",
-      "novedades.n12": "<strong>Catálogo ampliado a 16 especialidades (110 instrumentos)</strong> — se añaden angiología y cirugía vascular, cirugía oral y maxilofacial, pediátrica, plástica y reparadora, torácica, dermatología y oftalmología.",
-      "novedades.n13": "<strong>Auditoría de acciones sensibles</strong> — registro de quién ha hecho qué y cuándo (aprobaciones, cambios de rol, transferencia de propiedad), visible para quien administra el grupo.",
-      "novedades.n14": "<strong>Cobertura de conocimiento documentado</strong> — un panel agregado muestra cuántas técnicas y protocolos hay por especialidad, publicados y pendientes de revisión.",
-      "novedades.n15": "<strong>Pasos de protocolo categorizables</strong> — organiza un checklist por bloques (Preoperatorio, Anestesia, Equipamiento, Instrumental, Seguridad), al estilo de la lista de verificación de seguridad quirúrgica de la OMS.",
-      "novedades.n16": "<strong>Notificaciones push</strong> — aviso cuando un contenido entra en revisión, se aprueba o se rechaza, sin tener que abrir la app para comprobarlo.",
-      "novedades.n17": "<strong>Modo sin conexión</strong> — técnicas, protocolos y tarjetas de preferencia se pueden consultar y editar sin red; los cambios se sincronizan solos al recuperarla.",
-      "novedades.n18": "<strong>Instrumental personalizado del equipo</strong> — cada equipo puede dar de alta su propio instrumental, con variantes y fotos, privado y nunca compartido fuera de vuestro espacio.",
-      "novedades.n19": "<strong>Bandejas de instrumental</strong> — sets de material con checklist de cantidades, fotos, versionado y aprobación, para verificar cajas completas tras el lavado y la esterilización.",
-      "novedades.n20": "<strong>Esterilización estructurada</strong> — cada instrumento puede llevar uno o varios métodos de esterilización con sus parámetros, más ficha técnica (fabricante, IFU, mantenimiento, vida útil).",
-      "novedades.n21": "<strong>Perfil profesional</strong> — elige instrumentista, supervisión, esterilización, enfermería, cirujano, estudiante o docente, y la ficha de cada instrumento reordena lo que más te interesa ver primero, sin ocultar nada.",
-      "novedades.proxTag": "Próximamente", "novedades.prox": "Publicación en Google Play; sincronizar el progreso de aprendizaje en la nube; modo sin conexión para las bandejas; y un sistema de donaciones transparente.",
       "colabora.eyebrow": "Colabora", "colabora.h1": "Instriq crece con quien lo usa.",
       "colabora.c1t": "Eres profesional sanitario", "colabora.c1p": "Comparte el instrumental y las técnicas de tu equipo dentro de tu grupo, ayúdanos a revisar contenido del catálogo, o dinos qué protocolo o guía te falta.",
       "colabora.c1l1": "Crea o únete al espacio de tu grupo desde la app", "colabora.c1l2": "Propón correcciones o instrumental nuevo", "colabora.c1l3": "Cuéntanos qué guías necesitas — nos ayuda a priorizar",
@@ -458,28 +440,6 @@
       "hoy.c2t": "Learn", "hoy.c2p": "Flashcards and review quizzes, with progress saved on your own device.",
       "hoy.c3t": "Preference cards", "hoy.c3p": "Instruments specific to surgeon and procedure, shared and validated within your group.",
       "novedades.eyebrow": "Latest", "novedades.h1": "Built in the open, in public.",
-      "novedades.n1": "<strong>Export and delete account (GDPR)</strong> — download your data anytime; if you delete your account, your personal data disappears and content you created or approved is kept anonymized for your team.",
-      "novedades.n2": "<strong>Granular roles per space</strong> — Owner and Administrator at group level; Approver, Editor and Reader assigned per space, including ownership transfer.",
-      "novedades.n3": "<strong>Workspaces</strong> — a group can be organized into several spaces (by specialty, service, training...), each with its own techniques, protocols and preference cards.",
-      "novedades.n4": "<strong>Standardized specialty</strong> — the specialty field for techniques and protocols now uses the official surgical specialty catalog (Royal Decree 183/2008), not free text.",
-      "novedades.n5": "<strong>Versioning and approval workflow</strong> — every change to a technique or protocol creates a draft; the approver reviews, compares and approves before publishing. Nothing is overwritten: full history stays available and restorable.",
-      "novedades.n6": "<strong>Surgical techniques and protocols</strong> — new group-owned content beyond preference cards: document step by step how your team works and link it to related instruments.",
-      "novedades.n7": "<strong>Optional login</strong> — the catalog, flashcards, quiz and progress no longer require an account.",
-      "novedades.n8": "<strong>Self-service group signup</strong> — any team can register its hospital, surgical block or service and share knowledge.",
-      "novedades.n9": "<strong>Catalog expanded to 9 specialties</strong> — from general surgery to robotics, neurosurgery, cardiovascular, ENT and more.",
-      "novedades.n10": "<strong>Web app</strong> — Instriq now also works from the browser, nothing to install.",
-      "novedades.n11": "<strong>Catalan, Spanish and English interface</strong> — the app and website work in Catalan by default, with a language switcher that remembers your choice.",
-      "novedades.n12": "<strong>Catalog expanded to 16 specialties (110 instruments)</strong> — adding vascular surgery, oral and maxillofacial surgery, pediatric, plastic and reconstructive, thoracic, dermatology and ophthalmology.",
-      "novedades.n13": "<strong>Audit log for sensitive actions</strong> — a record of who did what and when (approvals, role changes, ownership transfer), visible to whoever administers the group.",
-      "novedades.n14": "<strong>Documented knowledge coverage</strong> — an aggregated dashboard shows how many techniques and protocols exist per specialty, published and pending review.",
-      "novedades.n15": "<strong>Categorizable protocol steps</strong> — organize a checklist into blocks (Pre-op, Anesthesia, Equipment, Instruments, Safety), in the style of the WHO Surgical Safety Checklist.",
-      "novedades.n16": "<strong>Push notifications</strong> — get notified when content enters review, is approved or rejected, without having to open the app to check.",
-      "novedades.n17": "<strong>Offline mode</strong> — techniques, protocols and preference cards can be viewed and edited without network; changes sync on their own once it's back.",
-      "novedades.n18": "<strong>Team-specific instruments</strong> — each team can add its own custom instruments, with variants and photos, private and never shared outside your space.",
-      "novedades.n19": "<strong>Instrument trays</strong> — sets of equipment with a quantity checklist, photos, versioning and approval, to verify complete trays after washing and sterilization.",
-      "novedades.n20": "<strong>Structured sterilization</strong> — each instrument can carry one or more sterilization methods with their own parameters, plus technical info (manufacturer, IFU, maintenance, useful life).",
-      "novedades.n21": "<strong>Professional profile</strong> — choose scrub nurse, supervision, sterilization, nursing, surgeon, student or teacher, and each instrument's page reorders what matters most to you first, without hiding anything.",
-      "novedades.proxTag": "Coming soon", "novedades.prox": "Google Play release; syncing learning progress to the cloud; offline mode for trays; and a transparent donation system.",
       "colabora.eyebrow": "Contribute", "colabora.h1": "Instriq grows with the people who use it.",
       "colabora.c1t": "You're a healthcare professional", "colabora.c1p": "Share your team's instruments and techniques within your group, help us review catalog content, or tell us which protocol or guide is missing.",
       "colabora.c1l1": "Create or join your group's space from the app", "colabora.c1l2": "Propose corrections or new instruments", "colabora.c1l3": "Tell us which guides you need — it helps us prioritize",
@@ -510,6 +470,121 @@
   });
   CA_DEFAULTS['meta.title'] = document.title;
 
+  // Timeline interactiu de novetats: 1 origen + 21 desplegaments + 4 previstos.
+  var TIMELINE_SHIPPED = 22; // origen (índex 0) + 21 novetats (índexs 1-21)
+  var TL = {
+    ca: [
+      { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
+      { badge: '#1', text: '<strong>App web</strong> — Instriq ja funciona també des del navegador, sense instal·lar res.' },
+      { badge: '#2', text: '<strong>Catàleg ampliat a 9 especialitats</strong> — de cirurgia general a robòtica, neurocirurgia, cardiovascular, ORL i més.' },
+      { badge: '#3', text: '<strong>Alta de grup per autoservei</strong> — qualsevol equip pot registrar el seu hospital, bloc quirúrgic o servei i compartir coneixement.' },
+      { badge: '#4', text: '<strong>Inici de sessió opcional</strong> — el catàleg, flashcards, qüestionari i progrés ja no requereixen compte.' },
+      { badge: '#5', text: '<strong>Tècniques quirúrgiques i protocols</strong> — nou contingut propi del grup, més enllà de les targetes de preferència: documenta pas a pas com treballa el teu equip i enllaça\'l a l\'instrumental relacionat.' },
+      { badge: '#6', text: '<strong>Versionat i flux d\'aprovació</strong> — cada canvi en una tècnica o protocol crea un esborrany; qui aprova el revisa, el compara i l\'aprova abans de publicar-se. Res se sobreescriu: tot l\'historial queda disponible i és restaurable.' },
+      { badge: '#7', text: '<strong>Especialitat estandarditzada</strong> — el camp d\'especialitat de tècniques i protocols usa ja el catàleg oficial d\'especialitats quirúrgiques (Reial Decret 183/2008), no text lliure.' },
+      { badge: '#8', text: '<strong>Espais de treball</strong> — un grup es pot organitzar en diversos espais (per especialitat, servei, formació...), cadascun amb les seves pròpies tècniques, protocols i targetes de preferència.' },
+      { badge: '#9', text: '<strong>Rols granulars per espai</strong> — Owner i Administrator a nivell de grup; Approver, Editor i Reader assignats per espai, amb transferència de propietat inclosa.' },
+      { badge: '#10', text: '<strong>Exportar i eliminar compte (GDPR)</strong> — descarrega les teves dades en qualsevol moment; si elimines el teu compte, les teves dades personals desapareixen i el contingut que hagis creat o aprovat es conserva anonimitzat per al teu equip.' },
+      { badge: '#11', text: '<strong>Passos de protocol categoritzables</strong> — organitza un checklist per blocs (Preoperatori, Anestèsia, Equipament, Instrumental, Seguretat), a l\'estil de la llista de verificació de seguretat quirúrgica de l\'OMS.' },
+      { badge: '#12', text: '<strong>Cobertura de coneixement documentat</strong> — un tauler agregat mostra quantes tècniques i protocols hi ha per especialitat, publicats i pendents de revisió.' },
+      { badge: '#13', text: '<strong>Auditoria d\'accions sensibles</strong> — registre de qui ha fet què i quan (aprovacions, canvis de rol, transferència de propietat), visible per a qui administra el grup.' },
+      { badge: '#14', text: '<strong>Catàleg ampliat a 16 especialitats (110 instruments)</strong> — s\'hi afegeixen angiologia i cirurgia vascular, cirurgia oral i maxil·lofacial, pediàtrica, plàstica i reparadora, toràcica, dermatologia i oftalmologia.' },
+      { badge: '#15', text: '<strong>Interfície en català, castellà i anglès</strong> — l\'app i la web funcionen en català per defecte, amb selector d\'idioma que recorda la teva elecció.' },
+      { badge: '#16', text: '<strong>Instrumental personalitzat de l\'equip</strong> — cada equip pot donar d\'alta el seu propi instrumental, amb variants i fotos, privat i mai compartit fora del vostre espai.' },
+      { badge: '#17', text: '<strong>Mode sense connexió</strong> — tècniques, protocols i targetes de preferència es poden consultar i editar sense xarxa; els canvis es sincronitzen sols en recuperar-la.' },
+      { badge: '#18', text: '<strong>Notificacions push</strong> — avís quan un contingut entra en revisió, s\'aprova o es rebutja, sense haver d\'obrir l\'app per comprovar-ho.' },
+      { badge: '#19', text: '<strong>Perfil professional</strong> — tria instrumentista, supervisió, esterilització, infermeria, cirurgià, estudiant o docent, i la fitxa de cada instrument reordena el que et interessa veure primer, sense amagar res.' },
+      { badge: '#20', text: '<strong>Esterilització estructurada</strong> — cada instrument pot portar un o diversos mètodes d\'esterilització amb els seus paràmetres, més fitxa tècnica (fabricant, IFU, manteniment, vida útil).' },
+      { badge: '#21', text: '<strong>Bandejes d\'instrumental</strong> — sets de material amb checklist de quantitats, fotos, versionat i aprovació, per verificar caixes completes després del rentat i l\'esterilització.' },
+      { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
+      { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
+      { badge: 'Previst', future: true, text: 'Mode sense connexió per a les bandejes.' },
+      { badge: 'Previst', future: true, text: 'Sistema de donacions transparent.' }
+    ],
+    es: [
+      { badge: 'Origen', text: '<strong>Nace Instriq</strong> — de la idea de una pareja: un ingeniero informático y una enfermera de quirófano, cansada de ver el conocimiento del bloque quirúrgico vivir en carpetas de papel desactualizadas.' },
+      { badge: '#1', text: '<strong>App web</strong> — Instriq ya funciona también desde el navegador, sin instalar nada.' },
+      { badge: '#2', text: '<strong>Catálogo ampliado a 9 especialidades</strong> — de cirugía general a robótica, neurocirugía, cardiovascular, ORL y más.' },
+      { badge: '#3', text: '<strong>Alta de grupo por autoservicio</strong> — cualquier equipo puede registrar su hospital, bloque quirúrgico o servicio y compartir conocimiento.' },
+      { badge: '#4', text: '<strong>Login opcional</strong> — el catálogo, flashcards, quiz y progreso ya no requieren cuenta.' },
+      { badge: '#5', text: '<strong>Técnicas quirúrgicas y protocolos</strong> — nuevo contenido propio del grupo, más allá de las tarjetas de preferencia: documenta paso a paso cómo trabaja tu equipo y enlázalo al instrumental relacionado.' },
+      { badge: '#6', text: '<strong>Versionado y flujo de aprobación</strong> — cada cambio en una técnica o protocolo crea un borrador; quien aprueba lo revisa, compara y aprueba antes de publicarse. Nada se sobrescribe: todo el historial queda disponible y es restaurable.' },
+      { badge: '#7', text: '<strong>Especialidad estandarizada</strong> — el campo de especialidad de técnicas y protocolos usa ya el catálogo oficial de especialidades quirúrgicas (Real Decreto 183/2008), no texto libre.' },
+      { badge: '#8', text: '<strong>Espacios de trabajo</strong> — un grupo puede organizarse en varios espacios (por especialidad, servicio, formación...), cada uno con sus propias técnicas, protocolos y tarjetas de preferencia.' },
+      { badge: '#9', text: '<strong>Roles granulares por espacio</strong> — Owner y Administrator a nivel de grupo; Approver, Editor y Reader asignados por espacio, con transferencia de propiedad incluida.' },
+      { badge: '#10', text: '<strong>Exportar y eliminar cuenta (GDPR)</strong> — descarga tus datos en cualquier momento; si eliminas tu cuenta, tus datos personales desaparecen y el contenido que hayas creado o aprobado se conserva anonimizado para tu equipo.' },
+      { badge: '#11', text: '<strong>Pasos de protocolo categorizables</strong> — organiza un checklist por bloques (Preoperatorio, Anestesia, Equipamiento, Instrumental, Seguridad), al estilo de la lista de verificación de seguridad quirúrgica de la OMS.' },
+      { badge: '#12', text: '<strong>Cobertura de conocimiento documentado</strong> — un panel agregado muestra cuántas técnicas y protocolos hay por especialidad, publicados y pendientes de revisión.' },
+      { badge: '#13', text: '<strong>Auditoría de acciones sensibles</strong> — registro de quién ha hecho qué y cuándo (aprobaciones, cambios de rol, transferencia de propiedad), visible para quien administra el grupo.' },
+      { badge: '#14', text: '<strong>Catálogo ampliado a 16 especialidades (110 instrumentos)</strong> — se añaden angiología y cirugía vascular, cirugía oral y maxilofacial, pediátrica, plástica y reparadora, torácica, dermatología y oftalmología.' },
+      { badge: '#15', text: '<strong>Interfaz en catalán, castellano e inglés</strong> — la app y la web funcionan en catalán por defecto, con selector de idioma que recuerda tu elección.' },
+      { badge: '#16', text: '<strong>Instrumental personalizado del equipo</strong> — cada equipo puede dar de alta su propio instrumental, con variantes y fotos, privado y nunca compartido fuera de vuestro espacio.' },
+      { badge: '#17', text: '<strong>Modo sin conexión</strong> — técnicas, protocolos y tarjetas de preferencia se pueden consultar y editar sin red; los cambios se sincronizan solos al recuperarla.' },
+      { badge: '#18', text: '<strong>Notificaciones push</strong> — aviso cuando un contenido entra en revisión, se aprueba o se rechaza, sin tener que abrir la app para comprobarlo.' },
+      { badge: '#19', text: '<strong>Perfil profesional</strong> — elige instrumentista, supervisión, esterilización, enfermería, cirujano, estudiante o docente, y la ficha de cada instrumento reordena lo que más te interesa ver primero, sin ocultar nada.' },
+      { badge: '#20', text: '<strong>Esterilización estructurada</strong> — cada instrumento puede llevar uno o varios métodos de esterilización con sus parámetros, más ficha técnica (fabricante, IFU, mantenimiento, vida útil).' },
+      { badge: '#21', text: '<strong>Bandejas de instrumental</strong> — sets de material con checklist de cantidades, fotos, versionado y aprobación, para verificar cajas completas tras el lavado y la esterilización.' },
+      { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
+      { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
+      { badge: 'Previsto', future: true, text: 'Modo sin conexión para las bandejas.' },
+      { badge: 'Previsto', future: true, text: 'Sistema de donaciones transparente.' }
+    ],
+    en: [
+      { badge: 'Origin', text: '<strong>Instriq is born</strong> — from the idea of a couple: a software engineer and an operating room nurse, tired of watching the surgical block\'s knowledge live in outdated paper folders.' },
+      { badge: '#1', text: '<strong>Web app</strong> — Instriq now also works from the browser, nothing to install.' },
+      { badge: '#2', text: '<strong>Catalog expanded to 9 specialties</strong> — from general surgery to robotics, neurosurgery, cardiovascular, ENT and more.' },
+      { badge: '#3', text: '<strong>Self-service group signup</strong> — any team can register its hospital, surgical block or service and share knowledge.' },
+      { badge: '#4', text: '<strong>Optional login</strong> — the catalog, flashcards, quiz and progress no longer require an account.' },
+      { badge: '#5', text: '<strong>Surgical techniques and protocols</strong> — new group-owned content beyond preference cards: document step by step how your team works and link it to related instruments.' },
+      { badge: '#6', text: '<strong>Versioning and approval workflow</strong> — every change to a technique or protocol creates a draft; the approver reviews, compares and approves before publishing. Nothing is overwritten: full history stays available and restorable.' },
+      { badge: '#7', text: '<strong>Standardized specialty</strong> — the specialty field for techniques and protocols now uses the official surgical specialty catalog (Royal Decree 183/2008), not free text.' },
+      { badge: '#8', text: '<strong>Workspaces</strong> — a group can be organized into several spaces (by specialty, service, training...), each with its own techniques, protocols and preference cards.' },
+      { badge: '#9', text: '<strong>Granular roles per space</strong> — Owner and Administrator at group level; Approver, Editor and Reader assigned per space, including ownership transfer.' },
+      { badge: '#10', text: '<strong>Export and delete account (GDPR)</strong> — download your data anytime; if you delete your account, your personal data disappears and content you created or approved is kept anonymized for your team.' },
+      { badge: '#11', text: '<strong>Categorizable protocol steps</strong> — organize a checklist into blocks (Pre-op, Anesthesia, Equipment, Instruments, Safety), in the style of the WHO Surgical Safety Checklist.' },
+      { badge: '#12', text: '<strong>Documented knowledge coverage</strong> — an aggregated dashboard shows how many techniques and protocols exist per specialty, published and pending review.' },
+      { badge: '#13', text: '<strong>Audit log for sensitive actions</strong> — a record of who did what and when (approvals, role changes, ownership transfer), visible to whoever administers the group.' },
+      { badge: '#14', text: '<strong>Catalog expanded to 16 specialties (110 instruments)</strong> — adding vascular surgery, oral and maxillofacial surgery, pediatric, plastic and reconstructive, thoracic, dermatology and ophthalmology.' },
+      { badge: '#15', text: '<strong>Catalan, Spanish and English interface</strong> — the app and website work in Catalan by default, with a language switcher that remembers your choice.' },
+      { badge: '#16', text: '<strong>Team-specific instruments</strong> — each team can add its own custom instruments, with variants and photos, private and never shared outside your space.' },
+      { badge: '#17', text: '<strong>Offline mode</strong> — techniques, protocols and preference cards can be viewed and edited without network; changes sync on their own once it\'s back.' },
+      { badge: '#18', text: '<strong>Push notifications</strong> — get notified when content enters review, is approved or rejected, without having to open the app to check.' },
+      { badge: '#19', text: '<strong>Professional profile</strong> — choose scrub nurse, supervision, sterilization, nursing, surgeon, student or teacher, and each instrument\'s page reorders what matters most to you first, without hiding anything.' },
+      { badge: '#20', text: '<strong>Structured sterilization</strong> — each instrument can carry one or more sterilization methods with their own parameters, plus technical info (manufacturer, IFU, maintenance, useful life).' },
+      { badge: '#21', text: '<strong>Instrument trays</strong> — sets of equipment with a quantity checklist, photos, versioning and approval, to verify complete trays after washing and sterilization.' },
+      { badge: 'Planned', future: true, text: 'Google Play release.' },
+      { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
+      { badge: 'Planned', future: true, text: 'Offline mode for trays.' },
+      { badge: 'Planned', future: true, text: 'A transparent donation system.' }
+    ]
+  };
+  var tlLang = 'ca';
+  var tlIndex = TIMELINE_SHIPPED - 1; // arranca a l'última novetat publicada
+  var tlSlider = document.getElementById('tlSlider');
+  var tlBadge = document.getElementById('tlBadge');
+  var tlIndexLabel = document.getElementById('tlIndex');
+  var tlText = document.getElementById('tlText');
+  var tlFill = document.getElementById('tlFill');
+  var tlPrev = document.getElementById('tlPrev');
+  var tlNext = document.getElementById('tlNext');
+
+  function renderTimeline() {
+    var items = TL[tlLang] || TL.ca;
+    var item = items[tlIndex];
+    tlBadge.textContent = item.badge;
+    tlBadge.classList.toggle('is-future', !!item.future);
+    tlText.innerHTML = item.text;
+    tlIndexLabel.textContent = (tlIndex + 1) + ' / ' + items.length;
+    tlSlider.value = tlIndex;
+    tlFill.style.width = (tlIndex / (items.length - 1) * 100) + '%';
+    tlPrev.disabled = tlIndex === 0;
+    tlNext.disabled = tlIndex === items.length - 1;
+  }
+
+  tlSlider.addEventListener('input', function () { tlIndex = parseInt(tlSlider.value, 10); renderTimeline(); });
+  tlPrev.addEventListener('click', function () { if (tlIndex > 0) { tlIndex--; renderTimeline(); } });
+  tlNext.addEventListener('click', function () { var max = (TL[tlLang] || TL.ca).length - 1; if (tlIndex < max) { tlIndex++; renderTimeline(); } });
+
   function applyLang(lang) {
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
@@ -523,6 +598,10 @@
       b.classList.toggle('active', b.getAttribute('data-lang') === lang);
     });
     try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
+    tlLang = TL[lang] ? lang : 'ca';
+    var futureLabels = { ca: 'Passat ← → Previst', es: 'Pasado ← → Previsto', en: 'Past ← → Planned' };
+    document.getElementById('tlFutureLabel').textContent = futureLabels[tlLang];
+    renderTimeline();
   }
 
   document.querySelectorAll('#langSwitch button').forEach(function (b) {
