@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../data/instruments_data.dart';
 import '../models/instrument.dart';
+import '../services/catalog_community_photo_service.dart';
+import '../services/profile_service.dart';
 import '../services/progress_service.dart';
 import '../widgets/category_icon.dart';
+import 'community_photos_review_screen.dart';
 import 'instrument_detail_screen.dart';
 
 class CatalogScreen extends StatefulWidget {
@@ -15,11 +18,34 @@ class CatalogScreen extends StatefulWidget {
 }
 
 class _CatalogScreenState extends State<CatalogScreen> {
+  static const String _refType = 'catalog';
+
   String _query = '';
   final Set<InstrumentCategory> _categoryFilters = {};
   final Set<Specialty> _specialtyFilters = {};
+  Set<String> _approvedCommunityPhotoIds = {};
 
   int get _activeFilterCount => _categoryFilters.length + _specialtyFilters.length;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadApprovedCommunityPhotoIds();
+  }
+
+  Future<void> _loadApprovedCommunityPhotoIds() async {
+    try {
+      final ids = await CatalogCommunityPhotoService.instance.fetchApprovedInstrumentIds(_refType);
+      if (!mounted) return;
+      setState(() => _approvedCommunityPhotoIds = ids);
+    } catch (_) {
+      // Sin conexión o sin sesión: el badge de "sin foto" simplemente no
+      // tiene en cuenta las fotos de la comunidad, no bloquea el catálogo.
+    }
+  }
+
+  bool _hasAnyPhoto(Instrument instrument) =>
+      instrument.image != null || _approvedCommunityPhotoIds.contains(instrument.id);
 
   void _toggleSpecialty(Specialty s) {
     setState(() {
@@ -56,6 +82,14 @@ class _CatalogScreenState extends State<CatalogScreen> {
       appBar: AppBar(
         title: Text(l10n.catalogTitle),
         actions: [
+          if (ProfileService.instance.isAdmin)
+            IconButton(
+              icon: const Icon(Icons.rate_review_outlined),
+              tooltip: l10n.communityPhotoReviewTooltip,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const CommunityPhotosReviewScreen()),
+              ),
+            ),
           if (_activeFilterCount > 0)
             TextButton(
               onPressed: _clearFilters,
@@ -175,7 +209,22 @@ class _CatalogScreenState extends State<CatalogScreen> {
                             category: instrument.category,
                             size: 48,
                           ),
-                          title: Text(instrument.name),
+                          title: Row(
+                            children: [
+                              Flexible(child: Text(instrument.name)),
+                              if (!_hasAnyPhoto(instrument)) ...[
+                                const SizedBox(width: 6),
+                                Tooltip(
+                                  message: l10n.noPhotoBadgeTooltip,
+                                  child: Icon(
+                                    Icons.no_photography_outlined,
+                                    size: 16,
+                                    color: Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                           subtitle: Text('${instrument.specialty.label} · ${instrument.category.label}'),
                           trailing: learned
                               ? const Icon(Icons.check_circle, color: Colors.green)
@@ -188,6 +237,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                               ),
                             );
                             setState(() {});
+                            _loadApprovedCommunityPhotoIds();
                           },
                         ),
                       );

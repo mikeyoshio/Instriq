@@ -8,11 +8,21 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.corte,
     aliases: ['Mango de bisturí', 'Scalpel'],
     icon: 'cut',
-    description:
-        'Instrumento de corte formado por un mango y una hoja desechable. El mango nº 3 monta hojas del 10 al 15 (no existe la hoja nº 14); el mango nº 4, hojas más grandes, del 18 al 24.',
-    use:
-        'Apertura de piel y tejidos blandos. Se entrega al cirujano con la hoja hacia abajo, nunca directamente a la mano.',
-    tip: 'La hoja nº 10 es la más usada en incisiones grandes; la nº 15 en incisiones pequeñas y precisas.',
+    description: LocalizedText(
+      ca: 'Instrument de tall format per un mànec i una fulla d\'un sol ús. El mànec núm. 3 munta fulles del 10 al 15 (no existeix la fulla núm. 14); el mànec núm. 4, fulles més grans, del 18 al 24.',
+      es: 'Instrumento de corte formado por un mango y una hoja desechable. El mango nº 3 monta hojas del 10 al 15 (no existe la hoja nº 14); el mango nº 4, hojas más grandes, del 18 al 24.',
+      en: 'Cutting instrument made of a handle and a disposable blade. Handle no. 3 fits blades 10 to 15 (there is no no. 14 blade); handle no. 4 fits larger blades, 18 to 24.',
+    ),
+    use: LocalizedText(
+      ca: 'Obertura de pell i teixits tous. Es lliura al cirurgià amb la fulla cap avall, mai directament a la mà.',
+      es: 'Apertura de piel y tejidos blandos. Se entrega al cirujano con la hoja hacia abajo, nunca directamente a la mano.',
+      en: 'Opening skin and soft tissue. Handed to the surgeon with the blade facing down, never directly into the hand.',
+    ),
+    tip: LocalizedText(
+      ca: 'La fulla núm. 10 és la més utilitzada en incisions grans; la núm. 15 en incisions petites i precises.',
+      es: 'La hoja nº 10 es la más usada en incisiones grandes; la nº 15 en incisiones pequeñas y precisas.',
+      en: 'Blade no. 10 is the most used for large incisions; no. 15 for small, precise incisions.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Scalpel_00.jpg',
       license: 'CC BY-SA 3.0',
@@ -26,10 +36,21 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.corte,
     aliases: ['Mayo scissors'],
     icon: 'cut',
-    description:
-        'Tijera robusta de punta roma, recta o curva, con hojas gruesas. Existe también en versión larga.',
-    use: 'Corte de tejidos resistentes: fascia, suturas gruesas, material de sutura. La curva larga se usa sobre todo en laparotomía o cirugía abierta profunda.',
-    tip: 'La curva se usa para tejido profundo; la recta para superficial y para cortar suturas.',
+    description: LocalizedText(
+      ca: 'Tisora robusta de punta roma, recta o corba, amb fulles gruixudes. Existeix també en versió llarga.',
+      es: 'Tijera robusta de punta roma, recta o curva, con hojas gruesas. Existe también en versión larga.',
+      en: 'Sturdy blunt-tipped scissors, straight or curved, with thick blades. Also available in a long version.',
+    ),
+    use: LocalizedText(
+      ca: 'Tall de teixits resistents: fàscia, sutures gruixudes, material de sutura. La corba llarga s\'usa sobretot en laparotomia o cirurgia oberta profunda.',
+      es: 'Corte de tejidos resistentes: fascia, suturas gruesas, material de sutura. La curva larga se usa sobre todo en laparotomía o cirugía abierta profunda.',
+      en: 'Cutting resistant tissue: fascia, thick sutures, suture material. The long curved version is used mainly in laparotomy or deep open surgery.',
+    ),
+    tip: LocalizedText(
+      ca: 'La corba s\'usa per a teixit profund; la recta per a superficial i per tallar sutures.',
+      es: 'La curva se usa para tejido profundo; la recta para superficial y para cortar suturas.',
+      en: 'The curved blade is used for deep tissue; the straight one for superficial tissue and cutting sutures.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/5/58/Mayo_scissors.jpg',
       license: 'CC0 1.0',
@@ -43,9 +64,21 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.corte,
     aliases: ['Metzenbaum scissors'],
     icon: 'cut',
-    description: 'Tijera de hojas finas y delicadas, más larga y estrecha que la de Mayo. Existe en longitud corta y larga.',
-    use: 'Disección fina de tejidos delicados (fascia, vasos, tejido subcutáneo).',
-    tip: 'Nunca se usa para cortar suturas: las hojas finas se desafilan y pierden precisión.',
+    description: LocalizedText(
+      ca: 'Tisora de fulles fines i delicades, més llarga i estreta que la de Mayo. Existeix en longitud curta i llarga.',
+      es: 'Tijera de hojas finas y delicadas, más larga y estrecha que la de Mayo. Existe en longitud corta y larga.',
+      en: 'Scissors with fine, delicate blades, longer and narrower than the Mayo. Available in short and long lengths.',
+    ),
+    use: LocalizedText(
+      ca: 'Dissecció fina de teixits delicats (fàscia, vasos, teixit subcutani).',
+      es: 'Disección fina de tejidos delicados (fascia, vasos, tejido subcutáneo).',
+      en: 'Fine dissection of delicate tissue (fascia, vessels, subcutaneous tissue).',
+    ),
+    tip: LocalizedText(
+      ca: 'Mai s\'utilitza per tallar sutures: les fulles fines es desafilen i perden precisió.',
+      es: 'Nunca se usa para cortar suturas: las hojas finas se desafilan y pierden precisión.',
+      en: 'Never used to cut sutures: the fine blades dull and lose precision.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Metzenbaum_scissors.jpg',
       license: 'CC0 1.0',
@@ -59,8 +92,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.corte,
     aliases: ['Iris scissors', 'Tijera de plástica'],
     icon: 'cut',
-    description: 'Tijera pequeña de punta fina, recta o curva. También usada en cirugía plástica.',
-    use: 'Cirugía de precisión en espacios reducidos y muy fina: oftalmología, cirugía plástica, microcirugía, disección superficial fina.',
+    description: LocalizedText(
+      ca: 'Tisora petita de punta fina, recta o corba. També utilitzada en cirurgia plàstica.',
+      es: 'Tijera pequeña de punta fina, recta o curva. También usada en cirugía plástica.',
+      en: 'Small scissors with a fine tip, straight or curved. Also used in plastic surgery.',
+    ),
+    use: LocalizedText(
+      ca: 'Cirurgia de precisió en espais reduïts i molt fina: oftalmologia, cirurgia plàstica, microcirurgia, dissecció superficial fina.',
+      es: 'Cirugía de precisión en espacios reducidos y muy fina: oftalmología, cirugía plástica, microcirugía, disección superficial fina.',
+      en: 'Fine precision surgery in confined spaces: ophthalmology, plastic surgery, microsurgery, fine superficial dissection.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Iris_scissors_by_Roboz_Tech_Surgical_.jpg',
       license: 'CC BY-SA 4.0',
@@ -76,9 +117,21 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Pinza de Adson con dientes'],
     icon: 'pinch',
-    description: 'Pinza de agarre con dientes finos en la punta (tipo "ratón").',
-    use: 'Sujeción firme de tejidos resistentes: piel, fascia, aponeurosis.',
-    tip: 'No se usa en tejidos delicados porque los dientes pueden lesionarlos.',
+    description: LocalizedText(
+      ca: 'Pinça de subjecció amb dents fines a la punta (tipus "ratolí").',
+      es: 'Pinza de agarre con dientes finos en la punta (tipo "ratón").',
+      en: 'Grasping forceps with fine teeth at the tip (mouse-tooth type).',
+    ),
+    use: LocalizedText(
+      ca: 'Subjecció ferma de teixits resistents: pell, fàscia, aponeurosi.',
+      es: 'Sujeción firme de tejidos resistentes: piel, fascia, aponeurosis.',
+      en: 'Firm grip on resistant tissue: skin, fascia, aponeurosis.',
+    ),
+    tip: LocalizedText(
+      ca: 'No s\'utilitza en teixits delicats perquè les dents els poden lesionar.',
+      es: 'No se usa en tejidos delicados porque los dientes pueden lesionarlos.',
+      en: 'Not used on delicate tissue, as the teeth can damage it.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/6/66/Adson_00.jpg',
       license: 'CC0 1.0',
@@ -92,8 +145,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Pinza de disección lisa'],
     icon: 'pinch',
-    description: 'Pinza de agarre con superficie lisa o estriada, sin dientes.',
-    use: 'Manipulación de tejidos delicados: vasos, intestino, peritoneo.',
+    description: LocalizedText(
+      ca: 'Pinça de subjecció amb superfície llisa o estriada, sense dents.',
+      es: 'Pinza de agarre con superficie lisa o estriada, sin dientes.',
+      en: 'Grasping forceps with a smooth or serrated surface, without teeth.',
+    ),
+    use: LocalizedText(
+      ca: 'Manipulació de teixits delicats: vasos, intestí, peritoneu.',
+      es: 'Manipulación de tejidos delicados: vasos, intestino, peritoneo.',
+      en: 'Handling delicate tissue: vessels, bowel, peritoneum.',
+    ),
   ),
   Instrument(
     id: 'pinza-kocher',
@@ -101,8 +162,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Kocher forceps'],
     icon: 'pinch',
-    description: 'Pinza hemostática recta o curva, con dientes en la punta (1x2) y ramas estriadas, o en versión sin dientes.',
-    use: 'Sujeción firme de tejidos gruesos y aponeurosis; menos usada para hemostasia por ser traumática.',
+    description: LocalizedText(
+      ca: 'Pinça hemostàtica recta o corba, amb dents a la punta (1x2) i branques estriades, o en versió sense dents.',
+      es: 'Pinza hemostática recta o curva, con dientes en la punta (1x2) y ramas estriadas, o en versión sin dientes.',
+      en: 'Straight or curved hemostatic forceps, with teeth at the tip (1x2) and serrated jaws, also available toothless.',
+    ),
+    use: LocalizedText(
+      ca: 'Subjecció ferma de teixits gruixuts i aponeurosi; menys utilitzada per a hemostàsia per ser traumàtica.',
+      es: 'Sujeción firme de tejidos gruesos y aponeurosis; menos usada para hemostasia por ser traumática.',
+      en: 'Firm grip on thick tissue and aponeurosis; less used for hemostasis because it is traumatic.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Kocher_clamp_01.JPG',
       license: 'CC0 1.0',
@@ -116,8 +185,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Kelly forceps', 'Pinza de Crile', 'Crile forceps'],
     icon: 'pinch',
-    description: 'Pinza hemostática recta o curva (como una Kocher curva), normalmente sin dientes, con estrías transversales. Muy similar a la pinza de Crile.',
-    use: 'Hemostasia (pinzamiento de vasos sangrantes) y disección roma.',
+    description: LocalizedText(
+      ca: 'Pinça hemostàtica recta o corba (com una Kocher corba), normalment sense dents, amb estries transversals. Molt semblant a la pinça de Crile.',
+      es: 'Pinza hemostática recta o curva (como una Kocher curva), normalmente sin dientes, con estrías transversales. Muy similar a la pinza de Crile.',
+      en: 'Straight or curved hemostatic forceps (like a curved Kocher), usually toothless, with transverse serrations. Very similar to the Crile forceps.',
+    ),
+    use: LocalizedText(
+      ca: 'Hemostàsia (pinçament de vasos sagnants) i dissecció roma.',
+      es: 'Hemostasia (pinzamiento de vasos sangrantes) y disección roma.',
+      en: 'Hemostasis (clamping bleeding vessels) and blunt dissection.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Kelly_Forceps.svg/500px-Kelly_Forceps.svg.png',
       license: 'CC BY-SA 3.0',
@@ -131,8 +208,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Mosquito forceps'],
     icon: 'pinch',
-    description: 'Pinza hemostática pequeña y delicada, recta o curva.',
-    use: 'Hemostasia de vasos pequeños y superficiales.',
+    description: LocalizedText(
+      ca: 'Pinça hemostàtica petita i delicada, recta o corba.',
+      es: 'Pinza hemostática pequeña y delicada, recta o curva.',
+      en: 'Small, delicate hemostatic forceps, straight or curved.',
+    ),
+    use: LocalizedText(
+      ca: 'Hemostàsia de vasos petits i superficials.',
+      es: 'Hemostasia de vasos pequeños y superficiales.',
+      en: 'Hemostasis of small, superficial vessels.',
+    ),
   ),
   Instrument(
     id: 'pinza-allis',
@@ -140,8 +225,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Allis forceps'],
     icon: 'pinch',
-    description: 'Pinza de agarre con dientes múltiples finos y romos en la punta.',
-    use: 'Sujeción de tejidos para tracción sin aplastarlos en exceso: intestino, mama, piel.',
+    description: LocalizedText(
+      ca: 'Pinça de subjecció amb dents múltiples fines i romes a la punta.',
+      es: 'Pinza de agarre con dientes múltiples finos y romos en la punta.',
+      en: 'Grasping forceps with multiple fine, blunt teeth at the tip.',
+    ),
+    use: LocalizedText(
+      ca: 'Subjecció de teixits per a tracció sense aixafar-los en excés: intestí, mama, pell.',
+      es: 'Sujeción de tejidos para tracción sin aplastarlos en exceso: intestino, mama, piel.',
+      en: 'Grasping tissue for traction without excessive crushing: bowel, breast, skin.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Allis_clamp_01.JPG',
       license: 'CC0 1.0',
@@ -155,8 +248,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Babcock forceps'],
     icon: 'pinch',
-    description: 'Pinza de puntas curvas y anchas, atraumática, sin dientes.',
-    use: 'Sujeción de estructuras delicadas y tubulares: intestino, trompas, uréter, apéndice.',
+    description: LocalizedText(
+      ca: 'Pinça de puntes corbes i amples, atraumàtica, sense dents.',
+      es: 'Pinza de puntas curvas y anchas, atraumática, sin dientes.',
+      en: 'Forceps with wide, curved tips, atraumatic, toothless.',
+    ),
+    use: LocalizedText(
+      ca: 'Subjecció d\'estructures delicades i tubulars: intestí, trompes, urèter, apèndix.',
+      es: 'Sujeción de estructuras delicadas y tubulares: intestino, trompas, uréter, apéndice.',
+      en: 'Grasping delicate tubular structures: bowel, fallopian tubes, ureter, appendix.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Babcock.JPG',
       license: 'CC0 1.0',
@@ -170,8 +271,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Pinza de aro', 'Sponge forceps', 'Pinza Foster (común)'],
     icon: 'pinch',
-    description: 'Pinza larga con extremo en anillo, con o sin dientes. Conocida coloquialmente como "Foster".',
-    use: 'Sujeción de gasas o torundas para antisepsia de campo; tracción de tejidos; también para extraer piedras de la vesícula en colecistectomía laparoscópica.',
+    description: LocalizedText(
+      ca: 'Pinça llarga amb extrem en anella, amb o sense dents. Coneguda col·loquialment com a "Foster".',
+      es: 'Pinza larga con extremo en anillo, con o sin dientes. Conocida coloquialmente como "Foster".',
+      en: 'Long forceps with a ring tip, toothed or toothless. Commonly known as "sponge forceps" or "Foster".',
+    ),
+    use: LocalizedText(
+      ca: 'Subjecció de gases o torundes per a antisèpsia de camp; tracció de teixits; també per extreure pedres de la vesícula en colecistectomia laparoscòpica.',
+      es: 'Sujeción de gasas o torundas para antisepsia de campo; tracción de tejidos; también para extraer piedras de la vesícula en colecistectomía laparoscópica.',
+      en: 'Holding gauze or swabs for field antisepsis; tissue traction; also used to extract gallstones during laparoscopic cholecystectomy.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Foerster_clamp_02.JPG',
       license: 'CC0 1.0',
@@ -185,8 +294,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Pinza de campo', 'Pinza para paños', 'Towel clamp', 'Towel forceps'],
     icon: 'pinch',
-    description: 'Pinza con puntas afiladas curvas que se cruzan, tipo clip.',
-    use: 'Fijación de paños de campo quirúrgico entre sí y a la piel.',
+    description: LocalizedText(
+      ca: 'Pinça amb puntes afilades corbes que es creuen, tipus clip.',
+      es: 'Pinza con puntas afiladas curvas que se cruzan, tipo clip.',
+      en: 'Clip-type forceps with sharp, crossing curved points.',
+    ),
+    use: LocalizedText(
+      ca: 'Fixació de camps quirúrgics entre si i a la pell.',
+      es: 'Fijación de paños de campo quirúrgico entre sí y a la piel.',
+      en: 'Securing surgical drapes to one another and to the skin.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Backhaus_clamp.svg/500px-Backhaus_clamp.svg.png',
       license: 'CC BY-SA 3.0',
@@ -202,9 +319,21 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.sutura,
     aliases: ['Needle holder'],
     icon: 'needle',
-    description: 'Instrumento tipo pinza con mordida corta y estriada, sin filo.',
-    use: 'Sujetar la aguja de sutura para realizar puntos y anudado.',
-    tip: 'La aguja se carga en la punta, nunca en el centro de la mordida.',
+    description: LocalizedText(
+      ca: 'Instrument tipus pinça amb mossegada curta i estriada, sense tall.',
+      es: 'Instrumento tipo pinza con mordida corta y estriada, sin filo.',
+      en: 'Forceps-type instrument with a short, serrated jaw, without a cutting edge.',
+    ),
+    use: LocalizedText(
+      ca: 'Subjectar l\'agulla de sutura per fer punts i nusos.',
+      es: 'Sujetar la aguja de sutura para realizar puntos y anudado.',
+      en: 'Holding the suture needle to place stitches and tie knots.',
+    ),
+    tip: LocalizedText(
+      ca: 'L\'agulla es carrega a la punta, mai al centre de la mossegada.',
+      es: 'La aguja se carga en la punta, nunca en el centro de la mordida.',
+      en: 'The needle is loaded at the tip, never at the center of the jaw.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Naaldvoerder_Mayo-hegar.jpg',
       license: 'CC BY-SA 3.0',
@@ -218,8 +347,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.sutura,
     aliases: ['Webster needle holder'],
     icon: 'needle',
-    description: 'Portaagujas pequeño y delicado, sin cremallera de bloqueo.',
-    use: 'Sutura de precisión en cirugía fina y microcirugía.',
+    description: LocalizedText(
+      ca: 'Portaagulles petit i delicat, sense cremallera de bloqueig.',
+      es: 'Portaagujas pequeño y delicado, sin cremallera de bloqueo.',
+      en: 'Small, delicate needle holder, without a locking ratchet.',
+    ),
+    use: LocalizedText(
+      ca: 'Sutura de precisió en cirurgia fina i microcirurgia.',
+      es: 'Sutura de precisión en cirugía fina y microcirugía.',
+      en: 'Precision suturing in fine surgery and microsurgery.',
+    ),
   ),
   Instrument(
     id: 'portaagujas-vascular',
@@ -227,8 +364,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.sutura,
     aliases: ['Vascular needle holder'],
     icon: 'needle',
-    description: 'Portaagujas fino y delicado, con o sin cremallera, para suturas de calibre muy pequeño.',
-    use: 'Anastomosis y sutura de vasos sanguíneos en cirugía vascular.',
+    description: LocalizedText(
+      ca: 'Portaagulles fi i delicat, amb o sense cremallera, per a sutures de calibre molt petit.',
+      es: 'Portaagujas fino y delicado, con o sin cremallera, para suturas de calibre muy pequeño.',
+      en: 'Fine, delicate needle holder, with or without ratchet, for very fine-gauge sutures.',
+    ),
+    use: LocalizedText(
+      ca: 'Anastomosi i sutura de vasos sanguinis en cirurgia vascular.',
+      es: 'Anastomosis y sutura de vasos sanguíneos en cirugía vascular.',
+      en: 'Anastomosis and suturing of blood vessels in vascular surgery.',
+    ),
   ),
   Instrument(
     id: 'portaagujas-castroviejo',
@@ -236,8 +381,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.sutura,
     aliases: ['Castroviejo needle holder'],
     icon: 'needle',
-    description: 'Portaagujas muy fino, tipo resorte (sin anillas para los dedos), de precisión milimétrica.',
-    use: 'Microcirugía: oftalmología, cirugía vascular y de nervios, anastomosis muy finas.',
+    description: LocalizedText(
+      ca: 'Portaagulles molt fi, tipus molla (sense anelles per als dits), de precisió mil·limètrica.',
+      es: 'Portaagujas muy fino, tipo resorte (sin anillas para los dedos), de precisión milimétrica.',
+      en: 'Very fine spring-type needle holder (no finger rings), with millimetric precision.',
+    ),
+    use: LocalizedText(
+      ca: 'Microcirurgia: oftalmologia, cirurgia vascular i de nervis, anastomosis molt fines.',
+      es: 'Microcirugía: oftalmología, cirugía vascular y de nervios, anastomosis muy finas.',
+      en: 'Microsurgery: ophthalmology, vascular and nerve surgery, very fine anastomoses.',
+    ),
   ),
 
   // ---- SEPARACIÓN / EXPOSICIÓN ----
@@ -247,8 +400,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.separacion,
     aliases: ['Farabeuf retractor'],
     icon: 'expand',
-    description: 'Separador manual en forma de "S", de doble hoja curva.',
-    use: 'Retracción manual de bordes de la herida para exponer el campo quirúrgico.',
+    description: LocalizedText(
+      ca: 'Separador manual en forma de "S", de doble fulla corba.',
+      es: 'Separador manual en forma de "S", de doble hoja curva.',
+      en: 'S-shaped handheld retractor with a double curved blade.',
+    ),
+    use: LocalizedText(
+      ca: 'Retracció manual de vores de la ferida per exposar el camp quirúrgic.',
+      es: 'Retracción manual de bordes de la herida para exponer el campo quirúrgico.',
+      en: 'Manual retraction of wound edges to expose the surgical field.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Farabeuf_retractor.svg/500px-Farabeuf_retractor.svg.png',
       license: 'CC BY-SA 3.0',
@@ -262,8 +423,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.separacion,
     aliases: ['Weitlaner retractor'],
     icon: 'expand',
-    description: 'Separador autoestático con ramas curvas y cremallera de fijación.',
-    use: 'Mantener abierta la herida sin necesidad de ayudante, en cirugías superficiales.',
+    description: LocalizedText(
+      ca: 'Separador autoestàtic amb branques corbes i cremallera de fixació.',
+      es: 'Separador autoestático con ramas curvas y cremallera de fijación.',
+      en: 'Self-retaining retractor with curved prongs and a locking ratchet.',
+    ),
+    use: LocalizedText(
+      ca: 'Mantenir oberta la ferida sense necessitat d\'ajudant, en cirurgies superficials.',
+      es: 'Mantener abierta la herida sin necesidad de ayudante, en cirugías superficiales.',
+      en: 'Keeping the wound open without an assistant, in superficial surgeries.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Weitlaner_Retraktor.jpg',
       license: 'CC BY 3.0',
@@ -277,8 +446,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.separacion,
     aliases: ['Doyen retractor'],
     icon: 'expand',
-    description: 'Separador curvo en forma de "raqueta", manual.',
-    use: 'Retracción de la vejiga o el útero en cirugía abdominal y pélvica.',
+    description: LocalizedText(
+      ca: 'Separador corb en forma de "raqueta", manual.',
+      es: 'Separador curvo en forma de "raqueta", manual.',
+      en: 'Handheld curved, racquet-shaped retractor.',
+    ),
+    use: LocalizedText(
+      ca: 'Retracció de la bufeta o l\'úter en cirurgia abdominal i pèlvica.',
+      es: 'Retracción de la vejiga o el útero en cirugía abdominal y pélvica.',
+      en: 'Retraction of the bladder or uterus in abdominal and pelvic surgery.',
+    ),
   ),
   Instrument(
     id: 'separador-richardson',
@@ -286,8 +463,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.separacion,
     aliases: ['Richardson retractor'],
     icon: 'expand',
-    description: 'Separador manual en forma de "L" con hoja ancha.',
-    use: 'Retracción profunda de pared abdominal en laparotomías.',
+    description: LocalizedText(
+      ca: 'Separador manual en forma de "L" amb fulla ampla.',
+      es: 'Separador manual en forma de "L" con hoja ancha.',
+      en: 'L-shaped handheld retractor with a wide blade.',
+    ),
+    use: LocalizedText(
+      ca: 'Retracció profunda de la paret abdominal en laparotomies.',
+      es: 'Retracción profunda de pared abdominal en laparotomías.',
+      en: 'Deep retraction of the abdominal wall in laparotomies.',
+    ),
   ),
 
   // ---- SUCCIÓN / ASPIRACIÓN ----
@@ -297,8 +482,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.succion,
     aliases: ['Yankauer suction tip'],
     icon: 'suction',
-    description: 'Cánula rígida de aspiración con punta perforada y curva. Existe en calibre fino y grueso.',
-    use: 'Aspiración de sangre, secreciones y humo quirúrgico del campo operatorio.',
+    description: LocalizedText(
+      ca: 'Cànula rígida d\'aspiració amb punta perforada i corba. Existeix en calibre fi i gruixut.',
+      es: 'Cánula rígida de aspiración con punta perforada y curva. Existe en calibre fino y grueso.',
+      en: 'Rigid suction cannula with a perforated, curved tip. Available in fine and coarse gauges.',
+    ),
+    use: LocalizedText(
+      ca: 'Aspiració de sang, secrecions i fum quirúrgic del camp operatori.',
+      es: 'Aspiración de sangre, secreciones y humo quirúrgico del campo operatorio.',
+      en: 'Suctioning blood, secretions and surgical smoke from the operative field.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Yankauer_Suction_Tip.jpg',
       license: 'CC BY-SA 3.0',
@@ -312,8 +505,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.succion,
     aliases: ['Poole suction tip', 'Cánula multiperforada'],
     icon: 'suction',
-    description: 'Cánula de aspiración con múltiples orificios laterales protegidos por una carcasa. Conocida vulgarmente como "multiperforada".',
-    use: 'Aspiración de líquido abundante en cavidades (ascitis, lavados peritoneales) evitando succionar tejido.',
+    description: LocalizedText(
+      ca: 'Cànula d\'aspiració amb múltiples orificis laterals protegits per una carcassa. Coneguda vulgarment com a "multiperforada".',
+      es: 'Cánula de aspiración con múltiples orificios laterales protegidos por una carcasa. Conocida vulgarmente como "multiperforada".',
+      en: 'Suction cannula with multiple side ports protected by a shield. Commonly known as the "multi-hole" tip.',
+    ),
+    use: LocalizedText(
+      ca: 'Aspiració de líquid abundant en cavitats (ascites, rentats peritoneals) evitant succionar teixit.',
+      es: 'Aspiración de líquido abundante en cavidades (ascitis, lavados peritoneales) evitando succionar tejido.',
+      en: 'Suctioning large volumes of fluid from cavities (ascites, peritoneal lavage) while avoiding tissue suction.',
+    ),
   ),
 
   // ---- SONDAS / ESPECIALES ----
@@ -323,8 +524,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.especiales,
     aliases: ['Grooved director'],
     icon: 'tool',
-    description: 'Instrumento romo con un canal longitudinal en toda su superficie.',
-    use: 'Guía protegida para cortar con bisturí sin lesionar estructuras subyacentes; muy usada en la liberación del túnel carpiano.',
+    description: LocalizedText(
+      ca: 'Instrument rom amb un canal longitudinal en tota la seva superfície.',
+      es: 'Instrumento romo con un canal longitudinal en toda su superficie.',
+      en: 'Blunt instrument with a longitudinal groove running its full length.',
+    ),
+    use: LocalizedText(
+      ca: 'Guia protegida per tallar amb bisturí sense lesionar estructures subjacents; molt usada en l\'alliberament del túnel carpià.',
+      es: 'Guía protegida para cortar con bisturí sin lesionar estructuras subyacentes; muy usada en la liberación del túnel carpiano.',
+      en: 'Protected guide for cutting with a scalpel without injuring underlying structures; widely used in carpal tunnel release.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Sonde_cannel%C3%A9e_-_mus%C3%A9e_HCL_-_instruments_chirurgicaux.jpg',
       license: 'CC BY-SA 4.0',
@@ -338,8 +547,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.especiales,
     aliases: ['Curette'],
     icon: 'tool',
-    description: 'Instrumento con extremo en forma de cuchara o aro afilado.',
-    use: 'Raspado y limpieza de tejido de cavidades (hueso, quistes); en ginecología, legrado uterino (restos ovulares, abortos incompletos).',
+    description: LocalizedText(
+      ca: 'Instrument amb extrem en forma de cullera o anella afilada.',
+      es: 'Instrumento con extremo en forma de cuchara o aro afilado.',
+      en: 'Instrument with a spoon-shaped or sharp-edged ring tip.',
+    ),
+    use: LocalizedText(
+      ca: 'Raspat i neteja de teixit de cavitats (os, quists); en ginecologia, legrat uterí (restes ovulars, avortaments incomplets).',
+      es: 'Raspado y limpieza de tejido de cavidades (hueso, quistes); en ginecología, legrado uterino (restos ovulares, abortos incompletos).',
+      en: 'Scraping and clearing tissue from cavities (bone, cysts); in gynecology, uterine curettage (retained products of conception, incomplete miscarriage).',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Uterine_Curette_01.jpg',
       license: 'CC0 1.0',
@@ -353,9 +570,21 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.especiales,
     aliases: ['Electrocautery pencil', 'Bovie'],
     icon: 'bolt',
-    description: 'Dispositivo eléctrico con punta metálica intercambiable conectado a un generador.',
-    use: 'Corte y coagulación de tejido mediante corriente eléctrica de alta frecuencia.',
-    tip: 'Requiere placa de retorno de paciente conectada correctamente para evitar quemaduras.',
+    description: LocalizedText(
+      ca: 'Dispositiu elèctric amb punta metàl·lica intercanviable connectat a un generador.',
+      es: 'Dispositivo eléctrico con punta metálica intercambiable conectado a un generador.',
+      en: 'Electrical device with an interchangeable metal tip connected to a generator.',
+    ),
+    use: LocalizedText(
+      ca: 'Tall i coagulació de teixit mitjançant corrent elèctric d\'alta freqüència.',
+      es: 'Corte y coagulación de tejido mediante corriente eléctrica de alta frecuencia.',
+      en: 'Cutting and coagulating tissue using high-frequency electrical current.',
+    ),
+    tip: LocalizedText(
+      ca: 'Requereix placa de retorn de pacient connectada correctament per evitar cremades.',
+      es: 'Requiere placa de retorno de paciente conectada correctamente para evitar quemaduras.',
+      en: 'Requires a properly connected patient return electrode to prevent burns.',
+    ),
   ),
   Instrument(
     id: 'pinza-disección-bipolar',
@@ -363,8 +592,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.especiales,
     aliases: ['Bipolar forceps'],
     icon: 'bolt',
-    description: 'Pinza de disección conectada a electrobisturí, la corriente pasa solo entre sus dos puntas.',
-    use: 'Coagulación precisa de vasos pequeños cerca de estructuras delicadas (nervios, vía biliar).',
+    description: LocalizedText(
+      ca: 'Pinça de dissecció connectada a electrobisturí, el corrent només passa entre les seves dues puntes.',
+      es: 'Pinza de disección conectada a electrobisturí, la corriente pasa solo entre sus dos puntas.',
+      en: 'Dissecting forceps connected to electrocautery; current flows only between its two tips.',
+    ),
+    use: LocalizedText(
+      ca: 'Coagulació precisa de vasos petits prop d\'estructures delicades (nervis, via biliar).',
+      es: 'Coagulación precisa de vasos pequeños cerca de estructuras delicadas (nervios, vía biliar).',
+      en: 'Precise coagulation of small vessels near delicate structures (nerves, bile duct).',
+    ),
   ),
   Instrument(
     id: 'trocar',
@@ -372,8 +609,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.especiales,
     aliases: ['Trocar laparoscópico'],
     icon: 'tool',
-    description: 'Instrumento puntiagudo con camisa hueca para crear un acceso a una cavidad. Gran variedad: punta cortante o romba, distintos grosores (5, 10, 12 mm...) y longitudes, incluidos modelos pediátricos.',
-    use: 'Creación de puertos de entrada en cirugía laparoscópica para introducir la óptica e instrumental.',
+    description: LocalizedText(
+      ca: 'Instrument punxegut amb camisa buida per crear un accés a una cavitat. Gran varietat: punta tallant o roma, diferents gruixos (5, 10, 12 mm...) i longituds, inclosos models pediàtrics.',
+      es: 'Instrumento puntiagudo con camisa hueca para crear un acceso a una cavidad. Gran variedad: punta cortante o romba, distintos grosores (5, 10, 12 mm...) y longitudes, incluidos modelos pediátricos.',
+      en: 'Sharp-tipped instrument with a hollow sheath used to create access to a cavity. Wide variety: cutting or blunt tip, different diameters (5, 10, 12 mm...) and lengths, including pediatric models.',
+    ),
+    use: LocalizedText(
+      ca: 'Creació de ports d\'entrada en cirurgia laparoscòpica per introduir l\'òptica i l\'instrumental.',
+      es: 'Creación de puertos de entrada en cirugía laparoscópica para introducir la óptica e instrumental.',
+      en: 'Creating entry ports in laparoscopic surgery to introduce the scope and instruments.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Disposable_Trocars.jpg',
       license: 'CC BY-SA 3.0',
@@ -387,8 +632,16 @@ const List<Instrument> kInstruments = [
     category: InstrumentCategory.diseccion,
     aliases: ['Pean forceps'],
     icon: 'pinch',
-    description: 'Pinza hemostática robusta, recta o curva, sin dientes, más larga y fuerte que la Kelly.',
-    use: 'Hemostasia de vasos de mayor calibre y sujeción de tejido grueso.',
+    description: LocalizedText(
+      ca: 'Pinça hemostàtica robusta, recta o corba, sense dents, més llarga i forta que la Kelly.',
+      es: 'Pinza hemostática robusta, recta o curva, sin dientes, más larga y fuerte que la Kelly.',
+      en: 'Sturdy hemostatic forceps, straight or curved, toothless, longer and stronger than the Kelly.',
+    ),
+    use: LocalizedText(
+      ca: 'Hemostàsia de vasos de més calibre i subjecció de teixit gruixut.',
+      es: 'Hemostasia de vasos de mayor calibre y sujeción de tejido grueso.',
+      en: 'Hemostasis of larger-caliber vessels and grasping of thick tissue.',
+    ),
   ),
 
   // ==================================================================
@@ -401,9 +654,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['Harmonic Scalpel', 'Harmonic 1100 Shears (Ethicon/J&J MedTech)'],
     icon: 'bolt',
-    description:
-        'Instrumento de energía ultrasónica: convierte corriente eléctrica en vibración mecánica de alta frecuencia en la hoja.',
-    use: 'Corta y coagula tejido blando y vasos de hasta 5 mm simultáneamente, con menor diseminación térmica que el electrobisturí.',
+    description: LocalizedText(
+      ca: 'Instrument d\'energia ultrasònica: converteix corrent elèctric en vibració mecànica d\'alta freqüència a la fulla.',
+      es: 'Instrumento de energía ultrasónica: convierte corriente eléctrica en vibración mecánica de alta frecuencia en la hoja.',
+      en: 'Ultrasonic energy instrument: converts electrical current into high-frequency mechanical vibration at the blade.',
+    ),
+    use: LocalizedText(
+      ca: 'Talla i coagula teixit tou i vasos de fins a 5 mm simultàniament, amb menys dissipació tèrmica que l\'electrobisturí.',
+      es: 'Corta y coagula tejido blando y vasos de hasta 5 mm simultáneamente, con menor diseminación térmica que el electrobisturí.',
+      en: 'Cuts and coagulates soft tissue and vessels up to 5 mm simultaneously, with less thermal spread than electrocautery.',
+    ),
   ),
   Instrument(
     id: 'ligasure',
@@ -412,8 +672,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['LigaSure (Medtronic)', 'LigaSure Atlas/Exact/Impact'],
     icon: 'bolt',
-    description: 'Pinza bipolar que fusiona el colágeno y la elastina de la pared vascular para sellar el vaso de forma permanente.',
-    use: 'Sellado y sección de vasos y haces tisulares hasta 7 mm sin disección ni ligadura previa.',
+    description: LocalizedText(
+      ca: 'Pinça bipolar que fusiona el col·lagen i l\'elastina de la paret vascular per segellar el vas de manera permanent.',
+      es: 'Pinza bipolar que fusiona el colágeno y la elastina de la pared vascular para sellar el vaso de forma permanente.',
+      en: 'Bipolar device that fuses the collagen and elastin of the vessel wall to permanently seal the vessel.',
+    ),
+    use: LocalizedText(
+      ca: 'Segellat i secció de vasos i feixos tissulars fins a 7 mm sense dissecció ni lligadura prèvia.',
+      es: 'Sellado y sección de vasos y haces tisulares hasta 7 mm sin disección ni ligadura previa.',
+      en: 'Sealing and division of vessels and tissue bundles up to 7 mm without prior dissection or ligation.',
+    ),
   ),
   Instrument(
     id: 'thunderbeat',
@@ -422,8 +690,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['ThunderBeat (Olympus)'],
     icon: 'bolt',
-    description: 'Combina en un mismo instrumento energía bipolar avanzada y ultrasónica.',
-    use: 'Sella y corta vasos hasta 7 mm en un solo instrumento, reduciendo cambios de instrumental durante la cirugía.',
+    description: LocalizedText(
+      ca: 'Combina en un mateix instrument energia bipolar avançada i ultrasònica.',
+      es: 'Combina en un mismo instrumento energía bipolar avanzada y ultrasónica.',
+      en: 'Combines advanced bipolar and ultrasonic energy in a single instrument.',
+    ),
+    use: LocalizedText(
+      ca: 'Segella i talla vasos fins a 7 mm en un sol instrument, reduint els canvis d\'instrumental durant la cirurgia.',
+      es: 'Sella y corta vasos hasta 7 mm en un solo instrumento, reduciendo cambios de instrumental durante la cirugía.',
+      en: 'Seals and cuts vessels up to 7 mm with a single instrument, reducing instrument changes during surgery.',
+    ),
   ),
   Instrument(
     id: 'enseal',
@@ -432,8 +708,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['EnSeal X1 (Ethicon/J&J MedTech)'],
     icon: 'bolt',
-    description: 'Sellador bipolar con tecnología de tejido adaptativo que ajusta la energía según la carga tisular detectada.',
-    use: 'Sellado y corte de vasos y haces tisulares hasta 7 mm con rotación de eje 360°.',
+    description: LocalizedText(
+      ca: 'Segellador bipolar amb tecnologia de teixit adaptatiu que ajusta l\'energia segons la càrrega tissular detectada.',
+      es: 'Sellador bipolar con tecnología de tejido adaptativo que ajusta la energía según la carga tisular detectada.',
+      en: 'Bipolar sealer with adaptive tissue technology that adjusts energy according to detected tissue load.',
+    ),
+    use: LocalizedText(
+      ca: 'Segellat i tall de vasos i feixos tissulars fins a 7 mm amb rotació d\'eix de 360°.',
+      es: 'Sellado y corte de vasos y haces tisulares hasta 7 mm con rotación de eje 360°.',
+      en: 'Sealing and cutting of vessels and tissue bundles up to 7 mm with 360° shaft rotation.',
+    ),
   ),
   Instrument(
     id: 'grapadora-signia',
@@ -442,8 +726,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['Signia Stapling System (Medtronic)', 'Tri-Staple'],
     icon: 'needle',
-    description: 'Grapadora lineal motorizada que mide la fuerza de disparo en tiempo real y ajusta velocidad según el grosor del tejido.',
-    use: 'Sección y grapado de tejido en resecciones laparoscópicas, con retroalimentación háptica al cirujano.',
+    description: LocalizedText(
+      ca: 'Grapadora lineal motoritzada que mesura la força de disparament en temps real i ajusta la velocitat segons el gruix del teixit.',
+      es: 'Grapadora lineal motorizada que mide la fuerza de disparo en tiempo real y ajusta velocidad según el grosor del tejido.',
+      en: 'Motorized linear stapler that measures firing force in real time and adjusts speed according to tissue thickness.',
+    ),
+    use: LocalizedText(
+      ca: 'Secció i grapat de teixit en reseccions laparoscòpiques, amb retroalimentació hàptica al cirurgià.',
+      es: 'Sección y grapado de tejido en resecciones laparoscópicas, con retroalimentación háptica al cirujano.',
+      en: 'Transecting and stapling tissue in laparoscopic resections, with haptic feedback to the surgeon.',
+    ),
   ),
   Instrument(
     id: 'grapadora-circular-motorizada',
@@ -452,8 +744,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['Echelon Circular Powered Stapler (Ethicon)'],
     icon: 'needle',
-    description: 'Grapadora circular motorizada con tecnología de superficie de agarre para reducir el deslizamiento tisular.',
-    use: 'Anastomosis colorrectal, gástrica y torácica término-terminal.',
+    description: LocalizedText(
+      ca: 'Grapadora circular motoritzada amb tecnologia de superfície d\'agafament per reduir el lliscament tissular.',
+      es: 'Grapadora circular motorizada con tecnología de superficie de agarre para reducir el deslizamiento tisular.',
+      en: 'Motorized circular stapler with grip-surface technology to reduce tissue slippage.',
+    ),
+    use: LocalizedText(
+      ca: 'Anastomosi colorectal, gàstrica i toràcica termino-terminal.',
+      es: 'Anastomosis colorrectal, gástrica y torácica término-terminal.',
+      en: 'End-to-end colorectal, gastric and thoracic anastomosis.',
+    ),
   ),
 
   // ==================================================================
@@ -466,8 +766,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.roboticaAsistida,
     aliases: ['da Vinci (Intuitive Surgical)', 'da Vinci Xi / da Vinci 5'],
     icon: 'tool',
-    description: 'Sistema robótico teleoperado desde una consola, con brazos que replican el movimiento de la muñeca del cirujano.',
-    use: 'Cirugía mínimamente invasiva de alta precisión en múltiples especialidades (general, urología, ginecología, torácica).',
+    description: LocalizedText(
+      ca: 'Sistema robòtic teleoperat des d\'una consola, amb braços que repliquen el moviment del canell del cirurgià.',
+      es: 'Sistema robótico teleoperado desde una consola, con brazos que replican el movimiento de la muñeca del cirujano.',
+      en: 'Robotic system teleoperated from a console, with arms that replicate the surgeon\'s wrist movement.',
+    ),
+    use: LocalizedText(
+      ca: 'Cirurgia mínimament invasiva d\'alta precisió en múltiples especialitats (general, urologia, ginecologia, toràcica).',
+      es: 'Cirugía mínimamente invasiva de alta precisión en múltiples especialidades (general, urología, ginecología, torácica).',
+      en: 'High-precision minimally invasive surgery across multiple specialties (general, urology, gynecology, thoracic).',
+    ),
   ),
   Instrument(
     id: 'pinza-cadiere',
@@ -476,8 +784,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.roboticaAsistida,
     aliases: ['Cadiere Forceps (EndoWrist, Intuitive)'],
     icon: 'pinch',
-    description: 'Instrumento robótico articulado con muñeca de varios grados de libertad.',
-    use: 'Manipulación y tracción tisular de precisión durante cirugía robótica.',
+    description: LocalizedText(
+      ca: 'Instrument robòtic articulat amb canell de diversos graus de llibertat.',
+      es: 'Instrumento robótico articulado con muñeca de varios grados de libertad.',
+      en: 'Articulated robotic instrument with a multi-degree-of-freedom wrist.',
+    ),
+    use: LocalizedText(
+      ca: 'Manipulació i tracció tissular de precisió durant la cirurgia robòtica.',
+      es: 'Manipulación y tracción tisular de precisión durante cirugía robótica.',
+      en: 'Precision tissue manipulation and traction during robotic surgery.',
+    ),
   ),
   Instrument(
     id: 'pinza-prograsp',
@@ -486,8 +802,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.roboticaAsistida,
     aliases: ['ProGrasp Forceps (EndoWrist, Intuitive)'],
     icon: 'pinch',
-    description: 'Pinza robótica con mandíbulas entrelazadas y mecanismo de trinquete para agarre seguro.',
-    use: 'Tracción firme de tejido durante disección robótica.',
+    description: LocalizedText(
+      ca: 'Pinça robòtica amb mandíbules entrellaçades i mecanisme de trinquet per a un agafament segur.',
+      es: 'Pinza robótica con mandíbulas entrelazadas y mecanismo de trinquete para agarre seguro.',
+      en: 'Robotic forceps with interlocking jaws and a ratchet mechanism for a secure grip.',
+    ),
+    use: LocalizedText(
+      ca: 'Tracció ferma de teixit durant la dissecció robòtica.',
+      es: 'Tracción firme de tejido durante disección robótica.',
+      en: 'Firm tissue traction during robotic dissection.',
+    ),
   ),
   Instrument(
     id: 'vessel-sealer-robotico',
@@ -496,8 +820,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.roboticaAsistida,
     aliases: ['Vessel Sealer Extend', 'SynchroSeal (Intuitive)'],
     icon: 'bolt',
-    description: 'Instrumento robótico que combina energía bipolar con cierre mecánico.',
-    use: 'Sellado de vasos y haces tisulares hasta 7 mm durante cirugía robótica.',
+    description: LocalizedText(
+      ca: 'Instrument robòtic que combina energia bipolar amb tancament mecànic.',
+      es: 'Instrumento robótico que combina energía bipolar con cierre mecánico.',
+      en: 'Robotic instrument that combines bipolar energy with mechanical closure.',
+    ),
+    use: LocalizedText(
+      ca: 'Segellat de vasos i feixos tissulars fins a 7 mm durant la cirurgia robòtica.',
+      es: 'Sellado de vasos y haces tisulares hasta 7 mm durante cirugía robótica.',
+      en: 'Sealing of vessels and tissue bundles up to 7 mm during robotic surgery.',
+    ),
   ),
   Instrument(
     id: 'hugo-ras',
@@ -506,8 +838,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.roboticaAsistida,
     aliases: ['Hugo RAS (Medtronic)'],
     icon: 'tool',
-    description: 'Plataforma robótica modular con brazos independientes y óptica 3D.',
-    use: 'Cirugía asistida por robot con configuración flexible de 3-4 brazos según el procedimiento.',
+    description: LocalizedText(
+      ca: 'Plataforma robòtica modular amb braços independents i òptica 3D.',
+      es: 'Plataforma robótica modular con brazos independientes y óptica 3D.',
+      en: 'Modular robotic platform with independent arms and 3D optics.',
+    ),
+    use: LocalizedText(
+      ca: 'Cirurgia assistida per robot amb configuració flexible de 3-4 braços segons el procediment.',
+      es: 'Cirugía asistida por robot con configuración flexible de 3-4 brazos según el procedimiento.',
+      en: 'Robot-assisted surgery with a flexible 3-4 arm configuration depending on the procedure.',
+    ),
   ),
   Instrument(
     id: 'versius',
@@ -516,8 +856,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.roboticaAsistida,
     aliases: ['Versius (CMR Surgical)'],
     icon: 'tool',
-    description: 'Plataforma robótica con instrumentos totalmente articulados compatibles con puertos de 5 mm.',
-    use: 'Cirugía mínimamente invasiva asistida por robot con incisiones más pequeñas.',
+    description: LocalizedText(
+      ca: 'Plataforma robòtica amb instruments totalment articulats compatibles amb ports de 5 mm.',
+      es: 'Plataforma robótica con instrumentos totalmente articulados compatibles con puertos de 5 mm.',
+      en: 'Robotic platform with fully articulated instruments compatible with 5 mm ports.',
+    ),
+    use: LocalizedText(
+      ca: 'Cirurgia mínimament invasiva assistida per robot amb incisions més petites.',
+      es: 'Cirugía mínimamente invasiva asistida por robot con incisiones más pequeñas.',
+      en: 'Robot-assisted minimally invasive surgery with smaller incisions.',
+    ),
   ),
 
   // ==================================================================
@@ -530,8 +878,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ortopediaTrauma,
     aliases: ['Stryker System 9/CORE Precision Saw'],
     icon: 'cut',
-    description: 'Sierra motorizada de hoja oscilante con velocidad programable.',
-    use: 'Osteotomías y corte óseo en cirugía ortopédica y traumatológica.',
+    description: LocalizedText(
+      ca: 'Serra motoritzada de fulla oscil·lant amb velocitat programable.',
+      es: 'Sierra motorizada de hoja oscilante con velocidad programable.',
+      en: 'Motorized oscillating-blade saw with programmable speed.',
+    ),
+    use: LocalizedText(
+      ca: 'Osteotomies i tall ossi en cirurgia ortopèdica i traumatològica.',
+      es: 'Osteotomías y corte óseo en cirugía ortopédica y traumatológica.',
+      en: 'Osteotomies and bone cutting in orthopedic and trauma surgery.',
+    ),
   ),
   Instrument(
     id: 'driver-quirurgico',
@@ -540,8 +896,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ortopediaTrauma,
     aliases: ['Stryker System 8 Dual Trigger Driver'],
     icon: 'tool',
-    description: 'Instrumento motorizado con modos de perforación, atornillado y oscilación.',
-    use: 'Perforación y colocación de tornillos en huesos largos.',
+    description: LocalizedText(
+      ca: 'Instrument motoritzat amb modes de perforació, cargolat i oscil·lació.',
+      es: 'Instrumento motorizado con modos de perforación, atornillado y oscilación.',
+      en: 'Motorized instrument with drilling, screw-driving and oscillation modes.',
+    ),
+    use: LocalizedText(
+      ca: 'Perforació i col·locació de cargols en ossos llargs.',
+      es: 'Perforación y colocación de tornillos en huesos largos.',
+      en: 'Drilling and screw placement in long bones.',
+    ),
   ),
   Instrument(
     id: 'fijador-externo',
@@ -550,8 +914,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ortopediaTrauma,
     aliases: ['Hoffmann 3 (Stryker)', 'XtraFix / FastFrame (Zimmer Biomet)'],
     icon: 'tool',
-    description: 'Sistema modular de barras y clavos percutáneos que estabiliza una fractura desde el exterior.',
-    use: 'Estabilización temporal o definitiva de fracturas complejas de huesos largos y pelvis.',
+    description: LocalizedText(
+      ca: 'Sistema modular de barres i claus percutanis que estabilitza una fractura des de l\'exterior.',
+      es: 'Sistema modular de barras y clavos percutáneos que estabiliza una fractura desde el exterior.',
+      en: 'Modular system of bars and percutaneous pins that stabilizes a fracture from outside the body.',
+    ),
+    use: LocalizedText(
+      ca: 'Estabilització temporal o definitiva de fractures complexes d\'ossos llargs i pelvis.',
+      es: 'Estabilización temporal o definitiva de fracturas complejas de huesos largos y pelvis.',
+      en: 'Temporary or definitive stabilization of complex long-bone and pelvic fractures.',
+    ),
   ),
   Instrument(
     id: 'clavo-intramedular',
@@ -560,8 +932,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ortopediaTrauma,
     aliases: ['Gamma3/Gamma4 (Stryker)', 'T2 Alpha Nailing System'],
     icon: 'tool',
-    description: 'Clavo metálico insertado en el canal medular del hueso largo, bloqueado con tornillos proximales y distales.',
-    use: 'Fijación interna de fracturas de fémur, tibia o húmero.',
+    description: LocalizedText(
+      ca: 'Clau metàl·lic inserit al canal medul·lar de l\'os llarg, bloquejat amb cargols proximals i distals.',
+      es: 'Clavo metálico insertado en el canal medular del hueso largo, bloqueado con tornillos proximales y distales.',
+      en: 'Metal nail inserted into the medullary canal of a long bone, locked with proximal and distal screws.',
+    ),
+    use: LocalizedText(
+      ca: 'Fixació interna de fractures de fèmur, tíbia o húmer.',
+      es: 'Fijación interna de fracturas de fémur, tibia o húmero.',
+      en: 'Internal fixation of femoral, tibial or humeral fractures.',
+    ),
   ),
   Instrument(
     id: 'placa-fijacion',
@@ -570,8 +950,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ortopediaTrauma,
     aliases: ['DePuy Synthes VOLT', 'TriLEAP Anatomic Plating System'],
     icon: 'tool',
-    description: 'Placa de titanio o acero con tornillos de ángulo variable bloqueado.',
-    use: 'Fijación interna de fracturas y fragmentos óseos pequeños (mano, pie, muñeca).',
+    description: LocalizedText(
+      ca: 'Placa de titani o acer amb cargols d\'angle variable bloquejat.',
+      es: 'Placa de titanio o acero con tornillos de ángulo variable bloqueado.',
+      en: 'Titanium or steel plate with locking variable-angle screws.',
+    ),
+    use: LocalizedText(
+      ca: 'Fixació interna de fractures i fragments ossis petits (mà, peu, canell).',
+      es: 'Fijación interna de fracturas y fragmentos óseos pequeños (mano, pie, muñeca).',
+      en: 'Internal fixation of small bone fractures and fragments (hand, foot, wrist).',
+    ),
   ),
   Instrument(
     id: 'navegacion-ortopedica',
@@ -580,8 +968,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ortopediaTrauma,
     aliases: ['StealthStation (Medtronic)', 'Brainlab'],
     icon: 'tool',
-    description: 'Sistema de guía por imagen (óptica o de realidad aumentada) referenciada a la anatomía del paciente.',
-    use: 'Colocación precisa de implantes en cirugía de rodilla, cadera y columna.',
+    description: LocalizedText(
+      ca: 'Sistema de guia per imatge (òptica o de realitat augmentada) referenciada a l\'anatomia del pacient.',
+      es: 'Sistema de guía por imagen (óptica o de realidad aumentada) referenciada a la anatomía del paciente.',
+      en: 'Image-guidance system (optical or augmented-reality) referenced to the patient\'s anatomy.',
+    ),
+    use: LocalizedText(
+      ca: 'Col·locació precisa d\'implants en cirurgia de genoll, maluc i columna.',
+      es: 'Colocación precisa de implantes en cirugía de rodilla, cadera y columna.',
+      en: 'Precise implant placement in knee, hip and spine surgery.',
+    ),
   ),
 
   // ==================================================================
@@ -594,8 +990,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.neurocirugia,
     aliases: ['CUSA (Integra LifeSciences)', 'CUSA Clarity/Excel+/NXT'],
     icon: 'suction',
-    description: 'Dispositivo que fragmenta tejido mediante vibración ultrasónica y lo aspira, preservando estructuras vasculares y neurales.',
-    use: 'Resección de tumores en neurocirugía con preservación de estructuras adyacentes.',
+    description: LocalizedText(
+      ca: 'Dispositiu que fragmenta teixit mitjançant vibració ultrasònica i l\'aspira, preservant estructures vasculars i neurals.',
+      es: 'Dispositivo que fragmenta tejido mediante vibración ultrasónica y lo aspira, preservando estructuras vasculares y neurales.',
+      en: 'Device that fragments tissue through ultrasonic vibration and suctions it away, preserving vascular and neural structures.',
+    ),
+    use: LocalizedText(
+      ca: 'Resecció de tumors en neurocirurgia amb preservació d\'estructures adjacents.',
+      es: 'Resección de tumores en neurocirugía con preservación de estructuras adyacentes.',
+      en: 'Tumor resection in neurosurgery while preserving adjacent structures.',
+    ),
   ),
   Instrument(
     id: 'craniotomo',
@@ -604,8 +1008,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.neurocirugia,
     aliases: ['Midas Rex Legend (Medtronic)', 'Stryker CORE Craniotome'],
     icon: 'cut',
-    description: 'Instrumento motorizado (neumático o eléctrico) con accesorios intercambiables para cortar la bóveda craneal.',
-    use: 'Apertura de colgajo óseo craneal en craneotomías.',
+    description: LocalizedText(
+      ca: 'Instrument motoritzat (pneumàtic o elèctric) amb accessoris intercanviables per tallar la volta cranial.',
+      es: 'Instrumento motorizado (neumático o eléctrico) con accesorios intercambiables para cortar la bóveda craneal.',
+      en: 'Motorized instrument (pneumatic or electric) with interchangeable attachments for cutting the cranial vault.',
+    ),
+    use: LocalizedText(
+      ca: 'Obertura de colgall ossi cranial en craniotomies.',
+      es: 'Apertura de colgajo óseo craneal en craneotomías.',
+      en: 'Raising a bone flap in craniotomies.',
+    ),
   ),
   Instrument(
     id: 'perforador-craneal',
@@ -614,8 +1026,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.neurocirugia,
     aliases: ['Aesculap Disposable Cranial Perforator'],
     icon: 'cut',
-    description: 'Perforador de un solo uso con desacople automático al atravesar la tabla interna del cráneo.',
-    use: 'Trepanación craneal con seguridad anti-perforación dural.',
+    description: LocalizedText(
+      ca: 'Perforador d\'un sol ús amb desacoblament automàtic en travessar la taula interna del crani.',
+      es: 'Perforador de un solo uso con desacople automático al atravesar la tabla interna del cráneo.',
+      en: 'Single-use perforator with automatic disengagement upon crossing the inner skull table.',
+    ),
+    use: LocalizedText(
+      ca: 'Trepanació cranial amb seguretat antiperforació dural.',
+      es: 'Trepanación craneal con seguridad anti-perforación dural.',
+      en: 'Cranial burr-hole drilling with protection against dural perforation.',
+    ),
   ),
   Instrument(
     id: 'neuronavegacion',
@@ -624,8 +1044,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.neurocirugia,
     aliases: ['StealthStation (Medtronic)', 'Brainlab Curve'],
     icon: 'tool',
-    description: 'Sistema estereotáctico que referencia imágenes de TC/RM en tiempo real con la posición del instrumental.',
-    use: 'Guía de precisión en resección tumoral, biopsias y estimulación cerebral profunda.',
+    description: LocalizedText(
+      ca: 'Sistema estereotàctic que referencia imatges de TC/RM en temps real amb la posició de l\'instrumental.',
+      es: 'Sistema estereotáctico que referencia imágenes de TC/RM en tiempo real con la posición del instrumental.',
+      en: 'Stereotactic system that references CT/MRI images in real time against instrument position.',
+    ),
+    use: LocalizedText(
+      ca: 'Guia de precisió en resecció tumoral, biòpsies i estimulació cerebral profunda.',
+      es: 'Guía de precisión en resección tumoral, biopsias y estimulación cerebral profunda.',
+      en: 'Precision guidance for tumor resection, biopsies and deep brain stimulation.',
+    ),
   ),
   Instrument(
     id: 'microscopio-quirurgico',
@@ -634,8 +1062,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.neurocirugia,
     aliases: ['Zeiss KINEVO 900 / OPMI Pentero', 'Leica M530 OHX'],
     icon: 'tool',
-    description: 'Sistema óptico de aumento con iluminación integrada, algunos con brazo robotizado.',
-    use: 'Visualización de alta precisión en microcirugía neuro, vascular y de columna.',
+    description: LocalizedText(
+      ca: 'Sistema òptic d\'augment amb il·luminació integrada, alguns amb braç robotitzat.',
+      es: 'Sistema óptico de aumento con iluminación integrada, algunos con brazo robotizado.',
+      en: 'Optical magnification system with integrated illumination, some with a robotic arm.',
+    ),
+    use: LocalizedText(
+      ca: 'Visualització d\'alta precisió en microcirurgia neuro, vascular i de columna.',
+      es: 'Visualización de alta precisión en microcirugía neuro, vascular y de columna.',
+      en: 'High-precision visualization in neuro, vascular and spinal microsurgery.',
+    ),
   ),
   Instrument(
     id: 'clip-aneurisma',
@@ -644,8 +1080,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.neurocirugia,
     aliases: ['Yasargil Aneurysm Clip (Aesculap/B.Braun)'],
     icon: 'tool',
-    description: 'Clip de titanio de resorte, en múltiples diseños y tamaños, aplicado con una pinza aplicadora específica.',
-    use: 'Clipaje microquirúrgico de aneurismas cerebrales.',
+    description: LocalizedText(
+      ca: 'Clip de titani de molla, en múltiples dissenys i mides, aplicat amb una pinça aplicadora específica.',
+      es: 'Clip de titanio de resorte, en múltiples diseños y tamaños, aplicado con una pinza aplicadora específica.',
+      en: 'Titanium spring clip, available in multiple designs and sizes, applied with a dedicated applier.',
+    ),
+    use: LocalizedText(
+      ca: 'Clipatge microquirúrgic d\'aneurismes cerebrals.',
+      es: 'Clipaje microquirúrgico de aneurismas cerebrales.',
+      en: 'Microsurgical clipping of cerebral aneurysms.',
+    ),
   ),
 
   // ==================================================================
@@ -658,8 +1102,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.cardiovascular,
     aliases: ['Stryker System 7/8/9 Sternum Saw'],
     icon: 'cut',
-    description: 'Sierra oscilante o reciprocante motorizada para corte óseo longitudinal.',
-    use: 'Esternotomía media para acceso a tórax en cirugía cardíaca abierta.',
+    description: LocalizedText(
+      ca: 'Serra oscil·lant o reciprocant motoritzada per a tall ossi longitudinal.',
+      es: 'Sierra oscilante o reciprocante motorizada para corte óseo longitudinal.',
+      en: 'Motorized oscillating or reciprocating saw for longitudinal bone cutting.',
+    ),
+    use: LocalizedText(
+      ca: 'Esternotomia mitjana per accedir al tòrax en cirurgia cardíaca oberta.',
+      es: 'Esternotomía media para acceso a tórax en cirugía cardíaca abierta.',
+      en: 'Median sternotomy for thoracic access in open-heart surgery.',
+    ),
   ),
   Instrument(
     id: 'canula-aortica',
@@ -668,8 +1120,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.cardiovascular,
     aliases: ['Bio-Medicus NextGen (Medtronic)'],
     icon: 'tool',
-    description: 'Cánula que conecta el sistema vascular del paciente con la máquina de circulación extracorpórea.',
-    use: 'Entrada/salida de sangre y perfusión de cardioplejia durante bypass cardiopulmonar.',
+    description: LocalizedText(
+      ca: 'Cànula que connecta el sistema vascular del pacient amb la màquina de circulació extracorpòria.',
+      es: 'Cánula que conecta el sistema vascular del paciente con la máquina de circulación extracorpórea.',
+      en: 'Cannula that connects the patient\'s vascular system to the cardiopulmonary bypass machine.',
+    ),
+    use: LocalizedText(
+      ca: 'Entrada/sortida de sang i perfusió de cardioplegia durant el bypass cardiopulmonar.',
+      es: 'Entrada/salida de sangre y perfusión de cardioplejia durante bypass cardiopulmonar.',
+      en: 'Blood inflow/outflow and cardioplegia delivery during cardiopulmonary bypass.',
+    ),
   ),
   Instrument(
     id: 'clamp-aortico',
@@ -678,8 +1138,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.cardiovascular,
     aliases: ['DeBakey Aorta Clamp', 'Cygnet (Peters Surgical)'],
     icon: 'expand',
-    description: 'Pinza vascular curva que ocluye completamente la aorta ascendente.',
-    use: 'Aislamiento del corazón de la circulación sistémica durante cardioplejia.',
+    description: LocalizedText(
+      ca: 'Pinça vascular corba que oclou completament l\'aorta ascendent.',
+      es: 'Pinza vascular curva que ocluye completamente la aorta ascendente.',
+      en: 'Curved vascular clamp that fully occludes the ascending aorta.',
+    ),
+    use: LocalizedText(
+      ca: 'Aïllament del cor de la circulació sistèmica durant la cardioplegia.',
+      es: 'Aislamiento del corazón de la circulación sistémica durante cardioplejia.',
+      en: 'Isolating the heart from systemic circulation during cardioplegia.',
+    ),
   ),
   Instrument(
     id: 'pinza-debakey',
@@ -688,8 +1156,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.cardiovascular,
     aliases: ['DALE ATRAUMATA (B.Braun/Aesculap)'],
     icon: 'expand',
-    description: 'Pinza de mandíbula tipo cuchara que sujeta el vaso sin dañar la íntima vascular.',
-    use: 'Clampaje atraumático de vasos en cirugía cardiovascular.',
+    description: LocalizedText(
+      ca: 'Pinça de mandíbula tipus cullera que subjecta el vas sense danyar la íntima vascular.',
+      es: 'Pinza de mandíbula tipo cuchara que sujeta el vaso sin dañar la íntima vascular.',
+      en: 'Spoon-jawed clamp that grips the vessel without damaging the vascular intima.',
+    ),
+    use: LocalizedText(
+      ca: 'Clampatge atraumàtic de vasos en cirurgia cardiovascular.',
+      es: 'Clampaje atraumático de vasos en cirugía cardiovascular.',
+      en: 'Atraumatic vessel clamping in cardiovascular surgery.',
+    ),
   ),
   Instrument(
     id: 'anastomosis-distal',
@@ -698,8 +1174,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.cardiovascular,
     aliases: ['C-Port xA / C-Port Flex A'],
     icon: 'needle',
-    description: 'Dispositivo que grapa automáticamente el injerto a la arteria coronaria sin sutura manual.',
-    use: 'Anastomosis coronaria en bypass (CABG) off-pump.',
+    description: LocalizedText(
+      ca: 'Dispositiu que grapa automàticament l\'empelt a l\'artèria coronària sense sutura manual.',
+      es: 'Dispositivo que grapa automáticamente el injerto a la arteria coronaria sin sutura manual.',
+      en: 'Device that automatically staples the graft to the coronary artery without manual suturing.',
+    ),
+    use: LocalizedText(
+      ca: 'Anastomosi coronària en bypass (CABG) off-pump.',
+      es: 'Anastomosis coronaria en bypass (CABG) off-pump.',
+      en: 'Coronary anastomosis in off-pump bypass (CABG).',
+    ),
   ),
   Instrument(
     id: 'cierre-esternal',
@@ -708,8 +1192,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.cardiovascular,
     aliases: ['Synthes ZipFix', 'FiberTape Sternal Closure (Arthrex)'],
     icon: 'needle',
-    description: 'Sistema de cables o cintas que reaproxima y fija el esternón, alternativa al alambre tradicional.',
-    use: 'Cierre y fijación del esternón tras esternotomía.',
+    description: LocalizedText(
+      ca: 'Sistema de cables o cintes que reaproxima i fixa l\'estèrnum, alternativa al filferro tradicional.',
+      es: 'Sistema de cables o cintas que reaproxima y fija el esternón, alternativa al alambre tradicional.',
+      en: 'System of cables or tapes that reapproximates and fixes the sternum, an alternative to traditional wire.',
+    ),
+    use: LocalizedText(
+      ca: 'Tancament i fixació de l\'estèrnum després d\'una esternotomia.',
+      es: 'Cierre y fijación del esternón tras esternotomía.',
+      en: 'Closure and fixation of the sternum after sternotomy.',
+    ),
   ),
 
   // ==================================================================
@@ -722,8 +1214,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ginecologiaObstetricia,
     aliases: ['Bettocchi Hysteroscope (Karl Storz)'],
     icon: 'tool',
-    description: 'Endoscopio rígido o flexible de calibre fino para explorar la cavidad uterina.',
-    use: 'Diagnóstico y tratamiento de pólipos, miomas submucosos y septos uterinos.',
+    description: LocalizedText(
+      ca: 'Endoscopi rígid o flexible de calibre fi per explorar la cavitat uterina.',
+      es: 'Endoscopio rígido o flexible de calibre fino para explorar la cavidad uterina.',
+      en: 'Rigid or flexible, fine-gauge endoscope for examining the uterine cavity.',
+    ),
+    use: LocalizedText(
+      ca: 'Diagnòstic i tractament de pòlips, miomes submucosos i septes uterins.',
+      es: 'Diagnóstico y tratamiento de pólipos, miomas submucosos y septos uterinos.',
+      en: 'Diagnosis and treatment of polyps, submucosal fibroids and uterine septa.',
+    ),
   ),
   Instrument(
     id: 'morcelador',
@@ -732,9 +1232,21 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ginecologiaObstetricia,
     aliases: ['moresolution Power Morcellator (Olympus)'],
     icon: 'cut',
-    description: 'Instrumento motorizado que fragmenta tejido para extracción a través de un trócar.',
-    use: 'Fragmentación de miomas o útero en miomectomía/histerectomía laparoscópica.',
-    tip: 'Debe usarse siempre con bolsa de contención tisular por riesgo de diseminación celular.',
+    description: LocalizedText(
+      ca: 'Instrument motoritzat que fragmenta teixit per extreure\'l a través d\'un tròcar.',
+      es: 'Instrumento motorizado que fragmenta tejido para extracción a través de un trócar.',
+      en: 'Motorized instrument that fragments tissue for extraction through a trocar.',
+    ),
+    use: LocalizedText(
+      ca: 'Fragmentació de miomes o úter en miomectomia/histerectomia laparoscòpica.',
+      es: 'Fragmentación de miomas o útero en miomectomía/histerectomía laparoscópica.',
+      en: 'Fragmentation of fibroids or uterus in laparoscopic myomectomy/hysterectomy.',
+    ),
+    tip: LocalizedText(
+      ca: 'Cal utilitzar-lo sempre amb bossa de contenció tissular pel risc de disseminació cel·lular.',
+      es: 'Debe usarse siempre con bolsa de contención tisular por riesgo de diseminación celular.',
+      en: 'Must always be used with a tissue containment bag due to the risk of cell dissemination.',
+    ),
   ),
   Instrument(
     id: 'bolsa-contencion-morcelacion',
@@ -743,8 +1255,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ginecologiaObstetricia,
     aliases: ['PneumoLiner (Olympus)', 'LapBox POWER (Ark Surgical)'],
     icon: 'tool',
-    description: 'Bolsa insuflable que aísla el tejido durante la morcelación de potencia.',
-    use: 'Evita la diseminación de fragmentos tisulares en la cavidad abdominal durante morcelación.',
+    description: LocalizedText(
+      ca: 'Bossa inflable que aïlla el teixit durant la morcelació de potència.',
+      es: 'Bolsa insuflable que aísla el tejido durante la morcelación de potencia.',
+      en: 'Inflatable bag that isolates tissue during power morcellation.',
+    ),
+    use: LocalizedText(
+      ca: 'Evita la disseminació de fragments tissulars a la cavitat abdominal durant la morcelació.',
+      es: 'Evita la diseminación de fragmentos tisulares en la cavidad abdominal durante morcelación.',
+      en: 'Prevents dissemination of tissue fragments into the abdominal cavity during morcellation.',
+    ),
   ),
   Instrument(
     id: 'pinza-green-armytage',
@@ -753,8 +1273,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.ginecologiaObstetricia,
     aliases: ['Green-Armytage Forceps'],
     icon: 'pinch',
-    description: 'Pinza hemostática de mandíbula larga y curva.',
-    use: 'Hemostasia del borde de la histerotomía tras la incisión uterina en cesárea.',
+    description: LocalizedText(
+      ca: 'Pinça hemostàtica de mandíbula llarga i corba.',
+      es: 'Pinza hemostática de mandíbula larga y curva.',
+      en: 'Hemostatic forceps with a long, curved jaw.',
+    ),
+    use: LocalizedText(
+      ca: 'Hemostàsia de la vora de la histerotomia després de la incisió uterina en cesària.',
+      es: 'Hemostasia del borde de la histerotomía tras la incisión uterina en cesárea.',
+      en: 'Hemostasis of the hysterotomy edge after the uterine incision in cesarean section.',
+    ),
   ),
 
   // ==================================================================
@@ -767,8 +1295,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.urologia,
     aliases: ['Olympus PLASMA System (TURis)'],
     icon: 'tool',
-    description: 'Resectoscopio que trabaja en medio salino con energía bipolar, evitando el síndrome de RTU.',
-    use: 'Resección transuretral de próstata (RTUP) y tumores vesicales.',
+    description: LocalizedText(
+      ca: 'Resectoscopi que treballa en medi salí amb energia bipolar, evitant la síndrome de RTU.',
+      es: 'Resectoscopio que trabaja en medio salino con energía bipolar, evitando el síndrome de RTU.',
+      en: 'Resectoscope that operates in saline medium with bipolar energy, avoiding TUR syndrome.',
+    ),
+    use: LocalizedText(
+      ca: 'Resecció transuretral de pròstata (RTUP) i tumors vesicals.',
+      es: 'Resección transuretral de próstata (RTUP) y tumores vesicales.',
+      en: 'Transurethral resection of the prostate (TURP) and bladder tumors.',
+    ),
   ),
   Instrument(
     id: 'laser-holmio',
@@ -777,8 +1313,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.urologia,
     aliases: ['Lumenis Pulse 120H', 'Moses 2.0'],
     icon: 'bolt',
-    description: 'Láser pulsado que fragmenta cálculos urinarios mediante fototermólisis.',
-    use: 'Litotricia intracorpórea de cálculos renales/ureterales y enucleación prostática (HoLEP).',
+    description: LocalizedText(
+      ca: 'Làser polsat que fragmenta càlculs urinaris mitjançant fototermòlisi.',
+      es: 'Láser pulsado que fragmenta cálculos urinarios mediante fototermólisis.',
+      en: 'Pulsed laser that fragments urinary stones through photothermolysis.',
+    ),
+    use: LocalizedText(
+      ca: 'Litotrícia intracorpòria de càlculs renals/ureterals i enucleació prostàtica (HoLEP).',
+      es: 'Litotricia intracorpórea de cálculos renales/ureterales y enucleación prostática (HoLEP).',
+      en: 'Intracorporeal lithotripsy of renal/ureteral stones and prostate enucleation (HoLEP).',
+    ),
   ),
   Instrument(
     id: 'laser-tulio',
@@ -787,8 +1331,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.urologia,
     aliases: ['Soltive SuperPulsed Laser (Olympus)'],
     icon: 'bolt',
-    description: 'Láser superpulsado de mayor eficiencia de corte y menor retropulsión que el holmio.',
-    use: 'Litotricia de cálculos urinarios.',
+    description: LocalizedText(
+      ca: 'Làser superpolsat de major eficiència de tall i menor retropulsió que l\'holmi.',
+      es: 'Láser superpulsado de mayor eficiencia de corte y menor retropulsión que el holmio.',
+      en: 'Super-pulsed laser with greater cutting efficiency and less retropulsion than holmium.',
+    ),
+    use: LocalizedText(
+      ca: 'Litotrícia de càlculs urinaris.',
+      es: 'Litotricia de cálculos urinarios.',
+      en: 'Lithotripsy of urinary stones.',
+    ),
   ),
   Instrument(
     id: 'ureteroscopio-flexible',
@@ -797,8 +1349,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.urologia,
     aliases: ['LithoVue (Stryker)'],
     icon: 'tool',
-    description: 'Endoscopio flexible con cámara digital en la punta, de un solo uso o reutilizable.',
-    use: 'Acceso ureteral y renal para diagnóstico y tratamiento de litiasis.',
+    description: LocalizedText(
+      ca: 'Endoscopi flexible amb càmera digital a la punta, d\'un sol ús o reutilitzable.',
+      es: 'Endoscopio flexible con cámara digital en la punta, de un solo uso o reutilizable.',
+      en: 'Flexible endoscope with a digital camera at the tip, single-use or reusable.',
+    ),
+    use: LocalizedText(
+      ca: 'Accés ureteral i renal per al diagnòstic i el tractament de la litiasi.',
+      es: 'Acceso ureteral y renal para diagnóstico y tratamiento de litiasis.',
+      en: 'Ureteral and renal access for diagnosis and treatment of stone disease.',
+    ),
   ),
 
   // ==================================================================
@@ -811,8 +1371,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.otorrino,
     aliases: ['StraightShot M4/M5 (Medtronic)', 'Stryker Pello'],
     icon: 'cut',
-    description: 'Instrumento motorizado que corta y aspira simultáneamente tejido blando u óseo.',
-    use: 'Cirugía endoscópica sinusal, adenoidectomía y resección de pólipos.',
+    description: LocalizedText(
+      ca: 'Instrument motoritzat que talla i aspira simultàniament teixit tou o ossi.',
+      es: 'Instrumento motorizado que corta y aspira simultáneamente tejido blando u óseo.',
+      en: 'Motorized instrument that simultaneously cuts and suctions soft or bony tissue.',
+    ),
+    use: LocalizedText(
+      ca: 'Cirurgia endoscòpica sinusal, adenoïdectomia i resecció de pòlips.',
+      es: 'Cirugía endoscópica sinusal, adenoidectomía y resección de pólipos.',
+      en: 'Endoscopic sinus surgery, adenoidectomy and polyp resection.',
+    ),
   ),
   Instrument(
     id: 'navegacion-ent',
@@ -821,8 +1389,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.otorrino,
     aliases: ['Fusion ENT Navigation (Medtronic)', 'Karl Storz NAV1'],
     icon: 'tool',
-    description: 'Sistema de navegación electromagnética que guía el instrumental sobre la TC preoperatoria.',
-    use: 'Cirugía sinusal y de base de cráneo, especialmente en revisiones.',
+    description: LocalizedText(
+      ca: 'Sistema de navegació electromagnètica que guia l\'instrumental sobre la TC preoperatòria.',
+      es: 'Sistema de navegación electromagnética que guía el instrumental sobre la TC preoperatoria.',
+      en: 'Electromagnetic navigation system that guides instruments against preoperative CT imaging.',
+    ),
+    use: LocalizedText(
+      ca: 'Cirurgia sinusal i de base de crani, especialment en revisions.',
+      es: 'Cirugía sinusal y de base de cráneo, especialmente en revisiones.',
+      en: 'Sinus and skull-base surgery, especially in revision cases.',
+    ),
   ),
   Instrument(
     id: 'dilatacion-sinusal-balon',
@@ -831,8 +1407,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.otorrino,
     aliases: ['Relieva (Acclarent)', 'NuVent EM (Medtronic)'],
     icon: 'tool',
-    description: 'Catéter con balón que dilata el ostium sinusal de forma mínimamente invasiva.',
-    use: 'Sinuplastia con balón, alternativa a la cirugía endoscópica sinusal clásica.',
+    description: LocalizedText(
+      ca: 'Catèter amb baló que dilata l\'osti sinusal de manera mínimament invasiva.',
+      es: 'Catéter con balón que dilata el ostium sinusal de forma mínimamente invasiva.',
+      en: 'Balloon catheter that dilates the sinus ostium in a minimally invasive way.',
+    ),
+    use: LocalizedText(
+      ca: 'Sinuplàstia amb baló, alternativa a la cirurgia endoscòpica sinusal clàssica.',
+      es: 'Sinuplastia con balón, alternativa a la cirugía endoscópica sinusal clásica.',
+      en: 'Balloon sinuplasty, an alternative to classic endoscopic sinus surgery.',
+    ),
   ),
   Instrument(
     id: 'coblator',
@@ -841,8 +1425,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.otorrino,
     aliases: ['Coblator II (Smith+Nephew)'],
     icon: 'bolt',
-    description: 'Tecnología de plasma frío que ablaciona tejido blando con mínimo daño térmico.',
-    use: 'Amigdalectomía intracapsular y adenoidectomía.',
+    description: LocalizedText(
+      ca: 'Tecnologia de plasma fred que ablaciona teixit tou amb mínim dany tèrmic.',
+      es: 'Tecnología de plasma frío que ablaciona tejido blando con mínimo daño térmico.',
+      en: 'Cold-plasma technology that ablates soft tissue with minimal thermal damage.',
+    ),
+    use: LocalizedText(
+      ca: 'Amigdalectomia intracapsular i adenoïdectomia.',
+      es: 'Amigdalectomía intracapsular y adenoidectomía.',
+      en: 'Intracapsular tonsillectomy and adenoidectomy.',
+    ),
   ),
   Instrument(
     id: 'laser-co2-laringeo',
@@ -851,8 +1443,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.otorrino,
     aliases: ['UltraPulse (Lumenis)', 'Digital AcuBlade'],
     icon: 'bolt',
-    description: 'Láser de dióxido de carbono con micromanipulador de precisión bajo microlaringoscopia.',
-    use: 'Microcirugía fonatoria de cuerdas vocales (pólipos, nódulos, papilomas).',
+    description: LocalizedText(
+      ca: 'Làser de diòxid de carboni amb micromanipulador de precisió sota microlaringoscòpia.',
+      es: 'Láser de dióxido de carbono con micromanipulador de precisión bajo microlaringoscopia.',
+      en: 'Carbon dioxide laser with a precision micromanipulator under microlaryngoscopy.',
+    ),
+    use: LocalizedText(
+      ca: 'Microcirurgia fonatòria de cordes vocals (pòlips, nòduls, papil·lomes).',
+      es: 'Microcirugía fonatoria de cuerdas vocales (pólipos, nódulos, papilomas).',
+      en: 'Phonosurgery of the vocal cords (polyps, nodules, papillomas).',
+    ),
   ),
 
   // ==================================================================
@@ -865,9 +1465,21 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.vascular,
     aliases: ['Satinsky clamp'],
     icon: 'pinch',
-    description: 'Pinza vascular angulada de mordida larga y curva, diseñada para el clampaje tangencial parcial de vasos de gran calibre.',
-    use: 'Oclusión parcial de aorta, vena cava u otros vasos de gran calibre sin interrumpir el flujo total, para permitir suturas o anastomosis laterales.',
-    tip: 'Se aplica de forma tangencial, ocluyendo solo una porción de la pared del vaso.',
+    description: LocalizedText(
+      ca: 'Pinça vascular angulada de mossegada llarga i corba, dissenyada per al clampatge tangencial parcial de vasos de gran calibre.',
+      es: 'Pinza vascular angulada de mordida larga y curva, diseñada para el clampaje tangencial parcial de vasos de gran calibre.',
+      en: 'Angled vascular clamp with a long, curved jaw, designed for partial tangential clamping of large-caliber vessels.',
+    ),
+    use: LocalizedText(
+      ca: 'Oclusió parcial d\'aorta, vena cava o altres vasos de gran calibre sense interrompre el flux total, per permetre sutures o anastomosis laterals.',
+      es: 'Oclusión parcial de aorta, vena cava u otros vasos de gran calibre sin interrumpir el flujo total, para permitir suturas o anastomosis laterales.',
+      en: 'Partial occlusion of the aorta, vena cava or other large-caliber vessels without interrupting total flow, allowing lateral sutures or anastomoses.',
+    ),
+    tip: LocalizedText(
+      ca: 'S\'aplica de forma tangencial, ocloent només una porció de la paret del vas.',
+      es: 'Se aplica de forma tangencial, ocluyendo solo una porción de la pared del vaso.',
+      en: 'Applied tangentially, occluding only a portion of the vessel wall.',
+    ),
     image: InstrumentImage(
       url: 'https://upload.wikimedia.org/wikipedia/commons/6/65/Satinsky%E2%80%99s_clamp_applied_to_arterial_injury_during_emergency_surgery%2C_Riadh.jpg',
       license: 'CC BY 4.0',
@@ -882,8 +1494,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.vascular,
     aliases: ['Bulldog clamp', 'Pinza de Dieffenbach'],
     icon: 'pinch',
-    description: 'Pinza pequeña de resorte con mordida atraumática, de oclusión temporal y baja fuerza de cierre.',
-    use: 'Oclusión temporal de vasos de pequeño y mediano calibre durante anastomosis microvasculares o vasculares.',
+    description: LocalizedText(
+      ca: 'Pinça petita de molla amb mossegada atraumàtica, d\'oclusió temporal i baixa força de tancament.',
+      es: 'Pinza pequeña de resorte con mordida atraumática, de oclusión temporal y baja fuerza de cierre.',
+      en: 'Small spring clamp with an atraumatic jaw, for temporary occlusion with low closing force.',
+    ),
+    use: LocalizedText(
+      ca: 'Oclusió temporal de vasos de petit i mitjà calibre durant anastomosis microvasculars o vasculars.',
+      es: 'Oclusión temporal de vasos de pequeño y mediano calibre durante anastomosis microvasculares o vasculares.',
+      en: 'Temporary occlusion of small and medium-caliber vessels during microvascular or vascular anastomoses.',
+    ),
   ),
   Instrument(
     id: 'cateter-fogarty',
@@ -892,9 +1512,21 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.vascular,
     aliases: ['Fogarty embolectomy catheter'],
     icon: 'tool',
-    description: 'Catéter flexible con balón inflable en la punta, introducido en el interior del vaso a través de una arteriotomía.',
-    use: 'Extracción de émbolos y trombos arteriales (embolectomía) mediante inflado del balón y retirada del catéter, arrastrando el coágulo.',
-    tip: 'Inventado por Thomas J. Fogarty en 1961: fue el origen de la cirugía vascular mínimamente invasiva.',
+    description: LocalizedText(
+      ca: 'Catèter flexible amb baló inflable a la punta, introduït dins del vas a través d\'una arteriotomia.',
+      es: 'Catéter flexible con balón inflable en la punta, introducido en el interior del vaso a través de una arteriotomía.',
+      en: 'Flexible catheter with an inflatable balloon at the tip, introduced into the vessel through an arteriotomy.',
+    ),
+    use: LocalizedText(
+      ca: 'Extracció d\'èmbols i trombes arterials (embolectomia) inflant el baló i retirant el catèter, arrossegant el coàgul.',
+      es: 'Extracción de émbolos y trombos arteriales (embolectomía) mediante inflado del balón y retirada del catéter, arrastrando el coágulo.',
+      en: 'Extraction of arterial emboli and thrombi (embolectomy) by inflating the balloon and withdrawing the catheter, dragging out the clot.',
+    ),
+    tip: LocalizedText(
+      ca: 'Inventat per Thomas J. Fogarty el 1961: va ser l\'origen de la cirurgia vascular mínimament invasiva.',
+      es: 'Inventado por Thomas J. Fogarty en 1961: fue el origen de la cirugía vascular mínimamente invasiva.',
+      en: 'Invented by Thomas J. Fogarty in 1961: it was the starting point of minimally invasive vascular surgery.',
+    ),
   ),
   Instrument(
     id: 'injerto-vascular-protesico',
@@ -903,8 +1535,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.vascular,
     aliases: ['Gore-Tex vascular graft (W. L. Gore)'],
     icon: 'tool',
-    description: 'Prótesis tubular de poliéster tejido (Dacron) o politetrafluoroetileno expandido (ePTFE), recta o bifurcada.',
-    use: 'Sustitución o bypass de segmentos arteriales enfermos u ocluidos (aorta, ilíacas, femorales).',
+    description: LocalizedText(
+      ca: 'Pròtesi tubular de polièster teixit (Dacron) o politetrafluoroetilè expandit (ePTFE), recta o bifurcada.',
+      es: 'Prótesis tubular de poliéster tejido (Dacron) o politetrafluoroetileno expandido (ePTFE), recta o bifurcada.',
+      en: 'Tubular prosthesis made of woven polyester (Dacron) or expanded polytetrafluoroethylene (ePTFE), straight or bifurcated.',
+    ),
+    use: LocalizedText(
+      ca: 'Substitució o bypass de segments arterials malalts o oclosos (aorta, ilíaques, femorals).',
+      es: 'Sustitución o bypass de segmentos arteriales enfermos u ocluidos (aorta, ilíacas, femorales).',
+      en: 'Replacement or bypass of diseased or occluded arterial segments (aorta, iliac, femoral).',
+    ),
   ),
   Instrument(
     id: 'ecografo-doppler-intraoperatorio',
@@ -913,8 +1553,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.vascular,
     aliases: [],
     icon: 'tool',
-    description: 'Ecógrafo portátil con sonda estéril compatible con campo quirúrgico, con modo Doppler color y espectral.',
-    use: 'Valoración intraoperatoria del flujo y la permeabilidad de anastomosis vasculares y bypasses antes del cierre.',
+    description: LocalizedText(
+      ca: 'Ecògraf portàtil amb sonda estèril compatible amb el camp quirúrgic, amb mode Doppler color i espectral.',
+      es: 'Ecógrafo portátil con sonda estéril compatible con campo quirúrgico, con modo Doppler color y espectral.',
+      en: 'Portable ultrasound unit with a sterile probe compatible with the surgical field, featuring color and spectral Doppler modes.',
+    ),
+    use: LocalizedText(
+      ca: 'Valoració intraoperatòria del flux i la permeabilitat d\'anastomosis vasculars i bypasses abans del tancament.',
+      es: 'Valoración intraoperatoria del flujo y la permeabilidad de anastomosis vasculares y bypasses antes del cierre.',
+      en: 'Intraoperative assessment of flow and patency of vascular anastomoses and bypasses before closure.',
+    ),
   ),
   Instrument(
     id: 'sistema-trombectomia-mecanica',
@@ -923,8 +1571,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.vascular,
     aliases: ['FlowTriever / ClotTriever / Artix (Inari Medical, Stryker)', 'Indigo Aspiration System (Penumbra)'],
     icon: 'tool',
-    description: 'Consola de aspiración continua o por catéter, combinada con dispositivos de extracción mecánica de trombo.',
-    use: 'Extracción percutánea de trombos venosos o arteriales (tromboembolismo pulmonar, isquemia arterial aguda) sin trombolisis.',
+    description: LocalizedText(
+      ca: 'Consola d\'aspiració contínua o per catèter, combinada amb dispositius d\'extracció mecànica de trombe.',
+      es: 'Consola de aspiración continua o por catéter, combinada con dispositivos de extracción mecánica de trombo.',
+      en: 'Console for continuous or catheter-based aspiration, combined with mechanical thrombus-extraction devices.',
+    ),
+    use: LocalizedText(
+      ca: 'Extracció percutània de trombes venosos o arterials (tromboembolisme pulmonar, isquèmia arterial aguda) sense trombòlisi.',
+      es: 'Extracción percutánea de trombos venosos o arteriales (tromboembolismo pulmonar, isquemia arterial aguda) sin trombolisis.',
+      en: 'Percutaneous extraction of venous or arterial thrombi (pulmonary thromboembolism, acute arterial ischemia) without thrombolysis.',
+    ),
   ),
 
   // ==================================================================
@@ -937,8 +1593,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.maxilofacial,
     aliases: ['Dental extraction forceps'],
     icon: 'pinch',
-    description: 'Pinza de mordidas anatómicas específicas para cada tipo de pieza dentaria (superior, inferior, molar, incisivo).',
-    use: 'Luxación y extracción de piezas dentarias en exodoncia quirúrgica.',
+    description: LocalizedText(
+      ca: 'Pinça de mossegades anatòmiques específiques per a cada tipus de peça dentària (superior, inferior, molar, incisiu).',
+      es: 'Pinza de mordidas anatómicas específicas para cada tipo de pieza dentaria (superior, inferior, molar, incisivo).',
+      en: 'Forceps with anatomical jaws specific to each tooth type (upper, lower, molar, incisor).',
+    ),
+    use: LocalizedText(
+      ca: 'Luxació i extracció de peces dentàries en exodòncia quirúrgica.',
+      es: 'Luxación y extracción de piezas dentarias en exodoncia quirúrgica.',
+      en: 'Luxation and extraction of teeth in surgical extraction.',
+    ),
   ),
   Instrument(
     id: 'elevador-periostotomo',
@@ -947,8 +1611,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.maxilofacial,
     aliases: ['Periosteal elevator'],
     icon: 'tool',
-    description: 'Instrumento de punta plana o curva, con mango, usado para separar el periostio del hueso o luxar la pieza dentaria.',
-    use: 'Despegamiento de colgajos mucoperiósticos y luxación previa a la extracción dental.',
+    description: LocalizedText(
+      ca: 'Instrument de punta plana o corba, amb mànec, utilitzat per separar el periosti de l\'os o luxar la peça dentària.',
+      es: 'Instrumento de punta plana o curva, con mango, usado para separar el periostio del hueso o luxar la pieza dentaria.',
+      en: 'Handled instrument with a flat or curved tip, used to separate the periosteum from bone or luxate a tooth.',
+    ),
+    use: LocalizedText(
+      ca: 'Despreniment de colgalls mucoperiòstics i luxació prèvia a l\'extracció dental.',
+      es: 'Despegamiento de colgajos mucoperiósticos y luxación previa a la extracción dental.',
+      en: 'Raising mucoperiosteal flaps and luxation prior to tooth extraction.',
+    ),
   ),
   Instrument(
     id: 'placa-osteosintesis-maxilofacial',
@@ -957,8 +1629,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.maxilofacial,
     aliases: [],
     icon: 'tool',
-    description: 'Placa de titanio de bajo perfil, con tornillos monocorticales, adaptable a los contornos óseos faciales.',
-    use: 'Fijación de fracturas y osteotomías de mandíbula, maxilar y órbita.',
+    description: LocalizedText(
+      ca: 'Placa de titani de baix perfil, amb cargols monocorticals, adaptable als contorns ossis facials.',
+      es: 'Placa de titanio de bajo perfil, con tornillos monocorticales, adaptable a los contornos óseos faciales.',
+      en: 'Low-profile titanium plate with monocortical screws, adaptable to facial bone contours.',
+    ),
+    use: LocalizedText(
+      ca: 'Fixació de fractures i osteotomies de mandíbula, maxil·lar i òrbita.',
+      es: 'Fijación de fracturas y osteotomías de mandíbula, maxilar y órbita.',
+      en: 'Fixation of mandibular, maxillary and orbital fractures and osteotomies.',
+    ),
   ),
   Instrument(
     id: 'motor-piezoelectrico-oral',
@@ -967,8 +1647,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.maxilofacial,
     aliases: ['Piezosurgery plus / MT-BONE (Mectron)'],
     icon: 'bolt',
-    description: 'Generador de microvibraciones ultrasónicas (25-30 kHz) que corta tejido óseo mineralizado sin dañar tejidos blandos adyacentes.',
-    use: 'Osteotomías precisas en cirugía oral e implantología: elevación de seno, extracción de terceros molares, split óseo.',
+    description: LocalizedText(
+      ca: 'Generador de microvibracions ultrasòniques (25-30 kHz) que talla teixit ossi mineralitzat sense danyar teixits tous adjacents.',
+      es: 'Generador de microvibraciones ultrasónicas (25-30 kHz) que corta tejido óseo mineralizado sin dañar tejidos blandos adyacentes.',
+      en: 'Ultrasonic micro-vibration generator (25-30 kHz) that cuts mineralized bone tissue without damaging adjacent soft tissue.',
+    ),
+    use: LocalizedText(
+      ca: 'Osteotomies precises en cirurgia oral i implantologia: elevació de si, extracció de tercers molars, split ossi.',
+      es: 'Osteotomías precisas en cirugía oral e implantología: elevación de seno, extracción de terceros molares, split óseo.',
+      en: 'Precision osteotomies in oral surgery and implantology: sinus lifts, third-molar extraction, bone splitting.',
+    ),
   ),
   Instrument(
     id: 'distractor-mandibular',
@@ -977,8 +1665,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.maxilofacial,
     aliases: ['Mandibular distractor (KLS Martin)'],
     icon: 'tool',
-    description: 'Dispositivo mecánico fijado al hueso a ambos lados de una osteotomía, con un tornillo de activación gradual diaria.',
-    use: 'Alargamiento progresivo de la mandíbula por distracción osteogénica en micrognatia (p. ej. secuencia de Pierre Robin).',
+    description: LocalizedText(
+      ca: 'Dispositiu mecànic fixat a l\'os a banda i banda d\'una osteotomia, amb un cargol d\'activació gradual diària.',
+      es: 'Dispositivo mecánico fijado al hueso a ambos lados de una osteotomía, con un tornillo de activación gradual diaria.',
+      en: 'Mechanical device fixed to bone on both sides of an osteotomy, with a screw activated gradually each day.',
+    ),
+    use: LocalizedText(
+      ca: 'Allargament progressiu de la mandíbula per distracció osteogènica en micrognàtia (p. ex. seqüència de Pierre Robin).',
+      es: 'Alargamiento progresivo de la mandíbula por distracción osteogénica en micrognatia (p. ej. secuencia de Pierre Robin).',
+      en: 'Progressive mandibular lengthening by distraction osteogenesis in micrognathia (e.g. Pierre Robin sequence).',
+    ),
   ),
   Instrument(
     id: 'fresa-quirurgica-dental',
@@ -987,8 +1683,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.maxilofacial,
     aliases: ['Surgical bur'],
     icon: 'cut',
-    description: 'Fresa rotatoria de carburo de tungsteno o diamante, montada en pieza de mano o contra-ángulo con irrigación.',
-    use: 'Odontosección, ostectomía y modelado óseo en exodoncias complejas y cirugía preprotésica.',
+    description: LocalizedText(
+      ca: 'Fresa rotatòria de carbur de tungstè o diamant, muntada en peça de mà o contra-angle amb irrigació.',
+      es: 'Fresa rotatoria de carburo de tungsteno o diamante, montada en pieza de mano o contra-ángulo con irrigación.',
+      en: 'Rotary bur of tungsten carbide or diamond, mounted on a handpiece or contra-angle with irrigation.',
+    ),
+    use: LocalizedText(
+      ca: 'Odontosecció, ostectomia i modelatge ossi en exodòncies complexes i cirurgia preprotètica.',
+      es: 'Odontosección, ostectomía y modelado óseo en exodoncias complejas y cirugía preprotésica.',
+      en: 'Tooth sectioning, ostectomy and bone contouring in complex extractions and pre-prosthetic surgery.',
+    ),
   ),
 
   // ==================================================================
@@ -1001,8 +1705,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.pediatrica,
     aliases: [],
     icon: 'pinch',
-    description: 'Versiones de menor longitud y calibre de instrumental ya existente en el catálogo (tijera de Metzenbaum, pinza de Kelly, portaagujas), adaptadas a la anatomía neonatal e infantil.',
-    use: 'Disección y hemostasia en cirugía neonatal y pediátrica, donde el instrumental de adulto resulta desproporcionado.',
+    description: LocalizedText(
+      ca: 'Versions de menor longitud i calibre de l\'instrumental ja existent al catàleg (tisora de Metzenbaum, pinça de Kelly, portaagulles), adaptades a l\'anatomia neonatal i infantil.',
+      es: 'Versiones de menor longitud y calibre de instrumental ya existente en el catálogo (tijera de Metzenbaum, pinza de Kelly, portaagujas), adaptadas a la anatomía neonatal e infantil.',
+      en: 'Shorter, finer-gauge versions of instruments already in the catalog (Metzenbaum scissors, Kelly forceps, needle holders), adapted to neonatal and pediatric anatomy.',
+    ),
+    use: LocalizedText(
+      ca: 'Dissecció i hemostàsia en cirurgia neonatal i pediàtrica, on l\'instrumental d\'adult resulta desproporcionat.',
+      es: 'Disección y hemostasia en cirugía neonatal y pediátrica, donde el instrumental de adulto resulta desproporcionado.',
+      en: 'Dissection and hemostasis in neonatal and pediatric surgery, where adult instruments are disproportionately large.',
+    ),
   ),
   Instrument(
     id: 'trocar-laparoscopico-pediatrico',
@@ -1011,8 +1723,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.pediatrica,
     aliases: [],
     icon: 'tool',
-    description: 'Trócar de 3 a 5 mm, más corto y de menor diámetro que el estándar de adulto (habitualmente 5-12 mm).',
-    use: 'Acceso laparoscópico en neonatos y lactantes, minimizando el trauma de pared abdominal.',
+    description: LocalizedText(
+      ca: 'Tròcar de 3 a 5 mm, més curt i de menor diàmetre que l\'estàndard d\'adult (habitualment 5-12 mm).',
+      es: 'Trócar de 3 a 5 mm, más corto y de menor diámetro que el estándar de adulto (habitualmente 5-12 mm).',
+      en: 'Trocar of 3 to 5 mm, shorter and narrower than the standard adult size (typically 5-12 mm).',
+    ),
+    use: LocalizedText(
+      ca: 'Accés laparoscòpic en nounats i lactants, minimitzant el traumatisme de la paret abdominal.',
+      es: 'Acceso laparoscópico en neonatos y lactantes, minimizando el trauma de pared abdominal.',
+      en: 'Laparoscopic access in neonates and infants, minimizing abdominal wall trauma.',
+    ),
   ),
   Instrument(
     id: 'tijera-potts-smith-pediatrica',
@@ -1021,8 +1741,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.pediatrica,
     aliases: ['Potts-Smith scissors'],
     icon: 'cut',
-    description: 'Tijera angulada de hojas finas, en versión de longitud reducida para campo quirúrgico pediátrico.',
-    use: 'Corte de vasos y tejidos finos en cardiocirugía y cirugía vascular pediátrica.',
+    description: LocalizedText(
+      ca: 'Tisora angulada de fulles fines, en versió de longitud reduïda per al camp quirúrgic pediàtric.',
+      es: 'Tijera angulada de hojas finas, en versión de longitud reducida para campo quirúrgico pediátrico.',
+      en: 'Angled scissors with fine blades, in a shortened version for the pediatric surgical field.',
+    ),
+    use: LocalizedText(
+      ca: 'Tall de vasos i teixits fins en cardiocirurgia i cirurgia vascular pediàtrica.',
+      es: 'Corte de vasos y tejidos finos en cardiocirugía y cirugía vascular pediátrica.',
+      en: 'Cutting fine vessels and tissue in pediatric cardiac and vascular surgery.',
+    ),
   ),
   Instrument(
     id: 'separador-weitlaner-pediatrico',
@@ -1031,8 +1759,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.pediatrica,
     aliases: ['Weitlaner retractor (versión pediátrica)'],
     icon: 'expand',
-    description: 'Separador autoestático de ramas romas o dentadas, en tamaño reducido respecto al modelo estándar de adulto.',
-    use: 'Separación de bordes de la herida en campos operatorios pequeños de cirugía pediátrica.',
+    description: LocalizedText(
+      ca: 'Separador autoestàtic de branques romes o dentades, en mida reduïda respecte al model estàndard d\'adult.',
+      es: 'Separador autoestático de ramas romas o dentadas, en tamaño reducido respecto al modelo estándar de adulto.',
+      en: 'Self-retaining retractor with blunt or toothed prongs, in a reduced size compared to the standard adult model.',
+    ),
+    use: LocalizedText(
+      ca: 'Separació de vores de la ferida en camps operatoris petits de cirurgia pediàtrica.',
+      es: 'Separación de bordes de la herida en campos operatorios pequeños de cirugía pediátrica.',
+      en: 'Retracting wound edges in small operative fields in pediatric surgery.',
+    ),
   ),
   Instrument(
     id: 'cateter-umbilical',
@@ -1041,8 +1777,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.pediatrica,
     aliases: ['Umbilical arterial/venous catheter'],
     icon: 'tool',
-    description: 'Catéter fino radiopaco, de una o dos luces, insertado en los vasos umbilicales del recién nacido.',
-    use: 'Acceso vascular para monitorización de presión arterial, extracciones y administración de fluidos en neonatos críticos.',
+    description: LocalizedText(
+      ca: 'Catèter fi radiopac, d\'una o dues llums, inserit als vasos umbilicals del nounat.',
+      es: 'Catéter fino radiopaco, de una o dos luces, insertado en los vasos umbilicales del recién nacido.',
+      en: 'Thin radiopaque catheter, single- or double-lumen, inserted into the newborn\'s umbilical vessels.',
+    ),
+    use: LocalizedText(
+      ca: 'Accés vascular per a monitoratge de pressió arterial, extraccions i administració de fluids en nounats crítics.',
+      es: 'Acceso vascular para monitorización de presión arterial, extracciones y administración de fluidos en neonatos críticos.',
+      en: 'Vascular access for blood pressure monitoring, blood draws and fluid administration in critically ill neonates.',
+    ),
   ),
   Instrument(
     id: 'sistema-ecmo-neonatal',
@@ -1051,8 +1795,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.pediatrica,
     aliases: ['Cardiohelp II (Getinge)'],
     icon: 'tool',
-    description: 'Consola compacta con bomba centrífuga, oxigenador de membrana e intercambiador de calor integrados en un único circuito miniaturizado.',
-    use: 'Soporte cardiopulmonar extracorpóreo prolongado en insuficiencia respiratoria o cardíaca neonatal refractaria.',
+    description: LocalizedText(
+      ca: 'Consola compacta amb bomba centrífuga, oxigenador de membrana i intercanviador de calor integrats en un únic circuit miniaturitzat.',
+      es: 'Consola compacta con bomba centrífuga, oxigenador de membrana e intercambiador de calor integrados en un único circuito miniaturizado.',
+      en: 'Compact console with a centrifugal pump, membrane oxygenator and heat exchanger integrated into a single miniaturized circuit.',
+    ),
+    use: LocalizedText(
+      ca: 'Suport cardiopulmonar extracorpori perllongat en insuficiència respiratòria o cardíaca neonatal refractària.',
+      es: 'Soporte cardiopulmonar extracorpóreo prolongado en insuficiencia respiratoria o cardíaca neonatal refractaria.',
+      en: 'Prolonged extracorporeal cardiopulmonary support in refractory neonatal respiratory or cardiac failure.',
+    ),
   ),
 
   // ==================================================================
@@ -1065,8 +1817,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.plastica,
     aliases: ['Skin hook', 'Gancho de Joseph'],
     icon: 'pinch',
-    description: 'Instrumento fino con una o dos puntas romas o agudas en ángulo, sin mordida de pinza.',
-    use: 'Tracción atraumática de los bordes de la piel durante disección y sutura, minimizando el aplastamiento tisular.',
+    description: LocalizedText(
+      ca: 'Instrument fi amb una o dues puntes romes o agudes en angle, sense mossegada de pinça.',
+      es: 'Instrumento fino con una o dos puntas romas o agudas en ángulo, sin mordida de pinza.',
+      en: 'Fine instrument with one or two angled blunt or sharp points, without a forceps-type jaw.',
+    ),
+    use: LocalizedText(
+      ca: 'Tracció atraumàtica de les vores de la pell durant la dissecció i la sutura, minimitzant l\'aixafament tissular.',
+      es: 'Tracción atraumática de los bordes de la piel durante disección y sutura, minimizando el aplastamiento tisular.',
+      en: 'Atraumatic traction of skin edges during dissection and suturing, minimizing tissue crushing.',
+    ),
   ),
   Instrument(
     id: 'separador-senn-miller',
@@ -1075,8 +1835,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.plastica,
     aliases: ['Senn retractor'],
     icon: 'expand',
-    description: 'Separador manual de doble extremo, uno romo en forma de rastrillo de tres dientes y otro en forma de pala.',
-    use: 'Separación superficial de piel y tejido subcutáneo en incisiones pequeñas y medianas.',
+    description: LocalizedText(
+      ca: 'Separador manual de doble extrem, un rom en forma de rasclet de tres dents i l\'altre en forma de pala.',
+      es: 'Separador manual de doble extremo, uno romo en forma de rastrillo de tres dientes y otro en forma de pala.',
+      en: 'Double-ended handheld retractor, one end a blunt three-pronged rake, the other blade-shaped.',
+    ),
+    use: LocalizedText(
+      ca: 'Separació superficial de pell i teixit subcutani en incisions petites i mitjanes.',
+      es: 'Separación superficial de piel y tejido subcutáneo en incisiones pequeñas y medianas.',
+      en: 'Superficial retraction of skin and subcutaneous tissue in small and medium incisions.',
+    ),
   ),
   Instrument(
     id: 'canula-liposuccion',
@@ -1085,8 +1853,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.plastica,
     aliases: [],
     icon: 'tool',
-    description: 'Cánula metálica hueca de punta roma con orificios laterales, de diferentes calibres y longitudes, conectada a un sistema de aspiración.',
-    use: 'Extracción de tejido adiposo subcutáneo mediante movimientos de vaivén bajo vacío controlado.',
+    description: LocalizedText(
+      ca: 'Cànula metàl·lica buida de punta roma amb orificis laterals, de diferents calibres i longituds, connectada a un sistema d\'aspiració.',
+      es: 'Cánula metálica hueca de punta roma con orificios laterales, de diferentes calibres y longitudes, conectada a un sistema de aspiración.',
+      en: 'Hollow metal cannula with a blunt tip and side ports, in various gauges and lengths, connected to a suction system.',
+    ),
+    use: LocalizedText(
+      ca: 'Extracció de teixit adipós subcutani mitjançant moviments de vaivé sota buit controlat.',
+      es: 'Extracción de tejido adiposo subcutáneo mediante movimientos de vaivén bajo vacío controlado.',
+      en: 'Removal of subcutaneous adipose tissue through back-and-forth movements under controlled vacuum.',
+    ),
   ),
   Instrument(
     id: 'expansor-tisular',
@@ -1095,8 +1871,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.plastica,
     aliases: ['Tissue expander (Mentor, Allergan)'],
     icon: 'tool',
-    description: 'Prótesis de silicona con puerto de relleno, implantada bajo la piel y rellenada progresivamente con suero.',
-    use: 'Generación gradual de excedente cutáneo para reconstrucción posterior (mamaria, cuero cabelludo, quemados).',
+    description: LocalizedText(
+      ca: 'Pròtesi de silicona amb port de reompliment, implantada sota la pell i reomplerta progressivament amb sèrum.',
+      es: 'Prótesis de silicona con puerto de relleno, implantada bajo la piel y rellenada progresivamente con suero.',
+      en: 'Silicone prosthesis with a fill port, implanted under the skin and progressively filled with saline.',
+    ),
+    use: LocalizedText(
+      ca: 'Generació gradual d\'excedent cutani per a reconstrucció posterior (mamària, cuir cabellut, cremats).',
+      es: 'Generación gradual de excedente cutáneo para reconstrucción posterior (mamaria, cuero cabelludo, quemados).',
+      en: 'Gradual generation of excess skin for later reconstruction (breast, scalp, burns).',
+    ),
   ),
   Instrument(
     id: 'dermatomo',
@@ -1105,8 +1889,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.plastica,
     aliases: ['Zimmer Air/Electric Dermatome'],
     icon: 'bolt',
-    description: 'Instrumento motorizado (eléctrico o neumático) con hoja oscilante y calibrador de espesor ajustable.',
-    use: 'Obtención de injertos cutáneos de espesor parcial de una zona donante para cobertura de quemaduras o defectos.',
+    description: LocalizedText(
+      ca: 'Instrument motoritzat (elèctric o pneumàtic) amb fulla oscil·lant i calibrador de gruix ajustable.',
+      es: 'Instrumento motorizado (eléctrico o neumático) con hoja oscilante y calibrador de espesor ajustable.',
+      en: 'Motorized instrument (electric or pneumatic) with an oscillating blade and adjustable thickness gauge.',
+    ),
+    use: LocalizedText(
+      ca: 'Obtenció d\'empelts cutanis de gruix parcial d\'una zona donant per a cobertura de cremades o defectes.',
+      es: 'Obtención de injertos cutáneos de espesor parcial de una zona donante para cobertura de quemaduras o defectos.',
+      en: 'Harvesting split-thickness skin grafts from a donor site to cover burns or defects.',
+    ),
   ),
 
   // ==================================================================
@@ -1119,8 +1911,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.toracica,
     aliases: ['Finochietto retractor', 'Rib spreader'],
     icon: 'expand',
-    description: 'Separador autoestático de ramas fenestradas con cremallera de trinquete, descrito por el cirujano argentino Enrique Finochietto en 1936.',
-    use: 'Separación de los arcos costales para exponer el campo quirúrgico en toracotomía.',
+    description: LocalizedText(
+      ca: 'Separador autoestàtic de branques fenestrades amb cremallera de trinquet, descrit pel cirurgià argentí Enrique Finochietto el 1936.',
+      es: 'Separador autoestático de ramas fenestradas con cremallera de trinquete, descrito por el cirujano argentino Enrique Finochietto en 1936.',
+      en: 'Self-retaining retractor with fenestrated blades and a ratchet mechanism, described by Argentine surgeon Enrique Finochietto in 1936.',
+    ),
+    use: LocalizedText(
+      ca: 'Separació dels arcs costals per exposar el camp quirúrgic en toracotomia.',
+      es: 'Separación de los arcos costales para exponer el campo quirúrgico en toracotomía.',
+      en: 'Spreading the rib arches to expose the surgical field in thoracotomy.',
+    ),
   ),
   Instrument(
     id: 'grapadora-toracica-motorizada',
@@ -1129,8 +1929,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.toracica,
     aliases: ['Echelon 3000 / Echelon Flex (Ethicon/J&J MedTech)'],
     icon: 'needle',
-    description: 'Grapadora endoscópica lineal motorizada, con cartuchos intercambiables según el grosor tisular.',
-    use: 'Sección y grapado de parénquima pulmonar y vasos en lobectomías y resecciones pulmonares por VATS o toracotomía.',
+    description: LocalizedText(
+      ca: 'Grapadora endoscòpica lineal motoritzada, amb cartutxos intercanviables segons el gruix tissular.',
+      es: 'Grapadora endoscópica lineal motorizada, con cartuchos intercambiables según el grosor tisular.',
+      en: 'Motorized linear endoscopic stapler, with interchangeable cartridges according to tissue thickness.',
+    ),
+    use: LocalizedText(
+      ca: 'Secció i grapat de parènquima pulmonar i vasos en lobectomies i reseccions pulmonars per VATS o toracotomia.',
+      es: 'Sección y grapado de parénquima pulmonar y vasos en lobectomías y resecciones pulmonares por VATS o toracotomía.',
+      en: 'Transecting and stapling lung parenchyma and vessels in lobectomies and lung resections via VATS or thoracotomy.',
+    ),
   ),
   Instrument(
     id: 'drenaje-toracico-sello-agua',
@@ -1139,8 +1947,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.toracica,
     aliases: ['Pleur-evac (Teleflex)'],
     icon: 'tool',
-    description: 'Sistema de tres cámaras (colección, sello de agua y control de aspiración) conectado a un tubo de drenaje pleural.',
-    use: 'Drenaje de aire, sangre o líquido de la cavidad pleural tras cirugía torácica, evitando la entrada de aire con la inspiración.',
+    description: LocalizedText(
+      ca: 'Sistema de tres cambres (col·lecció, segell d\'aigua i control d\'aspiració) connectat a un tub de drenatge pleural.',
+      es: 'Sistema de tres cámaras (colección, sello de agua y control de aspiración) conectado a un tubo de drenaje pleural.',
+      en: 'Three-chamber system (collection, water seal and suction control) connected to a pleural drainage tube.',
+    ),
+    use: LocalizedText(
+      ca: 'Drenatge d\'aire, sang o líquid de la cavitat pleural després de la cirurgia toràcica, evitant l\'entrada d\'aire amb la inspiració.',
+      es: 'Drenaje de aire, sangre o líquido de la cavidad pleural tras cirugía torácica, evitando la entrada de aire con la inspiración.',
+      en: 'Draining air, blood or fluid from the pleural cavity after thoracic surgery, preventing air entry during inspiration.',
+    ),
   ),
   Instrument(
     id: 'sistema-vats',
@@ -1149,8 +1965,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.toracica,
     aliases: ['IMAGE1 S (Karl Storz)', 'ENDOEYE Flex (Olympus)'],
     icon: 'tool',
-    description: 'Plataforma de vídeo con óptica rígida o deflectable en la punta, torre de imagen HD y fuente de luz integradas.',
-    use: 'Visualización endoscópica de la cavidad torácica en cirugía torácica videoasistida.',
+    description: LocalizedText(
+      ca: 'Plataforma de vídeo amb òptica rígida o deflectable a la punta, torre d\'imatge HD i font de llum integrades.',
+      es: 'Plataforma de vídeo con óptica rígida o deflectable en la punta, torre de imagen HD y fuente de luz integradas.',
+      en: 'Video platform with a rigid or deflectable-tip scope, integrated HD imaging tower and light source.',
+    ),
+    use: LocalizedText(
+      ca: 'Visualització endoscòpica de la cavitat toràcica en cirurgia toràcica videoassistida.',
+      es: 'Visualización endoscópica de la cavidad torácica en cirugía torácica videoasistida.',
+      en: 'Endoscopic visualization of the thoracic cavity in video-assisted thoracic surgery.',
+    ),
   ),
   Instrument(
     id: 'pinza-duval',
@@ -1159,8 +1983,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.toracica,
     aliases: ['Duval lung forceps'],
     icon: 'pinch',
-    description: 'Pinza de mordida triangular fenestrada y atraumática, diseñada para sujetar tejido pulmonar sin desgarrarlo.',
-    use: 'Prensión y tracción de parénquima pulmonar durante resecciones y biopsias pulmonares.',
+    description: LocalizedText(
+      ca: 'Pinça de mossegada triangular fenestrada i atraumàtica, dissenyada per subjectar teixit pulmonar sense esquinçar-lo.',
+      es: 'Pinza de mordida triangular fenestrada y atraumática, diseñada para sujetar tejido pulmonar sin desgarrarlo.',
+      en: 'Forceps with a fenestrated, atraumatic triangular jaw, designed to grasp lung tissue without tearing it.',
+    ),
+    use: LocalizedText(
+      ca: 'Prensió i tracció de parènquima pulmonar durant reseccions i biòpsies pulmonars.',
+      es: 'Prensión y tracción de parénquima pulmonar durante resecciones y biopsias pulmonares.',
+      en: 'Grasping and traction of lung parenchyma during pulmonary resections and biopsies.',
+    ),
   ),
 
   // ==================================================================
@@ -1173,8 +2005,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.dermatologia,
     aliases: ['Skin biopsy punch'],
     icon: 'cut',
-    description: 'Instrumento cilíndrico de hoja circular, de 2 a 8 mm de diámetro, de un solo uso, con mango.',
-    use: 'Obtención de una muestra cutánea de espesor completo mediante rotación, para diagnóstico histológico de lesiones dérmicas.',
+    description: LocalizedText(
+      ca: 'Instrument cilíndric de fulla circular, de 2 a 8 mm de diàmetre, d\'un sol ús, amb mànec.',
+      es: 'Instrumento cilíndrico de hoja circular, de 2 a 8 mm de diámetro, de un solo uso, con mango.',
+      en: 'Cylindrical instrument with a circular blade, 2 to 8 mm in diameter, single-use, with a handle.',
+    ),
+    use: LocalizedText(
+      ca: 'Obtenció d\'una mostra cutània de gruix complet mitjançant rotació, per al diagnòstic histològic de lesions dèrmiques.',
+      es: 'Obtención de una muestra cutánea de espesor completo mediante rotación, para diagnóstico histológico de lesiones dérmicas.',
+      en: 'Obtaining a full-thickness skin sample by rotation, for histological diagnosis of dermal lesions.',
+    ),
   ),
   Instrument(
     id: 'cureta-dermatologica',
@@ -1183,8 +2023,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.dermatologia,
     aliases: ['Dermal curette'],
     icon: 'cut',
-    description: 'Instrumento de mango largo con anillo cortante en el extremo, de distintos diámetros.',
-    use: 'Raspado de lesiones cutáneas superficiales (queratosis, verrugas, carcinomas basocelulares superficiales) mediante curetaje.',
+    description: LocalizedText(
+      ca: 'Instrument de mànec llarg amb anella tallant a l\'extrem, de diferents diàmetres.',
+      es: 'Instrumento de mango largo con anillo cortante en el extremo, de distintos diámetros.',
+      en: 'Long-handled instrument with a cutting ring at the tip, in various diameters.',
+    ),
+    use: LocalizedText(
+      ca: 'Raspat de lesions cutànies superficials (queratosis, berrugues, carcinomes basocel·lulars superficials) mitjançant curetatge.',
+      es: 'Raspado de lesiones cutáneas superficiales (queratosis, verrugas, carcinomas basocelulares superficiales) mediante curetaje.',
+      en: 'Scraping of superficial skin lesions (keratoses, warts, superficial basal cell carcinomas) by curettage.',
+    ),
   ),
   Instrument(
     id: 'criosonda-crioterapia',
@@ -1193,8 +2041,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.dermatologia,
     aliases: ['CryoProbe XP'],
     icon: 'bolt',
-    description: 'Dispositivo que libera un microchorro controlado de óxido nitroso o nitrógeno líquido a través de una sonda o pulverizador.',
-    use: 'Destrucción por congelación de lesiones cutáneas benignas (verrugas, queratosis actínicas, queratosis seborreicas).',
+    description: LocalizedText(
+      ca: 'Dispositiu que allibera un microdoll controlat d\'òxid nitrós o nitrogen líquid a través d\'una sonda o polvoritzador.',
+      es: 'Dispositivo que libera un microchorro controlado de óxido nitroso o nitrógeno líquido a través de una sonda o pulverizador.',
+      en: 'Device that releases a controlled micro-spray of nitrous oxide or liquid nitrogen through a probe or spray tip.',
+    ),
+    use: LocalizedText(
+      ca: 'Destrucció per congelació de lesions cutànies benignes (berrugues, queratosis actíniques, queratosis seborreiques).',
+      es: 'Destrucción por congelación de lesiones cutáneas benignas (verrugas, queratosis actínicas, queratosis seborreicas).',
+      en: 'Freeze destruction of benign skin lesions (warts, actinic keratoses, seborrheic keratoses).',
+    ),
   ),
   Instrument(
     id: 'dermatoscopio-digital',
@@ -1203,8 +2059,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.dermatologia,
     aliases: ['FotoFinder skeen'],
     icon: 'tool',
-    description: 'Sistema de captura de imagen con luz polarizada y no polarizada, magnificación óptica y análisis asistido por IA.',
-    use: 'Documentación y seguimiento fotográfico de lesiones pigmentadas para el diagnóstico precoz de melanoma.',
+    description: LocalizedText(
+      ca: 'Sistema de captura d\'imatge amb llum polaritzada i no polaritzada, magnificació òptica i anàlisi assistida per IA.',
+      es: 'Sistema de captura de imagen con luz polarizada y no polarizada, magnificación óptica y análisis asistido por IA.',
+      en: 'Imaging system with polarized and non-polarized light, optical magnification and AI-assisted analysis.',
+    ),
+    use: LocalizedText(
+      ca: 'Documentació i seguiment fotogràfic de lesions pigmentades per al diagnòstic precoç del melanoma.',
+      es: 'Documentación y seguimiento fotográfico de lesiones pigmentadas para el diagnóstico precoz de melanoma.',
+      en: 'Photographic documentation and monitoring of pigmented lesions for early melanoma diagnosis.',
+    ),
   ),
   Instrument(
     id: 'laser-dermatologico',
@@ -1213,8 +2077,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.dermatologia,
     aliases: ['DermaV (Cynosure/Lutronic)'],
     icon: 'bolt',
-    description: 'Plataforma láser de doble longitud de onda (532/1064 nm) con enfriamiento por criógeno y pulsado secuencial variable.',
-    use: 'Tratamiento de lesiones vasculares (angiomas, telangiectasias) y pigmentarias de la piel.',
+    description: LocalizedText(
+      ca: 'Plataforma làser de doble longitud d\'ona (532/1064 nm) amb refredament per criogen i polsació seqüencial variable.',
+      es: 'Plataforma láser de doble longitud de onda (532/1064 nm) con enfriamiento por criógeno y pulsado secuencial variable.',
+      en: 'Dual-wavelength laser platform (532/1064 nm) with cryogen cooling and variable sequential pulsing.',
+    ),
+    use: LocalizedText(
+      ca: 'Tractament de lesions vasculars (angiomes, telangièctasies) i pigmentàries de la pell.',
+      es: 'Tratamiento de lesiones vasculares (angiomas, telangiectasias) y pigmentarias de la piel.',
+      en: 'Treatment of vascular (angiomas, telangiectasias) and pigmented skin lesions.',
+    ),
   ),
 
   // ==================================================================
@@ -1227,8 +2099,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.oftalmologia,
     aliases: ['Eyelid speculum'],
     icon: 'expand',
-    description: 'Instrumento de alambre o resorte que separa y mantiene abiertos los párpados durante la cirugía.',
-    use: 'Exposición del globo ocular en cirugía oftalmológica, evitando el parpadeo involuntario.',
+    description: LocalizedText(
+      ca: 'Instrument de filferro o molla que separa i manté oberts les parpelles durant la cirurgia.',
+      es: 'Instrumento de alambre o resorte que separa y mantiene abiertos los párpados durante la cirugía.',
+      en: 'Wire or spring instrument that separates and holds the eyelids open during surgery.',
+    ),
+    use: LocalizedText(
+      ca: 'Exposició del globus ocular en cirurgia oftalmològica, evitant el parpelleig involuntari.',
+      es: 'Exposición del globo ocular en cirugía oftalmológica, evitando el parpadeo involuntario.',
+      en: 'Exposing the eyeball in ophthalmic surgery, preventing involuntary blinking.',
+    ),
   ),
   Instrument(
     id: 'facoemulsificador',
@@ -1237,8 +2117,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.oftalmologia,
     aliases: ['Centurion Vision System con Active Sentry (Alcon)'],
     icon: 'bolt',
-    description: 'Consola que emite ultrasonidos de alta frecuencia a través de una pieza de mano, con control de fluidos activo e infusión-aspiración integradas.',
-    use: 'Fragmentación y aspiración del cristalino opacificado en la cirugía de cataratas.',
+    description: LocalizedText(
+      ca: 'Consola que emet ultrasons d\'alta freqüència a través d\'una peça de mà, amb control de fluids actiu i infusió-aspiració integrades.',
+      es: 'Consola que emite ultrasonidos de alta frecuencia a través de una pieza de mano, con control de fluidos activo e infusión-aspiración integradas.',
+      en: 'Console that emits high-frequency ultrasound through a handpiece, with active fluidics control and integrated infusion-aspiration.',
+    ),
+    use: LocalizedText(
+      ca: 'Fragmentació i aspiració del cristal·lí opacificat en la cirurgia de cataractes.',
+      es: 'Fragmentación y aspiración del cristalino opacificado en la cirugía de cataratas.',
+      en: 'Fragmentation and aspiration of the opacified lens in cataract surgery.',
+    ),
   ),
   Instrument(
     id: 'vitrectomo',
@@ -1247,8 +2135,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.oftalmologia,
     aliases: ['Constellation Vision System (Alcon)'],
     icon: 'bolt',
-    description: 'Sistema de corte neumático de doble puerto de alta velocidad (hasta 10.000 cortes/min), con control independiente de apertura y cierre.',
-    use: 'Extracción del humor vítreo en cirugía vitreorretiniana (desprendimiento de retina, hemorragia vítrea).',
+    description: LocalizedText(
+      ca: 'Sistema de tall pneumàtic de doble port d\'alta velocitat (fins a 10.000 talls/min), amb control independent d\'obertura i tancament.',
+      es: 'Sistema de corte neumático de doble puerto de alta velocidad (hasta 10.000 cortes/min), con control independiente de apertura y cierre.',
+      en: 'High-speed dual-port pneumatic cutting system (up to 10,000 cuts/min), with independent open/close control.',
+    ),
+    use: LocalizedText(
+      ca: 'Extracció de l\'humor vitri en cirurgia vitreoretiniana (despreniment de retina, hemorràgia vítria).',
+      es: 'Extracción del humor vítreo en cirugía vitreorretiniana (desprendimiento de retina, hemorragia vítrea).',
+      en: 'Removal of the vitreous humor in vitreoretinal surgery (retinal detachment, vitreous hemorrhage).',
+    ),
   ),
   Instrument(
     id: 'pinza-capsulorrexis',
@@ -1257,8 +2153,16 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.oftalmologia,
     aliases: ['Utrata forceps'],
     icon: 'pinch',
-    description: 'Pinza de microcirugía de mordida muy fina y curva, para desgarrar la cápsula anterior del cristalino.',
-    use: 'Apertura circular continua de la cápsula anterior (capsulorrexis) previa a la facoemulsificación.',
+    description: LocalizedText(
+      ca: 'Pinça de microcirurgia de mossegada molt fina i corba, per esquinçar la càpsula anterior del cristal·lí.',
+      es: 'Pinza de microcirugía de mordida muy fina y curva, para desgarrar la cápsula anterior del cristalino.',
+      en: 'Microsurgical forceps with a very fine, curved jaw, for tearing the anterior lens capsule.',
+    ),
+    use: LocalizedText(
+      ca: 'Obertura circular contínua de la càpsula anterior (capsulorrexi) prèvia a la facoemulsificació.',
+      es: 'Apertura circular continua de la cápsula anterior (capsulorrexis) previa a la facoemulsificación.',
+      en: 'Continuous circular opening of the anterior capsule (capsulorhexis) prior to phacoemulsification.',
+    ),
   ),
   Instrument(
     id: 'portaagujas-barraquer',
@@ -1267,7 +2171,15 @@ const List<Instrument> kInstruments = [
     specialty: Specialty.oftalmologia,
     aliases: ['Barraquer needle holder'],
     icon: 'needle',
-    description: 'Portaagujas tipo resorte, sin anillas para los dedos, de mordida muy fina y precisión milimétrica.',
-    use: 'Sutura de precisión de la córnea, esclera y conjuntiva en microcirugía oftalmológica.',
+    description: LocalizedText(
+      ca: 'Portaagulles tipus molla, sense anelles per als dits, de mossegada molt fina i precisió mil·limètrica.',
+      es: 'Portaagujas tipo resorte, sin anillas para los dedos, de mordida muy fina y precisión milimétrica.',
+      en: 'Spring-type needle holder, without finger rings, with a very fine jaw and millimetric precision.',
+    ),
+    use: LocalizedText(
+      ca: 'Sutura de precisió de la còrnia, l\'esclera i la conjuntiva en microcirurgia oftalmològica.',
+      es: 'Sutura de precisión de la córnea, esclera y conjuntiva en microcirugía oftalmológica.',
+      en: 'Precision suturing of the cornea, sclera and conjunctiva in ophthalmic microsurgery.',
+    ),
   ),
 ];

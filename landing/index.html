@@ -136,6 +136,19 @@
   ul.checklist { list-style: none; padding: 0; margin: 18px 0 0; }
   ul.checklist li { padding-left: 26px; position: relative; margin-bottom: 12px; color: var(--ink-muted); }
   ul.checklist li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-family: var(--display); }
+  .org-diagram { max-width: var(--measure); margin: 44px auto 0; }
+  .org-node { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 14px 18px; box-shadow: var(--shadow-soft); font-family: var(--display); font-size: 0.92rem; font-weight: 700; color: var(--ink); text-align: center; }
+  .org-hospital { display: inline-flex; flex-direction: column; gap: 2px; padding: 16px 28px; border-color: var(--accent); }
+  .org-sub { display: block; font-family: var(--body); font-weight: 400; font-size: 0.8rem; color: var(--ink-muted); margin-top: 2px; }
+  .org-arrow-down { font-size: 1.3rem; color: var(--ink-muted); margin: 10px 0; }
+  .org-workspaces { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .org-workspace-active { border-color: var(--accent); color: var(--accent); }
+  .org-content-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 460px; margin: 0 auto; }
+  .org-content { font-size: 0.85rem; font-weight: 600; }
+  @media (max-width: 520px) { .org-content-grid { grid-template-columns: 1fr; } }
+  .org-caption { font-size: 0.85rem; margin-top: 16px; text-align: center; }
+  .org-criterion { max-width: var(--measure); margin: 32px auto 0; text-align: left; background: var(--paper-alt); border-radius: 12px; padding: 20px 24px; }
+  .org-criterion p { margin: 0; color: var(--ink); }
   .license-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 32px; max-width: var(--measure); }
   @media (min-width: 620px) { .license-grid { grid-template-columns: 1fr 1fr; } }
   .license-card { background: var(--surface); border-radius: 12px; padding: 20px 22px; display: flex; justify-content: space-between; align-items: center; gap: 12px; box-shadow: var(--shadow-soft); }
@@ -290,6 +303,34 @@
   </div>
 </section>
 
+<section id="organiza" class="section reveal">
+  <div class="wrap measure center">
+    <span class="eyebrow" data-i18n="organiza.eyebrow">Estructura</span>
+    <h2 data-i18n="organiza.h1">Organitza el teu grup abans de començar.</h2>
+    <p class="lede" data-i18n="organiza.lede">A Instriq, un <strong>grup</strong> (el teu hospital, bloc quirúrgic o equip) conté un o diversos <strong>espais de treball</strong> — normalment un per especialitat o servei. Dins de cada espai hi viuen les tècniques i protocols, les targetes de preferència, l'instrumental propi de l'equip i les safates.</p>
+    <div class="org-diagram">
+      <div class="org-node org-hospital" data-i18n="organiza.hospital">🏥 Hospital Vallnord<span class="org-sub">el grup</span></div>
+      <div class="org-arrow-down">↓</div>
+      <div class="org-workspaces">
+        <div class="org-node" data-i18n="organiza.ws1">Traumatologia</div>
+        <div class="org-node org-workspace-active" data-i18n="organiza.ws2">Laparoscòpia</div>
+        <div class="org-node" data-i18n="organiza.ws3">Formació de personal nou</div>
+      </div>
+      <div class="org-arrow-down">↓</div>
+      <div class="org-content-grid">
+        <div class="org-node org-content" data-i18n="organiza.c1">Tècniques i protocols</div>
+        <div class="org-node org-content" data-i18n="organiza.c2">Targetes de preferència</div>
+        <div class="org-node org-content" data-i18n="organiza.c3">Instrumental de l'equip</div>
+        <div class="org-node org-content" data-i18n="organiza.c4">Safates d'instrumental</div>
+      </div>
+      <p class="org-caption" data-i18n="organiza.caption">Contingut dins de l'espai "Laparoscòpia"</p>
+    </div>
+    <div class="org-criterion">
+      <p data-i18n="organiza.criterion">Organitza els espais per <strong>especialitat o servei</strong>, no per cada tècnica individual. ✓ "Traumatologia", "Quiròfan 3". ✗ Un espai per cada protocol.</p>
+    </div>
+  </div>
+</section>
+
 <section class="section band reveal">
   <div class="wrap measure center">
     <span class="eyebrow" data-i18n="equipo.eyebrow">Equip</span>
@@ -398,6 +439,13 @@
       "colabora.c1l1": "Crea o únete al espacio de tu grupo desde la app", "colabora.c1l2": "Propón correcciones o instrumental nuevo", "colabora.c1l3": "Cuéntanos qué guías necesitas — nos ayuda a priorizar",
       "colabora.c2t": "Eres desarrolladora/or", "colabora.c2p": "El código es público. Flutter (Android/iOS/Web) + Supabase. Empieza por el README del repo.",
       "colabora.c2l1": "Clona el repo y levanta el proyecto en minutos", "colabora.c2l2": "Revisa los issues abiertos en GitHub", "colabora.c2l3": "Propón mejoras vía pull request", "colabora.c2cta": "Ir al repositorio →",
+      "organiza.eyebrow": "Estructura", "organiza.h1": "Organiza tu grupo antes de empezar.",
+      "organiza.lede": "En Instriq, un <strong>grupo</strong> (tu hospital, bloque quirúrgico o equipo) contiene uno o varios <strong>espacios de trabajo</strong> — normalmente uno por especialidad o servicio. Dentro de cada espacio viven las técnicas y protocolos, las tarjetas de preferencia, el instrumental propio del equipo y las bandejas.",
+      "organiza.hospital": "🏥 Hospital Vallnord<span class=\"org-sub\">el grupo</span>",
+      "organiza.ws1": "Traumatología", "organiza.ws2": "Laparoscopia", "organiza.ws3": "Formación de personal nuevo",
+      "organiza.c1": "Técnicas y protocolos", "organiza.c2": "Tarjetas de preferencia", "organiza.c3": "Instrumental del equipo", "organiza.c4": "Bandejas de instrumental",
+      "organiza.caption": "Contenido dentro del espacio \"Laparoscopia\"",
+      "organiza.criterion": "Organiza los espacios por <strong>especialidad o servicio</strong>, no por cada técnica individual. ✓ \"Traumatología\", \"Quirófano 3\". ✗ Un espacio por cada protocolo.",
       "equipo.eyebrow": "Equipo", "equipo.h1": "Un equipo pequeño, con vocación de comunidad.",
       "equipo.p1": "Instriq lo impulsa un pequeño equipo inicial, pero su crecimiento depende de una red de profesionales sanitarios, docentes, investigadores y desarrolladores que colaboran de forma voluntaria y sin ánimo de lucro. Si quieres formar parte, escríbenos.",
       "analitica.eyebrow": "Analítica", "analitica.h1": "Datos para priorizar, sin vigilar a nadie.",
@@ -445,6 +493,13 @@
       "colabora.c1l1": "Create or join your group's space from the app", "colabora.c1l2": "Propose corrections or new instruments", "colabora.c1l3": "Tell us which guides you need — it helps us prioritize",
       "colabora.c2t": "You're a developer", "colabora.c2p": "The code is public. Flutter (Android/iOS/Web) + Supabase. Start with the repo's README.",
       "colabora.c2l1": "Clone the repo and get it running in minutes", "colabora.c2l2": "Check the open issues on GitHub", "colabora.c2l3": "Propose improvements via pull request", "colabora.c2cta": "Go to the repository →",
+      "organiza.eyebrow": "Structure", "organiza.h1": "Organize your group before you start.",
+      "organiza.lede": "In Instriq, a <strong>group</strong> (your hospital, surgical block or team) contains one or several <strong>workspaces</strong> — usually one per specialty or service. Inside each workspace live the techniques and protocols, preference cards, team-owned instruments and trays.",
+      "organiza.hospital": "🏥 Hospital Vallnord<span class=\"org-sub\">the group</span>",
+      "organiza.ws1": "Trauma", "organiza.ws2": "Laparoscopy", "organiza.ws3": "New staff training",
+      "organiza.c1": "Techniques and protocols", "organiza.c2": "Preference cards", "organiza.c3": "Team instruments", "organiza.c4": "Instrument trays",
+      "organiza.caption": "Content inside the \"Laparoscopy\" workspace",
+      "organiza.criterion": "Organize workspaces by <strong>specialty or service</strong>, not by individual technique. ✓ \"Trauma\", \"OR 3\". ✗ One workspace per protocol.",
       "equipo.eyebrow": "Team", "equipo.h1": "A small team, with a community mindset.",
       "equipo.p1": "Instriq is driven by a small initial team, but its growth depends on a network of healthcare professionals, educators, researchers and developers collaborating voluntarily and not-for-profit. If you want to get involved, reach out.",
       "analitica.eyebrow": "Analytics", "analitica.h1": "Data to prioritize, without watching anyone.",
