@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/app_localizations.dart';
+import '../models/catalog_community_photo.dart';
 import '../models/instrument.dart';
 import '../models/instrument_sterilization.dart';
 import '../models/professional_profile.dart';
+import '../services/auth_service.dart';
+import '../services/catalog_community_photo_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
 import '../services/sterilization_service.dart';
@@ -26,10 +32,52 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   List<SterilizationMethodEntry> _methods = [];
   InstrumentTechnicalInfo? _technicalInfo;
 
+  bool _loadingCommunityPhoto = true;
+  CatalogCommunityPhoto? _approvedCommunityPhoto;
+  CatalogCommunityPhoto? _ownPendingPhoto;
+
   @override
   void initState() {
     super.initState();
     _loadClinicalData();
+    if (widget.instrument.image == null) {
+      _loadCommunityPhotoState();
+    } else {
+      _loadingCommunityPhoto = false;
+    }
+  }
+
+  Future<void> _loadCommunityPhotoState() async {
+    try {
+      final approved =
+          await CatalogCommunityPhotoService.instance.fetchApprovedPhoto(_refType, widget.instrument.id);
+      final ownPending =
+          await CatalogCommunityPhotoService.instance.fetchOwnPendingPhoto(_refType, widget.instrument.id);
+      if (!mounted) return;
+      setState(() {
+        _approvedCommunityPhoto = approved;
+        _ownPendingPhoto = ownPending;
+        _loadingCommunityPhoto = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loadingCommunityPhoto = false);
+    }
+  }
+
+  Future<void> _openUploadCommunityPhotoSheet() async {
+    final submitted = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) => _CommunityPhotoUploadSheet(
+        refType: _refType,
+        refId: widget.instrument.id,
+      ),
+    );
+    if (submitted == true) {
+      setState(() => _loadingCommunityPhoto = true);
+      await _loadCommunityPhotoState();
+    }
   }
 
   Future<void> _loadClinicalData() async {
@@ -130,44 +178,32 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   Widget _buildPhotoSection(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final instrument = widget.instrument;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-          child: instrument.image != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    instrument.image!.url,
+
+    if (instrument.image != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                instrument.image!.url,
+                height: 200,
+                fit: BoxFit.contain,
+                loadingBuilder: (context, child, progress) {
+                  if (progress == null) return child;
+                  return SizedBox(
                     height: 200,
-                    fit: BoxFit.contain,
-                    loadingBuilder: (context, child, progress) {
-                      if (progress == null) return child;
-                      return SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: InstrumentIcon(
-                            iconKey: instrument.icon,
-                            category: instrument.category,
-                            size: 120,
-                          ),
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stack) => InstrumentIcon(
-                      iconKey: instrument.icon,
-                      category: instrument.category,
-                      size: 120,
+                    child: Center(
+                      child: InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
                     ),
-                  ),
-                )
-              : InstrumentIcon(
-                  iconKey: instrument.icon,
-                  category: instrument.category,
-                  size: 120,
-                ),
-        ),
-        if (instrument.image != null) ...[
+                  );
+                },
+                errorBuilder: (context, error, stack) =>
+                    InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
+              ),
+            ),
+          ),
           const SizedBox(height: 6),
           Center(
             child: GestureDetector(
@@ -178,6 +214,73 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
+          ),
+          const SizedBox(height: 20),
+        ],
+      );
+    }
+
+    if (_loadingCommunityPhoto) {
+      return const Padding(
+        padding: EdgeInsets.only(bottom: 20),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final approved = _approvedCommunityPhoto;
+    if (approved != null) {
+      final creditName =
+          (approved.creditName == null || approved.creditName!.trim().isEmpty)
+              ? l10n.communityPhotoDefaultCredit
+              : approved.creditName!;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                CatalogCommunityPhotoService.instance.getPublicUrl(approved.photoPath),
+                height: 200,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stack) =>
+                    InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Center(
+            child: Text(
+              l10n.communityPhotoCreditLabel(creditName),
+              style: Theme.of(context).textTheme.bodySmall,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 20),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
+        ),
+        if (AuthService.instance.currentUser != null) ...[
+          const SizedBox(height: 10),
+          Center(
+            child: _ownPendingPhoto != null
+                ? Text(
+                    l10n.communityPhotoAlreadyPending,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  )
+                : OutlinedButton.icon(
+                    icon: const Icon(Icons.add_a_photo_outlined),
+                    label: Text(l10n.uploadPhotoButtonLabel),
+                    onPressed: _openUploadCommunityPhotoSheet,
+                  ),
           ),
         ],
         const SizedBox(height: 20),
@@ -217,6 +320,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
 
   Widget _buildDescriptionSection(BuildContext context, AppLocalizations l10n) {
     final instrument = widget.instrument;
+    final languageCode = Localizations.localeOf(context).languageCode;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
@@ -224,7 +328,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         children: [
           Text(l10n.descriptionLabel, style: Theme.of(context).textTheme.labelLarge),
           const SizedBox(height: 4),
-          Text(instrument.description, style: Theme.of(context).textTheme.bodyLarge),
+          Text(instrument.description.forLanguageCode(languageCode), style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     );
@@ -232,6 +336,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
 
   Widget _buildUseSection(BuildContext context, AppLocalizations l10n) {
     final instrument = widget.instrument;
+    final languageCode = Localizations.localeOf(context).languageCode;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
@@ -239,7 +344,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         children: [
           Text(l10n.mainUseLabel, style: Theme.of(context).textTheme.labelLarge),
           const SizedBox(height: 4),
-          Text(instrument.use, style: Theme.of(context).textTheme.bodyLarge),
+          Text(instrument.use.forLanguageCode(languageCode), style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     );
@@ -248,6 +353,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   Widget _buildTipSection(BuildContext context) {
     final instrument = widget.instrument;
     if (instrument.tip == null) return const SizedBox.shrink();
+    final languageCode = Localizations.localeOf(context).languageCode;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Card(
@@ -259,7 +365,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
             children: [
               const Icon(Icons.lightbulb_outline),
               const SizedBox(width: 8),
-              Expanded(child: Text(instrument.tip!)),
+              Expanded(child: Text(instrument.tip!.forLanguageCode(languageCode))),
             ],
           ),
         ),
@@ -649,6 +755,154 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
                     : const Icon(Icons.save),
                 label: Text(l10n.save),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Hoja de subida de una foto de la comunidad para un instrumento del
+/// catálogo sin foto verificada. Exige aceptar explícitamente el aviso de
+/// consentimiento (checkbox) antes de habilitar el envío — ver
+/// supabase/schema_v16_community_photos.sql (consent_accepted obligatorio a
+/// nivel de tabla y de RLS).
+class _CommunityPhotoUploadSheet extends StatefulWidget {
+  final String refType;
+  final String refId;
+
+  const _CommunityPhotoUploadSheet({required this.refType, required this.refId});
+
+  @override
+  State<_CommunityPhotoUploadSheet> createState() => _CommunityPhotoUploadSheetState();
+}
+
+class _CommunityPhotoUploadSheetState extends State<_CommunityPhotoUploadSheet> {
+  File? _pickedPhoto;
+  bool _consentAccepted = false;
+  bool _submitting = false;
+  bool _submitted = false;
+  String? _error;
+
+  Future<void> _pickPhoto() async {
+    final l10n = AppLocalizations.of(context)!;
+    final picker = ImagePicker();
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(l10n.pickFromGalleryLabel),
+              onTap: () => Navigator.pop(ctx, ImageSource.gallery),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_camera_outlined),
+              title: Text(l10n.pickFromCameraLabel),
+              onTap: () => Navigator.pop(ctx, ImageSource.camera),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null) return;
+    final picked = await picker.pickImage(source: source, maxWidth: 1600, imageQuality: 85);
+    if (picked != null) {
+      setState(() => _pickedPhoto = File(picked.path));
+    }
+  }
+
+  Future<void> _submit() async {
+    if (_pickedPhoto == null || !_consentAccepted) return;
+    setState(() {
+      _submitting = true;
+      _error = null;
+    });
+    try {
+      await CatalogCommunityPhotoService.instance.submitPhoto(
+        refType: widget.refType,
+        refId: widget.refId,
+        file: _pickedPhoto!,
+        consentAccepted: _consentAccepted,
+      );
+      if (!mounted) return;
+      setState(() {
+        _submitting = false;
+        _submitted = true;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _submitting = false;
+        _error = e.toString();
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: 16 + MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.communityPhotoDialogTitle, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 16),
+              if (_submitted) ...[
+                Text(l10n.communityPhotoSubmitSuccess),
+                const SizedBox(height: 16),
+                FilledButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(l10n.save),
+                ),
+              ] else ...[
+                if (_pickedPhoto != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.file(_pickedPhoto!, height: 160, fit: BoxFit.contain),
+                  ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.photo_outlined),
+                  label: Text(l10n.uploadPhotoButtonLabel),
+                  onPressed: _pickPhoto,
+                ),
+                const SizedBox(height: 16),
+                Text(l10n.communityPhotoConsentText, style: Theme.of(context).textTheme.bodySmall),
+                CheckboxListTile(
+                  value: _consentAccepted,
+                  onChanged: (value) => setState(() => _consentAccepted = value ?? false),
+                  title: Text(l10n.communityPhotoConsentCheckbox),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                if (_error != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.communityPhotoSubmitError(_error!),
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                ],
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  onPressed: (_pickedPhoto != null && _consentAccepted && !_submitting) ? _submit : null,
+                  icon: _submitting
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Icon(Icons.send),
+                  label: Text(l10n.communityPhotoSubmit),
+                ),
+              ],
             ],
           ),
         ),

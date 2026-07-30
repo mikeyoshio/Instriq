@@ -87,6 +87,27 @@ extension SpecialtyLabel on Specialty {
   }
 }
 
+/// Texto de instrumento en los 3 idiomas soportados por la app (ca/es/en).
+/// [forLanguageCode] evita depender de `Locale` (widgets.dart) en un modelo
+/// de datos puro; el llamante ya resuelve el locale activo con lo que tenga.
+class LocalizedText {
+  final String ca;
+  final String es;
+  final String en;
+  const LocalizedText({required this.ca, required this.es, required this.en});
+
+  String forLanguageCode(String languageCode) {
+    switch (languageCode) {
+      case 'ca':
+        return ca;
+      case 'en':
+        return en;
+      default:
+        return es;
+    }
+  }
+}
+
 /// Foto real de referencia con licencia libre verificada (Wikimedia Commons).
 /// [attribution] y [sourceUrl] deben mostrarse junto a la imagen: la mayoría
 /// de licencias CC exigen atribución visible, no solo en un fichero aparte.
@@ -111,9 +132,9 @@ class Instrument {
   final Specialty specialty;
   final List<String> aliases;
   final String icon;
-  final String description;
-  final String use;
-  final String? tip;
+  final LocalizedText description;
+  final LocalizedText use;
+  final LocalizedText? tip;
   final InstrumentImage? image;
 
   const Instrument({

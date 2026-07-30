@@ -168,16 +168,17 @@ class _CardBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(l10n.descriptionLabel, style: Theme.of(context).textTheme.labelLarge),
-          Text(instrument.description),
+          Text(instrument.description.forLanguageCode(languageCode)),
           const SizedBox(height: 12),
           Text(l10n.useLabel, style: Theme.of(context).textTheme.labelLarge),
-          Text(instrument.use),
+          Text(instrument.use.forLanguageCode(languageCode)),
         ],
       ),
     );

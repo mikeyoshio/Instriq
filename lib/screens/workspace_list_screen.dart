@@ -76,10 +76,21 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.workspaceNewTitle),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: InputDecoration(hintText: l10n.workspaceNameHint),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.workspaceOrgHint,
+              style: Theme.of(ctx).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: controller,
+              autofocus: true,
+              decoration: InputDecoration(hintText: l10n.workspaceNameHint),
+            ),
+          ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
@@ -102,6 +113,32 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
     }
   }
 
+  Widget _buildEmptyState(BuildContext context, AppLocalizations l10n) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.workspaces_outlined, size: 56),
+            const SizedBox(height: 16),
+            Text(
+              l10n.workspaceEmptyTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.workspaceEmptyBody,
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -119,7 +156,9 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
           ? const Center(child: CircularProgressIndicator())
           : _error != null
               ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
-              : ListView.builder(
+              : WorkspaceService.instance.workspaces.isEmpty
+                  ? _buildEmptyState(context, l10n)
+                  : ListView.builder(
                   padding: const EdgeInsets.all(12),
                   itemCount: WorkspaceService.instance.workspaces.length,
                   itemBuilder: (context, index) {
