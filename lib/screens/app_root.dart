@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
 import '../services/profile_service.dart';
-import 'home_screen.dart';
 
-/// Raíz de la app: carga el estado de sesión/hospital (si lo hay) una vez y
-/// entra directo al Home. Nunca exige login — el catálogo, flashcards, quiz
-/// y progreso funcionan como invitado. Solo "Mi hospital" pide conectar.
+/// Carga el estado de sesión/hospital (si lo hay) una vez antes de pintar
+/// [child] — el shell de navegación real, construido en main.dart a partir
+/// del router (ver navigation/router.dart). Nunca exige login — el catálogo,
+/// flashcards, quiz y progreso funcionan como invitado. Solo "Mi hospital"
+/// pide conectar.
 class AppRoot extends StatefulWidget {
-  const AppRoot({super.key});
+  final Widget child;
+
+  const AppRoot({super.key, required this.child});
 
   @override
   State<AppRoot> createState() => _AppRootState();
@@ -38,8 +41,14 @@ class _AppRootState extends State<AppRoot> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      // Sin MaterialApp propio alrededor todavía (el de [child] es el
+      // definitivo), así que este spinner necesita el suyo para tener
+      // Directionality/localizations mínimas mientras carga.
+      return const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      );
     }
-    return const HomeScreen();
+    return widget.child;
   }
 }

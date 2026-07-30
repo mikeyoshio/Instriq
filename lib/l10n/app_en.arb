@@ -63,6 +63,17 @@
   "connectGroupTitle": "Connect with your group",
   "connectGroupSubtitle": "Join with a code or create your own to share knowledge with your team",
 
+  "navHome": "Home",
+  "navSearch": "Search",
+  "navLibrary": "Library",
+  "navActivity": "Activity",
+  "navProfile": "Profile",
+  "libraryCollectionsHeader": "Workspace collections",
+  "libraryDocumentsTitle": "Documents and protocols",
+  "libraryDocumentsSubtitle": "Surgical techniques and protocols in your workspace",
+  "activityAdminOnly": "Only group admins can see activity.",
+  "profilePreferencesHeader": "Preferences",
+
   "catalogSearchHint": "Search instrument or trade name...",
   "clearWithCount": "Clear ({count})",
   "@clearWithCount": {"placeholders": {"count": {"type": "int"}}},

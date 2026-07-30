@@ -4,12 +4,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'design_system/instriq_theme.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
+import 'navigation/router.dart';
 import 'screens/app_root.dart';
 import 'screens/auth/reset_password_screen.dart';
 import 'services/app_version_service.dart';
@@ -48,6 +51,9 @@ class InstriqApp extends StatefulWidget {
 
 class _InstriqAppState extends State<InstriqApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
+  // Construido una sola vez: reconstruirlo en cada build tiraría el estado
+  // de navegación de las 5 ramas del shell (ver navigation/router.dart).
+  late final GoRouter _router = buildRouter(_navigatorKey);
 
   @override
   void initState() {
@@ -123,29 +129,23 @@ class _InstriqAppState extends State<InstriqApp> {
         return ValueListenableBuilder<Locale>(
           valueListenable: LocaleService.instance.locale,
           builder: (context, locale, _) {
-            return MaterialApp(
-              navigatorKey: _navigatorKey,
-              onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-              debugShowCheckedModeBanner: false,
-              themeMode: mode,
-              theme: ThemeData(
-                colorSchemeSeed: Colors.teal,
-                useMaterial3: true,
+            return AppRoot(
+              child: MaterialApp.router(
+                routerConfig: _router,
+                onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+                debugShowCheckedModeBanner: false,
+                themeMode: mode,
+                theme: InstriqTheme.light,
+                darkTheme: InstriqTheme.dark,
+                locale: locale,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: AppLocalizations.supportedLocales,
               ),
-              darkTheme: ThemeData(
-                colorSchemeSeed: Colors.teal,
-                brightness: Brightness.dark,
-                useMaterial3: true,
-              ),
-              locale: locale,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: AppLocalizations.supportedLocales,
-              home: const AppRoot(),
             );
           },
         );
