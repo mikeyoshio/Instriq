@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
-import '../data/surgical_specialties.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
+import '../models/specialty_entity.dart';
 import '../services/connectivity_service.dart';
 import '../services/group_document_service.dart';
+import '../services/profile_service.dart';
+import '../services/specialty_service.dart';
 import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/tag_picker.dart';
 
 /// Edita el borrador de una versión ([existingDraft]) o crea un documento
 /// nuevo. Nunca edita directamente el contenido publicado: guardar solo
@@ -35,12 +38,17 @@ class GroupDocumentFormScreen extends StatefulWidget {
 
 class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   late final TextEditingController _titleController;
-  String? _specialty;
+  String? _specialtyId;
+  // Solo lectura: texto de la antigua columna `specialty`, se muestra como
+  // pista cuando la fila todavía no se ha migrado a `specialty_id`.
+  String? _legacySpecialtyText;
+  List<SpecialtyEntity> _specialties = [];
   late final TextEditingController _contentController;
   late final TextEditingController _commentController;
   late List<ProtocolStep> _steps;
   late List<String> _relatedInstrumentIds;
   GroupDocumentVersion? _draft;
+  final _tagPickerKey = GlobalKey<TagPickerState>();
   bool _loading = true;
   bool _saving = false;
   String? _error;
@@ -58,15 +66,12 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
 
   Future<void> _init() async {
     try {
-      GroupDocumentVersion draft;
-      if (widget.existingDraft != null) {
-        draft = widget.existingDraft!;
-      } else if (widget.existingDocument != null) {
-        draft = await GroupDocumentService.instance.startEditing(widget.existingDocument!);
-      } else {
-        draft = await GroupDocumentService.instance.createDocument(widget.kind, widget.workspaceId);
-      }
-      _applyDraft(draft);
+      final results = await Future.wait([
+        _loadDraft(),
+        SpecialtyService.instance.fetchAll(),
+      ]);
+      _applyDraft(results[0] as GroupDocumentVersion);
+      _specialties = results[1] as List<SpecialtyEntity>;
     } catch (e) {
       setState(() => _error = AppLocalizations.of(context)!.formPrepareDraftError(e.toString()));
     } finally {
@@ -74,10 +79,20 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     }
   }
 
+  Future<GroupDocumentVersion> _loadDraft() async {
+    if (widget.existingDraft != null) {
+      return widget.existingDraft!;
+    } else if (widget.existingDocument != null) {
+      return GroupDocumentService.instance.startEditing(widget.existingDocument!);
+    }
+    return GroupDocumentService.instance.createDocument(widget.kind, widget.workspaceId);
+  }
+
   void _applyDraft(GroupDocumentVersion draft) {
     _draft = draft;
     _titleController.text = draft.title;
-    _specialty = draft.specialty;
+    _specialtyId = draft.specialtyId;
+    _legacySpecialtyText = draft.specialtyId == null ? draft.specialty : null;
     _contentController.text = draft.content ?? '';
     _steps = List.of(draft.steps);
     _relatedInstrumentIds = List.of(draft.relatedInstrumentIds);
@@ -186,8 +201,8 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     final title = _titleController.text.trim();
     return _draft!.copyWith(
       title: title,
-      specialty: _specialty,
-      clearSpecialty: _specialty == null,
+      specialtyId: _specialtyId,
+      clearSpecialtyId: _specialtyId == null,
       content: _contentController.text.trim().isEmpty ? null : _contentController.text.trim(),
       clearContent: _contentController.text.trim().isEmpty,
       steps: _steps,
@@ -209,6 +224,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     try {
       final wasOffline = !ConnectivityService.instance.isOnline.value;
       final updated = await GroupDocumentService.instance.saveDraft(_draftWithFormValues());
+      await _tagPickerKey.currentState?.save();
       if (andSubmit) {
         await GroupDocumentService.instance.submitForReview(updated.id);
       }
@@ -229,22 +245,30 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   }
 
   Widget _buildSpecialtyDropdown(AppLocalizations l10n) {
-    final legacyValue =
-        _specialty != null && !kSurgicalSpecialties.contains(_specialty) ? _specialty : null;
-    return DropdownButtonFormField<String?>(
-      value: _specialty,
-      isExpanded: true,
-      decoration: InputDecoration(
-        labelText: l10n.specialtyLabel,
-        border: const OutlineInputBorder(),
-      ),
-      items: [
-        DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
-        if (legacyValue != null)
-          DropdownMenuItem<String?>(value: legacyValue, child: Text(l10n.legacySpecialtySuffix(legacyValue))),
-        ...kSurgicalSpecialties.map((s) => DropdownMenuItem<String?>(value: s, child: Text(s))),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DropdownButtonFormField<String?>(
+          value: _specialtyId,
+          isExpanded: true,
+          decoration: InputDecoration(
+            labelText: l10n.specialtyLabel,
+            border: const OutlineInputBorder(),
+          ),
+          items: [
+            DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
+            ..._specialties.map((s) => DropdownMenuItem<String?>(value: s.id, child: Text(s.label))),
+          ],
+          onChanged: (value) => setState(() => _specialtyId = value),
+        ),
+        if (_legacySpecialtyText != null && _legacySpecialtyText!.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Text(
+            l10n.legacySpecialtySuffix(_legacySpecialtyText!),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
       ],
-      onChanged: (value) => setState(() => _specialty = value),
     );
   }
 
@@ -359,6 +383,15 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 ),
               );
             }),
+            const SizedBox(height: 20),
+            Text(l10n.tagsLabel, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            TagPicker(
+              key: _tagPickerKey,
+              refType: 'group_document',
+              refId: _draft!.documentId,
+              organizationId: ProfileService.instance.organizationId,
+            ),
             const SizedBox(height: 20),
             TextField(
               controller: _commentController,

@@ -21,16 +21,16 @@ void main() {
     const card = PreferenceCard(
       id: 'card-1',
       workspaceId: 'workspace-1',
-      surgeonName: 'Dr. Pérez',
+      surgeonId: 'surgeon-1',
       procedureName: 'Colecistectomía',
       items: [PreferenceCardItem(customName: 'Trócar')],
     );
 
-    final row = card.toRow(hospitalId: 'hospital-1');
+    final row = card.toRow(organizationId: 'hospital-1');
 
-    expect(row['hospital_id'], 'hospital-1');
+    expect(row['organization_id'], 'hospital-1');
     expect(row['workspace_id'], 'workspace-1');
-    expect(row['surgeon_name'], 'Dr. Pérez');
+    expect(row['surgeon_id'], 'surgeon-1');
     expect(row['validated'], false);
   });
 }

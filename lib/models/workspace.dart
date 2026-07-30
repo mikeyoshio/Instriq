@@ -4,7 +4,7 @@
 /// directamente del grupo.
 class Workspace {
   final String id;
-  final String hospitalId;
+  final String organizationId;
   final String name;
   final String? description;
   final String? createdBy;
@@ -12,15 +12,15 @@ class Workspace {
 
   const Workspace({
     required this.id,
-    required this.hospitalId,
+    required this.organizationId,
     required this.name,
     this.description,
     this.createdBy,
     this.createdAt,
   });
 
-  Map<String, dynamic> toRow({required String hospitalId}) => {
-        'hospital_id': hospitalId,
+  Map<String, dynamic> toRow({required String organizationId}) => {
+        'organization_id': organizationId,
         'name': name,
         'description': description,
       };
@@ -28,7 +28,7 @@ class Workspace {
   factory Workspace.fromRow(Map<String, dynamic> row) {
     return Workspace(
       id: row['id'] as String,
-      hospitalId: row['hospital_id'] as String,
+      organizationId: row['organization_id'] as String,
       name: row['name'] as String? ?? '',
       description: row['description'] as String?,
       createdBy: row['created_by'] as String?,

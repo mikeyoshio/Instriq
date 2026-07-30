@@ -5,7 +5,7 @@
 /// supabase/schema_v10_audit.sql) — nunca desde el cliente.
 class AuditEntry {
   final String id;
-  final String? hospitalId;
+  final String? organizationId;
   final String? actorId;
   final String action;
   final String? entityType;
@@ -24,7 +24,7 @@ class AuditEntry {
 
   const AuditEntry({
     required this.id,
-    this.hospitalId,
+    this.organizationId,
     this.actorId,
     required this.action,
     this.entityType,
@@ -39,7 +39,7 @@ class AuditEntry {
   AuditEntry copyWith({String? actorDisplayName}) {
     return AuditEntry(
       id: id,
-      hospitalId: hospitalId,
+      organizationId: organizationId,
       actorId: actorId,
       action: action,
       entityType: entityType,
@@ -56,7 +56,7 @@ class AuditEntry {
     final workspaceRow = row['workspaces'] as Map<String, dynamic>?;
     return AuditEntry(
       id: row['id'] as String,
-      hospitalId: row['hospital_id'] as String?,
+      organizationId: row['organization_id'] as String?,
       actorId: row['actor_id'] as String?,
       action: row['action'] as String,
       entityType: row['entity_type'] as String?,

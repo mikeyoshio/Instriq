@@ -17,7 +17,7 @@ class WorkspaceService {
 
   /// Limpia el caché en memoria. Debe llamarse al cambiar de grupo o cerrar
   /// sesión: si no, un espacio de un grupo anterior puede quedar cacheado y
-  /// usarse por error con el hospital_id del grupo nuevo.
+  /// usarse por error con el organization_id del grupo nuevo.
   void clear() {
     _workspaces = [];
   }
@@ -29,13 +29,13 @@ class WorkspaceService {
   }
 
   Future<Workspace> createWorkspace(String name, {String? description}) async {
-    final hospitalId = ProfileService.instance.hospitalId;
-    if (hospitalId == null) {
+    final organizationId = ProfileService.instance.organizationId;
+    if (organizationId == null) {
       throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
     final row = await _client
         .from('workspaces')
-        .insert({'hospital_id': hospitalId, 'name': name, 'description': description})
+        .insert({'organization_id': organizationId, 'name': name, 'description': description})
         .select()
         .single();
     final workspace = Workspace.fromRow(row);
@@ -50,7 +50,7 @@ class WorkspaceService {
       final current = _workspaces[index];
       _workspaces[index] = Workspace(
         id: current.id,
-        hospitalId: current.hospitalId,
+        organizationId: current.organizationId,
         name: name,
         description: current.description,
         createdBy: current.createdBy,

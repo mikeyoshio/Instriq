@@ -133,7 +133,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(20),
                 children: [
-                  Text(profile.hospitalName ?? '', style: Theme.of(context).textTheme.headlineSmall),
+                  Text(profile.organizationName ?? '', style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(height: 20),
                   Card(
                     child: Padding(

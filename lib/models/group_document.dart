@@ -41,8 +41,8 @@ class GroupDocument {
     this.publishedVersion,
   });
 
-  Map<String, dynamic> toRow({required String hospitalId}) => {
-        'hospital_id': hospitalId,
+  Map<String, dynamic> toRow({required String organizationId}) => {
+        'organization_id': organizationId,
         'workspace_id': workspaceId,
         'kind': kind.dbValue,
       };

@@ -130,9 +130,9 @@ class GroupDocumentService {
     if (!ConnectivityService.instance.isOnline.value) {
       return SyncQueueService.instance.queueCreateDocument(kind, workspaceId);
     }
-    final hospitalId = ProfileService.instance.hospitalId;
+    final organizationId = ProfileService.instance.organizationId;
     final userId = AuthService.instance.currentUser?.id;
-    if (hospitalId == null || userId == null) {
+    if (organizationId == null || userId == null) {
       throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
     final versionRow = await _client.rpc('create_group_document', params: {
@@ -177,7 +177,7 @@ class GroupDocumentService {
           'version_number': nextVersionNumber,
           'status': GroupDocumentVersionStatus.draft.dbValue,
           'title': published.title,
-          'specialty': published.specialty,
+          'specialty_id': published.specialtyId,
           'content': published.content,
           'steps': published.steps.map((s) => s.toJson()).toList(),
           'related_instrument_ids': published.relatedInstrumentIds,

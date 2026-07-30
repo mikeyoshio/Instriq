@@ -16,8 +16,11 @@ class AnalyticsService {
 
   SupabaseClient get _client => Supabase.instance.client;
 
-  Future<HospitalContentStats> fetchHospitalContentStats(String hospitalId) async {
-    final result = await _client.rpc('hospital_content_stats', params: {'p_hospital_id': hospitalId});
+  Future<HospitalContentStats> fetchHospitalContentStats(String organizationId) async {
+    // RPC name + 'p_hospital_id' param key are unchanged tech debt: the SQL
+    // function still literally has that signature, only its meaning changed
+    // (hospital -> organization). Do not rename either.
+    final result = await _client.rpc('hospital_content_stats', params: {'p_hospital_id': organizationId});
     return HospitalContentStats.fromJson(result as Map<String, dynamic>);
   }
 }

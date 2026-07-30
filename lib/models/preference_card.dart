@@ -27,7 +27,12 @@ class PreferenceCardItem {
 class PreferenceCard {
   final String id;
   final String workspaceId;
-  final String surgeonName;
+
+  /// FK a `surgeons` (Fase C) — el antiguo campo de texto libre
+  /// `surgeon_name` ya no existe en la BD. Nullable porque una tarjeta
+  /// puede guardarse sin cirujano asignado todavía; el nombre se resuelve
+  /// vía [SurgeonService] (caché por grupo), no se guarda aquí.
+  final String? surgeonId;
   final String procedureName;
   final List<PreferenceCardItem> items;
   final String? generalNotes;
@@ -41,7 +46,7 @@ class PreferenceCard {
   const PreferenceCard({
     required this.id,
     required this.workspaceId,
-    required this.surgeonName,
+    this.surgeonId,
     required this.procedureName,
     required this.items,
     this.generalNotes,
@@ -50,7 +55,8 @@ class PreferenceCard {
   });
 
   PreferenceCard copyWith({
-    String? surgeonName,
+    String? surgeonId,
+    bool clearSurgeonId = false,
     String? procedureName,
     List<PreferenceCardItem>? items,
     String? generalNotes,
@@ -60,7 +66,7 @@ class PreferenceCard {
     return PreferenceCard(
       id: id,
       workspaceId: workspaceId,
-      surgeonName: surgeonName ?? this.surgeonName,
+      surgeonId: clearSurgeonId ? null : (surgeonId ?? this.surgeonId),
       procedureName: procedureName ?? this.procedureName,
       items: items ?? this.items,
       generalNotes: generalNotes ?? this.generalNotes,
@@ -70,10 +76,10 @@ class PreferenceCard {
   }
 
   /// Payload para insert/update en Supabase (sin id ni columnas gestionadas por la BD).
-  Map<String, dynamic> toRow({required String hospitalId}) => {
-        'hospital_id': hospitalId,
+  Map<String, dynamic> toRow({required String organizationId}) => {
+        'organization_id': organizationId,
         'workspace_id': workspaceId,
-        'surgeon_name': surgeonName,
+        'surgeon_id': surgeonId,
         'procedure_name': procedureName,
         'items': items.map((i) => i.toJson()).toList(),
         'general_notes': generalNotes,
@@ -85,7 +91,7 @@ class PreferenceCard {
     return PreferenceCard(
       id: row['id'] as String,
       workspaceId: row['workspace_id'] as String,
-      surgeonName: row['surgeon_name'] as String? ?? '',
+      surgeonId: row['surgeon_id'] as String?,
       procedureName: row['procedure_name'] as String? ?? '',
       items: rawItems
           .map((e) => PreferenceCardItem.fromJson(e as Map<String, dynamic>))
@@ -101,7 +107,7 @@ class PreferenceCard {
   Map<String, dynamic> toCacheRow() => {
         'id': id,
         'workspace_id': workspaceId,
-        'surgeon_name': surgeonName,
+        'surgeon_id': surgeonId,
         'procedure_name': procedureName,
         'items': items.map((i) => i.toJson()).toList(),
         'general_notes': generalNotes,

@@ -12,9 +12,9 @@ import '../services/audit_service.dart';
 /// existente. Para abrirla:
 /// `Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AuditLogScreen()));`
 class AuditLogScreen extends StatefulWidget {
-  const AuditLogScreen({super.key, this.hospitalId, this.workspaceId});
+  const AuditLogScreen({super.key, this.organizationId, this.workspaceId});
 
-  final String? hospitalId;
+  final String? organizationId;
   final String? workspaceId;
 
   @override
@@ -39,7 +39,7 @@ class _AuditLogScreenState extends State<AuditLogScreen> {
     });
     try {
       _entries = await AuditService.instance.fetchAuditLog(
-        hospitalId: widget.hospitalId,
+        organizationId: widget.organizationId,
         workspaceId: widget.workspaceId,
       );
     } catch (e) {

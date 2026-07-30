@@ -7,6 +7,7 @@ import '../utils/invite_code.dart';
 import 'auth_service.dart';
 import 'group_document_service.dart';
 import 'preference_card_service.dart';
+import 'surgeon_service.dart';
 import 'tray_service.dart';
 import 'workspace_service.dart';
 
@@ -16,8 +17,8 @@ class ProfileService {
 
   SupabaseClient get _client => Supabase.instance.client;
 
-  String? _hospitalId;
-  String? _hospitalName;
+  String? _organizationId;
+  String? _organizationName;
   String? _hospitalCif;
   String? _inviteCode;
   bool _isAdmin = false;
@@ -30,14 +31,14 @@ class ProfileService {
   /// de cada pantalla que lo consulte.
   final ValueNotifier<WorkMode?> activeWorkModeNotifier = ValueNotifier<WorkMode?>(null);
 
-  String? get hospitalId => _hospitalId;
-  String? get hospitalName => _hospitalName;
+  String? get organizationId => _organizationId;
+  String? get organizationName => _organizationName;
   String? get hospitalCif => _hospitalCif;
   String? get inviteCode => _inviteCode;
   bool get isAdmin => _isAdmin;
   bool get isOwner => _isOwner;
   String? get ownerId => _ownerId;
-  bool get hasHospital => _hospitalId != null;
+  bool get hasHospital => _organizationId != null;
 
   Future<void> loadProfile() async {
     final user = AuthService.instance.currentUser;
@@ -47,17 +48,17 @@ class ProfileService {
     }
     final row = await _client
         .from('profiles')
-        .select('hospital_id, is_admin, active_work_mode, hospitals(name, cif, invite_code, owner_id)')
+        .select('organization_id, is_admin, active_work_mode, organizations(name, cif, invite_code, owner_id)')
         .eq('id', user.id)
         .maybeSingle();
-    final newHospitalId = row?['hospital_id'] as String?;
-    if (newHospitalId != _hospitalId) {
+    final newOrganizationId = row?['organization_id'] as String?;
+    if (newOrganizationId != _organizationId) {
       _clearGroupContentCaches();
     }
-    _hospitalId = newHospitalId;
+    _organizationId = newOrganizationId;
     _isAdmin = row?['is_admin'] as bool? ?? false;
-    final hospitalRow = row?['hospitals'] as Map<String, dynamic>?;
-    _hospitalName = hospitalRow?['name'] as String?;
+    final hospitalRow = row?['organizations'] as Map<String, dynamic>?;
+    _organizationName = hospitalRow?['name'] as String?;
     _hospitalCif = hospitalRow?['cif'] as String?;
     _inviteCode = hospitalRow?['invite_code'] as String?;
     _ownerId = hospitalRow?['owner_id'] as String?;
@@ -76,8 +77,8 @@ class ProfileService {
   }
 
   void _resetHospitalState() {
-    _hospitalId = null;
-    _hospitalName = null;
+    _organizationId = null;
+    _organizationName = null;
     _hospitalCif = null;
     _inviteCode = null;
     _isAdmin = false;
@@ -90,12 +91,13 @@ class ProfileService {
   /// Al cambiar de grupo (unirse, crear uno nuevo, cerrar sesión) hay que
   /// limpiar el caché en memoria de todo el contenido del grupo anterior:
   /// si no, un espacio/documento/tarjeta del grupo previo puede quedar
-  /// cacheado y usarse por error junto con el hospital_id del grupo nuevo.
+  /// cacheado y usarse por error junto con el organization_id del grupo nuevo.
   void _clearGroupContentCaches() {
     WorkspaceService.instance.clear();
     GroupDocumentService.instance.clear();
     PreferenceCardService.instance.clear();
     TrayService.instance.clear();
+    SurgeonService.instance.clear();
   }
 
   /// Busca el hospital por código de invitación y liga el perfil del usuario actual.
@@ -106,7 +108,7 @@ class ProfileService {
 
     final normalized = normalizeInviteCode(inviteCode);
     final hospitalRow = await _client
-        .from('hospitals')
+        .from('organizations')
         .select()
         .eq('invite_code', normalized)
         .maybeSingle();
@@ -115,13 +117,13 @@ class ProfileService {
     final hospital = Hospital.fromRow(hospitalRow);
     await _client.from('profiles').upsert({
       'id': user.id,
-      'hospital_id': hospital.id,
+      'organization_id': hospital.id,
       'is_admin': false,
       if (displayName != null && displayName.isNotEmpty) 'display_name': displayName,
     });
     _clearGroupContentCaches();
-    _hospitalId = hospital.id;
-    _hospitalName = hospital.name;
+    _organizationId = hospital.id;
+    _organizationName = hospital.name;
     _hospitalCif = hospital.cif;
     _inviteCode = hospital.inviteCode;
     _ownerId = hospital.ownerId;
@@ -143,7 +145,7 @@ class ProfileService {
     for (var attempt = 0; attempt < 5; attempt++) {
       try {
         inserted = await _client
-            .from('hospitals')
+            .from('organizations')
             .insert({
               'name': name.trim(),
               'invite_code': code,
@@ -168,13 +170,13 @@ class ProfileService {
     final hospital = Hospital.fromRow(inserted);
     await _client.from('profiles').upsert({
       'id': user.id,
-      'hospital_id': hospital.id,
+      'organization_id': hospital.id,
       'is_admin': true,
       if (displayName != null && displayName.isNotEmpty) 'display_name': displayName,
     });
     _clearGroupContentCaches();
-    _hospitalId = hospital.id;
-    _hospitalName = hospital.name;
+    _organizationId = hospital.id;
+    _organizationName = hospital.name;
     _hospitalCif = hospital.cif;
     _inviteCode = hospital.inviteCode;
     _ownerId = hospital.ownerId;
@@ -185,11 +187,11 @@ class ProfileService {
 
   /// Genera un nuevo código de invitación para el hospital actual (solo admin).
   Future<String> regenerateInviteCode() async {
-    if (_hospitalId == null) throw StateError('No perteneces a ningún hospital.');
+    if (_organizationId == null) throw StateError('No perteneces a ningún hospital.');
     String code = generateInviteCode();
     for (var attempt = 0; attempt < 5; attempt++) {
       try {
-        await _client.from('hospitals').update({'invite_code': code}).eq('id', _hospitalId!);
+        await _client.from('organizations').update({'invite_code': code}).eq('id', _organizationId!);
         _inviteCode = code;
         return code;
       } on PostgrestException catch (e) {
@@ -204,11 +206,11 @@ class ProfileService {
   }
 
   Future<List<HospitalMember>> fetchMembers() async {
-    if (_hospitalId == null) return [];
+    if (_organizationId == null) return [];
     final rows = await _client
         .from('profiles')
         .select('id, display_name, is_admin')
-        .eq('hospital_id', _hospitalId!);
+        .eq('organization_id', _organizationId!);
     return (rows as List<dynamic>)
         .map((r) => HospitalMember.fromRow(r as Map<String, dynamic>))
         .toList();
@@ -216,7 +218,7 @@ class ProfileService {
 
   /// Expulsa a un miembro del hospital (solo admin, vía RLS).
   Future<void> removeMember(String userId) async {
-    await _client.from('profiles').update({'hospital_id': null, 'is_admin': false}).eq('id', userId);
+    await _client.from('profiles').update({'organization_id': null, 'is_admin': false}).eq('id', userId);
   }
 
   /// Transfiere la propiedad del grupo a otro miembro (solo la propietaria/el

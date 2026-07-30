@@ -87,7 +87,15 @@ class GroupDocumentVersion {
   final int versionNumber;
   final GroupDocumentVersionStatus status;
   final String title;
+
+  /// Texto libre heredado, ya no se escribe desde código nuevo (ver
+  /// [specialtyId]) — se conserva solo para mostrar filas antiguas sin migrar.
   final String? specialty;
+
+  /// FK a `specialties` (Fase C). Fuente de verdad para código nuevo; puede
+  /// ser null en filas antiguas que todavía no se han migrado (en ese caso
+  /// [specialty] conserva el texto original).
+  final String? specialtyId;
   final String? content;
   final List<ProtocolStep> steps;
   final List<String> relatedInstrumentIds;
@@ -111,6 +119,7 @@ class GroupDocumentVersion {
     required this.status,
     required this.title,
     this.specialty,
+    this.specialtyId,
     this.content,
     this.steps = const [],
     this.relatedInstrumentIds = const [],
@@ -125,20 +134,20 @@ class GroupDocumentVersion {
 
   Map<String, dynamic> toRow() => {
         'title': title,
-        'specialty': specialty,
+        'specialty_id': specialtyId,
         'content': content,
         'steps': steps.map((s) => s.toJson()).toList(),
         'related_instrument_ids': relatedInstrumentIds,
         'comment': comment,
       };
 
-  /// [clearSpecialty]/[clearContent]: al ser campos nullable, pasar `null`
-  /// en [specialty]/[content] no basta para vaciarlos (se confundiría con
+  /// [clearSpecialtyId]/[clearContent]: al ser campos nullable, pasar `null`
+  /// en [specialtyId]/[content] no basta para vaciarlos (se confundiría con
   /// "no lo toques") — hay que pedirlo explícitamente.
   GroupDocumentVersion copyWith({
     String? title,
-    String? specialty,
-    bool clearSpecialty = false,
+    String? specialtyId,
+    bool clearSpecialtyId = false,
     String? content,
     bool clearContent = false,
     List<ProtocolStep>? steps,
@@ -152,7 +161,8 @@ class GroupDocumentVersion {
       versionNumber: versionNumber,
       status: status,
       title: title ?? this.title,
-      specialty: clearSpecialty ? null : (specialty ?? this.specialty),
+      specialty: specialty,
+      specialtyId: clearSpecialtyId ? null : (specialtyId ?? this.specialtyId),
       content: clearContent ? null : (content ?? this.content),
       steps: steps ?? this.steps,
       relatedInstrumentIds: relatedInstrumentIds ?? this.relatedInstrumentIds,
@@ -177,6 +187,7 @@ class GroupDocumentVersion {
       status: GroupDocumentVersionStatusLabel.fromDb(row['status'] as String),
       title: row['title'] as String? ?? '',
       specialty: row['specialty'] as String?,
+      specialtyId: row['specialty_id'] as String?,
       content: row['content'] as String?,
       steps: (row['steps'] as List<dynamic>? ?? []).map(ProtocolStep.fromDynamic).toList(),
       relatedInstrumentIds:
@@ -201,6 +212,7 @@ class GroupDocumentVersion {
         'status': status.dbValue,
         'title': title,
         'specialty': specialty,
+        'specialty_id': specialtyId,
         'content': content,
         'steps': steps.map((s) => s.toJson()).toList(),
         'related_instrument_ids': relatedInstrumentIds,

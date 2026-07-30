@@ -18,13 +18,13 @@ class AuditService {
   /// `profiles` y se combina en memoria (mismo patrón que
   /// WorkspaceService.fetchMembers).
   Future<List<AuditEntry>> fetchAuditLog({
-    String? hospitalId,
+    String? organizationId,
     String? workspaceId,
     DateTime? since,
   }) async {
     var query = _client.from('audit_log').select('*, workspaces(name)');
-    if (hospitalId != null) {
-      query = query.eq('hospital_id', hospitalId);
+    if (organizationId != null) {
+      query = query.eq('organization_id', organizationId);
     }
     if (workspaceId != null) {
       query = query.eq('workspace_id', workspaceId);

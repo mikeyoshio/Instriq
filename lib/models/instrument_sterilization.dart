@@ -66,7 +66,7 @@ extension SterilizationMethodLabel on SterilizationMethod {
   }
 }
 
-/// Una fila de `instrument_sterilization_methods`. [hospitalId]/[workspaceId]
+/// Una fila de `instrument_sterilization_methods`. [organizationId]/[workspaceId]
 /// nulos significan que es un dato de catálogo global (curado, visible para
 /// cualquier hospital); no nulos, que es una particularidad de un
 /// `custom_instrument` de ese workspace.
@@ -74,7 +74,7 @@ class SterilizationMethodEntry {
   final String? id;
   final String instrumentRefType;
   final String instrumentRefId;
-  final String? hospitalId;
+  final String? organizationId;
   final String? workspaceId;
   final SterilizationMethod method;
   final String? temperature;
@@ -90,7 +90,7 @@ class SterilizationMethodEntry {
     this.id,
     required this.instrumentRefType,
     required this.instrumentRefId,
-    this.hospitalId,
+    this.organizationId,
     this.workspaceId,
     required this.method,
     this.temperature,
@@ -106,7 +106,7 @@ class SterilizationMethodEntry {
   Map<String, dynamic> toRow() => {
         'instrument_ref_type': instrumentRefType,
         'instrument_ref_id': instrumentRefId,
-        'hospital_id': hospitalId,
+        'organization_id': organizationId,
         'workspace_id': workspaceId,
         'method': method.dbValue,
         'temperature': temperature,
@@ -134,7 +134,7 @@ class SterilizationMethodEntry {
       id: id,
       instrumentRefType: instrumentRefType,
       instrumentRefId: instrumentRefId,
-      hospitalId: hospitalId,
+      organizationId: organizationId,
       workspaceId: workspaceId,
       method: method ?? this.method,
       temperature: temperature ?? this.temperature,
@@ -153,7 +153,7 @@ class SterilizationMethodEntry {
       id: row['id'] as String?,
       instrumentRefType: row['instrument_ref_type'] as String,
       instrumentRefId: row['instrument_ref_id'] as String,
-      hospitalId: row['hospital_id'] as String?,
+      organizationId: row['organization_id'] as String?,
       workspaceId: row['workspace_id'] as String?,
       method: SterilizationMethodLabel.fromDb(row['method'] as String),
       temperature: row['temperature'] as String?,
@@ -169,14 +169,17 @@ class SterilizationMethodEntry {
 }
 
 /// La fila (única por instrumento) de `instrument_technical_info`.
+/// [manufacturerId]/[ifuDocumentId] son FKs (a `manufacturers`/
+/// `reference_documents`) desde Fase C — las columnas de texto libre
+/// `manufacturer`/`ifu_url` ya no existen en la BD.
 class InstrumentTechnicalInfo {
   final String? id;
   final String instrumentRefType;
   final String instrumentRefId;
-  final String? hospitalId;
+  final String? organizationId;
   final String? workspaceId;
-  final String? manufacturer;
-  final String? ifuUrl;
+  final String? manufacturerId;
+  final String? ifuDocumentId;
   final String? maintenanceNotes;
   final String? inspectionNotes;
   final String? usefulLifeNotes;
@@ -185,10 +188,10 @@ class InstrumentTechnicalInfo {
     this.id,
     required this.instrumentRefType,
     required this.instrumentRefId,
-    this.hospitalId,
+    this.organizationId,
     this.workspaceId,
-    this.manufacturer,
-    this.ifuUrl,
+    this.manufacturerId,
+    this.ifuDocumentId,
     this.maintenanceNotes,
     this.inspectionNotes,
     this.usefulLifeNotes,
@@ -197,18 +200,20 @@ class InstrumentTechnicalInfo {
   Map<String, dynamic> toRow() => {
         'instrument_ref_type': instrumentRefType,
         'instrument_ref_id': instrumentRefId,
-        'hospital_id': hospitalId,
+        'organization_id': organizationId,
         'workspace_id': workspaceId,
-        'manufacturer': manufacturer,
-        'ifu_url': ifuUrl,
+        'manufacturer_id': manufacturerId,
+        'ifu_document_id': ifuDocumentId,
         'maintenance_notes': maintenanceNotes,
         'inspection_notes': inspectionNotes,
         'useful_life_notes': usefulLifeNotes,
       };
 
   InstrumentTechnicalInfo copyWith({
-    String? manufacturer,
-    String? ifuUrl,
+    String? manufacturerId,
+    bool clearManufacturerId = false,
+    String? ifuDocumentId,
+    bool clearIfuDocumentId = false,
     String? maintenanceNotes,
     String? inspectionNotes,
     String? usefulLifeNotes,
@@ -217,10 +222,10 @@ class InstrumentTechnicalInfo {
       id: id,
       instrumentRefType: instrumentRefType,
       instrumentRefId: instrumentRefId,
-      hospitalId: hospitalId,
+      organizationId: organizationId,
       workspaceId: workspaceId,
-      manufacturer: manufacturer ?? this.manufacturer,
-      ifuUrl: ifuUrl ?? this.ifuUrl,
+      manufacturerId: clearManufacturerId ? null : (manufacturerId ?? this.manufacturerId),
+      ifuDocumentId: clearIfuDocumentId ? null : (ifuDocumentId ?? this.ifuDocumentId),
       maintenanceNotes: maintenanceNotes ?? this.maintenanceNotes,
       inspectionNotes: inspectionNotes ?? this.inspectionNotes,
       usefulLifeNotes: usefulLifeNotes ?? this.usefulLifeNotes,
@@ -232,10 +237,10 @@ class InstrumentTechnicalInfo {
       id: row['id'] as String?,
       instrumentRefType: row['instrument_ref_type'] as String,
       instrumentRefId: row['instrument_ref_id'] as String,
-      hospitalId: row['hospital_id'] as String?,
+      organizationId: row['organization_id'] as String?,
       workspaceId: row['workspace_id'] as String?,
-      manufacturer: row['manufacturer'] as String?,
-      ifuUrl: row['ifu_url'] as String?,
+      manufacturerId: row['manufacturer_id'] as String?,
+      ifuDocumentId: row['ifu_document_id'] as String?,
       maintenanceNotes: row['maintenance_notes'] as String?,
       inspectionNotes: row['inspection_notes'] as String?,
       usefulLifeNotes: row['useful_life_notes'] as String?,

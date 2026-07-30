@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../data/surgical_specialties.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
+import '../models/specialty_entity.dart';
 import '../models/tray.dart';
 import '../services/custom_instrument_service.dart';
+import '../services/profile_service.dart';
+import '../services/specialty_service.dart';
 import '../services/tray_service.dart';
+import '../widgets/tag_picker.dart';
 import '../widgets/tray_item_picker_sheet.dart';
 
 /// Edita el borrador de una versión de bandeja ([existingDraft]) o crea una
@@ -32,7 +35,11 @@ class TrayFormScreen extends StatefulWidget {
 
 class _TrayFormScreenState extends State<TrayFormScreen> {
   late final TextEditingController _nameController;
-  String? _specialty;
+  String? _specialtyId;
+  // Solo lectura: texto de la antigua columna `specialty`, se muestra como
+  // pista cuando la fila todavía no se ha migrado a `specialty_id`.
+  String? _legacySpecialtyText;
+  List<SpecialtyEntity> _specialties = [];
   late final TextEditingController _descriptionController;
   late final TextEditingController _observationsController;
   late final TextEditingController _commentController;
@@ -41,6 +48,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
   final List<File> _newPhotos = [];
   TrayVersion? _draft;
   List<CustomInstrument> _customInstruments = [];
+  final _tagPickerKey = GlobalKey<TagPickerState>();
   bool _loading = true;
   bool _saving = false;
   String? _error;
@@ -61,6 +69,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
     try {
       await CustomInstrumentService.instance.fetchForWorkspace(widget.workspaceId);
       _customInstruments = CustomInstrumentService.instance.instruments;
+      _specialties = await SpecialtyService.instance.fetchAll();
       TrayVersion draft;
       if (widget.existingDraft != null) {
         draft = widget.existingDraft!;
@@ -80,7 +89,8 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
   void _applyDraft(TrayVersion draft) {
     _draft = draft;
     _nameController.text = draft.name;
-    _specialty = draft.specialty;
+    _specialtyId = draft.specialtyId;
+    _legacySpecialtyText = draft.specialtyId == null ? draft.specialty : null;
     _descriptionController.text = draft.description ?? '';
     _observationsController.text = draft.observations ?? '';
     _items = List.of(draft.items);
@@ -170,8 +180,8 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
     final name = _nameController.text.trim();
     return _draft!.copyWith(
       name: name,
-      specialty: _specialty,
-      clearSpecialty: _specialty == null,
+      specialtyId: _specialtyId,
+      clearSpecialtyId: _specialtyId == null,
       description: _descriptionController.text.trim().isEmpty ? null : _descriptionController.text.trim(),
       clearDescription: _descriptionController.text.trim().isEmpty,
       photoPaths: _photoPaths,
@@ -202,6 +212,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
       }
       _newPhotos.clear();
       final updated = await TrayService.instance.saveDraft(_draftWithFormValues());
+      await _tagPickerKey.currentState?.save();
       if (andSubmit) {
         await TrayService.instance.submitForReview(updated.id);
       }
@@ -214,18 +225,27 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
   }
 
   Widget _buildSpecialtyDropdown(AppLocalizations l10n) {
-    final legacyValue = _specialty != null && !kSurgicalSpecialties.contains(_specialty) ? _specialty : null;
-    return DropdownButtonFormField<String?>(
-      value: _specialty,
-      isExpanded: true,
-      decoration: InputDecoration(labelText: l10n.specialtyLabel, border: const OutlineInputBorder()),
-      items: [
-        DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
-        if (legacyValue != null)
-          DropdownMenuItem<String?>(value: legacyValue, child: Text(l10n.legacySpecialtySuffix(legacyValue))),
-        ...kSurgicalSpecialties.map((s) => DropdownMenuItem<String?>(value: s, child: Text(s))),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DropdownButtonFormField<String?>(
+          value: _specialtyId,
+          isExpanded: true,
+          decoration: InputDecoration(labelText: l10n.specialtyLabel, border: const OutlineInputBorder()),
+          items: [
+            DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
+            ..._specialties.map((s) => DropdownMenuItem<String?>(value: s.id, child: Text(s.label))),
+          ],
+          onChanged: (value) => setState(() => _specialtyId = value),
+        ),
+        if (_legacySpecialtyText != null && _legacySpecialtyText!.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Text(
+            l10n.legacySpecialtySuffix(_legacySpecialtyText!),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
       ],
-      onChanged: (value) => setState(() => _specialty = value),
     );
   }
 
@@ -328,6 +348,15 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
                 alignLabelWithHint: true,
               ),
               maxLines: 3,
+            ),
+            const SizedBox(height: 20),
+            Text(l10n.tagsLabel, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            TagPicker(
+              key: _tagPickerKey,
+              refType: 'tray',
+              refId: _draft!.trayId,
+              organizationId: ProfileService.instance.organizationId,
             ),
             const SizedBox(height: 20),
             TextField(

@@ -55,8 +55,8 @@ class CustomInstrumentService {
   }
 
   Future<CustomInstrument> create(CustomInstrument instrument) async {
-    final hospitalId = ProfileService.instance.hospitalId;
-    if (hospitalId == null) {
+    final organizationId = ProfileService.instance.organizationId;
+    if (organizationId == null) {
       throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
     final row = await _client
@@ -136,18 +136,18 @@ class CustomInstrumentService {
   }
 
   /// Sube la foto de una variante al bucket privado, con la ruta convenida
-  /// `{hospital_id}/{workspace_id}/{custom_instrument_id}/{variant_id}.<ext>`
+  /// `{organization_id}/{workspace_id}/{custom_instrument_id}/{variant_id}.<ext>`
   /// (ver schema_v13), y guarda `photo_path` en la fila. El bucket NO es
   /// público: para mostrarla hay que pedir una signed URL con
   /// [getVariantPhotoUrl].
   Future<CustomInstrumentVariant> uploadVariantPhoto({
     required CustomInstrumentVariant variant,
-    required String hospitalId,
+    required String organizationId,
     required String workspaceId,
     required File file,
   }) async {
     final ext = _extensionOf(file.path);
-    final path = '$hospitalId/$workspaceId/${variant.customInstrumentId}/${variant.id}.$ext';
+    final path = '$organizationId/$workspaceId/${variant.customInstrumentId}/${variant.id}.$ext';
     await _client.storage.from(_bucket).upload(
           path,
           file,

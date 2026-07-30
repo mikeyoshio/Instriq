@@ -5,8 +5,10 @@ import 'package:image_picker/image_picker.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
+import '../models/specialty_entity.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/profile_service.dart';
+import '../services/specialty_service.dart';
 
 /// Crear/editar un instrumento personalizado del equipo, con sus variantes
 /// (nombre + foto) gestionadas inline. Nunca toca el catálogo global.
@@ -35,7 +37,11 @@ class _VariantDraft {
 class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _categoryController;
-  late final TextEditingController _specialtyController;
+  String? _specialtyId;
+  // Solo lectura: texto de la antigua columna `specialty`, se muestra como
+  // pista cuando la fila todavía no se ha migrado a `specialty_id`.
+  String? _legacySpecialtyText;
+  List<SpecialtyEntity> _specialties = [];
   late final TextEditingController _descriptionController;
   late final TextEditingController _useController;
   late final TextEditingController _tipController;
@@ -48,18 +54,25 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
     final instrument = widget.existingInstrument;
     _nameController = TextEditingController(text: instrument?.name ?? '');
     _categoryController = TextEditingController(text: instrument?.category ?? '');
-    _specialtyController = TextEditingController(text: instrument?.specialty ?? '');
+    _specialtyId = instrument?.specialtyId;
+    _legacySpecialtyText = instrument?.specialtyId == null ? instrument?.specialty : null;
     _descriptionController = TextEditingController(text: instrument?.description ?? '');
     _useController = TextEditingController(text: instrument?.useText ?? '');
     _tipController = TextEditingController(text: instrument?.tip ?? '');
     _variants = (instrument?.variants ?? const []).map((v) => _VariantDraft(existing: v)).toList();
+    _loadSpecialties();
+  }
+
+  Future<void> _loadSpecialties() async {
+    final specialties = await SpecialtyService.instance.fetchAll();
+    if (!mounted) return;
+    setState(() => _specialties = specialties);
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _categoryController.dispose();
-    _specialtyController.dispose();
     _descriptionController.dispose();
     _useController.dispose();
     _tipController.dispose();
@@ -113,8 +126,8 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
       );
       return;
     }
-    final hospitalId = ProfileService.instance.hospitalId;
-    if (hospitalId == null) {
+    final organizationId = ProfileService.instance.organizationId;
+    if (organizationId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.customInstrumentSaveError('Sin hospital'))),
       );
@@ -128,11 +141,11 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
       if (widget.existingInstrument == null) {
         instrument = await service.create(CustomInstrument(
           id: '',
-          hospitalId: hospitalId,
+          organizationId: organizationId,
           workspaceId: widget.workspaceId,
           name: name,
           category: _categoryController.text.trim().isEmpty ? null : _categoryController.text.trim(),
-          specialty: _specialtyController.text.trim().isEmpty ? null : _specialtyController.text.trim(),
+          specialtyId: _specialtyId,
           description: description,
           useText: _useController.text.trim().isEmpty ? null : _useController.text.trim(),
           tip: _tipController.text.trim().isEmpty ? null : _tipController.text.trim(),
@@ -141,7 +154,8 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
         instrument = await service.update(widget.existingInstrument!.copyWith(
           name: name,
           category: _categoryController.text.trim().isEmpty ? null : _categoryController.text.trim(),
-          specialty: _specialtyController.text.trim().isEmpty ? null : _specialtyController.text.trim(),
+          specialtyId: _specialtyId,
+          clearSpecialtyId: _specialtyId == null,
           description: description,
           useText: _useController.text.trim().isEmpty ? null : _useController.text.trim(),
           tip: _tipController.text.trim().isEmpty ? null : _tipController.text.trim(),
@@ -176,7 +190,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
         if (draft.pickedPhoto != null) {
           await service.uploadVariantPhoto(
             variant: variant,
-            hospitalId: hospitalId,
+            organizationId: organizationId,
             workspaceId: widget.workspaceId,
             file: draft.pickedPhoto!,
           );
@@ -221,13 +235,26 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
               ),
             ),
             const SizedBox(height: 12),
-            TextField(
-              controller: _specialtyController,
+            DropdownButtonFormField<String?>(
+              value: _specialtyId,
+              isExpanded: true,
               decoration: InputDecoration(
                 labelText: l10n.customInstrumentSpecialtyLabel,
                 border: const OutlineInputBorder(),
               ),
+              items: [
+                DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
+                ..._specialties.map((s) => DropdownMenuItem<String?>(value: s.id, child: Text(s.label))),
+              ],
+              onChanged: (value) => setState(() => _specialtyId = value),
             ),
+            if (_legacySpecialtyText != null && _legacySpecialtyText!.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(
+                l10n.legacySpecialtySuffix(_legacySpecialtyText!),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
             const SizedBox(height: 12),
             TextField(
               controller: _descriptionController,

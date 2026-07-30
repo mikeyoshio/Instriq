@@ -5,16 +5,22 @@ import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
+import '../models/specialty_entity.dart';
+import '../models/tag.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/recent_activity_service.dart';
+import '../services/specialty_service.dart';
+import '../services/tag_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/offline_banner.dart';
 import 'group_document_form_screen.dart';
 import 'group_document_version_history_screen.dart';
 import 'instrument_detail_screen.dart';
+import 'specialty_detail_screen.dart';
+import 'tag_detail_screen.dart';
 
 class GroupDocumentDetailScreen extends StatefulWidget {
   final GroupDocument document;
@@ -33,15 +39,44 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
   GroupDocumentVersion? _ownPendingDraft;
   bool _loadingHistory = true;
   bool _isFavorite = false;
+  SpecialtyEntity? _specialty;
+  List<Tag> _tags = [];
 
   @override
   void initState() {
     super.initState();
     _document = widget.document;
     _loadOwnDraft();
+    _loadSpecialty();
+    _loadTags();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _document.id);
       _loadFavoriteState();
+    }
+  }
+
+  Future<void> _loadSpecialty() async {
+    final specialtyId = _document.publishedVersion?.specialtyId;
+    if (specialtyId == null) return;
+    final specialties = await SpecialtyService.instance.fetchAll();
+    if (!mounted) return;
+    SpecialtyEntity? found;
+    for (final s in specialties) {
+      if (s.id == specialtyId) {
+        found = s;
+        break;
+      }
+    }
+    setState(() => _specialty = found);
+  }
+
+  Future<void> _loadTags() async {
+    try {
+      final tags = await TagService.instance.fetchTagsFor(_refType, _document.id);
+      if (!mounted) return;
+      setState(() => _tags = tags);
+    } catch (_) {
+      // Sin bloquear la ficha si falla: las etiquetas son metadato accesorio.
     }
   }
 
@@ -195,8 +230,30 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               child: Text(l10n.docNotPublishedYet),
             )
           else ...[
-            if (published.specialty != null) ...[
-              Chip(label: Text(published.specialty!)),
+            if (_specialty != null || published.specialty != null) ...[
+              _specialty != null
+                  ? InputChip(
+                      label: Text(_specialty!.label),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => SpecialtyDetailScreen(specialty: _specialty!)),
+                      ),
+                    )
+                  : Chip(label: Text(published.specialty!)),
+              const SizedBox(height: 16),
+            ],
+            if (_tags.isNotEmpty) ...[
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: _tags
+                    .map((tag) => InputChip(
+                          label: Text(tag.name),
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => TagDetailScreen(tag: tag)),
+                          ),
+                        ))
+                    .toList(),
+              ),
               const SizedBox(height: 16),
             ],
             if (published.content != null) ...[

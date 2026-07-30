@@ -86,7 +86,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     InstriqListItem(
                       icon: Icons.workspaces_outlined,
                       title: l10n.spacesTitle,
-                      subtitle: ProfileService.instance.hospitalName ?? l10n.spacesSubtitleDefault,
+                      subtitle: ProfileService.instance.organizationName ?? l10n.spacesSubtitleDefault,
                       onTap: _openWorkspaces,
                     ),
                   ]

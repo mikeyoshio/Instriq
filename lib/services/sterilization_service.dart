@@ -5,7 +5,7 @@ import '../models/instrument_sterilization.dart';
 /// CRUD de métodos de esterilización y ficha técnica de un instrumento
 /// (catálogo global o instrumento personalizado). Ver
 /// supabase/schema_v15_clinical_knowledge_model.sql para el modelo y RLS.
-/// Para el catálogo global ([refType] = 'catalog') se pasa [hospitalId]
+/// Para el catálogo global ([refType] = 'catalog') se pasa [organizationId]
 /// / [workspaceId] null en los upserts — ver [SterilizationMethodEntry].
 class SterilizationService {
   SterilizationService._();
@@ -54,5 +54,17 @@ class SterilizationService {
 
   Future<void> deleteMethod(String id) async {
     await _client.from('instrument_sterilization_methods').delete().eq('id', id);
+  }
+
+  /// Fichas técnicas que referencian un fabricante, para
+  /// [ManufacturerDetailScreen] ("usado en"). RLS de `instrument_technical_info`
+  /// ya limita lo privado (workspace) al grupo del usuario; el catálogo
+  /// global es visible para todos.
+  Future<List<InstrumentTechnicalInfo>> fetchTechnicalInfoForManufacturer(String manufacturerId) async {
+    final rows =
+        await _client.from('instrument_technical_info').select().eq('manufacturer_id', manufacturerId);
+    return (rows as List<dynamic>)
+        .map((r) => InstrumentTechnicalInfo.fromRow(r as Map<String, dynamic>))
+        .toList();
   }
 }

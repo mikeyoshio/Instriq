@@ -27,14 +27,16 @@ class PreferenceCardService {
     _cards = [];
   }
 
-  List<String> get surgeonNames {
-    final names = _cards.map((c) => c.surgeonName).toSet().toList();
-    names.sort();
-    return names;
+  /// Ids (posiblemente null) de los cirujanos con al menos una tarjeta en el
+  /// caché actual — la UI resuelve el nombre a mostrar vía [SurgeonService].
+  List<String?> get surgeonIds {
+    final ids = _cards.map((c) => c.surgeonId).toSet().toList();
+    ids.sort((a, b) => (a ?? '').compareTo(b ?? ''));
+    return ids;
   }
 
-  List<PreferenceCard> cardsForSurgeon(String surgeonName) {
-    return _cards.where((c) => c.surgeonName == surgeonName).toList();
+  List<PreferenceCard> cardsForSurgeon(String? surgeonId) {
+    return _cards.where((c) => c.surgeonId == surgeonId).toList();
   }
 
   /// Trae las tarjetas del espacio indicado (el hospital ya lo filtra RLS en el servidor).
@@ -55,7 +57,6 @@ class PreferenceCardService {
           .from('preference_cards')
           .select()
           .eq('workspace_id', workspaceId)
-          .order('surgeon_name')
           .order('procedure_name');
       _cards = (rows as List<dynamic>)
           .map((r) => PreferenceCard.fromRow(r as Map<String, dynamic>))
@@ -80,11 +81,11 @@ class PreferenceCardService {
       }
       return;
     }
-    final hospitalId = ProfileService.instance.hospitalId;
-    if (hospitalId == null) {
+    final organizationId = ProfileService.instance.organizationId;
+    if (organizationId == null) {
       throw StateError('El usuario no pertenece a ningún hospital todavía.');
     }
-    final row = card.toRow(hospitalId: hospitalId);
+    final row = card.toRow(organizationId: organizationId);
     try {
       if (card.id.isEmpty) {
         final inserted = await _client.from('preference_cards').insert(row).select().single();
@@ -127,5 +128,28 @@ class PreferenceCardService {
   Future<void> deleteCard(String id) async {
     await _client.from('preference_cards').delete().eq('id', id);
     _cards.removeWhere((c) => c.id == id);
+  }
+
+  /// Fetch puntual por id (sin pasar por el caché de workspace) — usado por
+  /// `ref_resolver.dart` para resolver un ref `preference_card` (p.ej. desde
+  /// la pantalla de una etiqueta) sin haber cargado antes todo el espacio al
+  /// que pertenece. Mismo patrón que [CustomInstrumentService.fetchById].
+  Future<PreferenceCard> fetchById(String id) async {
+    final row = await _client.from('preference_cards').select().eq('id', id).single();
+    return PreferenceCard.fromRow(row);
+  }
+
+  /// Tarjetas de un cirujano concreto, para [SurgeonDetailScreen] — cruza
+  /// workspaces (la RLS ya limita al grupo actual), así que no pasa por el
+  /// caché por-workspace de [fetchCards].
+  Future<List<PreferenceCard>> fetchForSurgeon(String surgeonId) async {
+    final rows = await _client
+        .from('preference_cards')
+        .select()
+        .eq('surgeon_id', surgeonId)
+        .order('procedure_name');
+    return (rows as List<dynamic>)
+        .map((r) => PreferenceCard.fromRow(r as Map<String, dynamic>))
+        .toList();
   }
 }

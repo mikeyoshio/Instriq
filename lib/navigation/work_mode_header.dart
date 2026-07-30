@@ -31,7 +31,7 @@ class WorkModeHeader extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    ProfileService.instance.hospitalName ?? '',
+                    ProfileService.instance.organizationName ?? '',
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),

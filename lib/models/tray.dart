@@ -74,7 +74,7 @@ class TrayItem {
 /// que [GroupDocument]/[GroupDocumentVersion].
 class Tray {
   final String id;
-  final String hospitalId;
+  final String organizationId;
   final String workspaceId;
   final String? createdBy;
   final DateTime? createdAt;
@@ -83,7 +83,7 @@ class Tray {
 
   const Tray({
     required this.id,
-    required this.hospitalId,
+    required this.organizationId,
     required this.workspaceId,
     this.createdBy,
     this.createdAt,
@@ -94,7 +94,7 @@ class Tray {
   Tray copyWith({String? publishedVersionId, TrayVersion? publishedVersion}) {
     return Tray(
       id: id,
-      hospitalId: hospitalId,
+      organizationId: organizationId,
       workspaceId: workspaceId,
       createdBy: createdBy,
       createdAt: createdAt,
@@ -107,7 +107,7 @@ class Tray {
     final versionRow = row['published_version'] as Map<String, dynamic>?;
     return Tray(
       id: row['id'] as String,
-      hospitalId: row['hospital_id'] as String,
+      organizationId: row['organization_id'] as String,
       workspaceId: row['workspace_id'] as String,
       createdBy: row['created_by'] as String?,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
@@ -127,7 +127,13 @@ class TrayVersion {
   final int versionNumber;
   final GroupDocumentVersionStatus status;
   final String name;
+
+  /// Texto libre heredado, ya no se escribe desde código nuevo (ver
+  /// [specialtyId]) — se conserva solo para mostrar filas antiguas sin migrar.
   final String? specialty;
+
+  /// FK a `specialties` (Fase C). Fuente de verdad para código nuevo.
+  final String? specialtyId;
   final String? description;
   final List<String> photoPaths;
   final List<TrayItem> items;
@@ -146,6 +152,7 @@ class TrayVersion {
     required this.status,
     required this.name,
     this.specialty,
+    this.specialtyId,
     this.description,
     this.photoPaths = const [],
     this.items = const [],
@@ -160,7 +167,7 @@ class TrayVersion {
 
   Map<String, dynamic> toRow() => {
         'name': name,
-        'specialty': specialty,
+        'specialty_id': specialtyId,
         'description': description,
         'photo_paths': photoPaths,
         'items': items.map((i) => i.toJson()).toList(),
@@ -168,14 +175,14 @@ class TrayVersion {
         'comment': comment,
       };
 
-  /// [clearSpecialty]/[clearDescription]/[clearObservations]: campos
+  /// [clearSpecialtyId]/[clearDescription]/[clearObservations]: campos
   /// nullable donde pasar `null` no basta para vaciarlos (se confundiría con
   /// "no lo toques") — hay que pedirlo explícitamente, mismo patrón que
   /// [GroupDocumentVersion.copyWith].
   TrayVersion copyWith({
     String? name,
-    String? specialty,
-    bool clearSpecialty = false,
+    String? specialtyId,
+    bool clearSpecialtyId = false,
     String? description,
     bool clearDescription = false,
     List<String>? photoPaths,
@@ -190,7 +197,8 @@ class TrayVersion {
       versionNumber: versionNumber,
       status: status,
       name: name ?? this.name,
-      specialty: clearSpecialty ? null : (specialty ?? this.specialty),
+      specialty: specialty,
+      specialtyId: clearSpecialtyId ? null : (specialtyId ?? this.specialtyId),
       description: clearDescription ? null : (description ?? this.description),
       photoPaths: photoPaths ?? this.photoPaths,
       items: items ?? this.items,
@@ -212,6 +220,7 @@ class TrayVersion {
       status: GroupDocumentVersionStatusLabel.fromDb(row['status'] as String),
       name: row['name'] as String? ?? '',
       specialty: row['specialty'] as String?,
+      specialtyId: row['specialty_id'] as String?,
       description: row['description'] as String?,
       photoPaths: (row['photo_paths'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
       items: (row['items'] as List<dynamic>? ?? [])

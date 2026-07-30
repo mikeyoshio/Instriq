@@ -4,10 +4,13 @@ import '../data/instruments_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
+import '../models/surgeon.dart';
 import '../models/workspace_role.dart';
 import '../services/preference_card_service.dart';
+import '../services/surgeon_service.dart';
 import '../widgets/category_icon.dart';
 import 'preference_card_form_screen.dart';
+import 'surgeon_detail_screen.dart';
 
 class PreferenceCardDetailScreen extends StatefulWidget {
   final PreferenceCard card;
@@ -21,11 +24,21 @@ class PreferenceCardDetailScreen extends StatefulWidget {
 
 class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen> {
   late PreferenceCard _card;
+  Surgeon? _surgeon;
 
   @override
   void initState() {
     super.initState();
     _card = widget.card;
+    _loadSurgeon();
+  }
+
+  Future<void> _loadSurgeon() async {
+    final surgeonId = _card.surgeonId;
+    if (surgeonId == null) return;
+    await SurgeonService.instance.fetchForOrganization();
+    if (!mounted) return;
+    setState(() => _surgeon = SurgeonService.instance.byId(surgeonId));
   }
 
   Instrument? _catalogFor(PreferenceCardItem item) {
@@ -60,7 +73,7 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.deleteCardTitle),
-        content: Text(l10n.deleteCardBody(_card.procedureName, _card.surgeonName)),
+        content: Text(l10n.deleteCardBody(_card.procedureName, _surgeon?.name ?? '')),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
           TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.deleteAction)),
@@ -94,7 +107,20 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
               const Icon(Icons.person),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(_card.surgeonName, style: Theme.of(context).textTheme.titleMedium),
+                child: _surgeon != null
+                    ? InkWell(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => SurgeonDetailScreen(surgeon: _surgeon!)),
+                        ),
+                        child: Text(
+                          _surgeon!.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(decoration: TextDecoration.underline),
+                        ),
+                      )
+                    : Text('—', style: Theme.of(context).textTheme.titleMedium),
               ),
               if (_card.validated)
                 Chip(
