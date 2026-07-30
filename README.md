@@ -28,6 +28,9 @@ El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. S
 - **Instrumental personalizado del equipo**: cada espacio de trabajo puede dar de alta su propio instrumental (con variantes y foto), privado a ese hospital/espacio — nunca se mezcla con el catálogo global ni es visible fuera de tu equipo. Cada foto subida por un equipo lleva un aviso explícito de que no está verificada por Instriq (a diferencia de las del catálogo global, con licencia libre comprobada).
 - **Modo sin conexión**: técnicas, protocolos y tarjetas de preferencia se cachean localmente y se pueden consultar sin red; crear o editar contenido sin conexión se encola y se sincroniza solo al recuperarla.
 - **Notificaciones push**: aviso cuando un contenido entra en revisión, se aprueba o se rechaza (Firebase Cloud Messaging), sin depender de abrir la app para enterarse.
+- **Perfil profesional**: cada persona puede marcar uno o varios perfiles (instrumentista, supervisión de quirófano, esterilización/CSSD, enfermería quirúrgica, cirujano/a, estudiante, docente). No es un sistema de permisos — solo reordena qué información de cada instrumento se muestra primero según lo que más le interesa a ese perfil, sin ocultar nunca el resto de la ficha.
+- **Esterilización estructurada**: cada instrumento puede llevar uno o varios métodos de esterilización (vapor, plasma de peróxido, óxido de etileno, baja temperatura, desechable, no esterilizable) con sus propios parámetros (temperatura, tiempo, presión, ciclo recomendado, compatibilidad, restricciones), más una ficha técnica (fabricante, IFU, mantenimiento, inspección, vida útil) — no es texto libre, es un dato consultable.
+- **Bandejas de instrumental**: sets de instrumental (cajas/bandejas) con checklist de instrumentos y cantidad esperada de cada uno, fotos, versionado y flujo de aprobación igual que técnicas/protocolos — para verificar que una caja está completa tras lavado, montaje y esterilización.
 - **Modo claro/oscuro** con toggle manual persistente.
 
 ## Stack técnico
@@ -45,19 +48,21 @@ El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. S
 lib/
   l10n/         # ARB (català/castellano/inglés) + AppLocalizations generado (flutter gen-l10n)
   models/       # Instrument, PreferenceCard, GroupDocument(Version, ProtocolStep), Workspace(Role/Member),
-                # Hospital (= grupo), AuditEntry, HospitalContentStats, CustomInstrument(Variant)
+                # Hospital (= grupo), AuditEntry, HospitalContentStats, CustomInstrument(Variant),
+                # ProfessionalProfile, SterilizationMethodEntry/InstrumentTechnicalInfo, Tray(Version, Item)
   data/         # Catálogo de instrumental (110) y especialidades quirúrgicas estándar
   services/     # Supabase, auth, perfil/grupo, espacios, progreso, tema, idioma, cuenta (GDPR),
                 # versión de la app, auditoría, analítica, instrumental personalizado,
-                # conectividad, caché/cola de sincronización offline, notificaciones push
+                # conectividad, caché/cola de sincronización offline, notificaciones push,
+                # esterilización, bandejas
   screens/
     auth/       # Bienvenida, login/registro, alta de grupo, flujo de conexión
     admin/      # Gestión del grupo (código, miembros, propiedad)
     ...         # Catálogo, Aprende, progreso, espacios, técnicas/protocolos, tarjetas, cuenta y privacidad,
-                # auditoría, cobertura de conocimiento, instrumental personalizado del equipo
+                # auditoría, cobertura de conocimiento, instrumental personalizado del equipo, bandejas
   utils/        # Generador de código de invitación
 supabase/
-  schema_v*.sql    # Esquema SQL (ejecutar en orden: schema.sql → schema_v14_security_hardening.sql)
+  schema_v*.sql    # Esquema SQL (ejecutar en orden: schema.sql → schema_v15_clinical_knowledge_model.sql)
   functions/       # Edge Functions (send-push: envía notificaciones vía FCM a partir del log de auditoría)
 ```
 
@@ -73,7 +78,7 @@ flutter run -d chrome        # navegador
 
 1. Crea un proyecto en [supabase.com](https://supabase.com).
 2. En el SQL Editor, ejecuta en orden todos los `supabase/schema_v*.sql` (y `schema.sql` primero):
-   `schema.sql` → `schema_v2_hospital_admin.sql` → `schema_v3_fix_rls_recursion.sql` → `schema_v4_group_documents.sql` → `schema_v5_group_document_versions.sql` → `schema_v6_workspaces.sql` → `schema_v7_roles.sql` → `schema_v8_app_config.sql` → `schema_v9_gdpr.sql` → `schema_v10_audit.sql` → `schema_v11_analytics.sql` → `schema_v12_push_notifications.sql` → `schema_v13_custom_instruments.sql` → `schema_v14_security_hardening.sql`.
+   `schema.sql` → `schema_v2_hospital_admin.sql` → `schema_v3_fix_rls_recursion.sql` → `schema_v4_group_documents.sql` → `schema_v5_group_document_versions.sql` → `schema_v6_workspaces.sql` → `schema_v7_roles.sql` → `schema_v8_app_config.sql` → `schema_v9_gdpr.sql` → `schema_v10_audit.sql` → `schema_v11_analytics.sql` → `schema_v12_push_notifications.sql` → `schema_v13_custom_instruments.sql` → `schema_v14_security_hardening.sql` → `schema_v15_clinical_knowledge_model.sql`.
 3. Copia la URL y la **publishable key** (Project Settings → API) a `lib/services/supabase_config.dart`. Es pública/segura de commitear — la seguridad real la da Row Level Security, no el secreto de esta key.
 4. Para las notificaciones push: despliega `supabase/functions/send-push` (`supabase functions deploy send-push`), añade el secret `FCM_SERVICE_ACCOUNT_JSON` (JSON del service account de Firebase) en Edge Functions → Secrets, y confirma que exista un Database Webhook o trigger que llame a esa función en cada `insert` sobre `audit_log` (`schema_v12` ya deja el trigger listo si tu proyecto tiene `pg_net`).
 5. Para el instrumental personalizado: confirma que el bucket privado `custom-instrument-photos` existe en Storage (la migración `schema_v13` lo crea; en algunos proyectos hay que crearlo a mano desde el dashboard con el mismo nombre).
@@ -105,9 +110,14 @@ flutter run -d chrome        # navegador
 - [x] Instrumental personalizado del equipo, con fotos y variantes, privado por espacio
 - [x] Modo sin conexión con cola de sincronización
 - [x] Notificaciones push (Firebase Cloud Messaging)
-- [ ] Publicación en Google Play (Android)
+- [x] Perfil profesional (instrumentista, supervisión, esterilización, enfermería, cirujano, estudiante, docente) — reordena la ficha de instrumento sin ocultar nada
+- [x] Esterilización estructurada por instrumento (método, parámetros, ficha técnica/IFU/fabricante)
+- [x] Bandejas de instrumental: checklist, fotos, versionado y aprobación
+- [ ] Publicación en Google Play (Android) — en curso
 - [ ] Progreso de aprendizaje sincronizado en Supabase (hoy solo local por dispositivo) — requisito previo para analítica de uso real
-- [ ] Red de conocimiento (instrumental ↔ técnicas ↔ protocolos)
+- [ ] Modo sin conexión para bandejas (hoy solo técnicas/protocolos/tarjetas)
+- [ ] Unificar las dos taxonomías de especialidad (14 oficiales RD 183/2008 vs. 16 del catálogo de instrumental)
+- [ ] Red de conocimiento completa (instrumental ↔ técnicas ↔ bandejas ↔ protocolos)
 - [ ] Sistema de donaciones transparente
 
 ## Contacto
