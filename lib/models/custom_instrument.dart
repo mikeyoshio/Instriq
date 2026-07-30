@@ -6,11 +6,17 @@
 /// de acceso (privado del workspace/hospital que lo crea).
 class CustomInstrument {
   final String id;
-  final String hospitalId;
+  final String organizationId;
   final String workspaceId;
   final String name;
   final String? category;
+
+  /// Texto libre heredado, ya no se escribe desde código nuevo (ver
+  /// [specialtyId]) — se conserva solo para mostrar filas antiguas sin migrar.
   final String? specialty;
+
+  /// FK a `specialties` (Fase C). Fuente de verdad para código nuevo.
+  final String? specialtyId;
   final String? description;
   final String? useText;
   final String? tip;
@@ -21,11 +27,12 @@ class CustomInstrument {
 
   const CustomInstrument({
     required this.id,
-    required this.hospitalId,
+    required this.organizationId,
     required this.workspaceId,
     required this.name,
     this.category,
     this.specialty,
+    this.specialtyId,
     this.description,
     this.useText,
     this.tip,
@@ -36,11 +43,11 @@ class CustomInstrument {
   });
 
   Map<String, dynamic> toRow() => {
-        'hospital_id': hospitalId,
+        'organization_id': organizationId,
         'workspace_id': workspaceId,
         'name': name,
         'category': category,
-        'specialty': specialty,
+        'specialty_id': specialtyId,
         'description': description,
         'use_text': useText,
         'tip': tip,
@@ -49,7 +56,8 @@ class CustomInstrument {
   CustomInstrument copyWith({
     String? name,
     String? category,
-    String? specialty,
+    String? specialtyId,
+    bool clearSpecialtyId = false,
     String? description,
     String? useText,
     String? tip,
@@ -57,11 +65,12 @@ class CustomInstrument {
   }) {
     return CustomInstrument(
       id: id,
-      hospitalId: hospitalId,
+      organizationId: organizationId,
       workspaceId: workspaceId,
       name: name ?? this.name,
       category: category ?? this.category,
-      specialty: specialty ?? this.specialty,
+      specialty: specialty,
+      specialtyId: clearSpecialtyId ? null : (specialtyId ?? this.specialtyId),
       description: description ?? this.description,
       useText: useText ?? this.useText,
       tip: tip ?? this.tip,
@@ -76,11 +85,12 @@ class CustomInstrument {
     final rawVariants = row['custom_instrument_variants'] as List<dynamic>?;
     return CustomInstrument(
       id: row['id'] as String,
-      hospitalId: row['hospital_id'] as String,
+      organizationId: row['organization_id'] as String,
       workspaceId: row['workspace_id'] as String,
       name: row['name'] as String? ?? '',
       category: row['category'] as String?,
       specialty: row['specialty'] as String?,
+      specialtyId: row['specialty_id'] as String?,
       description: row['description'] as String?,
       useText: row['use_text'] as String?,
       tip: row['tip'] as String?,

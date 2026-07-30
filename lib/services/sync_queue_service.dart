@@ -154,7 +154,7 @@ class SyncQueueService {
     return PreferenceCard(
       id: localId,
       workspaceId: card.workspaceId,
-      surgeonName: card.surgeonName,
+      surgeonId: card.surgeonId,
       procedureName: card.procedureName,
       items: card.items,
       generalNotes: card.generalNotes,

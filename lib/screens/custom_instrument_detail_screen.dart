@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
+import '../models/specialty_entity.dart';
+import '../models/tag.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
 import '../services/recent_activity_service.dart';
+import '../services/specialty_service.dart';
+import '../services/tag_service.dart';
 import 'custom_instrument_form_screen.dart';
+import 'specialty_detail_screen.dart';
+import 'tag_detail_screen.dart';
 
 /// Vista de lectura de un instrumento personalizado: sus variantes con foto
 /// (vía signed URL, el bucket es privado) y el disclaimer de licencia
@@ -29,15 +35,44 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
   final Map<String, String> _photoUrls = {};
   bool _loadingPhotos = true;
   bool _isFavorite = false;
+  SpecialtyEntity? _specialty;
+  List<Tag> _tags = [];
 
   @override
   void initState() {
     super.initState();
     _instrument = widget.instrument;
     _loadPhotos();
+    _loadSpecialty();
+    _loadTags();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _instrument.id);
       _loadFavoriteState();
+    }
+  }
+
+  Future<void> _loadSpecialty() async {
+    final specialtyId = _instrument.specialtyId;
+    if (specialtyId == null) return;
+    final specialties = await SpecialtyService.instance.fetchAll();
+    if (!mounted) return;
+    SpecialtyEntity? found;
+    for (final s in specialties) {
+      if (s.id == specialtyId) {
+        found = s;
+        break;
+      }
+    }
+    setState(() => _specialty = found);
+  }
+
+  Future<void> _loadTags() async {
+    try {
+      final tags = await TagService.instance.fetchTagsFor(_refType, _instrument.id);
+      if (!mounted) return;
+      setState(() => _tags = tags);
+    } catch (_) {
+      // Sin bloquear la ficha si falla: las etiquetas son metadato accesorio.
     }
   }
 
@@ -119,6 +154,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
                       _loadingPhotos = true;
                     });
                     _loadPhotos();
+                    _loadSpecialty();
                   }
                 }
               },
@@ -134,14 +170,37 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            if (_instrument.category != null || _instrument.specialty != null)
+            if (_instrument.category != null || _specialty != null || _instrument.specialty != null)
               Wrap(
                 spacing: 8,
                 children: [
                   if (_instrument.category != null) Chip(label: Text(_instrument.category!)),
-                  if (_instrument.specialty != null) Chip(label: Text(_instrument.specialty!)),
+                  if (_specialty != null)
+                    InputChip(
+                      label: Text(_specialty!.label),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => SpecialtyDetailScreen(specialty: _specialty!)),
+                      ),
+                    )
+                  else if (_instrument.specialty != null)
+                    Chip(label: Text(_instrument.specialty!)),
                 ],
               ),
+            if (_tags.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: _tags
+                    .map((tag) => InputChip(
+                          label: Text(tag.name),
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => TagDetailScreen(tag: tag)),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ],
             const SizedBox(height: 12),
             if (_instrument.description != null) ...[
               Text(_instrument.description!, style: Theme.of(context).textTheme.bodyMedium),

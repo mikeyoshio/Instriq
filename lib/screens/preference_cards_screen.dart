@@ -5,6 +5,7 @@ import '../models/preference_card.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/preference_card_service.dart';
+import '../services/surgeon_service.dart';
 import '../widgets/offline_banner.dart';
 import 'preference_card_detail_screen.dart';
 import 'preference_card_form_screen.dart';
@@ -38,12 +39,24 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
       _error = null;
     });
     try {
-      await PreferenceCardService.instance.fetchCards(widget.workspace.id);
+      await Future.wait([
+        PreferenceCardService.instance.fetchCards(widget.workspace.id),
+        SurgeonService.instance.fetchForOrganization(),
+      ]);
       _fromCache = PreferenceCardService.instance.cardsFromCache;
     } catch (e) {
       _error = l10n.preferenceCardsLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
+  }
+
+  /// Nombre a mostrar para agrupar/buscar, resuelto contra el caché de
+  /// [SurgeonService] ya cargado en [_load] — nunca vacío para que el
+  /// agrupado tenga una clave estable incluso sin cirujano asignado.
+  String _surgeonLabel(AppLocalizations l10n, PreferenceCard card) {
+    final surgeonId = card.surgeonId;
+    if (surgeonId == null) return l10n.noSurgeonAssignedLabel;
+    return SurgeonService.instance.byId(surgeonId)?.name ?? l10n.noSurgeonAssignedLabel;
   }
 
   @override
@@ -77,13 +90,13 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
     final cards = PreferenceCardService.instance.cards.where((c) {
       if (_query.isEmpty) return true;
       final q = _query.toLowerCase();
-      return c.surgeonName.toLowerCase().contains(q) ||
+      return _surgeonLabel(l10n, c).toLowerCase().contains(q) ||
           c.procedureName.toLowerCase().contains(q);
     }).toList();
 
     final bySurgeon = <String, List<PreferenceCard>>{};
     for (final c in cards) {
-      bySurgeon.putIfAbsent(c.surgeonName, () => []).add(c);
+      bySurgeon.putIfAbsent(_surgeonLabel(l10n, c), () => []).add(c);
     }
     final surgeons = bySurgeon.keys.toList()..sort();
 

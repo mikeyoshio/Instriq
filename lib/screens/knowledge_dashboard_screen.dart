@@ -42,8 +42,8 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
       _loading = true;
       _error = null;
     });
-    final hospitalId = ProfileService.instance.hospitalId;
-    if (hospitalId == null) {
+    final organizationId = ProfileService.instance.organizationId;
+    if (organizationId == null) {
       setState(() {
         _loading = false;
         _error = 'Tu usuario no pertenece a ningún grupo todavía.';
@@ -51,7 +51,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
       return;
     }
     try {
-      final stats = await AnalyticsService.instance.fetchHospitalContentStats(hospitalId);
+      final stats = await AnalyticsService.instance.fetchHospitalContentStats(organizationId);
       if (!mounted) return;
       setState(() {
         _stats = stats;

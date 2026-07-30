@@ -3,13 +3,19 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document_version.dart' show GroupDocumentVersionStatus;
+import '../models/specialty_entity.dart';
+import '../models/tag.dart';
 import '../models/tray.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
 import '../services/recent_activity_service.dart';
+import '../services/specialty_service.dart';
+import '../services/tag_service.dart';
 import '../services/tray_service.dart';
+import 'specialty_detail_screen.dart';
+import 'tag_detail_screen.dart';
 import 'tray_form_screen.dart';
 import 'tray_version_history_screen.dart';
 
@@ -34,15 +40,44 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
   final Map<String, String> _photoUrls = {};
   bool _loading = true;
   bool _isFavorite = false;
+  SpecialtyEntity? _specialty;
+  List<Tag> _tags = [];
 
   @override
   void initState() {
     super.initState();
     _tray = widget.tray;
     _load();
+    _loadSpecialty();
+    _loadTags();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _tray.id);
       _loadFavoriteState();
+    }
+  }
+
+  Future<void> _loadSpecialty() async {
+    final specialtyId = _tray.publishedVersion?.specialtyId;
+    if (specialtyId == null) return;
+    final specialties = await SpecialtyService.instance.fetchAll();
+    if (!mounted) return;
+    SpecialtyEntity? found;
+    for (final s in specialties) {
+      if (s.id == specialtyId) {
+        found = s;
+        break;
+      }
+    }
+    setState(() => _specialty = found);
+  }
+
+  Future<void> _loadTags() async {
+    try {
+      final tags = await TagService.instance.fetchTagsFor(_refType, _tray.id);
+      if (!mounted) return;
+      setState(() => _tags = tags);
+    } catch (_) {
+      // Sin bloquear la ficha si falla: las etiquetas son metadato accesorio.
     }
   }
 
@@ -176,8 +211,30 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                     child: Text(l10n.docNotPublishedYet),
                   )
                 else ...[
-                  if (published.specialty != null) ...[
-                    Chip(label: Text(published.specialty!)),
+                  if (_specialty != null || published.specialty != null) ...[
+                    _specialty != null
+                        ? InputChip(
+                            label: Text(_specialty!.label),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => SpecialtyDetailScreen(specialty: _specialty!)),
+                            ),
+                          )
+                        : Chip(label: Text(published.specialty!)),
+                    const SizedBox(height: 16),
+                  ],
+                  if (_tags.isNotEmpty) ...[
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      children: _tags
+                          .map((tag) => InputChip(
+                                label: Text(tag.name),
+                                onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (_) => TagDetailScreen(tag: tag)),
+                                ),
+                              ))
+                          .toList(),
+                    ),
                     const SizedBox(height: 16),
                   ],
                   if (published.description != null) ...[

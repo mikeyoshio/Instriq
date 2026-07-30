@@ -27,7 +27,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Future<void> _openAuditLog() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => AuditLogScreen(hospitalId: ProfileService.instance.hospitalId),
+        builder: (_) => AuditLogScreen(organizationId: ProfileService.instance.organizationId),
       ),
     );
     setState(() {});

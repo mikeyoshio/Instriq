@@ -4,13 +4,25 @@ import '../data/instruments_data.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
 import '../models/instrument.dart';
+import '../models/manufacturer.dart';
+import '../models/preference_card.dart';
+import '../models/specialty_entity.dart';
+import '../models/surgeon.dart';
 import '../models/tray.dart';
 import '../screens/custom_instrument_detail_screen.dart';
 import '../screens/group_document_detail_screen.dart';
 import '../screens/instrument_detail_screen.dart';
+import '../screens/manufacturer_detail_screen.dart';
+import '../screens/preference_card_detail_screen.dart';
+import '../screens/specialty_detail_screen.dart';
+import '../screens/surgeon_detail_screen.dart';
 import '../screens/tray_detail_screen.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/group_document_service.dart';
+import '../services/manufacturer_service.dart';
+import '../services/preference_card_service.dart';
+import '../services/specialty_service.dart';
+import '../services/surgeon_service.dart';
 import '../services/tray_service.dart';
 import '../services/workspace_service.dart';
 
@@ -86,6 +98,70 @@ Future<ResolvedRef?> resolveRef(String refType, String refId) async {
           workspaceId: tray.workspaceId,
           data: tray,
         );
+      case 'preference_card':
+        final card = await PreferenceCardService.instance.fetchById(refId);
+        return ResolvedRef(
+          refType: refType,
+          refId: refId,
+          title: card.procedureName,
+          workspaceId: card.workspaceId,
+          data: card,
+        );
+      case 'manufacturer':
+        var manufacturer = ManufacturerService.instance.byId(refId);
+        if (manufacturer == null) {
+          final all = await ManufacturerService.instance.fetchAll();
+          for (final m in all) {
+            if (m.id == refId) {
+              manufacturer = m;
+              break;
+            }
+          }
+        }
+        if (manufacturer == null) return null;
+        return ResolvedRef(
+          refType: refType,
+          refId: refId,
+          title: manufacturer.name,
+          workspaceId: null,
+          data: manufacturer,
+        );
+      case 'surgeon':
+        var surgeon = SurgeonService.instance.byId(refId);
+        if (surgeon == null) {
+          final all = await SurgeonService.instance.fetchForOrganization();
+          for (final s in all) {
+            if (s.id == refId) {
+              surgeon = s;
+              break;
+            }
+          }
+        }
+        if (surgeon == null) return null;
+        return ResolvedRef(
+          refType: refType,
+          refId: refId,
+          title: surgeon.name,
+          workspaceId: null,
+          data: surgeon,
+        );
+      case 'specialty':
+        final specialties = await SpecialtyService.instance.fetchAll();
+        SpecialtyEntity? specialty;
+        for (final s in specialties) {
+          if (s.id == refId) {
+            specialty = s;
+            break;
+          }
+        }
+        if (specialty == null) return null;
+        return ResolvedRef(
+          refType: refType,
+          refId: refId,
+          title: specialty.label,
+          workspaceId: null,
+          data: specialty,
+        );
       default:
         return null;
     }
@@ -129,6 +205,34 @@ Future<void> navigateToResolvedRef(BuildContext context, ResolvedRef ref) async 
       if (!context.mounted) return;
       await Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: ref.data as Tray, myRole: myRole)),
+      );
+      return;
+    case 'preference_card':
+      final myRole = await WorkspaceService.instance.fetchMyRole(ref.workspaceId!);
+      if (!context.mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PreferenceCardDetailScreen(card: ref.data as PreferenceCard, myRole: myRole),
+        ),
+      );
+      return;
+    case 'manufacturer':
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ManufacturerDetailScreen(manufacturer: ref.data as Manufacturer),
+        ),
+      );
+      return;
+    case 'surgeon':
+      await Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => SurgeonDetailScreen(surgeon: ref.data as Surgeon)),
+      );
+      return;
+    case 'specialty':
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => SpecialtyDetailScreen(specialty: ref.data as SpecialtyEntity),
+        ),
       );
       return;
   }

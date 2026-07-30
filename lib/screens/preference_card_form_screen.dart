@@ -4,8 +4,10 @@ import '../data/instruments_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
+import '../models/surgeon.dart';
 import '../services/connectivity_service.dart';
 import '../services/preference_card_service.dart';
+import '../services/surgeon_service.dart';
 import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
 
@@ -20,24 +22,42 @@ class PreferenceCardFormScreen extends StatefulWidget {
 }
 
 class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
-  late final TextEditingController _surgeonController;
+  // Texto libre "espejo" del campo de autocompletar: el TextEditingController
+  // real lo crea `Autocomplete` internamente (ver fieldViewBuilder) — este
+  // solo sirve para leer el valor final al guardar.
+  final TextEditingController _surgeonFieldController = TextEditingController();
   late final TextEditingController _procedureController;
   late final TextEditingController _notesController;
   late List<PreferenceCardItem> _items;
+
+  String? _selectedSurgeonId;
+  bool _loadingSurgeons = true;
 
   @override
   void initState() {
     super.initState();
     final card = widget.existingCard;
-    _surgeonController = TextEditingController(text: card?.surgeonName ?? '');
     _procedureController = TextEditingController(text: card?.procedureName ?? '');
     _notesController = TextEditingController(text: card?.generalNotes ?? '');
     _items = List.of(card?.items ?? const []);
+    _selectedSurgeonId = card?.surgeonId;
+    _loadSurgeons();
+  }
+
+  Future<void> _loadSurgeons() async {
+    await SurgeonService.instance.fetchForOrganization();
+    if (!mounted) return;
+    final surgeonId = _selectedSurgeonId;
+    if (surgeonId != null) {
+      final existing = SurgeonService.instance.byId(surgeonId);
+      if (existing != null) _surgeonFieldController.text = existing.name;
+    }
+    setState(() => _loadingSurgeons = false);
   }
 
   @override
   void dispose() {
-    _surgeonController.dispose();
+    _surgeonFieldController.dispose();
     _procedureController.dispose();
     _notesController.dispose();
     super.dispose();
@@ -127,24 +147,33 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
 
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
-    final surgeon = _surgeonController.text.trim();
+    final surgeonName = _surgeonFieldController.text.trim();
     final procedure = _procedureController.text.trim();
-    if (surgeon.isEmpty || procedure.isEmpty || _items.isEmpty) {
+    if (surgeonName.isEmpty || procedure.isEmpty || _items.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.missingFieldsSnackbar)),
       );
       return;
     }
-    final card = PreferenceCard(
-      id: widget.existingCard?.id ?? '',
-      workspaceId: widget.existingCard?.workspaceId ?? widget.workspaceId,
-      surgeonName: surgeon,
-      procedureName: procedure,
-      items: _items,
-      generalNotes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
-      validated: widget.existingCard?.validated ?? false,
-    );
     try {
+      // _selectedSurgeonId solo es válido si sigue apuntando a un cirujano
+      // cuyo nombre cacheado coincide con el texto actual: si la persona lo
+      // editó a mano tras seleccionar uno, hay que resolver (o crear) de
+      // nuevo — mismo criterio que se aplica en el onChanged del campo.
+      final cached = _selectedSurgeonId == null ? null : SurgeonService.instance.byId(_selectedSurgeonId!);
+      final surgeonId = (cached != null && cached.name == surgeonName)
+          ? cached.id
+          : (await SurgeonService.instance.createOrGet(surgeonName)).id;
+
+      final card = PreferenceCard(
+        id: widget.existingCard?.id ?? '',
+        workspaceId: widget.existingCard?.workspaceId ?? widget.workspaceId,
+        surgeonId: surgeonId,
+        procedureName: procedure,
+        items: _items,
+        generalNotes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+        validated: widget.existingCard?.validated ?? false,
+      );
       final wasOffline = !ConnectivityService.instance.isOnline.value;
       await PreferenceCardService.instance.upsertCard(card);
       if (mounted) {
@@ -176,13 +205,39 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Column(
                 children: [
-                  TextField(
-                    controller: _surgeonController,
-                    decoration: InputDecoration(
-                      labelText: l10n.surgeonLabel,
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
+                  _loadingSurgeons
+                      ? const LinearProgressIndicator()
+                      : Autocomplete<Surgeon>(
+                          optionsBuilder: (value) {
+                            if (value.text.trim().isEmpty) return const Iterable<Surgeon>.empty();
+                            return SurgeonService.instance.searchByName(value.text);
+                          },
+                          displayStringForOption: (s) => s.name,
+                          initialValue: TextEditingValue(text: _surgeonFieldController.text),
+                          onSelected: (s) {
+                            _selectedSurgeonId = s.id;
+                            _surgeonFieldController.text = s.name;
+                          },
+                          fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
+                            return TextField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: l10n.surgeonLabel,
+                                border: const OutlineInputBorder(),
+                              ),
+                              onChanged: (value) {
+                                _surgeonFieldController.text = value;
+                                final cached = _selectedSurgeonId == null
+                                    ? null
+                                    : SurgeonService.instance.byId(_selectedSurgeonId!);
+                                if (cached != null && cached.name != value) {
+                                  _selectedSurgeonId = null;
+                                }
+                              },
+                            );
+                          },
+                        ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: _procedureController,

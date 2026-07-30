@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import '../models/tray.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
+import '../services/specialty_service.dart';
 import '../services/tray_service.dart';
 import 'tray_detail_screen.dart';
 import 'tray_form_screen.dart';
@@ -37,11 +39,21 @@ class _TraysScreenState extends State<TraysScreen> {
       _error = null;
     });
     try {
-      await TrayService.instance.fetchTrays(widget.workspace.id);
+      await Future.wait([
+        TrayService.instance.fetchTrays(widget.workspace.id),
+        SpecialtyService.instance.fetchAll(),
+      ]);
     } catch (e) {
       _error = l10n.trayLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
+  }
+
+  String? _specialtyLabel(TrayVersion? published) {
+    if (published == null) return null;
+    final specialtyId = published.specialtyId;
+    if (specialtyId != null) return SpecialtyService.instance.byId(specialtyId)?.label ?? published.specialty;
+    return published.specialty;
   }
 
   @override
@@ -124,7 +136,7 @@ class _TraysScreenState extends State<TraysScreen> {
                       return Card(
                         child: ListTile(
                           title: Text(published?.name ?? l10n.unpublished),
-                          subtitle: published?.specialty != null ? Text(published!.specialty!) : null,
+                          subtitle: _specialtyLabel(published) != null ? Text(_specialtyLabel(published)!) : null,
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () async {
                             await Navigator.of(context).push(

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
+import '../models/group_document_version.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/group_document_service.dart';
+import '../services/specialty_service.dart';
 import '../widgets/offline_banner.dart';
 import 'group_document_detail_screen.dart';
 import 'group_document_form_screen.dart';
@@ -50,12 +52,22 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
       _error = null;
     });
     try {
-      await GroupDocumentService.instance.fetchDocuments(widget.kind, widget.workspace.id);
+      await Future.wait([
+        GroupDocumentService.instance.fetchDocuments(widget.kind, widget.workspace.id),
+        SpecialtyService.instance.fetchAll(),
+      ]);
       _fromCache = GroupDocumentService.instance.documentsFromCache;
     } catch (e) {
       _error = l10n.groupDocLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
+  }
+
+  String? _specialtyLabel(GroupDocumentVersion? published) {
+    if (published == null) return null;
+    final specialtyId = published.specialtyId;
+    if (specialtyId != null) return SpecialtyService.instance.byId(specialtyId)?.label ?? published.specialty;
+    return published.specialty;
   }
 
   @override
@@ -149,7 +161,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
                       return Card(
                         child: ListTile(
                           title: Text(published?.title ?? l10n.unpublished),
-                          subtitle: published?.specialty != null ? Text(published!.specialty!) : null,
+                          subtitle: _specialtyLabel(published) != null ? Text(_specialtyLabel(published)!) : null,
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () async {
                             await Navigator.of(context).push(

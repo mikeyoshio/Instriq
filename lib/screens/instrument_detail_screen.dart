@@ -8,15 +8,24 @@ import '../l10n/app_localizations.dart';
 import '../models/catalog_community_photo.dart';
 import '../models/instrument.dart';
 import '../models/instrument_sterilization.dart';
+import '../models/manufacturer.dart';
+import '../models/reference_document.dart';
+import '../models/tag.dart';
 import '../models/work_mode.dart';
 import '../services/auth_service.dart';
 import '../services/catalog_community_photo_service.dart';
 import '../services/favorites_service.dart';
+import '../services/manufacturer_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
 import '../services/recent_activity_service.dart';
+import '../services/reference_document_service.dart';
 import '../services/sterilization_service.dart';
+import '../services/tag_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/tag_picker.dart';
+import 'manufacturer_detail_screen.dart';
+import 'tag_detail_screen.dart';
 
 class InstrumentDetailScreen extends StatefulWidget {
   final Instrument instrument;
@@ -33,6 +42,9 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   bool _loadingClinicalData = true;
   List<SterilizationMethodEntry> _methods = [];
   InstrumentTechnicalInfo? _technicalInfo;
+  Manufacturer? _manufacturer;
+  ReferenceDocument? _ifuDocument;
+  List<Tag> _tags = [];
 
   bool _loadingCommunityPhoto = true;
   CatalogCommunityPhoto? _approvedCommunityPhoto;
@@ -107,10 +119,30 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       final methods = await SterilizationService.instance.fetchMethods(_refType, widget.instrument.id);
       final technicalInfo =
           await SterilizationService.instance.fetchTechnicalInfo(_refType, widget.instrument.id);
+      Manufacturer? manufacturer;
+      final manufacturerId = technicalInfo?.manufacturerId;
+      if (manufacturerId != null) {
+        final all = await ManufacturerService.instance.fetchAll();
+        for (final m in all) {
+          if (m.id == manufacturerId) {
+            manufacturer = m;
+            break;
+          }
+        }
+      }
+      ReferenceDocument? ifuDocument;
+      final ifuDocumentId = technicalInfo?.ifuDocumentId;
+      if (ifuDocumentId != null) {
+        ifuDocument = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
+      }
+      final tags = await TagService.instance.fetchTagsFor(_refType, widget.instrument.id);
       if (!mounted) return;
       setState(() {
         _methods = methods;
         _technicalInfo = technicalInfo;
+        _manufacturer = manufacturer;
+        _ifuDocument = ifuDocument;
+        _tags = tags;
         _loadingClinicalData = false;
       });
     } catch (_) {
@@ -470,8 +502,6 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   Widget _buildTechnicalSection(BuildContext context, AppLocalizations l10n) {
     final info = _technicalInfo;
     final lines = <String>[
-      if (info?.manufacturer != null && info!.manufacturer!.isNotEmpty)
-        '${l10n.technicalManufacturerLabel}: ${info.manufacturer}',
       if (info?.maintenanceNotes != null && info!.maintenanceNotes!.isNotEmpty)
         '${l10n.technicalMaintenanceLabel}: ${info.maintenanceNotes}',
       if (info?.inspectionNotes != null && info!.inspectionNotes!.isNotEmpty)
@@ -479,7 +509,9 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       if (info?.usefulLifeNotes != null && info!.usefulLifeNotes!.isNotEmpty)
         '${l10n.technicalUsefulLifeLabel}: ${info.usefulLifeNotes}',
     ];
-    final hasIfu = info?.ifuUrl != null && info!.ifuUrl!.isNotEmpty;
+    final manufacturer = _manufacturer;
+    final ifuDocument = _ifuDocument;
+    final hasAnything = lines.isNotEmpty || manufacturer != null || ifuDocument != null || _tags.isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -490,24 +522,49 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           const SizedBox(height: 8),
           if (_loadingClinicalData)
             const Center(child: CircularProgressIndicator())
-          else if (lines.isEmpty && !hasIfu)
+          else if (!hasAnything)
             Text(l10n.technicalInfoEmptyState, style: Theme.of(context).textTheme.bodyMedium)
           else ...[
+            if (manufacturer != null) ...[
+              InputChip(
+                avatar: const Icon(Icons.precision_manufacturing_outlined, size: 18),
+                label: Text('${l10n.technicalManufacturerLabel}: ${manufacturer.name}'),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => ManufacturerDetailScreen(manufacturer: manufacturer)),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
             for (final line in lines) ...[
               Text(line, style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 4),
             ],
-            if (hasIfu)
+            if (ifuDocument != null)
               GestureDetector(
-                onTap: () => launchUrl(Uri.parse(info.ifuUrl!)),
+                onTap: () => launchUrl(Uri.parse(ifuDocument.url)),
                 child: Text(
-                  '${l10n.technicalIfuLabel}: ${info.ifuUrl}',
+                  '${l10n.technicalIfuLabel}: ${ifuDocument.title}',
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium
                       ?.copyWith(decoration: TextDecoration.underline),
                 ),
               ),
+            if (_tags.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: _tags
+                    .map((tag) => InputChip(
+                          label: Text(tag.name),
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => TagDetailScreen(tag: tag)),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ],
           ],
         ],
       ),
@@ -546,11 +603,16 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
   late final TextEditingController _restrictionsController;
   late final TextEditingController _observationsController;
 
-  late final TextEditingController _manufacturerController;
-  late final TextEditingController _ifuController;
+  // Texto libre "espejo" del campo de autocompletar de fabricante — mismo
+  // patrón que `preference_card_form_screen.dart` para el cirujano.
+  final TextEditingController _manufacturerFieldController = TextEditingController();
+  String? _selectedManufacturerId;
+  late final TextEditingController _ifuTitleController;
+  late final TextEditingController _ifuUrlController;
   late final TextEditingController _maintenanceController;
   late final TextEditingController _inspectionController;
   late final TextEditingController _usefulLifeController;
+  final _tagPickerKey = GlobalKey<TagPickerState>();
 
   bool _saving = false;
 
@@ -569,11 +631,32 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
     _observationsController = TextEditingController(text: existingMethod?.observations ?? '');
 
     final info = widget.technicalInfo;
-    _manufacturerController = TextEditingController(text: info?.manufacturer ?? '');
-    _ifuController = TextEditingController(text: info?.ifuUrl ?? '');
+    _selectedManufacturerId = info?.manufacturerId;
+    _ifuTitleController = TextEditingController();
+    _ifuUrlController = TextEditingController();
     _maintenanceController = TextEditingController(text: info?.maintenanceNotes ?? '');
     _inspectionController = TextEditingController(text: info?.inspectionNotes ?? '');
     _usefulLifeController = TextEditingController(text: info?.usefulLifeNotes ?? '');
+    _loadManufacturerAndIfu();
+  }
+
+  Future<void> _loadManufacturerAndIfu() async {
+    await ManufacturerService.instance.fetchAll();
+    if (mounted) {
+      final manufacturerId = _selectedManufacturerId;
+      if (manufacturerId != null) {
+        final existing = ManufacturerService.instance.byId(manufacturerId);
+        if (existing != null) _manufacturerFieldController.text = existing.name;
+      }
+    }
+    final ifuDocumentId = widget.technicalInfo?.ifuDocumentId;
+    if (ifuDocumentId == null) return;
+    final doc = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
+    if (!mounted || doc == null) return;
+    setState(() {
+      _ifuTitleController.text = doc.title;
+      _ifuUrlController.text = doc.url;
+    });
   }
 
   @override
@@ -586,8 +669,9 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
     _compatibilityController.dispose();
     _restrictionsController.dispose();
     _observationsController.dispose();
-    _manufacturerController.dispose();
-    _ifuController.dispose();
+    _manufacturerFieldController.dispose();
+    _ifuTitleController.dispose();
+    _ifuUrlController.dispose();
     _maintenanceController.dispose();
     _inspectionController.dispose();
     _usefulLifeController.dispose();
@@ -616,18 +700,47 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
           observations: _nullIfEmpty(_observationsController.text),
         ),
       );
+
+      final manufacturerName = _manufacturerFieldController.text.trim();
+      String? manufacturerId;
+      if (manufacturerName.isNotEmpty) {
+        final cached =
+            _selectedManufacturerId == null ? null : ManufacturerService.instance.byId(_selectedManufacturerId!);
+        manufacturerId = (cached != null && cached.name == manufacturerName)
+            ? cached.id
+            : (await ManufacturerService.instance.createOrGet(manufacturerName)).id;
+      }
+
+      final ifuTitle = _ifuTitleController.text.trim();
+      final ifuUrl = _ifuUrlController.text.trim();
+      String? ifuDocumentId = widget.technicalInfo?.ifuDocumentId;
+      if (ifuTitle.isNotEmpty && ifuUrl.isNotEmpty) {
+        // Catálogo global: la IFU también es global (organizationId null),
+        // igual que el resto de la ficha técnica de un instrumento 'catalog'.
+        final doc = await ReferenceDocumentService.instance.createOrGet(
+          ifuTitle,
+          ifuUrl,
+          docType: 'ifu',
+          manufacturerId: manufacturerId,
+        );
+        ifuDocumentId = doc.id;
+      } else if (ifuTitle.isEmpty && ifuUrl.isEmpty) {
+        ifuDocumentId = null;
+      }
+
       await SterilizationService.instance.upsertTechnicalInfo(
         InstrumentTechnicalInfo(
           id: widget.technicalInfo?.id,
           instrumentRefType: _refType,
           instrumentRefId: widget.instrument.id,
-          manufacturer: _nullIfEmpty(_manufacturerController.text),
-          ifuUrl: _nullIfEmpty(_ifuController.text),
+          manufacturerId: manufacturerId,
+          ifuDocumentId: ifuDocumentId,
           maintenanceNotes: _nullIfEmpty(_maintenanceController.text),
           inspectionNotes: _nullIfEmpty(_inspectionController.text),
           usefulLifeNotes: _nullIfEmpty(_usefulLifeController.text),
         ),
       );
+      await _tagPickerKey.currentState?.save();
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       if (mounted) {
@@ -743,18 +856,50 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
               const Divider(height: 32),
               Text(l10n.technicalInfoSectionTitle, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
+              Autocomplete<Manufacturer>(
+                optionsBuilder: (value) {
+                  if (value.text.trim().isEmpty) return const Iterable<Manufacturer>.empty();
+                  return ManufacturerService.instance.searchByName(value.text);
+                },
+                displayStringForOption: (m) => m.name,
+                initialValue: TextEditingValue(text: _manufacturerFieldController.text),
+                onSelected: (m) {
+                  _selectedManufacturerId = m.id;
+                  _manufacturerFieldController.text = m.name;
+                },
+                fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
+                  return TextField(
+                    controller: controller,
+                    focusNode: focusNode,
+                    decoration: InputDecoration(
+                      labelText: l10n.technicalManufacturerLabel,
+                      border: const OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      _manufacturerFieldController.text = value;
+                      final cached = _selectedManufacturerId == null
+                          ? null
+                          : ManufacturerService.instance.byId(_selectedManufacturerId!);
+                      if (cached != null && cached.name != value) {
+                        _selectedManufacturerId = null;
+                      }
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
               TextField(
-                controller: _manufacturerController,
+                controller: _ifuTitleController,
                 decoration: InputDecoration(
-                  labelText: l10n.technicalManufacturerLabel,
+                  labelText: l10n.technicalIfuTitleLabel,
                   border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
               TextField(
-                controller: _ifuController,
+                controller: _ifuUrlController,
                 decoration: InputDecoration(
-                  labelText: l10n.technicalIfuLabel,
+                  labelText: l10n.technicalIfuUrlLabel,
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -784,6 +929,15 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
                   border: const OutlineInputBorder(),
                 ),
                 maxLines: 2,
+              ),
+              const Divider(height: 32),
+              Text(l10n.tagsLabel, style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 8),
+              TagPicker(
+                key: _tagPickerKey,
+                refType: _refType,
+                refId: widget.instrument.id,
+                organizationId: null,
               ),
               const SizedBox(height: 20),
               FilledButton.icon(

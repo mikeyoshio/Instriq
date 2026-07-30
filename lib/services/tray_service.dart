@@ -109,7 +109,7 @@ class TrayService {
           'version_number': nextVersionNumber,
           'status': GroupDocumentVersionStatus.draft.dbValue,
           'name': published.name,
-          'specialty': published.specialty,
+          'specialty_id': published.specialtyId,
           'description': published.description,
           'photo_paths': published.photoPaths,
           'items': published.items.map((i) => i.toJson()).toList(),
@@ -182,7 +182,7 @@ class TrayService {
   }
 
   /// Sube una foto de la bandeja al bucket privado `tray-photos`, con la ruta
-  /// convenida `{hospital_id}/{workspace_id}/{tray_id}/{filename}` (ver
+  /// convenida `{organization_id}/{workspace_id}/{tray_id}/{filename}` (ver
   /// schema_v15 / can_access_tray_photo). Devuelve el path guardado, que hay
   /// que añadir a [TrayVersion.photoPaths] y persistir con [saveDraft].
   Future<String> uploadPhoto({
@@ -190,13 +190,13 @@ class TrayService {
     required String workspaceId,
     required File file,
   }) async {
-    final hospitalId = ProfileService.instance.hospitalId;
-    if (hospitalId == null) {
+    final organizationId = ProfileService.instance.organizationId;
+    if (organizationId == null) {
       throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
     final ext = _extensionOf(file.path);
     final fileName = '${DateTime.now().microsecondsSinceEpoch}.$ext';
-    final path = '$hospitalId/$workspaceId/$trayId/$fileName';
+    final path = '$organizationId/$workspaceId/$trayId/$fileName';
     await _client.storage.from(_bucket).upload(path, file, fileOptions: const FileOptions(upsert: true));
     return path;
   }
