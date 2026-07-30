@@ -6,10 +6,10 @@
 <title>Política de privacidad — Instriq</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <style>
-  :root { --bg:#f4f8f7; --text:#14202b; --muted:#4a5a68; --border:#dbe4e6; --teal:#0d9488; }
-  @media (prefers-color-scheme: dark) { :root { --bg:#0b1220; --text:#eef3f6; --muted:#a7b6c2; --border:#223049; --teal:#14b8a6; } }
-  :root[data-theme="dark"] { --bg:#0b1220; --text:#eef3f6; --muted:#a7b6c2; --border:#223049; --teal:#14b8a6; }
-  :root[data-theme="light"] { --bg:#f4f8f7; --text:#14202b; --muted:#4a5a68; --border:#dbe4e6; --teal:#0d9488; }
+  :root { --bg:#f4f8f7; --text:#14202b; --muted:#4a5a68; --border:#dbe4e6; --teal:#0d9488; --note:#f1e3d7; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0b1220; --text:#eef3f6; --muted:#a7b6c2; --border:#223049; --teal:#14b8a6; --note:#1c2a3a; } }
+  :root[data-theme="dark"] { --bg:#0b1220; --text:#eef3f6; --muted:#a7b6c2; --border:#223049; --teal:#14b8a6; --note:#1c2a3a; }
+  :root[data-theme="light"] { --bg:#f4f8f7; --text:#14202b; --muted:#4a5a68; --border:#dbe4e6; --teal:#0d9488; --note:#f1e3d7; }
   body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.6; margin:0; }
   .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
   a { color: var(--teal); }
@@ -18,6 +18,12 @@
   p, li { color: var(--muted); }
   .updated { font-size: 0.85rem; color: var(--muted); margin-bottom: 32px; }
   .back { display:inline-block; margin-bottom: 24px; font-size: 0.9rem; }
+  .note { background: var(--note); border-radius: 10px; padding: 16px 20px; margin: 16px 0; }
+  .note p { color: var(--text); margin: 0; }
+  ol li { margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+  th { color: var(--text); }
 </style>
 </head>
 <body>
@@ -26,37 +32,66 @@
   <h1>Política de privacidad</h1>
   <p class="updated">Última actualización: julio de 2026</p>
 
-  <p>Esta política explica qué datos trata Instriq, con qué finalidad y qué derechos tienes sobre ellos, conforme al Reglamento General de Protección de Datos (RGPD).</p>
+  <p>Esta política explica qué datos trata <strong>Instriq</strong> (aplicación y web, desarrollada por Instriq), con qué finalidad y qué derechos tienes sobre ellos, conforme al Reglamento General de Protección de Datos (RGPD).</p>
 
   <h2>1. Uso sin cuenta</h2>
   <p>El catálogo de instrumental, las flashcards, el quiz y tu progreso de aprendizaje no requieren registro. Esta información se guarda únicamente en tu propio dispositivo (almacenamiento local) y no se envía a ningún servidor de Instriq.</p>
 
   <h2>2. Datos que tratamos si creas una cuenta</h2>
-  <p>Si decides unirte o crear el espacio de tu hospital, tratamos:</p>
+  <p>Si decides crear una cuenta, unirte o crear el espacio de tu hospital, tratamos:</p>
   <ul>
-    <li><strong>Email y contraseña</strong> (la contraseña se almacena cifrada por nuestro proveedor de autenticación, nunca en texto plano).</li>
+    <li><strong>Email y contraseña</strong> — la contraseña se almacena cifrada por nuestro proveedor de autenticación (Supabase), nunca en texto plano.</li>
     <li><strong>Nombre que introduces</strong> al unirte a un hospital, visible para el resto de miembros de ese mismo hospital.</li>
-    <li><strong>Hospital al que perteneces</strong> y si eres administradora de ese espacio.</li>
-    <li><strong>Contenido de las tarjetas de preferencia</strong> que tu hospital cree o edite (cirujano, procedimiento, instrumental, notas).</li>
+    <li><strong>Hospital al que perteneces</strong>, tu rol (Owner, Administrator, Approver, Editor o Reader) y los espacios de trabajo a los que tienes acceso.</li>
+    <li><strong>Contenido que creas o apruebas</strong>: técnicas quirúrgicas, protocolos, tarjetas de preferencia, e instrumental personalizado de tu equipo (incluidas las fotos que subas para este último, bajo tu responsabilidad).</li>
+    <li><strong>Token de notificaciones push</strong> (si aceptas recibirlas): un identificador de tu dispositivo usado únicamente para avisarte cuando algo entra en revisión, se aprueba o se rechaza.</li>
+    <li><strong>Registro de auditoría</strong>: qué acciones sensibles realizas (aprobar/rechazar contenido, cambios de rol, transferencia de propiedad), visible solo para quien administra tu hospital.</li>
   </ul>
+  <p>No tratamos datos de salud de pacientes: Instriq es una herramienta de conocimiento profesional para el personal de quirófano, no un sistema de historia clínica.</p>
 
   <h2>3. Con quién se comparten estos datos</h2>
-  <p>Los datos de tu cuenta y las tarjetas de preferencia se almacenan en Supabase (proveedor de base de datos e infraestructura). Solo son visibles para los miembros de tu mismo hospital, mediante reglas de acceso a nivel de base de datos (Row Level Security). No vendemos ni cedemos tus datos a terceros con fines comerciales o publicitarios.</p>
+  <p>Tus datos se almacenan y procesan mediante los siguientes proveedores, que actúan como encargados del tratamiento (no usan tus datos para sus propios fines):</p>
+  <ul>
+    <li><strong>Supabase</strong> — base de datos, autenticación y almacenamiento de archivos.</li>
+    <li><strong>Google Firebase Cloud Messaging</strong> — entrega de notificaciones push, únicamente el token de dispositivo.</li>
+    <li><strong>Resend</strong> — envío de los correos de confirmación de cuenta y recuperación de contraseña.</li>
+  </ul>
+  <p>Dentro de tu hospital, tu contenido es visible solo para los miembros con acceso a ese espacio de trabajo, mediante reglas de acceso a nivel de base de datos (Row Level Security). No vendemos ni cedemos tus datos a terceros con fines comerciales o publicitarios.</p>
 
   <h2>4. Base legal y finalidad</h2>
-  <p>Tratamos estos datos para poder ofrecerte el servicio que solicitas expresamente (compartir tarjetas de preferencia con tu hospital), en base al consentimiento que prestas al crear la cuenta y al interés legítimo de mantener la seguridad de la plataforma.</p>
+  <p>Tratamos estos datos para poder ofrecerte el servicio que solicitas expresamente (compartir conocimiento profesional con tu equipo), en base al consentimiento que prestas al crear la cuenta y al interés legítimo de mantener la seguridad de la plataforma.</p>
 
-  <h2>5. Tus derechos</h2>
-  <p>Puedes solicitar en cualquier momento el acceso, rectificación, eliminación o exportación de tus datos, o retirar tu consentimiento. Mientras terminamos de habilitar estas acciones directamente desde la app, puedes ejercer estos derechos escribiéndonos.</p>
+  <h2 id="eliminar-cuenta">5. Cómo eliminar tu cuenta</h2>
+  <p>Puedes eliminar tu cuenta de Instriq (aplicación y web, desarrollada por Instriq) en cualquier momento, directamente desde la app:</p>
+  <ol>
+    <li>Abre Instriq e inicia sesión.</li>
+    <li>Toca el icono de cuenta (🛡️) en la parte superior de la pantalla de inicio → <strong>"Mi cuenta y privacidad"</strong>.</li>
+    <li>En "Eliminar mi cuenta", escribe tu email para confirmar y pulsa <strong>"Eliminar definitivamente"</strong>.</li>
+  </ol>
+  <div class="note">
+    <p>Si eres la única propietaria u propietario de un hospital con más miembros, la app te pedirá que transfieras la propiedad primero desde "Administrar grupo" — es la única condición previa.</p>
+  </div>
+  <p>Qué ocurre al confirmar:</p>
+  <table>
+    <tr><th>Dato</th><th>Qué pasa</th></tr>
+    <tr><td>Email, contraseña, perfil, token de notificaciones</td><td>Se eliminan de forma permanente e inmediata.</td></tr>
+    <tr><td>Técnicas, protocolos, tarjetas e instrumental que creaste o aprobaste</td><td>Se conservan para tu equipo, mostrados como "Usuario eliminado" — no perdemos el conocimiento compartido del hospital.</td></tr>
+    <tr><td>Progreso de aprendizaje (flashcards/quiz)</td><td>Vive solo en tu dispositivo; se borra al desinstalar la app.</td></tr>
+  </table>
+  <p>No hay periodo de retención adicional: los datos personales se eliminan en el momento de la confirmación, sin demora.</p>
+  <p>También puedes solicitar la eliminación sin borrar la cuenta (por ejemplo, de una foto de instrumental concreta) contactando en <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
 
-  <h2>6. Conservación</h2>
-  <p>Conservamos tus datos mientras tu cuenta esté activa. Si eliminas tu cuenta o solicitas la baja, eliminamos tus datos personales, salvo el contenido que hayas aportado a tarjetas de preferencia compartidas con tu hospital, que puede conservarse de forma anonimizada para no romper el trabajo del resto del equipo.</p>
+  <h2>6. Exportar tus datos</h2>
+  <p>Desde la misma pantalla de "Mi cuenta y privacidad" puedes generar y copiar una exportación en JSON de tu perfil, roles y el contenido que hayas creado o aprobado.</p>
 
-  <h2>7. Cambios en esta política</h2>
+  <h2>7. Tus derechos</h2>
+  <p>Puedes solicitar en cualquier momento el acceso, rectificación, eliminación o exportación de tus datos, o retirar tu consentimiento, desde la propia app o escribiendo a <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
+
+  <h2>8. Cambios en esta política</h2>
   <p>Instriq es un proyecto en desarrollo activo. Si esta política cambia de forma relevante, lo indicaremos en esta misma página con la fecha de actualización.</p>
 
-  <h2>8. Contacto</h2>
-  <p>Para cualquier consulta sobre privacidad o para ejercer tus derechos, contacta a través del repositorio del proyecto en <a href="https://github.com/mikeyoshio/Instriq">GitHub</a>.</p>
+  <h2>9. Contacto</h2>
+  <p>Para cualquier consulta sobre privacidad o para ejercer tus derechos: <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
 </div>
 </body>
 </html>
