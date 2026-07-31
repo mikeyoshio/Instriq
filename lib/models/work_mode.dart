@@ -55,7 +55,7 @@ extension WorkModeLabel on WorkMode {
 
 /// Claves de sección de la ficha de instrumento, en el orden por defecto
 /// (didáctico): foto, especialidad, alias, descripción, uso, consejo,
-/// esterilización, ficha técnica.
+/// esterilización, ficha técnica, dónde se usa (EPIC 1, grafo de conocimiento).
 const List<String> _defaultSectionOrder = [
   'photo',
   'specialty',
@@ -65,12 +65,10 @@ const List<String> _defaultSectionOrder = [
   'tip',
   'sterilization',
   'technical',
+  'usedIn',
 ];
 
-/// Orden de prioridad de secciones por cada modo de trabajo. Nota: el modo
-/// "instrumentista" no incluye todavía secciones de "bandejas donde
-/// aparece"/"instrumental relacionado" — esas secciones aún no existen, se
-/// añadirán cuando se construya la funcionalidad de Bandejas.
+/// Orden de prioridad de secciones por cada modo de trabajo.
 const Map<WorkMode, List<String>> _modeSectionOrder = {
   WorkMode.estudiante: _defaultSectionOrder,
   WorkMode.instrumentista: [
@@ -82,6 +80,7 @@ const Map<WorkMode, List<String>> _modeSectionOrder = {
     'photo',
     'sterilization',
     'technical',
+    'usedIn',
   ],
   WorkMode.supervision: [
     'use',
@@ -92,6 +91,7 @@ const Map<WorkMode, List<String>> _modeSectionOrder = {
     'tip',
     'aliases',
     'photo',
+    'usedIn',
   ],
   WorkMode.esterilizacion: [
     'sterilization',
@@ -102,6 +102,7 @@ const Map<WorkMode, List<String>> _modeSectionOrder = {
     'tip',
     'aliases',
     'photo',
+    'usedIn',
   ],
   WorkMode.enfermeria: [
     'use',
@@ -112,6 +113,7 @@ const Map<WorkMode, List<String>> _modeSectionOrder = {
     'photo',
     'sterilization',
     'technical',
+    'usedIn',
   ],
   WorkMode.cirujano: [
     'use',
@@ -122,6 +124,7 @@ const Map<WorkMode, List<String>> _modeSectionOrder = {
     'photo',
     'sterilization',
     'technical',
+    'usedIn',
   ],
   WorkMode.docente: [
     'description',
@@ -132,6 +135,7 @@ const Map<WorkMode, List<String>> _modeSectionOrder = {
     'photo',
     'sterilization',
     'technical',
+    'usedIn',
   ],
 };
 

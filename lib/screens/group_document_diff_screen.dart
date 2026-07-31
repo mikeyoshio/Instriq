@@ -25,6 +25,10 @@ class GroupDocumentDiffScreen extends StatelessWidget {
     final removedInstruments = oldVersion.relatedInstrumentIds
         .where((s) => !newVersion.relatedInstrumentIds.contains(s))
         .toList();
+    final addedTrays =
+        newVersion.relatedTrayIds.where((s) => !oldVersion.relatedTrayIds.contains(s)).toList();
+    final removedTrays =
+        oldVersion.relatedTrayIds.where((s) => !newVersion.relatedTrayIds.contains(s)).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -56,6 +60,12 @@ class GroupDocumentDiffScreen extends StatelessWidget {
             Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text(l10n.noChanges)),
           ...addedInstruments.map((s) => _ChangeTile(icon: Icons.add, color: Colors.green, text: s)),
           ...removedInstruments.map((s) => _ChangeTile(icon: Icons.remove, color: Colors.red, text: s)),
+          const SizedBox(height: 20),
+          Text(l10n.relatedTraysLabel, style: Theme.of(context).textTheme.titleMedium),
+          if (addedTrays.isEmpty && removedTrays.isEmpty)
+            Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text(l10n.noChanges)),
+          ...addedTrays.map((s) => _ChangeTile(icon: Icons.add, color: Colors.green, text: s)),
+          ...removedTrays.map((s) => _ChangeTile(icon: Icons.remove, color: Colors.red, text: s)),
         ],
       ),
     );

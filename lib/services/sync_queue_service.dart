@@ -227,6 +227,7 @@ class SyncQueueService {
           steps: (row['steps'] as List<dynamic>? ?? []).map(ProtocolStep.fromDynamic).toList(),
           relatedInstrumentIds:
               (row['related_instrument_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
+          relatedTrayIds: (row['related_tray_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
           comment: row['comment'] as String?,
         );
         await GroupDocumentService.instance.saveDraft(version);

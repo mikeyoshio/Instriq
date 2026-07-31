@@ -291,6 +291,11 @@
   "stepsUncategorizedGroup": "General",
   "relatedInstrumentsLabel": "Instrumental relacionado",
   "noInstrumentsLinked": "Sin instrumental enlazado",
+  "relatedTraysLabel": "Bandejas relacionadas",
+  "noTraysLinked": "Sin bandejas enlazadas",
+  "noTraysInWorkspace": "Este espacio todavía no tiene bandejas",
+  "knowledgeGraphUsedInTitle": "Usado en",
+  "knowledgeGraphUsedInEmptyState": "Todavía no se usa en ninguna técnica, protocolo o bandeja",
   "changeCommentLabel": "Comentario del cambio (opcional)",
   "submitForReview": "Enviar a revisión",
   "saveAsDraft": "Guardar como borrador",
@@ -372,6 +377,7 @@
   "@instrumentsCountTitle": {"placeholders": {"count": {"type": "int"}}},
 
   "searchInstrumentHint": "Buscar instrumento...",
+  "searchTrayHint": "Buscar bandeja...",
 
   "loadProfileError": "No se pudo cargar tu perfil: {error}",
   "@loadProfileError": {"placeholders": {"error": {"type": "String"}}},

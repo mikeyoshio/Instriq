@@ -14,6 +14,7 @@ import '../services/group_document_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/tag_service.dart';
+import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/offline_banner.dart';
@@ -22,6 +23,7 @@ import 'group_document_version_history_screen.dart';
 import 'instrument_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
+import 'tray_detail_screen.dart';
 
 class GroupDocumentDetailScreen extends StatefulWidget {
   final GroupDocument document;
@@ -50,6 +52,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     _loadOwnDraft();
     _loadSpecialty();
     _loadTags();
+    _loadTrays();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _document.id);
       UsageAnalyticsService.instance.recordView(_refType, _document.id);
@@ -79,6 +82,16 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
       setState(() => _tags = tags);
     } catch (_) {
       // Sin bloquear la ficha si falla: las etiquetas son metadato accesorio.
+    }
+  }
+
+  Future<void> _loadTrays() async {
+    try {
+      await TrayService.instance.fetchTrays(_document.workspaceId);
+      if (!mounted) return;
+      setState(() {});
+    } catch (_) {
+      // Sin bloquear la ficha si falla: se muestra el id crudo como fallback.
     }
   }
 
@@ -299,6 +312,25 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => InstrumentDetailScreen(instrument: instrument)),
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 20),
+            ],
+            if (published.relatedTrayIds.isNotEmpty) ...[
+              Text(l10n.relatedTraysLabel, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              ...published.relatedTrayIds.map((id) {
+                final tray = TrayService.instance.trayById(id);
+                if (tray == null) return const SizedBox.shrink();
+                return Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.inventory_2_outlined),
+                    title: Text(tray.publishedVersion?.name ?? id),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: widget.myRole)),
                     ),
                   ),
                 );

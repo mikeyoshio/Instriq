@@ -99,6 +99,7 @@ class GroupDocumentVersion {
   final String? content;
   final List<ProtocolStep> steps;
   final List<String> relatedInstrumentIds;
+  final List<String> relatedTrayIds;
   final String? authorId;
   final String? comment;
   final String? basedOnVersionId;
@@ -123,6 +124,7 @@ class GroupDocumentVersion {
     this.content,
     this.steps = const [],
     this.relatedInstrumentIds = const [],
+    this.relatedTrayIds = const [],
     this.authorId,
     this.comment,
     this.basedOnVersionId,
@@ -138,6 +140,7 @@ class GroupDocumentVersion {
         'content': content,
         'steps': steps.map((s) => s.toJson()).toList(),
         'related_instrument_ids': relatedInstrumentIds,
+        'related_tray_ids': relatedTrayIds,
         'comment': comment,
       };
 
@@ -152,6 +155,7 @@ class GroupDocumentVersion {
     bool clearContent = false,
     List<ProtocolStep>? steps,
     List<String>? relatedInstrumentIds,
+    List<String>? relatedTrayIds,
     String? comment,
     bool? pendingSync,
   }) {
@@ -166,6 +170,7 @@ class GroupDocumentVersion {
       content: clearContent ? null : (content ?? this.content),
       steps: steps ?? this.steps,
       relatedInstrumentIds: relatedInstrumentIds ?? this.relatedInstrumentIds,
+      relatedTrayIds: relatedTrayIds ?? this.relatedTrayIds,
       authorId: authorId,
       comment: comment ?? this.comment,
       basedOnVersionId: basedOnVersionId,
@@ -192,6 +197,7 @@ class GroupDocumentVersion {
       steps: (row['steps'] as List<dynamic>? ?? []).map(ProtocolStep.fromDynamic).toList(),
       relatedInstrumentIds:
           (row['related_instrument_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
+      relatedTrayIds: (row['related_tray_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
       authorId: row['author_id'] as String?,
       comment: row['comment'] as String?,
       basedOnVersionId: row['based_on_version_id'] as String?,
@@ -216,6 +222,7 @@ class GroupDocumentVersion {
         'content': content,
         'steps': steps.map((s) => s.toJson()).toList(),
         'related_instrument_ids': relatedInstrumentIds,
+        'related_tray_ids': relatedTrayIds,
         'author_id': authorId,
         'comment': comment,
         'based_on_version_id': basedOnVersionId,

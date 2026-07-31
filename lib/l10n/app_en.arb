@@ -291,6 +291,11 @@
   "stepsUncategorizedGroup": "General",
   "relatedInstrumentsLabel": "Related instruments",
   "noInstrumentsLinked": "No instruments linked",
+  "relatedTraysLabel": "Related trays",
+  "noTraysLinked": "No trays linked",
+  "noTraysInWorkspace": "This workspace has no trays yet",
+  "knowledgeGraphUsedInTitle": "Used in",
+  "knowledgeGraphUsedInEmptyState": "Not used in any technique, protocol or tray yet",
   "changeCommentLabel": "Change comment (optional)",
   "submitForReview": "Submit for review",
   "saveAsDraft": "Save as draft",
@@ -372,6 +377,7 @@
   "@instrumentsCountTitle": {"placeholders": {"count": {"type": "int"}}},
 
   "searchInstrumentHint": "Search instrument...",
+  "searchTrayHint": "Search tray...",
 
   "loadProfileError": "Couldn't load your profile: {error}",
   "@loadProfileError": {"placeholders": {"error": {"type": "String"}}},
