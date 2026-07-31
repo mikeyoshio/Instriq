@@ -537,5 +537,21 @@
   "teamsLoadError": "No s'han pogut carregar els equips: {error}",
   "@teamsLoadError": {"placeholders": {"error": {"type": "String"}}},
 
-  "preferenceCardTitle": "Targeta de preferència"
+  "preferenceCardTitle": "Targeta de preferència",
+
+  "usageSectionTitle": "Ús",
+  "usageSectionSubtitle": "Què es consulta, què es busca i què queda pendent — últims 30 dies.",
+  "usageLoadError": "No s'han pogut carregar les dades d'ús: {error}",
+  "@usageLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "usageTopViewedTitle": "Més consultat",
+  "usageTopSearchesTitle": "Cerques més freqüents",
+  "usageZeroResultSearchesTitle": "Cerques sense resultats",
+  "usagePendingDraftsTitle": "Esborranys pendents per persona",
+  "usageEmptyState": "Encara no hi ha dades",
+  "usageViewCountLabel": "{count, plural, one {1 vista} other {{count} vistes}}",
+  "@usageViewCountLabel": {"placeholders": {"count": {"type": "int"}}},
+  "usageSearchCountLabel": "{count, plural, one {1 cerca} other {{count} cerques}}",
+  "@usageSearchCountLabel": {"placeholders": {"count": {"type": "int"}}},
+  "usageDraftCountLabel": "{count, plural, one {1 esborrany} other {{count} esborranys}}",
+  "@usageDraftCountLabel": {"placeholders": {"count": {"type": "int"}}}
 }

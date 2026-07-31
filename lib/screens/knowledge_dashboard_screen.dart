@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_badge.dart';
+import '../design_system/components/instriq_list_item.dart';
+import '../design_system/tokens.dart';
+import '../l10n/app_localizations.dart';
 import '../models/hospital_content_stats.dart';
+import '../models/usage_stats.dart';
 import '../services/analytics_service.dart';
 import '../services/profile_service.dart';
+import '../services/usage_analytics_service.dart';
+import '../utils/ref_resolver.dart';
 
 /// Dashboard agregado de COBERTURA DE CONOCIMIENTO DOCUMENTADO por
-/// especialidad (Fase E, version minima/realista).
-///
-/// IMPORTANTE — esto no es un dashboard de uso/engagement: no existe hoy
-/// ningun tracking server-side de que tecnica o protocolo se consulta mas.
-/// El progreso de aprendizaje (flashcards/quiz) vive solo en
-/// shared_preferences local de cada dispositivo (ver
-/// lib/services/progress_service.dart). Lo que esta pantalla muestra es
-/// cuanto contenido tiene documentado el hospital — cuantas
-/// tecnicas/protocolos estan publicados frente a pendientes de revision por
-/// especialidad, y totales de espacios/miembros — no cuanto se lee.
+/// especialidad (Fase E, version minima/realista), mas — desde Fase D (2/2,
+/// ver supabase/schema_v23_usage_analytics.sql) — la seccion de USO REAL
+/// (`_UsageSection` mas abajo): que se consulta, que se busca, que busqueda
+/// no encuentra nada y cuantos borradores propios tiene cada persona
+/// pendientes. El progreso de aprendizaje (flashcards/quiz) sigue viviendo
+/// solo en shared_preferences local de cada dispositivo (ver
+/// lib/services/progress_service.dart) y no aparece aqui. Lo que la primera
+/// seccion de esta pantalla muestra es cuanto contenido tiene documentado el
+/// hospital — cuantas tecnicas/protocolos estan publicados frente a
+/// pendientes de revision por especialidad, y totales de espacios/miembros —
+/// no cuanto se lee; la seccion de uso, mas abajo, es la que si mide lectura.
 ///
 /// Pantalla standalone: todavia no esta enlazada desde ningun otro screen
 /// (home_screen.dart u otro) a proposito, para no chocar con cambios en
@@ -31,10 +39,57 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
   String? _error;
   HospitalContentStats? _stats;
 
+  // Estado separado del bloque de cobertura de arriba a propósito: son dos
+  // RPCs distintas (hospital_content_stats vs organization_usage_stats) que
+  // pueden tardar/fallar de forma independiente — no tiene sentido que un
+  // fallo en una bloquee a la otra.
+  bool _usageLoading = true;
+  String? _usageError;
+  UsageStats? _usageStats;
+  List<_ResolvedViewCount> _resolvedViews = [];
+
   @override
   void initState() {
     super.initState();
     _load();
+    _loadUsage();
+  }
+
+  Future<void> _loadUsage() async {
+    setState(() {
+      _usageLoading = true;
+      _usageError = null;
+    });
+    final organizationId = ProfileService.instance.organizationId;
+    if (organizationId == null) {
+      setState(() => _usageLoading = false);
+      return;
+    }
+    try {
+      final stats = await UsageAnalyticsService.instance.fetchStats(organizationId);
+      // Contenido borrado entretanto se omite en silencio (ver resolveRef) —
+      // nunca crashear el dashboard por una fila de analítica que apunta a
+      // algo que ya no existe.
+      final resolvedViews = <_ResolvedViewCount>[];
+      for (final v in stats.topViewed) {
+        final resolved = await resolveRef(v.refType, v.refId);
+        if (resolved != null) {
+          resolvedViews.add(_ResolvedViewCount(ref: resolved, viewCount: v.viewCount));
+        }
+      }
+      if (!mounted) return;
+      setState(() {
+        _usageStats = stats;
+        _resolvedViews = resolvedViews;
+        _usageLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _usageError = e.toString();
+        _usageLoading = false;
+      });
+    }
   }
 
   Future<void> _load() async {
@@ -68,6 +123,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: const Text('Cobertura de conocimiento')),
       body: _loading
@@ -80,7 +136,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
                   ),
                 )
               : RefreshIndicator(
-                  onRefresh: _load,
+                  onRefresh: () => Future.wait([_load(), _loadUsage()]),
                   child: ListView(
                     padding: const EdgeInsets.all(20),
                     children: [
@@ -104,11 +160,32 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
                         )
                       else
                         _SpecialtyList(stats: _stats!.bySpecialty),
+                      const SizedBox(height: 24),
+                      Text(l10n.usageSectionTitle, style: Theme.of(context).textTheme.titleMedium),
+                      const SizedBox(height: 4),
+                      Text(
+                        l10n.usageSectionSubtitle,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                      ),
+                      const SizedBox(height: 8),
+                      _UsageSection(
+                        loading: _usageLoading,
+                        error: _usageError,
+                        stats: _usageStats,
+                        resolvedViews: _resolvedViews,
+                      ),
                     ],
                   ),
                 ),
     );
   }
+}
+
+class _ResolvedViewCount {
+  final ResolvedRef ref;
+  final int viewCount;
+
+  const _ResolvedViewCount({required this.ref, required this.viewCount});
 }
 
 class _HonestyBanner extends StatelessWidget {
@@ -128,7 +205,7 @@ class _HonestyBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 'Esto mide cuánto conocimiento tiene documentado el grupo, '
-                'no cuánto se consulta o se usa. No hay datos de uso disponibles hoy.',
+                'no cuánto se consulta o se usa — para eso, ver la sección "Uso" más abajo.',
                 style: TextStyle(fontSize: 13),
               ),
             ),
@@ -240,6 +317,131 @@ class _SpecialtyList extends StatelessWidget {
           ),
         );
       }).toList(),
+    );
+  }
+}
+
+/// Sección "Uso" (ver comentario de clase de [KnowledgeDashboardScreen]):
+/// estado propio de carga/error, para no bloquearla con el de cobertura de
+/// arriba — mismo patrón visual (loading/error/lista) que el resto de la
+/// pantalla, solo que dividido en 4 sub-bloques.
+class _UsageSection extends StatelessWidget {
+  final bool loading;
+  final String? error;
+  final UsageStats? stats;
+  final List<_ResolvedViewCount> resolvedViews;
+
+  const _UsageSection({
+    required this.loading,
+    required this.error,
+    required this.stats,
+    required this.resolvedViews,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    if (loading) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (error != null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Text(l10n.usageLoadError(error!), style: const TextStyle(color: Colors.red)),
+      );
+    }
+    final data = stats;
+    if (data == null) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _UsageSubsection(
+          title: l10n.usageTopViewedTitle,
+          emptyLabel: l10n.usageEmptyState,
+          rows: resolvedViews
+              .map((v) => InstriqListItem(
+                    icon: Icons.visibility_outlined,
+                    title: v.ref.title,
+                    trailing: Text(l10n.usageViewCountLabel(v.viewCount)),
+                    onTap: () => navigateToResolvedRef(context, v.ref),
+                  ))
+              .toList(),
+        ),
+        const SizedBox(height: 20),
+        _UsageSubsection(
+          title: l10n.usageTopSearchesTitle,
+          emptyLabel: l10n.usageEmptyState,
+          rows: data.topSearches
+              .map((q) => InstriqListItem(
+                    icon: Icons.search,
+                    title: q.query,
+                    trailing: Text(l10n.usageSearchCountLabel(q.searchCount)),
+                  ))
+              .toList(),
+        ),
+        const SizedBox(height: 20),
+        // Tratamiento visual más prominente a propósito (InstriqBadge con
+        // tono de aviso en vez de texto plano): es la sección más accionable
+        // para un admin — le dice qué contenido falta, no solo qué se usa.
+        _UsageSubsection(
+          title: l10n.usageZeroResultSearchesTitle,
+          emptyLabel: l10n.usageEmptyState,
+          rows: data.zeroResultSearches
+              .map((q) => InstriqListItem(
+                    icon: Icons.search_off,
+                    title: q.query,
+                    trailing: InstriqBadge(
+                      label: l10n.usageSearchCountLabel(q.searchCount),
+                      color: InstriqColors.statusInReview,
+                    ),
+                  ))
+              .toList(),
+        ),
+        const SizedBox(height: 20),
+        _UsageSubsection(
+          title: l10n.usagePendingDraftsTitle,
+          emptyLabel: l10n.usageEmptyState,
+          rows: data.pendingDraftsByPerson
+              .map((p) => InstriqListItem(
+                    icon: Icons.edit_note_outlined,
+                    title: p.displayName,
+                    trailing: Text(l10n.usageDraftCountLabel(p.draftCount)),
+                  ))
+              .toList(),
+        ),
+      ],
+    );
+  }
+}
+
+class _UsageSubsection extends StatelessWidget {
+  final String title;
+  final String emptyLabel;
+  final List<Widget> rows;
+
+  const _UsageSubsection({required this.title, required this.emptyLabel, required this.rows});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 8),
+        if (rows.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Text(emptyLabel, style: TextStyle(color: Colors.grey[600])),
+          )
+        else
+          for (final row in rows) ...[
+            row,
+            const SizedBox(height: 8),
+          ],
+      ],
     );
   }
 }
