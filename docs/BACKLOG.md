@@ -22,7 +22,7 @@ Actualment aquests fluxos únicament s'han validat en mode convidat.
 
 ## Bugs coneguts (pendents d'investigar)
 
-* **Filtre de Mode de Treball no sembla tenir efecte**: en seleccionar un Mode de Treball (p. ex. instrumentista) i després tornar a "Sense preferència", el filtre torna a l'estat anterior en comptes de reiniciar-se, i no s'aprecia cap canvi visible aparent en canviar de mode. Reportat per l'usuari, pendent de reproduir i diagnosticar.
+* ~~Filtre de Mode de Treball no sembla tenir efecte~~ — **arreglat (2026-08)**. Causa real: `PopupMenuButton<T>` de Flutter confon "menú tancat sense triar" amb "s'ha triat `value: null`" (`showMenu` retorna `null` en tots dos casos), així que `onSelected` mai s'executava en tocar "Sense preferència" a `lib/navigation/work_mode_header.dart` — el mode mai es reiniciava i el botó tornava a mostrar l'anterior. El selector de xips de "El meu compte" (`work_mode_picker.dart`) ja funcionava bé, no tenia aquest problema. Verificat amb `flutter analyze`/`flutter test`; **pendent de provar en viu amb usuari autenticat** (el header només es mostra amb hospital connectat, no reproduïble en mode convidat).
 
 ---
 
