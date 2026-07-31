@@ -29,4 +29,13 @@ class AuthService {
   Future<void> updatePassword(String newPassword) async {
     await _client.auth.updateUser(UserAttributes(password: newPassword));
   }
+
+  /// Auditoría de login (ver supabase/schema_v21). Fire-and-forget a
+  /// propósito: un fallo aquí (p.ej. sin red en el instante del login) no
+  /// debe impedir que la persona entre en la app.
+  Future<void> logLoginEvent() async {
+    try {
+      await _client.rpc('log_login_event');
+    } catch (_) {}
+  }
 }

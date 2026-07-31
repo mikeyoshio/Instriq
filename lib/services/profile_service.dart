@@ -8,6 +8,7 @@ import 'auth_service.dart';
 import 'group_document_service.dart';
 import 'preference_card_service.dart';
 import 'surgeon_service.dart';
+import 'team_service.dart';
 import 'tray_service.dart';
 import 'workspace_service.dart';
 
@@ -98,6 +99,7 @@ class ProfileService {
     PreferenceCardService.instance.clear();
     TrayService.instance.clear();
     SurgeonService.instance.clear();
+    TeamService.instance.clear();
   }
 
   /// Busca el hospital por código de invitación y liga el perfil del usuario actual.

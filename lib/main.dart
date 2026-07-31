@@ -68,6 +68,11 @@ class _InstriqAppState extends State<InstriqApp> {
           state.event == AuthChangeEvent.initialSession) {
         if (state.session != null) PushNotificationService.instance.initForCurrentUser();
       }
+      if (state.event == AuthChangeEvent.signedIn) {
+        // Solo en signedIn, nunca en initialSession: si no, cada reapertura
+        // de la app con sesión persistida contaría como un login nuevo.
+        AuthService.instance.logLoginEvent();
+      }
       if (state.event == AuthChangeEvent.signedOut) {
         PushNotificationService.instance.unregisterCurrentToken();
       }

@@ -519,5 +519,23 @@
   "specialtySectionCustomInstruments": "Instrumental personalizado",
   "specialtyDetailEmptyState": "Todavía no hay contenido asociado a esta especialidad.",
   "technicalIfuTitleLabel": "Título de las instrucciones de uso",
-  "technicalIfuUrlLabel": "URL de las instrucciones de uso"
+  "technicalIfuUrlLabel": "URL de las instrucciones de uso",
+
+  "auditActionUserSignedIn": "Ha iniciado sesión",
+
+  "manageTeamsTitle": "Equipos",
+  "manageTeamsSubtitle": "Asigna roles de espacio a equipos enteros de una vez",
+  "teamsSectionHeader": "Equipos",
+  "newTeamLabel": "Nuevo equipo",
+  "teamNameLabel": "Nombre del equipo",
+  "teamMembersCountTitle": "{count, plural, one {1 miembro} other {{count} miembros}}",
+  "@teamMembersCountTitle": {"placeholders": {"count": {"type": "int"}}},
+  "deleteTeamTitle": "Eliminar equipo",
+  "deleteTeamConfirmBody": "¿Eliminar \"{name}\"? Esta acción no se puede deshacer.",
+  "@deleteTeamConfirmBody": {"placeholders": {"name": {"type": "String"}}},
+  "noTeamsYet": "Todavía no hay equipos. Crea el primero con el botón +.",
+  "teamsLoadError": "No se pudieron cargar los equipos: {error}",
+  "@teamsLoadError": {"placeholders": {"error": {"type": "String"}}},
+
+  "preferenceCardTitle": "Tarjeta de preferencia"
 }

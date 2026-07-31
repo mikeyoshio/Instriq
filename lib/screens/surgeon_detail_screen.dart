@@ -75,8 +75,8 @@ class _SurgeonDetailScreenState extends State<SurgeonDetailScreen> {
                   ..._cards.map((card) => Card(
                         child: ListTile(
                           leading: const Icon(Icons.assignment_outlined),
-                          title: Text(card.procedureName),
-                          subtitle: Text(l10n.instrumentsCount(card.items.length)),
+                          title: Text(card.publishedVersion?.procedureName ?? l10n.unpublished),
+                          subtitle: Text(l10n.instrumentsCount(card.publishedVersion?.items.length ?? 0)),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () => _openCard(card),
                         ),

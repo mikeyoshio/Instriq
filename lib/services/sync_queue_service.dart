@@ -5,12 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
-import '../models/preference_card.dart';
 import 'connectivity_service.dart';
 import 'group_document_service.dart';
-import 'preference_card_service.dart';
 
-enum SyncOperationType { createGroupDocument, saveGroupDocumentDraft, submitForReview, upsertPreferenceCard }
+enum SyncOperationType { createGroupDocument, saveGroupDocumentDraft, submitForReview }
 
 class PendingSyncOperation {
   final String id;
@@ -54,13 +52,21 @@ class SyncFailure {
 }
 
 /// Cola FIFO de operaciones de escritura (crear/editar técnicas y
-/// protocolos, enviar a revisión, crear/editar tarjetas de preferencia)
-/// hechas sin conexión. Persiste en `shared_preferences` (clave
-/// `pending_sync_queue`) para sobrevivir a que se cierre la app, y se vacía
-/// sola en cuanto [ConnectivityService] detecta que ha vuelto la red.
+/// protocolos, enviar a revisión) hechas sin conexión. Persiste en
+/// `shared_preferences` (clave `pending_sync_queue`) para sobrevivir a que se
+/// cierre la app, y se vacía sola en cuanto [ConnectivityService] detecta que
+/// ha vuelto la red.
 ///
 /// No duplica la lógica de red: al reintentar, llama a los mismos métodos de
-/// [GroupDocumentService]/[PreferenceCardService] que se usarían online.
+/// [GroupDocumentService] que se usarían online.
+///
+/// Las tarjetas de preferencia (`upsertPreferenceCard`) ya no pasan por esta
+/// cola: con el modelo de versiones (Fase E, ver
+/// supabase/schema_v22_preference_card_versioning.sql) editar una tarjeta ya
+/// no es un simple upsert de fila, sino crear/guardar una versión borrador —
+/// mismo motivo por el que [TrayService] tampoco usa esta cola. Regresión
+/// conocida: la edición offline de tarjetas de preferencia que existía antes
+/// de esta migración ya no está disponible.
 class SyncQueueService {
   SyncQueueService._();
   static final SyncQueueService instance = SyncQueueService._();
@@ -147,22 +153,6 @@ class SyncQueueService {
     await _enqueue(SyncOperationType.submitForReview, {'versionId': versionId});
   }
 
-  Future<PreferenceCard> queueUpsertCard(PreferenceCard card) async {
-    final isNew = card.id.isEmpty;
-    final localId = isNew ? newLocalId() : card.id;
-    await _enqueue(SyncOperationType.upsertPreferenceCard, {'cardRow': card.toCacheRow()});
-    return PreferenceCard(
-      id: localId,
-      workspaceId: card.workspaceId,
-      surgeonId: card.surgeonId,
-      procedureName: card.procedureName,
-      items: card.items,
-      generalNotes: card.generalNotes,
-      validated: card.validated,
-      pendingSync: true,
-    );
-  }
-
   // --- Procesar la cola ---
 
   Future<void> processQueue() async {
@@ -207,8 +197,6 @@ class SyncQueueService {
         return 'Guardar borrador ${op.payload['versionId']}';
       case SyncOperationType.submitForReview:
         return 'Enviar a revisión ${op.payload['versionId']}';
-      case SyncOperationType.upsertPreferenceCard:
-        return 'Guardar tarjeta de preferencia';
     }
   }
 
@@ -246,11 +234,6 @@ class SyncQueueService {
       case SyncOperationType.submitForReview:
         final versionId = _resolve(op.payload['versionId'] as String);
         await GroupDocumentService.instance.submitForReview(versionId);
-        break;
-      case SyncOperationType.upsertPreferenceCard:
-        final row = (op.payload['cardRow'] as Map).cast<String, dynamic>();
-        final card = PreferenceCard.fromRow(row);
-        await PreferenceCardService.instance.upsertCard(card);
         break;
     }
   }
