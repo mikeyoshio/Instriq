@@ -291,6 +291,11 @@
   "stepsUncategorizedGroup": "General",
   "relatedInstrumentsLabel": "Instrumental relacionat",
   "noInstrumentsLinked": "Sense instrumental enllaçat",
+  "relatedTraysLabel": "Safates relacionades",
+  "noTraysLinked": "Sense safates enllaçades",
+  "noTraysInWorkspace": "Aquest espai encara no té safates",
+  "knowledgeGraphUsedInTitle": "Usat a",
+  "knowledgeGraphUsedInEmptyState": "Encara no s'usa a cap tècnica, protocol o safata",
   "changeCommentLabel": "Comentari del canvi (opcional)",
   "submitForReview": "Envia a revisió",
   "saveAsDraft": "Desa com a esborrany",
@@ -372,6 +377,7 @@
   "@instrumentsCountTitle": {"placeholders": {"count": {"type": "int"}}},
 
   "searchInstrumentHint": "Cerca instrument...",
+  "searchTrayHint": "Cerca safata...",
 
   "loadProfileError": "No s'ha pogut carregar el teu perfil: {error}",
   "@loadProfileError": {"placeholders": {"error": {"type": "String"}}},

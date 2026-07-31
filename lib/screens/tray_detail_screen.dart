@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
+import '../models/group_document.dart';
 import '../models/group_document_version.dart' show GroupDocumentVersionStatus;
 import '../models/specialty_entity.dart';
 import '../models/tag.dart';
@@ -10,11 +11,14 @@ import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
+import '../services/group_document_service.dart';
+import '../services/knowledge_link_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
+import 'group_document_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_form_screen.dart';
@@ -43,6 +47,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
   bool _isFavorite = false;
   SpecialtyEntity? _specialty;
   List<Tag> _tags = [];
+  List<GroupDocument> _usedInDocuments = [];
 
   @override
   void initState() {
@@ -115,6 +120,21 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
       }
     } catch (_) {
       _ownPendingDraft = null;
+    }
+    try {
+      final links = await KnowledgeLinkService.instance.fetchRelatedTo('tray', _tray.id);
+      final usedInDocuments = <GroupDocument>[];
+      for (final link in links) {
+        if (link.fromType != 'group_document') continue;
+        try {
+          usedInDocuments.add(await GroupDocumentService.instance.fetchDocument(link.fromId));
+        } catch (_) {
+          // Enlace obsoleto (documento borrado sin limpiar a tiempo): se omite.
+        }
+      }
+      _usedInDocuments = usedInDocuments;
+    } catch (_) {
+      // Grafo de conocimiento es metadato accesorio: no bloquea el resto de la ficha.
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -286,6 +306,23 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                     Text(l10n.trayObservationsLabel, style: Theme.of(context).textTheme.labelLarge),
                     const SizedBox(height: 4),
                     Text(published.observations!, style: Theme.of(context).textTheme.bodyLarge),
+                    const SizedBox(height: 20),
+                  ],
+                  if (_usedInDocuments.isNotEmpty) ...[
+                    Text(l10n.knowledgeGraphUsedInTitle, style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    ..._usedInDocuments.map((doc) => Card(
+                          child: ListTile(
+                            leading: const Icon(Icons.description_outlined),
+                            title: Text(doc.publishedVersion?.title ?? doc.id),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => GroupDocumentDetailScreen(document: doc, myRole: widget.myRole),
+                              ),
+                            ),
+                          ),
+                        )),
                   ],
                 ],
               ],

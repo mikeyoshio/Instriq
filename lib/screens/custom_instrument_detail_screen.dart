@@ -2,19 +2,26 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
+import '../models/group_document.dart';
 import '../models/specialty_entity.dart';
 import '../models/tag.dart';
+import '../models/tray.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
+import '../services/group_document_service.dart';
+import '../services/knowledge_link_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/tag_service.dart';
+import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import 'custom_instrument_form_screen.dart';
+import 'group_document_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
+import 'tray_detail_screen.dart';
 
 /// Vista de lectura de un instrumento personalizado: sus variantes con foto
 /// (vía signed URL, el bucket es privado) y el disclaimer de licencia
@@ -38,6 +45,8 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
   bool _isFavorite = false;
   SpecialtyEntity? _specialty;
   List<Tag> _tags = [];
+  List<GroupDocument> _usedInDocuments = [];
+  List<Tray> _usedInTrays = [];
 
   @override
   void initState() {
@@ -46,6 +55,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
     _loadPhotos();
     _loadSpecialty();
     _loadTags();
+    _loadUsedIn();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _instrument.id);
       UsageAnalyticsService.instance.recordView(_refType, _instrument.id);
@@ -75,6 +85,36 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
       setState(() => _tags = tags);
     } catch (_) {
       // Sin bloquear la ficha si falla: las etiquetas son metadato accesorio.
+    }
+  }
+
+  Future<void> _loadUsedIn() async {
+    try {
+      final links = await KnowledgeLinkService.instance.fetchRelatedTo(_refType, _instrument.id);
+      final usedInDocuments = <GroupDocument>[];
+      final usedInTrays = <Tray>[];
+      for (final link in links) {
+        if (link.fromType == 'group_document') {
+          try {
+            usedInDocuments.add(await GroupDocumentService.instance.fetchDocument(link.fromId));
+          } catch (_) {
+            // Enlace obsoleto (documento borrado sin limpiar a tiempo): se omite.
+          }
+        } else if (link.fromType == 'tray') {
+          try {
+            usedInTrays.add(await TrayService.instance.fetchTray(link.fromId));
+          } catch (_) {
+            // Enlace obsoleto (safata borrada sin limpiar a tiempo): se omite.
+          }
+        }
+      }
+      if (!mounted) return;
+      setState(() {
+        _usedInDocuments = usedInDocuments;
+        _usedInTrays = usedInTrays;
+      });
+    } catch (_) {
+      // Grafo de conocimiento es metadato accesorio: no bloquea el resto de la ficha.
     }
   }
 
@@ -229,6 +269,33 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
                     photoUrl: _photoUrls[variant.id],
                     loading: _loadingPhotos,
                   )),
+            if (_usedInDocuments.isNotEmpty || _usedInTrays.isNotEmpty) ...[
+              const Divider(height: 32),
+              Text(l10n.knowledgeGraphUsedInTitle, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              ..._usedInDocuments.map((doc) => Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.description_outlined),
+                      title: Text(doc.publishedVersion?.title ?? doc.id),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => GroupDocumentDetailScreen(document: doc, myRole: widget.myRole),
+                        ),
+                      ),
+                    ),
+                  )),
+              ..._usedInTrays.map((tray) => Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.inventory_2_outlined),
+                      title: Text(tray.publishedVersion?.name ?? tray.id),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: widget.myRole)),
+                      ),
+                    ),
+                  )),
+            ],
           ],
         ),
       ),

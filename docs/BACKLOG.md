@@ -20,6 +20,12 @@ Actualment aquests fluxos únicament s'han validat en mode convidat.
 
 ---
 
+## Bugs coneguts (pendents d'investigar)
+
+* **Filtre de Mode de Treball no sembla tenir efecte**: en seleccionar un Mode de Treball (p. ex. instrumentista) i després tornar a "Sense preferència", el filtre torna a l'estat anterior en comptes de reiniciar-se, i no s'aprecia cap canvi visible aparent en canviar de mode. Reportat per l'usuari, pendent de reproduir i diagnosticar.
+
+---
+
 # Millores pendents
 
 ## Arquitectura funcional
@@ -359,6 +365,8 @@ Cada EPIC avaluat segons els 5 criteris anteriors. Base de referència: el model
 * **Compatibilitat amb arquitectura actual**: alta. Estén el patró ja aprovat (taules tipades + FK) enlloc del model genèric `entities`/`entity_relations` que ja es va descartar explícitament aquesta sessió (complexitat RLS, pèrdua d'integritat referencial, cost de self-joins).
 * **Dependències**: cap bloqueig entrant; bloqueja EPIC 2, 5 (agrupació per relació) i 6 (obligatori).
 * **Veredicte**: primer EPIC a fer. Baix risc arquitectònic, alt valor habilitador.
+
+**Estat: primer tram fet (2026-08).** Implementat `knowledge_links` (`supabase/schema_v24_knowledge_links.sql`): taula-índex derivada, sincronitzada al publicar una tècnica/protocol o safata, amb la relació que faltava (`related_tray_ids` a `group_document_versions`) i la relació inversa nova (secció "Usat a" a la fitxa d'instrumental de catàleg, personalitzat i de safata). Verificat amb `flutter analyze`/`flutter test` i en emulador (mode convidat). Pendent, no fet en aquest tram: EPIC 2 (Clinical Workspace) i la resta d'EPICS 3-8, tal com estava previst a la seqüenciació recomanada.
 
 ## EPIC 2 · Clinical Workspace
 

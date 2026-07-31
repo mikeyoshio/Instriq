@@ -6,13 +6,16 @@ import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
 import '../models/specialty_entity.dart';
+import '../models/tray.dart';
 import '../services/connectivity_service.dart';
 import '../services/group_document_service.dart';
 import '../services/profile_service.dart';
 import '../services/specialty_service.dart';
+import '../services/tray_service.dart';
 import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/tag_picker.dart';
+import '../widgets/tray_picker_sheet.dart';
 
 /// Edita el borrador de una versión ([existingDraft]) o crea un documento
 /// nuevo. Nunca edita directamente el contenido publicado: guardar solo
@@ -47,6 +50,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   late final TextEditingController _commentController;
   late List<ProtocolStep> _steps;
   late List<String> _relatedInstrumentIds;
+  late List<String> _relatedTrayIds;
   GroupDocumentVersion? _draft;
   final _tagPickerKey = GlobalKey<TagPickerState>();
   bool _loading = true;
@@ -61,6 +65,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     _commentController = TextEditingController();
     _steps = [];
     _relatedInstrumentIds = [];
+    _relatedTrayIds = [];
     _init();
   }
 
@@ -69,6 +74,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       final results = await Future.wait([
         _loadDraft(),
         SpecialtyService.instance.fetchAll(),
+        TrayService.instance.fetchTrays(widget.workspaceId),
       ]);
       _applyDraft(results[0] as GroupDocumentVersion);
       _specialties = results[1] as List<SpecialtyEntity>;
@@ -96,6 +102,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     _contentController.text = draft.content ?? '';
     _steps = List.of(draft.steps);
     _relatedInstrumentIds = List.of(draft.relatedInstrumentIds);
+    _relatedTrayIds = List.of(draft.relatedTrayIds);
   }
 
   @override
@@ -112,6 +119,8 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     }
     return null;
   }
+
+  Tray? _trayFor(String id) => TrayService.instance.trayById(id);
 
   List<String> _stepCategorySuggestions(AppLocalizations l10n) => [
         l10n.stepCategoryPreop,
@@ -197,6 +206,17 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     }
   }
 
+  Future<void> _addTray() async {
+    final selected = await showModalBottomSheet<Tray>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => TrayPickerSheet(workspaceId: widget.workspaceId),
+    );
+    if (selected != null && !_relatedTrayIds.contains(selected.id)) {
+      setState(() => _relatedTrayIds.add(selected.id));
+    }
+  }
+
   GroupDocumentVersion _draftWithFormValues() {
     final title = _titleController.text.trim();
     return _draft!.copyWith(
@@ -207,6 +227,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       clearContent: _contentController.text.trim().isEmpty,
       steps: _steps,
       relatedInstrumentIds: _relatedInstrumentIds,
+      relatedTrayIds: _relatedTrayIds,
       comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
     );
   }
@@ -379,6 +400,34 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () => setState(() => _relatedInstrumentIds.remove(id)),
+                ),
+              );
+            }),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Text(l10n.relatedTraysLabel, style: Theme.of(context).textTheme.titleMedium),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: _addTray,
+                  icon: const Icon(Icons.add),
+                  label: Text(l10n.addAction),
+                ),
+              ],
+            ),
+            if (_relatedTrayIds.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(l10n.noTraysLinked),
+              ),
+            ..._relatedTrayIds.map((id) {
+              final tray = _trayFor(id);
+              return ListTile(
+                leading: const Icon(Icons.inventory_2_outlined),
+                title: Text(tray?.publishedVersion?.name ?? id),
+                trailing: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => setState(() => _relatedTrayIds.remove(id)),
                 ),
               );
             }),

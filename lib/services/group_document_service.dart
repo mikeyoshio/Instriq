@@ -181,6 +181,7 @@ class GroupDocumentService {
           'content': published.content,
           'steps': published.steps.map((s) => s.toJson()).toList(),
           'related_instrument_ids': published.relatedInstrumentIds,
+          'related_tray_ids': published.relatedTrayIds,
           'author_id': userId,
           'based_on_version_id': published.id,
         })

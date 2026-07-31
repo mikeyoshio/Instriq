@@ -6,15 +6,19 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/catalog_community_photo.dart';
+import '../models/group_document.dart';
 import '../models/instrument.dart';
 import '../models/instrument_sterilization.dart';
 import '../models/manufacturer.dart';
 import '../models/reference_document.dart';
 import '../models/tag.dart';
+import '../models/tray.dart';
 import '../models/work_mode.dart';
 import '../services/auth_service.dart';
 import '../services/catalog_community_photo_service.dart';
 import '../services/favorites_service.dart';
+import '../services/group_document_service.dart';
+import '../services/knowledge_link_service.dart';
 import '../services/manufacturer_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
@@ -22,11 +26,14 @@ import '../services/recent_activity_service.dart';
 import '../services/reference_document_service.dart';
 import '../services/sterilization_service.dart';
 import '../services/tag_service.dart';
+import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/tag_picker.dart';
+import 'group_document_detail_screen.dart';
 import 'manufacturer_detail_screen.dart';
 import 'tag_detail_screen.dart';
+import 'tray_detail_screen.dart';
 
 class InstrumentDetailScreen extends StatefulWidget {
   final Instrument instrument;
@@ -46,6 +53,8 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   Manufacturer? _manufacturer;
   ReferenceDocument? _ifuDocument;
   List<Tag> _tags = [];
+  List<GroupDocument> _usedInDocuments = [];
+  List<Tray> _usedInTrays = [];
 
   bool _loadingCommunityPhoto = true;
   CatalogCommunityPhoto? _approvedCommunityPhoto;
@@ -138,6 +147,28 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         ifuDocument = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
       }
       final tags = await TagService.instance.fetchTagsFor(_refType, widget.instrument.id);
+      final usedInDocuments = <GroupDocument>[];
+      final usedInTrays = <Tray>[];
+      try {
+        final links = await KnowledgeLinkService.instance.fetchRelatedTo(_refType, widget.instrument.id);
+        for (final link in links) {
+          if (link.fromType == 'group_document') {
+            try {
+              usedInDocuments.add(await GroupDocumentService.instance.fetchDocument(link.fromId));
+            } catch (_) {
+              // Enlace obsoleto (documento borrado sin limpiar a tiempo): se omite.
+            }
+          } else if (link.fromType == 'tray') {
+            try {
+              usedInTrays.add(await TrayService.instance.fetchTray(link.fromId));
+            } catch (_) {
+              // Enlace obsoleto (safata borrada sin limpiar a tiempo): se omite.
+            }
+          }
+        }
+      } catch (_) {
+        // Grafo de conocimiento es metadato accesorio: no bloquea el resto de la ficha.
+      }
       if (!mounted) return;
       setState(() {
         _methods = methods;
@@ -145,6 +176,8 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         _manufacturer = manufacturer;
         _ifuDocument = ifuDocument;
         _tags = tags;
+        _usedInDocuments = usedInDocuments;
+        _usedInTrays = usedInTrays;
         _loadingClinicalData = false;
       });
     } catch (_) {
@@ -183,6 +216,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       'tip': _buildTipSection,
       'sterilization': (context) => _buildSterilizationSection(context, l10n),
       'technical': (context) => _buildTechnicalSection(context, l10n),
+      'usedIn': (context) => _buildUsedInSection(context, l10n),
     };
 
     return Scaffold(
@@ -567,6 +601,49 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                     .toList(),
               ),
             ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Relación inversa del grafo de conocimiento (EPIC 1): técnicas/protocolos
+  /// y safates que enlazan a este instrumento, resuelta a partir de
+  /// `knowledge_links` (ver supabase/schema_v24_knowledge_links.sql).
+  Widget _buildUsedInSection(BuildContext context, AppLocalizations l10n) {
+    final hasAnything = _usedInDocuments.isNotEmpty || _usedInTrays.isNotEmpty;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.knowledgeGraphUsedInTitle, style: Theme.of(context).textTheme.labelLarge),
+          const SizedBox(height: 8),
+          if (_loadingClinicalData)
+            const Center(child: CircularProgressIndicator())
+          else if (!hasAnything)
+            Text(l10n.knowledgeGraphUsedInEmptyState, style: Theme.of(context).textTheme.bodyMedium)
+          else ...[
+            ..._usedInDocuments.map((doc) => Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.description_outlined),
+                    title: Text(doc.publishedVersion?.title ?? doc.id),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => GroupDocumentDetailScreen(document: doc, myRole: null)),
+                    ),
+                  ),
+                )),
+            ..._usedInTrays.map((tray) => Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.inventory_2_outlined),
+                    title: Text(tray.publishedVersion?.name ?? tray.id),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: null)),
+                    ),
+                  ),
+                )),
           ],
         ],
       ),
