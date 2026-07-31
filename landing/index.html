@@ -270,7 +270,7 @@
         <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
         <div class="timeline-track-wrap">
           <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
-          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="27" value="0" step="1" aria-label="Línia del temps d'Instriq">
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="32" value="0" step="1" aria-label="Línia del temps d'Instriq">
         </div>
         <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
       </div>
@@ -529,8 +529,8 @@
   });
   CA_DEFAULTS['meta.title'] = document.title;
 
-  // Timeline interactiu de novetats: 1 origen + 23 desplegaments + 4 previstos.
-  var TIMELINE_SHIPPED = 24; // origen (índex 0) + 23 novetats (índexs 1-23)
+  // Timeline interactiu de novetats: 1 origen + 28 desplegaments + 4 previstos.
+  var TIMELINE_SHIPPED = 29; // origen (índex 0) + 28 novetats (índexs 1-28)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -557,6 +557,11 @@
       { badge: '#21', text: '<strong>Safates d\'instrumental</strong> — sets de material amb checklist de quantitats, fotos, versionat i aprovació, per verificar caixes completes després del rentat i l\'esterilització.' },
       { badge: '#22', text: '<strong>Disseny propi i navegació responsive</strong> — nou sistema visual (tipografia, color, espaiats) i una única experiència amb barra lateral a l\'escriptori i navegació inferior al mòbil, la mateixa a totes les pantalles.' },
       { badge: '#23', text: '<strong>Mode de Treball i inici centrat en la cerca</strong> — el perfil professional dona pas a un mode de treball únic i actiu, canviable a l\'instant des de la capçalera; la pantalla d\'inici ara comença per un cercador global, amb activitat recent i favorits.' },
+      { badge: '#24', text: '<strong>Model de dades relacional</strong> — fabricant, cirurgià, especialitat i etiquetes passen a ser entitats pròpies, no text lliure: menys duplicació i cerques i filtres més fiables.' },
+      { badge: '#25', text: '<strong>Organització, no només hospital</strong> — un grup ja pot ser un hospital, una clínica, una universitat, un centre de simulació, un fabricant o un equip privat, cadascun amb el seu tipus.' },
+      { badge: '#26', text: '<strong>Rols assignats a equips</strong> — a més del rol individual, ara es pot donar un rol (lector, editor, aprovador) a un equip sencer d\'un cop; s\'hi suma auditoria de cada inici de sessió.' },
+      { badge: '#27', text: '<strong>Analítica d\'ús real</strong> — el tauler d\'administració ja mostra l\'instrumental i el contingut més consultat, les cerques més freqüents i les que no troben res.' },
+      { badge: '#28', text: '<strong>Versionat a les targetes de preferència</strong> — cada canvi passa per esborrany, revisió i publicació amb historial complet, igual que tècniques, protocols i safates.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
       { badge: 'Previst', future: true, text: 'Mode sense connexió per a les bandejes.' },
@@ -587,6 +592,11 @@
       { badge: '#21', text: '<strong>Bandejas de instrumental</strong> — sets de material con checklist de cantidades, fotos, versionado y aprobación, para verificar cajas completas tras el lavado y la esterilización.' },
       { badge: '#22', text: '<strong>Diseño propio y navegación responsive</strong> — nuevo sistema visual (tipografía, color, espaciados) y una única experiencia con barra lateral en escritorio y navegación inferior en móvil, la misma en todas las pantallas.' },
       { badge: '#23', text: '<strong>Modo de Trabajo e inicio centrado en la búsqueda</strong> — el perfil profesional da paso a un modo de trabajo único y activo, cambiable al instante desde la cabecera; la pantalla de inicio ahora empieza con un buscador global, con actividad reciente y favoritos.' },
+      { badge: '#24', text: '<strong>Modelo de datos relacional</strong> — fabricante, cirujano, especialidad y etiquetas pasan a ser entidades propias, no texto libre: menos duplicación y búsquedas y filtros más fiables.' },
+      { badge: '#25', text: '<strong>Organización, no solo hospital</strong> — un grupo ya puede ser un hospital, una clínica, una universidad, un centro de simulación, un fabricante o un equipo privado, cada uno con su tipo.' },
+      { badge: '#26', text: '<strong>Roles asignados a equipos</strong> — además del rol individual, ahora se puede dar un rol (lector, editor, aprobador) a un equipo entero de una vez; se suma auditoría de cada inicio de sesión.' },
+      { badge: '#27', text: '<strong>Analítica de uso real</strong> — el panel de administración ya muestra el instrumental y el contenido más consultado, las búsquedas más frecuentes y las que no encuentran nada.' },
+      { badge: '#28', text: '<strong>Versionado en las tarjetas de preferencia</strong> — cada cambio pasa por borrador, revisión y publicación con historial completo, igual que técnicas, protocolos y bandejas.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
       { badge: 'Previsto', future: true, text: 'Modo sin conexión para las bandejas.' },
@@ -617,6 +627,11 @@
       { badge: '#21', text: '<strong>Instrument trays</strong> — sets of equipment with a quantity checklist, photos, versioning and approval, to verify complete trays after washing and sterilization.' },
       { badge: '#22', text: '<strong>Own design system and responsive navigation</strong> — a new visual system (typography, color, spacing) and a single experience with a sidebar on desktop and bottom navigation on mobile, the same on every screen.' },
       { badge: '#23', text: '<strong>Work Mode and a search-first home</strong> — the professional profile gives way to a single active work mode, switchable instantly from the header; the home screen now opens with a global search bar, recent activity and favorites.' },
+      { badge: '#24', text: '<strong>Relational data model</strong> — manufacturer, surgeon, specialty and tags become their own entities instead of free text: less duplication, more reliable search and filtering.' },
+      { badge: '#25', text: '<strong>Organization, not just hospital</strong> — a group can now be a hospital, a clinic, a university, a simulation center, a manufacturer or a private team, each with its own type.' },
+      { badge: '#26', text: '<strong>Roles assigned to teams</strong> — beyond individual roles, a role (reader, editor, approver) can now be granted to an entire team at once; plus an audit trail for every sign-in.' },
+      { badge: '#27', text: '<strong>Real usage analytics</strong> — the admin dashboard now shows the most-viewed instruments and content, the most frequent searches, and the ones that find nothing.' },
+      { badge: '#28', text: '<strong>Versioning for preference cards</strong> — every change goes through draft, review and publish with full history, just like techniques, protocols and trays.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
       { badge: 'Planned', future: true, text: 'Offline mode for trays.' },
