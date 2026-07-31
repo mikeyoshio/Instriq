@@ -99,11 +99,13 @@ Future<ResolvedRef?> resolveRef(String refType, String refId) async {
           data: tray,
         );
       case 'preference_card':
-        final card = await PreferenceCardService.instance.fetchById(refId);
+        final card = await PreferenceCardService.instance.fetchCard(refId);
+        final title = card.publishedVersion?.procedureName;
+        if (title == null) return null;
         return ResolvedRef(
           refType: refType,
           refId: refId,
-          title: card.procedureName,
+          title: title,
           workspaceId: card.workspaceId,
           data: card,
         );

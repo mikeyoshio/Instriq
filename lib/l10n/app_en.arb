@@ -519,5 +519,23 @@
   "specialtySectionCustomInstruments": "Custom instruments",
   "specialtyDetailEmptyState": "No content associated with this specialty yet.",
   "technicalIfuTitleLabel": "IFU title",
-  "technicalIfuUrlLabel": "IFU URL"
+  "technicalIfuUrlLabel": "IFU URL",
+
+  "auditActionUserSignedIn": "Signed in",
+
+  "manageTeamsTitle": "Teams",
+  "manageTeamsSubtitle": "Assign workspace roles to whole teams at once",
+  "teamsSectionHeader": "Teams",
+  "newTeamLabel": "New team",
+  "teamNameLabel": "Team name",
+  "teamMembersCountTitle": "{count, plural, one {1 member} other {{count} members}}",
+  "@teamMembersCountTitle": {"placeholders": {"count": {"type": "int"}}},
+  "deleteTeamTitle": "Delete team",
+  "deleteTeamConfirmBody": "Delete \"{name}\"? This cannot be undone.",
+  "@deleteTeamConfirmBody": {"placeholders": {"name": {"type": "String"}}},
+  "noTeamsYet": "No teams yet. Create the first one with the + button.",
+  "teamsLoadError": "Couldn't load teams: {error}",
+  "@teamsLoadError": {"placeholders": {"error": {"type": "String"}}},
+
+  "preferenceCardTitle": "Preference card"
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/audit_entry.dart';
 import '../services/audit_service.dart';
 
@@ -108,9 +109,19 @@ class _AuditEntryTile extends StatelessWidget {
     'document_deleted': Icons.delete_outline,
     'workspace_member_role_changed': Icons.manage_accounts_outlined,
     'hospital_ownership_transferred': Icons.swap_horiz,
+    'user_signed_in': Icons.login,
   };
 
-  String get _actionLabel => _actionLabels[entry.action] ?? entry.action;
+  /// `user_signed_in` es la única acción con etiqueta vía l10n (resto de
+  /// entradas de este mapa son texto fijo en castellano, gap ya existente en
+  /// esta pantalla — no se toca aquí, solo la etiqueta nueva sigue la regla
+  /// del proyecto de que todo string nuevo va por los 3 arb).
+  String _actionLabel(BuildContext context) {
+    if (entry.action == 'user_signed_in') {
+      return AppLocalizations.of(context)!.auditActionUserSignedIn;
+    }
+    return _actionLabels[entry.action] ?? entry.action;
+  }
 
   IconData get _icon => _actionIcons[entry.action] ?? Icons.history;
 
@@ -179,7 +190,7 @@ class _AuditEntryTile extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: Icon(_icon),
-        title: Text(_actionLabel),
+        title: Text(_actionLabel(context)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

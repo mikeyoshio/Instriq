@@ -11,6 +11,7 @@ import '../services/theme_service.dart';
 import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'knowledge_dashboard_screen.dart';
+import 'manage_teams_screen.dart';
 
 /// Cuenta, idioma, tema y — si `ProfileService.instance.isAdmin` —
 /// administración del grupo. Todo esto vivía como botones sueltos en el
@@ -80,6 +81,13 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     _refresh();
   }
 
+  Future<void> _openManageTeams() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ManageTeamsScreen()),
+    );
+    _refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -145,6 +153,13 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                   title: l10n.knowledgeDashboardTitle,
                   subtitle: l10n.knowledgeDashboardSubtitle,
                   onTap: _openKnowledgeDashboard,
+                ),
+                const SizedBox(height: InstriqSpacing.sm),
+                InstriqListItem(
+                  icon: Icons.groups_outlined,
+                  title: l10n.manageTeamsTitle,
+                  subtitle: l10n.manageTeamsSubtitle,
+                  onTap: _openManageTeams,
                 ),
               ],
             ],

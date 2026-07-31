@@ -519,5 +519,23 @@
   "specialtySectionCustomInstruments": "Instrumental personalitzat",
   "specialtyDetailEmptyState": "Encara no hi ha contingut associat a aquesta especialitat.",
   "technicalIfuTitleLabel": "Títol de les instruccions d'ús",
-  "technicalIfuUrlLabel": "URL de les instruccions d'ús"
+  "technicalIfuUrlLabel": "URL de les instruccions d'ús",
+
+  "auditActionUserSignedIn": "Ha iniciat sessió",
+
+  "manageTeamsTitle": "Equips",
+  "manageTeamsSubtitle": "Assigna rols d'espai a equips sencers d'un sol cop",
+  "teamsSectionHeader": "Equips",
+  "newTeamLabel": "Nou equip",
+  "teamNameLabel": "Nom de l'equip",
+  "teamMembersCountTitle": "{count, plural, one {1 membre} other {{count} membres}}",
+  "@teamMembersCountTitle": {"placeholders": {"count": {"type": "int"}}},
+  "deleteTeamTitle": "Eliminar equip",
+  "deleteTeamConfirmBody": "Vols eliminar \"{name}\"? Aquesta acció no es pot desfer.",
+  "@deleteTeamConfirmBody": {"placeholders": {"name": {"type": "String"}}},
+  "noTeamsYet": "Encara no hi ha equips. Crea el primer amb el botó +.",
+  "teamsLoadError": "No s'han pogut carregar els equips: {error}",
+  "@teamsLoadError": {"placeholders": {"error": {"type": "String"}}},
+
+  "preferenceCardTitle": "Targeta de preferència"
 }

@@ -6,10 +6,13 @@ import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
-import '../widgets/offline_banner.dart';
 import 'preference_card_detail_screen.dart';
 import 'preference_card_form_screen.dart';
 
+/// Lista de tarjetas de preferencia de un espacio, agrupadas por cirujano
+/// (resuelto desde la versión publicada de cada tarjeta). Calcado en el
+/// manejo de cabecera+versión de [TraysScreen] — incluye el estado "sin
+/// publicar" para tarjetas cuyo primer borrador todavía no se ha aprobado.
 class PreferenceCardsScreen extends StatefulWidget {
   final Workspace workspace;
   final WorkspaceRole? myRole;
@@ -24,7 +27,6 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
   String _query = '';
   bool _loading = true;
   String? _error;
-  bool _fromCache = false;
 
   @override
   void initState() {
@@ -43,7 +45,6 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
         PreferenceCardService.instance.fetchCards(widget.workspace.id),
         SurgeonService.instance.fetchForOrganization(),
       ]);
-      _fromCache = PreferenceCardService.instance.cardsFromCache;
     } catch (e) {
       _error = l10n.preferenceCardsLoadError(e.toString());
     }
@@ -54,7 +55,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
   /// [SurgeonService] ya cargado en [_load] — nunca vacío para que el
   /// agrupado tenga una clave estable incluso sin cirujano asignado.
   String _surgeonLabel(AppLocalizations l10n, PreferenceCard card) {
-    final surgeonId = card.surgeonId;
+    final surgeonId = card.publishedVersion?.surgeonId;
     if (surgeonId == null) return l10n.noSurgeonAssignedLabel;
     return SurgeonService.instance.byId(surgeonId)?.name ?? l10n.noSurgeonAssignedLabel;
   }
@@ -87,11 +88,11 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
       );
     }
 
-    final cards = PreferenceCardService.instance.cards.where((c) {
+    final cards = PreferenceCardService.instance.cardsOfWorkspace(widget.workspace.id).where((c) {
       if (_query.isEmpty) return true;
       final q = _query.toLowerCase();
       return _surgeonLabel(l10n, c).toLowerCase().contains(q) ||
-          c.procedureName.toLowerCase().contains(q);
+          (c.publishedVersion?.procedureName ?? '').toLowerCase().contains(q);
     }).toList();
 
     final bySurgeon = <String, List<PreferenceCard>>{};
@@ -119,11 +120,6 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
           : null,
       body: Column(
         children: [
-          if (_fromCache)
-            const Padding(
-              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
-              child: OfflineBanner(),
-            ),
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
@@ -140,10 +136,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                 ? Center(
                     child: Padding(
                       padding: const EdgeInsets.all(24),
-                      child: Text(
-                        l10n.noCardsYet,
-                        textAlign: TextAlign.center,
-                      ),
+                      child: Text(l10n.noCardsYet, textAlign: TextAlign.center),
                     ),
                   )
                 : ListView.builder(
@@ -158,18 +151,14 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                           title: Text(surgeon, style: const TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Text(l10n.procedureCount(surgeonCards.length)),
                           children: surgeonCards.map((card) {
+                            final published = card.publishedVersion;
                             return ListTile(
-                              title: Text(card.procedureName),
-                              subtitle: Text(l10n.instrumentsCount(card.items.length)),
+                              title: Text(published?.procedureName ?? l10n.unpublished),
+                              subtitle: Text(l10n.instrumentsCount(published?.items.length ?? 0)),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (card.pendingSync)
-                                    const Padding(
-                                      padding: EdgeInsets.only(right: 4),
-                                      child: PendingSyncChip(),
-                                    ),
-                                  if (card.validated)
+                                  if (published?.validatedBySurgeon ?? false)
                                     const Padding(
                                       padding: EdgeInsets.only(right: 4),
                                       child: Icon(Icons.verified, color: Colors.green, size: 18),

@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
-import '../models/preference_card.dart';
 
 /// Envuelve un resultado que puede venir de red o de caché, para que la UI
 /// pueda distinguir y mostrar el aviso "sin conexión" cuando corresponda.
@@ -18,10 +17,15 @@ class CachedResult<T> {
 
 /// Guarda en `shared_preferences` (como JSON, mismo patrón que
 /// [ThemeService]/[LocaleService]) el último resultado conocido de red para
-/// técnicas/protocolos y tarjetas de preferencia, para que las pantallas de
-/// lectura sigan funcionando sin conexión con el último contenido
-/// sincronizado. No es una base de datos: solo el último snapshot por
-/// workspace/documento, suficiente para el volumen de datos de la app.
+/// técnicas/protocolos, para que las pantallas de lectura sigan funcionando
+/// sin conexión con el último contenido sincronizado. No es una base de
+/// datos: solo el último snapshot por workspace/documento, suficiente para
+/// el volumen de datos de la app.
+///
+/// Las tarjetas de preferencia ya no se cachean aquí: con el modelo de
+/// versiones (Fase E) una tarjeta es cabecera + versión publicada, no una
+/// fila plana — ver la nota de regresión offline en
+/// [PreferenceCardService].
 class OfflineCacheService {
   OfflineCacheService._();
   static final OfflineCacheService instance = OfflineCacheService._();
@@ -32,7 +36,6 @@ class OfflineCacheService {
 
   static String _documentsKey(String workspaceId) => 'cache_group_documents_$workspaceId';
   static String _versionHistoryKey(String documentId) => 'cache_group_document_versions_$documentId';
-  static String _cardsKey(String workspaceId) => 'cache_preference_cards_$workspaceId';
   static const _timestampSuffix = '_cached_at';
 
   Future<void> _write(String key, dynamic jsonValue) async {
@@ -76,23 +79,6 @@ class OfflineCacheService {
     if (raw == null) return null;
     final list = (jsonDecode(raw) as List<dynamic>)
         .map((r) => GroupDocumentVersion.fromRow((r as Map).cast<String, dynamic>()))
-        .toList();
-    return CachedResult(data: list, isFromCache: true, cachedAt: _timestampFor(prefs, key));
-  }
-
-  // --- Tarjetas de preferencia por workspace ---
-
-  Future<void> cacheCards(String workspaceId, List<PreferenceCard> cards) async {
-    await _write(_cardsKey(workspaceId), cards.map((c) => c.toCacheRow()).toList());
-  }
-
-  Future<CachedResult<List<PreferenceCard>>?> getCachedCards(String workspaceId) async {
-    final prefs = await _sp;
-    final key = _cardsKey(workspaceId);
-    final raw = prefs.getString(key);
-    if (raw == null) return null;
-    final list = (jsonDecode(raw) as List<dynamic>)
-        .map((r) => PreferenceCard.fromRow((r as Map).cast<String, dynamic>()))
         .toList();
     return CachedResult(data: list, isFromCache: true, cachedAt: _timestampFor(prefs, key));
   }
