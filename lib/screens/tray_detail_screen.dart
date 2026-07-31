@@ -14,6 +14,7 @@ import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/tag_service.dart';
 import '../services/tray_service.dart';
+import '../services/usage_analytics_service.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_form_screen.dart';
@@ -52,6 +53,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
     _loadTags();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _tray.id);
+      UsageAnalyticsService.instance.recordView(_refType, _tray.id);
       _loadFavoriteState();
     }
   }

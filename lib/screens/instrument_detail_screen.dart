@@ -22,6 +22,7 @@ import '../services/recent_activity_service.dart';
 import '../services/reference_document_service.dart';
 import '../services/sterilization_service.dart';
 import '../services/tag_service.dart';
+import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/tag_picker.dart';
 import 'manufacturer_detail_screen.dart';
@@ -65,6 +66,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       // Fire-and-forget: no debe bloquear ni fallar visiblemente si el
       // usuario es invitado o la RLS lo deniega (ver FavoritesService).
       RecentActivityService.instance.recordView(_refType, widget.instrument.id);
+      UsageAnalyticsService.instance.recordView(_refType, widget.instrument.id);
       _loadFavoriteState();
     }
   }

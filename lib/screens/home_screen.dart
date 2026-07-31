@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -20,6 +22,7 @@ import '../services/group_document_service.dart';
 import '../services/profile_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/tray_service.dart';
+import '../services/usage_analytics_service.dart';
 import '../services/workspace_service.dart';
 import '../utils/ref_resolver.dart';
 import 'catalog_screen.dart';
@@ -90,6 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
   String _query = '';
   String? _appVersion;
 
+  // Debounce solo para el registro de analítica de uso (ver
+  // supabase/schema_v23_usage_analytics.sql) — el filtrado en vivo de
+  // _buildSearchResults sigue sin debounce, tecla a tecla, para no introducir
+  // latencia percibida en la búsqueda en sí.
+  Timer? _searchAnalyticsDebounce;
+
   bool _loadingGroupContent = true;
   List<Workspace> _workspaces = [];
   List<GroupDocument> _techniques = [];
@@ -118,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _searchAnalyticsDebounce?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -290,6 +300,38 @@ class _HomeScreenState extends State<HomeScreen> {
     _refreshAfterReturn();
   }
 
+  /// Duplica los predicados de `_buildSearchResults` a propósito: se evalúa
+  /// tras el debounce (500ms después de dejar de escribir), un instante
+  /// distinto del que dibuja la lista, así que no puede compartir listas ya
+  /// construidas en build().
+  bool _hasAnySearchResults(String query, String languageCode) {
+    final q = query.toLowerCase();
+    return kInstruments.any((i) => _matchesInstrument(i, q, languageCode)) ||
+        _techniques.any((d) => (d.publishedVersion?.title ?? '').toLowerCase().contains(q)) ||
+        _protocols.any((d) => (d.publishedVersion?.title ?? '').toLowerCase().contains(q)) ||
+        _trays.any((t) => (t.publishedVersion?.name ?? '').toLowerCase().contains(q)) ||
+        _customInstruments.any((i) => i.name.toLowerCase().contains(q));
+  }
+
+  /// Solo cuando hay a qué organización atribuir el evento (mismo criterio de
+  /// guest-gating que favoritos/recientes en esta pantalla) — evita la
+  /// llamada de red para invitados aunque el RPC ya sea un no-op para ellos.
+  void _scheduleSearchAnalytics(String value) {
+    _searchAnalyticsDebounce?.cancel();
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return;
+    if (AuthService.instance.currentUser == null || !ProfileService.instance.hasHospital) return;
+    _searchAnalyticsDebounce = Timer(const Duration(milliseconds: 500), () {
+      if (!mounted) return;
+      final languageCode = Localizations.localeOf(context).languageCode;
+      if (_hasAnySearchResults(trimmed, languageCode)) {
+        UsageAnalyticsService.instance.recordSearch(trimmed);
+      } else {
+        UsageAnalyticsService.instance.recordZeroResultSearch(trimmed);
+      }
+    });
+  }
+
   bool _matchesInstrument(Instrument instrument, String query, String languageCode) {
     return instrument.name.toLowerCase().contains(query) ||
         instrument.aliases.any((alias) => alias.toLowerCase().contains(query)) ||
@@ -349,12 +391,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       : IconButton(
                           icon: const Icon(Icons.clear),
                           onPressed: () {
+                            _searchAnalyticsDebounce?.cancel();
                             _searchController.clear();
                             setState(() => _query = '');
                           },
                         ),
                 ),
-                onChanged: (value) => setState(() => _query = value),
+                onChanged: (value) {
+                  setState(() => _query = value);
+                  _scheduleSearchAnalytics(value);
+                },
               ),
             ),
             Expanded(

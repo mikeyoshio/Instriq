@@ -537,5 +537,21 @@
   "teamsLoadError": "No se pudieron cargar los equipos: {error}",
   "@teamsLoadError": {"placeholders": {"error": {"type": "String"}}},
 
-  "preferenceCardTitle": "Tarjeta de preferencia"
+  "preferenceCardTitle": "Tarjeta de preferencia",
+
+  "usageSectionTitle": "Uso",
+  "usageSectionSubtitle": "Qué se consulta, qué se busca y qué queda pendiente — últimos 30 días.",
+  "usageLoadError": "No se pudieron cargar los datos de uso: {error}",
+  "@usageLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "usageTopViewedTitle": "Más consultado",
+  "usageTopSearchesTitle": "Búsquedas más frecuentes",
+  "usageZeroResultSearchesTitle": "Búsquedas sin resultados",
+  "usagePendingDraftsTitle": "Borradores pendientes por persona",
+  "usageEmptyState": "Todavía no hay datos",
+  "usageViewCountLabel": "{count, plural, one {1 vista} other {{count} vistas}}",
+  "@usageViewCountLabel": {"placeholders": {"count": {"type": "int"}}},
+  "usageSearchCountLabel": "{count, plural, one {1 búsqueda} other {{count} búsquedas}}",
+  "@usageSearchCountLabel": {"placeholders": {"count": {"type": "int"}}},
+  "usageDraftCountLabel": "{count, plural, one {1 borrador} other {{count} borradores}}",
+  "@usageDraftCountLabel": {"placeholders": {"count": {"type": "int"}}}
 }

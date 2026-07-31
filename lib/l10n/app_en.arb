@@ -537,5 +537,21 @@
   "teamsLoadError": "Couldn't load teams: {error}",
   "@teamsLoadError": {"placeholders": {"error": {"type": "String"}}},
 
-  "preferenceCardTitle": "Preference card"
+  "preferenceCardTitle": "Preference card",
+
+  "usageSectionTitle": "Usage",
+  "usageSectionSubtitle": "What's viewed, what's searched, and what's left pending — last 30 days.",
+  "usageLoadError": "Couldn't load usage data: {error}",
+  "@usageLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "usageTopViewedTitle": "Most viewed",
+  "usageTopSearchesTitle": "Most frequent searches",
+  "usageZeroResultSearchesTitle": "Searches with no results",
+  "usagePendingDraftsTitle": "Pending drafts by person",
+  "usageEmptyState": "No data yet",
+  "usageViewCountLabel": "{count, plural, one {1 view} other {{count} views}}",
+  "@usageViewCountLabel": {"placeholders": {"count": {"type": "int"}}},
+  "usageSearchCountLabel": "{count, plural, one {1 search} other {{count} searches}}",
+  "@usageSearchCountLabel": {"placeholders": {"count": {"type": "int"}}},
+  "usageDraftCountLabel": "{count, plural, one {1 draft} other {{count} drafts}}",
+  "@usageDraftCountLabel": {"placeholders": {"count": {"type": "int"}}}
 }

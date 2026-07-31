@@ -14,6 +14,7 @@ import '../services/group_document_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/tag_service.dart';
+import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/offline_banner.dart';
 import 'group_document_form_screen.dart';
@@ -51,6 +52,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     _loadTags();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _document.id);
+      UsageAnalyticsService.instance.recordView(_refType, _document.id);
       _loadFavoriteState();
     }
   }
