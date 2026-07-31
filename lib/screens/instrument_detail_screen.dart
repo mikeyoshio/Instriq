@@ -776,7 +776,7 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
               Text(l10n.sterilizationSectionTitle, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
               DropdownButtonFormField<SterilizationMethod>(
-                value: _method,
+                initialValue: _method,
                 decoration: InputDecoration(
                   labelText: l10n.sterilizationMethodLabel,
                   border: const OutlineInputBorder(),

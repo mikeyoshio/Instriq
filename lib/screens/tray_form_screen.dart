@@ -229,7 +229,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DropdownButtonFormField<String?>(
-          value: _specialtyId,
+          initialValue: _specialtyId,
           isExpanded: true,
           decoration: InputDecoration(labelText: l10n.specialtyLabel, border: const OutlineInputBorder()),
           items: [
