@@ -131,50 +131,7 @@ flutter run -d chrome        # navegador
 - [x] Versionado y flujo de aprobación en tarjetas de preferencia (antes se editaban directo)
 - [x] Actualización de toolchain para el requisito de Google Play de `targetSdk` 36/Android 16 (Flutter, AGP, Kotlin, Gradle, JDK 17)
 
-### Aplazado (acción externa, no bloquea nada)
-
-- [ ] Subida manual del AAB a Play Console — AAB firmado listo (`android/app/instriq-release.jks`); requiere cuenta de Google, solo puede hacerla el propietario del proyecto
-- [ ] Verificar en producción los flujos D/E con usuario autenticado real (crear equipo, asignar rol a equipo, borrador→revisión→publicación de tarjeta de preferencia) — solo probado en modo invitado durante el desarrollo
-
-### A continuar
-
-- [ ] Diseñar versionado para instrumental personalizado del equipo y para esterilización/ficha técnica del catálogo (dónde viven fotos/variantes, quién aprueba un cambio a un dato global del catálogo)
-- [ ] Progreso de aprendizaje sincronizado en Supabase (hoy solo local por dispositivo)
-- [ ] Modo sin conexión para bandejas (hoy solo técnicas/protocolos/tarjetas)
-- [ ] Unificar las dos taxonomías de especialidad (14 oficiales RD 183/2008 vs. 16 del catálogo de instrumental)
-- [ ] Localizar el campo de observaciones de los métodos de esterilización (hoy solo en castellano)
-- [ ] Migrar a "Built-in Kotlin" de Flutter (aviso de la propia herramienta, no urgente — el build actual funciona)
-- [ ] Red de conocimiento completa (instrumental ↔ técnicas ↔ bandejas ↔ protocolos ↔ documentos de referencia)
-- [ ] Vídeo y Nota como entidades de primer nivel del grafo de conocimiento
-- [ ] Sistema de donaciones transparente
-
-## Èpiques de producte (visió a mig termini)
-
-Vuit línies de treball, no encara planificades en fases — l'ordre reflecteix prioritat.
-
-**EPIC 1 · Knowledge Graph**
-Moltes entitats ja existeixen (instrumental, tècniques, safates, cirurgians, fabricants...); falta relacionar-les entre si. Exemple de cadena real: Colecistectomia → *utilitza* → Kelly → *fabricat per* → Aesculap → *compatible amb* → Autoclau Vapor → *present a* → Safata General → *preferida pel* → Dr. Garcia. Això converteix Instriq en un graf de coneixement, no en una wiki.
-
-**EPIC 2 · Clinical Workspace**
-No més fitxes soltes — un únic espai de treball per procediment. Exemple, "Colecistectomia laparoscòpica" hauria de reunir en una sola pantalla: resum, passos, vídeo, instrumental, safata, fungible, sutures, implants, posicionament, esterilització, IFU, notes, preferències i historial.
-
-**EPIC 3 · CSSD**
-Un mòdul complet, no un camp més. Cadena d'entitats: Instrument → Mètodes → Paràmetres → Compatibilitats → Incidències → Lubricació → Manteniment → IFU → Fabricant.
-
-**EPIC 4 · Bandejes 2.0**
-Avui les safates només existeixen com a llistat. Afegir: checklist, posicions, fotos, versions, preparació, control de qualitat, validació i duplicació.
-
-**EPIC 5 · Cerca Intel·ligent**
-La cerca ha de ser el cor d'Instriq: trobar qualsevol cosa, no només noms exactes ("Kelly", "Cole", "Autoclau", "Trauma", "Dr Garcia", "Tisores", "ETHICON", "Plasma", "Bisturí"), amb resultats agrupats per tipus d'entitat.
-
-**EPIC 6 · IA**
-Un cop el graf estigui complet: preguntes, comparacions, explicacions, resums i detecció de documentació incompleta, relacionant contingut existent. Mai inventar informació — sempre indicar la font.
-
-**EPIC 7 · Offline**
-Més important del que sembla: molts hospitals tenen mala cobertura. Cache intel·ligent, sincronització, resolució de conflictes, última versió coneguda i treball offline complet (avui parcial: només tècniques/protocols/targetes).
-
-**EPIC 8 · Aprenentatge contextual**
-La diferència d'Instriq davant Moodle o un LMS genèric: aprenentatge des del propi instrument, no des d'un curs. Veure un instrument → començar una sessió → fer preguntes → repetició espaiada → recordatoris → progrés → estadístiques.
+Backlog completo (pendientes, EPICs de producto y revisión arquitectónica previa a cada uno): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
 
 ## Contacto
 
