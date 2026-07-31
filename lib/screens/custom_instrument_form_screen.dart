@@ -236,7 +236,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
-              value: _specialtyId,
+              initialValue: _specialtyId,
               isExpanded: true,
               decoration: InputDecoration(
                 labelText: l10n.customInstrumentSpecialtyLabel,

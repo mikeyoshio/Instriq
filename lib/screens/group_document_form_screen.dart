@@ -141,7 +141,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 TextField(controller: controller, autofocus: true, maxLines: 3),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String?>(
-                  value: category,
+                  initialValue: category,
                   isExpanded: true,
                   decoration: InputDecoration(
                     labelText: l10n.stepCategoryLabel,
@@ -249,7 +249,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DropdownButtonFormField<String?>(
-          value: _specialtyId,
+          initialValue: _specialtyId,
           isExpanded: true,
           decoration: InputDecoration(
             labelText: l10n.specialtyLabel,
@@ -332,9 +332,8 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _steps.length,
-              onReorder: (oldIndex, newIndex) {
+              onReorderItem: (oldIndex, newIndex) {
                 setState(() {
-                  if (newIndex > oldIndex) newIndex--;
                   final step = _steps.removeAt(oldIndex);
                   _steps.insert(newIndex, step);
                 });
