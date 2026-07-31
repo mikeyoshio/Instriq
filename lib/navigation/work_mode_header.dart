@@ -5,6 +5,13 @@ import '../models/work_mode.dart';
 import '../services/profile_service.dart';
 import '../widgets/work_mode_picker.dart';
 
+/// Centinela para el ítem "Sense preferència" del menú. `PopupMenuButton<T>`
+/// conflacia "menú cerrado sin elegir" con "se eligió `value: null`" (ambos
+/// casos hacen que `showMenu` devuelva `null` internamente), así que
+/// `onSelected` nunca se dispara si un `PopupMenuItem` usa `value: null` —
+/// hay que representar "sin preferencia" con un valor no nulo distinto.
+const Object _noPreference = Object();
+
 /// Barra prima sobre `navigationShell` (ver app_shell.dart) con el nombre
 /// del hospital y el selector de modo de trabajo activo. Escucha
 /// [ProfileService.activeWorkModeNotifier] para repintar su propia etiqueta
@@ -39,16 +46,17 @@ class WorkModeHeader extends StatelessWidget {
                 ValueListenableBuilder<WorkMode?>(
                   valueListenable: ProfileService.instance.activeWorkModeNotifier,
                   builder: (context, mode, _) {
-                    return PopupMenuButton<WorkMode?>(
-                      initialValue: mode,
-                      onSelected: ProfileService.instance.setActiveWorkMode,
+                    return PopupMenuButton<Object>(
+                      initialValue: mode ?? _noPreference,
+                      onSelected: (value) => ProfileService.instance
+                          .setActiveWorkMode(identical(value, _noPreference) ? null : value as WorkMode),
                       itemBuilder: (context) => [
-                        PopupMenuItem<WorkMode?>(
-                          value: null,
+                        PopupMenuItem<Object>(
+                          value: _noPreference,
                           child: Text(l10n.workModeNoPreference),
                         ),
                         for (final option in WorkMode.values)
-                          PopupMenuItem<WorkMode?>(
+                          PopupMenuItem<Object>(
                             value: option,
                             child: Text(WorkModePicker.labelFor(l10n, option)),
                           ),
