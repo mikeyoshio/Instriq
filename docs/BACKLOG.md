@@ -395,6 +395,8 @@ Cada EPIC avaluat segons els 5 criteris anteriors. Base de referència: el model
 * **Dependències**: cap bloqueig.
 * **Veredicte**: EPIC de risc més baix; es pot fer en paral·lel a EPIC 1, sense esperar res.
 
+**Estat: fet (2026-08).** Implementat sobre `tray_versions`/`trays` existents: posició opcional per ítem, duplicar bandeja (`duplicate_tray`, sense copiar fotos — limitació de Storage documentada), i **sessions reals de preparació** (`tray_preparation_sessions`) amb control de qualitat/validació — es va preguntar explícitament l'abast d'aquest últim punt (flag lleuger vs. sessió real amb historial) i es va triar la sessió real. Verificat amb `flutter analyze`/`flutter test` i en emulador (mode convidat, sense regressions). Pendent, com sempre amb aquests fluxos: provar amb compte autenticat real preparar una safata i fer-ne el control de qualitat.
+
 ## EPIC 5 · Smart Search
 
 * **Model de domini**: cap entitat nova; cal una cerca creuada (full-text Postgres, `tsvector`/GIN) sobre Instrument/GroupDocument/Tray/PreferenceCard/Manufacturer/Surgeon/Tag.

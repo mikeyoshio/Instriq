@@ -121,30 +121,46 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
     }
   }
 
-  Future<void> _editQty(int index) async {
+  Future<void> _editItem(int index) async {
     final l10n = AppLocalizations.of(context)!;
-    final controller = TextEditingController(text: '${_items[index].expectedQty}');
-    final qty = await showDialog<int>(
+    final qtyController = TextEditingController(text: '${_items[index].expectedQty}');
+    final positionController = TextEditingController(text: _items[index].position ?? '');
+    final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.expectedQtyLabel),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          keyboardType: TextInputType.number,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: qtyController,
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: l10n.expectedQtyLabel, border: const OutlineInputBorder()),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: positionController,
+              decoration: InputDecoration(labelText: l10n.trayItemPositionLabel, border: const OutlineInputBorder()),
+            ),
+          ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, int.tryParse(controller.text.trim())),
-            child: Text(l10n.saveAction),
-          ),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.saveAction)),
         ],
       ),
     );
-    if (qty != null && qty > 0) {
-      setState(() => _items[index] = _items[index].copyWith(expectedQty: qty));
-    }
+    if (result != true) return;
+    final qty = int.tryParse(qtyController.text.trim());
+    final position = positionController.text.trim();
+    setState(() {
+      _items[index] = _items[index].copyWith(
+        expectedQty: (qty != null && qty > 0) ? qty : null,
+        position: position.isEmpty ? null : position,
+        clearPosition: position.isEmpty,
+      );
+    });
   }
 
   Future<void> _pickPhoto() async {
@@ -307,8 +323,12 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
                       : Icons.precision_manufacturing_outlined,
                 ),
                 title: Text(item.resolveName(_customInstruments)),
-                subtitle: Text(l10n.expectedQtyValue(item.expectedQty)),
-                onTap: () => _editQty(index),
+                subtitle: Text(
+                  item.position == null
+                      ? l10n.expectedQtyValue(item.expectedQty)
+                      : '${l10n.expectedQtyValue(item.expectedQty)} · ${item.position}',
+                ),
+                onTap: () => _editItem(index),
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () => setState(() => _items.removeAt(index)),

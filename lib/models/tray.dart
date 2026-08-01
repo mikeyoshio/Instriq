@@ -24,22 +24,30 @@ class TrayItem {
   final String instrumentRefId;
   final int expectedQty;
 
+  /// Posición física dentro de la bandeja (p.ej. "Bandeja superior, fila 1"),
+  /// texto libre porque el layout de una safata varía mucho entre equipos —
+  /// no hay un esquema de slots estandarizado que valga para todos (EPIC 4).
+  final String? position;
+
   const TrayItem({
     required this.instrumentRefType,
     required this.instrumentRefId,
     this.expectedQty = 1,
+    this.position,
   });
 
-  TrayItem copyWith({int? expectedQty}) => TrayItem(
+  TrayItem copyWith({int? expectedQty, String? position, bool clearPosition = false}) => TrayItem(
         instrumentRefType: instrumentRefType,
         instrumentRefId: instrumentRefId,
         expectedQty: expectedQty ?? this.expectedQty,
+        position: clearPosition ? null : (position ?? this.position),
       );
 
   Map<String, dynamic> toJson() => {
         'instrument_ref_type': instrumentRefType.dbValue,
         'instrument_ref_id': instrumentRefId,
         'expected_qty': expectedQty,
+        'position': position,
       };
 
   factory TrayItem.fromJson(Map<String, dynamic> json) {
@@ -47,6 +55,7 @@ class TrayItem {
       instrumentRefType: InstrumentRefTypeLabel.fromDb(json['instrument_ref_type'] as String),
       instrumentRefId: json['instrument_ref_id'] as String,
       expectedQty: (json['expected_qty'] as num?)?.toInt() ?? 1,
+      position: json['position'] as String?,
     );
   }
 
