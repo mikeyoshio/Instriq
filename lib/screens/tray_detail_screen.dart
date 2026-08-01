@@ -22,6 +22,8 @@ import 'group_document_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_form_screen.dart';
+import 'tray_preparation_form_screen.dart';
+import 'tray_preparation_sessions_screen.dart';
 import 'tray_version_history_screen.dart';
 
 /// Vista de lectura de la versión publicada de una bandeja (o el borrador
@@ -165,6 +167,37 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
     _load();
   }
 
+  Future<void> _prepare() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => TrayPreparationFormScreen(tray: _tray)),
+    );
+  }
+
+  Future<void> _openPreparationHistory() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => TrayPreparationSessionsScreen(tray: _tray, myRole: widget.myRole),
+      ),
+    );
+  }
+
+  Future<void> _duplicate() async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final newDraft = await TrayService.instance.duplicateTray(_tray.id);
+      if (!mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => TrayFormScreen(workspaceId: _tray.workspaceId, existingDraft: newDraft),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
   Future<void> _delete() async {
     final l10n = AppLocalizations.of(context)!;
     final name = _tray.publishedVersion?.name ?? '';
@@ -233,6 +266,31 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                     child: Text(l10n.docNotPublishedYet),
                   )
                 else ...[
+                  if (widget.myRole != null) ...[
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: _prepare,
+                            icon: const Icon(Icons.playlist_add_check_outlined),
+                            label: Text(l10n.prepareTrayAction),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: _openPreparationHistory,
+                          icon: const Icon(Icons.history_edu_outlined),
+                          tooltip: l10n.trayPreparationHistoryLabel,
+                        ),
+                        if (canEdit)
+                          IconButton(
+                            onPressed: _duplicate,
+                            icon: const Icon(Icons.copy_all_outlined),
+                            tooltip: l10n.duplicateTrayAction,
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   if (_specialty != null || published.specialty != null) ...[
                     _specialty != null
                         ? InputChip(
@@ -276,6 +334,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                                   : Icons.precision_manufacturing_outlined,
                             ),
                             title: Text(item.resolveName(_customInstruments)),
+                            subtitle: item.position != null ? Text(item.position!) : null,
                             trailing: Text(l10n.expectedQtyValue(item.expectedQty)),
                           ),
                         )),

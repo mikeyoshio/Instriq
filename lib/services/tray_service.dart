@@ -176,6 +176,14 @@ class TrayService {
     return result;
   }
 
+  /// Duplica la definición publicada de [trayId] en una bandeja nueva, como
+  /// primer borrador — no copia fotos (viven en Storage atadas al tray_id
+  /// original, fuera de alcance de EPIC 4 · Bandejas 2.0).
+  Future<TrayVersion> duplicateTray(String trayId) async {
+    final versionRow = await _client.rpc('duplicate_tray', params: {'p_tray_id': trayId});
+    return TrayVersion.fromRow(versionRow as Map<String, dynamic>);
+  }
+
   Future<void> deleteTray(String id) async {
     await _client.from('trays').delete().eq('id', id);
     _trays.removeWhere((t) => t.id == id);
