@@ -22,6 +22,12 @@ class TagService {
     _tags = (rows as List<dynamic>).map((r) => Tag.fromRow(r as Map<String, dynamic>)).toList();
   }
 
+  /// Catálogo completo de etiquetas (mismo nombre que
+  /// [ManufacturerService.fetchAll]/[SurgeonService.fetchForOrganization] —
+  /// para cargarlo una vez y filtrar después en memoria sin volver a `await`,
+  /// ver `home_screen.dart`).
+  Future<List<Tag>> fetchAll() => searchByName('');
+
   /// Carga (o reutiliza el caché de) el catálogo completo de etiquetas y
   /// filtra en memoria — mismo patrón que
   /// [ManufacturerService.searchByName]/[SurgeonService.searchByName].

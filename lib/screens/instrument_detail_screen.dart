@@ -29,6 +29,7 @@ import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/sterilization_method_label.dart';
 import '../widgets/tag_picker.dart';
 import 'group_document_detail_screen.dart';
 import 'manufacturer_detail_screen.dart';
@@ -524,7 +525,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(method.method.label, style: Theme.of(context).textTheme.titleSmall),
+            Text(sterilizationMethodValueLabel(l10n, method.method), style: Theme.of(context).textTheme.titleSmall),
             for (final line in details) ...[
               const SizedBox(height: 4),
               Text(line, style: Theme.of(context).textTheme.bodySmall),
@@ -859,7 +860,7 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
                   border: const OutlineInputBorder(),
                 ),
                 items: SterilizationMethod.values
-                    .map((m) => DropdownMenuItem(value: m, child: Text(m.label)))
+                    .map((m) => DropdownMenuItem(value: m, child: Text(sterilizationMethodValueLabel(l10n, m))))
                     .toList(),
                 onChanged: (value) {
                   if (value != null) setState(() => _method = value);
