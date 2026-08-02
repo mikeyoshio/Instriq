@@ -406,6 +406,10 @@ Cada EPIC avaluat segons els 5 criteris anteriors. Base de referència: el model
 * **Dependències**: independent per començar; la cerca semàntica (fase posterior explícita al propi document) comparteix infraestructura d'embeddings amb EPIC 6 — dissenyar-les juntes evita construir-ho dues vegades.
 * **Veredicte**: es pot començar ja (cerca per nom/entitat); ajornar la part semàntica fins decidir EPIC 6.
 
+**Estat: fet (2026-08), la part per nom/entitat.** No es va introduir `pg_trgm`/`tsvector`: totes les llistes rellevants ja es cachegen senceres en memòria a l'escala real de l'app (catàleg de 110 instruments, fabricants/cirurgians/etiquetes d'un hospital), així que el filtratge en client segueix sent l'opció correcta — la infraestructura Postgres queda per quan hi hagi cerca semàntica de veritat (EPIC 6). Ampliat el cercador d'Inici: instrumental ara també per especialitat, categoria i mètode d'esterilització; noves seccions de resultats per fabricants, cirurgians i etiquetes (reutilitzant `ManufacturerDetailScreen`/`SurgeonDetailScreen`/`TagDetailScreen` ja existents — `SurgeonDetailScreen` ja mostra les targetes de preferència del cirurgià, així que no calia afegir-les com a resultat propi). De pas, unificats els dos jocs de predicats duplicats (`_hasAnySearchResults`/`_buildSearchResults`) en un sol càlcul.
+
+Dos bugs reals trobats i arreglats durant la verificació: (1) les etiquetes de mètode d'esterilització eren un text fix en castellà (`SterilizationMethod.label`), així que cercar "Autoclau" en català no trobava res — ara localitzades (`sterilizationMethodValueLabel`, mateix patró que `WorkModePicker.labelFor`) i ja s'usen també a la fitxa d'instrument i al formulari d'admin; (2) el metadata de cerca (fabricants, etiquetes, especialitats, mètodes d'esterilització) es carregava dins del mateix bloc que exigia tenir hospital connectat, així que no funcionava en mode convidat tot i ser catàleg global — separat de la resta de `_loadGroupContent`.
+
 ## EPIC 6 · Clinical AI Assistant
 
 * **Model de domini**: sense impacte fins introduir `pgvector`/embeddings.

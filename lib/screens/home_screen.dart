@@ -12,6 +12,10 @@ import '../models/custom_instrument.dart';
 import '../models/favorite_entry.dart';
 import '../models/group_document.dart';
 import '../models/instrument.dart';
+import '../models/instrument_sterilization.dart';
+import '../models/manufacturer.dart';
+import '../models/surgeon.dart';
+import '../models/tag.dart';
 import '../models/tray.dart';
 import '../models/work_mode.dart';
 import '../models/workspace.dart';
@@ -19,12 +23,18 @@ import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
+import '../services/manufacturer_service.dart';
 import '../services/profile_service.dart';
 import '../services/recent_activity_service.dart';
+import '../services/specialty_service.dart';
+import '../services/sterilization_service.dart';
+import '../services/surgeon_service.dart';
+import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../services/workspace_service.dart';
 import '../utils/ref_resolver.dart';
+import '../widgets/sterilization_method_label.dart';
 import 'catalog_screen.dart';
 import 'custom_instrument_detail_screen.dart';
 import 'group_document_detail_screen.dart';
@@ -32,7 +42,10 @@ import 'group_document_list_screen.dart';
 import 'group_document_review_queue_screen.dart';
 import 'instrument_detail_screen.dart';
 import 'learn_screen.dart';
+import 'manufacturer_detail_screen.dart';
 import 'progress_screen.dart';
+import 'surgeon_detail_screen.dart';
+import 'tag_detail_screen.dart';
 import 'tray_detail_screen.dart';
 import 'trays_screen.dart';
 import 'workspace_list_screen.dart';
@@ -75,6 +88,42 @@ class _PendingApprovalItem {
   const _PendingApprovalItem({required this.title, required this.isTray});
 }
 
+/// Resultado de una búsqueda en Inicio, agrupado por tipo de entidad — un
+/// único cómputo que alimenta tanto el render (`_buildSearchResults`) como el
+/// chequeo de "hay resultados" para la analítica de uso, así los dos nunca
+/// pueden desincronizarse (EPIC 5 · Smart Search).
+class _SearchResults {
+  final List<Instrument> instruments;
+  final List<GroupDocument> techniques;
+  final List<GroupDocument> protocols;
+  final List<Tray> trays;
+  final List<CustomInstrument> customInstruments;
+  final List<Manufacturer> manufacturers;
+  final List<Surgeon> surgeons;
+  final List<Tag> tags;
+
+  const _SearchResults({
+    required this.instruments,
+    required this.techniques,
+    required this.protocols,
+    required this.trays,
+    required this.customInstruments,
+    required this.manufacturers,
+    required this.surgeons,
+    required this.tags,
+  });
+
+  bool get isEmpty =>
+      instruments.isEmpty &&
+      techniques.isEmpty &&
+      protocols.isEmpty &&
+      trays.isEmpty &&
+      customInstruments.isEmpty &&
+      manufacturers.isEmpty &&
+      surgeons.isEmpty &&
+      tags.isEmpty;
+}
+
 /// Destino "Inicio" del shell (ver navigation/app_shell.dart): cerca
 /// prominente arriba de todo, con resultados agregados del catálogo global y
 /// del contenido propio del grupo (todo en cliente, sin RPC nueva — ver
@@ -105,6 +154,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<GroupDocument> _protocols = [];
   List<Tray> _trays = [];
   List<CustomInstrument> _customInstruments = [];
+  List<Tag> _tags = [];
+  Map<String, String> _specialtyLabelById = {};
+  Map<String, List<SterilizationMethod>> _catalogSterilizationMethods = {};
 
   bool _loadingRecentFavorites = true;
   List<_RecentOrFavoriteItem> _recent = [];
@@ -133,6 +185,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadGroupContent() async {
+    // Metadato de catálogo global (fabricantes, etiquetas, especialidades,
+    // métodos de esterilización): disponible también en modo invitado, igual
+    // que el propio catálogo de instrumentos — no depende de tener grupo, así
+    // que se carga ANTES del corte por `hasHospital` de más abajo (EPIC 5 ·
+    // Smart Search). Fabricantes no se guarda en el estado de Home: se busca
+    // directamente sobre el caché en memoria de `ManufacturerService`
+    // (`.searchByName`), esta llamada solo calienta ese caché la primera vez.
+    var tags = <Tag>[];
+    var specialtyLabelById = <String, String>{};
+    var catalogSterilizationMethods = <String, List<SterilizationMethod>>{};
+    try {
+      await ManufacturerService.instance.fetchAll();
+    } catch (_) {
+      // Metadato accesorio de búsqueda: no bloquea el resto de Inicio si falla.
+    }
+    try {
+      tags = await TagService.instance.fetchAll();
+    } catch (_) {
+      // Metadato accesorio de búsqueda: no bloquea el resto de Inicio si falla.
+    }
+    try {
+      final specialties = await SpecialtyService.instance.fetchAll();
+      specialtyLabelById = {for (final s in specialties) s.id: s.label};
+    } catch (_) {
+      // Metadato accesorio de búsqueda: no bloquea el resto de Inicio si falla.
+    }
+    try {
+      catalogSterilizationMethods = await SterilizationService.instance.fetchAllCatalogMethods();
+    } catch (_) {
+      // Metadato accesorio de búsqueda: no bloquea el resto de Inicio si falla.
+    }
+    if (mounted) {
+      setState(() {
+        _tags = tags;
+        _specialtyLabelById = specialtyLabelById;
+        _catalogSterilizationMethods = catalogSterilizationMethods;
+      });
+    }
+
     if (!ProfileService.instance.hasHospital) {
       if (mounted) setState(() => _loadingGroupContent = false);
       return;
@@ -161,6 +252,16 @@ class _HomeScreenState extends State<HomeScreen> {
           // bloquear la agregación del resto de espacios.
         }
       }
+      // Cirujanos: de organización, no por espacio — se carga una sola vez,
+      // no dentro del bucle de arriba. No se guarda en el estado de Home
+      // (mismo criterio que fabricantes): se busca sobre el caché de
+      // `SurgeonService` (`.searchByName`).
+      try {
+        await SurgeonService.instance.fetchForOrganization();
+      } catch (_) {
+        // Metadato accesorio de búsqueda: no bloquea el resto de Inicio si falla.
+      }
+
       if (!mounted) return;
       setState(() {
         _workspaces = workspaces;
@@ -300,17 +401,48 @@ class _HomeScreenState extends State<HomeScreen> {
     _refreshAfterReturn();
   }
 
-  /// Duplica los predicados de `_buildSearchResults` a propósito: se evalúa
-  /// tras el debounce (500ms después de dejar de escribir), un instante
-  /// distinto del que dibuja la lista, así que no puede compartir listas ya
-  /// construidas en build().
-  bool _hasAnySearchResults(String query, String languageCode) {
+  Future<void> _openManufacturer(Manufacturer manufacturer) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => ManufacturerDetailScreen(manufacturer: manufacturer)),
+    );
+  }
+
+  Future<void> _openSurgeon(Surgeon surgeon) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => SurgeonDetailScreen(surgeon: surgeon)),
+    );
+  }
+
+  Future<void> _openTag(Tag tag) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => TagDetailScreen(tag: tag)),
+    );
+  }
+
+  /// Único cómputo de resultados, usado tanto por el render
+  /// (`_buildSearchResults`) como por la analítica de búsqueda tras el
+  /// debounce — antes eran dos listados de predicados mantenidos por
+  /// separado (riesgo de desincronización), ahora es uno solo (EPIC 5).
+  _SearchResults _computeSearchResults(String query, String languageCode, AppLocalizations l10n) {
     final q = query.toLowerCase();
-    return kInstruments.any((i) => _matchesInstrument(i, q, languageCode)) ||
-        _techniques.any((d) => (d.publishedVersion?.title ?? '').toLowerCase().contains(q)) ||
-        _protocols.any((d) => (d.publishedVersion?.title ?? '').toLowerCase().contains(q)) ||
-        _trays.any((t) => (t.publishedVersion?.name ?? '').toLowerCase().contains(q)) ||
-        _customInstruments.any((i) => i.name.toLowerCase().contains(q));
+    final instruments = kInstruments.where((i) => _matchesInstrument(i, q, languageCode, l10n)).toList();
+    final techniques = _techniques.where((d) => _matchesGroupDocument(d, q)).toList();
+    final protocols = _protocols.where((d) => _matchesGroupDocument(d, q)).toList();
+    final trays = _trays.where((t) => _matchesTray(t, q)).toList();
+    final customInstruments = _customInstruments.where((i) => _matchesCustomInstrument(i, q)).toList();
+    final manufacturers = ManufacturerService.instance.searchByName(q);
+    final surgeons = SurgeonService.instance.searchByName(q);
+    final tags = _tags.where((t) => t.name.toLowerCase().contains(q)).toList();
+    return _SearchResults(
+      instruments: instruments,
+      techniques: techniques,
+      protocols: protocols,
+      trays: trays,
+      customInstruments: customInstruments,
+      manufacturers: manufacturers,
+      surgeons: surgeons,
+      tags: tags,
+    );
   }
 
   /// Solo cuando hay a qué organización atribuir el evento (mismo criterio de
@@ -324,7 +456,9 @@ class _HomeScreenState extends State<HomeScreen> {
     _searchAnalyticsDebounce = Timer(const Duration(milliseconds: 500), () {
       if (!mounted) return;
       final languageCode = Localizations.localeOf(context).languageCode;
-      if (_hasAnySearchResults(trimmed, languageCode)) {
+      final l10n = AppLocalizations.of(context)!;
+      final results = _computeSearchResults(trimmed, languageCode, l10n);
+      if (!results.isEmpty) {
         UsageAnalyticsService.instance.recordSearch(trimmed);
       } else {
         UsageAnalyticsService.instance.recordZeroResultSearch(trimmed);
@@ -332,11 +466,42 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  bool _matchesInstrument(Instrument instrument, String query, String languageCode) {
+  bool _matchesInstrument(Instrument instrument, String query, String languageCode, AppLocalizations l10n) {
     return instrument.name.toLowerCase().contains(query) ||
         instrument.aliases.any((alias) => alias.toLowerCase().contains(query)) ||
         instrument.description.forLanguageCode(languageCode).toLowerCase().contains(query) ||
-        instrument.use.forLanguageCode(languageCode).toLowerCase().contains(query);
+        instrument.use.forLanguageCode(languageCode).toLowerCase().contains(query) ||
+        instrument.specialty.label.toLowerCase().contains(query) ||
+        instrument.category.label.toLowerCase().contains(query) ||
+        (_catalogSterilizationMethods[instrument.id] ?? const [])
+            .any((m) => sterilizationMethodValueLabel(l10n, m).toLowerCase().contains(query));
+  }
+
+  /// Especialidad resuelta de una versión publicada (`specialtyId` → label,
+  /// o el texto legado `specialty` si la fila todavía no se migró) — mismo
+  /// criterio de fallback que usan las fichas de detalle.
+  String _resolvedSpecialtyLabel(String? specialtyId, String? legacySpecialty) {
+    if (specialtyId != null) return _specialtyLabelById[specialtyId] ?? '';
+    return legacySpecialty ?? '';
+  }
+
+  bool _matchesGroupDocument(GroupDocument document, String query) {
+    final published = document.publishedVersion;
+    if (published == null) return false;
+    return published.title.toLowerCase().contains(query) ||
+        _resolvedSpecialtyLabel(published.specialtyId, published.specialty).toLowerCase().contains(query);
+  }
+
+  bool _matchesTray(Tray tray, String query) {
+    final published = tray.publishedVersion;
+    if (published == null) return false;
+    return published.name.toLowerCase().contains(query) ||
+        _resolvedSpecialtyLabel(published.specialtyId, published.specialty).toLowerCase().contains(query);
+  }
+
+  bool _matchesCustomInstrument(CustomInstrument instrument, String query) {
+    return instrument.name.toLowerCase().contains(query) ||
+        _resolvedSpecialtyLabel(instrument.specialtyId, instrument.specialty).toLowerCase().contains(query);
   }
 
   String _timeAgo(AppLocalizations l10n, DateTime dateTime) {
@@ -413,26 +578,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSearchResults(BuildContext context, AppLocalizations l10n) {
-    final query = _query.toLowerCase();
     final languageCode = Localizations.localeOf(context).languageCode;
-    final instruments = kInstruments.where((i) => _matchesInstrument(i, query, languageCode)).toList();
-    final techniques = _techniques
-        .where((d) => (d.publishedVersion?.title ?? '').toLowerCase().contains(query))
-        .toList();
-    final protocols =
-        _protocols.where((d) => (d.publishedVersion?.title ?? '').toLowerCase().contains(query)).toList();
-    final trays =
-        _trays.where((t) => (t.publishedVersion?.name ?? '').toLowerCase().contains(query)).toList();
-    final customInstruments =
-        _customInstruments.where((i) => i.name.toLowerCase().contains(query)).toList();
+    final results = _computeSearchResults(_query, languageCode, l10n);
 
-    final hasResults = instruments.isNotEmpty ||
-        techniques.isNotEmpty ||
-        protocols.isNotEmpty ||
-        trays.isNotEmpty ||
-        customInstruments.isNotEmpty;
-
-    if (!hasResults) {
+    if (results.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(InstriqSpacing.xl),
@@ -444,10 +593,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return ListView(
       padding: const EdgeInsets.all(InstriqSpacing.lg),
       children: [
-        if (instruments.isNotEmpty) ...[
+        if (results.instruments.isNotEmpty) ...[
           InstriqSectionHeader(l10n.homeSectionInstruments),
           const SizedBox(height: InstriqSpacing.sm),
-          for (final instrument in instruments) ...[
+          for (final instrument in results.instruments) ...[
             InstriqListItem(
               icon: Icons.build_outlined,
               title: instrument.name,
@@ -457,10 +606,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           const SizedBox(height: InstriqSpacing.md),
         ],
-        if (techniques.isNotEmpty) ...[
+        if (results.techniques.isNotEmpty) ...[
           InstriqSectionHeader(l10n.homeSectionTechniques),
           const SizedBox(height: InstriqSpacing.sm),
-          for (final doc in techniques) ...[
+          for (final doc in results.techniques) ...[
             InstriqListItem(
               icon: Icons.menu_book_outlined,
               title: doc.publishedVersion?.title ?? l10n.unpublished,
@@ -470,10 +619,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           const SizedBox(height: InstriqSpacing.md),
         ],
-        if (protocols.isNotEmpty) ...[
+        if (results.protocols.isNotEmpty) ...[
           InstriqSectionHeader(l10n.homeSectionProtocols),
           const SizedBox(height: InstriqSpacing.sm),
-          for (final doc in protocols) ...[
+          for (final doc in results.protocols) ...[
             InstriqListItem(
               icon: Icons.fact_check_outlined,
               title: doc.publishedVersion?.title ?? l10n.unpublished,
@@ -483,10 +632,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           const SizedBox(height: InstriqSpacing.md),
         ],
-        if (trays.isNotEmpty) ...[
+        if (results.trays.isNotEmpty) ...[
           InstriqSectionHeader(l10n.homeSectionTrays),
           const SizedBox(height: InstriqSpacing.sm),
-          for (final tray in trays) ...[
+          for (final tray in results.trays) ...[
             InstriqListItem(
               icon: Icons.inventory_2_outlined,
               title: tray.publishedVersion?.name ?? l10n.unpublished,
@@ -496,14 +645,53 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           const SizedBox(height: InstriqSpacing.md),
         ],
-        if (customInstruments.isNotEmpty) ...[
+        if (results.customInstruments.isNotEmpty) ...[
           InstriqSectionHeader(l10n.homeSectionCustomInstruments),
           const SizedBox(height: InstriqSpacing.sm),
-          for (final instrument in customInstruments) ...[
+          for (final instrument in results.customInstruments) ...[
             InstriqListItem(
               icon: Icons.precision_manufacturing_outlined,
               title: instrument.name,
               onTap: () => _openCustomInstrument(instrument),
+            ),
+            const SizedBox(height: InstriqSpacing.sm),
+          ],
+          const SizedBox(height: InstriqSpacing.md),
+        ],
+        if (results.manufacturers.isNotEmpty) ...[
+          InstriqSectionHeader(l10n.homeSectionManufacturers),
+          const SizedBox(height: InstriqSpacing.sm),
+          for (final manufacturer in results.manufacturers) ...[
+            InstriqListItem(
+              icon: Icons.precision_manufacturing_outlined,
+              title: manufacturer.name,
+              onTap: () => _openManufacturer(manufacturer),
+            ),
+            const SizedBox(height: InstriqSpacing.sm),
+          ],
+          const SizedBox(height: InstriqSpacing.md),
+        ],
+        if (results.surgeons.isNotEmpty) ...[
+          InstriqSectionHeader(l10n.homeSectionSurgeons),
+          const SizedBox(height: InstriqSpacing.sm),
+          for (final surgeon in results.surgeons) ...[
+            InstriqListItem(
+              icon: Icons.person_outline,
+              title: surgeon.name,
+              onTap: () => _openSurgeon(surgeon),
+            ),
+            const SizedBox(height: InstriqSpacing.sm),
+          ],
+          const SizedBox(height: InstriqSpacing.md),
+        ],
+        if (results.tags.isNotEmpty) ...[
+          InstriqSectionHeader(l10n.homeSectionTags),
+          const SizedBox(height: InstriqSpacing.sm),
+          for (final tag in results.tags) ...[
+            InstriqListItem(
+              icon: Icons.label_outline,
+              title: tag.name,
+              onTap: () => _openTag(tag),
             ),
             const SizedBox(height: InstriqSpacing.sm),
           ],

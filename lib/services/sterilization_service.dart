@@ -56,6 +56,25 @@ class SterilizationService {
     await _client.from('instrument_sterilization_methods').delete().eq('id', id);
   }
 
+  /// Todos los métodos de esterilización del catálogo global, agrupados por
+  /// instrumento — para poder buscar instrumentos por método (p.ej.
+  /// "Autoclau"/"Plasma") en Inicio sin una consulta por instrumento
+  /// (EPIC 5 · Smart Search).
+  Future<Map<String, List<SterilizationMethod>>> fetchAllCatalogMethods() async {
+    final rows = await _client
+        .from('instrument_sterilization_methods')
+        .select('instrument_ref_id, method')
+        .eq('instrument_ref_type', 'catalog');
+    final result = <String, List<SterilizationMethod>>{};
+    for (final r in (rows as List<dynamic>)) {
+      final row = r as Map<String, dynamic>;
+      final refId = row['instrument_ref_id'] as String;
+      final method = SterilizationMethodLabel.fromDb(row['method'] as String);
+      (result[refId] ??= []).add(method);
+    }
+    return result;
+  }
+
   /// Fichas técnicas que referencian un fabricante, para
   /// [ManufacturerDetailScreen] ("usado en"). RLS de `instrument_technical_info`
   /// ya limita lo privado (workspace) al grupo del usuario; el catálogo
