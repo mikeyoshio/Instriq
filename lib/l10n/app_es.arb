@@ -444,6 +444,16 @@
   "resetProgressBody": "Se borrará todo lo aprendido y las puntuaciones. ¿Continuar?",
   "resetLabel": "Reiniciar",
 
+  "startReviewSessionAction": "Iniciar sesión de repaso",
+  "reviewSessionTitle": "Sesión de repaso",
+  "reviewSessionBoxLabel": "Caja {box} de 5",
+  "@reviewSessionBoxLabel": {"placeholders": {"box": {"type": "int"}}},
+  "reviewSessionPrompt": "¿Lo sabías?",
+  "reviewSessionYes": "Sí",
+  "reviewSessionNo": "No",
+  "reviewsDueTodayLabel": "{count} repasos pendientes hoy",
+  "@reviewsDueTodayLabel": {"placeholders": {"count": {"type": "int"}}},
+
   "resultTitle": "Resultado",
   "scoreFraction": "{score} / {total}",
   "@scoreFraction": {"placeholders": {"score": {"type": "int"}, "total": {"type": "int"}}},

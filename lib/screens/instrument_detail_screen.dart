@@ -33,6 +33,7 @@ import '../widgets/sterilization_method_label.dart';
 import '../widgets/tag_picker.dart';
 import 'group_document_detail_screen.dart';
 import 'manufacturer_detail_screen.dart';
+import 'review_session_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_detail_screen.dart';
 
@@ -272,6 +273,22 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                 ),
                 onPressed: () async {
                   await ProgressService.instance.toggleLearned(instrument.id);
+                  setState(() {});
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.replay),
+                label: Text(l10n.startReviewSessionAction),
+                onPressed: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ReviewSessionScreen(instrument: instrument),
+                    ),
+                  );
                   setState(() {});
                 },
               ),

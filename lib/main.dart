@@ -21,6 +21,7 @@ import 'services/connectivity_service.dart';
 import 'services/locale_service.dart';
 import 'services/progress_service.dart';
 import 'services/push_notification_service.dart';
+import 'services/reminder_service.dart';
 import 'services/supabase_config.dart';
 import 'services/sync_queue_service.dart';
 import 'services/theme_service.dart';
@@ -66,7 +67,15 @@ class _InstriqAppState extends State<InstriqApp> {
       }
       if (state.event == AuthChangeEvent.signedIn ||
           state.event == AuthChangeEvent.initialSession) {
-        if (state.session != null) PushNotificationService.instance.initForCurrentUser();
+        if (state.session != null) {
+          PushNotificationService.instance.initForCurrentUser();
+          // A diferencia de logLoginEvent, aquí sí interesa tanto en
+          // signedIn como en initialSession: el progreso de servidor debe
+          // cargarse también al reanudar una sesión persistida, no solo al
+          // iniciar sesión de nuevo (sincronizar progreso, prerrequisito de
+          // EPIC 8 · Contextual Learning).
+          ProgressService.instance.syncFromServer().then((_) => ReminderService.instance.refresh());
+        }
       }
       if (state.event == AuthChangeEvent.signedIn) {
         // Solo en signedIn, nunca en initialSession: si no, cada reapertura
@@ -75,6 +84,8 @@ class _InstriqAppState extends State<InstriqApp> {
       }
       if (state.event == AuthChangeEvent.signedOut) {
         PushNotificationService.instance.unregisterCurrentToken();
+        ProgressService.instance.clear();
+        ReminderService.instance.cancel();
       }
     });
     if (!kIsWeb) {

@@ -444,6 +444,16 @@
   "resetProgressBody": "S'esborrarà tot el que has après i les puntuacions. Vols continuar?",
   "resetLabel": "Reinicia",
 
+  "startReviewSessionAction": "Inicia sessió de repàs",
+  "reviewSessionTitle": "Sessió de repàs",
+  "reviewSessionBoxLabel": "Caixa {box} de 5",
+  "@reviewSessionBoxLabel": {"placeholders": {"box": {"type": "int"}}},
+  "reviewSessionPrompt": "L'has sabut?",
+  "reviewSessionYes": "Sí",
+  "reviewSessionNo": "No",
+  "reviewsDueTodayLabel": "{count} repassos pendents avui",
+  "@reviewsDueTodayLabel": {"placeholders": {"count": {"type": "int"}}},
+
   "resultTitle": "Resultat",
   "scoreFraction": "{score} / {total}",
   "@scoreFraction": {"placeholders": {"score": {"type": "int"}, "total": {"type": "int"}}},

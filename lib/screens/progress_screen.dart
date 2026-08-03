@@ -32,6 +32,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
           ),
           const SizedBox(height: 6),
           Text(l10n.progressCount(progress.learnedCount, progress.totalCount)),
+          if (progress.dueCount() > 0) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Icon(Icons.notifications_active_outlined, size: 18),
+                const SizedBox(width: 8),
+                Text(l10n.reviewsDueTodayLabel(progress.dueCount())),
+              ],
+            ),
+          ],
           const SizedBox(height: 24),
           Text(l10n.bestQuizScoreLabel, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 4),
