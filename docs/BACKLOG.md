@@ -337,6 +337,18 @@ L'objectiu és accelerar l'aprenentatge sense separar-lo del context clínic.
 
 ---
 
+## EPIC 9 · Community & Editorial Governance
+
+### Objectiu
+
+Cada organització és propietària del seu coneixement privat — Instriq no hi intervé.
+
+Però en el futur Instriq tindrà una Biblioteca Pública compartida per tota la comunitat, que no pot editar-se sense un model de governança: candidatures de col·laborador, nivells (Contributor/Reviewer/Editorial Board), àrees de col·laboració, flux editorial (proposta → revisió → comentaris → correccions → aprovació → publicació) i perfil públic.
+
+**Document d'arquitectura complet, sense codi ni migracions**: [`docs/EPIC_COMMUNITY_GOVERNANCE.md`](EPIC_COMMUNITY_GOVERNANCE.md) — entitats, relacions, flux de candidatura i editorial, anàlisi crítica dels 4 nivells proposats (es recomana 2 eixos: 3 esglaons de flux de treball + etiqueta d'expertesa per àrea, no una escala de 4), compatibilitat amb el Knowledge Graph/permisos/multiorganització, riscos i classificació apartat per apartat (ja implementat / parcial / no implementat).
+
+---
+
 # Proper pas
 
 Abans d'implementar qualsevol d'aquestes EPICS, cal completar la revisió arquitectònica del projecte.
@@ -441,6 +453,15 @@ Dos bugs reals trobats i arreglats durant la verificació: (1) les etiquetes de 
 * **Dependències**: **dependència dura** amb "Sincronitzar el progrés d'aprenentatge amb Supabase" (ja llistat per separat al backlog) — la repetició espaiada necessita estat de programació al servidor, no només local.
 * **Veredicte**: seqüenciar just després de la sincronització de progrés, no abans.
 
+## EPIC 9 · Community & Editorial Governance
+
+* **Model de domini**: entitats noves (`contributor_applications`, `contributor_profiles`, `public_documents`/`public_trays` + versions, `editorial_comments`), reutilitzant `specialties`/`tags`/`taggings` existents en comptes de catàlegs nous. Detall complet a [`docs/EPIC_COMMUNITY_GOVERNANCE.md`](EPIC_COMMUNITY_GOVERNANCE.md).
+* **Compatibilitat amb el Knowledge Graph**: additiva i de baix risc — `knowledge_links` ja té `organization_id` nul·lable, només calen 2 valors nous al `check` de `from_type`.
+* **Impacte UX**: alt — formulari de candidatura, cua de revisió editorial amb fils de comentaris (capacitat nova, no existeix enlloc avui), perfil públic.
+* **Compatibilitat amb arquitectura actual**: **parcial** — `WorkspaceRole`/`my_workspace_role()` són sempre relatius a una organització; els nivells de col·laborador són un eix de permisos nou i paral·lel, no una extensió del rol actual.
+* **Dependències**: cap bloqueig tècnic; bloqueig humà real — cal decidir qui són els primers membres de l'Editorial Board abans d'obrir candidatures (el sistema no pot auto-nomenar-los).
+* **Veredicte**: independent de la resta d'EPICs (no bloqueja ni el bloquegen), però és la que necessita més decisions de producte/governança abans de dissenyar-se en detall d'implementació — no s'ha començat cap part tècnica encara, aquest EPIC és només el document d'arquitectura.
+
 ## Seqüenciació recomanada
 
 1. **EPIC 1 · Knowledge Graph** — fundació, desbloqueja la resta.
@@ -451,3 +472,4 @@ Dos bugs reals trobats i arreglats durant la verificació: (1) les etiquetes de 
 6. **EPIC 3 · CSSD Workspace** — només després de resoldre qui aprova canvis a dades globals del catàleg.
 7. **EPIC 7 · Offline First** — limitat a Bandejes fins decidir stack de base de dades local.
 8. **EPIC 6 · Clinical AI Assistant** — últim, requereix EPIC 1 consolidat + decisió de producte sobre proveïdor d'IA i privacitat.
+9. **EPIC 9 · Community & Editorial Governance** — en paral·lel a qualsevol altre EPIC (és independent), però no es dissenya en detall d'implementació fins decidir els primers membres de l'Editorial Board.
