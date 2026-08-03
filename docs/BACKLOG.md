@@ -39,8 +39,7 @@ Actualment aquests fluxos únicament s'han validat en mode convidat.
 
 ## Aprenentatge
 
-* Sincronitzar el progrés d'aprenentatge amb Supabase.
-* Actualment el progrés és exclusivament local.
+* ~~Sincronitzar el progrés d'aprenentatge amb Supabase~~ — **fet (2026-08)**, com a prerequisit d'EPIC 8. Veure detall a la secció d'EPIC 8 més avall.
 
 ---
 
@@ -453,6 +452,14 @@ Dos bugs reals trobats i arreglats durant la verificació: (1) les etiquetes de 
 * **Dependències**: **dependència dura** amb "Sincronitzar el progrés d'aprenentatge amb Supabase" (ja llistat per separat al backlog) — la repetició espaiada necessita estat de programació al servidor, no només local.
 * **Veredicte**: seqüenciar just després de la sincronització de progrés, no abans.
 
+**Estat: prerequisit + primer tram fet (2026-08).** Es va preguntar el nivell de complexitat de la repetició espaiada (Leitner d'intervals fixos vs. SM-2 adaptatiu) i es va triar el simple.
+
+*Sincronització de progrés (prerequisit)*: `supabase/schema_v26_learning_progress.sql` — taula `learning_progress` (`ref_type`/`ref_id` polimòrfic, mateix patró que `favorites`) amb `box`/`next_review_at` a la mateixa fila que `learned_at`, RLS per `auth.uid()`, i `profiles.quiz_best_scores` (jsonb) pels millors resultats de quiz. `ProgressService` reescrit amb backend dual: mode convidat continua sent 100% `shared_preferences` (zero regressió, mateixa API pública que ja usaven `flashcards_screen.dart`/`quiz_screen.dart`/`instrument_detail_screen.dart`, cap d'ells tocat), mode autenticat llegeix/escriu Supabase amb migració única (puja el progrés local si el servidor no en té) en iniciar sessió. Enganxat a `authStateChanges` a `main.dart` (`syncFromServer()`/`clear()`).
+
+*EPIC 8 primer tram*: repetició espaiada Leitner (`kLeitnerIntervalsDays = [1, 3, 7, 14, 30]`, `recordReviewResult`/`dueCount`/`boxFor` a `ProgressService`), sessió de repàs contextual d'un únic instrument (`lib/screens/review_session_screen.dart`, nou botó "Inicia sessió de repàs" a `instrument_detail_screen.dart`, mateix patró de targeta que es volteja que `flashcards_screen.dart`), recordatori diari local (`lib/services/reminder_service.dart`, nova dependència `flutter_local_notifications` + `timezone`, una única notificació reprogramada a `refresh()` — no una per ítem) i línia de pendents de repàs avui a `progress_screen.dart`.
+
+Calgué activar `coreLibraryDesugaringEnabled` i afegir `desugar_jdk_libs` a `android/app/build.gradle` — requisit d'AAR de `flutter_local_notifications` no detectat fins al primer build de release. `flutter analyze`/`flutter test` nets. Verificat en emulador que l'app arrenca i la pantalla d'Inici carrega correctament en mode convidat després del canvi (mateix contingut que abans); la navegació fins al botó nou i la sessió de repàs en si no es van poder completar en viu — l'emulador va entrar en ANRs repetits de `system_server` (no de l'app, confirmat amb `dumpsys cpuinfo`) després d'hores d'ús continuat aquesta sessió, el mateix patró ja documentat a EPIC 2. Sincronització real (login, migració única, notificació programada) requereix compte autenticat i queda pendent de prova, com la resta d'aquests fluxos.
+
 ## EPIC 9 · Community & Editorial Governance
 
 * **Model de domini**: entitats noves (`contributor_applications`, `contributor_profiles`, `public_documents`/`public_trays` + versions, `editorial_comments`), reutilitzant `specialties`/`tags`/`taggings` existents en comptes de catàlegs nous. Detall complet a [`docs/EPIC_COMMUNITY_GOVERNANCE.md`](EPIC_COMMUNITY_GOVERNANCE.md).
@@ -468,7 +475,7 @@ Dos bugs reals trobats i arreglats durant la verificació: (1) les etiquetes de 
 2. **EPIC 4 · Trays 2.0** en paral·lel — cap dependència, risc baix.
 3. **EPIC 5 · Smart Search** (part per nom/entitat) en paral·lel — cap dependència dura.
 4. **EPIC 2 · Clinical Workspace** — un cop EPIC 1 tingui les relacions clau (tècnica↔instrumental↔safata).
-5. **Sincronitzar progrés d'aprenentatge a Supabase** (millora, no EPIC) → **EPIC 8 · Contextual Learning**.
+5. ~~**Sincronitzar progrés d'aprenentatge a Supabase** (millora, no EPIC) → **EPIC 8 · Contextual Learning**~~ — fet, primer tram (2026-08).
 6. **EPIC 3 · CSSD Workspace** — només després de resoldre qui aprova canvis a dades globals del catàleg.
 7. **EPIC 7 · Offline First** — limitat a Bandejes fins decidir stack de base de dades local.
 8. **EPIC 6 · Clinical AI Assistant** — últim, requereix EPIC 1 consolidat + decisió de producte sobre proveïdor d'IA i privacitat.

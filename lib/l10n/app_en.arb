@@ -444,6 +444,16 @@
   "resetProgressBody": "Everything learned and all scores will be erased. Continue?",
   "resetLabel": "Reset",
 
+  "startReviewSessionAction": "Start review session",
+  "reviewSessionTitle": "Review session",
+  "reviewSessionBoxLabel": "Box {box} of 5",
+  "@reviewSessionBoxLabel": {"placeholders": {"box": {"type": "int"}}},
+  "reviewSessionPrompt": "Did you know it?",
+  "reviewSessionYes": "Yes",
+  "reviewSessionNo": "No",
+  "reviewsDueTodayLabel": "{count} reviews due today",
+  "@reviewsDueTodayLabel": {"placeholders": {"count": {"type": "int"}}},
+
   "resultTitle": "Result",
   "scoreFraction": "{score} / {total}",
   "@scoreFraction": {"placeholders": {"score": {"type": "int"}, "total": {"type": "int"}}},
