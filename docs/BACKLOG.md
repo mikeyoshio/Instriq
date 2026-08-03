@@ -28,7 +28,20 @@ Actualment aquests fluxos únicament s'han validat en mode convidat.
 
 # Millores pendents
 
-## Arquitectura funcional
+## 🟢 Technical Debt
+
+No són EPICs — són deute tècnic, sense decisió d'arquitectura pendent.
+
+* Migrar Flutter al nou sistema "Built-in Kotlin" — no urgent, però el build d'EPIC 8 (2026-08) ja va mostrar el warning real: `package_info_plus`/`shared_preferences_android` encara apliquen el Kotlin Gradle Plugin antic.
+* Unificar les dues taxonomies actuals d'especialitats (14 i 16 categories).
+* Internacionalitzar les observacions d'esterilització.
+* Eliminar textos fixos únicament disponibles en castellà.
+
+---
+
+## 🟡 Product Evolution
+
+Evolució funcional. Els dos primers punts es relacionen amb **ADR-004** (veure secció d'ADRs): abans de construir-los caldria decidir si es duplica per quarta vegada el patró capçalera+versions o s'extreu un component compartit.
 
 * Dissenyar el sistema de versionat per a l'instrumental personalitzat.
 * Dissenyar el versionat de la informació d'esterilització i de les fitxes tècniques.
@@ -43,30 +56,6 @@ Actualment aquests fluxos únicament s'han validat en mode convidat.
 
 ---
 
-## Offline
-
-* Implementar suport complet per treballar sense connexió.
-* Sincronització automàtica.
-* Resolució de conflictes.
-* Cache intel·ligent.
-
----
-
-## Qualitat de dades
-
-* Unificar les dues taxonomies actuals d'especialitats (14 i 16 categories).
-* Internacionalitzar les observacions d'esterilització.
-* Eliminar textos fixos únicament disponibles en castellà.
-
----
-
-## Plataforma
-
-* Migrar Flutter al nou sistema "Built-in Kotlin".
-* Aquesta migració no és urgent però s'ha de planificar.
-
----
-
 ## Sostenibilitat
 
 * Desenvolupar un sistema de donacions completament transparent.
@@ -74,6 +63,36 @@ Actualment aquests fluxos únicament s'han validat en mode convidat.
 
   * Manteniment del projecte.
   * Donacions destinades a investigació mèdica.
+
+---
+
+# ADR pendents (Architecture Decision Records)
+
+Revisió de l'usuari (2026-08): EPIC 3, 6 i 7 no estaven "bloquejats" per una pregunta puntual ("qui aprova", "quin proveïdor d'IA", "sqlite o drift"), sinó per decisions d'arquitectura més profundes que condicionen diversos EPICs alhora. A partir d'ara es documenten com a ADR pendents, no com a bloquejos ad-hoc: permet veure d'un cop d'ull quina decisió afecta quins EPICs, i si un EPIC pot avançar parcialment sense comprometre l'arquitectura futura.
+
+## ADR-001 · Governança del coneixement
+
+Què és global (catàleg), què és privat (organització), què és una adaptació local, qui n'és el propietari, qui pot publicar-hi canvis. Un cop existeixi aquest model, decidir "qui aprova" un canvi concret és trivial.
+
+**Impacta**: EPIC 1, EPIC 3, EPIC 9.
+
+## ADR-002 · Arquitectura d'IA
+
+RAG (com es recupera el context), model de permisos (què pot veure la IA de cada organització), estratègia de citació de fonts, política de privadesa de dades clíniques, traçabilitat de respostes. El proveïdor d'IA (Claude, OpenAI, model local) és gairebé la darrera decisió, no la primera.
+
+**Impacta**: EPIC 5 (cerca semàntica), EPIC 6.
+
+## ADR-003 · Estratègia Offline
+
+Quines entitats han de funcionar sense connexió, quines són només lectura, quines es poden editar offline, política de sincronització, resolució de conflictes, estratègia de versions en conflicte. L'stack local (sqlite/drift) és un detall d'implementació posterior, no la decisió en si.
+
+**Impacta**: EPIC 4, EPIC 7.
+
+## ADR-004 · Versionat del coneixement
+
+El patró capçalera+versions (draft→revisió→publicat→arxivat) s'ha construït 3 vegades de forma independent (`group_documents`, `trays`, `preference_cards`), sense abstracció compartida. Cal decidir si continuar duplicant-lo per cada entitat nova (instrumental personalitzat, esterilització/fitxes tècniques — Product Evolution) o extreure'n un component genèric abans de construir-ne una quarta còpia.
+
+**Impacta**: EPIC 1, EPIC 2, EPIC 3, EPIC 4.
 
 ---
 
@@ -398,8 +417,8 @@ Cada EPIC avaluat segons els 5 criteris anteriors. Base de referència: el model
 * **Compatibilitat amb el Knowledge Graph**: bon encaix, ja FK'd a Instrument/Manufacturer.
 * **Impacte UX**: mitjà — pantalles noves seguint convencions ja usades a la fitxa d'esterilització actual.
 * **Compatibilitat amb arquitectura actual**: alta — coincideix exactament amb el "versionat d'esterilització" ja marcat com a pendent des de Fase E.
-* **Dependències**: bloquejat per una decisió de producte encara oberta: **qui aprova un canvi a un dato GLOBAL del catàleg** (no és una decisió tècnica, cal resposta abans de dissenyar RLS/aprovació).
-* **Veredicte**: no planificar fins resoldre la pregunta de producte; en paral·lel a EPIC 1/2 si es resol.
+* **Dependències**: bloquejada per **ADR-001 · Governança del coneixement** — no és "qui aprova", sinó que encara no existeix un model que defineixi què és global, què és privat, què és una adaptació local i qui n'és el propietari.
+* **Veredicte**: no planificar fins resoldre ADR-001; en paral·lel a EPIC 1/2 si es resol.
 
 ## EPIC 4 · Trays 2.0
 
@@ -431,17 +450,17 @@ Dos bugs reals trobats i arreglats durant la verificació: (1) les etiquetes de 
 * **Compatibilitat amb el Knowledge Graph**: dependència dura explícita al propi document — no començar sense EPIC 1 consolidat.
 * **Impacte UX**: alt i nou paradigma (xat/preguntes); ha de citar sempre la font i **no ha de poder citar esborranys**, només contingut publicat/aprovat — coherent amb el model de confiança draft→revisió→publicat ja establert a tota la resta de l'app.
 * **Compatibilitat amb arquitectura actual**: la de més superfície nova de tots els EPICS — requereix integració amb un LLM extern (probablement via Edge Function) i `pgvector`, cap dels dos existeix avui.
-* **Dependències**: bloquejat per EPIC 1; comparteix infraestructura amb la cerca semàntica d'EPIC 5.
-* **Veredicte**: últim EPIC a planificar; requereix decisió de producte pròpia (quin proveïdor d'IA, cost, privacitat de dades clíniques enviades a un tercer) abans de dissenyar-lo.
+* **Dependències**: bloquejat per EPIC 1 i per **ADR-002 · Arquitectura d'IA** — el bloqueig real no és el proveïdor (canviar d'OpenAI a Claude o a un model local és una decisió fàcil i tardana), sinó RAG, permisos, citació de fonts i privadesa; comparteix infraestructura amb la cerca semàntica d'EPIC 5.
+* **Veredicte**: últim EPIC a planificar; requereix resoldre ADR-002 abans de dissenyar-lo. El proveïdor es tria al final, no al principi.
 
 ## EPIC 7 · Offline First
 
 * **Model de domini**: cap entitat nova; estén el mode sense connexió ja existent (tècniques/protocols/targetes) a Bandejes i afegeix resolució de conflictes real.
 * **Compatibilitat amb el Knowledge Graph**: neutre, és una qüestió de client, no d'esquema.
 * **Impacte UX**: mitjà — calen indicadors d'estat de sincronització i una UI de conflicte ("la teva versió vs. la del servidor") que avui no existeix enlloc de l'app.
-* **Compatibilitat amb arquitectura actual**: **risc mitjà-alt**. L'stack actual (`connectivity_plus` + `shared_preferences`, sense base de dades local) serveix per a cua-i-repetició simple; resolució de conflictes real amb un graf d'entitats creixent normalment demana un magatzem local de veritat (p. ex. sqlite/drift) — és una decisió d'stack no presa encara, no una simple ampliació.
-* **Dependències**: l'abast creix amb cada entitat nova (Bandejes, després Clinical Workspace/CSSD).
-* **Veredicte**: limitar-lo a Bandejes primer (ja marcat com "a continuar"); no generalitzar-lo fins decidir l'stack local.
+* **Compatibilitat amb arquitectura actual**: **risc mitjà-alt**, però no per l'elecció de sqlite/drift (un detall d'implementació posterior) — per **ADR-003 · Estratègia Offline**: quines entitats funcionen offline, quines són només lectura, quines editables, política de sincronització i resolució de conflictes.
+* **Dependències**: l'abast creix amb cada entitat nova (Bandejes, després Clinical Workspace/CSSD); bloquejat per ADR-003.
+* **Veredicte**: limitar-lo a Bandejes primer (ja marcat com "a continuar"); no generalitzar-lo fins resoldre ADR-003.
 
 ## EPIC 8 · Contextual Learning
 
@@ -466,8 +485,8 @@ Calgué activar `coreLibraryDesugaringEnabled` i afegir `desugar_jdk_libs` a `an
 * **Compatibilitat amb el Knowledge Graph**: additiva i de baix risc — `knowledge_links` ja té `organization_id` nul·lable, només calen 2 valors nous al `check` de `from_type`.
 * **Impacte UX**: alt — formulari de candidatura, cua de revisió editorial amb fils de comentaris (capacitat nova, no existeix enlloc avui), perfil públic.
 * **Compatibilitat amb arquitectura actual**: **parcial** — `WorkspaceRole`/`my_workspace_role()` són sempre relatius a una organització; els nivells de col·laborador són un eix de permisos nou i paral·lel, no una extensió del rol actual.
-* **Dependències**: cap bloqueig tècnic; bloqueig humà real — cal decidir qui són els primers membres de l'Editorial Board abans d'obrir candidatures (el sistema no pot auto-nomenar-los).
-* **Veredicte**: independent de la resta d'EPICs (no bloqueja ni el bloquegen), però és la que necessita més decisions de producte/governança abans de dissenyar-se en detall d'implementació — no s'ha començat cap part tècnica encara, aquest EPIC és només el document d'arquitectura.
+* **Dependències**: cap bloqueig, ni tècnic ni de disseny. El sistema de candidatures, perfils, flux d'aprovació (Pending/Approved/Rejected) i base de dades es pot implementar sencer sense tenir encara membres del Consell Editorial. Es relaciona amb ADR-001 (governança del coneixement) però no en depèn per començar — EPIC 9 tracta contingut públic/comunitari, no el catàleg privat de cada organització.
+* **Veredicte**: **implementable ja**, revisat (2026-08). Únic pendent real: nomenar els primers membres del Consell Editorial abans d'obrir la Biblioteca Pública al públic — és una tasca operativa posterior a la implementació, no un bloqueig previ.
 
 ## Seqüenciació recomanada
 
@@ -476,7 +495,9 @@ Calgué activar `coreLibraryDesugaringEnabled` i afegir `desugar_jdk_libs` a `an
 3. **EPIC 5 · Smart Search** (part per nom/entitat) en paral·lel — cap dependència dura.
 4. **EPIC 2 · Clinical Workspace** — un cop EPIC 1 tingui les relacions clau (tècnica↔instrumental↔safata).
 5. ~~**Sincronitzar progrés d'aprenentatge a Supabase** (millora, no EPIC) → **EPIC 8 · Contextual Learning**~~ — fet, primer tram (2026-08).
-6. **EPIC 3 · CSSD Workspace** — només després de resoldre qui aprova canvis a dades globals del catàleg.
-7. **EPIC 7 · Offline First** — limitat a Bandejes fins decidir stack de base de dades local.
-8. **EPIC 6 · Clinical AI Assistant** — últim, requereix EPIC 1 consolidat + decisió de producte sobre proveïdor d'IA i privacitat.
-9. **EPIC 9 · Community & Editorial Governance** — en paral·lel a qualsevol altre EPIC (és independent), però no es dissenya en detall d'implementació fins decidir els primers membres de l'Editorial Board.
+6. **EPIC 3 · CSSD Workspace** — només després de resoldre **ADR-001** (governança del coneixement).
+7. **EPIC 7 · Offline First** — limitat a Bandejes fins resoldre **ADR-003** (estratègia offline).
+8. **EPIC 6 · Clinical AI Assistant** — últim, requereix EPIC 1 consolidat + resoldre **ADR-002** (arquitectura d'IA). El proveïdor es tria al final.
+9. **EPIC 9 · Community & Editorial Governance** — **implementable ja**, en paral·lel a qualsevol altre EPIC; el nomenament del Consell Editorial és posterior a la implementació, no una condició prèvia.
+
+Nota transversal: **ADR-004** (versionat del coneixement) no bloqueja cap EPIC en marxa, però hauria de resoldre's abans d'implementar el versionat d'instrumental personalitzat o d'esterilització (Product Evolution) — seria la quarta còpia independent del mateix patró.
