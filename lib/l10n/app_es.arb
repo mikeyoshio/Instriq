@@ -303,6 +303,7 @@
   "relatedTraysLabel": "Bandejas relacionadas",
   "noTraysLinked": "Sin bandejas enlazadas",
   "noTraysInWorkspace": "Este espacio todavía no tiene bandejas",
+  "workspacePreferenceCardsLabel": "Tarjetas de preferencia del espacio",
   "knowledgeGraphUsedInTitle": "Usado en",
   "knowledgeGraphUsedInEmptyState": "Todavía no se usa en ninguna técnica, protocolo o bandeja",
   "changeCommentLabel": "Comentario del cambio (opcional)",

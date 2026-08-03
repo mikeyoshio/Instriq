@@ -303,6 +303,7 @@
   "relatedTraysLabel": "Safates relacionades",
   "noTraysLinked": "Sense safates enllaçades",
   "noTraysInWorkspace": "Aquest espai encara no té safates",
+  "workspacePreferenceCardsLabel": "Targetes de preferència de l'espai",
   "knowledgeGraphUsedInTitle": "Usat a",
   "knowledgeGraphUsedInEmptyState": "Encara no s'usa a cap tècnica, protocol o safata",
   "changeCommentLabel": "Comentari del canvi (opcional)",

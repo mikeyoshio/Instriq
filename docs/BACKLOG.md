@@ -377,6 +377,10 @@ Cada EPIC avaluat segons els 5 criteris anteriors. Base de referència: el model
 * **Dependències**: bloquejat per EPIC 1; es beneficia d'EPIC 3 i 4 ja fets.
 * **Veredicte**: segon EPIC, immediatament després d'EPIC 1.
 
+**Estat: primer tramo fet (2026-08), ampliant la fitxa en lloc de substituir-la.** Es va preguntar l'abast (pantalla nova que substitueixi `GroupDocumentDetailScreen` a tota la nav vs. ampliar la fitxa existent in situ) i es va triar ampliar-la — baix risc, cap punt de navegació canvia. Sense RPC d'agregació nova: tot servible amb les consultes existents (bucle petit per instrument relacionat, mateix criteri que la resta de l'app; el bulk-fetch només es justifica a escala de "tot el catàleg", com a EPIC 5). Afegit: resum d'esterilització/fabricant per cada instrument relacionat, checklist de la safata expandit inline (`ExpansionTile`), i una secció nova de targetes de preferència **de l'espai** (no "del procediment" — no existeix cap relació real entre una targeta i una tècnica concreta al model de dades, només comparteixen espai; el nom de la secció ho deixa clar per no insinuar una precisió que no hi ha). Vídeos, material fungible/sutures/implants i posicionament del pacient **no existeixen com a entitat enlloc** — queden fora, documentats com a pendents de disseny propi.
+
+`flutter analyze`/`flutter test` nets. Verificació en emulador no concloent aquesta vegada (l'emulador ha acumulat molta càrrega després d'una sessió molt llarga i no arrencava amb fluïdesa) — el canvi només toca `GroupDocumentDetailScreen`, inaccessible en mode convidat, així que el risc de regressió en mode convidat és estructuralment nul independentment. Queda pendent, com sempre amb aquests fluxos, la prova real amb compte autenticat.
+
 ## EPIC 3 · CSSD Workspace
 
 * **Model de domini**: additiu sobre `instrument_sterilization_methods`/`instrument_technical_info` (ja existents). "Incidències" és taula nova, candidata natural al patró `ref_type`/`ref_id`.
