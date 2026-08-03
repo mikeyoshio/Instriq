@@ -70,11 +70,15 @@ Evolució funcional. Els dos primers punts es relacionen amb **ADR-004** (veure 
 
 Revisió de l'usuari (2026-08): EPIC 3, 6 i 7 no estaven "bloquejats" per una pregunta puntual ("qui aprova", "quin proveïdor d'IA", "sqlite o drift"), sinó per decisions d'arquitectura més profundes que condicionen diversos EPICs alhora. A partir d'ara es documenten com a ADR pendents, no com a bloquejos ad-hoc: permet veure d'un cop d'ull quina decisió afecta quins EPICs, i si un EPIC pot avançar parcialment sense comprometre l'arquitectura futura.
 
+**Pregunta de producte pendent, no tècnica** — es va plantejar en paral·lel: és Instriq una plataforma SaaS amb la comunitat com a extra (Visió A), o una comunitat Open Source amb els hospitals com a funcionalitat (Visió B)? `docs/ADR_001_KNOWLEDGE_GOVERNANCE.md` conclou que aquesta decisió **no bloqueja** l'arquitectura d'herència (funciona igual sota les dues visions), però queda pendent com a decisió de negoci separada.
+
 ## ADR-001 · Governança del coneixement
 
 Què és global (catàleg), què és privat (organització), què és una adaptació local, qui n'és el propietari, qui pot publicar-hi canvis. Un cop existeixi aquest model, decidir "qui aprova" un canvi concret és trivial.
 
-**Impacta**: EPIC 1, EPIC 3, EPIC 9.
+**Document d'arquitectura complet, sense codi ni migracions**: [`docs/ADR_001_KNOWLEDGE_GOVERNANCE.md`](ADR_001_KNOWLEDGE_GOVERNANCE.md) — comparativa Git (branques/forks/merges) vs. Wikipedia (veritat única) vs. còpia sense procedència vs. **referència upstream amb sincronització conscient de la divergència (recomanada)**; resposta a les 5 preguntes de governança, traducció a UX simple (Actualitzar/Revisar canvis/Deixar de seguir, mai vocabulari de "fork"), relació amb el Knowledge Graph i amb ADR-004, i classificació per apartat. Conclou que la decisió Visió A/B (SaaS vs. comunitat Open Source) és real però no bloqueja aquest ADR.
+
+**Impacta**: EPIC 1, EPIC 2, EPIC 3, EPIC 4, EPIC 5, EPIC 9.
 
 ## ADR-002 · Arquitectura d'IA
 
