@@ -48,3 +48,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase: config con API keys de proyecto, se genera con `flutterfire
+# configure` (ver README) -- no se commitea, cada quien lo genera contra su
+# propio proyecto Firebase.
+lib/firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
