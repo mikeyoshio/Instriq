@@ -2,25 +2,35 @@ import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
 import '../l10n/app_localizations.dart';
+import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
+import '../models/instrument_sterilization.dart';
+import '../models/preference_card.dart';
 import '../models/specialty_entity.dart';
 import '../models/tag.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
+import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
+import '../services/manufacturer_service.dart';
+import '../services/preference_card_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
+import '../services/sterilization_service.dart';
+import '../services/surgeon_service.dart';
 import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/offline_banner.dart';
+import '../widgets/sterilization_method_label.dart';
 import 'group_document_form_screen.dart';
 import 'group_document_version_history_screen.dart';
 import 'instrument_detail_screen.dart';
+import 'preference_card_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_detail_screen.dart';
@@ -44,6 +54,10 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
   bool _isFavorite = false;
   SpecialtyEntity? _specialty;
   List<Tag> _tags = [];
+  Map<String, List<SterilizationMethodEntry>> _instrumentMethods = {};
+  Map<String, InstrumentTechnicalInfo?> _instrumentTechnicalInfo = {};
+  List<PreferenceCard> _preferenceCards = [];
+  List<CustomInstrument> _customInstruments = [];
 
   @override
   void initState() {
@@ -53,6 +67,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     _loadSpecialty();
     _loadTags();
     _loadTrays();
+    _loadClinicalWorkspaceData();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _document.id);
       UsageAnalyticsService.instance.recordView(_refType, _document.id);
@@ -87,12 +102,78 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
 
   Future<void> _loadTrays() async {
     try {
-      await TrayService.instance.fetchTrays(_document.workspaceId);
+      await Future.wait([
+        TrayService.instance.fetchTrays(_document.workspaceId),
+        CustomInstrumentService.instance.fetchForWorkspace(_document.workspaceId),
+      ]);
       if (!mounted) return;
-      setState(() {});
+      setState(() => _customInstruments = CustomInstrumentService.instance.instruments);
     } catch (_) {
       // Sin bloquear la ficha si falla: se muestra el id crudo como fallback.
     }
+  }
+
+  /// Esterilización/ficha técnica de cada instrumento relacionado, y las
+  /// tarjetas de preferencia del espacio — EPIC 2 · Clinical Workspace.
+  /// `related_instrument_ids` solo contiene ids de catálogo (el selector de
+  /// la técnica solo ofrece catálogo), así que no hace falta resolver
+  /// instrumental personalizado aquí. El N de instrumentos relacionados por
+  /// técnica es pequeño: un fetch por id es el mismo criterio ya aceptado en
+  /// el resto de la app (no se justifica una RPC de bulk como en EPIC 5,
+  /// pensada para "todo el catálogo").
+  Future<void> _loadClinicalWorkspaceData() async {
+    final relatedIds = _document.publishedVersion?.relatedInstrumentIds ?? const <String>[];
+    final methods = <String, List<SterilizationMethodEntry>>{};
+    final technicalInfo = <String, InstrumentTechnicalInfo?>{};
+    for (final id in relatedIds) {
+      try {
+        methods[id] = await SterilizationService.instance.fetchMethods('catalog', id);
+        technicalInfo[id] = await SterilizationService.instance.fetchTechnicalInfo('catalog', id);
+      } catch (_) {
+        // Metadato accesorio: un instrumento fallando no bloquea el resto de la ficha.
+      }
+    }
+    try {
+      // No hace falta guardar la lista devuelta: ManufacturerService.byId lee
+      // de su propio caché interno, calentado por este fetchAll.
+      await ManufacturerService.instance.fetchAll();
+    } catch (_) {
+      // Metadato accesorio: no bloquea el resto de la ficha si falla.
+    }
+    var preferenceCards = <PreferenceCard>[];
+    try {
+      await Future.wait([
+        PreferenceCardService.instance.fetchCards(_document.workspaceId),
+        SurgeonService.instance.fetchForOrganization(),
+      ]);
+      preferenceCards = PreferenceCardService.instance.cardsOfWorkspace(_document.workspaceId);
+    } catch (_) {
+      // Metadato accesorio: no bloquea el resto de la ficha si falla.
+    }
+    if (!mounted) return;
+    setState(() {
+      _instrumentMethods = methods;
+      _instrumentTechnicalInfo = technicalInfo;
+      _preferenceCards = preferenceCards;
+    });
+  }
+
+  String? _instrumentSummary(AppLocalizations l10n, String instrumentId) {
+    final methods = _instrumentMethods[instrumentId] ?? const [];
+    final info = _instrumentTechnicalInfo[instrumentId];
+    final parts = <String>[
+      if (methods.isNotEmpty) methods.map((m) => sterilizationMethodValueLabel(l10n, m.method)).join(', '),
+      if (info?.manufacturerId != null)
+        ManufacturerService.instance.byId(info!.manufacturerId!)?.name ?? '',
+    ]..removeWhere((p) => p.isEmpty);
+    if (parts.isEmpty) return null;
+    return parts.join(' · ');
+  }
+
+  String _surgeonLabel(AppLocalizations l10n, PreferenceCard card) {
+    final surgeonId = card.publishedVersion?.surgeonId;
+    if (surgeonId == null) return l10n.noSurgeonAssignedLabel;
+    return SurgeonService.instance.byId(surgeonId)?.name ?? l10n.noSurgeonAssignedLabel;
   }
 
   Future<void> _loadFavoriteState() async {
@@ -305,10 +386,12 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               ...published.relatedInstrumentIds.map((id) {
                 final instrument = _instrumentFor(id);
                 if (instrument == null) return const SizedBox.shrink();
+                final summary = _instrumentSummary(l10n, id);
                 return Card(
                   child: ListTile(
                     leading: InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 40),
                     title: Text(instrument.name),
+                    subtitle: summary != null ? Text(summary) : null,
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => InstrumentDetailScreen(instrument: instrument)),
@@ -324,13 +407,47 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               ...published.relatedTrayIds.map((id) {
                 final tray = TrayService.instance.trayById(id);
                 if (tray == null) return const SizedBox.shrink();
+                final items = tray.publishedVersion?.items ?? const [];
                 return Card(
-                  child: ListTile(
+                  child: ExpansionTile(
                     leading: const Icon(Icons.inventory_2_outlined),
                     title: Text(tray.publishedVersion?.name ?? id),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.chevron_right),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: widget.myRole)),
+                      ),
+                    ),
+                    children: items.isEmpty
+                        ? [Padding(padding: const EdgeInsets.all(12), child: Text(l10n.trayNoItemsYet))]
+                        : items.map((item) {
+                            return ListTile(
+                              dense: true,
+                              title: Text(item.resolveName(_customInstruments)),
+                              subtitle: item.position != null ? Text(item.position!) : null,
+                              trailing: Text(l10n.expectedQtyValue(item.expectedQty)),
+                            );
+                          }).toList(),
+                  ),
+                );
+              }),
+              const SizedBox(height: 20),
+            ],
+            if (_preferenceCards.isNotEmpty) ...[
+              Text(l10n.workspacePreferenceCardsLabel, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              ..._preferenceCards.map((card) {
+                final cardPublished = card.publishedVersion;
+                return Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.assignment_outlined),
+                    title: Text(cardPublished?.procedureName ?? l10n.unpublished),
+                    subtitle: Text(_surgeonLabel(l10n, card)),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: widget.myRole)),
+                      MaterialPageRoute(
+                        builder: (_) => PreferenceCardDetailScreen(card: card, myRole: widget.myRole),
+                      ),
                     ),
                   ),
                 );

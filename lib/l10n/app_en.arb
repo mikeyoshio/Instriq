@@ -303,6 +303,7 @@
   "relatedTraysLabel": "Related trays",
   "noTraysLinked": "No trays linked",
   "noTraysInWorkspace": "This workspace has no trays yet",
+  "workspacePreferenceCardsLabel": "Workspace preference cards",
   "knowledgeGraphUsedInTitle": "Used in",
   "knowledgeGraphUsedInEmptyState": "Not used in any technique, protocol or tray yet",
   "changeCommentLabel": "Change comment (optional)",
