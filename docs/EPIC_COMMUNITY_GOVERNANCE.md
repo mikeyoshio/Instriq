@@ -170,10 +170,10 @@ Recomanació: **opt-in explícit** (`is_public`), mai automàtic en aprovar la c
 | Model d'organitzacions/permisos privats (`WorkspaceRole`, `my_workspace_role`) | Ja implementat | Cap canvi (es manté intacte, els nivells de col·laborador hi coexisteixen sense tocar-lo) |
 | Especialitats (`specialties`) i etiquetes (`tags`/`taggings`) | Ja implementat | Cap canvi per a especialitats; refactorització parcial a `taggings` (afegir `'contributor'` al check de `ref_type`) |
 | Patró de versionat draft→revisió→publicat→arxivat | Ja implementat (3 vegades) | Cap canvi al patró; nova EPIC per aplicar-lo a taules públiques noves |
-| Comentaris de revisió multi-ronda (`editorial_comments`) | No implementat | Nova EPIC |
+| Comentaris de revisió multi-ronda (`editorial_comments`) | **Implementat (2026-08)** | — Fil de comentaris a la cua de revisió, `lib/screens/public_library_review_queue_screen.dart` |
 | Candidatura de col·laborador (`contributor_applications`) | **Implementat (2026-08)** | — (`supabase/schema_v27_contributors.sql`, `ContributorApplicationFormScreen`) |
 | Nivells de col·laborador (`contributor_profiles`) | **Implementat (2026-08)** | — (2 eixos aplicats: `level` lineal 3 esglaons + `taggings` per àrea d'expertesa) |
-| Biblioteca Pública (`public_documents`/`public_trays`) | No implementat | Nova EPIC — revisar primer si cal taula nova o `visibility` a `trays`/`group_documents` existents (veure `docs/ADR_001_KNOWLEDGE_GOVERNANCE.md` §0) |
+| Biblioteca Pública (`public_documents`/`public_trays`) | **Implementat (2026-08), segon tram** | — Taules noves separades (confirmat, no `visibility` a taules existents — veure `docs/ADR_001_KNOWLEDGE_GOVERNANCE.md` §0 revisat i `docs/ADR_004_VERSIONING.md`). Lectura pública, proposta/revisió/aprovació per col·laboradors, `lib/screens/public_library_screen.dart`. Pendent: adopció a organitzacions (depèn de com s'apliqui ADR-001 en detall), sync de `knowledge_links` per a contingut públic (decisió conscient de deixar-ho fora, veure `schema_v29_public_library.sql` §6) |
 | Perfil públic (dades) | **Implementat (2026-08)** | — (`ContributorProfileScreen`, `is_public`/`show_organization` opt-in) |
 | Perfil públic (pantalla de veure el d'un altre col·laborador) | No implementat | Nova EPIC (petita) |
 | Insígnies/reconeixements | No implementat (i es recomana que sigui una vista, no una taula) | Nova EPIC (petita, un cop hi hagi dades reals de contribucions) |

@@ -708,5 +708,19 @@
   "sterilizationObsGenericReusable": "Método general para instrumental metálico reutilizable estándar. Verifica siempre las instrucciones de uso (IFU) del fabricante y el protocolo de tu central de esterilización para parámetros exactos y posibles excepciones.",
   "sterilizationObsGenericDisposable": "Componente o versión de un solo uso — no reesterilizar. Verifica las instrucciones del fabricante.",
   "sterilizationObsScalpelHandle": "Corresponde al mango reutilizable del bisturí. La hoja es un componente de un solo uso independiente: ver la otra fila de este mismo instrumento (method = 'desechable'). Verifica siempre las instrucciones de uso (IFU) del fabricante y el protocolo de tu central de esterilización para parámetros exactos y posibles excepciones.",
-  "sterilizationObsScalpelBlade": "Corresponde a la hoja de bisturí, de un solo uso: no reesterilizar. El mango (reutilizable) se esteriliza aparte por vapor: ver la otra fila de este mismo instrumento. Verifica las instrucciones del fabricante."
+  "sterilizationObsScalpelBlade": "Corresponde a la hoja de bisturí, de un solo uso: no reesterilizar. El mango (reutilizable) se esteriliza aparte por vapor: ver la otra fila de este mismo instrumento. Verifica las instrucciones del fabricante.",
+
+  "publicLibraryTitle": "Biblioteca Pública",
+  "publicLibraryReviewQueueTitle": "Candidaturas de contenido público",
+  "publicLibraryLoadError": "No se pudo cargar la biblioteca pública: {error}",
+  "@publicLibraryLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "publicLibraryEmptyState": "Todavía no hay nada publicado",
+  "publicLibraryProposeAction": "Proponer",
+  "publicLibrarySubmittedSnackbar": "Enviado a revisión",
+  "publicLibrarySubmitError": "No se pudo enviar: {error}",
+  "@publicLibrarySubmitError": {"placeholders": {"error": {"type": "String"}}},
+  "publicLibrarySubmitForReviewAction": "Enviar a revisión",
+  "editorialCommentsEmptyState": "Todavía no hay comentarios",
+  "editorialCommentHint": "Escribe un comentario",
+  "editorialCommentSendAction": "Comentar"
 }
