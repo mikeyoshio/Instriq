@@ -114,6 +114,10 @@ Quines entitats han de funcionar sense connexió, quines són només lectura, qu
 
 El patró capçalera+versions (draft→revisió→publicat→arxivat) s'ha construït 3 vegades de forma independent (`group_documents`, `trays`, `preference_cards`), sense abstracció compartida. Cal decidir si continuar duplicant-lo per cada entitat nova (instrumental personalitzat, esterilització/fitxes tècniques — Product Evolution) o extreure'n un component genèric abans de construir-ne una quarta còpia.
 
+**Document d'arquitectura complet**: [`docs/ADR_004_VERSIONING.md`](ADR_004_VERSIONING.md) — comparativa exacta de columnes/RPC/codi Dart dels 3 casos, veredicte: **cap taula SQL genèrica** (el propi codi ja demostra per què — `knowledge_links` existeix precisament perquè consultar dins un jsonb no era prou bo), sí una **recepta documentada** per a instàncies noves + una base compartida a Dart (`VersionedContentService`, widget de revisió genèric) **només per a la 4a instància**, sense retro-migrar els 3 serveis existents. De pas, es va trobar i corregir un bug real: `preference_card_versions` no tenia les restriccions d'unicitat que sí tenen les altres dues (`schema_v28_preference_card_constraints_fix.sql`, verificat sense dades que el violessin abans d'aplicar-lo).
+
+**Estat: decidit i bug corregit (2026-08).** Pendent: aplicar la recepta a instrumental personalitzat/esterilització d'organització (Product Evolution) — encara no fet.
+
 **Impacta**: EPIC 1, EPIC 2, EPIC 3, EPIC 4.
 
 ---
@@ -530,4 +534,4 @@ Fora d'abast d'aquest tram (com ja preveia el document d'arquitectura): la Bibli
 8. **EPIC 6 · Clinical AI Assistant** — últim, requereix EPIC 1 consolidat + resoldre **ADR-002** (arquitectura d'IA). El proveïdor es tria al final.
 9. **EPIC 9 · Community & Editorial Governance** — **implementable ja**, en paral·lel a qualsevol altre EPIC; el nomenament del Consell Editorial és posterior a la implementació, no una condició prèvia.
 
-Nota transversal: **ADR-004** (versionat del coneixement) no bloqueja cap EPIC en marxa, però hauria de resoldre's abans d'implementar el versionat d'instrumental personalitzat o d'esterilització (Product Evolution) — seria la quarta còpia independent del mateix patró.
+Nota transversal: ~~**ADR-004** (versionat del coneixement) no bloqueja cap EPIC en marxa, però hauria de resoldre's abans d'implementar el versionat d'instrumental personalitzat o d'esterilització (Product Evolution) — seria la quarta còpia independent del mateix patró.~~ **Resolt (2026-08)**, veure `docs/ADR_004_VERSIONING.md` — la recepta ja existeix, falta aplicar-la.
