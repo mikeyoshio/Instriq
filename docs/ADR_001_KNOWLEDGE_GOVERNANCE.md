@@ -1,6 +1,37 @@
 # ADR-001 · Governança i herència del coneixement — proposta d'arquitectura
 
-**Estat d'aquest document**: anàlisi comparativa d'arquitectura. Cap codi, cap migració, cap interfície. No s'ha implementat res del que segueix — és una proposta pendent de decisió.
+**Estat d'aquest document**: **decidit (2026-08)**. Secció 0 recull els principis i el model de dades confirmats pel propietari. La resta del document és l'anàlisi comparativa que hi va portar. Encara sense codi ni migracions — la implementació es fa EPIC a EPIC (es comença per EPIC 9, que no toca el model de contingut versionat).
+
+---
+
+## 0. Decisió final (confirmada pel propietari, 2026-08)
+
+**Visió del producte**: ni SaaS (Visió A) ni comunitat pura estil Wikipedia — una **infraestructura Open Source** per gestionar coneixement clínic. La comunitat la fa créixer, les organitzacions la fan servir, Instriq és el facilitador, no el propietari del contingut. Model mental: GitHub, no Wikipedia — Instriq no és propietari del "codi" (coneixement), només proporciona la plataforma.
+
+**Principis confirmats**:
+
+1. Instriq és una infraestructura Open Source per gestionar coneixement clínic, no el propietari del contingut.
+2. Cada organització és propietària del seu coneixement privat.
+3. La Biblioteca Pública és una biblioteca de referència mantinguda per la comunitat i l'Editorial Board — **no és una autoritat clínica**.
+4. Una organització pot crear una versió local d'un contingut públic. **Vocabulari d'usuari**: "Versió local", "Actualitzar des de la Biblioteca Pública", "Continuar amb la meva versió" — mai "fork"/"merge".
+5. Les actualitzacions de la Biblioteca Pública **mai** s'apliquen automàticament — cada organització decideix si les adopta.
+6. El Knowledge Graph funciona igual sobre contingut públic o privat — les relacions existeixen igual, el motor respecta els permisos de qui consulta.
+7. La IA (EPIC 6, quan es dissenyi) respectarà el mateix model — només pot fer servir el coneixement al qual l'usuari consultant ja tingui accés.
+
+**Model de dades simplificat per a V1** (substitueix la comparativa de camps de §5 del document original — es descarta el diff/comparació camp a camp per ara):
+
+Cada contingut versionable porta:
+
+* **Owner** — organització, usuari o comunitat/Editorial Board.
+* **Source** — d'on prové (referència a l'element públic d'origen), si escau.
+* **Visibility** — privat / públic.
+* **Version** — ja existent (patró capçalera+versions actual).
+* **Parent** *(opcional)* — apunta a una **versió concreta** (no només a l'entitat) d'on deriva, per poder saber més tard si l'origen ha canviat des de l'adopció.
+* **Sync Status** — enum de 3 estats, **emmagatzemat, no derivat en cada lectura**: `synced` (segueix la referència), `customized` (deriva però té canvis locals), `independent` (ja no manté relació amb l'original). Millora respecte a la proposta inicial d'aquest document (que ho calculava com un booleà a partir d'un hash/timestamp) — un camp explícit és més barat de consultar i més fàcil de mostrar a la UI; es manté amb una transició d'estat en cada edició local (`synced`→`customized` en el primer canvi) i en l'acció explícita "Continuar amb la meva versió" (→`independent`).
+
+**Implicació addicional sobre EPIC 9 / ADR-004** (no decidida encara, anotada per quan es dissenyi la Biblioteca Pública en detall): si cada contingut ja porta `Visibility`, probablement **no calen taules separades** `public_documents`/`public_trays` com recomanava `docs/EPIC_COMMUNITY_GOVERNANCE.md` §2.4 — la mateixa taula `group_documents`/`trays` amb `Visibility='public'` i `Owner` apuntant a la comunitat en lloc d'una organització podria servir per a totes dues coses, evitant la "4a còpia" del patró de versionat que ADR-004 assenyalava com a risc. Es revisarà quan es dissenyi la implementació concreta de la Biblioteca Pública — **no bloqueja** la candidatura/perfil de col·laborador (EPIC 9, primer tram), que no toca contingut versionat.
+
+---
 
 **Encàrrec**: analitzar si el model de coneixement d'Instriq hauria de funcionar de manera similar a Git (herència, forks, sincronització, versions) o si existeix un model millor per a una plataforma de coneixement clínic multiorganització, comparar estratègies i recomanar-ne una.
 

@@ -171,10 +171,11 @@ Recomanació: **opt-in explícit** (`is_public`), mai automàtic en aprovar la c
 | Especialitats (`specialties`) i etiquetes (`tags`/`taggings`) | Ja implementat | Cap canvi per a especialitats; refactorització parcial a `taggings` (afegir `'contributor'` al check de `ref_type`) |
 | Patró de versionat draft→revisió→publicat→arxivat | Ja implementat (3 vegades) | Cap canvi al patró; nova EPIC per aplicar-lo a taules públiques noves |
 | Comentaris de revisió multi-ronda (`editorial_comments`) | No implementat | Nova EPIC |
-| Candidatura de col·laborador (`contributor_applications`) | No implementat | Nova EPIC |
-| Nivells de col·laborador (`contributor_profiles`) | No implementat | Nova EPIC |
-| Biblioteca Pública (`public_documents`/`public_trays`) | No implementat | Nova EPIC |
-| Perfil públic | No implementat | Nova EPIC |
+| Candidatura de col·laborador (`contributor_applications`) | **Implementat (2026-08)** | — (`supabase/schema_v27_contributors.sql`, `ContributorApplicationFormScreen`) |
+| Nivells de col·laborador (`contributor_profiles`) | **Implementat (2026-08)** | — (2 eixos aplicats: `level` lineal 3 esglaons + `taggings` per àrea d'expertesa) |
+| Biblioteca Pública (`public_documents`/`public_trays`) | No implementat | Nova EPIC — revisar primer si cal taula nova o `visibility` a `trays`/`group_documents` existents (veure `docs/ADR_001_KNOWLEDGE_GOVERNANCE.md` §0) |
+| Perfil públic (dades) | **Implementat (2026-08)** | — (`ContributorProfileScreen`, `is_public`/`show_organization` opt-in) |
+| Perfil públic (pantalla de veure el d'un altre col·laborador) | No implementat | Nova EPIC (petita) |
 | Insígnies/reconeixements | No implementat (i es recomana que sigui una vista, no una taula) | Nova EPIC (petita, un cop hi hagi dades reals de contribucions) |
 | Knowledge Graph compatible amb contingut públic | Parcialment implementat (`knowledge_links` ja preparat estructuralment, falten els 2 valors nous d'enum) | Refactorització parcial |
-| Auditoria (`audit_log`) aplicada a accions editorials/de candidatura | Parcialment implementat (el mecanisme existeix, les accions noves no hi són) | Refactorització parcial |
+| Auditoria (`audit_log`) aplicada a accions editorials/de candidatura | **Implementat (2026-08) per a candidatures** (`review_contributor_application`/`set_contributor_level` ja hi registren); pendent per a accions editorials (encara no existeixen) | Refactorització parcial quan es construeixi la Biblioteca Pública |
