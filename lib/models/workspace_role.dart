@@ -5,19 +5,6 @@
 enum WorkspaceRole { reader, editor, approver, administrator }
 
 extension WorkspaceRoleLabel on WorkspaceRole {
-  String get label {
-    switch (this) {
-      case WorkspaceRole.reader:
-        return 'Lector';
-      case WorkspaceRole.editor:
-        return 'Editor';
-      case WorkspaceRole.approver:
-        return 'Aprobador';
-      case WorkspaceRole.administrator:
-        return 'Administrador';
-    }
-  }
-
   /// Puede crear o editar borradores de contenido.
   bool get canEdit =>
       this == WorkspaceRole.editor || this == WorkspaceRole.approver || this == WorkspaceRole.administrator;

@@ -20,6 +20,12 @@ Actualment aquests fluxos únicament s'han validat en mode convidat.
 
 ---
 
+## Navegació
+
+* ~~Pestanya "Activitat" era un carreró sense sortida per a qui no és admin~~ — **arreglat (2026-08)**. `ActivityScreen` només mostra un text de "només administradors" per a la resta d'usuaris (la majoria: personal de quiròfan, no admins). `lib/navigation/app_shell.dart` ara filtra els destins visibles del `NavigationBar`/`NavigationRail` segons `ProfileService.instance.isAdmin` (les 5 rames de `StatefulShellRoute.indexedStack` no es toquen, només què es mostra) — 4 pestanyes per a no-admin, 5 per a admin.
+
+---
+
 ## Bugs coneguts (pendents d'investigar)
 
 * ~~Filtre de Mode de Treball no sembla tenir efecte~~ — **arreglat (2026-08)**. Causa real: `PopupMenuButton<T>` de Flutter confon "menú tancat sense triar" amb "s'ha triat `value: null`" (`showMenu` retorna `null` en tots dos casos), així que `onSelected` mai s'executava en tocar "Sense preferència" a `lib/navigation/work_mode_header.dart` — el mode mai es reiniciava i el botó tornava a mostrar l'anterior. El selector de xips de "El meu compte" (`work_mode_picker.dart`) ja funcionava bé, no tenia aquest problema. Verificat amb `flutter analyze`/`flutter test`; **pendent de provar en viu amb usuari autenticat** (el header només es mostra amb hospital connectat, no reproduïble en mode convidat).
@@ -32,10 +38,10 @@ Actualment aquests fluxos únicament s'han validat en mode convidat.
 
 No són EPICs — són deute tècnic, sense decisió d'arquitectura pendent.
 
-* Migrar Flutter al nou sistema "Built-in Kotlin" — no urgent, però el build d'EPIC 8 (2026-08) ja va mostrar el warning real: `package_info_plus`/`shared_preferences_android` encara apliquen el Kotlin Gradle Plugin antic.
-* Unificar les dues taxonomies actuals d'especialitats (14 i 16 categories).
-* Internacionalitzar les observacions d'esterilització.
-* Eliminar textos fixos únicament disponibles en castellà.
+* ~~Migrar Flutter al nou sistema "Built-in Kotlin"~~ — **investigat (2026-08), bloquejat aigües amunt**. L'avís ve de dos plugins (`package_info_plus`, `shared_preferences_android`), no del `build.gradle` propi (AGP 9.0.1/Kotlin 2.3.20 ja són moderns). `package_info_plus` té un salt de versió major disponible (8.x→10.x) que podria arreglar-ho, però és *breaking* i caldria revisar els punts d'ús. `shared_preferences_android` no té cap versió més nova disponible encara (2.4.27 és el màxim resoluble) — la migració depèn de si aquest paquet fa el seu propi pas a Built-in Kotlin, no és cosa nostra encara. No urgent (avís, no error).
+* ~~Unificar les dues taxonomies actuals d'especialitats (14 i 16 categories)~~ — **fet (2026-08)**. La llista de 14 (`lib/data/surgical_specialties.dart`, RD 183/2008) era codi mort: cap pantalla la important mai. Eliminada. La llista de 16 (`Specialty` enum + taula `specialties`, Fase C) és l'única real i ja cobreix les 14 categories oficials (2 addicions pròpies: laparoscòpia/energia avançada i cirurgia robòtica). Actualitzats els 2 comentaris SQL obsolets que hi feien referència.
+* ~~Internacionalitzar les observacions d'esterilització~~ — **fet (2026-08)**. Les ~50 files sembrades del catàleg global (`supabase/seed_v1_catalog_sterilization_defaults.sql`) repetien literalment 4 frases fixes en castellà. Traduïdes com a claus l10n (`sterilizationObsGenericReusable`/`Disposable`/`ScalpelHandle`/`ScalpelBlade`) i localitzades a la UI (`sterilizationObservationsText()` a `lib/widgets/sterilization_method_label.dart`) quan el text guardat coincideix exactament amb una plantilla coneguda; el text propi d'un hospital (escrit pel seu equip) es mostra tal qual, mateix criteri que la resta de contingut d'autor lliure de l'app (`group_documents.content`, notes de safates, etc. — cap altra taula separa per idioma).
+* Eliminar textos fixos únicament disponibles en castellà — **parcial (2026-08)**: arreglats `audit_log_screen.dart` (títol, accions, rols, "fa X temps", estat buit) i `WorkspaceRole.label` (usat també a `manage_workspace_members_screen.dart`, reemplaçat per `workspaceRoleLabel()` a `lib/widgets/workspace_role_label.dart`, mateix patró que `sterilizationMethodValueLabel`). Pendent: cap més detectat en aquesta passada, però no s'ha fet una auditoria exhaustiva de tot el repositori.
 
 ---
 

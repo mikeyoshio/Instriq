@@ -34,6 +34,7 @@ class _AuditLogScreenState extends State<AuditLogScreen> {
   }
 
   Future<void> _load() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -44,7 +45,7 @@ class _AuditLogScreenState extends State<AuditLogScreen> {
         workspaceId: widget.workspaceId,
       );
     } catch (e) {
-      _error = 'No se pudo cargar el registro de auditoría: $e';
+      _error = l10n.auditLogLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -71,10 +72,10 @@ class _AuditLogScreenState extends State<AuditLogScreen> {
                   )
                 : _entries.isEmpty
                     ? ListView(
-                        children: const [
+                        children: [
                           Padding(
-                            padding: EdgeInsets.all(24),
-                            child: Text('Todavía no hay ninguna acción registrada.'),
+                            padding: const EdgeInsets.all(24),
+                            child: Text(l10n.auditLogEmptyState),
                           ),
                         ],
                       )
@@ -94,15 +95,6 @@ class _AuditEntryTile extends StatelessWidget {
 
   final AuditEntry entry;
 
-  static const _actionLabels = <String, String>{
-    'document_version_approved': 'Versión aprobada',
-    'document_version_rejected': 'Versión rechazada',
-    'document_created': 'Documento creado',
-    'document_deleted': 'Documento eliminado',
-    'workspace_member_role_changed': 'Rol de miembro cambiado',
-    'hospital_ownership_transferred': 'Propiedad del grupo transferida',
-  };
-
   static const _actionIcons = <String, IconData>{
     'document_version_approved': Icons.check_circle_outline,
     'document_version_rejected': Icons.cancel_outlined,
@@ -113,71 +105,83 @@ class _AuditEntryTile extends StatelessWidget {
     'user_signed_in': Icons.login,
   };
 
-  /// `user_signed_in` es la única acción con etiqueta vía l10n (resto de
-  /// entradas de este mapa son texto fijo en castellano, gap ya existente en
-  /// esta pantalla — no se toca aquí, solo la etiqueta nueva sigue la regla
-  /// del proyecto de que todo string nuevo va por los 3 arb).
-  String _actionLabel(BuildContext context) {
-    if (entry.action == 'user_signed_in') {
-      return AppLocalizations.of(context)!.auditActionUserSignedIn;
+  String _actionLabel(AppLocalizations l10n) {
+    switch (entry.action) {
+      case 'user_signed_in':
+        return l10n.auditActionUserSignedIn;
+      case 'document_version_approved':
+        return l10n.auditActionDocumentVersionApproved;
+      case 'document_version_rejected':
+        return l10n.auditActionDocumentVersionRejected;
+      case 'document_created':
+        return l10n.auditActionDocumentCreated;
+      case 'document_deleted':
+        return l10n.auditActionDocumentDeleted;
+      case 'workspace_member_role_changed':
+        return l10n.auditActionWorkspaceMemberRoleChanged;
+      case 'hospital_ownership_transferred':
+        return l10n.auditActionHospitalOwnershipTransferred;
+      default:
+        return entry.action;
     }
-    return _actionLabels[entry.action] ?? entry.action;
   }
 
   IconData get _icon => _actionIcons[entry.action] ?? Icons.history;
 
   /// Texto descriptivo de sobre qué entidad fue la acción, a partir de
   /// `metadata`/`entity_type`.
-  String? get _entityDescription {
+  String? _entityDescription(AppLocalizations l10n) {
     final metadata = entry.metadata;
     switch (entry.entityType) {
       case 'group_document_version':
         final title = metadata['title'] as String?;
-        return (title != null && title.isNotEmpty) ? title : 'Documento sin título';
+        return (title != null && title.isNotEmpty) ? title : l10n.auditDocumentUntitledLabel;
       case 'group_document':
         final title = metadata['title'] as String?;
         final kind = metadata['kind'] as String?;
-        final kindLabel = kind == 'protocol' ? 'Protocolo' : (kind == 'technique' ? 'Técnica quirúrgica' : null);
+        final kindLabel =
+            kind == 'protocol' ? l10n.auditKindProtocolLabel : (kind == 'technique' ? l10n.auditKindTechniqueLabel : null);
         if (title != null && title.isNotEmpty) return title;
         return kindLabel;
       case 'workspace_member':
         final previousRole = metadata['previous_role'] as String?;
         final newRole = metadata['new_role'] as String?;
-        if (newRole == null) return 'Acceso quitado (antes: ${_roleLabel(previousRole)})';
-        if (previousRole == null) return 'Asignado como ${_roleLabel(newRole)}';
-        return '${_roleLabel(previousRole)} → ${_roleLabel(newRole)}';
+        if (newRole == null) return l10n.auditAccessRemovedDescription(_roleLabel(l10n, previousRole));
+        if (previousRole == null) return l10n.auditAssignedAsRoleDescription(_roleLabel(l10n, newRole));
+        return l10n.auditRoleChangeDescription(_roleLabel(l10n, previousRole), _roleLabel(l10n, newRole));
       case 'hospital':
-        return 'Propietaria/o del grupo';
+        return l10n.auditHospitalOwnerDescription;
       default:
         return null;
     }
   }
 
-  String _roleLabel(String? role) {
+  String _roleLabel(AppLocalizations l10n, String? role) {
     switch (role) {
       case 'reader':
-        return 'Lector';
+        return l10n.workspaceRoleReaderLabel;
       case 'editor':
-        return 'Editor';
+        return l10n.workspaceRoleEditorLabel;
       case 'approver':
-        return 'Aprobador';
+        return l10n.workspaceRoleApproverLabel;
       case 'administrator':
-        return 'Administrador';
+        return l10n.workspaceRoleAdministratorLabel;
       default:
-        return 'sin rol';
+        return l10n.auditNoRoleLabel;
     }
   }
 
-  String get _who => entry.actorId == null ? 'Usuario eliminado' : (entry.actorDisplayName ?? 'Usuario eliminado');
+  String _who(AppLocalizations l10n) =>
+      entry.actorId == null ? l10n.deletedUserLabel : (entry.actorDisplayName ?? l10n.deletedUserLabel);
 
-  String _when(DateTime? createdAt) {
+  String _when(AppLocalizations l10n, DateTime? createdAt) {
     if (createdAt == null) return '';
     final now = DateTime.now();
     final diff = now.difference(createdAt);
-    if (diff.inMinutes < 1) return 'Hace un momento';
-    if (diff.inMinutes < 60) return 'Hace ${diff.inMinutes} min';
-    if (diff.inHours < 24) return 'Hace ${diff.inHours} h';
-    if (diff.inDays < 7) return 'Hace ${diff.inDays} d';
+    if (diff.inMinutes < 1) return l10n.auditJustNowLabel;
+    if (diff.inMinutes < 60) return l10n.auditMinutesAgoLabel(diff.inMinutes);
+    if (diff.inHours < 24) return l10n.auditHoursAgoLabel(diff.inHours);
+    if (diff.inDays < 7) return l10n.auditDaysAgoLabel(diff.inDays);
     return '${createdAt.day.toString().padLeft(2, '0')}/'
         '${createdAt.month.toString().padLeft(2, '0')}/'
         '${createdAt.year} '
@@ -187,11 +191,12 @@ class _AuditEntryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final description = _entityDescription;
+    final l10n = AppLocalizations.of(context)!;
+    final description = _entityDescription(l10n);
     return Card(
       child: ListTile(
         leading: Icon(_icon),
-        title: Text(_actionLabel(context)),
+        title: Text(_actionLabel(l10n)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -201,7 +206,7 @@ class _AuditEntryTile extends StatelessWidget {
             ],
             const SizedBox(height: 2),
             Text(
-              '$_who · ${_when(entry.createdAt)}'
+              '${_who(l10n)} · ${_when(l10n, entry.createdAt)}'
               '${entry.workspaceName != null ? ' · ${entry.workspaceName}' : ''}',
               style: Theme.of(context).textTheme.labelMedium,
             ),
