@@ -911,8 +911,9 @@ begin
 
   select json_build_object(
     -- Cobertura de contenido por especialidad. La especialidad es el campo
-    -- estandarizado (lista cerrada RD 183/2008, ver lib/data/surgical_specialties.dart)
-    -- que se guarda como texto en group_document_versions.specialty. Se
+    -- de texto libre historico en group_document_versions.specialty (la
+    -- lista cerrada real vive en la tabla `specialties`, 1:1 con el enum
+    -- Specialty de lib/models/instrument.dart, ver schema_v19). Se
     -- agrupa por el valor tal cual esta guardado (incluye null como "Sin
     -- especialidad" para no perder documentos antiguos sin clasificar).
     'by_specialty', (

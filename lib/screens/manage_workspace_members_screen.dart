@@ -7,6 +7,7 @@ import '../models/workspace_member.dart';
 import '../models/workspace_role.dart';
 import '../services/team_service.dart';
 import '../services/workspace_service.dart';
+import '../widgets/workspace_role_label.dart';
 
 /// Solo accesible para admin/owner (gateado además por RLS de
 /// workspace_members). Asigna el rol de cada miembro del hospital dentro de
@@ -94,7 +95,7 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
         DropdownMenuItem<WorkspaceRole?>(value: null, child: Text(l10n.manageMembersNoAccess)),
         ...WorkspaceRole.values
             .where((r) => r != WorkspaceRole.administrator)
-            .map((r) => DropdownMenuItem<WorkspaceRole?>(value: r, child: Text(r.label))),
+            .map((r) => DropdownMenuItem<WorkspaceRole?>(value: r, child: Text(workspaceRoleLabel(l10n, r)))),
       ],
       onChanged: onChanged,
     );

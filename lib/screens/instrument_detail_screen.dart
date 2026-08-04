@@ -533,7 +533,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       if (method.restrictions != null && method.restrictions!.isNotEmpty)
         '${l10n.sterilizationRestrictionsLabel}: ${method.restrictions}',
       if (method.observations != null && method.observations!.isNotEmpty)
-        '${l10n.sterilizationObservationsLabel}: ${method.observations}',
+        '${l10n.sterilizationObservationsLabel}: ${sterilizationObservationsText(l10n, method.observations!)}',
     ];
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
