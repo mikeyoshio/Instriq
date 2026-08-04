@@ -139,6 +139,7 @@ class _ManageTeamsScreenState extends State<ManageTeamsScreen> {
                             subtitle: Text(l10n.teamMembersCountTitle(_memberCounts[team.id] ?? 0)),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete_outline),
+                              tooltip: l10n.deleteTeamTooltip,
                               onPressed: () => _deleteTeam(team),
                             ),
                             onTap: () => _openMembers(team),

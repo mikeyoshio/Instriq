@@ -69,6 +69,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
         leading: _mode == _Mode.join
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
+                tooltip: l10n.backTooltip,
                 onPressed: () => setState(() => _mode = _Mode.choose),
               )
             : null,
@@ -76,6 +77,7 @@ class _JoinHospitalScreenState extends State<JoinHospitalScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
+            tooltip: l10n.signOut,
             onPressed: () => AuthService.instance.signOut(),
           ),
         ],

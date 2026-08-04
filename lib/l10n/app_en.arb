@@ -643,5 +643,31 @@
   "@contributorProfileSaveError": {"placeholders": {"error": {"type": "String"}}},
   "contributorReviewQueueTitle": "Contributor applications",
   "contributorApplicationApprovedSnackbar": "Application approved",
-  "contributorApplicationRejectedSnackbar": "Application rejected"
+  "contributorApplicationRejectedSnackbar": "Application rejected",
+
+  "backTooltip": "Back",
+  "editTooltip": "Edit",
+  "deleteTooltip": "Delete",
+  "removeMemberTooltip": "Remove member",
+  "openTrayTooltip": "Open tray",
+  "removeStepTooltip": "Remove step",
+  "removeRelatedInstrumentTooltip": "Remove related instrument",
+  "removeRelatedTrayTooltip": "Remove related tray",
+  "clearSearchTooltip": "Clear search",
+  "deleteTeamTooltip": "Delete team",
+  "editNoteTooltip": "Edit note",
+  "removeItemTooltip": "Remove item",
+  "refreshTooltip": "Refresh",
+
+  "howItWorksTitle": "How it works",
+  "howItWorksIntro": "Instriq helps you find, learn and share knowledge about surgical instruments. Here's a simple explanation of what you can do in each part of the app.",
+  "howItWorksHomeBody": "This is the main screen. You'll find quick access to the Catalog, Sterilization, the Learn section, and your Progress. You can also search directly from here.",
+  "howItWorksSearchBody": "Browse the whole instrument catalog. You can filter by specialty or category, or type the name of an instrument, a brand or a technique to find it faster.",
+  "howItWorksLibraryBody": "Here you'll find your hospital or team's content: prepared trays, techniques and protocols, surgeons' preference cards, and the team's own instruments. You need to be connected to a hospital to see this content.",
+  "howItWorksActivityBody": "This section is for administrators. It shows pending changes to review and a log of who did what.",
+  "howItWorksProfileBody": "Here you can change the language, turn on dark mode, manage your account and, if you want, take part in the Instriq community.",
+  "howItWorksTipsTitle": "Tips",
+  "howItWorksTipsBody": "Mark an instrument as learned once you know it well: your progress is saved. Choose your Work mode in Profile so screens show what you need first, based on your role. Mark instruments as favorites to find them faster next time.",
+  "howItWorksAccessibilityTitle": "Accessibility",
+  "howItWorksAccessibilityBody": "Instriq adapts to your needs. If you increase the text size on your phone, the app becomes bigger too. You can navigate with a screen reader (TalkBack on Android, VoiceOver on iPhone). If bright light bothers you, turn on dark mode from Profile. And you can choose between Catalan, Spanish and English, also from Profile."
 }

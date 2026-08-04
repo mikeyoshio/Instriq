@@ -368,6 +368,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                   subtitle: step.category != null ? Text(step.category!) : null,
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline),
+                    tooltip: l10n.removeStepTooltip,
                     onPressed: () => setState(() => _steps.removeAt(index)),
                   ),
                 );
@@ -399,6 +400,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 title: Text(instrument?.name ?? id),
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
+                  tooltip: l10n.removeRelatedInstrumentTooltip,
                   onPressed: () => setState(() => _relatedInstrumentIds.remove(id)),
                 ),
               );
@@ -427,6 +429,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 title: Text(tray?.publishedVersion?.name ?? id),
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
+                  tooltip: l10n.removeRelatedTrayTooltip,
                   onPressed: () => setState(() => _relatedTrayIds.remove(id)),
                 ),
               );

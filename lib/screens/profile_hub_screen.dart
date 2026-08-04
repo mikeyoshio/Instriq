@@ -15,6 +15,7 @@ import 'admin/manage_hospital_screen.dart';
 import 'contributor_application_form_screen.dart';
 import 'contributor_profile_screen.dart';
 import 'contributor_review_queue_screen.dart';
+import 'how_it_works_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
 
@@ -108,6 +109,12 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     if (locale != null) await LocaleService.instance.setLocale(locale);
   }
 
+  Future<void> _openHowItWorks() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
+    );
+  }
+
   Future<void> _openAccountPrivacy() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const AccountPrivacyScreen()),
@@ -176,6 +183,12 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                     onTap: () => ThemeService.instance.toggle(Theme.of(context).brightness),
                   );
                 },
+              ),
+              const SizedBox(height: InstriqSpacing.sm),
+              InstriqListItem(
+                icon: Icons.help_outline,
+                title: l10n.howItWorksTitle,
+                onTap: _openHowItWorks,
               ),
               if (loggedIn) ...[
                 const SizedBox(height: InstriqSpacing.xl),

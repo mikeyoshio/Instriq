@@ -296,8 +296,9 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               onPressed: _toggleFavorite,
             ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
-          if (canEdit) IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
-          if (canApprove) IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),
+          if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
+          if (canApprove)
+            IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.deleteTooltip, onPressed: _delete),
         ],
       ),
       body: ListView(
@@ -414,6 +415,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                     title: Text(tray.publishedVersion?.name ?? id),
                     trailing: IconButton(
                       icon: const Icon(Icons.chevron_right),
+                      tooltip: l10n.openTrayTooltip,
                       onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: widget.myRole)),
                       ),

@@ -555,6 +555,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? null
                       : IconButton(
                           icon: const Icon(Icons.clear),
+                          tooltip: l10n.clearSearchTooltip,
                           onPressed: () {
                             _searchAnalyticsDebounce?.cancel();
                             _searchController.clear();
