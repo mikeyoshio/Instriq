@@ -51,11 +51,12 @@ class _AuditLogScreenState extends State<AuditLogScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registro de auditoría'),
+        title: Text(l10n.auditLogTitle),
         actions: [
-          IconButton(onPressed: _load, icon: const Icon(Icons.refresh), tooltip: 'Actualizar'),
+          IconButton(onPressed: _load, icon: const Icon(Icons.refresh), tooltip: l10n.refreshTooltip),
         ],
       ),
       body: RefreshIndicator(

@@ -331,6 +331,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
                 onTap: () => _editItem(index),
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
+                  tooltip: l10n.removeItemTooltip,
                   onPressed: () => setState(() => _items.removeAt(index)),
                 ),
               );

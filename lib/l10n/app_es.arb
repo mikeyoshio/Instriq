@@ -643,5 +643,31 @@
   "@contributorProfileSaveError": {"placeholders": {"error": {"type": "String"}}},
   "contributorReviewQueueTitle": "Candidaturas de colaboradores",
   "contributorApplicationApprovedSnackbar": "Candidatura aprobada",
-  "contributorApplicationRejectedSnackbar": "Candidatura rechazada"
+  "contributorApplicationRejectedSnackbar": "Candidatura rechazada",
+
+  "backTooltip": "Atrás",
+  "editTooltip": "Editar",
+  "deleteTooltip": "Eliminar",
+  "removeMemberTooltip": "Eliminar miembro",
+  "openTrayTooltip": "Abrir bandeja",
+  "removeStepTooltip": "Eliminar paso",
+  "removeRelatedInstrumentTooltip": "Eliminar instrumento relacionado",
+  "removeRelatedTrayTooltip": "Eliminar bandeja relacionada",
+  "clearSearchTooltip": "Borrar búsqueda",
+  "deleteTeamTooltip": "Eliminar equipo",
+  "editNoteTooltip": "Editar nota",
+  "removeItemTooltip": "Eliminar elemento",
+  "refreshTooltip": "Actualizar",
+
+  "howItWorksTitle": "Cómo funciona",
+  "howItWorksIntro": "Instriq te ayuda a encontrar, aprender y compartir conocimiento sobre instrumental quirúrgico. Aquí encontrarás, explicado de forma sencilla, qué puedes hacer en cada parte de la aplicación.",
+  "howItWorksHomeBody": "Es la pantalla principal. Aquí tienes accesos rápidos al Catálogo, a la Esterilización, al apartado para Aprender y a tu Progreso. También puedes buscar directamente desde aquí.",
+  "howItWorksSearchBody": "Explora todo el catálogo de instrumental. Puedes filtrar por especialidad o categoría, o escribir el nombre de un instrumento, una marca o una técnica para encontrarlo más rápido.",
+  "howItWorksLibraryBody": "Aquí encontrarás el contenido de tu hospital o equipo: bandejas preparadas, técnicas y protocolos, tarjetas de preferencia de los cirujanos, e instrumental propio del equipo. Debes estar conectado a un hospital para ver este contenido.",
+  "howItWorksActivityBody": "Esta sección es para personas administradoras. Muestra los cambios pendientes de revisar y un registro de quién ha hecho qué.",
+  "howItWorksProfileBody": "Aquí puedes cambiar el idioma, activar el tema oscuro, gestionar tu cuenta y, si quieres, participar en la comunidad Instriq.",
+  "howItWorksTipsTitle": "Consejos",
+  "howItWorksTipsBody": "Marca como aprendido cada instrumento que ya conozcas bien: tu progreso queda guardado. Elige tu Modo de trabajo en Perfil para que las fichas te muestren primero lo que necesitas según tu trabajo. Marca instrumentos como favoritos para encontrarlos más rápido la próxima vez.",
+  "howItWorksAccessibilityTitle": "Accesibilidad",
+  "howItWorksAccessibilityBody": "Instriq se adapta a tus necesidades. Si aumentas el tamaño de letra en tu teléfono, la aplicación también se hace más grande. Puedes navegar con un lector de pantalla (TalkBack en Android, VoiceOver en iPhone). Si la luz brillante te molesta, activa el tema oscuro desde Perfil. Y puedes elegir entre catalán, castellano e inglés, también desde Perfil."
 }

@@ -235,8 +235,9 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
               onPressed: _toggleFavorite,
             ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
-          if (canEdit) IconButton(icon: const Icon(Icons.edit), onPressed: _edit),
-          if (canApprove) IconButton(icon: const Icon(Icons.delete_outline), onPressed: _delete),
+          if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
+          if (canApprove)
+            IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.deleteTooltip, onPressed: _delete),
         ],
       ),
       body: _loading

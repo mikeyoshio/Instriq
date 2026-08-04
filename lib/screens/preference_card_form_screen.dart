@@ -323,9 +323,14 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(icon: const Icon(Icons.note_alt_outlined), onPressed: () => _editNote(index)),
+                        IconButton(
+                          icon: const Icon(Icons.note_alt_outlined),
+                          tooltip: l10n.editNoteTooltip,
+                          onPressed: () => _editNote(index),
+                        ),
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
+                          tooltip: l10n.removeItemTooltip,
                           onPressed: () => setState(() => _items.removeAt(index)),
                         ),
                       ],

@@ -643,5 +643,31 @@
   "@contributorProfileSaveError": {"placeholders": {"error": {"type": "String"}}},
   "contributorReviewQueueTitle": "Candidatures de col·laboradors",
   "contributorApplicationApprovedSnackbar": "Candidatura aprovada",
-  "contributorApplicationRejectedSnackbar": "Candidatura rebutjada"
+  "contributorApplicationRejectedSnackbar": "Candidatura rebutjada",
+
+  "backTooltip": "Enrere",
+  "editTooltip": "Edita",
+  "deleteTooltip": "Elimina",
+  "removeMemberTooltip": "Elimina el membre",
+  "openTrayTooltip": "Obre la safata",
+  "removeStepTooltip": "Elimina el pas",
+  "removeRelatedInstrumentTooltip": "Elimina l'instrument relacionat",
+  "removeRelatedTrayTooltip": "Elimina la safata relacionada",
+  "clearSearchTooltip": "Esborra la cerca",
+  "deleteTeamTooltip": "Elimina l'equip",
+  "editNoteTooltip": "Edita la nota",
+  "removeItemTooltip": "Elimina l'element",
+  "refreshTooltip": "Actualitza",
+
+  "howItWorksTitle": "Com funciona",
+  "howItWorksIntro": "Instriq t'ajuda a trobar, aprendre i compartir coneixement sobre instrumental quirúrgic. Aquí trobaràs, explicat de manera senzilla, què pots fer a cada part de l'aplicació.",
+  "howItWorksHomeBody": "És la pantalla principal. Hi trobaràs accessos ràpids al Catàleg, a l'Esterilització, a l'apartat per Aprendre i al teu Progrés. També pots cercar directament des d'aquí.",
+  "howItWorksSearchBody": "Explora tot el catàleg d'instrumental. Pots filtrar per especialitat o categoria, o escriure el nom d'un instrument, una marca o una tècnica per trobar-lo més ràpid.",
+  "howItWorksLibraryBody": "Aquí trobaràs el contingut del teu hospital o equip: safates preparades, tècniques i protocols, targetes de preferència dels cirurgians, i instrumental propi de l'equip. Cal estar connectat a un hospital per veure aquest contingut.",
+  "howItWorksActivityBody": "Aquesta secció és per a persones administradores. Mostra els canvis pendents de revisar i un registre de qui ha fet què.",
+  "howItWorksProfileBody": "Aquí pots canviar l'idioma, activar el tema fosc, gestionar el teu compte i, si vols, participar a la comunitat Instriq.",
+  "howItWorksTipsTitle": "Consells",
+  "howItWorksTipsBody": "Marca com a après cada instrument que ja coneguis bé: el teu progrés queda desat. Tria el teu Mode de treball a Perfil perquè les fitxes et mostrin primer el que et cal segons la teva feina. Marca instruments com a favorits per trobar-los més ràpid una altra vegada.",
+  "howItWorksAccessibilityTitle": "Accessibilitat",
+  "howItWorksAccessibilityBody": "Instriq s'adapta a les teves necessitats. Si augmentes la mida de la lletra al teu telèfon, l'aplicació també es fa més gran. Pots navegar-hi amb un lector de pantalla (TalkBack a Android, VoiceOver a iPhone). Si la llum brillant et molesta, activa el tema fosc des de Perfil. I pots triar entre català, castellà i anglès, també des de Perfil."
 }

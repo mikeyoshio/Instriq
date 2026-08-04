@@ -179,6 +179,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
           if (canEdit)
             IconButton(
               icon: const Icon(Icons.edit_outlined),
+              tooltip: l10n.editTooltip,
               onPressed: () async {
                 final saved = await Navigator.of(context).push<bool>(
                   MaterialPageRoute(
@@ -204,6 +205,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
           if (canDelete)
             IconButton(
               icon: const Icon(Icons.delete_outline),
+              tooltip: l10n.deleteTooltip,
               onPressed: _delete,
             ),
         ],

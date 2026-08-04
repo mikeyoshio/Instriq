@@ -56,6 +56,18 @@ Evolució funcional. Els dos primers punts es relacionen amb **ADR-004** (veure 
 
 ---
 
+## Accessibilitat i onboarding
+
+* ~~Pantalla "Com funciona" (llenguatge planer) + revisió tècnica bàsica d'accessibilitat~~ — **fet (2026-08)**.
+
+**Estat: fet.** Nova `lib/screens/how_it_works_screen.dart`, accessible des de Perfil per a tothom (també en mode convidat, sense necessitat de compte). Deliberadament una sola pàgina que es desplaça (sense `ExpansionTile` ni pestanyes — cap contingut amagat rere un toc addicional), text a mida `bodyLarge` (16sp, no `bodyMedium`), frases curtes sense argot tècnic. Explica què fa cada pestanya (Inici/Cercar/Biblioteca/Activitat/Perfil), dona consells d'ús, i una secció d'accessibilitat pròpia (mida de lletra del sistema, lector de pantalla, tema fosc, idioma).
+
+Revisió tècnica bàsica feta en paral·lel: (1) contrast de color dels tokens (`InstriqColors`) verificat manualment — text secundari sobre fons ja supera 7:1 en tema clar i 8.8:1 en tema fosc, per sobre del mínim AA (4.5:1); (2) confirmat que l'app no sobreescriu `textScaleFactor` enlloc, així que respecta la mida de lletra del sistema; (3) trobats i arreglats **20 `IconButton` sense `tooltip`** (invisibles per a lectors de pantalla com TalkBack/VoiceOver) a 12 pantalles diferents — ara tots tenen una etiqueta accessible, amb 13 claus l10n noves (`editTooltip`/`deleteTooltip` genèrics per a botons d'una pantalla de detall d'una sola entitat, etiquetes específiques per a accions destructives dins de llistes); de pas, `audit_log_screen.dart` va deixar de tenir el títol i el tooltip de refrescar fixos en castellà (reutilitzant una clau `auditLogTitle` que ja existia i no s'usava).
+
+No inclòs en aquest tram (fora de l'abast acordat): auditoria exhaustiva de totes les pantalles (mida de zones tàctils pantalla per pantalla, ordre de focus per a lector de pantalla, `Semantics` personalitzats), i la resta de textos fixos en castellà d'`audit_log_screen.dart` (`_actionLabels`, `_roleLabel`, etc. — ja documentat per separat a Technical Debt). `flutter analyze`/`flutter test` nets. Verificat en emulador en mode convidat: la pantalla "Com funciona" es desplaça correctament amb totes les seccions llegibles, sense cap regressió a la resta de Perfil.
+
+---
+
 ## Sostenibilitat
 
 * Desenvolupar un sistema de donacions completament transparent.

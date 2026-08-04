@@ -200,6 +200,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                             if (!isMe && !m.isAdmin)
                               IconButton(
                                 icon: const Icon(Icons.person_remove_outlined),
+                                tooltip: l10n.removeMemberTooltip,
                                 onPressed: () => _removeMember(m),
                               ),
                           ],
