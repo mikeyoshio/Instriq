@@ -4,12 +4,17 @@ import '../design_system/components/instriq_list_item.dart';
 import '../design_system/components/instriq_section_header.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
+import '../models/contributor_application.dart';
 import '../services/auth_service.dart';
+import '../services/contributor_service.dart';
 import '../services/locale_service.dart';
 import '../services/profile_service.dart';
 import '../services/theme_service.dart';
 import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
+import 'contributor_application_form_screen.dart';
+import 'contributor_profile_screen.dart';
+import 'contributor_review_queue_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
 
@@ -25,7 +30,58 @@ class ProfileHubScreen extends StatefulWidget {
 }
 
 class _ProfileHubScreenState extends State<ProfileHubScreen> {
+  ContributorApplication? _lastApplication;
+  bool _loadingContributorState = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadContributorState();
+  }
+
+  Future<void> _loadContributorState() async {
+    if (AuthService.instance.currentUser == null) {
+      if (mounted) setState(() => _loadingContributorState = false);
+      return;
+    }
+    try {
+      await ContributorService.instance.loadMyProfile();
+      _lastApplication =
+          ContributorService.instance.myProfile == null ? await ContributorService.instance.fetchMyLatestApplication() : null;
+    } catch (_) {
+      // La secció de comunitat es un extra: si falla la carrega, no bloqueja
+      // la resta de "El meu compte".
+    }
+    if (mounted) setState(() => _loadingContributorState = false);
+  }
+
   void _refresh() => setState(() {});
+
+  Future<void> _refreshContributorState() async {
+    setState(() => _loadingContributorState = true);
+    await _loadContributorState();
+  }
+
+  Future<void> _openContributorApplicationForm() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ContributorApplicationFormScreen()),
+    );
+    _refreshContributorState();
+  }
+
+  Future<void> _openContributorProfile() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ContributorProfileScreen()),
+    );
+    _refreshContributorState();
+  }
+
+  Future<void> _openContributorReviewQueue() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ContributorReviewQueueScreen()),
+    );
+    _refreshContributorState();
+  }
 
   Future<void> _pickLanguage() async {
     final l10n = AppLocalizations.of(context)!;
@@ -136,6 +192,48 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                   title: l10n.signOut,
                   onTap: _signOut,
                 ),
+              ],
+              if (loggedIn && !_loadingContributorState) ...[
+                const SizedBox(height: InstriqSpacing.xl),
+                InstriqSectionHeader(l10n.communitySectionHeader),
+                const SizedBox(height: InstriqSpacing.md),
+                if (ContributorService.instance.myProfile != null) ...[
+                  InstriqListItem(
+                    icon: Icons.diversity_3_outlined,
+                    title: l10n.contributorProfileTitle,
+                    onTap: _openContributorProfile,
+                  ),
+                  if (ContributorService.instance.isEditorialBoard) ...[
+                    const SizedBox(height: InstriqSpacing.sm),
+                    InstriqListItem(
+                      icon: Icons.fact_check_outlined,
+                      title: l10n.contributorReviewQueueTitle,
+                      onTap: _openContributorReviewQueue,
+                    ),
+                  ],
+                ] else if (_lastApplication?.status == ContributorApplicationStatus.pending) ...[
+                  InstriqListItem(
+                    icon: Icons.hourglass_top_outlined,
+                    title: l10n.contributorApplicationPendingTitle,
+                    subtitle: l10n.contributorApplicationPendingSubtitle,
+                    onTap: null,
+                    trailing: const SizedBox.shrink(),
+                  ),
+                ] else if (_lastApplication?.status == ContributorApplicationStatus.rejected) ...[
+                  InstriqListItem(
+                    icon: Icons.refresh,
+                    title: l10n.contributorApplicationRejectedTitle,
+                    subtitle: _lastApplication?.reviewNotes ?? l10n.contributorApplicationRejectedSubtitle,
+                    onTap: _openContributorApplicationForm,
+                  ),
+                ] else ...[
+                  InstriqListItem(
+                    icon: Icons.volunteer_activism_outlined,
+                    title: l10n.contributorBecomeAction,
+                    subtitle: l10n.contributorBecomeSubtitle,
+                    onTap: _openContributorApplicationForm,
+                  ),
+                ],
               ],
               if (isAdmin) ...[
                 const SizedBox(height: InstriqSpacing.xl),
