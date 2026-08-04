@@ -708,5 +708,19 @@
   "sterilizationObsGenericReusable": "Mètode general per a instrumental metàl·lic reutilitzable estàndard. Verifica sempre les instruccions d'ús (IFU) del fabricant i el protocol de la teva central d'esterilització per a paràmetres exactes i possibles excepcions.",
   "sterilizationObsGenericDisposable": "Component o versió d'un sol ús — no reesterilitzis. Verifica les instruccions del fabricant.",
   "sterilizationObsScalpelHandle": "Correspon al mànec reutilitzable del bisturí. La fulla és un component d'un sol ús independent: consulta l'altra fila d'aquest mateix instrument (method = 'desechable'). Verifica sempre les instruccions d'ús (IFU) del fabricant i el protocol de la teva central d'esterilització per a paràmetres exactes i possibles excepcions.",
-  "sterilizationObsScalpelBlade": "Correspon a la fulla del bisturí, d'un sol ús: no reesterilitzis. El mànec (reutilitzable) s'esterilitza a part per vapor: consulta l'altra fila d'aquest mateix instrument. Verifica les instruccions del fabricant."
+  "sterilizationObsScalpelBlade": "Correspon a la fulla del bisturí, d'un sol ús: no reesterilitzis. El mànec (reutilitzable) s'esterilitza a part per vapor: consulta l'altra fila d'aquest mateix instrument. Verifica les instruccions del fabricant.",
+
+  "publicLibraryTitle": "Biblioteca Pública",
+  "publicLibraryReviewQueueTitle": "Candidatures de contingut públic",
+  "publicLibraryLoadError": "No s'ha pogut carregar la biblioteca pública: {error}",
+  "@publicLibraryLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "publicLibraryEmptyState": "Encara no hi ha res publicat",
+  "publicLibraryProposeAction": "Proposa",
+  "publicLibrarySubmittedSnackbar": "Enviat a revisió",
+  "publicLibrarySubmitError": "No s'ha pogut enviar: {error}",
+  "@publicLibrarySubmitError": {"placeholders": {"error": {"type": "String"}}},
+  "publicLibrarySubmitForReviewAction": "Envia a revisió",
+  "editorialCommentsEmptyState": "Encara no hi ha comentaris",
+  "editorialCommentHint": "Escriu un comentari",
+  "editorialCommentSendAction": "Comenta"
 }

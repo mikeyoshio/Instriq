@@ -708,5 +708,19 @@
   "sterilizationObsGenericReusable": "General method for standard reusable metal instruments. Always check the manufacturer's instructions for use (IFU) and your sterilization unit's protocol for exact parameters and possible exceptions.",
   "sterilizationObsGenericDisposable": "Single-use component or version — do not resterilize. Check the manufacturer's instructions.",
   "sterilizationObsScalpelHandle": "Corresponds to the scalpel's reusable handle. The blade is a separate single-use component: see the other row for this same instrument (method = 'desechable'). Always check the manufacturer's instructions for use (IFU) and your sterilization unit's protocol for exact parameters and possible exceptions.",
-  "sterilizationObsScalpelBlade": "Corresponds to the scalpel blade, single-use: do not resterilize. The (reusable) handle is sterilized separately by steam: see the other row for this same instrument. Check the manufacturer's instructions."
+  "sterilizationObsScalpelBlade": "Corresponds to the scalpel blade, single-use: do not resterilize. The (reusable) handle is sterilized separately by steam: see the other row for this same instrument. Check the manufacturer's instructions.",
+
+  "publicLibraryTitle": "Public Library",
+  "publicLibraryReviewQueueTitle": "Public library review queue",
+  "publicLibraryLoadError": "Could not load the public library: {error}",
+  "@publicLibraryLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "publicLibraryEmptyState": "Nothing published yet",
+  "publicLibraryProposeAction": "Propose",
+  "publicLibrarySubmittedSnackbar": "Sent for review",
+  "publicLibrarySubmitError": "Could not submit: {error}",
+  "@publicLibrarySubmitError": {"placeholders": {"error": {"type": "String"}}},
+  "publicLibrarySubmitForReviewAction": "Submit for review",
+  "editorialCommentsEmptyState": "No comments yet",
+  "editorialCommentHint": "Write a comment",
+  "editorialCommentSendAction": "Comment"
 }

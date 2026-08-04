@@ -7,6 +7,7 @@ import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/profile_service.dart';
 import 'auth/hospital_connect_flow.dart';
+import 'public_library_screen.dart';
 import 'workspace_list_screen.dart';
 
 /// Índice a las colecciones del grupo: bandejas, documentos/protocolos,
@@ -39,6 +40,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
     setState(() {});
   }
 
+  Future<void> _openPublicLibrary() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const PublicLibraryScreen()),
+    );
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -49,7 +57,19 @@ class _LibraryScreenState extends State<LibraryScreen> {
           padding: const EdgeInsets.all(InstriqSpacing.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: _isConnected
+            children: [
+              // Biblioteca Pública (EPIC 9): sempre visible, no exigeix
+              // hospital connectat -- és contingut de comunitat, ortogonal
+              // al model d'organitzacions (docs/ADR_001_KNOWLEDGE_GOVERNANCE.md).
+              InstriqSectionHeader(l10n.publicLibraryTitle),
+              const SizedBox(height: InstriqSpacing.md),
+              InstriqListItem(
+                icon: Icons.public,
+                title: l10n.publicLibraryTitle,
+                onTap: _openPublicLibrary,
+              ),
+              const SizedBox(height: InstriqSpacing.xl),
+              ..._isConnected
                 ? [
                     InstriqSectionHeader(l10n.libraryCollectionsHeader),
                     const SizedBox(height: InstriqSpacing.md),
@@ -98,6 +118,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       onTap: _openHospitalConnectFlow,
                     ),
                   ],
+            ],
           ),
         ),
       ),
