@@ -25,6 +25,7 @@ class ProfileService {
   bool _isAdmin = false;
   bool _isOwner = false;
   String? _ownerId;
+  bool _canApproveAnyWorkspace = false;
 
   /// Reactivo a propósito: el selector de modo de trabajo de la capçalera
   /// (ver work_mode_header.dart) necesita repintarse a l'instant en cualquier
@@ -40,6 +41,13 @@ class ProfileService {
   bool get isOwner => _isOwner;
   String? get ownerId => _ownerId;
   bool get hasHospital => _organizationId != null;
+
+  /// `true` si el usuario actual es `approver` (o `administrator`, aunque ese
+  /// valor nunca se guarda como fila) en al menos un espacio de trabajo, sin
+  /// importar de cuál. Junto con `isAdmin`, es la condición real para mostrar
+  /// la pestaña de Actividad/cola de revisión — `isAdmin` solo no basta porque
+  /// `approver` es un rol por espacio (`workspace_members`), no un flag global.
+  bool get canApproveAnyWorkspace => _canApproveAnyWorkspace;
 
   Future<void> loadProfile() async {
     final user = AuthService.instance.currentUser;
@@ -65,6 +73,18 @@ class ProfileService {
     _ownerId = hospitalRow?['owner_id'] as String?;
     _isOwner = _ownerId == user.id;
     activeWorkModeNotifier.value = WorkModeLabel.fromDb(row?['active_work_mode'] as String?);
+
+    // Consulta barata (RLS ya permite leer las filas propias de
+    // workspace_members, ver "workspace_members_select" en schema_v7): solo
+    // existencia, no hace falta RPC ni traer contenido.
+    final approverRow = await _client
+        .from('workspace_members')
+        .select('id')
+        .eq('user_id', user.id)
+        .inFilter('role', ['approver', 'administrator'])
+        .limit(1)
+        .maybeSingle();
+    _canApproveAnyWorkspace = approverRow != null;
   }
 
   /// Guarda la preferencia de modo de trabajo (update directo a `profiles`,
@@ -85,6 +105,7 @@ class ProfileService {
     _isAdmin = false;
     _isOwner = false;
     _ownerId = null;
+    _canApproveAnyWorkspace = false;
     activeWorkModeNotifier.value = null;
     _clearGroupContentCaches();
   }
@@ -228,5 +249,13 @@ class ProfileService {
   Future<void> transferOwnership(String newOwnerUserId) async {
     await _client.rpc('transfer_hospital_ownership', params: {'new_owner_id': newOwnerUserId});
     _isOwner = false;
+  }
+
+  /// Promueve o quita el rol de administrador/a de otro miembro del grupo
+  /// (solo admin, vía función security definer). El RPC rechaza quitar el
+  /// último admin de la organización — el error real (no capturado aquí) lo
+  /// muestra la pantalla llamante, igual que con `transferOwnership`.
+  Future<void> setHospitalAdmin(String userId, bool isAdmin) async {
+    await _client.rpc('set_hospital_admin', params: {'p_user_id': userId, 'p_is_admin': isAdmin});
   }
 }

@@ -7,11 +7,9 @@ import '../models/public_tray.dart';
 import '../services/contributor_service.dart';
 import '../services/public_document_service.dart';
 import '../services/public_tray_service.dart';
-import 'public_document_detail_screen.dart';
-import 'public_document_form_screen.dart';
+import 'public_entity_detail_screen.dart';
+import 'public_entity_form_screen.dart';
 import 'public_library_review_queue_screen.dart';
-import 'public_tray_detail_screen.dart';
-import 'public_tray_form_screen.dart';
 
 /// Biblioteca Pública (EPIC 9, segon tram): tècniques/protocols i safates
 /// mantingudes per la comunitat, obertes a tothom (també convidats -- RLS
@@ -34,7 +32,9 @@ class _PublicLibraryScreenState extends State<PublicLibraryScreen> {
     final draft = await PublicDocumentService.instance.fetchDraftVersion(documentId);
     if (!mounted) return;
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => PublicDocumentFormScreen(documentId: documentId, draft: draft)),
+      MaterialPageRoute(
+        builder: (_) => PublicEntityFormScreen.document(kind: kind, documentId: documentId, draft: draft),
+      ),
     );
     if (mounted) setState(() {});
   }
@@ -44,7 +44,7 @@ class _PublicLibraryScreenState extends State<PublicLibraryScreen> {
     final draft = await PublicTrayService.instance.fetchDraftVersion(trayId);
     if (!mounted) return;
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => PublicTrayFormScreen(trayId: trayId, draft: draft)),
+      MaterialPageRoute(builder: (_) => PublicEntityFormScreen.tray(trayId: trayId, draft: draft)),
     );
     if (mounted) setState(() {});
   }
@@ -146,7 +146,7 @@ class _PublicDocumentListState extends State<_PublicDocumentList> {
                                   : Icons.menu_book_outlined),
                               title: Text(version?.title ?? l10n.auditDocumentUntitledLabel),
                               onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => PublicDocumentDetailScreen(document: document)),
+                                MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.document(document: document)),
                               ),
                             ),
                           );
@@ -241,7 +241,7 @@ class _PublicTrayListState extends State<_PublicTrayList> {
                               leading: const Icon(Icons.inventory_2_outlined),
                               title: Text(tray.publishedVersion?.name ?? l10n.auditDocumentUntitledLabel),
                               onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => PublicTrayDetailScreen(tray: tray)),
+                                MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.tray(tray: tray)),
                               ),
                             ),
                           );

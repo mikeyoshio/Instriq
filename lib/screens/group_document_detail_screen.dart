@@ -192,11 +192,13 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     final userId = AuthService.instance.currentUser?.id;
     try {
       final versions = await GroupDocumentService.instance.fetchVersionHistory(_document.id);
-      _ownPendingDraft = versions
-          .where((v) =>
-              v.authorId == userId &&
-              (v.status == GroupDocumentVersionStatus.draft ||
-                  v.status == GroupDocumentVersionStatus.inReview))
+      _ownPendingDraft = (versions
+              .where((v) =>
+                  v.authorId == userId &&
+                  (v.status == GroupDocumentVersionStatus.draft ||
+                      v.status == GroupDocumentVersionStatus.inReview))
+              .toList()
+            ..sort((a, b) => b.versionNumber.compareTo(a.versionNumber)))
           .cast<GroupDocumentVersion?>()
           .firstWhere((_) => true, orElse: () => null);
     } catch (_) {

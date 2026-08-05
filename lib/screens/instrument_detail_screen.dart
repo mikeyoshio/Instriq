@@ -690,6 +690,12 @@ class _ClinicalDataFormSheet extends StatefulWidget {
 class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
   static const String _refType = 'catalog';
 
+  // `null` significa "nueva fila" (se insertará vía `upsertMethod` con
+  // `id: null`); si no, es el `id` de una de `widget.methods` que se está
+  // editando. Ver bug independent 6 del plan: antes el sheet solo leía/
+  // escribía `methods.first`, dejando invisibles el resto de filas cuando
+  // un instrumento tenía 2+ métodos registrados.
+  String? _selectedMethodId;
   SterilizationMethod _method = SterilizationMethod.vapor;
   late final TextEditingController _temperatureController;
   late final TextEditingController _timeController;
@@ -717,6 +723,7 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
   void initState() {
     super.initState();
     final existingMethod = widget.methods.isNotEmpty ? widget.methods.first : null;
+    _selectedMethodId = existingMethod?.id;
     _method = existingMethod?.method ?? SterilizationMethod.vapor;
     _temperatureController = TextEditingController(text: existingMethod?.temperature ?? '');
     _timeController = TextEditingController(text: existingMethod?.timeMinutes ?? '');
@@ -777,10 +784,37 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
 
   String? _nullIfEmpty(String value) => value.trim().isEmpty ? null : value.trim();
 
+  /// Cambia qué fila de `widget.methods` se está editando en el formulario
+  /// de esterilización (o pasa a "nueva fila" si [entry] es `null`). El resto
+  /// del sheet (ficha técnica, tags) no depende de esta selección.
+  void _selectMethod(SterilizationMethodEntry? entry) {
+    setState(() {
+      _selectedMethodId = entry?.id;
+      _method = entry?.method ?? SterilizationMethod.vapor;
+      _temperatureController.text = entry?.temperature ?? '';
+      _timeController.text = entry?.timeMinutes ?? '';
+      _pressureController.text = entry?.pressure ?? '';
+      _dryingController.text = entry?.drying ?? '';
+      _cycleController.text = entry?.recommendedCycle ?? '';
+      _compatibilityController.text = entry?.compatibilityNotes ?? '';
+      _restrictionsController.text = entry?.restrictions ?? '';
+      _observationsController.text = entry?.observations ?? '';
+    });
+  }
+
   Future<void> _save() async {
     setState(() => _saving = true);
     try {
-      final existingMethod = widget.methods.isNotEmpty ? widget.methods.first : null;
+      SterilizationMethodEntry? existingMethod;
+      final selectedId = _selectedMethodId;
+      if (selectedId != null) {
+        for (final m in widget.methods) {
+          if (m.id == selectedId) {
+            existingMethod = m;
+            break;
+          }
+        }
+      }
       await SterilizationService.instance.upsertMethod(
         SterilizationMethodEntry(
           id: existingMethod?.id,
@@ -850,6 +884,43 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
     }
   }
 
+  /// Selector de qué fila de `widget.methods` se edita en el formulario de
+  /// esterilización (o "añadir nuevo método" para insertar una fila más).
+  /// Si el instrumento no tiene ninguna fila registrada todavía, no hay nada
+  /// que elegir: el formulario ya arranca en modo "nuevo" y este selector no
+  /// se muestra. Ver bug independent 6 del plan de refactor.
+  Widget _buildMethodSelector(BuildContext context, AppLocalizations l10n) {
+    if (widget.methods.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.sterilizationSelectMethodToEditLabel, style: Theme.of(context).textTheme.labelMedium),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final entry in widget.methods)
+                ChoiceChip(
+                  label: Text(sterilizationMethodValueLabel(l10n, entry.method)),
+                  selected: _selectedMethodId == entry.id,
+                  onSelected: (_) => _selectMethod(entry),
+                ),
+              ChoiceChip(
+                label: Text(l10n.sterilizationAddNewMethodOption),
+                avatar: const Icon(Icons.add, size: 18),
+                selected: _selectedMethodId == null,
+                onSelected: (_) => _selectMethod(null),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -870,6 +941,7 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
               const SizedBox(height: 16),
               Text(l10n.sterilizationSectionTitle, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
+              _buildMethodSelector(context, l10n),
               DropdownButtonFormField<SterilizationMethod>(
                 initialValue: _method,
                 decoration: InputDecoration(
