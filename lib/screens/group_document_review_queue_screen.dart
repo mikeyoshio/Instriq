@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_review_queue.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document_version.dart';
@@ -64,95 +65,33 @@ class _DocumentReviewQueue extends StatefulWidget {
 }
 
 class _DocumentReviewQueueState extends State<_DocumentReviewQueue> {
-  bool _loading = true;
-  String? _error;
-  List<GroupDocumentVersion> _queue = [];
   Map<String, String> _workspaceNames = {};
 
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      _queue = await GroupDocumentService.instance.fetchReviewQueue();
-      _workspaceNames = await GroupDocumentService.instance
-          .fetchWorkspaceNamesForDocuments(_queue.map((v) => v.documentId).toSet().toList());
-    } catch (e) {
-      _error = l10n.reviewQueueLoadError(e.toString());
-    }
-    if (mounted) setState(() => _loading = false);
+  Future<List<GroupDocumentVersion>> _load() async {
+    final queue = await GroupDocumentService.instance.fetchReviewQueue();
+    _workspaceNames = await GroupDocumentService.instance
+        .fetchWorkspaceNamesForDocuments(
+            queue.map((v) => v.documentId).toSet().toList());
+    return queue;
   }
 
   Future<void> _openDiff(GroupDocumentVersion version) async {
     try {
-      final document = await GroupDocumentService.instance.fetchDocument(version.documentId);
+      final document =
+          await GroupDocumentService.instance.fetchDocument(version.documentId);
       final published = document.publishedVersion;
       if (published == null || !mounted) return;
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => GroupDocumentDiffScreen(oldVersion: published, newVersion: version),
+          builder: (_) => GroupDocumentDiffScreen(
+              oldVersion: published, newVersion: version),
         ),
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.compareLoadError(e.toString()))));
-      }
-    }
-  }
-
-  Future<void> _approve(GroupDocumentVersion version) async {
-    final l10n = AppLocalizations.of(context)!;
-    try {
-      await GroupDocumentService.instance.approve(version.id);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.changeApprovedSnackbar)));
-      }
-      _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.approveError(e.toString()))));
-      }
-    }
-  }
-
-  Future<void> _reject(GroupDocumentVersion version) async {
-    final l10n = AppLocalizations.of(context)!;
-    final controller = TextEditingController();
-    final comment = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.rejectChangeTitle),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          maxLines: 3,
-          decoration: InputDecoration(labelText: l10n.rejectReasonLabel),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: Text(l10n.reject)),
-        ],
-      ),
-    );
-    if (comment == null) return;
-    try {
-      await GroupDocumentService.instance.reject(version.id, comment: comment.isEmpty ? null : comment);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.changeReturnedSnackbar)));
-      }
-      _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.rejectError(e.toString()))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.compareLoadError(e.toString()))));
       }
     }
   }
@@ -160,48 +99,31 @@ class _DocumentReviewQueueState extends State<_DocumentReviewQueue> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    if (_loading) return const Center(child: CircularProgressIndicator());
-    if (_error != null) {
-      return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)));
-    }
-    if (_queue.isEmpty) {
-      return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noPendingReviews)));
-    }
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: _queue.length,
-      itemBuilder: (context, index) {
-        final version = _queue[index];
-        return Card(
+    return InstriqReviewQueue<GroupDocumentVersion>.inline(
+      load: _load,
+      titleOf: (v) => v.title,
+      secondaryLineOf: (v) => _workspaceNames[v.documentId],
+      commentOf: (v) => v.comment,
+      onCompare: _openDiff,
+      compareLabel: l10n.compare,
+      onApprove: (v) => GroupDocumentService.instance.approve(v.id),
+      approveLabel: l10n.approve,
+      onReject: (v, comment) =>
+          GroupDocumentService.instance.reject(v.id, comment: comment),
+      rejectLabel: l10n.reject,
+      rejectDialogTitle: l10n.rejectChangeTitle,
+      rejectReasonLabel: l10n.rejectReasonLabel,
+      cancelLabel: l10n.cancel,
+      approveSuccessMessage: l10n.changeApprovedSnackbar,
+      rejectSuccessMessage: l10n.changeReturnedSnackbar,
+      approveErrorMessage: (e) => l10n.approveError(e.toString()),
+      rejectErrorMessage: (e) => l10n.rejectError(e.toString()),
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) => Center(
           child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(version.title, style: Theme.of(context).textTheme.titleMedium),
-                if (_workspaceNames[version.documentId] != null) ...[
-                  const SizedBox(height: 2),
-                  Text(_workspaceNames[version.documentId]!, style: Theme.of(context).textTheme.labelMedium),
-                ],
-                if (version.comment != null) ...[
-                  const SizedBox(height: 4),
-                  Text(version.comment!, style: Theme.of(context).textTheme.bodyMedium),
-                ],
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    TextButton(onPressed: () => _openDiff(version), child: Text(l10n.compare)),
-                    const Spacer(),
-                    TextButton(onPressed: () => _reject(version), child: Text(l10n.reject)),
-                    const SizedBox(width: 8),
-                    FilledButton(onPressed: () => _approve(version), child: Text(l10n.approve)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+              padding: const EdgeInsets.all(24),
+              child: Text(l10n.noPendingReviews))),
     );
   }
 }
@@ -214,35 +136,18 @@ class _TrayReviewQueue extends StatefulWidget {
 }
 
 class _TrayReviewQueueState extends State<_TrayReviewQueue> {
-  bool _loading = true;
-  String? _error;
-  List<TrayVersion> _queue = [];
   Map<String, String> _workspaceNames = {};
   final Map<String, List<CustomInstrument>> _customInstrumentsByWorkspace = {};
 
-  @override
-  void initState() {
-    super.initState();
-    _load();
+  Future<List<TrayVersion>> _load() async {
+    final queue = await TrayService.instance.fetchReviewQueue();
+    _workspaceNames = await TrayService.instance.fetchWorkspaceNamesForTrays(
+        queue.map((v) => v.trayId).toSet().toList());
+    return queue;
   }
 
-  Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      _queue = await TrayService.instance.fetchReviewQueue();
-      _workspaceNames =
-          await TrayService.instance.fetchWorkspaceNamesForTrays(_queue.map((v) => v.trayId).toSet().toList());
-    } catch (e) {
-      _error = l10n.reviewQueueLoadError(e.toString());
-    }
-    if (mounted) setState(() => _loading = false);
-  }
-
-  Future<List<CustomInstrument>> _customInstrumentsFor(String workspaceId) async {
+  Future<List<CustomInstrument>> _customInstrumentsFor(
+      String workspaceId) async {
     final cached = _customInstrumentsByWorkspace[workspaceId];
     if (cached != null) return cached;
     await CustomInstrumentService.instance.fetchForWorkspace(workspaceId);
@@ -269,56 +174,9 @@ class _TrayReviewQueueState extends State<_TrayReviewQueue> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.compareLoadError(e.toString()))));
-      }
-    }
-  }
-
-  Future<void> _approve(TrayVersion version) async {
-    final l10n = AppLocalizations.of(context)!;
-    try {
-      await TrayService.instance.approve(version.id);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.changeApprovedSnackbar)));
-      }
-      _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.approveError(e.toString()))));
-      }
-    }
-  }
-
-  Future<void> _reject(TrayVersion version) async {
-    final l10n = AppLocalizations.of(context)!;
-    final controller = TextEditingController();
-    final comment = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.rejectChangeTitle),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          maxLines: 3,
-          decoration: InputDecoration(labelText: l10n.rejectReasonLabel),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: Text(l10n.reject)),
-        ],
-      ),
-    );
-    if (comment == null) return;
-    try {
-      await TrayService.instance.reject(version.id, comment: comment.isEmpty ? null : comment);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.changeReturnedSnackbar)));
-      }
-      _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.rejectError(e.toString()))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.compareLoadError(e.toString()))));
       }
     }
   }
@@ -326,48 +184,31 @@ class _TrayReviewQueueState extends State<_TrayReviewQueue> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    if (_loading) return const Center(child: CircularProgressIndicator());
-    if (_error != null) {
-      return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)));
-    }
-    if (_queue.isEmpty) {
-      return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noPendingReviews)));
-    }
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: _queue.length,
-      itemBuilder: (context, index) {
-        final version = _queue[index];
-        return Card(
+    return InstriqReviewQueue<TrayVersion>.inline(
+      load: _load,
+      titleOf: (v) => v.name,
+      secondaryLineOf: (v) => _workspaceNames[v.trayId],
+      commentOf: (v) => v.comment,
+      onCompare: _openDiff,
+      compareLabel: l10n.compare,
+      onApprove: (v) => TrayService.instance.approve(v.id),
+      approveLabel: l10n.approve,
+      onReject: (v, comment) =>
+          TrayService.instance.reject(v.id, comment: comment),
+      rejectLabel: l10n.reject,
+      rejectDialogTitle: l10n.rejectChangeTitle,
+      rejectReasonLabel: l10n.rejectReasonLabel,
+      cancelLabel: l10n.cancel,
+      approveSuccessMessage: l10n.changeApprovedSnackbar,
+      rejectSuccessMessage: l10n.changeReturnedSnackbar,
+      approveErrorMessage: (e) => l10n.approveError(e.toString()),
+      rejectErrorMessage: (e) => l10n.rejectError(e.toString()),
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) => Center(
           child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(version.name, style: Theme.of(context).textTheme.titleMedium),
-                if (_workspaceNames[version.trayId] != null) ...[
-                  const SizedBox(height: 2),
-                  Text(_workspaceNames[version.trayId]!, style: Theme.of(context).textTheme.labelMedium),
-                ],
-                if (version.comment != null) ...[
-                  const SizedBox(height: 4),
-                  Text(version.comment!, style: Theme.of(context).textTheme.bodyMedium),
-                ],
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    TextButton(onPressed: () => _openDiff(version), child: Text(l10n.compare)),
-                    const Spacer(),
-                    TextButton(onPressed: () => _reject(version), child: Text(l10n.reject)),
-                    const SizedBox(width: 8),
-                    FilledButton(onPressed: () => _approve(version), child: Text(l10n.approve)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+              padding: const EdgeInsets.all(24),
+              child: Text(l10n.noPendingReviews))),
     );
   }
 }
@@ -376,41 +217,27 @@ class _PreferenceCardReviewQueue extends StatefulWidget {
   const _PreferenceCardReviewQueue();
 
   @override
-  State<_PreferenceCardReviewQueue> createState() => _PreferenceCardReviewQueueState();
+  State<_PreferenceCardReviewQueue> createState() =>
+      _PreferenceCardReviewQueueState();
 }
 
-class _PreferenceCardReviewQueueState extends State<_PreferenceCardReviewQueue> {
-  bool _loading = true;
-  String? _error;
-  List<PreferenceCardVersion> _queue = [];
+class _PreferenceCardReviewQueueState
+    extends State<_PreferenceCardReviewQueue> {
   Map<String, String> _workspaceNames = {};
 
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      await SurgeonService.instance.fetchForOrganization();
-      _queue = await PreferenceCardService.instance.fetchReviewQueue();
-      _workspaceNames = await PreferenceCardService.instance
-          .fetchWorkspaceNamesForCards(_queue.map((v) => v.cardId).toSet().toList());
-    } catch (e) {
-      _error = l10n.reviewQueueLoadError(e.toString());
-    }
-    if (mounted) setState(() => _loading = false);
+  Future<List<PreferenceCardVersion>> _load() async {
+    await SurgeonService.instance.fetchForOrganization();
+    final queue = await PreferenceCardService.instance.fetchReviewQueue();
+    _workspaceNames = await PreferenceCardService.instance
+        .fetchWorkspaceNamesForCards(
+            queue.map((v) => v.cardId).toSet().toList());
+    return queue;
   }
 
   Future<void> _openDiff(PreferenceCardVersion version) async {
     try {
-      final card = await PreferenceCardService.instance.fetchCard(version.cardId);
+      final card =
+          await PreferenceCardService.instance.fetchCard(version.cardId);
       final published = card.publishedVersion;
       if (published == null || !mounted) return;
       await Navigator.of(context).push(
@@ -424,56 +251,9 @@ class _PreferenceCardReviewQueueState extends State<_PreferenceCardReviewQueue> 
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.compareLoadError(e.toString()))));
-      }
-    }
-  }
-
-  Future<void> _approve(PreferenceCardVersion version) async {
-    final l10n = AppLocalizations.of(context)!;
-    try {
-      await PreferenceCardService.instance.approve(version.id);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.changeApprovedSnackbar)));
-      }
-      _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.approveError(e.toString()))));
-      }
-    }
-  }
-
-  Future<void> _reject(PreferenceCardVersion version) async {
-    final l10n = AppLocalizations.of(context)!;
-    final controller = TextEditingController();
-    final comment = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.rejectChangeTitle),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          maxLines: 3,
-          decoration: InputDecoration(labelText: l10n.rejectReasonLabel),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: Text(l10n.reject)),
-        ],
-      ),
-    );
-    if (comment == null) return;
-    try {
-      await PreferenceCardService.instance.reject(version.id, comment: comment.isEmpty ? null : comment);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.changeReturnedSnackbar)));
-      }
-      _load();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.rejectError(e.toString()))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.compareLoadError(e.toString()))));
       }
     }
   }
@@ -481,48 +261,31 @@ class _PreferenceCardReviewQueueState extends State<_PreferenceCardReviewQueue> 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    if (_loading) return const Center(child: CircularProgressIndicator());
-    if (_error != null) {
-      return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)));
-    }
-    if (_queue.isEmpty) {
-      return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noPendingReviews)));
-    }
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: _queue.length,
-      itemBuilder: (context, index) {
-        final version = _queue[index];
-        return Card(
+    return InstriqReviewQueue<PreferenceCardVersion>.inline(
+      load: _load,
+      titleOf: (v) => v.procedureName,
+      secondaryLineOf: (v) => _workspaceNames[v.cardId],
+      commentOf: (v) => v.comment,
+      onCompare: _openDiff,
+      compareLabel: l10n.compare,
+      onApprove: (v) => PreferenceCardService.instance.approve(v.id),
+      approveLabel: l10n.approve,
+      onReject: (v, comment) =>
+          PreferenceCardService.instance.reject(v.id, comment: comment),
+      rejectLabel: l10n.reject,
+      rejectDialogTitle: l10n.rejectChangeTitle,
+      rejectReasonLabel: l10n.rejectReasonLabel,
+      cancelLabel: l10n.cancel,
+      approveSuccessMessage: l10n.changeApprovedSnackbar,
+      rejectSuccessMessage: l10n.changeReturnedSnackbar,
+      approveErrorMessage: (e) => l10n.approveError(e.toString()),
+      rejectErrorMessage: (e) => l10n.rejectError(e.toString()),
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) => Center(
           child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(version.procedureName, style: Theme.of(context).textTheme.titleMedium),
-                if (_workspaceNames[version.cardId] != null) ...[
-                  const SizedBox(height: 2),
-                  Text(_workspaceNames[version.cardId]!, style: Theme.of(context).textTheme.labelMedium),
-                ],
-                if (version.comment != null) ...[
-                  const SizedBox(height: 4),
-                  Text(version.comment!, style: Theme.of(context).textTheme.bodyMedium),
-                ],
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    TextButton(onPressed: () => _openDiff(version), child: Text(l10n.compare)),
-                    const Spacer(),
-                    TextButton(onPressed: () => _reject(version), child: Text(l10n.reject)),
-                    const SizedBox(width: 8),
-                    FilledButton(onPressed: () => _approve(version), child: Text(l10n.approve)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+              padding: const EdgeInsets.all(24),
+              child: Text(l10n.noPendingReviews))),
     );
   }
 }

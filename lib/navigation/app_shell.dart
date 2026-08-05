@@ -13,11 +13,11 @@ const _tabletBreakpoint = 840.0;
 
 /// Índice de la rama "Activitat" dentro de `appDestinations`/las 5 ramas de
 /// `StatefulShellRoute.indexedStack` en `router.dart` (0 Inici, 1 Cercar,
-/// 2 Biblioteca, 3 Activitat, 4 Perfil) — para no-admin, `ActivityScreen`
-/// solo muestra un texto de "solo administradores" (callejón sin salida),
-/// así que aquí se oculta la pestaña en vez de mostrarla vacía. Las ramas
-/// en sí no se tocan (go_router sigue teniendo las 5), solo se filtra qué
-/// se muestra en el `NavigationBar`/`NavigationRail`.
+/// 2 Biblioteca, 3 Activitat, 4 Perfil) — para quien no es admin ni approver
+/// de ningún espacio, `ActivityScreen` solo muestra un texto de "sin acceso"
+/// (callejón sin salida), así que aquí se oculta la pestaña en vez de
+/// mostrarla vacía. Las ramas en sí no se tocan (go_router sigue teniendo
+/// las 5), solo se filtra qué se muestra en el `NavigationBar`/`NavigationRail`.
 const _activityBranchIndex = 3;
 
 /// Shell de navegación de los destinos fijos. `navigationShell` viene de
@@ -29,10 +29,13 @@ class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.navigationShell});
 
   List<int> _visibleBranchIndices() {
-    final isAdmin = ProfileService.instance.isAdmin;
+    // isAdmin (flag global) o canApproveAnyWorkspace (rol approver en algún
+    // espacio, por fila de workspace_members) — ver profile_service.dart.
+    final canAccessActivity =
+        ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace;
     return [
       for (var i = 0; i < appDestinations.length; i++)
-        if (i != _activityBranchIndex || isAdmin) i,
+        if (i != _activityBranchIndex || canAccessActivity) i,
     ];
   }
 

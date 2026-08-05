@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
-import 'join_hospital_screen.dart';
-import 'welcome_screen.dart';
+import 'group_entry_screen.dart';
 
 /// Flujo para conectar con (o crear) el hospital del usuario. Se empuja
 /// desde el Home cuando alguien pulsa "Mi hospital" sin estar conectado, y
@@ -106,7 +105,6 @@ class _HospitalConnectFlowState extends State<HospitalConnectFlow> {
         ),
       );
     }
-    if (!_hasSession) return const WelcomeScreen();
-    return const JoinHospitalScreen();
+    return GroupEntryScreen(hasSessionAlready: _hasSession, onCompleted: _refresh);
   }
 }

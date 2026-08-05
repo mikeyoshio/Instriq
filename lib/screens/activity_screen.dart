@@ -36,11 +36,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isAdmin = ProfileService.instance.isAdmin;
+    // Misma condición combinada que app_shell.dart._visibleBranchIndices():
+    // isAdmin o approver en algún espacio (workspace_members).
+    final canAccessActivity =
+        ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navActivity)),
       body: SafeArea(
-        child: isAdmin
+        child: canAccessActivity
             ? SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
                 child: Column(

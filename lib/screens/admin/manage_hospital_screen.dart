@@ -92,6 +92,39 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
     }
   }
 
+  /// Promueve o quita el rol de administrador/a (RPC `set_hospital_admin`,
+  /// ver schema_v30_hospital_admin_promotion.sql). Acción de alto privilegio
+  /// -- diálogo de confirmación siempre, tanto al conceder como al quitar. El
+  /// error real del RPC (p. ej. rechazo por ser el último admin) se muestra
+  /// tal cual, sin silenciarlo -- mismo patrón que `_transferOwnership`.
+  Future<void> _setHospitalAdmin(HospitalMember member, bool isAdmin) async {
+    final l10n = AppLocalizations.of(context)!;
+    final name = member.displayName?.isNotEmpty == true ? member.displayName! : l10n.thisPerson;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(isAdmin ? l10n.makeAdminTitle : l10n.removeAdminTitle),
+        content: Text(isAdmin ? l10n.makeAdminBody(name) : l10n.removeAdminBody(name)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(isAdmin ? l10n.makeAdminTitle : l10n.removeAdminTitle),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await ProfileService.instance.setHospitalAdmin(member.id, isAdmin);
+      _load();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError(e.toString()))));
+      }
+    }
+  }
+
   Future<void> _removeMember(HospitalMember member) async {
     final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
@@ -196,6 +229,18 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                                 icon: const Icon(Icons.workspace_premium_outlined),
                                 tooltip: l10n.transferOwnershipTitle,
                                 onPressed: () => _transferOwnership(m),
+                              ),
+                            if (!m.isAdmin)
+                              IconButton(
+                                icon: const Icon(Icons.admin_panel_settings_outlined),
+                                tooltip: l10n.makeAdminTitle,
+                                onPressed: () => _setHospitalAdmin(m, true),
+                              ),
+                            if (m.isAdmin && !isMe && !isOwner)
+                              IconButton(
+                                icon: const Icon(Icons.remove_moderator_outlined),
+                                tooltip: l10n.removeAdminTitle,
+                                onPressed: () => _setHospitalAdmin(m, false),
                               ),
                             if (!isMe && !m.isAdmin)
                               IconButton(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
-import 'sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -110,12 +109,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                     : Text(l10n.enter),
               ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SignUpScreen()),
-              ),
-              child: Text(l10n.noAccountSignUp),
             ),
             TextButton(
               onPressed: _forgotPassword,

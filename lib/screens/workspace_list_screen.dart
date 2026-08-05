@@ -20,6 +20,11 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
   bool _loading = true;
   String? _error;
 
+  // Evita reempujar WorkspaceDetailScreen en cada rebuild: la colapsión de
+  // abajo (single workspace -> salto directo) solo se dispara una vez, justo
+  // al terminar la carga que la detecta, no desde build().
+  bool _autoNavigated = false;
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +42,16 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
     } catch (e) {
       _error = l10n.workspaceListLoadError(e.toString());
     }
-    if (mounted) setState(() => _loading = false);
+    if (!mounted) return;
+    final workspaces = WorkspaceService.instance.workspaces;
+    if (_error == null && workspaces.length == 1 && !_autoNavigated) {
+      _autoNavigated = true;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => WorkspaceDetailScreen(workspace: workspaces.first)),
+      );
+      return;
+    }
+    setState(() => _loading = false);
   }
 
   Future<void> _renameWorkspace(Workspace workspace) async {

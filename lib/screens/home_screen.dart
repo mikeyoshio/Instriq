@@ -19,6 +19,7 @@ import '../models/tag.dart';
 import '../models/tray.dart';
 import '../models/work_mode.dart';
 import '../models/workspace.dart';
+import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
@@ -325,17 +326,20 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) setState(() {});
   }
 
-  Future<void> _openTechniques() async {
+  /// Patrón compartido de los accesos rápidos que apuntan a una colección
+  /// dentro de un espacio de trabajo: si solo hay un espacio, se salta
+  /// directo a la colección (sin pasar por el selector); si hay 0 o 2+, se
+  /// abre WorkspaceListScreen (que a su vez colapsa igual si length == 1).
+  Future<void> _openWorkspaceCollection({
+    required Widget Function(Workspace workspace, WorkspaceRole? myRole) buildDirect,
+  }) async {
     if (!ProfileService.instance.hasHospital) return;
     if (_workspaces.length == 1) {
       final workspace = _workspaces.first;
       final myRole = await WorkspaceService.instance.fetchMyRole(workspace.id);
       if (!mounted) return;
       await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) =>
-              GroupDocumentListScreen(kind: DocumentKind.technique, workspace: workspace, myRole: myRole),
-        ),
+        MaterialPageRoute(builder: (_) => buildDirect(workspace, myRole)),
       );
     } else {
       await Navigator.of(context).push(
@@ -345,22 +349,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _refreshAfterReturn();
   }
 
-  Future<void> _openTrays() async {
-    if (!ProfileService.instance.hasHospital) return;
-    if (_workspaces.length == 1) {
-      final workspace = _workspaces.first;
-      final myRole = await WorkspaceService.instance.fetchMyRole(workspace.id);
-      if (!mounted) return;
-      await Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => TraysScreen(workspace: workspace, myRole: myRole)),
+  Future<void> _openTechniques() => _openWorkspaceCollection(
+        buildDirect: (workspace, myRole) =>
+            GroupDocumentListScreen(kind: DocumentKind.technique, workspace: workspace, myRole: myRole),
       );
-    } else {
-      await Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const WorkspaceListScreen()),
+
+  Future<void> _openTrays() => _openWorkspaceCollection(
+        buildDirect: (workspace, myRole) => TraysScreen(workspace: workspace, myRole: myRole),
       );
-    }
-    _refreshAfterReturn();
-  }
 
   Future<void> _openInstrument(Instrument instrument) async {
     await Navigator.of(context).push(

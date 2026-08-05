@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_review_queue.dart';
 import '../l10n/app_localizations.dart';
 import '../models/editorial_comment.dart';
 import '../models/public_document.dart';
@@ -33,39 +34,11 @@ class PublicLibraryReviewQueueScreen extends StatelessWidget {
   }
 }
 
-class _DocumentReviewQueue extends StatefulWidget {
+class _DocumentReviewQueue extends StatelessWidget {
   const _DocumentReviewQueue();
-  @override
-  State<_DocumentReviewQueue> createState() => _DocumentReviewQueueState();
-}
 
-class _DocumentReviewQueueState extends State<_DocumentReviewQueue> {
-  bool _loading = true;
-  String? _error;
-  List<PublicDocumentVersion> _queue = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      _queue = await PublicDocumentService.instance.fetchReviewQueue();
-    } catch (e) {
-      _error = l10n.reviewQueueLoadError(e.toString());
-    }
-    if (mounted) setState(() => _loading = false);
-  }
-
-  Future<void> _openComments(PublicDocumentVersion version) async {
-    await Navigator.of(context).push(
+  Future<void> _openComments(BuildContext context, PublicDocumentVersion version) {
+    return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => _EditorialCommentsScreen(
           refType: 'public_document_version',
@@ -76,67 +49,28 @@ class _DocumentReviewQueueState extends State<_DocumentReviewQueue> {
         ),
       ),
     );
-    _load();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    if (_loading) return const Center(child: CircularProgressIndicator());
-    if (_error != null) return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)));
-    if (_queue.isEmpty) {
-      return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noPendingReviews)));
-    }
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: _queue.length,
-      itemBuilder: (context, index) {
-        final version = _queue[index];
-        return Card(
-          child: ListTile(
-            title: Text(version.title ?? l10n.auditDocumentUntitledLabel),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => _openComments(version),
-          ),
-        );
-      },
+    return InstriqReviewQueue<PublicDocumentVersion>.navigate(
+      load: PublicDocumentService.instance.fetchReviewQueue,
+      titleOf: (v) => v.title ?? l10n.auditDocumentUntitledLabel,
+      onTap: _openComments,
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) =>
+          Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noPendingReviews))),
     );
   }
 }
 
-class _TrayReviewQueue extends StatefulWidget {
+class _TrayReviewQueue extends StatelessWidget {
   const _TrayReviewQueue();
-  @override
-  State<_TrayReviewQueue> createState() => _TrayReviewQueueState();
-}
 
-class _TrayReviewQueueState extends State<_TrayReviewQueue> {
-  bool _loading = true;
-  String? _error;
-  List<PublicTrayVersion> _queue = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      _queue = await PublicTrayService.instance.fetchReviewQueue();
-    } catch (e) {
-      _error = l10n.reviewQueueLoadError(e.toString());
-    }
-    if (mounted) setState(() => _loading = false);
-  }
-
-  Future<void> _openComments(PublicTrayVersion version) async {
-    await Navigator.of(context).push(
+  Future<void> _openComments(BuildContext context, PublicTrayVersion version) {
+    return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => _EditorialCommentsScreen(
           refType: 'public_tray_version',
@@ -147,30 +81,19 @@ class _TrayReviewQueueState extends State<_TrayReviewQueue> {
         ),
       ),
     );
-    _load();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    if (_loading) return const Center(child: CircularProgressIndicator());
-    if (_error != null) return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)));
-    if (_queue.isEmpty) {
-      return Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noPendingReviews)));
-    }
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: _queue.length,
-      itemBuilder: (context, index) {
-        final version = _queue[index];
-        return Card(
-          child: ListTile(
-            title: Text(version.name ?? l10n.auditDocumentUntitledLabel),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => _openComments(version),
-          ),
-        );
-      },
+    return InstriqReviewQueue<PublicTrayVersion>.navigate(
+      load: PublicTrayService.instance.fetchReviewQueue,
+      titleOf: (v) => v.name ?? l10n.auditDocumentUntitledLabel,
+      onTap: _openComments,
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) =>
+          Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noPendingReviews))),
     );
   }
 }

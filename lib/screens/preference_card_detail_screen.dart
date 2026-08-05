@@ -47,10 +47,12 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
       final surgeonId = _card.publishedVersion?.surgeonId;
       _surgeon = surgeonId != null ? SurgeonService.instance.byId(surgeonId) : null;
       final versions = await PreferenceCardService.instance.fetchVersionHistory(_card.id);
-      _ownPendingDraft = versions
-          .where((v) =>
-              v.authorId == userId &&
-              (v.status == GroupDocumentVersionStatus.draft || v.status == GroupDocumentVersionStatus.inReview))
+      _ownPendingDraft = (versions
+              .where((v) =>
+                  v.authorId == userId &&
+                  (v.status == GroupDocumentVersionStatus.draft || v.status == GroupDocumentVersionStatus.inReview))
+              .toList()
+            ..sort((a, b) => b.versionNumber.compareTo(a.versionNumber)))
           .cast<PreferenceCardVersion?>()
           .firstWhere((_) => true, orElse: () => null);
     } catch (_) {

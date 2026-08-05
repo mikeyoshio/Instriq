@@ -108,10 +108,12 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
       await CustomInstrumentService.instance.fetchForWorkspace(_tray.workspaceId);
       _customInstruments = CustomInstrumentService.instance.instruments;
       final versions = await TrayService.instance.fetchVersionHistory(_tray.id);
-      _ownPendingDraft = versions
-          .where((v) =>
-              v.authorId == userId &&
-              (v.status == GroupDocumentVersionStatus.draft || v.status == GroupDocumentVersionStatus.inReview))
+      _ownPendingDraft = (versions
+              .where((v) =>
+                  v.authorId == userId &&
+                  (v.status == GroupDocumentVersionStatus.draft || v.status == GroupDocumentVersionStatus.inReview))
+              .toList()
+            ..sort((a, b) => b.versionNumber.compareTo(a.versionNumber)))
           .cast<TrayVersion?>()
           .firstWhere((_) => true, orElse: () => null);
       final published = _tray.publishedVersion;
