@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16191a" media="(prefers-color-scheme: dark)">
 <title data-i18n="meta.title">Instriq — Coneixement de quiròfan obert i compartit</title>
 <meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Catàleg d'instrumental, tècniques, protocols i targetes de preferència compartits entre professionals de quiròfan. Open source.">
 <link rel="canonical" href="https://instriq.org/">
@@ -34,6 +36,39 @@
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
   "inLanguage": ["ca", "es", "en"],
   "publisher": { "@type": "Organization", "name": "Instriq", "url": "https://instriq.org/" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Cal tenir un compte per usar Instriq?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. El catàleg d'instrumental i l'aprenentatge bàsic (flashcards i qüestionaris) funcionen en mode convidat, sense registrar-se. Només cal un compte si el teu equip vol compartir el seu propi coneixement (tècniques, protocols o targetes de preferència)." }
+    },
+    {
+      "@type": "Question",
+      "name": "Quant costa Instriq?",
+      "acceptedAnswer": { "@type": "Answer", "text": "El catàleg i l'aprenentatge bàsic són gratuïts, sense pagament ni pla de pagament ocult. Ningú es queda fora per no tenir pressupost." }
+    },
+    {
+      "@type": "Question",
+      "name": "És Instriq de codi obert?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sí. El codi és públic sota llicència AGPL-3.0 i la documentació sota CC BY-SA 4.0. El nom i la marca \"Instriq\" es mantenen reservats per protegir la identitat del projecte." }
+    },
+    {
+      "@type": "Question",
+      "name": "En quines plataformes funciona Instriq?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Android, iOS i web, des de qualsevol tauleta o mòbil, amb la mateixa experiència a totes les plataformes." }
+    },
+    {
+      "@type": "Question",
+      "name": "Les dades i el contingut del meu hospital o equip són privats?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sí. Cada organització és propietària del seu contingut privat (tècniques, targetes de preferència, instrumental propi) i Instriq no hi intervé. Només es comparteix fora del teu grup el que tu decideixis publicar a la Biblioteca Pública." }
+    }
+  ]
 }
 </script>
 <meta name="twitter:image" content="https://instriq.org/og-image.png">
@@ -163,9 +198,17 @@
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
   .reveal.is-visible { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+  .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
+  .skip-link:focus { left: 0; }
+  .hero-shot { margin-top: 48px; }
+  .hero-shot img { width: 240px; height: 533px; margin: 0 auto; border-radius: 28px; box-shadow: var(--shadow-soft); border: 1px solid var(--rule); }
+  .github-stars { display: inline-flex; align-items: center; margin-left: 10px; vertical-align: middle; border-radius: 4px; }
+  .github-stars img { height: 20px; display: inline-block; }
 </style>
 </head>
 <body>
+
+<a href="#main" class="skip-link" data-i18n="a11y.skip">Saltar al contingut</a>
 
 <header class="site">
   <div class="wrap nav">
@@ -184,6 +227,8 @@
   </div>
 </header>
 
+<main id="main" tabindex="-1">
+
 <section class="hero">
   <div class="wrap">
     <img src="favicon.png" alt="" class="hero-icon">
@@ -198,6 +243,9 @@
       <div class="data-cell"><div class="num">70+</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
       <div class="data-cell"><div class="num">9</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
       <div class="data-cell"><div class="num">3</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
+    </div>
+    <div class="hero-shot">
+      <img src="screenshots/grupo.png" alt="Pantalla de l'espai de treball d'un grup, amb tècniques, safates i targetes de preferència" width="240" height="533" loading="eager">
     </div>
   </div>
 </section>
@@ -234,15 +282,15 @@
     <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="hoy.lede">L'aprenentatge bàsic funciona com a convidat. Només cal compte si el teu grup vol compartir el seu propi coneixement.</p>
     <div class="showcase">
       <figure>
-        <img src="screenshots/home.png" alt="Pantalla d'inici amb cercador global" width="260">
+        <img src="screenshots/home.png" alt="Pantalla d'inici amb cercador global" width="260" height="578" loading="lazy">
         <figcaption data-i18n="hoy.fig0">Inici centrat en un cercador global.</figcaption>
       </figure>
       <figure>
-        <img src="screenshots/catalogo.png" alt="Catàleg d'instrumental filtrat per especialitat" width="260">
+        <img src="screenshots/catalogo.png" alt="Catàleg d'instrumental filtrat per especialitat" width="260" height="578" loading="lazy">
         <figcaption data-i18n="hoy.fig1">Catàleg amb fotos reals per especialitat.</figcaption>
       </figure>
       <figure>
-        <img src="screenshots/instrumento.png" alt="Fitxa d'un instrument amb foto real i dades" width="260">
+        <img src="screenshots/instrumento.png" alt="Fitxa d'un instrument amb foto real i dades" width="260" height="578" loading="lazy">
         <figcaption data-i18n="hoy.fig2">Fitxa d'instrumental amb foto i noms comercials.</figcaption>
       </figure>
     </div>
@@ -259,7 +307,7 @@
     <span class="eyebrow" data-i18n="novedades.eyebrow">Novetats</span>
     <h2 data-i18n="novedades.h1">Construït en obert, en públic.</h2>
     <div class="timeline">
-      <div class="timeline-card">
+      <div class="timeline-card" id="tlCard" aria-live="polite" aria-atomic="true">
         <div class="timeline-meta">
           <span class="timeline-badge" id="tlBadge">Origen</span>
           <span class="timeline-index" id="tlIndex">1 / 26</span>
@@ -302,6 +350,9 @@
           <li data-i18n="colabora.c2l3">Proposa millores via pull request</li>
         </ul>
         <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" style="margin-top: 12px;" data-i18n="colabora.c2cta">Anar al repositori →</a>
+        <a href="https://github.com/mikeyoshio/Instriq" class="github-stars" aria-label="Estrelles del repositori a GitHub">
+          <img src="https://img.shields.io/github/stars/mikeyoshio/Instriq?style=social" alt="" width="110" height="20" loading="lazy">
+        </a>
       </div>
     </div>
   </div>
@@ -381,6 +432,8 @@
   </div>
 </section>
 
+</main>
+
 <footer class="site">
   <div class="wrap">
     <div class="cols">
@@ -415,6 +468,7 @@
     es: {
       "meta.title": "Instriq — Conocimiento de quirófano abierto y compartido",
       "meta.description": "Catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidos entre profesionales de quirófano. Open source.",
+      "a11y.skip": "Saltar al contenido",
       "nav.mision": "Misión", "nav.hoy": "Hoy", "nav.colabora": "Colabora", "nav.transparencia": "Transparencia", "nav.cta": "Abrir la app",
       "hero.eyebrow": "Open source · Bloque quirúrgico",
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido entre profesionales.",
@@ -469,6 +523,7 @@
     en: {
       "meta.title": "Instriq — Open, shared operating room knowledge",
       "meta.description": "Instrument catalog, techniques, protocols and preference cards shared among operating room professionals. Open source.",
+      "a11y.skip": "Skip to content",
       "nav.mision": "Mission", "nav.hoy": "Today", "nav.colabora": "Contribute", "nav.transparencia": "Transparency", "nav.cta": "Open the app",
       "hero.eyebrow": "Open source · Surgical block",
       "hero.h1": "Operating room knowledge,<br>open and shared between professionals.",
@@ -659,6 +714,8 @@
     tlFill.style.width = (tlIndex / (items.length - 1) * 100) + '%';
     tlPrev.disabled = tlIndex === 0;
     tlNext.disabled = tlIndex === items.length - 1;
+    var plainText = item.text.replace(/<[^>]+>/g, '');
+    tlSlider.setAttribute('aria-valuetext', (tlIndex + 1) + '/' + items.length + ' — ' + item.badge + ': ' + plainText);
   }
 
   tlSlider.addEventListener('input', function () { tlIndex = parseInt(tlSlider.value, 10); renderTimeline(); });
@@ -675,7 +732,9 @@
     });
     document.title = lang === 'ca' ? CA_DEFAULTS['meta.title'] : (DICT[lang] && DICT[lang]['meta.title']) || CA_DEFAULTS['meta.title'];
     document.querySelectorAll('#langSwitch button').forEach(function (b) {
-      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+      var isActive = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
     try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
     tlLang = TL[lang] ? lang : 'ca';
