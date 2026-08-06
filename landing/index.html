@@ -202,8 +202,9 @@
   .skip-link:focus { left: 0; }
   .hero-shot { margin-top: 48px; }
   .hero-shot img { width: 240px; height: 533px; margin: 0 auto; border-radius: 28px; box-shadow: var(--shadow-soft); border: 1px solid var(--rule); }
-  .github-stars { display: inline-flex; align-items: center; margin-left: 10px; vertical-align: middle; border-radius: 4px; }
-  .github-stars img { height: 20px; display: inline-block; }
+  .github-stars { display: flex; width: fit-content; align-items: center; gap: 7px; margin-top: 14px; color: var(--ink-muted); font-family: var(--display); font-size: 0.85rem; text-decoration: none; transition: color 0.15s ease; }
+  .github-stars:hover { color: var(--accent); }
+  .github-stars svg { flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -240,12 +241,12 @@
       <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
     </div>
     <div class="data-row">
-      <div class="data-cell"><div class="num">70+</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
-      <div class="data-cell"><div class="num">9</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
+      <div class="data-cell"><div class="num">110</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
+      <div class="data-cell"><div class="num">16</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
       <div class="data-cell"><div class="num">3</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
     </div>
     <div class="hero-shot">
-      <img src="screenshots/grupo.png" alt="Pantalla de l'espai de treball d'un grup, amb tècniques, safates i targetes de preferència" width="240" height="533" loading="eager">
+      <img src="screenshots/instrumento.png" alt="Fitxa d'un instrument quirúrgic real, amb foto, fabricant i dades tècniques" width="240" height="533" loading="eager">
     </div>
   </div>
 </section>
@@ -290,12 +291,12 @@
         <figcaption data-i18n="hoy.fig1">Catàleg amb fotos reals per especialitat.</figcaption>
       </figure>
       <figure>
-        <img src="screenshots/instrumento.png" alt="Fitxa d'un instrument amb foto real i dades" width="260" height="578" loading="lazy">
-        <figcaption data-i18n="hoy.fig2">Fitxa d'instrumental amb foto i noms comercials.</figcaption>
+        <img src="screenshots/grupo.png" alt="Espai de treball d'un grup, amb tècniques, safates i targetes de preferència" width="260" height="578" loading="lazy">
+        <figcaption data-i18n="hoy.fig2">Organitza el teu equip en espais de treball.</figcaption>
       </figure>
     </div>
     <div class="cards cols-3" style="text-align: left;">
-      <div class="card"><h3 data-i18n="hoy.c1t">Catàleg</h3><p data-i18n="hoy.c1p">+70 instruments organitzats per 9 especialitats i per categoria funcional, amb noms comercials i fabricant.</p></div>
+      <div class="card"><h3 data-i18n="hoy.c1t">Catàleg</h3><p data-i18n="hoy.c1p">110 instruments organitzats per 16 especialitats i per categoria funcional, amb noms comercials i fabricant.</p></div>
       <div class="card"><h3 data-i18n="hoy.c2t">Aprèn</h3><p data-i18n="hoy.c2p">Flashcards i qüestionaris de repàs, amb progrés guardat al teu propi dispositiu.</p></div>
       <div class="card"><h3 data-i18n="hoy.c3t">Targetes de preferència</h3><p data-i18n="hoy.c3p">Instrumental específic per cirurgià i procediment, compartit i validat dins del teu grup.</p></div>
     </div>
@@ -350,8 +351,9 @@
           <li data-i18n="colabora.c2l3">Proposa millores via pull request</li>
         </ul>
         <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" style="margin-top: 12px;" data-i18n="colabora.c2cta">Anar al repositori →</a>
-        <a href="https://github.com/mikeyoshio/Instriq" class="github-stars" aria-label="Estrelles del repositori a GitHub">
-          <img src="https://img.shields.io/github/stars/mikeyoshio/Instriq?style=social" alt="" width="110" height="20" loading="lazy">
+        <a href="https://github.com/mikeyoshio/Instriq" class="github-stars">
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2 14.9 8.6 22 9.3 16.5 14 18.2 21 12 17.3 5.8 21 7.5 14 2 9.3 9.1 8.6Z"/></svg>
+          <span data-i18n="colabora.c2star">Fes una estrella al repositori</span>
         </a>
       </div>
     </div>
@@ -367,8 +369,8 @@
       <div class="org-node org-hospital" data-i18n="organiza.hospital">🏥 Hospital Vallnord<span class="org-sub">el grup</span></div>
       <div class="org-arrow-down">↓</div>
       <div class="org-workspaces">
-        <div class="org-node" data-i18n="organiza.ws1">Traumatologia</div>
-        <div class="org-node org-workspace-active" data-i18n="organiza.ws2">Laparoscòpia</div>
+        <div class="org-node org-workspace-active" data-i18n="organiza.ws1">Traumatologia</div>
+        <div class="org-node" data-i18n="organiza.ws2">Laparoscòpia</div>
         <div class="org-node" data-i18n="organiza.ws3">Formació de personal nou</div>
       </div>
       <div class="org-arrow-down">↓</div>
@@ -378,7 +380,7 @@
         <div class="org-node org-content" data-i18n="organiza.c3">Instrumental de l'equip</div>
         <div class="org-node org-content" data-i18n="organiza.c4">Safates d'instrumental</div>
       </div>
-      <p class="org-caption" data-i18n="organiza.caption">Contingut dins de l'espai "Laparoscòpia"</p>
+      <p class="org-caption" data-i18n="organiza.caption">Contingut dins de l'espai "Traumatologia"</p>
     </div>
     <div class="org-criterion">
       <p data-i18n="organiza.criterion">Organitza els espais per <strong>especialitat o servei</strong>, no per cada tècnica individual. ✓ "Traumatologia", "Quiròfan 3". ✗ Un espai per cada protocol.</p>
@@ -487,8 +489,8 @@
       "valores.c4t": "Estándares abiertos", "valores.c4p": "Buscamos alinearnos con estándares reconocidos del sector (HL7, FHIR, DICOM) según el proyecto lo necesite.",
       "hoy.eyebrow": "Disponible hoy", "hoy.h1": "Sin cuenta, sin fricción.",
       "hoy.lede": "El aprendizaje básico funciona como invitado. Solo hace falta cuenta si tu grupo quiere compartir su propio conocimiento.",
-      "hoy.fig0": "Inicio centrado en un buscador global.", "hoy.fig1": "Catálogo con fotos reales por especialidad.", "hoy.fig2": "Ficha de instrumental con foto y nombres comerciales.",
-      "hoy.c1t": "Catálogo", "hoy.c1p": "+70 instrumentos organizados por 9 especialidades y por categoría funcional, con nombres comerciales y fabricante.",
+      "hoy.fig0": "Inicio centrado en un buscador global.", "hoy.fig1": "Catálogo con fotos reales por especialidad.", "hoy.fig2": "Organiza tu equipo en espacios de trabajo.",
+      "hoy.c1t": "Catálogo", "hoy.c1p": "110 instrumentos organizados por 16 especialidades y por categoría funcional, con nombres comerciales y fabricante.",
       "hoy.c2t": "Aprende", "hoy.c2p": "Flashcards y quiz de repaso, con progreso guardado en tu propio dispositivo.",
       "hoy.c3t": "Tarjetas de preferencia", "hoy.c3p": "Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu grupo.",
       "novedades.eyebrow": "Novedades", "novedades.h1": "Construido en abierto, en público.",
@@ -496,13 +498,13 @@
       "colabora.c1t": "Eres profesional sanitario", "colabora.c1p": "Comparte el instrumental y las técnicas de tu equipo dentro de tu grupo, ayúdanos a revisar contenido del catálogo, o dinos qué protocolo o guía te falta.",
       "colabora.c1l1": "Crea o únete al espacio de tu grupo desde la app", "colabora.c1l2": "Propón correcciones o instrumental nuevo", "colabora.c1l3": "Cuéntanos qué guías necesitas — nos ayuda a priorizar",
       "colabora.c2t": "Eres desarrolladora/or", "colabora.c2p": "El código es público. Flutter (Android/iOS/Web) + Supabase. Empieza por el README del repo.",
-      "colabora.c2l1": "Clona el repo y levanta el proyecto en minutos", "colabora.c2l2": "Revisa los issues abiertos en GitHub", "colabora.c2l3": "Propón mejoras vía pull request", "colabora.c2cta": "Ir al repositorio →",
+      "colabora.c2l1": "Clona el repo y levanta el proyecto en minutos", "colabora.c2l2": "Revisa los issues abiertos en GitHub", "colabora.c2l3": "Propón mejoras vía pull request", "colabora.c2cta": "Ir al repositorio →", "colabora.c2star": "Dale una estrella al repositorio",
       "organiza.eyebrow": "Estructura", "organiza.h1": "Organiza tu grupo antes de empezar.",
       "organiza.lede": "En Instriq, un <strong>grupo</strong> (tu hospital, bloque quirúrgico o equipo) contiene uno o varios <strong>espacios de trabajo</strong> — normalmente uno por especialidad o servicio. Dentro de cada espacio viven las técnicas y protocolos, las tarjetas de preferencia, el instrumental propio del equipo y las bandejas.",
       "organiza.hospital": "🏥 Hospital Vallnord<span class=\"org-sub\">el grupo</span>",
       "organiza.ws1": "Traumatología", "organiza.ws2": "Laparoscopia", "organiza.ws3": "Formación de personal nuevo",
       "organiza.c1": "Técnicas y protocolos", "organiza.c2": "Tarjetas de preferencia", "organiza.c3": "Instrumental del equipo", "organiza.c4": "Bandejas de instrumental",
-      "organiza.caption": "Contenido dentro del espacio \"Laparoscopia\"",
+      "organiza.caption": "Contenido dentro del espacio \"Traumatología\"",
       "organiza.criterion": "Organiza los espacios por <strong>especialidad o servicio</strong>, no por cada técnica individual. ✓ \"Traumatología\", \"Quirófano 3\". ✗ Un espacio por cada protocolo.",
       "equipo.eyebrow": "Equipo", "equipo.h1": "Un equipo pequeño, con vocación de comunidad.",
       "equipo.p1": "Instriq lo impulsa un pequeño equipo inicial, pero su crecimiento depende de una red de profesionales sanitarios, docentes, investigadores y desarrolladores que colaboran de forma voluntaria y sin ánimo de lucro. Si quieres formar parte, escríbenos.",
@@ -542,8 +544,8 @@
       "valores.c4t": "Open standards", "valores.c4p": "We aim to align with recognized industry standards (HL7, FHIR, DICOM) as the project needs.",
       "hoy.eyebrow": "Available today", "hoy.h1": "No account, no friction.",
       "hoy.lede": "Basic learning works as a guest. An account is only needed if your group wants to share its own knowledge.",
-      "hoy.fig0": "A home screen centered on global search.", "hoy.fig1": "Catalog with real photos by specialty.", "hoy.fig2": "Instrument entry with photo and trade names.",
-      "hoy.c1t": "Catalog", "hoy.c1p": "70+ instruments organized by 9 specialties and by functional category, with trade names and manufacturer.",
+      "hoy.fig0": "A home screen centered on global search.", "hoy.fig1": "Catalog with real photos by specialty.", "hoy.fig2": "Organize your team into workspaces.",
+      "hoy.c1t": "Catalog", "hoy.c1p": "110 instruments organized by 16 specialties and by functional category, with trade names and manufacturer.",
       "hoy.c2t": "Learn", "hoy.c2p": "Flashcards and review quizzes, with progress saved on your own device.",
       "hoy.c3t": "Preference cards", "hoy.c3p": "Instruments specific to surgeon and procedure, shared and validated within your group.",
       "novedades.eyebrow": "Latest", "novedades.h1": "Built in the open, in public.",
@@ -551,13 +553,13 @@
       "colabora.c1t": "You're a healthcare professional", "colabora.c1p": "Share your team's instruments and techniques within your group, help us review catalog content, or tell us which protocol or guide is missing.",
       "colabora.c1l1": "Create or join your group's space from the app", "colabora.c1l2": "Propose corrections or new instruments", "colabora.c1l3": "Tell us which guides you need — it helps us prioritize",
       "colabora.c2t": "You're a developer", "colabora.c2p": "The code is public. Flutter (Android/iOS/Web) + Supabase. Start with the repo's README.",
-      "colabora.c2l1": "Clone the repo and get it running in minutes", "colabora.c2l2": "Check the open issues on GitHub", "colabora.c2l3": "Propose improvements via pull request", "colabora.c2cta": "Go to the repository →",
+      "colabora.c2l1": "Clone the repo and get it running in minutes", "colabora.c2l2": "Check the open issues on GitHub", "colabora.c2l3": "Propose improvements via pull request", "colabora.c2cta": "Go to the repository →", "colabora.c2star": "Star the repository",
       "organiza.eyebrow": "Structure", "organiza.h1": "Organize your group before you start.",
       "organiza.lede": "In Instriq, a <strong>group</strong> (your hospital, surgical block or team) contains one or several <strong>workspaces</strong> — usually one per specialty or service. Inside each workspace live the techniques and protocols, preference cards, team-owned instruments and trays.",
       "organiza.hospital": "🏥 Hospital Vallnord<span class=\"org-sub\">the group</span>",
       "organiza.ws1": "Trauma", "organiza.ws2": "Laparoscopy", "organiza.ws3": "New staff training",
       "organiza.c1": "Techniques and protocols", "organiza.c2": "Preference cards", "organiza.c3": "Team instruments", "organiza.c4": "Instrument trays",
-      "organiza.caption": "Content inside the \"Laparoscopy\" workspace",
+      "organiza.caption": "Content inside the \"Trauma\" workspace",
       "organiza.criterion": "Organize workspaces by <strong>specialty or service</strong>, not by individual technique. ✓ \"Trauma\", \"OR 3\". ✗ One workspace per protocol.",
       "equipo.eyebrow": "Team", "equipo.h1": "A small team, with a community mindset.",
       "equipo.p1": "Instriq is driven by a small initial team, but its growth depends on a network of healthcare professionals, educators, researchers and developers collaborating voluntarily and not-for-profit. If you want to get involved, reach out.",
