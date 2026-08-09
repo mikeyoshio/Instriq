@@ -125,25 +125,24 @@ class ProfileService {
 
   /// Busca el hospital por código de invitación y liga el perfil del usuario actual.
   /// Devuelve el hospital si el código es válido, o null si no existe.
+  ///
+  /// Vía RPC (`join_hospital_with_code`, ver schema_v31_profile_security_hardening.sql):
+  /// antes esto era un `select` directo sobre `organizations` (exigía que
+  /// cualquiera pudiera leer todas las organizaciones para validar un código,
+  /// filtrando invite_code/cif de todo el mundo) + un `upsert` directo sobre
+  /// `profiles` (sin verificación de servidor de qué columnas se tocaban).
+  /// Ambos motivos de la auditoría de seguridad de 2026-08.
   Future<Hospital?> joinHospitalWithCode(String inviteCode, {String? displayName}) async {
     final user = AuthService.instance.currentUser;
     if (user == null) return null;
 
-    final normalized = normalizeInviteCode(inviteCode);
-    final hospitalRow = await _client
-        .from('organizations')
-        .select()
-        .eq('invite_code', normalized)
-        .maybeSingle();
-    if (hospitalRow == null) return null;
+    final rows = await _client.rpc('join_hospital_with_code', params: {
+      'p_invite_code': normalizeInviteCode(inviteCode),
+      if (displayName != null && displayName.isNotEmpty) 'p_display_name': displayName,
+    }) as List<dynamic>;
+    if (rows.isEmpty) return null;
 
-    final hospital = Hospital.fromRow(hospitalRow);
-    await _client.from('profiles').upsert({
-      'id': user.id,
-      'organization_id': hospital.id,
-      'is_admin': false,
-      if (displayName != null && displayName.isNotEmpty) 'display_name': displayName,
-    });
+    final hospital = Hospital.fromRow(rows.first as Map<String, dynamic>);
     _clearGroupContentCaches();
     _organizationId = hospital.id;
     _organizationName = hospital.name;
@@ -156,6 +155,11 @@ class ProfileService {
   }
 
   /// Registra un hospital nuevo (autoservicio) y lo liga como admin al usuario actual.
+  ///
+  /// Vía RPC (`register_hospital`, ver schema_v31_profile_security_hardening.sql):
+  /// antes el `insert`+`upsert` se hacían directamente desde el cliente,
+  /// confiando en que la policy de `profiles` no permitiera fijar columnas
+  /// arbitrarias -- no era así (auditoría de seguridad 2026-08).
   Future<Hospital> registerHospital({
     required String name,
     String? displayName,
@@ -163,40 +167,12 @@ class ProfileService {
     final user = AuthService.instance.currentUser;
     if (user == null) throw StateError('No hay sesión activa.');
 
-    String code = generateInviteCode();
-    Map<String, dynamic>? inserted;
-    for (var attempt = 0; attempt < 5; attempt++) {
-      try {
-        inserted = await _client
-            .from('organizations')
-            .insert({
-              'name': name.trim(),
-              'invite_code': code,
-              'created_by': user.id,
-              'owner_id': user.id,
-            })
-            .select()
-            .single();
-        break;
-      } on PostgrestException catch (e) {
-        if (e.code == '23505') {
-          code = generateInviteCode();
-          continue;
-        }
-        rethrow;
-      }
-    }
-    if (inserted == null) {
-      throw StateError('No se pudo generar un código de invitación único. Inténtalo de nuevo.');
-    }
+    final rows = await _client.rpc('register_hospital', params: {
+      'p_name': name.trim(),
+      if (displayName != null && displayName.isNotEmpty) 'p_display_name': displayName,
+    }) as List<dynamic>;
 
-    final hospital = Hospital.fromRow(inserted);
-    await _client.from('profiles').upsert({
-      'id': user.id,
-      'organization_id': hospital.id,
-      'is_admin': true,
-      if (displayName != null && displayName.isNotEmpty) 'display_name': displayName,
-    });
+    final hospital = Hospital.fromRow(rows.first as Map<String, dynamic>);
     _clearGroupContentCaches();
     _organizationId = hospital.id;
     _organizationName = hospital.name;
@@ -239,9 +215,16 @@ class ProfileService {
         .toList();
   }
 
-  /// Expulsa a un miembro del hospital (solo admin, vía RLS).
+  /// Expulsa a un miembro del hospital (solo admin, vía función security
+  /// definer -- `remove_hospital_member`, ver
+  /// schema_v31_profile_security_hardening.sql). Antes era un `update`
+  /// directo sobre `profiles`: la UI ocultaba el botón para admins/propietario
+  /// pero nada lo impedía en el servidor -- un admin podía expulsar a otro
+  /// admin o a la propietaria/el propietario llamando la misma escritura
+  /// directamente (auditoría de seguridad 2026-08). El RPC rechaza ambos
+  /// casos; el error real (no capturado aquí) lo muestra la pantalla llamante.
   Future<void> removeMember(String userId) async {
-    await _client.from('profiles').update({'organization_id': null, 'is_admin': false}).eq('id', userId);
+    await _client.rpc('remove_hospital_member', params: {'p_user_id': userId});
   }
 
   /// Transfiere la propiedad del grupo a otro miembro (solo la propietaria/el
