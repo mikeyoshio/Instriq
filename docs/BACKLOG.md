@@ -1,5 +1,24 @@
 # Instriq Product Backlog
 
+## Design System (auditoria UX + implementació)
+
+Document de referència: auditoria completa de les 61 pantalles + Design System proposat, aprovat per l'usuari. Full de ruta en 3 nivells (consolidació → navegació → bugs de dades, aquests últims abordats juntament amb els altres dos, no per separat).
+
+**Estat: Nivell 1 i 2 fets i pujats (2026-08, commit `6689eec`).**
+
+* **Nivell 1 — consolidació.** 5 components genèrics nous (`InstriqAsyncView`, `InstriqEntityUsageList`, `InstriqVersionHistory`/`InstriqVersionDiff`, `InstriqReviewQueue`) substitueixen ~20 pantalles gairebé triplicades (historial/diff/cua de revisió de safata-document-targeta, fabricant/etiqueta/cirurgià/especialitat, formulari/detall de Biblioteca Pública). Bugs reals corregits de pas: direcció de diff invertida en comparar versions arxivades, `draft`/`archived` amb el mateix color, ids crus al diff de documents, canvis de quantitat/posició invisibles al diff de safates, editor clínic que només tocava el primer mètode d'esterilització (`methods.first`), dues etiquetes incorrectes a la fitxa de cirurgià, i fallos de xarxa mostrats com a "buit" en 4 pantalles d'entitat.
+* **Nivell 2 — navegació.** `WorkspaceListScreen` es col·lapsa sola quan hi ha un únic espai de treball. Embut d'autenticació unificat: `WelcomeScreen`/`SignUpScreen`/`JoinHospitalScreen`/`RegisterHospitalScreen` eliminats, substituïts per un únic `GroupEntryScreen` amb la decisió unir-se/crear resolta d'entrada i sense pantalla d'èxit dedicada (el codi d'invitació surt ara en un diàleg amb botó de copiar). Pestanya Activitat/cua de revisió ara visible per `canApprove` (rol `approver` a qualsevol espai), no només `isAdmin`. Nova capacitat de promoure/treure administrador des de `manage_hospital_screen.dart` (`set_hospital_admin`, `supabase/schema_v30_hospital_admin_promotion.sql`, bloqueja treure l'últim admin).
+
+`flutter analyze`/`flutter test` nets a totes dues fases.
+
+**Pendent:**
+* Verificació manual en emulador/web amb compte autenticat real de totes dues fases — especialment l'embut d'autenticació (porta d'entrada de l'app) i la promoció d'admin. Cap s'ha pogut provar en viu aquesta sessió, mateix punt pendent que la resta de fluxos autenticats del backlog.
+* Un únic punt d'entrada/bústia amb comptador agregat de les cues de revisió (col·laboradors, contingut públic, canvis de grup) — apuntat a l'auditoria original però no inclòs als 4 punts aprovats del Nivell 2; encara 3 cues separades i sense consciència mútua.
+* El `catch(_)` general de `tray_detail_screen.dart`/`group_document_detail_screen.dart`/`preference_card_detail_screen.dart` (anul·la `_ownPendingDraft` i altres seccions en qualsevol error, no només de xarxa) — fora d'abast del Nivell 1 perquè aquestes pantalles senceres no formaven part de cap dels 5 patrons consolidats; queda anotat per a un pas futur.
+* Nivell 3 restant: la resta de l'auditoria original (accessibilitat exhaustiva camp a camp, adopció completa del breakpoint responsive a totes les pantalles, unificació dels 6 sinònims de rol de permisos) no s'ha abordat — el Nivell 1+2 s'ha centrat en els patrons de més impacte/duplicació, no en una passada exhaustiva de tota l'auditoria.
+
+---
+
 ## Estat actual
 
 ### Tasques pendents (requereixen intervenció manual)
@@ -100,9 +119,11 @@ Què és global (catàleg), què és privat (organització), què és una adapta
 
 ## ADR-002 · Arquitectura d'IA
 
-RAG (com es recupera el context), model de permisos (què pot veure la IA de cada organització), estratègia de citació de fonts, política de privadesa de dades clíniques, traçabilitat de respostes. El proveïdor d'IA (Claude, OpenAI, model local) és gairebé la darrera decisió, no la primera.
+RAG (com es recupera el context), model de permisos (què pot veure la IA de cada organització), estratègia de citació de fonts, política de privadesa de dades clíniques, traçabilitat de respostes.
 
-**Impacta**: EPIC 5 (cerca semàntica), EPIC 6.
+**Primera restricció confirmada (2026-08, decisió del propietari)**: la IA ha de ser **local/offline**, no un LLM ni una API externa. Dos motius: (1) molts blocs quirúrgics no tenen cobertura wifi fiable — un assistent que depengui d'internet falla justament quan més calen, (2) les dades clíniques que li donarien contingut són sensibles i no s'han d'enviar a un tercer. Encara pendent dins d'aquesta restricció: inferència al dispositiu (model petit embarcat) vs. servidor local a la xarxa de l'hospital (sense sortir a internet); en tots dos casos el RAG/embeddings també han de viure en local, no al Postgres al núvol on avui hi ha `pgvector` instal·lat. La resta de l'ADR (model de permisos, citació de fonts, traçabilitat) segueix oberta.
+
+**Impacta**: EPIC 5 (cerca semàntica — la part semàntica, no la de nom/entitat ja feta), EPIC 6. Es relaciona directament amb **ADR-003** (estratègia offline): la infraestructura local que calgui per a la IA és, en essència, el mateix problema que ADR-003 ja havia de resoldre per a la resta de l'app — té sentit decidir-les juntes.
 
 ## ADR-003 · Estratègia Offline
 
@@ -472,12 +493,12 @@ Dos bugs reals trobats i arreglats durant la verificació: (1) les etiquetes de 
 
 ## EPIC 6 · Clinical AI Assistant
 
-* **Model de domini**: sense impacte fins introduir `pgvector`/embeddings.
+* **Model de domini**: sense impacte fins introduir embeddings/vector search.
 * **Compatibilitat amb el Knowledge Graph**: dependència dura explícita al propi document — no començar sense EPIC 1 consolidat.
 * **Impacte UX**: alt i nou paradigma (xat/preguntes); ha de citar sempre la font i **no ha de poder citar esborranys**, només contingut publicat/aprovat — coherent amb el model de confiança draft→revisió→publicat ja establert a tota la resta de l'app.
-* **Compatibilitat amb arquitectura actual**: la de més superfície nova de tots els EPICS — requereix integració amb un LLM extern (probablement via Edge Function) i `pgvector`, cap dels dos existeix avui.
-* **Dependències**: bloquejat per EPIC 1 i per **ADR-002 · Arquitectura d'IA** — el bloqueig real no és el proveïdor (canviar d'OpenAI a Claude o a un model local és una decisió fàcil i tardana), sinó RAG, permisos, citació de fonts i privadesa; comparteix infraestructura amb la cerca semàntica d'EPIC 5.
-* **Veredicte**: últim EPIC a planificar; requereix resoldre ADR-002 abans de dissenyar-lo. El proveïdor es tria al final, no al principi.
+* **Compatibilitat amb arquitectura actual**: la de més superfície nova de tots els EPICS, i ara amb un requisit afegit (decisió del propietari, 2026-08): **la IA ha de ser local/offline, no un LLM extern per API**. Motiu doble: molts blocs quirúrgics no tenen cobertura wifi fiable (un assistent que depengui d'una crida a internet no serviria precisament quan més falta fa), i les dades clíniques que li donarien contingut (tècniques, targetes de preferència, notes) són sensibles — no s'han d'enviar mai a un proveïdor extern. Això descarta la integració via Edge Function + API de tercers (Claude/OpenAI) que es donava per fet fins ara, i obre una pregunta pròpia dins d'ADR-002: **inferència al dispositiu** (model petit embarcat a l'app, límits reals de mida/qualitat en mòbil) vs. **servidor local a la xarxa de l'hospital** (una màquina/GPU dins del mateix bloc quirúrgic, sense sortir a internet) — cap de les dues s'ha decidit encara. El mateix val per a la cerca RAG: els embeddings/vector search també haurien de viure en local, no al Postgres al núvol de Supabase (on ja hi ha `pgvector` instal·lat, però pensat per a un altre escenari).
+* **Dependències**: bloquejat per EPIC 1, per **ADR-002 · Arquitectura d'IA** (ara amb el requisit local/offline com a primera restricció confirmada) i, de fet, també per **ADR-003 · Estratègia Offline** — infraestructura local/offline és exactament el que ADR-003 hauria de definir per a la resta de l'app; té sentit resoldre-les juntes, no per separat. La cerca semàntica d'EPIC 5 (pensada per compartir infraestructura amb aquest EPIC) també s'ha de revisar amb el mateix criteri quan arribi el moment.
+* **Veredicte**: **ajornat deliberadament (2026-08, decisió del propietari)** — no és el darrer EPIC per falta de prioritat, sinó perquè encara no hi ha ni la restricció d'arquitectura completa (local vs. servidor d'hospital) ni ADR-003 resolt. No planificar-lo en detall fins que ADR-002 (versió local/offline) i ADR-003 estiguin decidits.
 
 ## EPIC 7 · Offline First
 
@@ -535,9 +556,9 @@ Fora d'abast d'aquest tram: adopció d'una organització sobre contingut públic
 3. **EPIC 5 · Smart Search** (part per nom/entitat) en paral·lel — cap dependència dura.
 4. **EPIC 2 · Clinical Workspace** — un cop EPIC 1 tingui les relacions clau (tècnica↔instrumental↔safata).
 5. ~~**Sincronitzar progrés d'aprenentatge a Supabase** (millora, no EPIC) → **EPIC 8 · Contextual Learning**~~ — fet, primer tram (2026-08).
-6. **EPIC 3 · CSSD Workspace** — només després de resoldre **ADR-001** (governança del coneixement).
-7. **EPIC 7 · Offline First** — limitat a Bandejes fins resoldre **ADR-003** (estratègia offline).
-8. **EPIC 6 · Clinical AI Assistant** — últim, requereix EPIC 1 consolidat + resoldre **ADR-002** (arquitectura d'IA). El proveïdor es tria al final.
+6. ~~**EPIC 3 · CSSD Workspace** — només després de resoldre **ADR-001** (governança del coneixement).~~ **Desbloquejat (2026-08)** — ADR-001 ja està decidit (`docs/ADR_001_KNOWLEDGE_GOVERNANCE.md` §0). No s'ha començat encara.
+7. **EPIC 7 · Offline First** — limitat a Bandejes fins resoldre **ADR-003** (estratègia offline). Guanya prioritat pràctica: la infraestructura local que calgui resoldre aquí és, en bona part, la mateixa que necessitarà la IA local (punt 8).
+8. **EPIC 6 · Clinical AI Assistant** — **ajornat deliberadament (2026-08, decisió del propietari)**: ha de ser IA local/offline (cobertura wifi poc fiable a molts blocs quirúrgics + dades clíniques sensibles que no poden sortir a un tercer), no un LLM extern per API com es donava per fet fins ara. No es planifica en detall fins resoldre **ADR-002** (versió local: al dispositiu o a un servidor de la xarxa de l'hospital) i **ADR-003** — probablement juntes, no per separat.
 9. **EPIC 9 · Community & Editorial Governance** — **implementable ja**, en paral·lel a qualsevol altre EPIC; el nomenament del Consell Editorial és posterior a la implementació, no una condició prèvia.
 
 Nota transversal: ~~**ADR-004** (versionat del coneixement) no bloqueja cap EPIC en marxa, però hauria de resoldre's abans d'implementar el versionat d'instrumental personalitzat o d'esterilització (Product Evolution) — seria la quarta còpia independent del mateix patró.~~ **Resolt (2026-08)**, veure `docs/ADR_004_VERSIONING.md` — la recepta ja existeix, falta aplicar-la.
