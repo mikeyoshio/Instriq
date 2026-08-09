@@ -21,6 +21,7 @@
 create or replace function guard_profile_privilege_columns()
 returns trigger
 language plpgsql
+set search_path = public
 as $$
 begin
   if (new.is_admin is distinct from old.is_admin or new.organization_id is distinct from old.organization_id)
@@ -272,4 +273,9 @@ begin
 end;
 $$;
 
-revoke execute on function log_audit_event(uuid, text, text, uuid, uuid, jsonb) from anon, authenticated;
+-- El permís d'EXECUTE per defecte d'una funció nova es concedeix a PUBLIC, i
+-- anon/authenticated l'hereten via la seva pertinença implícita a PUBLIC --
+-- cal revocar de PUBLIC, no d'anon/authenticated per separat, perquè la
+-- revocació tingui efecte real.
+revoke all on function log_audit_event(uuid, text, text, uuid, uuid, jsonb) from public;
+grant execute on function log_audit_event(uuid, text, text, uuid, uuid, jsonb) to service_role;
