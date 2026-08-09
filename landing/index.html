@@ -7,23 +7,27 @@
 <meta name="theme-color" content="#16191a" media="(prefers-color-scheme: dark)">
 <title data-i18n="meta.title">Instriq — Coneixement de quiròfan obert i compartit</title>
 <meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Catàleg d'instrumental, tècniques, protocols i targetes de preferència compartits entre professionals de quiròfan. Open source.">
-<link rel="canonical" href="https://instriq.org/">
+<link rel="canonical" href="https://instriq.org/" id="canonicalLink">
+<link rel="alternate" hreflang="ca" href="https://instriq.org/">
+<link rel="alternate" hreflang="es" href="https://instriq.org/?lang=es">
+<link rel="alternate" hreflang="en" href="https://instriq.org/?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://instriq.org/">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://instriq.org/">
 <meta property="og:site_name" content="Instriq">
-<meta property="og:title" content="Instriq — Coneixement de quiròfan obert i compartit">
-<meta property="og:description" content="Catàleg d'instrumental, tècniques, protocols i targetes de preferència compartits entre professionals de quiròfan. Open source.">
+<meta property="og:title" data-i18n-attr="content" data-i18n="meta.title" content="Instriq — Coneixement de quiròfan obert i compartit">
+<meta property="og:description" data-i18n-attr="content" data-i18n="meta.description" content="Catàleg d'instrumental, tècniques, protocols i targetes de preferència compartits entre professionals de quiròfan. Open source.">
 <meta property="og:image" content="https://instriq.org/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:locale" content="ca_ES">
+<meta property="og:locale" content="ca_ES" id="ogLocale">
 <meta property="og:locale:alternate" content="es_ES">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Instriq — Coneixement de quiròfan obert i compartit">
-<meta name="twitter:description" content="Catàleg d'instrumental, tècniques, protocols i targetes de preferència compartits entre professionals de quiròfan. Open source.">
+<meta name="twitter:title" data-i18n-attr="content" data-i18n="meta.title" content="Instriq — Coneixement de quiròfan obert i compartit">
+<meta name="twitter:description" data-i18n-attr="content" data-i18n="meta.description" content="Catàleg d'instrumental, tècniques, protocols i targetes de preferència compartits entre professionals de quiròfan. Open source.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -36,6 +40,16 @@
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
   "inLanguage": ["ca", "es", "en"],
   "publisher": { "@type": "Organization", "name": "Instriq", "url": "https://instriq.org/" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Instriq",
+  "url": "https://instriq.org/",
+  "logo": "https://instriq.org/favicon.png",
+  "sameAs": ["https://github.com/mikeyoshio/Instriq"]
 }
 </script>
 <script type="application/ld+json">
@@ -724,7 +738,8 @@
   tlPrev.addEventListener('click', function () { if (tlIndex > 0) { tlIndex--; renderTimeline(); } });
   tlNext.addEventListener('click', function () { var max = (TL[tlLang] || TL.ca).length - 1; if (tlIndex < max) { tlIndex++; renderTimeline(); } });
 
-  function applyLang(lang) {
+  function applyLang(lang, opts) {
+    opts = opts || {};
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var key = el.getAttribute('data-i18n');
@@ -738,7 +753,21 @@
       b.classList.toggle('active', isActive);
       b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
+    // Canonical i og:locale coherents amb l'idioma mostrat -- perquè cada
+    // variant (`/`, `?lang=es`, `?lang=en`) es referencii a si mateixa, no
+    // sempre a l'arrel, tal com demanen les etiquetes hreflang de <head>.
+    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/' : 'https://instriq.org/?lang=' + lang;
+    var canonicalEl = document.getElementById('canonicalLink');
+    if (canonicalEl) canonicalEl.setAttribute('href', canonicalUrl);
+    var ogLocaleEl = document.getElementById('ogLocale');
+    var localeCodes = { ca: 'ca_ES', es: 'es_ES', en: 'en_US' };
+    if (ogLocaleEl) ogLocaleEl.setAttribute('content', localeCodes[lang] || localeCodes.ca);
     try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
+    if (opts.updateUrl) {
+      var url = new URL(window.location.href);
+      if (lang === 'ca') { url.searchParams.delete('lang'); } else { url.searchParams.set('lang', lang); }
+      window.history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
+    }
     tlLang = TL[lang] ? lang : 'ca';
     var futureLabels = { ca: 'Passat ← → Previst', es: 'Pasado ← → Previsto', en: 'Past ← → Planned' };
     document.getElementById('tlFutureLabel').textContent = futureLabels[tlLang];
@@ -746,12 +775,22 @@
   }
 
   document.querySelectorAll('#langSwitch button').forEach(function (b) {
-    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang')); });
+    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), { updateUrl: true }); });
   });
 
+  // Prioritat de l'idioma inicial: paràmetre ?lang= a l'URL (perquè un cercador
+  // o un enllaç compartit puguin apuntar a una variant concreta) > preferència
+  // guardada > català per defecte.
+  var validLangs = ['ca', 'es', 'en'];
+  var urlLang = null;
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var fromUrl = params.get('lang');
+    if (fromUrl && validLangs.indexOf(fromUrl) !== -1) urlLang = fromUrl;
+  } catch (e) {}
   var saved = null;
   try { saved = localStorage.getItem('instriq_lang'); } catch (e) {}
-  applyLang(saved || 'ca');
+  applyLang(urlLang || saved || 'ca');
 
   var els = document.querySelectorAll('.reveal');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
