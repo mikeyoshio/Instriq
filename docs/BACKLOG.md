@@ -464,8 +464,14 @@ Cada EPIC avaluat segons els 5 criteris anteriors. Base de referència: el model
 * **Compatibilitat amb el Knowledge Graph**: bon encaix, ja FK'd a Instrument/Manufacturer.
 * **Impacte UX**: mitjà — pantalles noves seguint convencions ja usades a la fitxa d'esterilització actual.
 * **Compatibilitat amb arquitectura actual**: alta — coincideix exactament amb el "versionat d'esterilització" ja marcat com a pendent des de Fase E.
-* **Dependències**: bloquejada per **ADR-001 · Governança del coneixement** — no és "qui aprova", sinó que encara no existeix un model que defineixi què és global, què és privat, què és una adaptació local i qui n'és el propietari.
-* **Veredicte**: no planificar fins resoldre ADR-001; en paral·lel a EPIC 1/2 si es resol.
+* **Dependències**: ~~bloquejada per **ADR-001**~~ — desbloquejada (ADR-001 decidit).
+* **Veredicte**: ~~no planificar fins resoldre ADR-001~~ **fet (2026-08)**.
+
+**Estat: fet (2026-08).** Implementat sobre `supabase/schema_v32_cssd_workspace.sql`: `instrument_sterilization_methods`/`instrument_technical_info` (71 files reals, cap pèrdua verificada) es converteixen en capçalera+versions (`instrument_sterilization_method_versions`/`instrument_technical_info_versions`), amb el mateix cicle draft→revisió→publicat→arxivat que tècniques/safates/targetes — decisió del propietari: **versionat complet, catàleg global inclòs**. La pregunta que ADR-004 deixava sense resposta ("qui aprova un canvi al catàleg global") es resol reutilitzant el sistema de col·laboradors/Editorial Board ja construït per a la Biblioteca Pública (`my_is_reviewer_or_above()`) en lloc d'inventar un rol nou; files d'organització s'aproven pel rol d'espai (`approver`/`administrator`) com sempre. Camps nous estructurats (abans text lliure): lubricació (`lubrication_required`/`type`/`notes`) i manteniment (`maintenance_interval_days`/`last_maintenance_at`). Taula nova `instrument_incidents` (gravetat baixa/mitjana/alta, estat obert/resolt) — sense versionat, és un registre operatiu, no contingut a aprovar.
+
+Codi Dart: `SterilizationService` ampliat amb el flux complet (crear/començar a editar/desar esborrany/enviar a revisió/aprovar/rebutjar/restaurar) per a totes dues entitats; nou `InstrumentIncidentService`. UI: la fitxa d'instrument reutilitza `InstriqVersionHistory`/`InstriqVersionDiff` (Nivell 1 del Design System) en lloc de construir-ne una 4a/5a versió a mà — exactament el cas per al qual es van generalitzar. `ReviewQueueScreen` guanya 2 pestanyes (files d'organització); nova `GlobalCatalogReviewQueueScreen` per a l'Editorial Board, accessible des de "Comunitat Instriq" a Perfil.
+
+`flutter analyze`/`flutter test` nets. Verificat: comptatge de files idèntic abans/després de la migració, `published_version_id` mai nul, `get_advisors` sense avisos nous fora del patró ja acceptat. Pendent, com sempre amb aquests fluxos: provar en viu (emulador, compte autenticat) el flux complet — proposar un mètode global i veure que només l'Editorial Board el pot aprovar, editar una fitxa tècnica d'espai i veure que l'aprova un `approver` d'aquell espai, reportar una incidència i marcar-la resolta.
 
 ## EPIC 4 · Trays 2.0
 
@@ -556,7 +562,7 @@ Fora d'abast d'aquest tram: adopció d'una organització sobre contingut públic
 3. **EPIC 5 · Smart Search** (part per nom/entitat) en paral·lel — cap dependència dura.
 4. **EPIC 2 · Clinical Workspace** — un cop EPIC 1 tingui les relacions clau (tècnica↔instrumental↔safata).
 5. ~~**Sincronitzar progrés d'aprenentatge a Supabase** (millora, no EPIC) → **EPIC 8 · Contextual Learning**~~ — fet, primer tram (2026-08).
-6. ~~**EPIC 3 · CSSD Workspace** — només després de resoldre **ADR-001** (governança del coneixement).~~ **Desbloquejat (2026-08)** — ADR-001 ja està decidit (`docs/ADR_001_KNOWLEDGE_GOVERNANCE.md` §0). No s'ha començat encara.
+6. ~~**EPIC 3 · CSSD Workspace** — només després de resoldre **ADR-001** (governança del coneixement).~~ **Fet (2026-08)** — veure detall a la secció EPIC 3 més amunt.
 7. **EPIC 7 · Offline First** — limitat a Bandejes fins resoldre **ADR-003** (estratègia offline). Guanya prioritat pràctica: la infraestructura local que calgui resoldre aquí és, en bona part, la mateixa que necessitarà la IA local (punt 8).
 8. **EPIC 6 · Clinical AI Assistant** — **ajornat deliberadament (2026-08, decisió del propietari)**: ha de ser IA local/offline (cobertura wifi poc fiable a molts blocs quirúrgics + dades clíniques sensibles que no poden sortir a un tercer), no un LLM extern per API com es donava per fet fins ara. No es planifica en detall fins resoldre **ADR-002** (versió local: al dispositiu o a un servidor de la xarxa de l'hospital) i **ADR-003** — probablement juntes, no per separat.
 9. **EPIC 9 · Community & Editorial Governance** — **implementable ja**, en paral·lel a qualsevol altre EPIC; el nomenament del Consell Editorial és posterior a la implementació, no una condició prèvia.

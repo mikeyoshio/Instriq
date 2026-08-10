@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../design_system/components/instriq_badge.dart';
 import '../l10n/app_localizations.dart';
 import '../models/catalog_community_photo.dart';
 import '../models/group_document.dart';
+import '../models/group_document_version.dart' show GroupDocumentVersionStatus;
 import '../models/instrument.dart';
+import '../models/instrument_incident.dart';
 import '../models/instrument_sterilization.dart';
 import '../models/manufacturer.dart';
 import '../models/reference_document.dart';
@@ -18,6 +21,7 @@ import '../services/auth_service.dart';
 import '../services/catalog_community_photo_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
+import '../services/instrument_incident_service.dart';
 import '../services/knowledge_link_service.dart';
 import '../services/manufacturer_service.dart';
 import '../services/profile_service.dart';
@@ -29,12 +33,15 @@ import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/instrument_incident_label.dart';
 import '../widgets/sterilization_method_label.dart';
 import '../widgets/tag_picker.dart';
 import 'group_document_detail_screen.dart';
 import 'manufacturer_detail_screen.dart';
 import 'review_session_screen.dart';
+import 'sterilization_method_version_history_screen.dart';
 import 'tag_detail_screen.dart';
+import 'technical_info_version_history_screen.dart';
 import 'tray_detail_screen.dart';
 
 class InstrumentDetailScreen extends StatefulWidget {
@@ -58,9 +65,19 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   List<GroupDocument> _usedInDocuments = [];
   List<Tray> _usedInTrays = [];
 
+  /// Borrador/en revisión propio más reciente entre todos los métodos de
+  /// esterilización del instrumento, si hay alguno -- mismo patrón que
+  /// `_ownPendingDraft` de [TrayDetailScreen], adaptado a que aquí puede haber
+  /// varias cabeceras en vez de una sola.
+  SterilizationMethodVersion? _ownPendingMethodDraft;
+  InstrumentTechnicalInfoVersion? _ownPendingInfoDraft;
+
   bool _loadingCommunityPhoto = true;
   CatalogCommunityPhoto? _approvedCommunityPhoto;
   CatalogCommunityPhoto? _ownPendingPhoto;
+
+  bool _loadingIncidents = true;
+  List<InstrumentIncident> _incidents = [];
 
   bool _isFavorite = false;
 
@@ -68,6 +85,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   void initState() {
     super.initState();
     _loadClinicalData();
+    _loadIncidents();
     if (widget.instrument.image == null) {
       _loadCommunityPhotoState();
     } else {
@@ -133,7 +151,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       final technicalInfo =
           await SterilizationService.instance.fetchTechnicalInfo(_refType, widget.instrument.id);
       Manufacturer? manufacturer;
-      final manufacturerId = technicalInfo?.manufacturerId;
+      final manufacturerId = technicalInfo?.publishedVersion?.manufacturerId;
       if (manufacturerId != null) {
         final all = await ManufacturerService.instance.fetchAll();
         for (final m in all) {
@@ -144,7 +162,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         }
       }
       ReferenceDocument? ifuDocument;
-      final ifuDocumentId = technicalInfo?.ifuDocumentId;
+      final ifuDocumentId = technicalInfo?.publishedVersion?.ifuDocumentId;
       if (ifuDocumentId != null) {
         ifuDocument = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
       }
@@ -171,6 +189,49 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       } catch (_) {
         // Grafo de conocimiento es metadato accesorio: no bloquea el resto de la ficha.
       }
+
+      // Borrador/en revisión propio pendiente: mismo criterio que
+      // `_ownPendingDraft` de [TrayDetailScreen], pero mirando todas las
+      // cabeceras de método (puede haber varias por instrumento) más la
+      // ficha técnica (una sola). No bloquea el resto de la ficha si falla.
+      SterilizationMethodVersion? ownPendingMethodDraft;
+      InstrumentTechnicalInfoVersion? ownPendingInfoDraft;
+      final userId = AuthService.instance.currentUser?.id;
+      if (userId != null) {
+        for (final method in methods) {
+          final methodId = method.id;
+          if (methodId == null) continue;
+          try {
+            final versions = await SterilizationService.instance.fetchMethodVersionHistory(methodId);
+            final mine = versions.where(
+              (v) =>
+                  v.authorId == userId &&
+                  (v.status == GroupDocumentVersionStatus.draft || v.status == GroupDocumentVersionStatus.inReview),
+            );
+            if (mine.isNotEmpty) {
+              ownPendingMethodDraft = mine.first;
+              break;
+            }
+          } catch (_) {
+            // Metadato accesorio: no bloquea el resto de la ficha.
+          }
+        }
+        final infoId = technicalInfo?.id;
+        if (infoId != null) {
+          try {
+            final versions = await SterilizationService.instance.fetchTechnicalInfoVersionHistory(infoId);
+            final mine = versions.where(
+              (v) =>
+                  v.authorId == userId &&
+                  (v.status == GroupDocumentVersionStatus.draft || v.status == GroupDocumentVersionStatus.inReview),
+            );
+            if (mine.isNotEmpty) ownPendingInfoDraft = mine.first;
+          } catch (_) {
+            // Metadato accesorio: no bloquea el resto de la ficha.
+          }
+        }
+      }
+
       if (!mounted) return;
       setState(() {
         _methods = methods;
@@ -180,11 +241,27 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         _tags = tags;
         _usedInDocuments = usedInDocuments;
         _usedInTrays = usedInTrays;
+        _ownPendingMethodDraft = ownPendingMethodDraft;
+        _ownPendingInfoDraft = ownPendingInfoDraft;
         _loadingClinicalData = false;
       });
     } catch (_) {
       if (!mounted) return;
       setState(() => _loadingClinicalData = false);
+    }
+  }
+
+  Future<void> _loadIncidents() async {
+    try {
+      final incidents = await InstrumentIncidentService.instance.fetchForInstrument(_refType, widget.instrument.id);
+      if (!mounted) return;
+      setState(() {
+        _incidents = incidents;
+        _loadingIncidents = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loadingIncidents = false);
     }
   }
 
@@ -201,6 +278,138 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     if (saved == true) {
       setState(() => _loadingClinicalData = true);
       await _loadClinicalData();
+    }
+  }
+
+  Future<void> _openMethodHistory(SterilizationMethodEntry method) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => SterilizationMethodVersionHistoryScreen(
+          method: method,
+          canRestore: ProfileService.instance.isAdmin,
+        ),
+      ),
+    );
+    await _loadClinicalData();
+  }
+
+  Future<void> _openTechnicalInfoHistory(InstrumentTechnicalInfo info) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => TechnicalInfoVersionHistoryScreen(
+          info: info,
+          canRestore: ProfileService.instance.isAdmin,
+        ),
+      ),
+    );
+    await _loadClinicalData();
+  }
+
+  Future<void> _openReportIncidentDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final descriptionController = TextEditingController();
+    IncidentSeverity severity = IncidentSeverity.low;
+    final reported = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text(l10n.reportIncidentDialogTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: descriptionController,
+                autofocus: true,
+                maxLines: 3,
+                onChanged: (_) => setDialogState(() {}),
+                decoration: InputDecoration(
+                  labelText: l10n.incidentDescriptionLabel,
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(l10n.incidentSeverityLabel, style: Theme.of(ctx).textTheme.labelMedium),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: IncidentSeverity.values
+                    .map((s) => ChoiceChip(
+                          label: Text(incidentSeverityValueLabel(l10n, s)),
+                          selected: severity == s,
+                          onSelected: (_) => setDialogState(() => severity = s),
+                        ))
+                    .toList(),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+            FilledButton(
+              onPressed: descriptionController.text.trim().isEmpty
+                  ? null
+                  : () => Navigator.pop(ctx, true),
+              child: Text(l10n.reportIncidentAction),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (reported != true || !mounted) return;
+    final description = descriptionController.text.trim();
+    if (description.isEmpty) return;
+    try {
+      await InstrumentIncidentService.instance.report(
+        refType: _refType,
+        refId: widget.instrument.id,
+        severity: severity,
+        description: description,
+      );
+      if (mounted) {
+        setState(() => _loadingIncidents = true);
+        await _loadIncidents();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
+  Future<void> _openResolveIncidentDialog(InstrumentIncident incident) async {
+    final l10n = AppLocalizations.of(context)!;
+    final notesController = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.resolveIncidentDialogTitle),
+        content: TextField(
+          controller: notesController,
+          autofocus: true,
+          maxLines: 3,
+          decoration: InputDecoration(
+            labelText: l10n.resolutionNotesLabel,
+            border: const OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.resolveIncidentAction)),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      final notes = notesController.text.trim();
+      await InstrumentIncidentService.instance.resolve(incident.id!, resolutionNotes: notes.isEmpty ? null : notes);
+      if (mounted) {
+        setState(() => _loadingIncidents = true);
+        await _loadIncidents();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
     }
   }
 
@@ -244,6 +453,23 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (_ownPendingMethodDraft != null || _ownPendingInfoDraft != null) ...[
+              Card(
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                child: ListTile(
+                  leading: const Icon(Icons.pending_actions),
+                  title: Text(
+                    (_ownPendingMethodDraft?.status == GroupDocumentVersionStatus.inReview ||
+                            _ownPendingInfoDraft?.status == GroupDocumentVersionStatus.inReview)
+                        ? l10n.pendingReviewTitle
+                        : l10n.pendingDraftTitle,
+                  ),
+                  subtitle: Text(l10n.pendingDraftSubtitle),
+                  onTap: _openEditClinicalDataSheet,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             // Reactivo al ValueNotifier: si el usuario cambia de modo de
             // trabajo desde la capçalera mientras tiene esta ficha abierta,
             // el orden de secciones se reordena a l'instant.
@@ -259,6 +485,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                 );
               },
             ),
+            _buildIncidentsSection(context, l10n),
             const SizedBox(height: 28),
             SizedBox(
               width: double.infinity,
@@ -517,23 +744,30 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   }
 
   Widget _buildMethodCard(BuildContext context, AppLocalizations l10n, SterilizationMethodEntry method) {
+    final published = method.publishedVersion;
     final details = <String>[
-      if (method.temperature != null && method.temperature!.isNotEmpty)
-        '${l10n.sterilizationTemperatureLabel}: ${method.temperature}',
-      if (method.timeMinutes != null && method.timeMinutes!.isNotEmpty)
-        '${l10n.sterilizationTimeLabel}: ${method.timeMinutes}',
-      if (method.pressure != null && method.pressure!.isNotEmpty)
-        '${l10n.sterilizationPressureLabel}: ${method.pressure}',
-      if (method.drying != null && method.drying!.isNotEmpty)
-        '${l10n.sterilizationDryingLabel}: ${method.drying}',
-      if (method.recommendedCycle != null && method.recommendedCycle!.isNotEmpty)
-        '${l10n.sterilizationRecommendedCycleLabel}: ${method.recommendedCycle}',
-      if (method.compatibilityNotes != null && method.compatibilityNotes!.isNotEmpty)
-        '${l10n.sterilizationCompatibilityLabel}: ${method.compatibilityNotes}',
-      if (method.restrictions != null && method.restrictions!.isNotEmpty)
-        '${l10n.sterilizationRestrictionsLabel}: ${method.restrictions}',
-      if (method.observations != null && method.observations!.isNotEmpty)
-        '${l10n.sterilizationObservationsLabel}: ${sterilizationObservationsText(l10n, method.observations!)}',
+      if (published?.temperature != null && published!.temperature!.isNotEmpty)
+        '${l10n.sterilizationTemperatureLabel}: ${published.temperature}',
+      if (published?.timeMinutes != null && published!.timeMinutes!.isNotEmpty)
+        '${l10n.sterilizationTimeLabel}: ${published.timeMinutes}',
+      if (published?.pressure != null && published!.pressure!.isNotEmpty)
+        '${l10n.sterilizationPressureLabel}: ${published.pressure}',
+      if (published?.drying != null && published!.drying!.isNotEmpty)
+        '${l10n.sterilizationDryingLabel}: ${published.drying}',
+      if (published?.recommendedCycle != null && published!.recommendedCycle!.isNotEmpty)
+        '${l10n.sterilizationRecommendedCycleLabel}: ${published.recommendedCycle}',
+      if (published?.compatibilityNotes != null && published!.compatibilityNotes!.isNotEmpty)
+        '${l10n.sterilizationCompatibilityLabel}: ${published.compatibilityNotes}',
+      if (published?.restrictions != null && published!.restrictions!.isNotEmpty)
+        '${l10n.sterilizationRestrictionsLabel}: ${published.restrictions}',
+      if (published?.observations != null && published!.observations!.isNotEmpty)
+        '${l10n.sterilizationObservationsLabel}: ${sterilizationObservationsText(l10n, published.observations!)}',
+      if (published?.lubricationRequired == true) ...[
+        if (published?.lubricationType != null && published!.lubricationType!.isNotEmpty)
+          '${l10n.lubricationTypeLabel}: ${published.lubricationType}',
+        if (published?.lubricationNotes != null && published!.lubricationNotes!.isNotEmpty)
+          '${l10n.lubricationNotesLabel}: ${published.lubricationNotes}',
+      ],
     ];
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -542,7 +776,23 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(sterilizationMethodValueLabel(l10n, method.method), style: Theme.of(context).textTheme.titleSmall),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    published != null
+                        ? sterilizationMethodValueLabel(l10n, published.method)
+                        : l10n.sterilizationUnpublishedMethodLabel,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.history, size: 20),
+                  tooltip: l10n.historyTooltip,
+                  onPressed: () => _openMethodHistory(method),
+                ),
+              ],
+            ),
             for (final line in details) ...[
               const SizedBox(height: 4),
               Text(line, style: Theme.of(context).textTheme.bodySmall),
@@ -553,15 +803,26 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     );
   }
 
+  String _formatShortDate(DateTime date) {
+    final d = date.day.toString().padLeft(2, '0');
+    final m = date.month.toString().padLeft(2, '0');
+    return '$d/$m/${date.year}';
+  }
+
   Widget _buildTechnicalSection(BuildContext context, AppLocalizations l10n) {
     final info = _technicalInfo;
+    final published = info?.publishedVersion;
     final lines = <String>[
-      if (info?.maintenanceNotes != null && info!.maintenanceNotes!.isNotEmpty)
-        '${l10n.technicalMaintenanceLabel}: ${info.maintenanceNotes}',
-      if (info?.inspectionNotes != null && info!.inspectionNotes!.isNotEmpty)
-        '${l10n.technicalInspectionLabel}: ${info.inspectionNotes}',
-      if (info?.usefulLifeNotes != null && info!.usefulLifeNotes!.isNotEmpty)
-        '${l10n.technicalUsefulLifeLabel}: ${info.usefulLifeNotes}',
+      if (published?.maintenanceNotes != null && published!.maintenanceNotes!.isNotEmpty)
+        '${l10n.technicalMaintenanceLabel}: ${published.maintenanceNotes}',
+      if (published?.inspectionNotes != null && published!.inspectionNotes!.isNotEmpty)
+        '${l10n.technicalInspectionLabel}: ${published.inspectionNotes}',
+      if (published?.usefulLifeNotes != null && published!.usefulLifeNotes!.isNotEmpty)
+        '${l10n.technicalUsefulLifeLabel}: ${published.usefulLifeNotes}',
+      if (published?.maintenanceIntervalDays != null)
+        '${l10n.technicalMaintenanceIntervalLabel}: ${published!.maintenanceIntervalDays}',
+      if (published?.lastMaintenanceAt != null)
+        '${l10n.technicalLastMaintenanceLabel}: ${_formatShortDate(published!.lastMaintenanceAt!)}',
     ];
     final manufacturer = _manufacturer;
     final ifuDocument = _ifuDocument;
@@ -572,7 +833,19 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.technicalInfoSectionTitle, style: Theme.of(context).textTheme.labelLarge),
+          Row(
+            children: [
+              Expanded(
+                child: Text(l10n.technicalInfoSectionTitle, style: Theme.of(context).textTheme.labelLarge),
+              ),
+              if (info != null)
+                IconButton(
+                  icon: const Icon(Icons.history, size: 20),
+                  tooltip: l10n.historyTooltip,
+                  onPressed: () => _openTechnicalInfoHistory(info),
+                ),
+            ],
+          ),
           const SizedBox(height: 8),
           if (_loadingClinicalData)
             const Center(child: CircularProgressIndicator())
@@ -667,11 +940,113 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       ),
     );
   }
+
+  /// Incidencias operativas del instrumento (EPIC 3 · CSSD Workspace): sin
+  /// versionado, cualquier miembro autenticado de la organización puede
+  /// reportar una, resolverla exige el mismo rol que el resto de acciones
+  /// sensibles de esta ficha (ver [ProfileService.isAdmin] en el botón de
+  /// editar esterilización/ficha técnica del AppBar) -- la RLS de
+  /// `instrument_incidents` es la autoridad real, esto solo evita mostrar un
+  /// botón que la base de datos rechazaría.
+  Widget _buildIncidentsSection(BuildContext context, AppLocalizations l10n) {
+    final canReport = AuthService.instance.currentUser != null && ProfileService.instance.organizationId != null;
+    final canResolve = ProfileService.instance.isAdmin;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(l10n.incidentsSectionTitle, style: Theme.of(context).textTheme.labelLarge),
+              ),
+              if (canReport)
+                TextButton.icon(
+                  onPressed: _openReportIncidentDialog,
+                  icon: const Icon(Icons.report_gmailerrorred_outlined, size: 18),
+                  label: Text(l10n.reportIncidentAction),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (_loadingIncidents)
+            const Center(child: CircularProgressIndicator())
+          else if (_incidents.isEmpty)
+            Text(l10n.incidentsEmptyState, style: Theme.of(context).textTheme.bodyMedium)
+          else
+            ..._incidents.map((incident) => _buildIncidentCard(context, l10n, incident, canResolve)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIncidentCard(
+    BuildContext context,
+    AppLocalizations l10n,
+    InstrumentIncident incident,
+    bool canResolve,
+  ) {
+    final severityColor = switch (incident.severity) {
+      IncidentSeverity.low => Colors.green,
+      IncidentSeverity.medium => Colors.orange,
+      IncidentSeverity.high => Colors.red,
+    };
+    final statusColor =
+        incident.status == IncidentStatus.open ? Theme.of(context).colorScheme.error : Colors.green;
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                InstriqBadge(label: incidentSeverityValueLabel(l10n, incident.severity), color: severityColor),
+                InstriqBadge(label: incidentStatusValueLabel(l10n, incident.status), color: statusColor),
+                if (incident.createdAt != null)
+                  Text(_formatShortDate(incident.createdAt!), style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(incident.description, style: Theme.of(context).textTheme.bodyMedium),
+            if (incident.resolutionNotes != null && incident.resolutionNotes!.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                '${l10n.resolutionNotesLabel}: ${incident.resolutionNotes}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+            if (canResolve && incident.status == IncidentStatus.open) ...[
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => _openResolveIncidentDialog(incident),
+                  child: Text(l10n.resolveIncidentAction),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-/// Formulario simple para dar de alta/editar un método de esterilización y la
-/// ficha técnica de un instrumento del catálogo global. Solo visible para
-/// admins (ver botón en el AppBar de [InstrumentDetailScreen]).
+/// Formulario de esterilización/ficha técnica de un instrumento del catálogo
+/// global. Solo visible para admins (ver botón en el AppBar de
+/// [InstrumentDetailScreen]). A diferencia de la versión anterior (escritura
+/// directa), cada método de esterilización y la ficha técnica son ahora
+/// pares cabecera+versiones (ver supabase/schema_v32_cssd_workspace.sql):
+/// este sheet nunca edita la versión publicada directamente, siempre pide-o-
+/// crea el borrador propio (`startEditingMethod`/`startEditingTechnicalInfo`,
+/// mismo patrón que [PreferenceCardService.startEditing]) y separa "Desa com
+/// a esborrany" de "Envia a revisió" (mismo patrón `_saveDraft({bool
+/// andSubmit})` que [TrayFormScreen]).
 class _ClinicalDataFormSheet extends StatefulWidget {
   final Instrument instrument;
   final List<SterilizationMethodEntry> methods;
@@ -690,12 +1065,20 @@ class _ClinicalDataFormSheet extends StatefulWidget {
 class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
   static const String _refType = 'catalog';
 
-  // `null` significa "nueva fila" (se insertará vía `upsertMethod` con
-  // `id: null`); si no, es el `id` de una de `widget.methods` que se está
-  // editando. Ver bug independent 6 del plan: antes el sheet solo leía/
-  // escribía `methods.first`, dejando invisibles el resto de filas cuando
-  // un instrumento tenía 2+ métodos registrados.
+  // Copia local mutable: al crear una cabecera de método nueva se añade aquí
+  // para que el selector de chips la vea sin recargar todo el sheet desde
+  // el padre.
+  late List<SterilizationMethodEntry> _methods;
+
+  // `null` significa "nueva fila" (se creará al guardar vía
+  // `createSterilizationMethod`); si no, es el `id` de una de `_methods` que
+  // se está editando. Ver bug independent 6 del plan de refactor original:
+  // antes el sheet solo leía/escribía `methods.first`, dejando invisibles el
+  // resto de filas cuando un instrumento tenía 2+ métodos registrados.
   String? _selectedMethodId;
+  SterilizationMethodVersion? _methodDraft;
+  bool _loadingMethodDraft = false;
+
   SterilizationMethod _method = SterilizationMethod.vapor;
   late final TextEditingController _temperatureController;
   late final TextEditingController _timeController;
@@ -705,6 +1088,13 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
   late final TextEditingController _compatibilityController;
   late final TextEditingController _restrictionsController;
   late final TextEditingController _observationsController;
+  bool _lubricationRequired = false;
+  late final TextEditingController _lubricationTypeController;
+  late final TextEditingController _lubricationNotesController;
+  late final TextEditingController _methodCommentController;
+
+  InstrumentTechnicalInfoVersion? _infoDraft;
+  bool _loadingInfoDraft = false;
 
   // Texto libre "espejo" del campo de autocompletar de fabricante — mismo
   // patrón que `preference_card_form_screen.dart` para el cirujano.
@@ -715,52 +1105,44 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
   late final TextEditingController _maintenanceController;
   late final TextEditingController _inspectionController;
   late final TextEditingController _usefulLifeController;
+  late final TextEditingController _maintenanceIntervalController;
+  DateTime? _lastMaintenanceAt;
+  late final TextEditingController _infoCommentController;
+
   final _tagPickerKey = GlobalKey<TagPickerState>();
 
   bool _saving = false;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    final existingMethod = widget.methods.isNotEmpty ? widget.methods.first : null;
-    _selectedMethodId = existingMethod?.id;
-    _method = existingMethod?.method ?? SterilizationMethod.vapor;
-    _temperatureController = TextEditingController(text: existingMethod?.temperature ?? '');
-    _timeController = TextEditingController(text: existingMethod?.timeMinutes ?? '');
-    _pressureController = TextEditingController(text: existingMethod?.pressure ?? '');
-    _dryingController = TextEditingController(text: existingMethod?.drying ?? '');
-    _cycleController = TextEditingController(text: existingMethod?.recommendedCycle ?? '');
-    _compatibilityController = TextEditingController(text: existingMethod?.compatibilityNotes ?? '');
-    _restrictionsController = TextEditingController(text: existingMethod?.restrictions ?? '');
-    _observationsController = TextEditingController(text: existingMethod?.observations ?? '');
+    _methods = List.of(widget.methods);
 
-    final info = widget.technicalInfo;
-    _selectedManufacturerId = info?.manufacturerId;
+    _temperatureController = TextEditingController();
+    _timeController = TextEditingController();
+    _pressureController = TextEditingController();
+    _dryingController = TextEditingController();
+    _cycleController = TextEditingController();
+    _compatibilityController = TextEditingController();
+    _restrictionsController = TextEditingController();
+    _observationsController = TextEditingController();
+    _lubricationTypeController = TextEditingController();
+    _lubricationNotesController = TextEditingController();
+    _methodCommentController = TextEditingController();
+
     _ifuTitleController = TextEditingController();
     _ifuUrlController = TextEditingController();
-    _maintenanceController = TextEditingController(text: info?.maintenanceNotes ?? '');
-    _inspectionController = TextEditingController(text: info?.inspectionNotes ?? '');
-    _usefulLifeController = TextEditingController(text: info?.usefulLifeNotes ?? '');
-    _loadManufacturerAndIfu();
-  }
+    _maintenanceController = TextEditingController();
+    _inspectionController = TextEditingController();
+    _usefulLifeController = TextEditingController();
+    _maintenanceIntervalController = TextEditingController();
+    _infoCommentController = TextEditingController();
 
-  Future<void> _loadManufacturerAndIfu() async {
-    await ManufacturerService.instance.fetchAll();
-    if (mounted) {
-      final manufacturerId = _selectedManufacturerId;
-      if (manufacturerId != null) {
-        final existing = ManufacturerService.instance.byId(manufacturerId);
-        if (existing != null) _manufacturerFieldController.text = existing.name;
-      }
-    }
-    final ifuDocumentId = widget.technicalInfo?.ifuDocumentId;
-    if (ifuDocumentId == null) return;
-    final doc = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
-    if (!mounted || doc == null) return;
-    setState(() {
-      _ifuTitleController.text = doc.title;
-      _ifuUrlController.text = doc.url;
-    });
+    final firstMethod = _methods.isNotEmpty ? _methods.first : null;
+    _selectedMethodId = firstMethod?.id;
+    _loadMethodDraft(firstMethod?.id);
+    _loadInfoDraft();
   }
 
   @override
@@ -773,124 +1155,272 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
     _compatibilityController.dispose();
     _restrictionsController.dispose();
     _observationsController.dispose();
+    _lubricationTypeController.dispose();
+    _lubricationNotesController.dispose();
+    _methodCommentController.dispose();
     _manufacturerFieldController.dispose();
     _ifuTitleController.dispose();
     _ifuUrlController.dispose();
     _maintenanceController.dispose();
     _inspectionController.dispose();
     _usefulLifeController.dispose();
+    _maintenanceIntervalController.dispose();
+    _infoCommentController.dispose();
     super.dispose();
   }
 
   String? _nullIfEmpty(String value) => value.trim().isEmpty ? null : value.trim();
 
-  /// Cambia qué fila de `widget.methods` se está editando en el formulario
-  /// de esterilización (o pasa a "nueva fila" si [entry] es `null`). El resto
-  /// del sheet (ficha técnica, tags) no depende de esta selección.
-  void _selectMethod(SterilizationMethodEntry? entry) {
-    setState(() {
-      _selectedMethodId = entry?.id;
-      _method = entry?.method ?? SterilizationMethod.vapor;
-      _temperatureController.text = entry?.temperature ?? '';
-      _timeController.text = entry?.timeMinutes ?? '';
-      _pressureController.text = entry?.pressure ?? '';
-      _dryingController.text = entry?.drying ?? '';
-      _cycleController.text = entry?.recommendedCycle ?? '';
-      _compatibilityController.text = entry?.compatibilityNotes ?? '';
-      _restrictionsController.text = entry?.restrictions ?? '';
-      _observationsController.text = entry?.observations ?? '';
-    });
+  String _formatDate(DateTime date) {
+    final d = date.day.toString().padLeft(2, '0');
+    final m = date.month.toString().padLeft(2, '0');
+    return '$d/$m/${date.year}';
   }
 
-  Future<void> _save() async {
-    setState(() => _saving = true);
+  void _applyMethodFields(SterilizationMethodVersion? draft) {
+    _method = draft?.method ?? SterilizationMethod.vapor;
+    _temperatureController.text = draft?.temperature ?? '';
+    _timeController.text = draft?.timeMinutes ?? '';
+    _pressureController.text = draft?.pressure ?? '';
+    _dryingController.text = draft?.drying ?? '';
+    _cycleController.text = draft?.recommendedCycle ?? '';
+    _compatibilityController.text = draft?.compatibilityNotes ?? '';
+    _restrictionsController.text = draft?.restrictions ?? '';
+    _observationsController.text = draft?.observations ?? '';
+    _lubricationRequired = draft?.lubricationRequired ?? false;
+    _lubricationTypeController.text = draft?.lubricationType ?? '';
+    _lubricationNotesController.text = draft?.lubricationNotes ?? '';
+    _methodCommentController.text = '';
+  }
+
+  /// Cambia qué cabecera de `_methods` se está editando (o pasa a "nueva
+  /// fila" si [headerId] es `null`): pide-o-crea el borrador propio del
+  /// método seleccionado -- nunca se edita la versión publicada directamente.
+  Future<void> _loadMethodDraft(String? headerId) async {
+    setState(() {
+      _selectedMethodId = headerId;
+      _loadingMethodDraft = true;
+    });
     try {
-      SterilizationMethodEntry? existingMethod;
-      final selectedId = _selectedMethodId;
-      if (selectedId != null) {
-        for (final m in widget.methods) {
-          if (m.id == selectedId) {
-            existingMethod = m;
-            break;
-          }
+      if (headerId == null) {
+        _methodDraft = null;
+        _applyMethodFields(null);
+      } else {
+        final draft = await SterilizationService.instance.startEditingMethod(headerId);
+        _methodDraft = draft;
+        _applyMethodFields(draft);
+      }
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      if (mounted) setState(() => _loadingMethodDraft = false);
+    }
+  }
+
+  Future<void> _loadInfoDraft() async {
+    setState(() => _loadingInfoDraft = true);
+    try {
+      await ManufacturerService.instance.fetchAll();
+      final infoId = widget.technicalInfo?.id;
+      final draft =
+          infoId == null ? null : await SterilizationService.instance.startEditingTechnicalInfo(infoId);
+      _infoDraft = draft;
+      _selectedManufacturerId = draft?.manufacturerId;
+      final manufacturerId = draft?.manufacturerId;
+      if (manufacturerId != null) {
+        final existing = ManufacturerService.instance.byId(manufacturerId);
+        if (existing != null) _manufacturerFieldController.text = existing.name;
+      }
+      final ifuDocumentId = draft?.ifuDocumentId;
+      if (ifuDocumentId != null) {
+        final doc = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
+        if (doc != null) {
+          _ifuTitleController.text = doc.title;
+          _ifuUrlController.text = doc.url;
         }
       }
-      await SterilizationService.instance.upsertMethod(
+      _maintenanceController.text = draft?.maintenanceNotes ?? '';
+      _inspectionController.text = draft?.inspectionNotes ?? '';
+      _usefulLifeController.text = draft?.usefulLifeNotes ?? '';
+      _maintenanceIntervalController.text = draft?.maintenanceIntervalDays?.toString() ?? '';
+      _lastMaintenanceAt = draft?.lastMaintenanceAt;
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      if (mounted) setState(() => _loadingInfoDraft = false);
+    }
+  }
+
+  Future<void> _pickLastMaintenanceDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _lastMaintenanceAt ?? now,
+      firstDate: DateTime(2000),
+      lastDate: now,
+    );
+    if (picked != null) setState(() => _lastMaintenanceAt = picked);
+  }
+
+  /// Crea la cabecera (si `_methodDraft` es `null`, o sea "nueva fila") o
+  /// actualiza el borrador existente con los valores actuales del formulario.
+  /// Devuelve la versión guardada, para poder encadenar el envío a revisión.
+  Future<SterilizationMethodVersion> _persistMethodDraft() async {
+    var draft = _methodDraft;
+    draft ??= await SterilizationService.instance.createSterilizationMethod(
+      refType: _refType,
+      refId: widget.instrument.id,
+      method: _method,
+    );
+
+    final temperature = _nullIfEmpty(_temperatureController.text);
+    final timeMinutes = _nullIfEmpty(_timeController.text);
+    final pressure = _nullIfEmpty(_pressureController.text);
+    final drying = _nullIfEmpty(_dryingController.text);
+    final recommendedCycle = _nullIfEmpty(_cycleController.text);
+    final compatibilityNotes = _nullIfEmpty(_compatibilityController.text);
+    final restrictions = _nullIfEmpty(_restrictionsController.text);
+    final observations = _nullIfEmpty(_observationsController.text);
+    final lubricationType = _nullIfEmpty(_lubricationTypeController.text);
+    final lubricationNotes = _nullIfEmpty(_lubricationNotesController.text);
+
+    final updated = draft.copyWith(
+      method: _method,
+      temperature: temperature,
+      clearTemperature: temperature == null,
+      timeMinutes: timeMinutes,
+      clearTimeMinutes: timeMinutes == null,
+      pressure: pressure,
+      clearPressure: pressure == null,
+      drying: drying,
+      clearDrying: drying == null,
+      recommendedCycle: recommendedCycle,
+      clearRecommendedCycle: recommendedCycle == null,
+      compatibilityNotes: compatibilityNotes,
+      clearCompatibilityNotes: compatibilityNotes == null,
+      restrictions: restrictions,
+      clearRestrictions: restrictions == null,
+      observations: observations,
+      clearObservations: observations == null,
+      lubricationRequired: _lubricationRequired,
+      lubricationType: lubricationType,
+      clearLubricationType: lubricationType == null,
+      lubricationNotes: lubricationNotes,
+      clearLubricationNotes: lubricationNotes == null,
+      comment: _nullIfEmpty(_methodCommentController.text),
+    );
+    final saved = await SterilizationService.instance.saveMethodDraft(updated);
+    _methodDraft = saved;
+    _selectedMethodId = saved.methodId;
+    if (!_methods.any((m) => m.id == saved.methodId)) {
+      _methods = [
+        ..._methods,
         SterilizationMethodEntry(
-          id: existingMethod?.id,
+          id: saved.methodId,
           instrumentRefType: _refType,
           instrumentRefId: widget.instrument.id,
-          method: _method,
-          temperature: _nullIfEmpty(_temperatureController.text),
-          timeMinutes: _nullIfEmpty(_timeController.text),
-          pressure: _nullIfEmpty(_pressureController.text),
-          drying: _nullIfEmpty(_dryingController.text),
-          recommendedCycle: _nullIfEmpty(_cycleController.text),
-          compatibilityNotes: _nullIfEmpty(_compatibilityController.text),
-          restrictions: _nullIfEmpty(_restrictionsController.text),
-          observations: _nullIfEmpty(_observationsController.text),
         ),
+      ];
+    }
+    return saved;
+  }
+
+  /// Ver [_persistMethodDraft] -- mismo criterio, entidad distinta (la ficha
+  /// técnica es una cabecera única por instrumento, no una lista).
+  Future<InstrumentTechnicalInfoVersion> _persistInfoDraft() async {
+    var draft = _infoDraft;
+    draft ??= await SterilizationService.instance.createTechnicalInfo(
+      refType: _refType,
+      refId: widget.instrument.id,
+    );
+
+    final manufacturerName = _manufacturerFieldController.text.trim();
+    String? manufacturerId;
+    if (manufacturerName.isNotEmpty) {
+      final cached =
+          _selectedManufacturerId == null ? null : ManufacturerService.instance.byId(_selectedManufacturerId!);
+      manufacturerId = (cached != null && cached.name == manufacturerName)
+          ? cached.id
+          : (await ManufacturerService.instance.createOrGet(manufacturerName)).id;
+    }
+
+    final ifuTitle = _ifuTitleController.text.trim();
+    final ifuUrl = _ifuUrlController.text.trim();
+    String? ifuDocumentId = draft.ifuDocumentId;
+    if (ifuTitle.isNotEmpty && ifuUrl.isNotEmpty) {
+      // Catálogo global: la IFU también es global (organizationId null),
+      // igual que el resto de la ficha técnica de un instrumento 'catalog'.
+      final doc = await ReferenceDocumentService.instance.createOrGet(
+        ifuTitle,
+        ifuUrl,
+        docType: 'ifu',
+        manufacturerId: manufacturerId,
       );
+      ifuDocumentId = doc.id;
+    } else if (ifuTitle.isEmpty && ifuUrl.isEmpty) {
+      ifuDocumentId = null;
+    }
 
-      final manufacturerName = _manufacturerFieldController.text.trim();
-      String? manufacturerId;
-      if (manufacturerName.isNotEmpty) {
-        final cached =
-            _selectedManufacturerId == null ? null : ManufacturerService.instance.byId(_selectedManufacturerId!);
-        manufacturerId = (cached != null && cached.name == manufacturerName)
-            ? cached.id
-            : (await ManufacturerService.instance.createOrGet(manufacturerName)).id;
+    final maintenanceNotes = _nullIfEmpty(_maintenanceController.text);
+    final inspectionNotes = _nullIfEmpty(_inspectionController.text);
+    final usefulLifeNotes = _nullIfEmpty(_usefulLifeController.text);
+    final maintenanceIntervalDays = int.tryParse(_maintenanceIntervalController.text.trim());
+
+    final updated = draft.copyWith(
+      manufacturerId: manufacturerId,
+      clearManufacturerId: manufacturerId == null,
+      ifuDocumentId: ifuDocumentId,
+      clearIfuDocumentId: ifuDocumentId == null,
+      maintenanceNotes: maintenanceNotes,
+      clearMaintenanceNotes: maintenanceNotes == null,
+      inspectionNotes: inspectionNotes,
+      clearInspectionNotes: inspectionNotes == null,
+      usefulLifeNotes: usefulLifeNotes,
+      clearUsefulLifeNotes: usefulLifeNotes == null,
+      maintenanceIntervalDays: maintenanceIntervalDays,
+      clearMaintenanceIntervalDays: maintenanceIntervalDays == null,
+      lastMaintenanceAt: _lastMaintenanceAt,
+      clearLastMaintenanceAt: _lastMaintenanceAt == null,
+      comment: _nullIfEmpty(_infoCommentController.text),
+    );
+    final saved = await SterilizationService.instance.saveTechnicalInfoDraft(updated);
+    _infoDraft = saved;
+    return saved;
+  }
+
+  /// Guarda ambos borradores (método + ficha técnica) y, si [submit] es
+  /// `true`, los envía a revisión a continuación -- mismo patrón
+  /// `_saveDraft({bool andSubmit})` que [TrayFormScreen._saveDraft].
+  Future<void> _save({required bool submit}) async {
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
+    try {
+      final savedMethod = await _persistMethodDraft();
+      if (submit) {
+        await SterilizationService.instance.submitMethodVersionForReview(savedMethod.id);
       }
-
-      final ifuTitle = _ifuTitleController.text.trim();
-      final ifuUrl = _ifuUrlController.text.trim();
-      String? ifuDocumentId = widget.technicalInfo?.ifuDocumentId;
-      if (ifuTitle.isNotEmpty && ifuUrl.isNotEmpty) {
-        // Catálogo global: la IFU también es global (organizationId null),
-        // igual que el resto de la ficha técnica de un instrumento 'catalog'.
-        final doc = await ReferenceDocumentService.instance.createOrGet(
-          ifuTitle,
-          ifuUrl,
-          docType: 'ifu',
-          manufacturerId: manufacturerId,
-        );
-        ifuDocumentId = doc.id;
-      } else if (ifuTitle.isEmpty && ifuUrl.isEmpty) {
-        ifuDocumentId = null;
+      final savedInfo = await _persistInfoDraft();
+      if (submit) {
+        await SterilizationService.instance.submitTechnicalInfoVersionForReview(savedInfo.id);
       }
-
-      await SterilizationService.instance.upsertTechnicalInfo(
-        InstrumentTechnicalInfo(
-          id: widget.technicalInfo?.id,
-          instrumentRefType: _refType,
-          instrumentRefId: widget.instrument.id,
-          manufacturerId: manufacturerId,
-          ifuDocumentId: ifuDocumentId,
-          maintenanceNotes: _nullIfEmpty(_maintenanceController.text),
-          inspectionNotes: _nullIfEmpty(_inspectionController.text),
-          usefulLifeNotes: _nullIfEmpty(_usefulLifeController.text),
-        ),
-      );
       await _tagPickerKey.currentState?.save();
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
-      if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(l10n.customInstrumentSaveError(e.toString()))));
-      }
+      if (mounted) setState(() => _error = AppLocalizations.of(context)!.saveError(e.toString()));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
   }
 
-  /// Selector de qué fila de `widget.methods` se edita en el formulario de
+  /// Selector de qué cabecera de `_methods` se edita en el formulario de
   /// esterilización (o "añadir nuevo método" para insertar una fila más).
   /// Si el instrumento no tiene ninguna fila registrada todavía, no hay nada
   /// que elegir: el formulario ya arranca en modo "nuevo" y este selector no
-  /// se muestra. Ver bug independent 6 del plan de refactor.
+  /// se muestra. Ver bug independent 6 del plan de refactor original.
   Widget _buildMethodSelector(BuildContext context, AppLocalizations l10n) {
-    if (widget.methods.isEmpty) return const SizedBox.shrink();
+    if (_methods.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -902,17 +1432,21 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final entry in widget.methods)
+              for (final entry in _methods)
                 ChoiceChip(
-                  label: Text(sterilizationMethodValueLabel(l10n, entry.method)),
+                  label: Text(
+                    entry.publishedVersion != null
+                        ? sterilizationMethodValueLabel(l10n, entry.publishedVersion!.method)
+                        : l10n.sterilizationUnpublishedMethodLabel,
+                  ),
                   selected: _selectedMethodId == entry.id,
-                  onSelected: (_) => _selectMethod(entry),
+                  onSelected: (_) => _loadMethodDraft(entry.id),
                 ),
               ChoiceChip(
                 label: Text(l10n.sterilizationAddNewMethodOption),
                 avatar: const Icon(Icons.add, size: 18),
                 selected: _selectedMethodId == null,
-                onSelected: (_) => _selectMethod(null),
+                onSelected: (_) => _loadMethodDraft(null),
               ),
             ],
           ),
@@ -924,6 +1458,7 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final loadingDraft = _loadingMethodDraft || _loadingInfoDraft;
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.only(
@@ -943,6 +1478,7 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
               const SizedBox(height: 8),
               _buildMethodSelector(context, l10n),
               DropdownButtonFormField<SterilizationMethod>(
+                key: ValueKey('method-dropdown-${_selectedMethodId ?? 'new'}'),
                 initialValue: _method,
                 decoration: InputDecoration(
                   labelText: l10n.sterilizationMethodLabel,
@@ -1018,6 +1554,41 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
                 controller: _observationsController,
                 decoration: InputDecoration(
                   labelText: l10n.sterilizationObservationsLabel,
+                  border: const OutlineInputBorder(),
+                ),
+                maxLines: 2,
+              ),
+              const SizedBox(height: 12),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                value: _lubricationRequired,
+                onChanged: (value) => setState(() => _lubricationRequired = value),
+                title: Text(l10n.lubricationRequiredLabel),
+              ),
+              if (_lubricationRequired) ...[
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _lubricationTypeController,
+                  decoration: InputDecoration(
+                    labelText: l10n.lubricationTypeLabel,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _lubricationNotesController,
+                  decoration: InputDecoration(
+                    labelText: l10n.lubricationNotesLabel,
+                    border: const OutlineInputBorder(),
+                  ),
+                  maxLines: 2,
+                ),
+              ],
+              const SizedBox(height: 12),
+              TextField(
+                controller: _methodCommentController,
+                decoration: InputDecoration(
+                  labelText: l10n.changeCommentLabel,
                   border: const OutlineInputBorder(),
                 ),
                 maxLines: 2,
@@ -1099,6 +1670,35 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
                 ),
                 maxLines: 2,
               ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _maintenanceIntervalController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: l10n.technicalMaintenanceIntervalLabel,
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12),
+              InkWell(
+                onTap: _pickLastMaintenanceDate,
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    labelText: l10n.technicalLastMaintenanceLabel,
+                    border: const OutlineInputBorder(),
+                  ),
+                  child: Text(_lastMaintenanceAt == null ? '—' : _formatDate(_lastMaintenanceAt!)),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _infoCommentController,
+                decoration: InputDecoration(
+                  labelText: l10n.changeCommentLabel,
+                  border: const OutlineInputBorder(),
+                ),
+                maxLines: 2,
+              ),
               const Divider(height: 32),
               Text(l10n.tagsLabel, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
@@ -1108,13 +1708,21 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
                 refId: widget.instrument.id,
                 organizationId: null,
               ),
+              if (_error != null) ...[
+                const SizedBox(height: 12),
+                Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              ],
               const SizedBox(height: 20),
-              FilledButton.icon(
-                onPressed: _saving ? null : _save,
-                icon: _saving
-                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Icon(Icons.save),
-                label: Text(l10n.save),
+              FilledButton(
+                onPressed: (_saving || loadingDraft) ? null : () => _save(submit: true),
+                child: _saving
+                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : Text(l10n.submitForReview),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                onPressed: (_saving || loadingDraft) ? null : () => _save(submit: false),
+                child: Text(l10n.saveAsDraft),
               ),
             ],
           ),
