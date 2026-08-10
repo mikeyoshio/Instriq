@@ -129,7 +129,11 @@ RAG (com es recupera el context), model de permisos (què pot veure la IA de cad
 
 Quines entitats han de funcionar sense connexió, quines són només lectura, quines es poden editar offline, política de sincronització, resolució de conflictes, estratègia de versions en conflicte. L'stack local (sqlite/drift) és un detall d'implementació posterior, no la decisió en si.
 
-**Impacta**: EPIC 4, EPIC 7.
+**Document d'arquitectura complet**: [`docs/ADR_003_OFFLINE_STRATEGY.md`](ADR_003_OFFLINE_STRATEGY.md) — anàlisi de l'estat real del codi (només tècniques/protocols tenen cap suport offline avui; safates/targetes/esterilització cap), una discrepància trobada entre aquest backlog i el codi (veure nota a EPIC 7 més avall), i una proposta: obrir un esborrany nou (o aprovar/rebutjar/restaurar) exigeix connexió — continuar editant un esborrany ja obert no. Amb això, la col·lisió de números de versió entre dispositius offline queda arquitectònicament impossible per construcció, no per detecció. Lectura offline de contingut publicat (no l'edició) es tracta com la prioritat real, alineat amb el motiu original de l'ADR (cobertura wifi poc fiable al bloc quirúrgic).
+
+**Estat: proposta, pendent de confirmació del propietari (2026-08).**
+
+**Impacta**: EPIC 4, EPIC 7, i (per la infraestructura local compartida) ADR-002/EPIC 6.
 
 ## ADR-004 · Versionat del coneixement
 
@@ -508,7 +512,7 @@ Dos bugs reals trobats i arreglats durant la verificació: (1) les etiquetes de 
 
 ## EPIC 7 · Offline First
 
-* **Model de domini**: cap entitat nova; estén el mode sense connexió ja existent (tècniques/protocols/targetes) a Bandejes i afegeix resolució de conflictes real.
+* **Model de domini**: cap entitat nova; estén el mode sense connexió ja existent a Bandejes, targetes de preferència i esterilització/fitxa tècnica. **Correcció (2026-08)**: aquest punt deia fins ara que targetes ja tenien mode sense connexió — no és cert, el codi ho treu explícitament (`preference_card_service.dart`, "regressió coneguda i deliberada" en migrar al versionat). Avui **només** tècniques/protocols en tenen. Veure `docs/ADR_003_OFFLINE_STRATEGY.md`.
 * **Compatibilitat amb el Knowledge Graph**: neutre, és una qüestió de client, no d'esquema.
 * **Impacte UX**: mitjà — calen indicadors d'estat de sincronització i una UI de conflicte ("la teva versió vs. la del servidor") que avui no existeix enlloc de l'app.
 * **Compatibilitat amb arquitectura actual**: **risc mitjà-alt**, però no per l'elecció de sqlite/drift (un detall d'implementació posterior) — per **ADR-003 · Estratègia Offline**: quines entitats funcionen offline, quines són només lectura, quines editables, política de sincronització i resolució de conflictes.
