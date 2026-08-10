@@ -1,10 +1,12 @@
-# ADR-003 · Estratègia Offline — proposta d'arquitectura
+# ADR-003 · Estratègia Offline
 
-**Estat d'aquest document**: proposta, pendent de confirmació del propietari. Secció 0 recull la decisió recomanada; la resta és l'anàlisi que hi porta, basada en una lectura completa del codi real (no de la documentació prèvia, que en un punt es contradiu amb el codi — veure secció 2).
+**Estat d'aquest document**: **decidit (2026-08)**. Secció 0 recull els principis confirmats pel propietari. La resta del document és l'anàlisi comparativa que hi va portar, basada en una lectura completa del codi real (no de la documentació prèvia, que en un punt es contradeia amb el codi — veure secció 2). Encara sense codi ni migracions — la implementació és feina d'EPIC 7.
 
 ---
 
-## 0. Decisió proposada
+## 0. Decisió final (confirmada pel propietari, 2026-08)
+
+**Premissa d'ús real que fa acceptable tot aquest disseny** (confirmada pel propietari): els canvis de contingut (crear/editar un esborrany, enviar-lo a revisió) es fan sempre en un moment de calma, no durant una intervenció — i en un moment de calma es dona per fet que hi ha connexió. Ningú edita una tècnica o una safata enmig d'una operació; qui ho fa, ho fa després, amb temps, i llavors envia l'esborrany a la persona responsable perquè l'aprovi. Això és exactament el que necessita l'única part d'aquest disseny que exigeix connexió (obrir un esborrany, aprovar/rebutjar/restaurar) — no és una limitació que calgui compensar amb més enginyeria, és com ja funciona el treball real al bloc quirúrgic. El que sí passa *durant* una intervenció és **consultar** — per això la lectura offline és la prioritat, no l'edició.
 
 **Principi central — el que ja funciona per a tècniques/protocols es generalitza, no es reinventa:**
 
