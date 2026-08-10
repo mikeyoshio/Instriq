@@ -161,10 +161,11 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
   String? _instrumentSummary(AppLocalizations l10n, String instrumentId) {
     final methods = _instrumentMethods[instrumentId] ?? const [];
     final info = _instrumentTechnicalInfo[instrumentId];
+    final methodValues = methods.map((m) => m.publishedVersion?.method).whereType<SterilizationMethod>();
+    final manufacturerId = info?.publishedVersion?.manufacturerId;
     final parts = <String>[
-      if (methods.isNotEmpty) methods.map((m) => sterilizationMethodValueLabel(l10n, m.method)).join(', '),
-      if (info?.manufacturerId != null)
-        ManufacturerService.instance.byId(info!.manufacturerId!)?.name ?? '',
+      if (methodValues.isNotEmpty) methodValues.map((m) => sterilizationMethodValueLabel(l10n, m)).join(', '),
+      if (manufacturerId != null) ManufacturerService.instance.byId(manufacturerId)?.name ?? '',
     ]..removeWhere((p) => p.isEmpty);
     if (parts.isEmpty) return null;
     return parts.join(' · ');

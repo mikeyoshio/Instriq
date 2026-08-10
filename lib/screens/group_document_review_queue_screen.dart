@@ -4,23 +4,32 @@ import '../design_system/components/instriq_review_queue.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document_version.dart';
+import '../models/instrument_sterilization.dart';
 import '../models/preference_card.dart';
 import '../models/tray.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/group_document_service.dart';
 import '../services/preference_card_service.dart';
+import '../services/sterilization_service.dart';
 import '../services/surgeon_service.dart';
 import '../services/tray_service.dart';
+import '../widgets/sterilization_method_label.dart';
 import 'group_document_diff_screen.dart';
 import 'preference_card_diff_screen.dart';
+import 'sterilization_method_diff_screen.dart';
+import 'sterilization_review_queue_support.dart';
+import 'technical_info_diff_screen.dart';
 import 'tray_diff_screen.dart';
 
 /// Cola de aprobación de todo el grupo: versiones en revisión, visible solo
 /// para administradores (hacen de aprobador hasta que exista el rol
-/// Approver dedicado, previsto para la Fase B). Tres pestañas: técnicas/
-/// protocolos, bandejas de instrumental y tarjetas de preferencia — las tres
-/// comparten el mismo workflow de aprobación (`in_review` -> aprobar/
-/// rechazar), así que se generaliza esta pantalla en vez de duplicarla.
+/// Approver dedicado, previsto para la Fase B). Cinco pestañas: técnicas/
+/// protocolos, bandejas de instrumental, tarjetas de preferencia, métodos de
+/// esterilización y fichas técnicas — todas comparten el mismo workflow de
+/// aprobación (`in_review` -> aprobar/rechazar), así que se generaliza esta
+/// pantalla en vez de duplicarla. Las dos últimas solo muestran filas de
+/// organización (`organization_id` no nulo); las globales del catálogo las
+/// aprueba el Editorial Board en `GlobalCatalogReviewQueueScreen`.
 class ReviewQueueScreen extends StatefulWidget {
   const ReviewQueueScreen({super.key});
 
@@ -33,15 +42,18 @@ class _ReviewQueueScreenState extends State<ReviewQueueScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.reviewQueueTitle),
           bottom: TabBar(
+            isScrollable: true,
             tabs: [
               Tab(text: '${l10n.techniquesTitle} / ${l10n.protocolsTitle}'),
               Tab(text: l10n.traysTitle),
               Tab(text: l10n.preferenceCardsTitle),
+              Tab(text: l10n.sterilizationMethodsTabTitle),
+              Tab(text: l10n.technicalInfoTabTitle),
             ],
           ),
         ),
@@ -50,6 +62,8 @@ class _ReviewQueueScreenState extends State<ReviewQueueScreen> {
             _DocumentReviewQueue(),
             _TrayReviewQueue(),
             _PreferenceCardReviewQueue(),
+            _SterilizationMethodReviewQueue(),
+            _TechnicalInfoReviewQueue(),
           ],
         ),
       ),
@@ -272,6 +286,171 @@ class _PreferenceCardReviewQueueState
       approveLabel: l10n.approve,
       onReject: (v, comment) =>
           PreferenceCardService.instance.reject(v.id, comment: comment),
+      rejectLabel: l10n.reject,
+      rejectDialogTitle: l10n.rejectChangeTitle,
+      rejectReasonLabel: l10n.rejectReasonLabel,
+      cancelLabel: l10n.cancel,
+      approveSuccessMessage: l10n.changeApprovedSnackbar,
+      rejectSuccessMessage: l10n.changeReturnedSnackbar,
+      approveErrorMessage: (e) => l10n.approveError(e.toString()),
+      rejectErrorMessage: (e) => l10n.rejectError(e.toString()),
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) => Center(
+          child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(l10n.noPendingReviews))),
+    );
+  }
+}
+
+/// Métodos de esterilización de organización (`organization_id` no nulo) --
+/// los globales (catálogo) los aprueba el Editorial Board en
+/// `GlobalCatalogReviewQueueScreen`, no aquí (ver EPIC 3 · Bloc B).
+class _SterilizationMethodReviewQueue extends StatefulWidget {
+  const _SterilizationMethodReviewQueue();
+
+  @override
+  State<_SterilizationMethodReviewQueue> createState() => _SterilizationMethodReviewQueueState();
+}
+
+class _SterilizationMethodReviewQueueState extends State<_SterilizationMethodReviewQueue> {
+  Map<String, SterilizationHeaderInfo> _headers = {};
+  Map<String, String> _instrumentNames = {};
+
+  Future<List<SterilizationMethodVersion>> _load() async {
+    final queue = await SterilizationService.instance.fetchMethodReviewQueue();
+    _headers = await fetchMethodHeaders(queue.map((v) => v.methodId).toSet().toList());
+    _instrumentNames = await resolveInstrumentNames(_headers.values);
+    return queue.where((v) => _headers[v.methodId]?.organizationId != null).toList();
+  }
+
+  String _titleOf(SterilizationMethodVersion v) {
+    final header = _headers[v.methodId];
+    if (header == null) return v.methodId;
+    return _instrumentNames[header.instrumentRefId] ?? header.instrumentRefId;
+  }
+
+  String? _secondaryLineOf(AppLocalizations l10n, SterilizationMethodVersion v) {
+    final header = _headers[v.methodId];
+    final parts = <String>[sterilizationMethodValueLabel(l10n, v.method)];
+    final workspaceName = header?.workspaceName;
+    if (workspaceName != null) parts.add(workspaceName);
+    return parts.join(' · ');
+  }
+
+  Future<void> _openDiff(SterilizationMethodVersion version) async {
+    try {
+      final entry = await fetchMethodEntryWithPublished(version.methodId);
+      final published = entry.publishedVersion;
+      if (published == null || !mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => SterilizationMethodDiffScreen(oldVersion: published, newVersion: version),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.compareLoadError(e.toString()))));
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return InstriqReviewQueue<SterilizationMethodVersion>.inline(
+      load: _load,
+      titleOf: _titleOf,
+      secondaryLineOf: (v) => _secondaryLineOf(l10n, v),
+      commentOf: (v) => v.comment,
+      onCompare: _openDiff,
+      compareLabel: l10n.compare,
+      onApprove: (v) => SterilizationService.instance.approveMethodVersion(v.id),
+      approveLabel: l10n.approve,
+      onReject: (v, comment) =>
+          SterilizationService.instance.rejectMethodVersion(v.id, comment: comment),
+      rejectLabel: l10n.reject,
+      rejectDialogTitle: l10n.rejectChangeTitle,
+      rejectReasonLabel: l10n.rejectReasonLabel,
+      cancelLabel: l10n.cancel,
+      approveSuccessMessage: l10n.changeApprovedSnackbar,
+      rejectSuccessMessage: l10n.changeReturnedSnackbar,
+      approveErrorMessage: (e) => l10n.approveError(e.toString()),
+      rejectErrorMessage: (e) => l10n.rejectError(e.toString()),
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) => Center(
+          child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(l10n.noPendingReviews))),
+    );
+  }
+}
+
+/// Fichas técnicas de organización (`organization_id` no nulo) -- ver
+/// [_SterilizationMethodReviewQueue].
+class _TechnicalInfoReviewQueue extends StatefulWidget {
+  const _TechnicalInfoReviewQueue();
+
+  @override
+  State<_TechnicalInfoReviewQueue> createState() => _TechnicalInfoReviewQueueState();
+}
+
+class _TechnicalInfoReviewQueueState extends State<_TechnicalInfoReviewQueue> {
+  Map<String, SterilizationHeaderInfo> _headers = {};
+  Map<String, String> _instrumentNames = {};
+
+  Future<List<InstrumentTechnicalInfoVersion>> _load() async {
+    final queue = await SterilizationService.instance.fetchTechnicalInfoReviewQueue();
+    _headers = await fetchTechnicalInfoHeaders(queue.map((v) => v.infoId).toSet().toList());
+    _instrumentNames = await resolveInstrumentNames(_headers.values);
+    return queue.where((v) => _headers[v.infoId]?.organizationId != null).toList();
+  }
+
+  String _titleOf(InstrumentTechnicalInfoVersion v) {
+    final header = _headers[v.infoId];
+    if (header == null) return v.infoId;
+    return _instrumentNames[header.instrumentRefId] ?? header.instrumentRefId;
+  }
+
+  String? _secondaryLineOf(InstrumentTechnicalInfoVersion v) => _headers[v.infoId]?.workspaceName;
+
+  Future<void> _openDiff(InstrumentTechnicalInfoVersion version) async {
+    try {
+      final info = await fetchTechnicalInfoWithPublished(version.infoId);
+      final published = info.publishedVersion;
+      if (published == null || !mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => TechnicalInfoDiffScreen(oldVersion: published, newVersion: version),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.compareLoadError(e.toString()))));
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return InstriqReviewQueue<InstrumentTechnicalInfoVersion>.inline(
+      load: _load,
+      titleOf: _titleOf,
+      secondaryLineOf: _secondaryLineOf,
+      commentOf: (v) => v.comment,
+      onCompare: _openDiff,
+      compareLabel: l10n.compare,
+      onApprove: (v) => SterilizationService.instance.approveTechnicalInfoVersion(v.id),
+      approveLabel: l10n.approve,
+      onReject: (v, comment) =>
+          SterilizationService.instance.rejectTechnicalInfoVersion(v.id, comment: comment),
       rejectLabel: l10n.reject,
       rejectDialogTitle: l10n.rejectChangeTitle,
       rejectReasonLabel: l10n.rejectReasonLabel,

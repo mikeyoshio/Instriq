@@ -15,6 +15,7 @@ import 'admin/manage_hospital_screen.dart';
 import 'contributor_application_form_screen.dart';
 import 'contributor_profile_screen.dart';
 import 'contributor_review_queue_screen.dart';
+import 'global_catalog_review_queue_screen.dart';
 import 'how_it_works_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
@@ -80,6 +81,13 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
   Future<void> _openContributorReviewQueue() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const ContributorReviewQueueScreen()),
+    );
+    _refreshContributorState();
+  }
+
+  Future<void> _openGlobalCatalogReviewQueue() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const GlobalCatalogReviewQueueScreen()),
     );
     _refreshContributorState();
   }
@@ -222,6 +230,12 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                       icon: Icons.fact_check_outlined,
                       title: l10n.contributorReviewQueueTitle,
                       onTap: _openContributorReviewQueue,
+                    ),
+                    const SizedBox(height: InstriqSpacing.sm),
+                    InstriqListItem(
+                      icon: Icons.inventory_2_outlined,
+                      title: l10n.globalCatalogReviewQueueTitle,
+                      onTap: _openGlobalCatalogReviewQueue,
                     ),
                   ],
                 ] else if (_lastApplication?.status == ContributorApplicationStatus.pending) ...[
