@@ -3,6 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/group_document_version.dart';
 import '../models/preference_card.dart';
 import 'auth_service.dart';
+import 'connectivity_service.dart';
+import 'offline_cache_service.dart';
+import 'sync_queue_service.dart';
 
 /// CRUD y workflow (borrador -> en revisión -> publicada -> archivada) de
 /// tarjetas de preferencia. Calcado de [TrayService], vía funciones
@@ -10,14 +13,12 @@ import 'auth_service.dart';
 /// supabase/schema_v22_preference_card_versioning.sql) para que la
 /// validación de permisos viva en un único sitio de confianza.
 ///
-/// Regresión conocida y deliberada: la versión anterior (modelo plano)
-/// soportaba edición offline vía [SyncQueueService]/[OfflineCacheService].
-/// El modelo de versiones (borrador -> revisión -> aprobación) no encaja con
-/// ese flujo de cola sin rediseñarlo — [TrayService], que ya usa este mismo
-/// patrón de versionado, tampoco soporta offline por el mismo motivo (ver su
-/// propio comentario). Se prioriza tener el workflow de aprobación completo
-/// funcionando online antes de sumarle esa complejidad; queda para una ronda
-/// futura si se ve necesario en el uso real.
+/// EPIC 7 (offline first, ver `docs/ADR_003_OFFLINE_STRATEGY.md`): sigue al
+/// pie de la letra el patrón ya probado en [GroupDocumentService] — lectura
+/// offline vía [OfflineCacheService] siempre, y creación/edición de borrador
+/// en cola vía [SyncQueueService] cuando no hay conexión (abrir un borrador
+/// nuevo a partir de una versión publicada, en [startEditing], sigue
+/// exigiendo conexión: es un punto de coordinación de números de versión).
 class PreferenceCardService {
   PreferenceCardService._();
   static final PreferenceCardService instance = PreferenceCardService._();
@@ -28,6 +29,12 @@ class PreferenceCardService {
 
   List<PreferenceCard> _cards = [];
 
+  /// true si el último [fetchCards] sirvió de [OfflineCacheService] en vez de
+  /// red (sin conexión, o la petición falló por un problema de red). La UI
+  /// la lee justo después para decidir si mostrar el aviso offline.
+  bool cardsFromCache = false;
+  DateTime? cardsCachedAt;
+
   void clear() {
     _cards = [];
   }
@@ -36,16 +43,40 @@ class PreferenceCardService {
       _cards.where((c) => c.workspaceId == workspaceId).toList();
 
   Future<void> fetchCards(String workspaceId) async {
-    final rows =
-        await _client.from('preference_cards').select(_publishedJoin).eq('workspace_id', workspaceId);
-    final fetched =
-        (rows as List<dynamic>).map((r) => PreferenceCard.fromRow(r as Map<String, dynamic>)).toList();
-    fetched.sort(
-        (a, b) => (a.publishedVersion?.procedureName ?? '').compareTo(b.publishedVersion?.procedureName ?? ''));
-    _cards = [
-      ..._cards.where((c) => c.workspaceId != workspaceId),
-      ...fetched,
-    ];
+    Future<void> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedPreferenceCards(workspaceId);
+      cardsFromCache = true;
+      cardsCachedAt = cached?.cachedAt;
+      final fetched = cached?.data ?? [];
+      _cards = [
+        ..._cards.where((c) => c.workspaceId != workspaceId),
+        ...fetched,
+      ];
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) {
+      await fallbackToCache();
+      return;
+    }
+    try {
+      final rows =
+          await _client.from('preference_cards').select(_publishedJoin).eq('workspace_id', workspaceId);
+      final fetched =
+          (rows as List<dynamic>).map((r) => PreferenceCard.fromRow(r as Map<String, dynamic>)).toList();
+      fetched.sort(
+          (a, b) => (a.publishedVersion?.procedureName ?? '').compareTo(b.publishedVersion?.procedureName ?? ''));
+      cardsFromCache = false;
+      cardsCachedAt = null;
+      _cards = [
+        ..._cards.where((c) => c.workspaceId != workspaceId),
+        ...fetched,
+      ];
+      await OfflineCacheService.instance
+          .cachePreferenceCards(workspaceId, _cards.where((c) => c.workspaceId == workspaceId).toList());
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await fallbackToCache();
+    }
   }
 
   PreferenceCard? cardById(String id) {
@@ -71,6 +102,9 @@ class PreferenceCardService {
 
   /// Crea una tarjeta nueva con su primera versión en borrador.
   Future<PreferenceCardVersion> createCard(String workspaceId) async {
+    if (!ConnectivityService.instance.isOnline.value) {
+      return SyncQueueService.instance.queueCreatePreferenceCard(workspaceId);
+    }
     final versionRow = await _client.rpc('create_preference_card', params: {'p_workspace_id': workspaceId});
     return PreferenceCardVersion.fromRow(versionRow as Map<String, dynamic>);
   }
@@ -92,7 +126,15 @@ class PreferenceCardService {
         .limit(1)
         .maybeSingle();
     if (existing != null) {
-      return PreferenceCardVersion.fromRow(existing);
+      final version = PreferenceCardVersion.fromRow(existing);
+      // Ver la nota equivalente en GroupDocumentService.startEditing: una
+      // versión en revisión no es continuable (la política de UPDATE exige
+      // status = 'draft'), así que hay que avisar aquí, no dejar que falle
+      // al guardar con un error de Postgres críptico.
+      if (version.status == GroupDocumentVersionStatus.inReview) {
+        throw StateError('Ya tienes una versión enviada a revisión: no se puede editar hasta que se apruebe, se rechace o se retire.');
+      }
+      return version;
     }
 
     final published = card.publishedVersion;
@@ -123,17 +165,36 @@ class PreferenceCardService {
   }
 
   Future<PreferenceCardVersion> saveDraft(PreferenceCardVersion version) async {
-    final row = await _client
-        .from('preference_card_versions')
-        .update(version.toRow())
-        .eq('id', version.id)
-        .select()
-        .single();
-    return PreferenceCardVersion.fromRow(row);
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(version.id)) {
+      // Un id "local_..." significa que ni la tarjeta llegó a crearse en el
+      // servidor todavía (createCard también está en cola): no hay fila real
+      // que actualizar, así que esto también se encola.
+      return SyncQueueService.instance.queueSavePreferenceCardDraft(version);
+    }
+    try {
+      final row = await _client
+          .from('preference_card_versions')
+          .update(version.toRow())
+          .eq('id', version.id)
+          .select()
+          .single();
+      return PreferenceCardVersion.fromRow(row);
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return SyncQueueService.instance.queueSavePreferenceCardDraft(version);
+    }
   }
 
   Future<void> submitForReview(String versionId) async {
-    await _client.rpc('submit_preference_card_version_for_review', params: {'p_version_id': versionId});
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(versionId)) {
+      return SyncQueueService.instance.queueSubmitPreferenceCardForReview(versionId);
+    }
+    try {
+      await _client.rpc('submit_preference_card_version_for_review', params: {'p_version_id': versionId});
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await SyncQueueService.instance.queueSubmitPreferenceCardForReview(versionId);
+    }
   }
 
   Future<void> approve(String versionId, {String? comment}) async {

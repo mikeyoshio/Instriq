@@ -71,13 +71,28 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
 
   Future<void> _init() async {
     try {
-      final results = await Future.wait([
-        _loadDraft(),
-        SpecialtyService.instance.fetchAll(),
-        TrayService.instance.fetchTrays(widget.workspaceId),
-      ]);
-      _applyDraft(results[0] as GroupDocumentVersion);
-      _specialties = results[1] as List<SpecialtyEntity>;
+      // Especialidades y bandejas relacionadas son datos auxiliares para los
+      // selectores del formulario, no el borrador en sí -- si fallan por
+      // falta de red, no debe impedir crear/seguir editando el borrador (que
+      // sí sabe encolarse sin conexión, ver GroupDocumentService). Antes
+      // estaban en el mismo Future.wait que _loadDraft(): si cualquiera de
+      // estos dos fallaba, Future.wait rechazaba entero y _applyDraft nunca
+      // se llamaba, aunque el borrador real ya se hubiera creado/encolado.
+      // Se capturan aparte para no abortar el _init entero; el picker
+      // simplemente se queda con lo que ya hubiera en memoria (o vacío). Ver
+      // la nota equivalente en TrayFormScreen._init.
+      try {
+        _specialties = await SpecialtyService.instance.fetchAll();
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+      }
+      try {
+        await TrayService.instance.fetchTrays(widget.workspaceId);
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+      }
+      final draft = await _loadDraft();
+      _applyDraft(draft);
     } catch (e) {
       setState(() => _error = AppLocalizations.of(context)!.formPrepareDraftError(e.toString()));
     } finally {

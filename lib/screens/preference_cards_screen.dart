@@ -6,6 +6,7 @@ import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
+import '../widgets/offline_banner.dart';
 import 'preference_card_detail_screen.dart';
 import 'preference_card_form_screen.dart';
 
@@ -27,6 +28,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
   String _query = '';
   bool _loading = true;
   String? _error;
+  bool _fromCache = false;
 
   @override
   void initState() {
@@ -35,7 +37,6 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -45,8 +46,9 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
         PreferenceCardService.instance.fetchCards(widget.workspace.id),
         SurgeonService.instance.fetchForOrganization(),
       ]);
+      _fromCache = PreferenceCardService.instance.cardsFromCache;
     } catch (e) {
-      _error = l10n.preferenceCardsLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.preferenceCardsLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -120,6 +122,11 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
           : null,
       body: Column(
         children: [
+          if (_fromCache)
+            const Padding(
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: OfflineBanner(),
+            ),
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(

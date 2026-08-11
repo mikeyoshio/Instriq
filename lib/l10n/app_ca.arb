@@ -499,6 +499,14 @@
   "pendingSyncBadge": "Pendent de sincronitzar",
   "savedOfflineSnackbar": "Sense connexió: guardat en local, se sincronitzarà sol quan tornis a tenir xarxa.",
 
+  "syncIssuesTitle": "Problemes de sincronització",
+  "syncIssuesMenuSubtitle": "Canvis que no s'han pogut pujar",
+  "syncIssuesEmptyState": "No hi ha problemes de sincronització",
+  "syncIssuesClearAll": "Esborra-ho tot",
+  "syncIssuesDismiss": "Descarta",
+  "syncIssuesCountLabel": "{count, plural, one {1 problema} other {{count} problemes}}",
+  "@syncIssuesCountLabel": {"placeholders": {"count": {"type": "int"}}},
+
   "saveAction": "Desa",
   "traysTitle": "Safates d'instrumental",
   "traysSubtitle": "Sets d'instrumental amb checklist, versionat i aprovació",

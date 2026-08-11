@@ -161,6 +161,11 @@ class SterilizationMethodVersion {
   final String? basedOnVersionId;
   final DateTime? createdAt;
 
+  /// true si esta versión solo existe localmente todavía — ver
+  /// [GroupDocumentVersion.pendingSync] (mismo patrón, generalizado a
+  /// esterilización en EPIC 7).
+  final bool pendingSync;
+
   const SterilizationMethodVersion({
     required this.id,
     required this.methodId,
@@ -184,6 +189,7 @@ class SterilizationMethodVersion {
     this.comment,
     this.basedOnVersionId,
     this.createdAt,
+    this.pendingSync = false,
   });
 
   Map<String, dynamic> toRow() => {
@@ -229,6 +235,7 @@ class SterilizationMethodVersion {
     String? lubricationNotes,
     bool clearLubricationNotes = false,
     String? comment,
+    bool? pendingSync,
   }) {
     return SterilizationMethodVersion(
       id: id,
@@ -253,6 +260,7 @@ class SterilizationMethodVersion {
       comment: comment ?? this.comment,
       basedOnVersionId: basedOnVersionId,
       createdAt: createdAt,
+      pendingSync: pendingSync ?? this.pendingSync,
     );
   }
 
@@ -280,6 +288,7 @@ class SterilizationMethodVersion {
       comment: row['comment'] as String?,
       basedOnVersionId: row['based_on_version_id'] as String?,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
+      pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }
 }
@@ -366,6 +375,11 @@ class InstrumentTechnicalInfoVersion {
   final String? basedOnVersionId;
   final DateTime? createdAt;
 
+  /// true si esta versión solo existe localmente todavía — ver
+  /// [GroupDocumentVersion.pendingSync] (mismo patrón, generalizado a ficha
+  /// técnica en EPIC 7).
+  final bool pendingSync;
+
   const InstrumentTechnicalInfoVersion({
     required this.id,
     required this.infoId,
@@ -384,6 +398,7 @@ class InstrumentTechnicalInfoVersion {
     this.comment,
     this.basedOnVersionId,
     this.createdAt,
+    this.pendingSync = false,
   });
 
   Map<String, dynamic> toRow() => {
@@ -416,6 +431,7 @@ class InstrumentTechnicalInfoVersion {
     DateTime? lastMaintenanceAt,
     bool clearLastMaintenanceAt = false,
     String? comment,
+    bool? pendingSync,
   }) {
     return InstrumentTechnicalInfoVersion(
       id: id,
@@ -436,6 +452,7 @@ class InstrumentTechnicalInfoVersion {
       comment: comment ?? this.comment,
       basedOnVersionId: basedOnVersionId,
       createdAt: createdAt,
+      pendingSync: pendingSync ?? this.pendingSync,
     );
   }
 
@@ -459,6 +476,7 @@ class InstrumentTechnicalInfoVersion {
       comment: row['comment'] as String?,
       basedOnVersionId: row['based_on_version_id'] as String?,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
+      pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }
 }

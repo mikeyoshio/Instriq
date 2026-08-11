@@ -19,6 +19,7 @@ import '../models/tray.dart';
 import '../models/work_mode.dart';
 import '../services/auth_service.dart';
 import '../services/catalog_community_photo_service.dart';
+import '../services/connectivity_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/instrument_incident_service.dart';
@@ -34,6 +35,7 @@ import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/instrument_incident_label.dart';
+import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
 import '../widgets/tag_picker.dart';
 import 'group_document_detail_screen.dart';
@@ -465,6 +467,9 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                         : l10n.pendingDraftTitle,
                   ),
                   subtitle: Text(l10n.pendingDraftSubtitle),
+                  trailing: (_ownPendingMethodDraft?.pendingSync == true || _ownPendingInfoDraft?.pendingSync == true)
+                      ? const PendingSyncChip()
+                      : null,
                   onTap: _openEditClinicalDataSheet,
                 ),
               ),
@@ -1220,7 +1225,16 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
   Future<void> _loadInfoDraft() async {
     setState(() => _loadingInfoDraft = true);
     try {
-      await ManufacturerService.instance.fetchAll();
+      // Fetch auxiliar para el autocompletar de fabricante -- se aísla en su
+      // propio try/catch (mismo criterio que TrayFormScreen._init) para que
+      // un fallo de red aquí NO tumbe la carga del borrador real de más
+      // abajo, que sí es la llamada que importa. Sin red se sigue con lo que
+      // ya hubiera en memoria (o vacío si es la primera carga de la sesión).
+      try {
+        await ManufacturerService.instance.fetchAll();
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+      }
       final infoId = widget.technicalInfo?.id;
       final draft =
           infoId == null ? null : await SterilizationService.instance.startEditingTechnicalInfo(infoId);
@@ -1233,10 +1247,18 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
       }
       final ifuDocumentId = draft?.ifuDocumentId;
       if (ifuDocumentId != null) {
-        final doc = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
-        if (doc != null) {
-          _ifuTitleController.text = doc.title;
-          _ifuUrlController.text = doc.url;
+        // Otro fetch auxiliar (título/URL de la IFU para rellenar el
+        // formulario) -- ReferenceDocumentService no cachea nada en memoria,
+        // así que sin red simplemente se deja el campo vacío en vez de
+        // abortar la carga del resto del borrador.
+        try {
+          final doc = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
+          if (doc != null) {
+            _ifuTitleController.text = doc.title;
+            _ifuUrlController.text = doc.url;
+          }
+        } catch (e) {
+          if (!ConnectivityService.isNetworkError(e)) rethrow;
         }
       }
       _maintenanceController.text = draft?.maintenanceNotes ?? '';
@@ -1335,13 +1357,26 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
     );
 
     final manufacturerName = _manufacturerFieldController.text.trim();
-    String? manufacturerId;
+    String? manufacturerId = draft.manufacturerId;
     if (manufacturerName.isNotEmpty) {
       final cached =
           _selectedManufacturerId == null ? null : ManufacturerService.instance.byId(_selectedManufacturerId!);
-      manufacturerId = (cached != null && cached.name == manufacturerName)
-          ? cached.id
-          : (await ManufacturerService.instance.createOrGet(manufacturerName)).id;
+      if (cached != null && cached.name == manufacturerName) {
+        manufacturerId = cached.id;
+      } else {
+        // Dar de alta un fabricante NUEVO exige conexión (igual que abrir una
+        // cabecera nueva, ver doc de SterilizationService) -- pero si falla
+        // por estar offline no debe tumbar el resto del guardado, que sí se
+        // encola vía saveTechnicalInfoDraft más abajo. Se conserva el
+        // fabricante que ya tuviera el borrador.
+        try {
+          manufacturerId = (await ManufacturerService.instance.createOrGet(manufacturerName)).id;
+        } catch (e) {
+          if (!ConnectivityService.isNetworkError(e)) rethrow;
+        }
+      }
+    } else {
+      manufacturerId = null;
     }
 
     final ifuTitle = _ifuTitleController.text.trim();
@@ -1350,13 +1385,23 @@ class _ClinicalDataFormSheetState extends State<_ClinicalDataFormSheet> {
     if (ifuTitle.isNotEmpty && ifuUrl.isNotEmpty) {
       // Catálogo global: la IFU también es global (organizationId null),
       // igual que el resto de la ficha técnica de un instrumento 'catalog'.
-      final doc = await ReferenceDocumentService.instance.createOrGet(
-        ifuTitle,
-        ifuUrl,
-        docType: 'ifu',
-        manufacturerId: manufacturerId,
-      );
-      ifuDocumentId = doc.id;
+      // ReferenceDocumentService.createOrGet SIEMPRE inserta (no dedup, ver
+      // su doc) así que esto corre en CADA guardado con IFU rellenada -- de
+      // ahí que aislarlo importe tanto: sin este try/catch, un guardado
+      // offline de campos que no tienen nada que ver con la IFU (notas de
+      // mantenimiento, etc.) se abortaría entero antes de llegar a
+      // saveTechnicalInfoDraft, que es la llamada que sí sabe encolarse.
+      try {
+        final doc = await ReferenceDocumentService.instance.createOrGet(
+          ifuTitle,
+          ifuUrl,
+          docType: 'ifu',
+          manufacturerId: manufacturerId,
+        );
+        ifuDocumentId = doc.id;
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+      }
     } else if (ifuTitle.isEmpty && ifuUrl.isEmpty) {
       ifuDocumentId = null;
     }

@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/workspace.dart';
 import '../models/workspace_member.dart';
 import '../models/workspace_role.dart';
+import 'connectivity_service.dart';
 import 'profile_service.dart';
 
 class WorkspaceService {
@@ -15,11 +16,17 @@ class WorkspaceService {
 
   List<Workspace> get workspaces => List.unmodifiable(_workspaces);
 
+  /// Último rol conocido por workspace, para poder seguir navegando a las
+  /// colecciones de un espacio (bandejas, técnicas...) sin conexión -- ver
+  /// nota en [fetchMyRole].
+  final Map<String, WorkspaceRole?> _roleCache = {};
+
   /// Limpia el caché en memoria. Debe llamarse al cambiar de grupo o cerrar
   /// sesión: si no, un espacio de un grupo anterior puede quedar cacheado y
   /// usarse por error con el organization_id del grupo nuevo.
   void clear() {
     _workspaces = [];
+    _roleCache.clear();
   }
 
   Future<void> fetchWorkspaces() async {
@@ -65,9 +72,23 @@ class WorkspaceService {
   }
 
   /// Rol efectivo del usuario actual en un espacio (null si no tiene ninguno).
+  ///
+  /// Sin conexión, cae al último rol conocido para ese espacio en vez de
+  /// lanzar la excepción de red tal cual: esta llamada se hace antes de
+  /// navegar a bandejas/técnicas/etc. desde Inicio, y las propias pantallas
+  /// de destino ya saben mostrar contenido cacheado sin conexión (EPIC 7) --
+  /// dejar que esto falle sin capturar convertía ese caso en un botón que no
+  /// hace nada (excepción no gestionada, sin ningún aviso en pantalla).
   Future<WorkspaceRole?> fetchMyRole(String workspaceId) async {
-    final result = await _client.rpc('my_workspace_role', params: {'p_workspace_id': workspaceId});
-    return WorkspaceRoleLabel.fromDb(result as String?);
+    try {
+      final result = await _client.rpc('my_workspace_role', params: {'p_workspace_id': workspaceId});
+      final role = WorkspaceRoleLabel.fromDb(result as String?);
+      _roleCache[workspaceId] = role;
+      return role;
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return _roleCache[workspaceId];
+    }
   }
 
   /// Miembros del hospital y su rol (si tiene alguno) en el espacio indicado.

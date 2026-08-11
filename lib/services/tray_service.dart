@@ -5,7 +5,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/group_document_version.dart';
 import '../models/tray.dart';
 import 'auth_service.dart';
+import 'connectivity_service.dart';
+import 'offline_cache_service.dart';
 import 'profile_service.dart';
+import 'sync_queue_service.dart';
 
 /// CRUD y workflow (borrador -> en revisión -> publicada -> archivada) de
 /// bandejas de instrumental. Calcado de [GroupDocumentService], vía
@@ -13,12 +16,12 @@ import 'profile_service.dart';
 /// supabase/schema_v15_clinical_knowledge_model.sql) para que la validación
 /// de permisos viva en un único sitio de confianza.
 ///
-/// A diferencia de [GroupDocumentService], esta primera ronda NO cae a
-/// caché/cola offline: se ha priorizado tener el flujo completo (formulario
-/// con dos orígenes de instrumental + fotos + workflow de aprobación)
-/// funcionando online antes de sumarle la complejidad de
-/// [OfflineCacheService]/[SyncQueueService]. Queda para una ronda futura si
-/// se ve necesario en el uso real.
+/// Offline (EPIC 7 / ADR-003): mismo principio que [GroupDocumentService] --
+/// abrir un borrador nuevo a partir de una versión publicada ([startEditing])
+/// exige conexión, pero crear una bandeja vacía ([createTray]) y seguir
+/// editando un borrador ya abierto ([saveDraft]/[submitForReview]) puede
+/// encolarse sin conexión vía [SyncQueueService]. La lectura ([fetchTrays])
+/// cae a [OfflineCacheService] cuando no hay red.
 class TrayService {
   TrayService._();
   static final TrayService instance = TrayService._();
@@ -30,6 +33,12 @@ class TrayService {
 
   List<Tray> _trays = [];
 
+  /// true si el último [fetchTrays] sirvió de [OfflineCacheService] en vez de
+  /// red (sin conexión, o la petición falló por un problema de red). La UI la
+  /// lee justo después para decidir si mostrar el aviso offline.
+  bool traysFromCache = false;
+  DateTime? traysCachedAt;
+
   void clear() {
     _trays = [];
   }
@@ -38,13 +47,36 @@ class TrayService {
       _trays.where((t) => t.workspaceId == workspaceId).toList();
 
   Future<void> fetchTrays(String workspaceId) async {
-    final rows = await _client.from('trays').select(_publishedJoin).eq('workspace_id', workspaceId);
-    final fetched = (rows as List<dynamic>).map((r) => Tray.fromRow(r as Map<String, dynamic>)).toList();
-    fetched.sort((a, b) => (a.publishedVersion?.name ?? '').compareTo(b.publishedVersion?.name ?? ''));
-    _trays = [
-      ..._trays.where((t) => t.workspaceId != workspaceId),
-      ...fetched,
-    ];
+    Future<void> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedTrays(workspaceId);
+      traysFromCache = true;
+      traysCachedAt = cached?.cachedAt;
+      final fetched = cached?.data ?? [];
+      _trays = [
+        ..._trays.where((t) => t.workspaceId != workspaceId),
+        ...fetched,
+      ];
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) {
+      await fallbackToCache();
+      return;
+    }
+    try {
+      final rows = await _client.from('trays').select(_publishedJoin).eq('workspace_id', workspaceId);
+      final fetched = (rows as List<dynamic>).map((r) => Tray.fromRow(r as Map<String, dynamic>)).toList();
+      fetched.sort((a, b) => (a.publishedVersion?.name ?? '').compareTo(b.publishedVersion?.name ?? ''));
+      traysFromCache = false;
+      traysCachedAt = null;
+      _trays = [
+        ..._trays.where((t) => t.workspaceId != workspaceId),
+        ...fetched,
+      ];
+      await OfflineCacheService.instance.cacheTrays(workspaceId, fetched);
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await fallbackToCache();
+    }
   }
 
   Tray? trayById(String id) {
@@ -70,6 +102,9 @@ class TrayService {
 
   /// Crea una bandeja nueva con su primera versión en borrador.
   Future<TrayVersion> createTray(String workspaceId) async {
+    if (!ConnectivityService.instance.isOnline.value) {
+      return SyncQueueService.instance.queueCreateTray(workspaceId);
+    }
     final versionRow = await _client.rpc('create_tray', params: {'p_workspace_id': workspaceId});
     return TrayVersion.fromRow(versionRow as Map<String, dynamic>);
   }
@@ -91,7 +126,15 @@ class TrayService {
         .limit(1)
         .maybeSingle();
     if (existing != null) {
-      return TrayVersion.fromRow(existing);
+      final version = TrayVersion.fromRow(existing);
+      // Ver la nota equivalente en GroupDocumentService.startEditing: una
+      // versión en revisión no es continuable (la política de UPDATE exige
+      // status = 'draft'), así que hay que avisar aquí, no dejar que falle
+      // al guardar con un error de Postgres críptico.
+      if (version.status == GroupDocumentVersionStatus.inReview) {
+        throw StateError('Ya tienes una versión enviada a revisión: no se puede editar hasta que se apruebe, se rechace o se retire.');
+      }
+      return version;
     }
 
     final published = tray.publishedVersion;
@@ -123,13 +166,32 @@ class TrayService {
   }
 
   Future<TrayVersion> saveDraft(TrayVersion version) async {
-    final row =
-        await _client.from('tray_versions').update(version.toRow()).eq('id', version.id).select().single();
-    return TrayVersion.fromRow(row);
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(version.id)) {
+      // Un id "local_..." significa que ni la bandeja llegó a crearse en el
+      // servidor todavía (createTray también está en cola): no hay fila real
+      // que actualizar, así que esto también se encola.
+      return SyncQueueService.instance.queueSaveTrayDraft(version);
+    }
+    try {
+      final row =
+          await _client.from('tray_versions').update(version.toRow()).eq('id', version.id).select().single();
+      return TrayVersion.fromRow(row);
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return SyncQueueService.instance.queueSaveTrayDraft(version);
+    }
   }
 
   Future<void> submitForReview(String versionId) async {
-    await _client.rpc('submit_tray_version_for_review', params: {'p_version_id': versionId});
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(versionId)) {
+      return SyncQueueService.instance.queueSubmitTrayForReview(versionId);
+    }
+    try {
+      await _client.rpc('submit_tray_version_for_review', params: {'p_version_id': versionId});
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await SyncQueueService.instance.queueSubmitTrayForReview(versionId);
+    }
   }
 
   Future<void> approve(String versionId, {String? comment}) async {

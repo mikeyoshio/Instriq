@@ -3,6 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument_sterilization.dart';
 import 'auth_service.dart';
+import 'connectivity_service.dart';
+import 'sync_queue_service.dart';
 
 /// CRUD y workflow (borrador -> en revisión -> publicada -> archivada) de
 /// métodos de esterilización y ficha técnica de un instrumento (catálogo
@@ -14,6 +16,16 @@ import 'auth_service.dart';
 /// el Editorial Board, `my_is_reviewer_or_above()`) como de organización (lo
 /// aprueba `approver`/`administrator` del espacio), y esa doble autoridad la
 /// resuelven las RPCs de Supabase, no el cliente.
+///
+/// Offline (EPIC 7 / ADR-003): mismo principio que [GroupDocumentService] --
+/// abrir una cabecera nueva ([createSterilizationMethod]/[createTechnicalInfo])
+/// o el primer borrador a partir de la versión publicada
+/// ([startEditingMethod]/[startEditingTechnicalInfo]) exige conexión, porque
+/// es un punto de coordinación con el servidor (reservar número de versión,
+/// resolver la doble autoría global/organización). Seguir editando un
+/// borrador ya abierto ([saveMethodDraft]/[submitMethodVersionForReview]/
+/// [saveTechnicalInfoDraft]/[submitTechnicalInfoVersionForReview]) sí puede
+/// encolarse sin conexión vía [SyncQueueService].
 class SterilizationService {
   SterilizationService._();
   static final SterilizationService instance = SterilizationService._();
@@ -137,7 +149,15 @@ class SterilizationService {
         .limit(1)
         .maybeSingle();
     if (existing != null) {
-      return SterilizationMethodVersion.fromRow(existing);
+      final version = SterilizationMethodVersion.fromRow(existing);
+      // Ver la nota equivalente en GroupDocumentService.startEditing: una
+      // versión en revisión no es continuable (la política de UPDATE exige
+      // status = 'draft'), así que hay que avisar aquí, no dejar que falle
+      // al guardar con un error de Postgres críptico.
+      if (version.status == GroupDocumentVersionStatus.inReview) {
+        throw StateError('Ya tienes una versión enviada a revisión: no se puede editar hasta que se apruebe, se rechace o se retire.');
+      }
+      return version;
     }
 
     final header =
@@ -177,17 +197,33 @@ class SterilizationService {
   }
 
   Future<SterilizationMethodVersion> saveMethodDraft(SterilizationMethodVersion version) async {
-    final row = await _client
-        .from('instrument_sterilization_method_versions')
-        .update(version.toRow())
-        .eq('id', version.id)
-        .select()
-        .single();
-    return SterilizationMethodVersion.fromRow(row);
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(version.id)) {
+      return SyncQueueService.instance.queueSaveSterilizationMethodDraft(version);
+    }
+    try {
+      final row = await _client
+          .from('instrument_sterilization_method_versions')
+          .update(version.toRow())
+          .eq('id', version.id)
+          .select()
+          .single();
+      return SterilizationMethodVersion.fromRow(row);
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return SyncQueueService.instance.queueSaveSterilizationMethodDraft(version);
+    }
   }
 
   Future<void> submitMethodVersionForReview(String versionId) async {
-    await _client.rpc('submit_sterilization_method_version_for_review', params: {'p_version_id': versionId});
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(versionId)) {
+      return SyncQueueService.instance.queueSubmitSterilizationMethodForReview(versionId);
+    }
+    try {
+      await _client.rpc('submit_sterilization_method_version_for_review', params: {'p_version_id': versionId});
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await SyncQueueService.instance.queueSubmitSterilizationMethodForReview(versionId);
+    }
   }
 
   Future<void> approveMethodVersion(String versionId, {String? comment}) async {
@@ -265,7 +301,15 @@ class SterilizationService {
         .limit(1)
         .maybeSingle();
     if (existing != null) {
-      return InstrumentTechnicalInfoVersion.fromRow(existing);
+      final version = InstrumentTechnicalInfoVersion.fromRow(existing);
+      // Ver la nota equivalente en GroupDocumentService.startEditing: una
+      // versión en revisión no es continuable (la política de UPDATE exige
+      // status = 'draft'), así que hay que avisar aquí, no dejar que falle
+      // al guardar con un error de Postgres críptico.
+      if (version.status == GroupDocumentVersionStatus.inReview) {
+        throw StateError('Ya tienes una versión enviada a revisión: no se puede editar hasta que se apruebe, se rechace o se retire.');
+      }
+      return version;
     }
 
     final header =
@@ -300,17 +344,33 @@ class SterilizationService {
   }
 
   Future<InstrumentTechnicalInfoVersion> saveTechnicalInfoDraft(InstrumentTechnicalInfoVersion version) async {
-    final row = await _client
-        .from('instrument_technical_info_versions')
-        .update(version.toRow())
-        .eq('id', version.id)
-        .select()
-        .single();
-    return InstrumentTechnicalInfoVersion.fromRow(row);
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(version.id)) {
+      return SyncQueueService.instance.queueSaveTechnicalInfoDraft(version);
+    }
+    try {
+      final row = await _client
+          .from('instrument_technical_info_versions')
+          .update(version.toRow())
+          .eq('id', version.id)
+          .select()
+          .single();
+      return InstrumentTechnicalInfoVersion.fromRow(row);
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return SyncQueueService.instance.queueSaveTechnicalInfoDraft(version);
+    }
   }
 
   Future<void> submitTechnicalInfoVersionForReview(String versionId) async {
-    await _client.rpc('submit_technical_info_version_for_review', params: {'p_version_id': versionId});
+    if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(versionId)) {
+      return SyncQueueService.instance.queueSubmitTechnicalInfoForReview(versionId);
+    }
+    try {
+      await _client.rpc('submit_technical_info_version_for_review', params: {'p_version_id': versionId});
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      await SyncQueueService.instance.queueSubmitTechnicalInfoForReview(versionId);
+    }
   }
 
   Future<void> approveTechnicalInfoVersion(String versionId, {String? comment}) async {

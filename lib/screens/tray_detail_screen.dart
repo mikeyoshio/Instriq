@@ -18,6 +18,7 @@ import '../services/specialty_service.dart';
 import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
+import '../widgets/offline_banner.dart';
 import 'group_document_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
@@ -258,6 +259,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                             : l10n.pendingDraftTitle,
                       ),
                       subtitle: Text(l10n.pendingDraftSubtitle),
+                      trailing: _ownPendingDraft!.pendingSync ? const PendingSyncChip() : null,
                       onTap: _edit,
                     ),
                   ),

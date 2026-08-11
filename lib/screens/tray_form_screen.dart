@@ -7,6 +7,7 @@ import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/specialty_entity.dart';
 import '../models/tray.dart';
+import '../services/connectivity_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/profile_service.dart';
 import '../services/specialty_service.dart';
@@ -67,9 +68,24 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
 
   Future<void> _init() async {
     try {
-      await CustomInstrumentService.instance.fetchForWorkspace(widget.workspaceId);
-      _customInstruments = CustomInstrumentService.instance.instruments;
-      _specialties = await SpecialtyService.instance.fetchAll();
+      // Instrumental personalizado y especialidades son datos auxiliares
+      // para los selectores del formulario, no el borrador en sí -- si
+      // fallan por falta de red, no debe impedir crear/seguir editando el
+      // borrador (que sí sabe encolarse sin conexión, ver TrayService). Se
+      // capturan aparte para no abortar el _init entero; el picker
+      // simplemente se queda con lo que ya hubiera en memoria (o vacío).
+      try {
+        await CustomInstrumentService.instance.fetchForWorkspace(widget.workspaceId);
+        _customInstruments = CustomInstrumentService.instance.instruments;
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+        _customInstruments = CustomInstrumentService.instance.instruments;
+      }
+      try {
+        _specialties = await SpecialtyService.instance.fetchAll();
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+      }
       TrayVersion draft;
       if (widget.existingDraft != null) {
         draft = widget.existingDraft!;
@@ -227,12 +243,21 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
         _photoPaths.add(path);
       }
       _newPhotos.clear();
+      final wasOffline = !ConnectivityService.instance.isOnline.value;
       final updated = await TrayService.instance.saveDraft(_draftWithFormValues());
       await _tagPickerKey.currentState?.save();
       if (andSubmit) {
         await TrayService.instance.submitForReview(updated.id);
       }
-      if (mounted) Navigator.of(context).pop(true);
+      if (mounted) {
+        if (wasOffline) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(l10n.savedOfflineSnackbar)));
+          await Future.delayed(const Duration(milliseconds: 900));
+        }
+        if (mounted) Navigator.of(context).pop(true);
+      }
     } catch (e) {
       setState(() => _error = l10n.saveError(e.toString()));
     } finally {

@@ -11,6 +11,7 @@ import '../services/auth_service.dart';
 import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/offline_banner.dart';
 import 'preference_card_form_screen.dart';
 import 'preference_card_version_history_screen.dart';
 import 'surgeon_detail_screen.dart';
@@ -158,6 +159,7 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
                             : l10n.pendingDraftTitle,
                       ),
                       subtitle: Text(l10n.pendingDraftSubtitle),
+                      trailing: _ownPendingDraft!.pendingSync ? const PendingSyncChip() : null,
                       onTap: _edit,
                     ),
                   ),
