@@ -333,7 +333,7 @@
         <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
         <div class="timeline-track-wrap">
           <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
-          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="32" value="0" step="1" aria-label="Línia del temps d'Instriq">
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="33" value="0" step="1" aria-label="Línia del temps d'Instriq">
         </div>
         <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
       </div>
@@ -601,7 +601,7 @@
   CA_DEFAULTS['meta.title'] = document.title;
 
   // Timeline interactiu de novetats: 1 origen + 28 desplegaments + 4 previstos.
-  var TIMELINE_SHIPPED = 29; // origen (índex 0) + 28 novetats (índexs 1-28)
+  var TIMELINE_SHIPPED = 31; // origen (índex 0) + 30 novetats (índexs 1-30)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -633,9 +633,10 @@
       { badge: '#26', text: '<strong>Rols assignats a equips</strong> — a més del rol individual, ara es pot donar un rol (lector, editor, aprovador) a un equip sencer d\'un cop; s\'hi suma auditoria de cada inici de sessió.' },
       { badge: '#27', text: '<strong>Analítica d\'ús real</strong> — el tauler d\'administració ja mostra l\'instrumental i el contingut més consultat, les cerques més freqüents i les que no troben res.' },
       { badge: '#28', text: '<strong>Versionat a les targetes de preferència</strong> — cada canvi passa per esborrany, revisió i publicació amb historial complet, igual que tècniques, protocols i safates.' },
+      { badge: '#29', text: '<strong>Mode sense connexió per a totes les eines</strong> — safates, targetes de preferència, esterilització i fitxa tècnica ja es poden crear i desar sense xarxa, com ja passava amb tècniques i protocols; la sincronització és automàtica en recuperar la connexió, i una pantalla nova avisa si algun canvi concret no s\'ha pogut pujar.' },
+      { badge: '#30', text: '<strong>Ronda de proves en viu i correccions de fiabilitat</strong> — s\'ha provat el flux complet (crear, revisar, aprovar, treballar sense connexió) amb comptes reals per primera vegada, i s\'han corregit diversos problemes que només apareixien en aquestes circumstàncies concretes.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
-      { badge: 'Previst', future: true, text: 'Mode sense connexió per a les bandejes.' },
       { badge: 'Previst', future: true, text: 'Sistema de donacions transparent.' }
     ],
     es: [
@@ -668,9 +669,10 @@
       { badge: '#26', text: '<strong>Roles asignados a equipos</strong> — además del rol individual, ahora se puede dar un rol (lector, editor, aprobador) a un equipo entero de una vez; se suma auditoría de cada inicio de sesión.' },
       { badge: '#27', text: '<strong>Analítica de uso real</strong> — el panel de administración ya muestra el instrumental y el contenido más consultado, las búsquedas más frecuentes y las que no encuentran nada.' },
       { badge: '#28', text: '<strong>Versionado en las tarjetas de preferencia</strong> — cada cambio pasa por borrador, revisión y publicación con historial completo, igual que técnicas, protocolos y bandejas.' },
+      { badge: '#29', text: '<strong>Modo sin conexión para todas las herramientas</strong> — bandejas, tarjetas de preferencia, esterilización y ficha técnica ya se pueden crear y guardar sin red, como ya pasaba con técnicas y protocolos; la sincronización es automática al recuperar la conexión, y una pantalla nueva avisa si algún cambio concreto no se ha podido subir.' },
+      { badge: '#30', text: '<strong>Ronda de pruebas en vivo y correcciones de fiabilidad</strong> — se ha probado el flujo completo (crear, revisar, aprobar, trabajar sin conexión) con cuentas reales por primera vez, y se han corregido varios problemas que solo aparecían en esas circunstancias concretas.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
-      { badge: 'Previsto', future: true, text: 'Modo sin conexión para las bandejas.' },
       { badge: 'Previsto', future: true, text: 'Sistema de donaciones transparente.' }
     ],
     en: [
@@ -703,9 +705,10 @@
       { badge: '#26', text: '<strong>Roles assigned to teams</strong> — beyond individual roles, a role (reader, editor, approver) can now be granted to an entire team at once; plus an audit trail for every sign-in.' },
       { badge: '#27', text: '<strong>Real usage analytics</strong> — the admin dashboard now shows the most-viewed instruments and content, the most frequent searches, and the ones that find nothing.' },
       { badge: '#28', text: '<strong>Versioning for preference cards</strong> — every change goes through draft, review and publish with full history, just like techniques, protocols and trays.' },
+      { badge: '#29', text: '<strong>Offline mode for every tool</strong> — trays, preference cards, sterilization and technical info can now be created and saved without network, just like techniques and protocols already could; sync happens automatically once connection returns, and a new screen flags if any specific change couldn\'t be uploaded.' },
+      { badge: '#30', text: '<strong>Live testing round and reliability fixes</strong> — the full flow (create, review, approve, work offline) was tested end-to-end with real accounts for the first time, and several issues that only showed up under those specific conditions were fixed.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
-      { badge: 'Planned', future: true, text: 'Offline mode for trays.' },
       { badge: 'Planned', future: true, text: 'A transparent donation system.' }
     ]
   };
