@@ -9,6 +9,7 @@ import '../services/auth_service.dart';
 import '../services/contributor_service.dart';
 import '../services/locale_service.dart';
 import '../services/profile_service.dart';
+import '../services/sync_queue_service.dart';
 import '../services/theme_service.dart';
 import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
@@ -19,6 +20,7 @@ import 'global_catalog_review_queue_screen.dart';
 import 'how_it_works_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
+import 'sync_issues_screen.dart';
 
 /// Cuenta, idioma, tema y — si `ProfileService.instance.isAdmin` —
 /// administración del grupo. Todo esto vivía como botones sueltos en el
@@ -130,6 +132,13 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     _refresh();
   }
 
+  Future<void> _openSyncIssues() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const SyncIssuesScreen()),
+    );
+    _refresh();
+  }
+
   Future<void> _signOut() async {
     await AuthService.instance.signOut();
     // loadProfile() detecta que ya no hay sesión y limpia el caché de
@@ -206,6 +215,20 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                   icon: Icons.privacy_tip_outlined,
                   title: l10n.accountTooltip,
                   onTap: _openAccountPrivacy,
+                ),
+                const SizedBox(height: InstriqSpacing.sm),
+                ValueListenableBuilder<List<SyncFailure>>(
+                  valueListenable: SyncQueueService.instance.failures,
+                  builder: (context, failures, _) {
+                    return InstriqListItem(
+                      icon: Icons.sync_problem_outlined,
+                      title: l10n.syncIssuesTitle,
+                      subtitle: failures.isEmpty
+                          ? l10n.syncIssuesMenuSubtitle
+                          : l10n.syncIssuesCountLabel(failures.length),
+                      onTap: _openSyncIssues,
+                    );
+                  },
                 ),
                 const SizedBox(height: InstriqSpacing.sm),
                 InstriqListItem(

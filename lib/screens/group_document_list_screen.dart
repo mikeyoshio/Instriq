@@ -46,7 +46,6 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -58,7 +57,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
       ]);
       _fromCache = GroupDocumentService.instance.documentsFromCache;
     } catch (e) {
-      _error = l10n.groupDocLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.groupDocLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }

@@ -499,6 +499,14 @@
   "pendingSyncBadge": "Pendiente de sincronizar",
   "savedOfflineSnackbar": "Sin conexión: guardado en local, se sincronizará solo cuando vuelva la red.",
 
+  "syncIssuesTitle": "Problemas de sincronización",
+  "syncIssuesMenuSubtitle": "Cambios que no llegaron a subirse",
+  "syncIssuesEmptyState": "No hay problemas de sincronización",
+  "syncIssuesClearAll": "Borrar todo",
+  "syncIssuesDismiss": "Descartar",
+  "syncIssuesCountLabel": "{count, plural, one {1 problema} other {{count} problemas}}",
+  "@syncIssuesCountLabel": {"placeholders": {"count": {"type": "int"}}},
+
   "saveAction": "Guardar",
   "traysTitle": "Bandejas de instrumental",
   "traysSubtitle": "Sets de instrumental con checklist, versionado y aprobación",

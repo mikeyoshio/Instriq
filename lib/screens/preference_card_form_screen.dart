@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
 import '../models/surgeon.dart';
+import '../services/connectivity_service.dart';
 import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
 import '../widgets/catalog_picker_sheet.dart';
@@ -57,7 +58,22 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
 
   Future<void> _init() async {
     try {
-      await SurgeonService.instance.fetchForOrganization();
+      // Cirujanos es un dato auxiliar para el Autocomplete del formulario, no
+      // la tarjeta en sí -- si falla por falta de red, no debe impedir
+      // crear/seguir editando el borrador (que sí sabe encolarse sin
+      // conexión, ver PreferenceCardService). Antes este await estaba
+      // desprotegido delante de la creación/carga real del borrador: sin
+      // conexión, fetchForOrganization lanzaba y abortaba _init entero antes
+      // de llegar siquiera a startEditing/createCard, dejando inalcanzable
+      // el encolado offline de EPIC 7. Se captura aparte para no abortar el
+      // _init entero; el Autocomplete simplemente se queda con lo que ya
+      // hubiera en memoria (o vacío). Ver la nota equivalente en
+      // TrayFormScreen._init.
+      try {
+        await SurgeonService.instance.fetchForOrganization();
+      } catch (e) {
+        if (!ConnectivityService.isNetworkError(e)) rethrow;
+      }
       PreferenceCardVersion draft;
       if (widget.existingDraft != null) {
         draft = widget.existingDraft!;

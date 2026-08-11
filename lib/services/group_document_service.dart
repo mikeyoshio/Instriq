@@ -159,7 +159,17 @@ class GroupDocumentService {
         .limit(1)
         .maybeSingle();
     if (existing != null) {
-      return GroupDocumentVersion.fromRow(existing);
+      final version = GroupDocumentVersion.fromRow(existing);
+      // Una versión en revisión ya no es "continuable": la política de
+      // UPDATE en Supabase solo permite escribir sobre status = 'draft'
+      // (ver schema_v5_group_document_versions.sql). Devolverla aquí como si
+      // se pudiera seguir editando llevaría a un error de Postgres críptico
+      // al guardar -- mejor avisar claro y aquí mismo, antes de abrir el
+      // formulario.
+      if (version.status == GroupDocumentVersionStatus.inReview) {
+        throw StateError('Ya tienes una versión enviada a revisión: no se puede editar hasta que se apruebe, se rechace o se retire.');
+      }
+      return version;
     }
 
     final published = document.publishedVersion;

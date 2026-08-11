@@ -347,6 +347,8 @@ Tota resposta haurà d'indicar la font utilitzada.
 
 ## EPIC 7 · Offline First
 
+**Estat: fet (2026-08)**, sobre el principi decidit a `docs/ADR_003_OFFLINE_STRATEGY.md`.
+
 ### Objectiu
 
 Permetre treballar sense connexió.
@@ -361,6 +363,30 @@ Inclou:
 * Gestió de versions.
 * Descàrrega selectiva de contingut.
 * Recuperació automàtica quan torni la connexió.
+
+### Fet (2026-08)
+
+Generalitzada la cua/caché que ja existia només per a tècniques/protocols (`sync_queue_service.dart`/`offline_cache_service.dart`) a Bandeges, targetes de preferència i esterilització/fitxa tècnica (EPIC 3), seguint exactament el principi de l'ADR-003: **crear una entitat nova buida i continuar editant un esborrany ja obert** (`saveDraft`/`submitForReview`) es pot encolar sense connexió; **obrir el primer esborrany d'una entitat existent** (`startEditing`, i els `create_*` d'esterilització/fitxa tècnica que resolen doble autoria global/organització) sempre exigeix connexió — són punts de coordinació amb el servidor.
+
+* Bandeges i targetes de preferència: cua completa (crear/desar esborrany/enviar a revisió) + lectura offline (`OfflineCacheService`, `OfflineBanner` a les pantalles de llista).
+* Esterilització/fitxa tècnica: desar esborrany/enviar a revisió encuats; sense caché de lectura encara (es consulten per instrument, no hi ha una llista navegable — queda pendent si l'ús real ho demana).
+* `pendingSync` afegit als 4 models de versió nous (calcat de `GroupDocumentVersion`), amb `PendingSyncChip` mostrat allà on ja es mostrava el borrador propi pendent.
+* **Forat tancat**: pantalla nova `sync_issues_screen.dart` (accessible des de `profile_hub_screen.dart`) que mostra els `SyncFailure` que abans es registraven però no es veien enlloc — rebuigs de conflicte (algú altre ja va aprovar/rebutjar mentre estaves sense connexió) ara són visibles i es poden descartar.
+* **Pendent explícit, fora d'abast**: pujar fotos (`uploadPhoto` de Bandeges) segueix exigint connexió — no hi ha ruta de cua per a Storage.
+
+### Verificat en viu (2026-08-11) — primer flux autenticat provat de tota la sessió
+
+Fins ara cap flux autenticat s'havia provat mai en viu (emulador + compte real) — era el forat més gran acumulat, repetit a gairebé cada EPIC d'aquest document. Es va tancar: 2 comptes de prova reals (editor + approver) a l'espai "Hospital Demo", flux complet crear→desar→enviar a revisió→aprovar→publicat verificat de cap a cap, i el flux offline (mode avió real amb `svc wifi/data disable`, no `airplane_mode_on` que no talla la xarxa de l'emulador) verificat: banner "sense connexió", cua de sincronització, i sincronització automàtica en recuperar connexió, tot confirmat directament contra la base de dades.
+
+**Bugs reals trobats i arreglats** (cap relacionat amb el codi escrit avui per EPIC 7 — tots preexistents, només mai executats en viu fins ara):
+
+1. **10 fitxers** (`group_document_list_screen.dart`, `trays_screen.dart`, `preference_cards_screen.dart`, `audit_log_screen.dart`, `custom_instruments_screen.dart`, `manage_teams_screen.dart` ×2, `manage_workspace_members_screen.dart`, `public_library_screen.dart` ×2, `workspace_list_screen.dart`, `admin/manage_hospital_screen.dart`) cridaven `AppLocalizations.of(context)` de manera síncrona dins d'un mètode `_load()` invocat des de `initState()` abans de cap `await` — Flutter ho prohibeix explícitament i llançava una excepció no gestionada, deixant la pantalla penjada en un spinner infinit. Corregit movent la crida a `l10n` al bloc `catch`, sempre després d'un `await`.
+2. **`startEditing()`/equivalents als 5 serveis versionats** (`GroupDocumentService`, `TrayService`, `PreferenceCardService`, `SterilizationService` ×2) permetien reobrir per "continuar editant" una versió ja `in_review` — però la política d'UPDATE de Supabase només permet escriure sobre `status = 'draft'`, així que desar/enviar fallava sempre amb un `PostgrestException` críptic. Corregit: si la versió trobada és `in_review`, es llança un error clar en lloc d'obrir el formulari d'edició.
+3. **`WorkspaceService.fetchMyRole()`** no tenia cap gestió de xarxa — cridat des de 14 llocs (Inici, fitxes de detall...), sense connexió llançava una excepció no capturada que feia que tocar una drecera d'Inici (p.ex. "Safates d'instrumental") no fes absolutament res, sense cap avís. Corregit amb una caché en memòria per workspace: sense connexió, cau al darrer rol conegut (o `null` si mai s'ha obtingut).
+4. **6 formularis de creació/edició** (`tray_form_screen.dart`, `group_document_form_screen.dart`, `preference_card_form_screen.dart`, `instrument_detail_screen.dart` ficha tècnica, `public_entity_form_screen.dart`) tenien el mateix patró: un fetch auxiliar (instrumental personalitzat, especialitats, cirurgians, fabricant/IFU) s'esperava *abans* de la crida real de creació/edició d'esborrany, sense captura d'errors. Sense connexió, el fetch auxiliar fallava i avortava tot el `_init()` — impedint que la trucada real (que sí sap encolar-se offline, feina d'avui mateix) s'arribés a executar. El cas de `instrument_detail_screen.dart` era el pitjor: `_persistInfoDraft` cridava `createOrGet` de fabricant/IFU (que insereix sempre, sense dedup) *abans* de `saveTechnicalInfoDraft` a *cada* desat amb camps IFU omplerts, no només la primera vegada — perdent canvis silenciosament cada cop, no només sense connexió. Corregit aïllant cada fetch auxiliar en el seu propi `try/catch`, descartant només errors de xarxa i deixant la trucada real fora, sense guardar.
+5. **`public_entity_form_screen.dart`**: `_saveDraft()` no tenia `catch` (només `finally`), i `_submitForReview()` cridava `_saveDraft()` fora del seu propi `try` — qualsevol error s'escapava sense cap avís a l'usuari. Corregit amb gestió d'error pròpia a `_saveDraft()` i coordinació neta amb `_submitForReview()` per no duplicar avisos.
+
+`flutter analyze`/`flutter test` nets després de cada tanda de fixes.
 
 ---
 
@@ -567,7 +593,7 @@ Fora d'abast d'aquest tram: adopció d'una organització sobre contingut públic
 4. **EPIC 2 · Clinical Workspace** — un cop EPIC 1 tingui les relacions clau (tècnica↔instrumental↔safata).
 5. ~~**Sincronitzar progrés d'aprenentatge a Supabase** (millora, no EPIC) → **EPIC 8 · Contextual Learning**~~ — fet, primer tram (2026-08).
 6. ~~**EPIC 3 · CSSD Workspace** — només després de resoldre **ADR-001** (governança del coneixement).~~ **Fet (2026-08)** — veure detall a la secció EPIC 3 més amunt.
-7. ~~**EPIC 7 · Offline First** — limitat a Bandejes fins resoldre **ADR-003**~~ **Desbloquejat (2026-08)** — ADR-003 decidit (`docs/ADR_003_OFFLINE_STRATEGY.md`). Implementable: generalitzar la cua ja provada a safates/targetes/esterilització + estendre la lectura offline.
+7. ~~**EPIC 7 · Offline First** — limitat a Bandejes fins resoldre **ADR-003**~~ **Fet (2026-08)** — veure detall a la secció EPIC 7 més amunt.
 8. **EPIC 6 · Clinical AI Assistant** — **ajornat deliberadament (2026-08, decisió del propietari)**: ha de ser IA local/offline (cobertura wifi poc fiable a molts blocs quirúrgics + dades clíniques sensibles que no poden sortir a un tercer), no un LLM extern per API com es donava per fet fins ara. No es planifica en detall fins resoldre **ADR-002** (versió local: al dispositiu o a un servidor de la xarxa de l'hospital) — ADR-003 ja no el bloqueja, però la infraestructura local que en surti val la pena revisar-la quan arribi el moment.
 9. **EPIC 9 · Community & Editorial Governance** — **implementable ja**, en paral·lel a qualsevol altre EPIC; el nomenament del Consell Editorial és posterior a la implementació, no una condició prèvia.
 

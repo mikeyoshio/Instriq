@@ -124,6 +124,17 @@ class Tray {
       publishedVersion: versionRow != null ? TrayVersion.fromRow(versionRow) : null,
     );
   }
+
+  /// Fila completa para [OfflineCacheService] — ver [GroupDocument.toCacheRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'organization_id': organizationId,
+        'workspace_id': workspaceId,
+        'created_by': createdBy,
+        'created_at': createdAt?.toIso8601String(),
+        'published_version_id': publishedVersionId,
+        'published_version': publishedVersion?.toCacheRow(),
+      };
 }
 
 /// Una versión concreta del contenido de una [Tray]. Calcado de
@@ -154,6 +165,11 @@ class TrayVersion {
   final String? basedOnVersionId;
   final DateTime? createdAt;
 
+  /// true si esta versión solo existe localmente todavía — ver
+  /// [GroupDocumentVersion.pendingSync] (mismo patrón, generalizado a
+  /// bandejas en EPIC 7).
+  final bool pendingSync;
+
   const TrayVersion({
     required this.id,
     required this.trayId,
@@ -172,6 +188,7 @@ class TrayVersion {
     this.comment,
     this.basedOnVersionId,
     this.createdAt,
+    this.pendingSync = false,
   });
 
   Map<String, dynamic> toRow() => {
@@ -199,6 +216,7 @@ class TrayVersion {
     String? observations,
     bool clearObservations = false,
     String? comment,
+    bool? pendingSync,
   }) {
     return TrayVersion(
       id: id,
@@ -218,6 +236,7 @@ class TrayVersion {
       comment: comment ?? this.comment,
       basedOnVersionId: basedOnVersionId,
       createdAt: createdAt,
+      pendingSync: pendingSync ?? this.pendingSync,
     );
   }
 
@@ -242,6 +261,30 @@ class TrayVersion {
       comment: row['comment'] as String?,
       basedOnVersionId: row['based_on_version_id'] as String?,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
+      pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }
+
+  /// Fila completa para [OfflineCacheService] — ver
+  /// [GroupDocumentVersion.toCacheRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'tray_id': trayId,
+        'version_number': versionNumber,
+        'status': status.dbValue,
+        'name': name,
+        'specialty': specialty,
+        'specialty_id': specialtyId,
+        'description': description,
+        'photo_paths': photoPaths,
+        'items': items.map((i) => i.toJson()).toList(),
+        'observations': observations,
+        'author_id': authorId,
+        'approved_by': approvedBy,
+        'approved_at': approvedAt?.toIso8601String(),
+        'comment': comment,
+        'based_on_version_id': basedOnVersionId,
+        'created_at': createdAt?.toIso8601String(),
+        'pending_sync': pendingSync,
+      };
 }

@@ -6,6 +6,7 @@ import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/specialty_service.dart';
 import '../services/tray_service.dart';
+import '../widgets/offline_banner.dart';
 import 'tray_detail_screen.dart';
 import 'tray_form_screen.dart';
 
@@ -25,6 +26,7 @@ class _TraysScreenState extends State<TraysScreen> {
   bool _loading = true;
   String? _error;
   String _query = '';
+  bool _fromCache = false;
 
   @override
   void initState() {
@@ -33,7 +35,6 @@ class _TraysScreenState extends State<TraysScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -43,8 +44,9 @@ class _TraysScreenState extends State<TraysScreen> {
         TrayService.instance.fetchTrays(widget.workspace.id),
         SpecialtyService.instance.fetchAll(),
       ]);
+      _fromCache = TrayService.instance.traysFromCache;
     } catch (e) {
-      _error = l10n.trayLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.trayLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -108,6 +110,11 @@ class _TraysScreenState extends State<TraysScreen> {
           : null,
       body: Column(
         children: [
+          if (_fromCache)
+            const Padding(
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: OfflineBanner(),
+            ),
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(

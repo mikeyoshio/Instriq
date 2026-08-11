@@ -499,6 +499,14 @@
   "pendingSyncBadge": "Pending sync",
   "savedOfflineSnackbar": "Offline: saved locally, it will sync automatically once you're back online.",
 
+  "syncIssuesTitle": "Sync issues",
+  "syncIssuesMenuSubtitle": "Changes that didn't make it to the server",
+  "syncIssuesEmptyState": "No sync issues",
+  "syncIssuesClearAll": "Clear all",
+  "syncIssuesDismiss": "Dismiss",
+  "syncIssuesCountLabel": "{count, plural, one {1 issue} other {{count} issues}}",
+  "@syncIssuesCountLabel": {"placeholders": {"count": {"type": "int"}}},
+
   "saveAction": "Save",
   "traysTitle": "Instrument trays",
   "traysSubtitle": "Instrument sets with checklist, versioning and approval",
