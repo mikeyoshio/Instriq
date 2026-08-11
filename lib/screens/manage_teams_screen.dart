@@ -30,7 +30,6 @@ class _ManageTeamsScreenState extends State<ManageTeamsScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -45,7 +44,7 @@ class _ManageTeamsScreenState extends State<ManageTeamsScreen> {
         ..clear()
         ..addEntries(counts);
     } catch (e) {
-      _error = l10n.teamsLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.teamsLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -177,7 +176,6 @@ class _TeamMembersScreenState extends State<_TeamMembersScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -187,7 +185,7 @@ class _TeamMembersScreenState extends State<_TeamMembersScreen> {
       final teamMembers = await TeamService.instance.fetchTeamMembers(widget.team.id);
       _memberIds = teamMembers.map((m) => m.userId).toSet();
     } catch (e) {
-      _error = l10n.manageMembersLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.manageMembersLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }

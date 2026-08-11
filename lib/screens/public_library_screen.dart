@@ -106,7 +106,6 @@ class _PublicDocumentListState extends State<_PublicDocumentList> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -116,7 +115,7 @@ class _PublicDocumentListState extends State<_PublicDocumentList> {
       final protocols = await PublicDocumentService.instance.fetchPublished(DocumentKind.protocol);
       _documents = [...techniques, ...protocols];
     } catch (e) {
-      _error = l10n.publicLibraryLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.publicLibraryLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -206,7 +205,6 @@ class _PublicTrayListState extends State<_PublicTrayList> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -214,7 +212,7 @@ class _PublicTrayListState extends State<_PublicTrayList> {
     try {
       _trays = await PublicTrayService.instance.fetchPublished();
     } catch (e) {
-      _error = l10n.publicLibraryLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.publicLibraryLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }

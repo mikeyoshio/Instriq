@@ -25,7 +25,6 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -33,7 +32,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
     try {
       _members = await ProfileService.instance.fetchMembers();
     } catch (e) {
-      _error = l10n.manageMembersLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.manageMembersLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }

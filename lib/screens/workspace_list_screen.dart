@@ -32,7 +32,6 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -40,7 +39,7 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
     try {
       await WorkspaceService.instance.fetchWorkspaces();
     } catch (e) {
-      _error = l10n.workspaceListLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.workspaceListLoadError(e.toString());
     }
     if (!mounted) return;
     final workspaces = WorkspaceService.instance.workspaces;

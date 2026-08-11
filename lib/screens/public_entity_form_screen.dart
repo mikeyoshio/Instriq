@@ -155,6 +155,12 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
       } else {
         await PublicDocumentService.instance.saveDraft(widget.documentDraft!.id, _currentDocument);
       }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.publicLibrarySubmitError(e.toString()))));
+      }
+      rethrow;
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -162,7 +168,12 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
 
   Future<void> _submitForReview() async {
     final l10n = AppLocalizations.of(context)!;
-    await _saveDraft();
+    try {
+      await _saveDraft();
+    } catch (_) {
+      // _saveDraft ya mostró su propio aviso de error -- no seguimos a submitForReview.
+      return;
+    }
     try {
       if (_isTray) {
         await PublicTrayService.instance.submitForReview(widget.trayDraft!.id);

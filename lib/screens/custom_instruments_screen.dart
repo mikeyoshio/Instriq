@@ -31,7 +31,6 @@ class _CustomInstrumentsScreenState extends State<CustomInstrumentsScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -39,7 +38,7 @@ class _CustomInstrumentsScreenState extends State<CustomInstrumentsScreen> {
     try {
       await CustomInstrumentService.instance.fetchForWorkspace(widget.workspaceId);
     } catch (e) {
-      _error = l10n.customInstrumentsLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.customInstrumentsLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }

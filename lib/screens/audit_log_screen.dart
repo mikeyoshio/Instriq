@@ -34,7 +34,6 @@ class _AuditLogScreenState extends State<AuditLogScreen> {
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -45,7 +44,7 @@ class _AuditLogScreenState extends State<AuditLogScreen> {
         workspaceId: widget.workspaceId,
       );
     } catch (e) {
-      _error = l10n.auditLogLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.auditLogLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }

@@ -37,7 +37,6 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
   }
 
   Future<void> _load() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _loading = true;
       _error = null;
@@ -48,7 +47,7 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
       final assigned = await TeamService.instance.fetchWorkspaceTeamRoles(widget.workspace.id);
       _teamRoles = {for (final a in assigned) a.team.id: a.role};
     } catch (e) {
-      _error = l10n.manageMembersLoadError(e.toString());
+      if (mounted) _error = AppLocalizations.of(context)!.manageMembersLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
   }
