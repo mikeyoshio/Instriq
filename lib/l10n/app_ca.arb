@@ -56,6 +56,7 @@
   "manageGroupSubtitle": "Codi d'invitació i membres",
   "reviewQueueTitle": "Revisar canvis pendents",
   "reviewQueueSubtitle": "Aprova o rebutja tècniques i protocols en revisió",
+  "reviewInboxTitle": "Bústia de revisió",
   "knowledgeDashboardTitle": "Cobertura de coneixement",
   "knowledgeDashboardSubtitle": "Tècniques i protocols documentats per especialitat",
   "auditLogTitle": "Registre d'auditoria",

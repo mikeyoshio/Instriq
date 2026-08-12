@@ -43,10 +43,17 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
 
   Future<void> _load() async {
     final userId = AuthService.instance.currentUser?.id;
+    // Bloques independientes: que falle la resolución del cirujano no debe
+    // anular un `_ownPendingDraft` que ni siquiera depende de ella -- ver
+    // docs/BACKLOG.md Nivell 3.
     try {
       await SurgeonService.instance.fetchForOrganization();
       final surgeonId = _card.publishedVersion?.surgeonId;
       _surgeon = surgeonId != null ? SurgeonService.instance.byId(surgeonId) : null;
+    } catch (_) {
+      // Metadato accesorio: no bloquea el resto de la ficha si falla.
+    }
+    try {
       final versions = await PreferenceCardService.instance.fetchVersionHistory(_card.id);
       _ownPendingDraft = (versions
               .where((v) =>

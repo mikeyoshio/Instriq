@@ -105,9 +105,16 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
 
   Future<void> _load() async {
     final userId = AuthService.instance.currentUser?.id;
+    // Cada bloque es un fallo independiente: que uno falle (p.ej. una URL de
+    // foto caducada) no debe anular un `_ownPendingDraft` ya calculado
+    // correctamente en un bloque anterior -- ver docs/BACKLOG.md Nivell 3.
     try {
       await CustomInstrumentService.instance.fetchForWorkspace(_tray.workspaceId);
       _customInstruments = CustomInstrumentService.instance.instruments;
+    } catch (_) {
+      // Instrumental personalizado es metadato accesorio del checklist: no bloquea el resto de la ficha.
+    }
+    try {
       final versions = await TrayService.instance.fetchVersionHistory(_tray.id);
       _ownPendingDraft = (versions
               .where((v) =>
@@ -117,6 +124,10 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
             ..sort((a, b) => b.versionNumber.compareTo(a.versionNumber)))
           .cast<TrayVersion?>()
           .firstWhere((_) => true, orElse: () => null);
+    } catch (_) {
+      _ownPendingDraft = null;
+    }
+    try {
       final published = _tray.publishedVersion;
       if (published != null) {
         for (final path in published.photoPaths) {
@@ -124,7 +135,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
         }
       }
     } catch (_) {
-      _ownPendingDraft = null;
+      // Fallo al firmar una URL de foto (Storage temporalmente inaccesible): no bloquea el resto.
     }
     try {
       final links = await KnowledgeLinkService.instance.fetchRelatedTo('tray', _tray.id);
