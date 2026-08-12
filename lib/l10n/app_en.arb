@@ -678,6 +678,11 @@
   "contributorReviewQueueTitle": "Contributor applications",
   "contributorApplicationApprovedSnackbar": "Application approved",
   "contributorApplicationRejectedSnackbar": "Application rejected",
+  "contributorPublicProfileTitle": "Contributor profile",
+  "contributorPublicProfileNotFound": "This profile isn't public or doesn't exist",
+  "contributorOrganizationLabel": "Organization",
+  "contributorPublishedContributionsLabel": "{count} published contributions",
+  "@contributorPublishedContributionsLabel": {"placeholders": {"count": {"type": "int"}}},
 
   "backTooltip": "Back",
   "editTooltip": "Edit",
