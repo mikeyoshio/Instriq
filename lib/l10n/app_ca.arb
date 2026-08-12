@@ -678,6 +678,11 @@
   "contributorReviewQueueTitle": "Candidatures de col·laboradors",
   "contributorApplicationApprovedSnackbar": "Candidatura aprovada",
   "contributorApplicationRejectedSnackbar": "Candidatura rebutjada",
+  "contributorPublicProfileTitle": "Perfil de col·laborador",
+  "contributorPublicProfileNotFound": "Aquest perfil no és públic o no existeix",
+  "contributorOrganizationLabel": "Organització",
+  "contributorPublishedContributionsLabel": "{count} contribucions publicades",
+  "@contributorPublishedContributionsLabel": {"placeholders": {"count": {"type": "int"}}},
 
   "backTooltip": "Enrere",
   "editTooltip": "Edita",

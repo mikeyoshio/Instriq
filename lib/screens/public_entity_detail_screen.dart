@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import '../models/group_document.dart' show DocumentKind;
 import '../models/public_document.dart';
 import '../models/public_tray.dart';
+import 'contributor_public_profile_screen.dart';
 import 'public_entity_form_screen.dart' show PublicEntityKind, PublicEntityKindX;
 
 /// Vista de lectura d'una tècnica/protocol o safata publicada a la
@@ -33,6 +34,7 @@ class PublicEntityDetailScreen extends StatelessWidget {
     final trayVersion = tray?.publishedVersion;
     final title = isTray ? trayVersion?.name : documentVersion?.title;
     final hasVersion = isTray ? trayVersion != null : documentVersion != null;
+    final authorId = isTray ? trayVersion?.authorId : documentVersion?.authorId;
 
     return Scaffold(
       appBar: AppBar(title: Text(title ?? l10n.auditDocumentUntitledLabel)),
@@ -41,9 +43,25 @@ class PublicEntityDetailScreen extends StatelessWidget {
           : SafeArea(
               child: ListView(
                 padding: const EdgeInsets.all(20),
-                children: isTray
-                    ? _trayContent(context, l10n, trayVersion!)
-                    : _documentContent(context, l10n, documentVersion!),
+                children: [
+                  ...isTray
+                      ? _trayContent(context, l10n, trayVersion!)
+                      : _documentContent(context, l10n, documentVersion!),
+                  if (authorId != null) ...[
+                    const SizedBox(height: 20),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.person_outline),
+                      title: Text(l10n.contributorPublicProfileTitle),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ContributorPublicProfileScreen(userId: authorId),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
     );

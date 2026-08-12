@@ -91,6 +91,56 @@ class ContributorService {
     });
   }
 
+  /// Perfil públic d'un altre col·laborador (docs/EPIC_COMMUNITY_GOVERNANCE.md
+  /// §8) -- `null` si no existeix o no és públic (RLS `is_public = true`,
+  /// `contributor_profiles_select`), en comptes de llançar.
+  Future<ContributorProfile?> fetchPublicProfile(String userId) async {
+    final row = await _client
+        .from('contributor_profiles')
+        .select()
+        .eq('user_id', userId)
+        .eq('is_public', true)
+        .maybeSingle();
+    return row == null ? null : ContributorProfile.fromRow(row);
+  }
+
+  /// Nom de l'organització d'un col·laborador, només si ell mateix ho ha triat
+  /// mostrar (`show_organization`) -- mai una consulta directa a
+  /// `profiles`/`organizations`, que no són llegibles entre organitzacions
+  /// diferents (veure `get_public_contributor_organization`, schema_v33).
+  Future<String?> fetchPublicOrganizationName(String userId) async {
+    final result = await _client.rpc('get_public_contributor_organization', params: {'p_user_id': userId});
+    return result as String?;
+  }
+
+  /// Etiquetes (àrees de col·laboració) d'un col·laborador -- mateix patró
+  /// `taggings` que usa [TagPicker], en mode lectura.
+  Future<List<String>> fetchAreaNames(String userId) async {
+    final rows = await _client.from('taggings').select('tags(name)').eq('ref_type', 'contributor').eq('ref_id', userId);
+    return (rows as List<dynamic>)
+        .map((r) => ((r as Map<String, dynamic>)['tags'] as Map<String, dynamic>?)?['name'] as String?)
+        .whereType<String>()
+        .toList();
+  }
+
+  /// Contribucions publicades (tècniques/protocols + safates) d'un
+  /// col·laborador a la Biblioteca Pública.
+  Future<int> fetchPublishedContributionCount(String userId) async {
+    final docs = await _client
+        .from('public_document_versions')
+        .select('id')
+        .eq('author_id', userId)
+        .eq('status', 'published')
+        .count(CountOption.exact);
+    final trays = await _client
+        .from('public_tray_versions')
+        .select('id')
+        .eq('author_id', userId)
+        .eq('status', 'published')
+        .count(CountOption.exact);
+    return docs.count + trays.count;
+  }
+
   Future<void> updateMyProfile({
     String? publicDisplayName,
     String? publicBio,
