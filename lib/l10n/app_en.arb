@@ -56,6 +56,7 @@
   "manageGroupSubtitle": "Invite code and members",
   "reviewQueueTitle": "Review pending changes",
   "reviewQueueSubtitle": "Approve or reject techniques and protocols under review",
+  "reviewInboxTitle": "Review inbox",
   "knowledgeDashboardTitle": "Knowledge coverage",
   "knowledgeDashboardSubtitle": "Techniques and protocols documented per specialty",
   "auditLogTitle": "Audit log",

@@ -15,11 +15,11 @@ import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'contributor_application_form_screen.dart';
 import 'contributor_profile_screen.dart';
-import 'contributor_review_queue_screen.dart';
 import 'global_catalog_review_queue_screen.dart';
 import 'how_it_works_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
+import 'review_inbox_screen.dart';
 import 'sync_issues_screen.dart';
 
 /// Cuenta, idioma, tema y — si `ProfileService.instance.isAdmin` —
@@ -80,9 +80,9 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     _refreshContributorState();
   }
 
-  Future<void> _openContributorReviewQueue() async {
+  Future<void> _openReviewInbox() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ContributorReviewQueueScreen()),
+      MaterialPageRoute(builder: (_) => const ReviewInboxScreen()),
     );
     _refreshContributorState();
   }
@@ -251,8 +251,8 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                     const SizedBox(height: InstriqSpacing.sm),
                     InstriqListItem(
                       icon: Icons.fact_check_outlined,
-                      title: l10n.contributorReviewQueueTitle,
-                      onTap: _openContributorReviewQueue,
+                      title: l10n.reviewInboxTitle,
+                      onTap: _openReviewInbox,
                     ),
                     const SizedBox(height: InstriqSpacing.sm),
                     InstriqListItem(

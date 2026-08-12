@@ -4,7 +4,7 @@ import '../design_system/components/instriq_list_item.dart';
 import '../l10n/app_localizations.dart';
 import '../services/profile_service.dart';
 import 'audit_log_screen.dart';
-import 'group_document_review_queue_screen.dart';
+import 'review_inbox_screen.dart';
 
 /// Índice a auditoría y cola de revisión — ambas ya gateadas por admin igual
 /// que antes en `home_screen.dart` (la RLS de servidor lo garantiza además
@@ -19,7 +19,7 @@ class ActivityScreen extends StatefulWidget {
 class _ActivityScreenState extends State<ActivityScreen> {
   Future<void> _openReviewQueue() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ReviewQueueScreen()),
+      MaterialPageRoute(builder: (_) => const ReviewInboxScreen()),
     );
     setState(() {});
   }

@@ -56,6 +56,7 @@
   "manageGroupSubtitle": "Código de invitación y miembros",
   "reviewQueueTitle": "Revisar cambios pendientes",
   "reviewQueueSubtitle": "Aprueba o rechaza técnicas y protocolos en revisión",
+  "reviewInboxTitle": "Bandeja de revisión",
   "knowledgeDashboardTitle": "Cobertura de conocimiento",
   "knowledgeDashboardSubtitle": "Técnicas y protocolos documentados por especialidad",
   "auditLogTitle": "Registro de auditoría",

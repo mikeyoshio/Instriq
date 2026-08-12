@@ -47,7 +47,7 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final canManage = _myRole == WorkspaceRole.administrator;
+    final canManage = _myRole?.isAdministrator ?? false;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.workspace.name),
