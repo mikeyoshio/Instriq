@@ -16,12 +16,16 @@ Tres de les quatre captures de la landing s'han actualitzat diverses vegades a m
 
 ## README de GitHub (`docs/screenshots/`)
 
-Aquestes 4 mai s'han actualitzat des del primer commit (2026-07-18) — són, de fet, ja l'"inici":
+Actualitzades per primera vegada el 2026-08-11 (fins llavors mai s'havien tocat des del primer commit, 2026-07-18):
 
-- `docs_welcome_2026-07-18.png` — la pantalla de Benvinguda original. **Ja no existeix a l'app**: l'embut d'autenticació es va refer sencer (Nivell 2 del Design System, 2026-08) i `WelcomeScreen`/`SignUpScreen`/`JoinHospitalScreen`/`RegisterHospitalScreen` es van eliminar, substituïts per una única `GroupEntryScreen`. Aquesta captura és avui l'única prova visual de com era l'onboarding abans del canvi.
-- `docs_catalogo_2026-07-18.png`, `docs_detalle_instrumento_2026-07-18.png`, `docs_flashcards_2026-07-18.png` — mateix cas: són la versió "inici", encara sense parella d'"avui".
+| Captura | Inici | Avui |
+|---|---|---|
+| Entrada al grup | `docs_welcome_2026-07-18.png` (`WelcomeScreen`, eliminada) | `docs_welcome_2026-08-11.png` (`GroupEntryScreen`, la substitueix) |
+| Catàleg | `docs_catalogo_2026-07-18.png` | `docs_catalogo_2026-08-11.png` |
+| Fitxa d'instrument | `docs_detalle_instrumento_2026-07-18.png` | `docs_detalle_instrumento_2026-08-11.png` |
+| Flashcards | `docs_flashcards_2026-07-18.png` | `docs_flashcards_2026-08-11.png` |
 
-**Pendent** (necessita emulador, no disponible en aquesta sessió): capturar les 4 pantalles equivalents d'avui — sobretot `GroupEntryScreen` per substituir la de Benvinguda al README — i afegir-les aquí com `docs_*_<data>.png` seguint la mateixa convenció.
+La d'"Entrada al grup" és un cas especial: no és el mateix component refrescat, és la pantalla que el va substituir. `WelcomeScreen`/`SignUpScreen`/`JoinHospitalScreen`/`RegisterHospitalScreen` es van eliminar sencers al Nivell 2 del Design System (2026-08), substituïts per una única `GroupEntryScreen` — la captura d'"inici" queda com l'única prova visual de com era l'onboarding abans del canvi.
 
 ## Convenció per a futures captures
 

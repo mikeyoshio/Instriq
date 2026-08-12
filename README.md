@@ -6,9 +6,9 @@ El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. S
 
 ## Capturas
 
-| Bienvenida | Catálogo | Detalle | Flashcards |
+| Entrada al grupo | Catálogo | Detalle | Flashcards |
 |---|---|---|---|
-| ![Bienvenida](docs/screenshots/welcome.png) | ![Catálogo](docs/screenshots/catalogo.png) | ![Detalle](docs/screenshots/detalle_instrumento.png) | ![Flashcards](docs/screenshots/flashcards.png) |
+| ![Entrada al grupo](docs/screenshots/welcome.png) | ![Catálogo](docs/screenshots/catalogo.png) | ![Detalle](docs/screenshots/detalle_instrumento.png) | ![Flashcards](docs/screenshots/flashcards.png) |
 
 ## Funcionalidades
 
