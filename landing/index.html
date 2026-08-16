@@ -214,6 +214,7 @@
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
   .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
   .skip-link:focus { left: 0; }
+  .hero-note { font-family: var(--display); font-size: 0.82rem; letter-spacing: 0.01em; color: var(--ink-muted); margin-top: 18px; }
   .hero-shot { margin-top: 48px; }
   .hero-shot img { width: 240px; height: 533px; margin: 0 auto; border-radius: 28px; box-shadow: var(--shadow-soft); border: 1px solid var(--rule); }
   .github-stars { display: flex; width: fit-content; align-items: center; gap: 7px; margin-top: 14px; color: var(--ink-muted); font-family: var(--display); font-size: 0.85rem; text-decoration: none; transition: color 0.15s ease; }
@@ -230,6 +231,7 @@
     <a href="#" class="brand"><img src="favicon.png" alt=""> Instriq</a>
     <nav class="nav-links">
       <a class="plain" href="#mision" data-i18n="nav.mision">Missió</a>
+      <a class="plain" href="#funciones" data-i18n="nav.funciones">Funcionalitats</a>
       <a class="plain" href="#hoy" data-i18n="nav.hoy">Avui</a>
       <a class="plain" href="#colabora" data-i18n="nav.colabora">Col·labora</a>
       <a class="plain" href="#transparencia" data-i18n="nav.transparencia">Transparència</a>
@@ -254,6 +256,7 @@
       <a href="https://app.instriq.org" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
       <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
     </div>
+    <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
     <div class="data-row">
       <div class="data-cell"><div class="num">110</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
       <div class="data-cell"><div class="num">16</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
@@ -313,6 +316,25 @@
       <div class="card"><h3 data-i18n="hoy.c1t">Catàleg</h3><p data-i18n="hoy.c1p">110 instruments organitzats per 16 especialitats i per categoria funcional, amb noms comercials i fabricant.</p></div>
       <div class="card"><h3 data-i18n="hoy.c2t">Aprèn</h3><p data-i18n="hoy.c2p">Flashcards i qüestionaris de repàs, amb progrés guardat al teu propi dispositiu.</p></div>
       <div class="card"><h3 data-i18n="hoy.c3t">Targetes de preferència</h3><p data-i18n="hoy.c3p">Instrumental específic per cirurgià i procediment, compartit i validat dins del teu grup.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="funciones" class="section band reveal">
+  <div class="wrap center">
+    <span class="eyebrow" data-i18n="funciones.eyebrow">Funcionalitats</span>
+    <h2 data-i18n="funciones.h1">Tot el que necessita un bloc quirúrgic, en un sol lloc.</h2>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="funciones.lede">Des del catàleg bàsic fins a la gestió completa del coneixement del teu grup — cada peça es pot fer servir sola o combinada amb la resta.</p>
+    <div class="cards cols-3" style="text-align: left;">
+      <div class="card"><h3 data-i18n="funciones.c1t">Tècniques i protocols</h3><p data-i18n="funciones.c1p">Documenta pas a pas com treballa el teu equip. Cada canvi passa per esborrany, revisió i publicació — res se sobreescriu, tot l'historial és consultable i restaurable.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c2t">Safates d'instrumental</h3><p data-i18n="funciones.c2p">Sets amb checklist de quantitats i fotos, versionades i aprovades, per verificar caixes completes després del rentat i l'esterilització.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c3t">Esterilització i fitxa tècnica</h3><p data-i18n="funciones.c3p">Mètodes d'esterilització amb els seus paràmetres, més fabricant, IFU, manteniment i vida útil per a cada instrument.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c4t">Espais de treball i rols</h3><p data-i18n="funciones.c4p">Organitza el grup per especialitat o servei. Rols granulars (lector, editor, aprovador, administrador) per espai, amb auditoria de cada canvi sensible.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c5t">Mode sense connexió</h3><p data-i18n="funciones.c5p">Consulta i edita sense xarxa a tot arreu on t'ho permetin els teus permisos; els canvis es pugen sols en recuperar la connexió.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c6t">Cerca intel·ligent</h3><p data-i18n="funciones.c6p">Un únic cercador per instrumental, tècniques, protocols, fabricants, cirurgians i etiquetes — amb activitat recent i favorits.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c7t">Instrumental personalitzat</h3><p data-i18n="funciones.c7p">Dona d'alta el material propi del teu equip, amb variants i fotos, privat i mai compartit fora del vostre espai.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c8t">Biblioteca Pública</h3><p data-i18n="funciones.c8p">Contingut obert a tota la comunitat, revisat i aprovat per un consell editorial — mai una autoritat clínica, sempre una referència de partida.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c9t">Auditoria i privacitat</h3><p data-i18n="funciones.c9p">Registre de qui ha fet què i quan en accions sensibles. Exporta o elimina les teves dades personals quan vulguis (GDPR).</p></div>
     </div>
   </div>
 </section>
@@ -402,6 +424,22 @@
   </div>
 </section>
 
+<section id="quien" class="section reveal">
+  <div class="wrap center">
+    <span class="eyebrow" data-i18n="quien.eyebrow">Per a qui és</span>
+    <h2 data-i18n="quien.h1">Un grup pot ser el que necessitis.</h2>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="quien.lede">Instriq no dona per fet que ets un hospital gran. Un grup és qualsevol equip que vulgui documentar com treballa — des d'un consultori de tres persones fins a una xarxa hospitalària sencera. Comences petit i creixes sense canviar d'eina.</p>
+    <div class="cards cols-3" style="text-align: left;">
+      <div class="card"><h3 data-i18n="quien.c1t">Equip o consultori petit</h3><p data-i18n="quien.c1p">Comença amb 2-3 persones i un únic espai de treball. Sense mínims, sense complicar-te.</p></div>
+      <div class="card"><h3 data-i18n="quien.c2t">Servei o bloc quirúrgic</h3><p data-i18n="quien.c2p">Un espai per la teva especialitat, amb les teves pròpies tècniques, targetes i safates.</p></div>
+      <div class="card"><h3 data-i18n="quien.c3t">Hospital amb diverses especialitats</h3><p data-i18n="quien.c3p">Un grup, tants espais com facin falta, cadascun amb el seu contingut i els seus rols propis.</p></div>
+      <div class="card"><h3 data-i18n="quien.c4t">Centre de formació o universitat</h3><p data-i18n="quien.c4p">Documenta protocols d'aprenentatge i dona accés controlat a estudiants i personal en formació.</p></div>
+      <div class="card"><h3 data-i18n="quien.c5t">Fabricant d'instrumental</h3><p data-i18n="quien.c5p">Comparteix fitxes tècniques i documentació oficial del teu catàleg amb qui l'utilitza cada dia.</p></div>
+      <div class="card"><h3 data-i18n="quien.c6t">Xarxa de diversos centres</h3><p data-i18n="quien.c6p">Cada hospital amb el seu propi grup i les seves dades privades, amb la Biblioteca Pública com a punt de trobada comú.</p></div>
+    </div>
+  </div>
+</section>
+
 <section class="section band reveal">
   <div class="wrap measure center">
     <span class="eyebrow" data-i18n="equipo.eyebrow">Equip</span>
@@ -485,11 +523,12 @@
       "meta.title": "Instriq — Conocimiento de quirófano abierto y compartido",
       "meta.description": "Catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidos entre profesionales de quirófano. Open source.",
       "a11y.skip": "Saltar al contenido",
-      "nav.mision": "Misión", "nav.hoy": "Hoy", "nav.colabora": "Colabora", "nav.transparencia": "Transparencia", "nav.cta": "Abrir la app",
+      "nav.mision": "Misión", "nav.funciones": "Funcionalidades", "nav.hoy": "Hoy", "nav.colabora": "Colabora", "nav.transparencia": "Transparencia", "nav.cta": "Abrir la app",
       "hero.eyebrow": "Open source · Bloque quirúrgico",
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido entre profesionales.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar, accesible desde cualquier tablet o móvil — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
       "hero.cta1": "Abrir la app →", "hero.cta2": "Ver el código en GitHub",
+      "hero.note": "Sin licencias. Sin cuota de SaaS. Sin sorpresas en la factura — abierto, siempre.",
       "hero.stat1": "Instrumentos", "hero.stat2": "Especialidades", "hero.stat3": "Plataformas",
       "mision.eyebrow1": "Misión", "mision.h1": "Reducir la curva de aprendizaje en quirófano.",
       "mision.p1": "Incorporarse a un bloque quirúrgico exige adquirir muchísimo conocimiento práctico en poco tiempo. Instriq existe para que cualquier instrumentista, enfermera, auxiliar o miembro del equipo quirúrgico encuentre información fiable, actualizada y basada en la experiencia real de otros profesionales — no en un manual genérico.",
@@ -507,6 +546,25 @@
       "hoy.c1t": "Catálogo", "hoy.c1p": "110 instrumentos organizados por 16 especialidades y por categoría funcional, con nombres comerciales y fabricante.",
       "hoy.c2t": "Aprende", "hoy.c2p": "Flashcards y quiz de repaso, con progreso guardado en tu propio dispositivo.",
       "hoy.c3t": "Tarjetas de preferencia", "hoy.c3p": "Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu grupo.",
+      "funciones.eyebrow": "Funcionalidades", "funciones.h1": "Todo lo que necesita un bloque quirúrgico, en un solo lugar.",
+      "funciones.lede": "Desde el catálogo básico hasta la gestión completa del conocimiento de tu grupo — cada pieza se puede usar sola o combinada con el resto.",
+      "funciones.c1t": "Técnicas y protocolos", "funciones.c1p": "Documenta paso a paso cómo trabaja tu equipo. Cada cambio pasa por borrador, revisión y publicación — nada se sobrescribe, todo el historial es consultable y restaurable.",
+      "funciones.c2t": "Bandejas de instrumental", "funciones.c2p": "Sets con checklist de cantidades y fotos, versionadas y aprobadas, para verificar cajas completas tras el lavado y la esterilización.",
+      "funciones.c3t": "Esterilización y ficha técnica", "funciones.c3p": "Métodos de esterilización con sus parámetros, más fabricante, IFU, mantenimiento y vida útil para cada instrumento.",
+      "funciones.c4t": "Espacios de trabajo y roles", "funciones.c4p": "Organiza el grupo por especialidad o servicio. Roles granulares (lector, editor, aprobador, administrador) por espacio, con auditoría de cada cambio sensible.",
+      "funciones.c5t": "Modo sin conexión", "funciones.c5p": "Consulta y edita sin red allá donde te lo permitan tus permisos; los cambios se suben solos al recuperar la conexión.",
+      "funciones.c6t": "Búsqueda inteligente", "funciones.c6p": "Un único buscador para instrumental, técnicas, protocolos, fabricantes, cirujanos y etiquetas — con actividad reciente y favoritos.",
+      "funciones.c7t": "Instrumental personalizado", "funciones.c7p": "Da de alta el material propio de tu equipo, con variantes y fotos, privado y nunca compartido fuera de vuestro espacio.",
+      "funciones.c8t": "Biblioteca Pública", "funciones.c8p": "Contenido abierto a toda la comunidad, revisado y aprobado por un consejo editorial — nunca una autoridad clínica, siempre una referencia de partida.",
+      "funciones.c9t": "Auditoría y privacidad", "funciones.c9p": "Registro de quién ha hecho qué y cuándo en acciones sensibles. Exporta o elimina tus datos personales cuando quieras (GDPR).",
+      "quien.eyebrow": "Para quién es", "quien.h1": "Un grupo puede ser lo que necesites.",
+      "quien.lede": "Instriq no da por hecho que eres un hospital grande. Un grupo es cualquier equipo que quiera documentar cómo trabaja — desde una consulta de tres personas hasta una red hospitalaria entera. Empiezas pequeño y creces sin cambiar de herramienta.",
+      "quien.c1t": "Equipo o consulta pequeña", "quien.c1p": "Empieza con 2-3 personas y un único espacio de trabajo. Sin mínimos, sin complicarte.",
+      "quien.c2t": "Servicio o bloque quirúrgico", "quien.c2p": "Un espacio para tu especialidad, con tus propias técnicas, tarjetas y bandejas.",
+      "quien.c3t": "Hospital con varias especialidades", "quien.c3p": "Un grupo, tantos espacios como hagan falta, cada uno con su contenido y sus roles propios.",
+      "quien.c4t": "Centro de formación o universidad", "quien.c4p": "Documenta protocolos de aprendizaje y da acceso controlado a estudiantes y personal en formación.",
+      "quien.c5t": "Fabricante de instrumental", "quien.c5p": "Comparte fichas técnicas y documentación oficial de tu catálogo con quien lo usa cada día.",
+      "quien.c6t": "Red de varios centros", "quien.c6p": "Cada hospital con su propio grupo y sus datos privados, con la Biblioteca Pública como punto de encuentro común.",
       "novedades.eyebrow": "Novedades", "novedades.h1": "Construido en abierto, en público.",
       "colabora.eyebrow": "Colabora", "colabora.h1": "Instriq crece con quien lo usa.",
       "colabora.c1t": "Eres profesional sanitario", "colabora.c1p": "Comparte el instrumental y las técnicas de tu equipo dentro de tu grupo, ayúdanos a revisar contenido del catálogo, o dinos qué protocolo o guía te falta.",
@@ -540,11 +598,12 @@
       "meta.title": "Instriq — Open, shared operating room knowledge",
       "meta.description": "Instrument catalog, techniques, protocols and preference cards shared among operating room professionals. Open source.",
       "a11y.skip": "Skip to content",
-      "nav.mision": "Mission", "nav.hoy": "Today", "nav.colabora": "Contribute", "nav.transparencia": "Transparency", "nav.cta": "Open the app",
+      "nav.mision": "Mission", "nav.funciones": "Features", "nav.hoy": "Today", "nav.colabora": "Contribute", "nav.transparencia": "Transparency", "nav.cta": "Open the app",
       "hero.eyebrow": "Open source · Surgical block",
       "hero.h1": "Operating room knowledge,<br>open and shared between professionals.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place, accessible from any tablet or phone — so learning your way around the OR doesn't depend on an outdated paper binder.",
       "hero.cta1": "Open the app →", "hero.cta2": "View the code on GitHub",
+      "hero.note": "No licenses. No SaaS fee. No surprises on the bill — open, always.",
       "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Platforms",
       "mision.eyebrow1": "Mission", "mision.h1": "Shortening the OR learning curve.",
       "mision.p1": "Joining a surgical team means absorbing a huge amount of practical knowledge in very little time. Instriq exists so any scrub nurse, nurse, aide or surgical team member can find reliable, up-to-date information grounded in other professionals' real experience — not a generic manual.",
@@ -562,6 +621,25 @@
       "hoy.c1t": "Catalog", "hoy.c1p": "110 instruments organized by 16 specialties and by functional category, with trade names and manufacturer.",
       "hoy.c2t": "Learn", "hoy.c2p": "Flashcards and review quizzes, with progress saved on your own device.",
       "hoy.c3t": "Preference cards", "hoy.c3p": "Instruments specific to surgeon and procedure, shared and validated within your group.",
+      "funciones.eyebrow": "Features", "funciones.h1": "Everything a surgical block needs, in one place.",
+      "funciones.lede": "From the basic catalog to your group's full knowledge management — every piece works alone or combined with the rest.",
+      "funciones.c1t": "Techniques and protocols", "funciones.c1p": "Document step by step how your team works. Every change goes through draft, review and publish — nothing is overwritten, full history stays viewable and restorable.",
+      "funciones.c2t": "Instrument trays", "funciones.c2p": "Sets with a quantity checklist and photos, versioned and approved, to verify complete trays after washing and sterilization.",
+      "funciones.c3t": "Sterilization and technical info", "funciones.c3p": "Sterilization methods with their own parameters, plus manufacturer, IFU, maintenance and useful life for each instrument.",
+      "funciones.c4t": "Workspaces and roles", "funciones.c4p": "Organize the group by specialty or service. Granular roles (reader, editor, approver, administrator) per workspace, with an audit trail for every sensitive change.",
+      "funciones.c5t": "Offline mode", "funciones.c5p": "View and edit without network wherever your permissions allow; changes sync on their own once connection returns.",
+      "funciones.c6t": "Smart search", "funciones.c6p": "One search bar for instruments, techniques, protocols, manufacturers, surgeons and tags — with recent activity and favorites.",
+      "funciones.c7t": "Team-specific instruments", "funciones.c7p": "Add your team's own instruments, with variants and photos, private and never shared outside your space.",
+      "funciones.c8t": "Public Library", "funciones.c8p": "Content open to the whole community, reviewed and approved by an editorial board — never a clinical authority, always a starting reference.",
+      "funciones.c9t": "Audit trail and privacy", "funciones.c9p": "A record of who did what and when for sensitive actions. Export or delete your personal data whenever you want (GDPR).",
+      "quien.eyebrow": "Who it's for", "quien.h1": "A group can be whatever you need it to be.",
+      "quien.lede": "Instriq doesn't assume you're a large hospital. A group is any team that wants to document how it works — from a three-person practice to an entire hospital network. Start small and grow without switching tools.",
+      "quien.c1t": "Small team or practice", "quien.c1p": "Start with 2-3 people and a single workspace. No minimums, no complications.",
+      "quien.c2t": "Service or surgical block", "quien.c2p": "A workspace for your specialty, with your own techniques, cards and trays.",
+      "quien.c3t": "Hospital with several specialties", "quien.c3p": "One group, as many workspaces as you need, each with its own content and its own roles.",
+      "quien.c4t": "Training center or university", "quien.c4p": "Document learning protocols and give controlled access to students and trainees.",
+      "quien.c5t": "Instrument manufacturer", "quien.c5p": "Share technical sheets and official documentation for your catalog with whoever uses it every day.",
+      "quien.c6t": "Network of several centers", "quien.c6p": "Each hospital with its own group and its own private data, with the Public Library as a shared meeting point.",
       "novedades.eyebrow": "Latest", "novedades.h1": "Built in the open, in public.",
       "colabora.eyebrow": "Contribute", "colabora.h1": "Instriq grows with the people who use it.",
       "colabora.c1t": "You're a healthcare professional", "colabora.c1p": "Share your team's instruments and techniques within your group, help us review catalog content, or tell us which protocol or guide is missing.",
