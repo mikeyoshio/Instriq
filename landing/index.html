@@ -261,6 +261,7 @@
       <div class="data-cell"><div class="num">110</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
       <div class="data-cell"><div class="num">16</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
       <div class="data-cell"><div class="num">3</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
+      <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
     </div>
     <div class="hero-shot">
       <img src="screenshots/instrumento.png" alt="Fitxa d'un instrument quirúrgic real, amb foto, fabricant i dades tècniques" width="240" height="533" loading="eager">
@@ -285,7 +286,7 @@
     <h2 data-i18n="valores.h1">La força d'Instriq és la intel·ligència col·lectiva.</h2>
     <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="valores.lede">Cada aportació construeix una base de coneixement més completa i revisada per a tota la comunitat. Com més persones comparteixin la seva experiència, millor la informació disponible per a totes.</p>
     <div class="cards cols-2" style="text-align: left;">
-      <div class="card"><h3 data-i18n="valores.c1t">Accés lliure</h3><p data-i18n="valores.c1p">El catàleg i l'aprenentatge bàsic no requereixen compte ni pagament. Ningú es queda fora per no tenir pressupost.</p></div>
+      <div class="card"><h3 data-i18n="valores.c1t">Accés lliure</h3><p data-i18n="valores.c1p">Sense quota mensual ni preu per usuari, a diferència de la majoria d'eines del sector. El catàleg i l'aprenentatge bàsic no requereixen ni compte: ningú es queda fora per no tenir pressupost.</p></div>
       <div class="card"><h3 data-i18n="valores.c2t">Transparència</h3><p data-i18n="valores.c2p">Codi obert, decisions públiques i, en el futur, comptes clars de com s'utilitza cada donació.</p></div>
       <div class="card"><h3 data-i18n="valores.c3t">Col·laboració real</h3><p data-i18n="valores.c3p">Construït amb professionals sanitaris i desenvolupadors voluntaris, no per una empresa tancada.</p></div>
       <div class="card"><h3 data-i18n="valores.c4t">Estàndards oberts</h3><p data-i18n="valores.c4p">Busquem alinear-nos amb estàndards reconeguts del sector (HL7, FHIR, DICOM) segons ho necessiti el projecte.</p></div>
@@ -471,6 +472,7 @@
       <div class="license-card"><span class="k" data-i18n="transparencia.k4">Estàndards</span><span class="v">HL7 · FHIR · DICOM</span></div>
     </div>
     <p style="margin-top: 24px; font-size: 0.92rem; max-width: var(--measure); margin-left:auto;margin-right:auto;" data-i18n="transparencia.p1">El nom i la marca "Instriq" queden reservats per protegir la identitat del projecte i evitar usos que confonguin la comunitat — el codi en si és lliure sota AGPL-3.0.</p>
+    <p style="margin-top: 14px; font-size: 0.92rem; max-width: var(--measure); margin-left:auto;margin-right:auto;" data-i18n="transparencia.p2">Cap contracte et lliga a nosaltres: si mai el projecte s'atura, el codi és teu i el pots seguir executant tu mateix o encarregar-ho a qui vulguis.</p>
   </div>
 </section>
 
@@ -529,14 +531,14 @@
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar, accesible desde cualquier tablet o móvil — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
       "hero.cta1": "Abrir la app →", "hero.cta2": "Ver el código en GitHub",
       "hero.note": "Sin licencias. Sin cuota de SaaS. Sin sorpresas en la factura — abierto, siempre.",
-      "hero.stat1": "Instrumentos", "hero.stat2": "Especialidades", "hero.stat3": "Plataformas",
+      "hero.stat1": "Instrumentos", "hero.stat2": "Especialidades", "hero.stat3": "Plataformas", "hero.stat4": "Equipos activos",
       "mision.eyebrow1": "Misión", "mision.h1": "Reducir la curva de aprendizaje en quirófano.",
       "mision.p1": "Incorporarse a un bloque quirúrgico exige adquirir muchísimo conocimiento práctico en poco tiempo. Instriq existe para que cualquier instrumentista, enfermera, auxiliar o miembro del equipo quirúrgico encuentre información fiable, actualizada y basada en la experiencia real de otros profesionales — no en un manual genérico.",
       "mision.eyebrow2": "Visión", "mision.h2": "La plataforma de referencia del bloque quirúrgico.",
       "mision.p2": "A largo plazo, que Instriq sea el lugar donde el conocimiento compartido, la colaboración entre profesionales y la tecnología abierta ayuden a mejorar la formación, la seguridad del paciente, la práctica clínica y la investigación médica en hospitales de todo el mundo.",
       "valores.eyebrow": "Valores", "valores.h1": "La fuerza de Instriq es la inteligencia colectiva.",
       "valores.lede": "Cada aportación construye una base de conocimiento más completa y revisada para toda la comunidad. Cuantas más personas compartan su experiencia, mejor la información disponible para todas.",
-      "valores.c1t": "Acceso libre", "valores.c1p": "El catálogo y el aprendizaje básico no requieren cuenta ni pago. Nadie se queda fuera por no tener presupuesto.",
+      "valores.c1t": "Acceso libre", "valores.c1p": "Sin cuota mensual ni precio por usuario, a diferencia de la mayoría de herramientas del sector. El catálogo y el aprendizaje básico no requieren ni cuenta: nadie se queda fuera por no tener presupuesto.",
       "valores.c2t": "Transparencia", "valores.c2p": "Código abierto, decisiones públicas y, a futuro, cuentas claras de cómo se usa cada donación.",
       "valores.c3t": "Colaboración real", "valores.c3p": "Construido con profesionales sanitarios y desarrolladores voluntarios, no por una empresa cerrada.",
       "valores.c4t": "Estándares abiertos", "valores.c4p": "Buscamos alinearnos con estándares reconocidos del sector (HL7, FHIR, DICOM) según el proyecto lo necesite.",
@@ -586,6 +588,7 @@
       "transparencia.eyebrow": "Transparencia", "transparencia.h1": "Abierto también en las condiciones.",
       "transparencia.k1": "Código", "transparencia.k2": "Documentación", "transparencia.k3": "APIs", "transparencia.v3": "Abiertas", "transparencia.k4": "Estándares",
       "transparencia.p1": "El nombre y la marca \"Instriq\" quedan reservados para proteger la identidad del proyecto y evitar usos que confundan a la comunidad — el código en sí es libre bajo AGPL-3.0.",
+      "transparencia.p2": "Ningún contrato te ata a nosotros: si alguna vez el proyecto se detiene, el código es tuyo y puedes seguir ejecutándolo tú mismo o encargárselo a quien quieras.",
       "donaciones.eyebrow": "Donaciones", "donaciones.h1": "Un sistema de financiación transparente.",
       "donaciones.p1": "A largo plazo habilitaremos donaciones completamente transparentes, con el destino de cada aportación publicado: mantener la infraestructura y los dominios, cubrir servidores, desarrollar nuevas funcionalidades, integrar estándares e inteligencia artificial, y apoyar proyectos de investigación médica y biomédica que repercutan en una mejor atención a los pacientes.",
       "donaciones.proxTag": "Próximamente", "donaciones.prox": "Todavía no hay un sistema de donaciones activo. Cuando lo haya, la distribución de fondos será pública, indicando el destino de cada aportación y las investigaciones apoyadas.",
@@ -604,14 +607,14 @@
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place, accessible from any tablet or phone — so learning your way around the OR doesn't depend on an outdated paper binder.",
       "hero.cta1": "Open the app →", "hero.cta2": "View the code on GitHub",
       "hero.note": "No licenses. No SaaS fee. No surprises on the bill — open, always.",
-      "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Platforms",
+      "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Platforms", "hero.stat4": "Active teams",
       "mision.eyebrow1": "Mission", "mision.h1": "Shortening the OR learning curve.",
       "mision.p1": "Joining a surgical team means absorbing a huge amount of practical knowledge in very little time. Instriq exists so any scrub nurse, nurse, aide or surgical team member can find reliable, up-to-date information grounded in other professionals' real experience — not a generic manual.",
       "mision.eyebrow2": "Vision", "mision.h2": "The reference platform for the surgical block.",
       "mision.p2": "In the long run, Instriq should be the place where shared knowledge, collaboration between professionals and open technology help improve training, patient safety, clinical practice and medical research in hospitals worldwide.",
       "valores.eyebrow": "Values", "valores.h1": "Instriq's strength is collective intelligence.",
       "valores.lede": "Every contribution builds a more complete, better-reviewed knowledge base for the whole community. The more people share their experience, the better the information available to everyone.",
-      "valores.c1t": "Free access", "valores.c1p": "The catalog and basic learning need no account or payment. No one is left out for lack of budget.",
+      "valores.c1t": "Free access", "valores.c1p": "No monthly fee, no per-user pricing, unlike most tools in the sector. The catalog and basic learning don't even need an account: no one is left out for lack of budget.",
       "valores.c2t": "Transparency", "valores.c2p": "Open source, public decisions and, eventually, clear accounts of how each donation is used.",
       "valores.c3t": "Real collaboration", "valores.c3p": "Built with healthcare professionals and volunteer developers, not by a closed company.",
       "valores.c4t": "Open standards", "valores.c4p": "We aim to align with recognized industry standards (HL7, FHIR, DICOM) as the project needs.",
@@ -661,6 +664,7 @@
       "transparencia.eyebrow": "Transparency", "transparencia.h1": "Open in its terms too.",
       "transparencia.k1": "Code", "transparencia.k2": "Documentation", "transparencia.k3": "APIs", "transparencia.v3": "Open", "transparencia.k4": "Reference standards",
       "transparencia.p1": "The \"Instriq\" name and brand are reserved to protect the project's identity and prevent uses that could confuse the community — the code itself is free under AGPL-3.0.",
+      "transparencia.p2": "No contract ties you to us: if the project ever stops, the code is yours and you can keep running it yourself or hand it to whoever you want.",
       "donaciones.eyebrow": "Donations", "donaciones.h1": "A transparent funding system.",
       "donaciones.p1": "In the long run we'll enable fully transparent donations, with the destination of each contribution published: maintaining infrastructure and domains, covering servers, developing new features, integrating standards and AI, and supporting medical and biomedical research that improves patient care.",
       "donaciones.proxTag": "Coming soon", "donaciones.prox": "There's no active donation system yet. Once there is, fund distribution will be public, showing the destination of each contribution and the research supported.",
@@ -885,6 +889,24 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
     els.forEach(function (r) { observer.observe(r); });
   }
+
+  // Comptador d'equips actius: nomes es mostra si la xifra ja diu alguna
+  // cosa (llindar 10) -- amb poques desenes d'equips real la xifra encara
+  // no aporta, i mostrar un numero petit fa mes mal que bé.
+  var GROWTH_THRESHOLD = 10;
+  fetch('https://ssskgmlubgcjvhdmayhp.supabase.co/rest/v1/rpc/get_public_organization_count', {
+    method: 'POST',
+    headers: {
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzc2tnbWx1YmdjanZoZG1heWhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyMjU0NjcsImV4cCI6MjA5OTgwMTQ2N30.w6SBsnM8QCWEiPxB5sTtiRZk_-rh3Q0ceE7U89HjaoY',
+      'Content-Type': 'application/json'
+    },
+    body: '{}'
+  }).then(function (res) { return res.ok ? res.json() : null; }).then(function (count) {
+    if (typeof count === 'number' && count >= GROWTH_THRESHOLD) {
+      document.getElementById('growthNum').textContent = count;
+      document.getElementById('growthCell').style.display = '';
+    }
+  }).catch(function () {});
 })();
 </script>
 
