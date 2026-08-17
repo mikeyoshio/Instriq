@@ -24,6 +24,13 @@ class WorkModeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<int>(
+      valueListenable: ProfileService.instance.profileRevision,
+      builder: (context, _, __) => _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     if (!ProfileService.instance.hasHospital) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
     return Material(

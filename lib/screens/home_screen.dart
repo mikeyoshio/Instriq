@@ -176,13 +176,25 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     _loadGroupContent();
     _loadRecentAndFavorites();
+    // Inici vive en su propia rama del shell (ver app_shell.dart): cerrar
+    // sesión desde Perfil no reconstruye este widget por sí solo, así que sin
+    // este listener se quedaba mostrando el grupo y el contenido de la sesión
+    // anterior hasta reiniciar la app.
+    ProfileService.instance.profileRevision.addListener(_onProfileChanged);
   }
 
   @override
   void dispose() {
+    ProfileService.instance.profileRevision.removeListener(_onProfileChanged);
     _searchAnalyticsDebounce?.cancel();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onProfileChanged() {
+    _pendingApprovalsFuture = null;
+    _loadGroupContent();
+    _loadRecentAndFavorites();
   }
 
   Future<void> _loadGroupContent() async {
