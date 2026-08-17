@@ -33,6 +33,17 @@ class ProfileService {
   /// de cada pantalla que lo consulte.
   final ValueNotifier<WorkMode?> activeWorkModeNotifier = ValueNotifier<WorkMode?>(null);
 
+  /// El resto del estado de esta clase (organización, `isAdmin`,
+  /// `canApproveAnyWorkspace`...) son campos planos sin ningún mecanismo
+  /// reactivo -- `AppShell`/`WorkModeHeader` los leen directamente en su
+  /// `build()`. Al cerrar sesión, `loadProfile()` los reinicia pero nada
+  /// avisa a esos widgets para que se reconstruyan (viven fuera del árbol
+  /// que hace `setState` en la pantalla de Perfil), así que se quedaban
+  /// mostrando la organización y las pestañas del usuario anterior hasta
+  /// reiniciar la app. Se incrementa al final de cualquier método que toque
+  /// ese estado (`loadProfile`, `joinHospitalWithCode`, `registerHospital`).
+  final ValueNotifier<int> profileRevision = ValueNotifier<int>(0);
+
   String? get organizationId => _organizationId;
   String? get organizationName => _organizationName;
   String? get hospitalCif => _hospitalCif;
@@ -53,6 +64,7 @@ class ProfileService {
     final user = AuthService.instance.currentUser;
     if (user == null) {
       _resetHospitalState();
+      profileRevision.value++;
       return;
     }
     final row = await _client
@@ -85,6 +97,7 @@ class ProfileService {
         .limit(1)
         .maybeSingle();
     _canApproveAnyWorkspace = approverRow != null;
+    profileRevision.value++;
   }
 
   /// Guarda la preferencia de modo de trabajo (update directo a `profiles`,
@@ -151,6 +164,7 @@ class ProfileService {
     _ownerId = hospital.ownerId;
     _isAdmin = false;
     _isOwner = false;
+    profileRevision.value++;
     return hospital;
   }
 
@@ -181,6 +195,7 @@ class ProfileService {
     _ownerId = hospital.ownerId;
     _isAdmin = true;
     _isOwner = true;
+    profileRevision.value++;
     return hospital;
   }
 

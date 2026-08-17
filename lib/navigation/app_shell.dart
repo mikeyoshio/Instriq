@@ -51,6 +51,13 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<int>(
+      valueListenable: ProfileService.instance.profileRevision,
+      builder: (context, _, __) => _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final visibleBranchIndices = _visibleBranchIndices();
     final visibleDestinations = [for (final i in visibleBranchIndices) appDestinations[i]];

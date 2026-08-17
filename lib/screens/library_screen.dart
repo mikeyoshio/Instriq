@@ -26,6 +26,25 @@ class _LibraryScreenState extends State<LibraryScreen> {
   bool get _isConnected =>
       AuthService.instance.currentUser != null && ProfileService.instance.hasHospital;
 
+  @override
+  void initState() {
+    super.initState();
+    // Misma razón que en home_screen.dart: esta pantalla vive en su propia
+    // rama del shell, así que cerrar sesión desde Perfil no la reconstruye
+    // por sí solo sin este listener.
+    ProfileService.instance.profileRevision.addListener(_onProfileChanged);
+  }
+
+  @override
+  void dispose() {
+    ProfileService.instance.profileRevision.removeListener(_onProfileChanged);
+    super.dispose();
+  }
+
+  void _onProfileChanged() {
+    if (mounted) setState(() {});
+  }
+
   Future<void> _openWorkspaces() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const WorkspaceListScreen()),
