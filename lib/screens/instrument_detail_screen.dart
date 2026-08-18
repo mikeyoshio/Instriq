@@ -948,14 +948,17 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
 
   /// Incidencias operativas del instrumento (EPIC 3 · CSSD Workspace): sin
   /// versionado, cualquier miembro autenticado de la organización puede
-  /// reportar una, resolverla exige el mismo rol que el resto de acciones
-  /// sensibles de esta ficha (ver [ProfileService.isAdmin] en el botón de
-  /// editar esterilización/ficha técnica del AppBar) -- la RLS de
-  /// `instrument_incidents` es la autoridad real, esto solo evita mostrar un
-  /// botón que la base de datos rechazaría.
+  /// reportar una, resolverla exige `approver`/`administrator` de espacio o
+  /// admin de organización -- ver `instrument_incidents_update` en
+  /// schema_v32_cssd_workspace.sql, la autoridad real. `isAdmin` solo no
+  /// bastaba: una incidencia es un asunto operativo de la organización (igual
+  /// que aprobar una técnica o una bandeja), no una edición del catálogo
+  /// global, así que sigue el mismo criterio que `canApproveAnyWorkspace` en
+  /// app_shell.dart en vez del gate de "quién puede editar esterilización/
+  /// ficha técnica" del botón del AppBar.
   Widget _buildIncidentsSection(BuildContext context, AppLocalizations l10n) {
     final canReport = AuthService.instance.currentUser != null && ProfileService.instance.organizationId != null;
-    final canResolve = ProfileService.instance.isAdmin;
+    final canResolve = ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
