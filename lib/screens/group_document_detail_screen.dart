@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 import '../data/instruments_data.dart';
+import '../data/sutures_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
+import '../models/group_document_video.dart';
 import '../models/instrument.dart';
 import '../models/instrument_sterilization.dart';
 import '../models/preference_card.dart';
 import '../models/specialty_entity.dart';
+import '../models/suture.dart';
 import '../models/tag.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
+import '../services/group_document_video_service.dart';
 import '../services/manufacturer_service.dart';
 import '../services/preference_card_service.dart';
+import '../services/profile_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/sterilization_service.dart';
@@ -32,6 +39,7 @@ import 'group_document_version_history_screen.dart';
 import 'instrument_detail_screen.dart';
 import 'preference_card_detail_screen.dart';
 import 'specialty_detail_screen.dart';
+import 'suture_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_detail_screen.dart';
 
@@ -58,6 +66,8 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
   Map<String, InstrumentTechnicalInfo?> _instrumentTechnicalInfo = {};
   List<PreferenceCard> _preferenceCards = [];
   List<CustomInstrument> _customInstruments = [];
+  bool _loadingVideos = true;
+  List<GroupDocumentVideo> _videos = [];
 
   @override
   void initState() {
@@ -68,6 +78,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     _loadTags();
     _loadTrays();
     _loadClinicalWorkspaceData();
+    _loadVideos();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _document.id);
       UsageAnalyticsService.instance.recordView(_refType, _document.id);
@@ -232,6 +243,99 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     return null;
   }
 
+  Suture? _sutureFor(String id) {
+    for (final s in kSutures) {
+      if (s.id == id) return s;
+    }
+    return null;
+  }
+
+  Future<void> _loadVideos() async {
+    try {
+      final videos = await GroupDocumentVideoService.instance.fetchForDocument(_document.id);
+      if (!mounted) return;
+      setState(() {
+        _videos = videos;
+        _loadingVideos = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loadingVideos = false);
+    }
+  }
+
+  Future<void> _openAddVideoDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final titleController = TextEditingController();
+    final urlController = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text(l10n.addVideoDialogTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: titleController,
+                autofocus: true,
+                onChanged: (_) => setDialogState(() {}),
+                decoration: InputDecoration(labelText: l10n.videoTitleLabel),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: urlController,
+                onChanged: (_) => setDialogState(() {}),
+                decoration: InputDecoration(labelText: l10n.videoUrlLabel),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+            FilledButton(
+              onPressed: (titleController.text.trim().isEmpty || urlController.text.trim().isEmpty)
+                  ? null
+                  : () => Navigator.pop(ctx, true),
+              child: Text(l10n.addVideoAction),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      await GroupDocumentVideoService.instance.submit(
+        groupDocumentId: _document.id,
+        workspaceId: _document.workspaceId,
+        title: titleController.text.trim(),
+        url: urlController.text.trim(),
+      );
+      if (mounted) {
+        setState(() => _loadingVideos = true);
+        await _loadVideos();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
+  Future<void> _approveVideo(GroupDocumentVideo video) async {
+    if (video.id == null) return;
+    await GroupDocumentVideoService.instance.approve(video.id!);
+    setState(() => _loadingVideos = true);
+    await _loadVideos();
+  }
+
+  Future<void> _rejectVideo(GroupDocumentVideo video) async {
+    if (video.id == null) return;
+    await GroupDocumentVideoService.instance.reject(video.id!);
+    setState(() => _loadingVideos = true);
+    await _loadVideos();
+  }
+
   Future<void> _edit() async {
     final saved = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
@@ -384,6 +488,69 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               }),
               const SizedBox(height: 20),
             ],
+            Builder(builder: (context) {
+              final canReport = AuthService.instance.currentUser != null;
+              final canModerate = ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace;
+              final visibleVideos =
+                  canModerate ? _videos : _videos.where((v) => v.status == VideoStatus.approved).toList();
+              if (!canReport && visibleVideos.isEmpty) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(l10n.videosLabel, style: Theme.of(context).textTheme.titleMedium),
+                        const Spacer(),
+                        if (canReport)
+                          TextButton.icon(
+                            onPressed: _openAddVideoDialog,
+                            icon: const Icon(Icons.add),
+                            label: Text(l10n.addVideoAction),
+                          ),
+                      ],
+                    ),
+                    if (_loadingVideos)
+                      const Center(child: CircularProgressIndicator())
+                    else if (visibleVideos.isEmpty)
+                      Text(l10n.noVideosYet, style: Theme.of(context).textTheme.bodyMedium)
+                    else
+                      ...visibleVideos.map((video) => Card(
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  leading: const Icon(Icons.play_circle_outline),
+                                  title: Text(video.title),
+                                  subtitle: video.status == VideoStatus.pending
+                                      ? Text(l10n.videoPendingLabel)
+                                      : null,
+                                  onTap: () => launchUrl(Uri.parse(video.url)),
+                                ),
+                                if (canModerate && video.status == VideoStatus.pending)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8, bottom: 8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () => _rejectVideo(video),
+                                          child: Text(l10n.reject),
+                                        ),
+                                        FilledButton(
+                                          onPressed: () => _approveVideo(video),
+                                          child: Text(l10n.approve),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          )),
+                  ],
+                ),
+              );
+            }),
             if (published.relatedInstrumentIds.isNotEmpty) ...[
               Text(l10n.relatedInstrumentsLabel, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
@@ -399,6 +566,26 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => InstrumentDetailScreen(instrument: instrument)),
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 20),
+            ],
+            if (published.relatedSutureIds.isNotEmpty) ...[
+              Text(l10n.relatedSuturesLabel, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              ...published.relatedSutureIds.map((id) {
+                final suture = _sutureFor(id);
+                if (suture == null) return const SizedBox.shrink();
+                return Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.line_style),
+                    title: Text(suture.name),
+                    subtitle: Text(suture.material.label),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => SutureDetailScreen(suture: suture)),
                     ),
                   ),
                 );
@@ -436,6 +623,32 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                   ),
                 );
               }),
+              const SizedBox(height: 20),
+            ],
+            if (published.consumables.isNotEmpty) ...[
+              Text(l10n.consumablesLabel, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              ...published.consumables.map((item) => Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.inventory_outlined),
+                      title: Text(item.quantity == null || item.quantity!.isEmpty
+                          ? item.name
+                          : '${item.name} · ${item.quantity}'),
+                      subtitle: item.notes != null && item.notes!.isNotEmpty ? Text(item.notes!) : null,
+                    ),
+                  )),
+              const SizedBox(height: 20),
+            ],
+            if (published.patientPositioning != null && published.patientPositioning!.isNotEmpty) ...[
+              Text(l10n.patientPositioningLabel, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 4),
+              Text(published.patientPositioning!, style: Theme.of(context).textTheme.bodyMedium),
+              const SizedBox(height: 20),
+            ],
+            if (published.anesthesiaNotes != null && published.anesthesiaNotes!.isNotEmpty) ...[
+              Text(l10n.anesthesiaNotesLabel, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 4),
+              Text(published.anesthesiaNotes!, style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 20),
             ],
             if (_preferenceCards.isNotEmpty) ...[

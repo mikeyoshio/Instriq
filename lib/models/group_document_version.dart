@@ -35,6 +35,37 @@ class ProtocolStep {
   }
 }
 
+/// Un ítem de material fungible/consumible necessari per a la tècnica (gases,
+/// draps, implants...) — mai instrumental reutilitzable (això ja es cobreix a
+/// [GroupDocumentVersion.relatedInstrumentIds]/`relatedTrayIds`) ni sutures
+/// (`relatedSutureIds`, catàleg propi). Mateix criteri que [ProtocolStep]:
+/// text lliure, no un catàleg tancat — cada centre necessita coses diferents.
+class ConsumableItem {
+  final String name;
+  final String? quantity;
+  final String? notes;
+
+  const ConsumableItem({required this.name, this.quantity, this.notes});
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'quantity': quantity,
+        'notes': notes,
+      };
+
+  factory ConsumableItem.fromDynamic(dynamic value) {
+    if (value is Map) {
+      final map = value.cast<String, dynamic>();
+      return ConsumableItem(
+        name: map['name'] as String? ?? '',
+        quantity: map['quantity'] as String?,
+        notes: map['notes'] as String?,
+      );
+    }
+    return ConsumableItem(name: value.toString());
+  }
+}
+
 extension GroupDocumentVersionStatusLabel on GroupDocumentVersionStatus {
   String get label {
     switch (this) {
@@ -100,6 +131,10 @@ class GroupDocumentVersion {
   final List<ProtocolStep> steps;
   final List<String> relatedInstrumentIds;
   final List<String> relatedTrayIds;
+  final List<ConsumableItem> consumables;
+  final String? patientPositioning;
+  final String? anesthesiaNotes;
+  final List<String> relatedSutureIds;
   final String? authorId;
   final String? comment;
   final String? basedOnVersionId;
@@ -125,6 +160,10 @@ class GroupDocumentVersion {
     this.steps = const [],
     this.relatedInstrumentIds = const [],
     this.relatedTrayIds = const [],
+    this.consumables = const [],
+    this.patientPositioning,
+    this.anesthesiaNotes,
+    this.relatedSutureIds = const [],
     this.authorId,
     this.comment,
     this.basedOnVersionId,
@@ -141,12 +180,17 @@ class GroupDocumentVersion {
         'steps': steps.map((s) => s.toJson()).toList(),
         'related_instrument_ids': relatedInstrumentIds,
         'related_tray_ids': relatedTrayIds,
+        'consumables': consumables.map((c) => c.toJson()).toList(),
+        'patient_positioning': patientPositioning,
+        'anesthesia_notes': anesthesiaNotes,
+        'related_suture_ids': relatedSutureIds,
         'comment': comment,
       };
 
-  /// [clearSpecialtyId]/[clearContent]: al ser campos nullable, pasar `null`
-  /// en [specialtyId]/[content] no basta para vaciarlos (se confundiría con
-  /// "no lo toques") — hay que pedirlo explícitamente.
+  /// [clearSpecialtyId]/[clearContent]/[clearPatientPositioning]/
+  /// [clearAnesthesiaNotes]: al ser campos nullable, pasar `null` en el valor
+  /// correspondiente no basta para vaciarlos (se confundiría con "no lo
+  /// toques") — hay que pedirlo explícitamente.
   GroupDocumentVersion copyWith({
     String? title,
     String? specialtyId,
@@ -156,6 +200,12 @@ class GroupDocumentVersion {
     List<ProtocolStep>? steps,
     List<String>? relatedInstrumentIds,
     List<String>? relatedTrayIds,
+    List<ConsumableItem>? consumables,
+    String? patientPositioning,
+    bool clearPatientPositioning = false,
+    String? anesthesiaNotes,
+    bool clearAnesthesiaNotes = false,
+    List<String>? relatedSutureIds,
     String? comment,
     bool? pendingSync,
   }) {
@@ -171,6 +221,11 @@ class GroupDocumentVersion {
       steps: steps ?? this.steps,
       relatedInstrumentIds: relatedInstrumentIds ?? this.relatedInstrumentIds,
       relatedTrayIds: relatedTrayIds ?? this.relatedTrayIds,
+      consumables: consumables ?? this.consumables,
+      patientPositioning:
+          clearPatientPositioning ? null : (patientPositioning ?? this.patientPositioning),
+      anesthesiaNotes: clearAnesthesiaNotes ? null : (anesthesiaNotes ?? this.anesthesiaNotes),
+      relatedSutureIds: relatedSutureIds ?? this.relatedSutureIds,
       authorId: authorId,
       comment: comment ?? this.comment,
       basedOnVersionId: basedOnVersionId,
@@ -198,6 +253,12 @@ class GroupDocumentVersion {
       relatedInstrumentIds:
           (row['related_instrument_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
       relatedTrayIds: (row['related_tray_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
+      consumables:
+          (row['consumables'] as List<dynamic>? ?? []).map(ConsumableItem.fromDynamic).toList(),
+      patientPositioning: row['patient_positioning'] as String?,
+      anesthesiaNotes: row['anesthesia_notes'] as String?,
+      relatedSutureIds:
+          (row['related_suture_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
       authorId: row['author_id'] as String?,
       comment: row['comment'] as String?,
       basedOnVersionId: row['based_on_version_id'] as String?,
@@ -223,6 +284,10 @@ class GroupDocumentVersion {
         'steps': steps.map((s) => s.toJson()).toList(),
         'related_instrument_ids': relatedInstrumentIds,
         'related_tray_ids': relatedTrayIds,
+        'consumables': consumables.map((c) => c.toJson()).toList(),
+        'patient_positioning': patientPositioning,
+        'anesthesia_notes': anesthesiaNotes,
+        'related_suture_ids': relatedSutureIds,
         'author_id': authorId,
         'comment': comment,
         'based_on_version_id': basedOnVersionId,
