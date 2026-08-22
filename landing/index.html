@@ -258,8 +258,8 @@
     </div>
     <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
     <div class="data-row">
-      <div class="data-cell"><div class="num">110</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
-      <div class="data-cell"><div class="num">16</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
+      <div class="data-cell"><div class="num">118</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
+      <div class="data-cell"><div class="num">17</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
       <div class="data-cell"><div class="num">3</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
       <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
     </div>
@@ -356,7 +356,7 @@
         <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
         <div class="timeline-track-wrap">
           <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
-          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="33" value="0" step="1" aria-label="Línia del temps d'Instriq">
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="34" value="0" step="1" aria-label="Línia del temps d'Instriq">
         </div>
         <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
       </div>
@@ -682,8 +682,8 @@
   });
   CA_DEFAULTS['meta.title'] = document.title;
 
-  // Timeline interactiu de novetats: 1 origen + 28 desplegaments + 4 previstos.
-  var TIMELINE_SHIPPED = 31; // origen (índex 0) + 30 novetats (índexs 1-30)
+  // Timeline interactiu de novetats: 1 origen + 31 desplegaments + 3 previstos.
+  var TIMELINE_SHIPPED = 32; // origen (índex 0) + 31 novetats (índexs 1-31)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -717,6 +717,7 @@
       { badge: '#28', text: '<strong>Versionat a les targetes de preferència</strong> — cada canvi passa per esborrany, revisió i publicació amb historial complet, igual que tècniques, protocols i safates.' },
       { badge: '#29', text: '<strong>Mode sense connexió per a totes les eines</strong> — safates, targetes de preferència, esterilització i fitxa tècnica ja es poden crear i desar sense xarxa, com ja passava amb tècniques i protocols; la sincronització és automàtica en recuperar la connexió, i una pantalla nova avisa si algun canvi concret no s\'ha pogut pujar.' },
       { badge: '#30', text: '<strong>Ronda de proves en viu i correccions de fiabilitat</strong> — s\'ha provat el flux complet (crear, revisar, aprovar, treballar sense connexió) amb comptes reals per primera vegada, i s\'han corregit diversos problemes que només apareixien en aquestes circumstàncies concretes.' },
+      { badge: '#31', text: '<strong>Vídeos, material fungible, posicionament i anestèsia a les tècniques</strong> — cada tècnica o protocol ja pot enllaçar vídeos externs (moderats abans de publicar-se), llistar el material fungible necessari i descriure la posició del pacient i l\'anestèsia prevista. S\'hi suma un catàleg propi de sutures i la nova especialitat Anestesiologia i Reanimació, amb el seu instrumental.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
       { badge: 'Previst', future: true, text: 'Sistema de donacions transparent.' }
@@ -753,6 +754,7 @@
       { badge: '#28', text: '<strong>Versionado en las tarjetas de preferencia</strong> — cada cambio pasa por borrador, revisión y publicación con historial completo, igual que técnicas, protocolos y bandejas.' },
       { badge: '#29', text: '<strong>Modo sin conexión para todas las herramientas</strong> — bandejas, tarjetas de preferencia, esterilización y ficha técnica ya se pueden crear y guardar sin red, como ya pasaba con técnicas y protocolos; la sincronización es automática al recuperar la conexión, y una pantalla nueva avisa si algún cambio concreto no se ha podido subir.' },
       { badge: '#30', text: '<strong>Ronda de pruebas en vivo y correcciones de fiabilidad</strong> — se ha probado el flujo completo (crear, revisar, aprobar, trabajar sin conexión) con cuentas reales por primera vez, y se han corregido varios problemas que solo aparecían en esas circunstancias concretas.' },
+      { badge: '#31', text: '<strong>Vídeos, material fungible, posicionamiento y anestesia en las técnicas</strong> — cada técnica o protocolo ya puede enlazar vídeos externos (moderados antes de publicarse), listar el material fungible necesario y describir la posición del paciente y la anestesia prevista. Se suma un catálogo propio de suturas y la nueva especialidad Anestesiología y Reanimación, con su instrumental.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
       { badge: 'Previsto', future: true, text: 'Sistema de donaciones transparente.' }
@@ -789,6 +791,7 @@
       { badge: '#28', text: '<strong>Versioning for preference cards</strong> — every change goes through draft, review and publish with full history, just like techniques, protocols and trays.' },
       { badge: '#29', text: '<strong>Offline mode for every tool</strong> — trays, preference cards, sterilization and technical info can now be created and saved without network, just like techniques and protocols already could; sync happens automatically once connection returns, and a new screen flags if any specific change couldn\'t be uploaded.' },
       { badge: '#30', text: '<strong>Live testing round and reliability fixes</strong> — the full flow (create, review, approve, work offline) was tested end-to-end with real accounts for the first time, and several issues that only showed up under those specific conditions were fixed.' },
+      { badge: '#31', text: '<strong>Videos, consumables, positioning and anesthesia on techniques</strong> — every technique or protocol can now link external videos (moderated before publishing), list the consumables needed and describe patient positioning and planned anesthesia. Also new: a dedicated suture catalog and the Anesthesiology and Resuscitation specialty, with its own instruments.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
       { badge: 'Planned', future: true, text: 'A transparent donation system.' }
