@@ -46,6 +46,7 @@ import 'learn_screen.dart';
 import 'manufacturer_detail_screen.dart';
 import 'progress_screen.dart';
 import 'surgeon_detail_screen.dart';
+import 'suture_catalog_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_detail_screen.dart';
 import 'trays_screen.dart';
@@ -775,6 +776,15 @@ class _HomeScreenState extends State<HomeScreen> {
           subtitle: l10n.homeSterilizationSubtitle,
           onTap: () async {
             await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CatalogScreen()));
+          },
+        ),
+        const SizedBox(height: InstriqSpacing.sm),
+        InstriqListItem(
+          icon: Icons.line_style,
+          title: l10n.sutureCatalogTitle,
+          subtitle: l10n.homeSutureCatalogSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SutureCatalogScreen()));
           },
         ),
         const SizedBox(height: InstriqSpacing.sm),

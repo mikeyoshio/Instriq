@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../data/sutures_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument.dart';
 import '../models/specialty_entity.dart';
+import '../models/suture.dart';
 import '../models/tray.dart';
 import '../services/connectivity_service.dart';
 import '../services/group_document_service.dart';
@@ -14,6 +16,7 @@ import '../services/specialty_service.dart';
 import '../services/tray_service.dart';
 import '../widgets/catalog_picker_sheet.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/suture_picker_sheet.dart';
 import '../widgets/tag_picker.dart';
 import '../widgets/tray_picker_sheet.dart';
 
@@ -51,6 +54,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   late List<ProtocolStep> _steps;
   late List<String> _relatedInstrumentIds;
   late List<String> _relatedTrayIds;
+  late List<ConsumableItem> _consumables;
+  late final TextEditingController _positioningController;
+  late final TextEditingController _anesthesiaController;
+  late List<String> _relatedSutureIds;
   GroupDocumentVersion? _draft;
   final _tagPickerKey = GlobalKey<TagPickerState>();
   bool _loading = true;
@@ -63,9 +70,13 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     _titleController = TextEditingController();
     _contentController = TextEditingController();
     _commentController = TextEditingController();
+    _positioningController = TextEditingController();
+    _anesthesiaController = TextEditingController();
     _steps = [];
     _relatedInstrumentIds = [];
     _relatedTrayIds = [];
+    _consumables = [];
+    _relatedSutureIds = [];
     _init();
   }
 
@@ -118,6 +129,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     _steps = List.of(draft.steps);
     _relatedInstrumentIds = List.of(draft.relatedInstrumentIds);
     _relatedTrayIds = List.of(draft.relatedTrayIds);
+    _consumables = List.of(draft.consumables);
+    _positioningController.text = draft.patientPositioning ?? '';
+    _anesthesiaController.text = draft.anesthesiaNotes ?? '';
+    _relatedSutureIds = List.of(draft.relatedSutureIds);
   }
 
   @override
@@ -125,6 +140,8 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     _titleController.dispose();
     _contentController.dispose();
     _commentController.dispose();
+    _positioningController.dispose();
+    _anesthesiaController.dispose();
     super.dispose();
   }
 
@@ -136,6 +153,13 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   }
 
   Tray? _trayFor(String id) => TrayService.instance.trayById(id);
+
+  Suture? _sutureFor(String id) {
+    for (final s in kSutures) {
+      if (s.id == id) return s;
+    }
+    return null;
+  }
 
   List<String> _stepCategorySuggestions(AppLocalizations l10n) => [
         l10n.stepCategoryPreop,
@@ -232,6 +256,69 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     }
   }
 
+  Future<void> _addSuture() async {
+    final selected = await showModalBottomSheet<Suture>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => const SuturePickerSheet(),
+    );
+    if (selected != null && !_relatedSutureIds.contains(selected.id)) {
+      setState(() => _relatedSutureIds.add(selected.id));
+    }
+  }
+
+  Future<void> _addConsumable() async {
+    final l10n = AppLocalizations.of(context)!;
+    final nameController = TextEditingController();
+    final quantityController = TextEditingController();
+    final notesController = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text(l10n.addConsumableTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: nameController,
+                autofocus: true,
+                onChanged: (_) => setDialogState(() {}),
+                decoration: InputDecoration(labelText: l10n.consumableNameLabel),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: quantityController,
+                decoration: InputDecoration(labelText: l10n.consumableQuantityLabel),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: notesController,
+                decoration: InputDecoration(labelText: l10n.consumableNotesLabel),
+                maxLines: 2,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+            FilledButton(
+              onPressed: nameController.text.trim().isEmpty ? null : () => Navigator.pop(ctx, true),
+              child: Text(l10n.addAction),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirmed == true && nameController.text.trim().isNotEmpty) {
+      setState(() => _consumables.add(ConsumableItem(
+            name: nameController.text.trim(),
+            quantity: quantityController.text.trim().isEmpty ? null : quantityController.text.trim(),
+            notes: notesController.text.trim().isEmpty ? null : notesController.text.trim(),
+          )));
+    }
+  }
+
   GroupDocumentVersion _draftWithFormValues() {
     final title = _titleController.text.trim();
     return _draft!.copyWith(
@@ -243,6 +330,13 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       steps: _steps,
       relatedInstrumentIds: _relatedInstrumentIds,
       relatedTrayIds: _relatedTrayIds,
+      consumables: _consumables,
+      patientPositioning:
+          _positioningController.text.trim().isEmpty ? null : _positioningController.text.trim(),
+      clearPatientPositioning: _positioningController.text.trim().isEmpty,
+      anesthesiaNotes: _anesthesiaController.text.trim().isEmpty ? null : _anesthesiaController.text.trim(),
+      clearAnesthesiaNotes: _anesthesiaController.text.trim().isEmpty,
+      relatedSutureIds: _relatedSutureIds,
       comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
     );
   }
@@ -449,6 +543,88 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 ),
               );
             }),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Text(l10n.relatedSuturesLabel, style: Theme.of(context).textTheme.titleMedium),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: _addSuture,
+                  icon: const Icon(Icons.add),
+                  label: Text(l10n.addAction),
+                ),
+              ],
+            ),
+            if (_relatedSutureIds.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(l10n.noSuturesLinked),
+              ),
+            ..._relatedSutureIds.map((id) {
+              final suture = _sutureFor(id);
+              return ListTile(
+                leading: const Icon(Icons.line_style),
+                title: Text(suture?.name ?? id),
+                trailing: IconButton(
+                  icon: const Icon(Icons.close),
+                  tooltip: l10n.removeRelatedSutureTooltip,
+                  onPressed: () => setState(() => _relatedSutureIds.remove(id)),
+                ),
+              );
+            }),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Text(l10n.consumablesLabel, style: Theme.of(context).textTheme.titleMedium),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: _addConsumable,
+                  icon: const Icon(Icons.add),
+                  label: Text(l10n.addAction),
+                ),
+              ],
+            ),
+            if (_consumables.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(l10n.noConsumablesYet),
+              ),
+            ..._consumables.asMap().entries.map((entry) {
+              final index = entry.key;
+              final item = entry.value;
+              return ListTile(
+                leading: const Icon(Icons.inventory_outlined),
+                title: Text(item.quantity == null || item.quantity!.isEmpty
+                    ? item.name
+                    : '${item.name} · ${item.quantity}'),
+                subtitle: item.notes != null && item.notes!.isNotEmpty ? Text(item.notes!) : null,
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete_outline),
+                  tooltip: l10n.removeConsumableTooltip,
+                  onPressed: () => setState(() => _consumables.removeAt(index)),
+                ),
+              );
+            }),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _positioningController,
+              decoration: InputDecoration(
+                labelText: l10n.patientPositioningLabel,
+                border: const OutlineInputBorder(),
+                alignLabelWithHint: true,
+              ),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _anesthesiaController,
+              decoration: InputDecoration(
+                labelText: l10n.anesthesiaNotesLabel,
+                border: const OutlineInputBorder(),
+                alignLabelWithHint: true,
+              ),
+              maxLines: 3,
+            ),
             const SizedBox(height: 20),
             Text(l10n.tagsLabel, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),

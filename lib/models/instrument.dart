@@ -46,6 +46,7 @@ enum Specialty {
   toracica,
   dermatologia,
   oftalmologia,
+  anestesiologiaReanimacio,
 }
 
 extension SpecialtyLabel on Specialty {
@@ -83,6 +84,8 @@ extension SpecialtyLabel on Specialty {
         return 'Dermatología Médico-Quirúrgica y Venereología';
       case Specialty.oftalmologia:
         return 'Oftalmología';
+      case Specialty.anestesiologiaReanimacio:
+        return 'Anestesiología y Reanimación';
     }
   }
 }
