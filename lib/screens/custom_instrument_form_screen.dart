@@ -10,28 +10,52 @@ import '../services/custom_instrument_service.dart';
 import '../services/profile_service.dart';
 import '../services/specialty_service.dart';
 
-/// Crear/editar un instrumento personalizado del equipo, con sus variantes
-/// (nombre + foto) gestionadas inline. Nunca toca el catálogo global.
+/// Edita el borrador de una versión de instrumento personalizado
+/// ([existingDraft]) o crea un instrumento nuevo. Calcado de
+/// [TrayFormScreen]: nunca edita directamente el contenido publicado, guardar
+/// solo persiste el borrador — las variantes (nombre + foto + nota) viven
+/// dentro de este mismo borrador, no en su propio CRUD (ver
+/// docs/ADR_004_VERSIONING.md §5).
 class CustomInstrumentFormScreen extends StatefulWidget {
   final String workspaceId;
   final CustomInstrument? existingInstrument;
+  final CustomInstrumentVersion? existingDraft;
 
-  const CustomInstrumentFormScreen({super.key, required this.workspaceId, this.existingInstrument});
+  const CustomInstrumentFormScreen({
+    super.key,
+    required this.workspaceId,
+    this.existingInstrument,
+    this.existingDraft,
+  });
 
   @override
   State<CustomInstrumentFormScreen> createState() => _CustomInstrumentFormScreenState();
 }
 
 class _VariantDraft {
-  final CustomInstrumentVariant? existing;
+  final String id;
   final TextEditingController nameController;
   final TextEditingController noteController;
+  String? photoPath;
   File? pickedPhoto;
-  bool markedForDeletion = false;
 
-  _VariantDraft({this.existing})
-      : nameController = TextEditingController(text: existing?.name ?? ''),
-        noteController = TextEditingController(text: existing?.note ?? '');
+  _VariantDraft({required this.id, String? name, this.photoPath, String? note})
+      : nameController = TextEditingController(text: name ?? ''),
+        noteController = TextEditingController(text: note ?? '');
+
+  factory _VariantDraft.fromVariant(CustomInstrumentVariant variant) => _VariantDraft(
+        id: variant.id,
+        name: variant.name,
+        photoPath: variant.photoPath,
+        note: variant.note,
+      );
+
+  CustomInstrumentVariant toVariant() => CustomInstrumentVariant(
+        id: id,
+        name: nameController.text.trim(),
+        photoPath: photoPath,
+        note: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+      );
 }
 
 class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen> {
@@ -45,28 +69,60 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
   late final TextEditingController _descriptionController;
   late final TextEditingController _useController;
   late final TextEditingController _tipController;
+  late final TextEditingController _commentController;
   late List<_VariantDraft> _variants;
+  CustomInstrumentVersion? _draft;
+  bool _loading = true;
   bool _saving = false;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    final instrument = widget.existingInstrument;
-    _nameController = TextEditingController(text: instrument?.name ?? '');
-    _categoryController = TextEditingController(text: instrument?.category ?? '');
-    _specialtyId = instrument?.specialtyId;
-    _legacySpecialtyText = instrument?.specialtyId == null ? instrument?.specialty : null;
-    _descriptionController = TextEditingController(text: instrument?.description ?? '');
-    _useController = TextEditingController(text: instrument?.useText ?? '');
-    _tipController = TextEditingController(text: instrument?.tip ?? '');
-    _variants = (instrument?.variants ?? const []).map((v) => _VariantDraft(existing: v)).toList();
-    _loadSpecialties();
+    _nameController = TextEditingController();
+    _categoryController = TextEditingController();
+    _descriptionController = TextEditingController();
+    _useController = TextEditingController();
+    _tipController = TextEditingController();
+    _commentController = TextEditingController();
+    _variants = [];
+    _init();
   }
 
-  Future<void> _loadSpecialties() async {
-    final specialties = await SpecialtyService.instance.fetchAll();
-    if (!mounted) return;
-    setState(() => _specialties = specialties);
+  Future<void> _init() async {
+    try {
+      try {
+        _specialties = await SpecialtyService.instance.fetchAll();
+      } catch (_) {
+        // Metadato accesorio para el selector: si falla, el formulario sigue
+        // usable sin lista de especialidades.
+      }
+      CustomInstrumentVersion draft;
+      if (widget.existingDraft != null) {
+        draft = widget.existingDraft!;
+      } else if (widget.existingInstrument != null) {
+        draft = await CustomInstrumentService.instance.startEditing(widget.existingInstrument!);
+      } else {
+        draft = await CustomInstrumentService.instance.create(widget.workspaceId);
+      }
+      _applyDraft(draft);
+    } catch (e) {
+      setState(() => _error = AppLocalizations.of(context)!.formPrepareDraftError(e.toString()));
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  void _applyDraft(CustomInstrumentVersion draft) {
+    _draft = draft;
+    _nameController.text = draft.name;
+    _categoryController.text = draft.category ?? '';
+    _specialtyId = draft.specialtyId;
+    _legacySpecialtyText = draft.specialtyId == null ? draft.specialty : null;
+    _descriptionController.text = draft.description ?? '';
+    _useController.text = draft.useText ?? '';
+    _tipController.text = draft.tip ?? '';
+    _variants = draft.variants.map((v) => _VariantDraft.fromVariant(v)).toList();
   }
 
   @override
@@ -76,6 +132,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
     _descriptionController.dispose();
     _useController.dispose();
     _tipController.dispose();
+    _commentController.dispose();
     for (final v in _variants) {
       v.nameController.dispose();
       v.noteController.dispose();
@@ -84,7 +141,14 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
   }
 
   void _addVariant() {
-    setState(() => _variants.add(_VariantDraft()));
+    setState(() => _variants.add(_VariantDraft(id: '${DateTime.now().microsecondsSinceEpoch}')));
+  }
+
+  void _removeVariant(int index) {
+    final removed = _variants.removeAt(index);
+    removed.nameController.dispose();
+    removed.noteController.dispose();
+    setState(() {});
   }
 
   Future<void> _pickPhoto(_VariantDraft draft) async {
@@ -116,93 +180,64 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
     }
   }
 
-  Future<void> _save() async {
+  CustomInstrumentVersion _draftWithFormValues() {
+    final name = _nameController.text.trim();
+    return _draft!.copyWith(
+      name: name,
+      category: _categoryController.text.trim().isEmpty ? null : _categoryController.text.trim(),
+      clearCategory: _categoryController.text.trim().isEmpty,
+      specialtyId: _specialtyId,
+      clearSpecialtyId: _specialtyId == null,
+      description: _descriptionController.text.trim().isEmpty ? null : _descriptionController.text.trim(),
+      clearDescription: _descriptionController.text.trim().isEmpty,
+      useText: _useController.text.trim().isEmpty ? null : _useController.text.trim(),
+      clearUseText: _useController.text.trim().isEmpty,
+      tip: _tipController.text.trim().isEmpty ? null : _tipController.text.trim(),
+      clearTip: _tipController.text.trim().isEmpty,
+      variants: _variants.map((v) => v.toVariant()).toList(),
+      comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
+    );
+  }
+
+  Future<void> _saveDraft({bool andSubmit = false}) async {
     final l10n = AppLocalizations.of(context)!;
     final name = _nameController.text.trim();
     final description = _descriptionController.text.trim();
     if (name.isEmpty || description.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.customInstrumentMissingFieldsSnackbar)),
-      );
+      setState(() => _error = l10n.customInstrumentMissingFieldsSnackbar);
       return;
     }
     final organizationId = ProfileService.instance.organizationId;
     if (organizationId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.customInstrumentSaveError('Sin hospital'))),
-      );
+      setState(() => _error = l10n.customInstrumentSaveError('Sin organización'));
       return;
     }
 
-    setState(() => _saving = true);
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
     try {
-      final service = CustomInstrumentService.instance;
-      CustomInstrument instrument;
-      if (widget.existingInstrument == null) {
-        instrument = await service.create(CustomInstrument(
-          id: '',
-          organizationId: organizationId,
-          workspaceId: widget.workspaceId,
-          name: name,
-          category: _categoryController.text.trim().isEmpty ? null : _categoryController.text.trim(),
-          specialtyId: _specialtyId,
-          description: description,
-          useText: _useController.text.trim().isEmpty ? null : _useController.text.trim(),
-          tip: _tipController.text.trim().isEmpty ? null : _tipController.text.trim(),
-        ));
-      } else {
-        instrument = await service.update(widget.existingInstrument!.copyWith(
-          name: name,
-          category: _categoryController.text.trim().isEmpty ? null : _categoryController.text.trim(),
-          specialtyId: _specialtyId,
-          clearSpecialtyId: _specialtyId == null,
-          description: description,
-          useText: _useController.text.trim().isEmpty ? null : _useController.text.trim(),
-          tip: _tipController.text.trim().isEmpty ? null : _tipController.text.trim(),
-        ));
-      }
-
-      for (final draft in _variants) {
-        if (draft.markedForDeletion) {
-          if (draft.existing != null) {
-            await service.deleteVariant(draft.existing!.id, instrument.id);
-          }
-          continue;
-        }
-        final variantName = draft.nameController.text.trim();
-        if (variantName.isEmpty && draft.existing == null) continue;
-
-        CustomInstrumentVariant variant;
-        if (draft.existing == null) {
-          variant = await service.addVariant(CustomInstrumentVariant(
-            id: '',
-            customInstrumentId: instrument.id,
-            name: variantName,
-            note: draft.noteController.text.trim().isEmpty ? null : draft.noteController.text.trim(),
-          ));
-        } else {
-          variant = await service.updateVariant(draft.existing!.copyWith(
-            name: variantName,
-            note: draft.noteController.text.trim().isEmpty ? null : draft.noteController.text.trim(),
-          ));
-        }
-
-        if (draft.pickedPhoto != null) {
-          await service.uploadVariantPhoto(
-            variant: variant,
+      // Sube las fotos nuevas antes de guardar, así el borrador se guarda ya
+      // con las rutas finales en cada variante.
+      for (final variant in _variants) {
+        if (variant.pickedPhoto != null) {
+          variant.photoPath = await CustomInstrumentService.instance.uploadVariantPhoto(
             organizationId: organizationId,
             workspaceId: widget.workspaceId,
-            file: draft.pickedPhoto!,
+            instrumentId: _draft!.customInstrumentId,
+            file: variant.pickedPhoto!,
           );
+          variant.pickedPhoto = null;
         }
       }
-
+      final updated = await CustomInstrumentService.instance.saveDraft(_draftWithFormValues());
+      if (andSubmit) {
+        await CustomInstrumentService.instance.submitForReview(updated.id);
+      }
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(l10n.customInstrumentSaveError(e.toString()))));
-      }
+      if (mounted) setState(() => _error = l10n.customInstrumentSaveError(e.toString()));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -212,7 +247,18 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = widget.existingInstrument != null;
-    final visibleVariants = _variants.where((v) => !v.markedForDeletion).toList();
+    if (_loading) {
+      return Scaffold(
+        appBar: AppBar(title: Text(isEditing ? l10n.editCustomInstrumentTitle : l10n.newCustomInstrumentLabel)),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (_draft == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text(isEditing ? l10n.editCustomInstrumentTitle : l10n.newCustomInstrumentLabel)),
+        body: Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error ?? l10n.errorLabel))),
+      );
+    }
     return Scaffold(
       appBar: AppBar(title: Text(isEditing ? l10n.editCustomInstrumentTitle : l10n.newCustomInstrumentLabel)),
       body: SafeArea(
@@ -294,86 +340,108 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
                 ),
               ],
             ),
-            if (visibleVariants.isEmpty) Padding(padding: const EdgeInsets.all(12), child: Text(l10n.noVariantsYet)),
-            ...visibleVariants.map((draft) {
+            if (_variants.isEmpty) Padding(padding: const EdgeInsets.all(12), child: Text(l10n.noVariantsYet)),
+            ..._variants.asMap().entries.map((entry) {
+              final index = entry.key;
+              final draft = entry.value;
               return Card(
                 margin: const EdgeInsets.only(bottom: 12),
                 child: Padding(
                   padding: const EdgeInsets.all(12),
-                  child: Column(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () => _pickPhoto(draft),
-                            child: draft.pickedPhoto != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(draft.pickedPhoto!, width: 64, height: 64, fit: BoxFit.cover),
-                                  )
-                                : CircleAvatar(
-                                    radius: 32,
-                                    child: Icon(
-                                      draft.existing?.photoPath != null
-                                          ? Icons.image_outlined
-                                          : Icons.add_a_photo_outlined,
-                                    ),
-                                  ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                TextField(
-                                  controller: draft.nameController,
-                                  decoration: InputDecoration(
-                                    labelText: l10n.variantNameLabel,
-                                    hintText: l10n.variantNameHint,
-                                    isDense: true,
-                                    border: const OutlineInputBorder(),
-                                  ),
+                      GestureDetector(
+                        onTap: () => _pickPhoto(draft),
+                        child: draft.pickedPhoto != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(draft.pickedPhoto!, width: 64, height: 64, fit: BoxFit.cover),
+                              )
+                            : CircleAvatar(
+                                radius: 32,
+                                child: Icon(
+                                  draft.photoPath != null ? Icons.image_outlined : Icons.add_a_photo_outlined,
                                 ),
-                                const SizedBox(height: 8),
-                                TextButton.icon(
-                                  onPressed: () => _pickPhoto(draft),
-                                  icon: const Icon(Icons.photo_camera_outlined, size: 18),
-                                  label: Text(
-                                    draft.existing?.photoPath != null || draft.pickedPhoto != null
-                                        ? l10n.changePhotoLabel
-                                        : l10n.pickPhotoLabel,
-                                  ),
-                                ),
-                              ],
+                              ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: draft.nameController,
+                              decoration: InputDecoration(
+                                labelText: l10n.variantNameLabel,
+                                hintText: l10n.variantNameHint,
+                                isDense: true,
+                                border: const OutlineInputBorder(),
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            tooltip: l10n.removeVariantLabel,
-                            onPressed: () => setState(() => draft.markedForDeletion = true),
-                          ),
-                        ],
+                            const SizedBox(height: 8),
+                            TextButton.icon(
+                              onPressed: () => _pickPhoto(draft),
+                              icon: const Icon(Icons.photo_camera_outlined, size: 18),
+                              label: Text(
+                                draft.photoPath != null || draft.pickedPhoto != null
+                                    ? l10n.changePhotoLabel
+                                    : l10n.pickPhotoLabel,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        tooltip: l10n.removeVariantLabel,
+                        onPressed: () => _removeVariant(index),
                       ),
                     ],
                   ),
                 ),
               );
             }),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _commentController,
+              decoration: InputDecoration(
+                labelText: l10n.changeCommentLabel,
+                border: const OutlineInputBorder(),
+                alignLabelWithHint: true,
+              ),
+              maxLines: 2,
+            ),
+            if (_error != null) ...[
+              const SizedBox(height: 12),
+              Text(_error!, style: const TextStyle(color: Colors.red)),
+            ],
           ],
         ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              onPressed: _saving ? null : _save,
-              icon: _saving
-                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Icon(Icons.save),
-              label: Text(l10n.save),
-            ),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: _saving ? null : () => _saveDraft(andSubmit: true),
+                  child: _saving
+                      ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : Text(l10n.submitForReview),
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: _saving ? null : () => _saveDraft(),
+                  child: Text(l10n.saveAsDraft),
+                ),
+              ),
+            ],
           ),
         ),
       ),

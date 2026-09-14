@@ -29,7 +29,7 @@ const TOKEN_URL = "https://oauth2.googleapis.com/token";
 
 interface AuditLogRecord {
   id: string;
-  hospital_id: string | null;
+  organization_id: string | null;
   actor_id: string | null;
   action: string;
   entity_type: string | null;
@@ -59,11 +59,16 @@ interface NotificationPlan {
   recipientUserIds: string[];
 }
 
-const RELEVANT_ACTIONS = new Set([
-  "document_version_submitted",
-  "document_version_approved",
-  "document_version_rejected",
-]);
+// EPIC "versionat d'instrumental personalitzat" (docs/ADR_004_VERSIONING.md
+// §5): custom_instrument_versions sigue exactamente el mismo ciclo de
+// submit/approve/reject que group_document_versions, así que se generalizan
+// las 3 acciones en vez de duplicar resolveNotificationPlan para una 4a
+// entidad — trays/preference_cards/esterilización no están aquí a propósito
+// (decisión ya tomada, ver ADR-004 §7: sin push para esas 3).
+const SUBMITTED_ACTIONS = new Set(["document_version_submitted", "custom_instrument_version_submitted"]);
+const APPROVED_ACTIONS = new Set(["document_version_approved", "custom_instrument_version_approved"]);
+const REJECTED_ACTIONS = new Set(["document_version_rejected", "custom_instrument_version_rejected"]);
+const RELEVANT_ACTIONS = new Set([...SUBMITTED_ACTIONS, ...APPROVED_ACTIONS, ...REJECTED_ACTIONS]);
 
 Deno.serve(async (req: Request) => {
   try {
@@ -159,7 +164,7 @@ async function resolveNotificationPlan(
   const metadataTitle =
     typeof record.metadata?.title === "string" ? (record.metadata!.title as string) : undefined;
 
-  if (record.action === "document_version_submitted") {
+  if (SUBMITTED_ACTIONS.has(record.action)) {
     if (!record.workspace_id) return null;
 
     const recipientIds = new Set<string>();
@@ -173,11 +178,11 @@ async function resolveNotificationPlan(
       recipientIds.add(row.user_id as string);
     }
 
-    if (record.hospital_id) {
+    if (record.organization_id) {
       const { data: admins } = await admin
         .from("profiles")
         .select("id")
-        .eq("hospital_id", record.hospital_id)
+        .eq("organization_id", record.organization_id)
         .eq("is_admin", true);
       for (const row of admins ?? []) {
         recipientIds.add(row.id as string);
@@ -195,11 +200,15 @@ async function resolveNotificationPlan(
     };
   }
 
-  if (record.action === "document_version_approved" || record.action === "document_version_rejected") {
+  if (APPROVED_ACTIONS.has(record.action) || REJECTED_ACTIONS.has(record.action)) {
     if (!record.entity_id) return null;
 
+    const versionTable = record.action.startsWith("custom_instrument")
+      ? "custom_instrument_versions"
+      : "group_document_versions";
+
     const { data: version } = await admin
-      .from("group_document_versions")
+      .from(versionTable)
       .select("author_id")
       .eq("id", record.entity_id)
       .maybeSingle();
@@ -209,10 +218,9 @@ async function resolveNotificationPlan(
       return null;
     }
 
-    const title =
-      record.action === "document_version_approved"
-        ? "Tu contenido fue aprobado"
-        : "Tu contenido necesita cambios";
+    const title = APPROVED_ACTIONS.has(record.action)
+      ? "Tu contenido fue aprobado"
+      : "Tu contenido necesita cambios";
 
     return {
       title,

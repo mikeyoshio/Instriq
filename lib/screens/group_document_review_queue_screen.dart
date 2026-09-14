@@ -14,6 +14,7 @@ import '../services/sterilization_service.dart';
 import '../services/surgeon_service.dart';
 import '../services/tray_service.dart';
 import '../widgets/sterilization_method_label.dart';
+import 'custom_instrument_diff_screen.dart';
 import 'group_document_diff_screen.dart';
 import 'preference_card_diff_screen.dart';
 import 'sterilization_method_diff_screen.dart';
@@ -42,7 +43,7 @@ class _ReviewQueueScreenState extends State<ReviewQueueScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.reviewQueueTitle),
@@ -54,6 +55,7 @@ class _ReviewQueueScreenState extends State<ReviewQueueScreen> {
               Tab(text: l10n.preferenceCardsTitle),
               Tab(text: l10n.sterilizationMethodsTabTitle),
               Tab(text: l10n.technicalInfoTabTitle),
+              Tab(text: l10n.customInstrumentsTitle),
             ],
           ),
         ),
@@ -64,6 +66,7 @@ class _ReviewQueueScreenState extends State<ReviewQueueScreen> {
             _PreferenceCardReviewQueue(),
             _SterilizationMethodReviewQueue(),
             _TechnicalInfoReviewQueue(),
+            _CustomInstrumentReviewQueue(),
           ],
         ),
       ),
@@ -451,6 +454,74 @@ class _TechnicalInfoReviewQueueState extends State<_TechnicalInfoReviewQueue> {
       approveLabel: l10n.approve,
       onReject: (v, comment) =>
           SterilizationService.instance.rejectTechnicalInfoVersion(v.id, comment: comment),
+      rejectLabel: l10n.reject,
+      rejectDialogTitle: l10n.rejectChangeTitle,
+      rejectReasonLabel: l10n.rejectReasonLabel,
+      cancelLabel: l10n.cancel,
+      approveSuccessMessage: l10n.changeApprovedSnackbar,
+      rejectSuccessMessage: l10n.changeReturnedSnackbar,
+      approveErrorMessage: (e) => l10n.approveError(e.toString()),
+      rejectErrorMessage: (e) => l10n.rejectError(e.toString()),
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) => Center(
+          child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(l10n.noPendingReviews))),
+    );
+  }
+}
+
+class _CustomInstrumentReviewQueue extends StatefulWidget {
+  const _CustomInstrumentReviewQueue();
+
+  @override
+  State<_CustomInstrumentReviewQueue> createState() => _CustomInstrumentReviewQueueState();
+}
+
+class _CustomInstrumentReviewQueueState extends State<_CustomInstrumentReviewQueue> {
+  Map<String, String> _workspaceNames = {};
+
+  Future<List<CustomInstrumentVersion>> _load() async {
+    final queue = await CustomInstrumentService.instance.fetchReviewQueue();
+    _workspaceNames = await CustomInstrumentService.instance
+        .fetchWorkspaceNamesForInstruments(queue.map((v) => v.customInstrumentId).toSet().toList());
+    return queue;
+  }
+
+  Future<void> _openDiff(CustomInstrumentVersion version) async {
+    try {
+      final instrument = await CustomInstrumentService.instance.fetchById(version.customInstrumentId);
+      final published = instrument.publishedVersion;
+      if (published == null || !mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => CustomInstrumentDiffScreen(oldVersion: published, newVersion: version),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.compareLoadError(e.toString()))));
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return InstriqReviewQueue<CustomInstrumentVersion>.inline(
+      load: _load,
+      titleOf: (v) => v.name,
+      secondaryLineOf: (v) => _workspaceNames[v.customInstrumentId],
+      commentOf: (v) => v.comment,
+      onCompare: _openDiff,
+      compareLabel: l10n.compare,
+      onApprove: (v) => CustomInstrumentService.instance.approve(v.id),
+      approveLabel: l10n.approve,
+      onReject: (v, comment) =>
+          CustomInstrumentService.instance.reject(v.id, comment: comment),
       rejectLabel: l10n.reject,
       rejectDialogTitle: l10n.rejectChangeTitle,
       rejectReasonLabel: l10n.rejectReasonLabel,

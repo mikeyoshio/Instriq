@@ -33,6 +33,7 @@ import '../widgets/instrument_incident_label.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
 import 'custom_instrument_form_screen.dart';
+import 'custom_instrument_version_history_screen.dart';
 import 'group_document_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'sterilization_method_version_history_screen.dart';
@@ -79,6 +80,12 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
   SterilizationMethodVersion? _ownPendingMethodDraft;
   InstrumentTechnicalInfoVersion? _ownPendingInfoDraft;
 
+  // Borrador/en revisión propio del instrumento mismo (nombre, categoría,
+  // especialidad, descripción, variantes...) -- distinto de
+  // _ownPendingMethodDraft/_ownPendingInfoDraft, que son de esterilización/
+  // ficha técnica (EPIC 3). Ver docs/ADR_004_VERSIONING.md §5.
+  CustomInstrumentVersion? _ownPendingInstrumentDraft;
+
   bool _loadingIncidents = true;
   List<InstrumentIncident> _incidents = [];
 
@@ -92,6 +99,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
     _loadUsedIn();
     _loadClinicalData();
     _loadIncidents();
+    _loadOwnPendingInstrumentDraft();
     if (AuthService.instance.currentUser != null) {
       RecentActivityService.instance.recordView(_refType, _instrument.id);
       UsageAnalyticsService.instance.recordView(_refType, _instrument.id);
@@ -175,6 +183,65 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
       if (!mounted) return;
       setState(() => _loadingClinicalData = false);
     }
+  }
+
+  Future<void> _loadOwnPendingInstrumentDraft() async {
+    final userId = AuthService.instance.currentUser?.id;
+    if (userId == null) return;
+    try {
+      final versions = await CustomInstrumentService.instance.fetchVersionHistory(_instrument.id);
+      final mine = (versions
+              .where((v) =>
+                  v.authorId == userId &&
+                  (v.status == GroupDocumentVersionStatus.draft || v.status == GroupDocumentVersionStatus.inReview))
+              .toList()
+            ..sort((a, b) => b.versionNumber.compareTo(a.versionNumber)))
+          .cast<CustomInstrumentVersion?>()
+          .firstWhere((_) => true, orElse: () => null);
+      if (!mounted) return;
+      setState(() => _ownPendingInstrumentDraft = mine);
+    } catch (_) {
+      // Metadato accesorio: no bloquea el resto de la ficha.
+    }
+  }
+
+  Future<void> _edit() async {
+    final saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => CustomInstrumentFormScreen(
+          workspaceId: _instrument.workspaceId,
+          existingInstrument: _instrument,
+          existingDraft: _ownPendingInstrumentDraft?.status == GroupDocumentVersionStatus.draft
+              ? _ownPendingInstrumentDraft
+              : null,
+        ),
+      ),
+    );
+    if (saved == true && mounted) {
+      final refreshed = await CustomInstrumentService.instance.fetchById(_instrument.id);
+      setState(() {
+        _instrument = refreshed;
+        _loadingPhotos = true;
+      });
+      _loadPhotos();
+      _loadSpecialty();
+      _loadOwnPendingInstrumentDraft();
+    }
+  }
+
+  Future<void> _openHistory() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CustomInstrumentVersionHistoryScreen(
+          instrument: _instrument,
+          canRestore: widget.myRole?.canApprove ?? false,
+        ),
+      ),
+    );
+    final refreshed = await CustomInstrumentService.instance.fetchById(_instrument.id);
+    if (!mounted) return;
+    setState(() => _instrument = refreshed);
+    _loadOwnPendingInstrumentDraft();
   }
 
   Future<void> _loadIncidents() async {
@@ -453,7 +520,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
     final canDelete = widget.myRole?.canApprove ?? false;
     return Scaffold(
       appBar: AppBar(
-        title: Text(_instrument.name),
+        title: Text(_instrument.name.isEmpty ? l10n.unpublished : _instrument.name),
         actions: [
           if (AuthService.instance.currentUser != null)
             IconButton(
@@ -461,31 +528,12 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
               tooltip: l10n.favoriteToggleTooltip,
               onPressed: _toggleFavorite,
             ),
+          IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (canEdit)
             IconButton(
               icon: const Icon(Icons.edit_outlined),
               tooltip: l10n.editTooltip,
-              onPressed: () async {
-                final saved = await Navigator.of(context).push<bool>(
-                  MaterialPageRoute(
-                    builder: (_) => CustomInstrumentFormScreen(
-                      workspaceId: _instrument.workspaceId,
-                      existingInstrument: _instrument,
-                    ),
-                  ),
-                );
-                if (saved == true) {
-                  final refreshed = CustomInstrumentService.instance.byId(_instrument.id);
-                  if (refreshed != null && mounted) {
-                    setState(() {
-                      _instrument = refreshed;
-                      _loadingPhotos = true;
-                    });
-                    _loadPhotos();
-                    _loadSpecialty();
-                  }
-                }
-              },
+              onPressed: _edit,
             ),
           if (canEdit)
             IconButton(
@@ -505,6 +553,22 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            if (_ownPendingInstrumentDraft != null) ...[
+              Card(
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                child: ListTile(
+                  leading: const Icon(Icons.pending_actions),
+                  title: Text(
+                    _ownPendingInstrumentDraft!.status == GroupDocumentVersionStatus.inReview
+                        ? l10n.pendingReviewTitle
+                        : l10n.pendingDraftTitle,
+                  ),
+                  subtitle: Text(l10n.pendingDraftSubtitle),
+                  onTap: _edit,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             if (_ownPendingMethodDraft != null || _ownPendingInfoDraft != null) ...[
               Card(
                 color: Theme.of(context).colorScheme.secondaryContainer,
