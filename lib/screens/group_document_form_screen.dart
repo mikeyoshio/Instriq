@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
 import '../data/sutures_data.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
@@ -422,7 +423,8 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.editDraftAppBarTitle(kindLabel))),
       body: SafeArea(
-        child: ListView(
+        child: InstriqResponsiveContent(
+          child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             TextField(
@@ -661,6 +663,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
               child: Text(l10n.saveAsDraft),
             ),
           ],
+        ),
         ),
       ),
     );

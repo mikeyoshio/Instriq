@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../design_system/components/instriq_responsive_content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/hospital.dart';
 import '../../services/auth_service.dart';
@@ -162,7 +163,8 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _load,
-              child: ListView(
+              child: InstriqResponsiveContent(
+                child: ListView(
                 padding: const EdgeInsets.all(20),
                 children: [
                   Text(profile.organizationName ?? '', style: Theme.of(context).textTheme.headlineSmall),
@@ -253,6 +255,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                     );
                   }),
                 ],
+              ),
               ),
             ),
     );

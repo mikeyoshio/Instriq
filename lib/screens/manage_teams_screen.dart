@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/hospital.dart';
 import '../models/team.dart';
@@ -126,25 +127,27 @@ class _ManageTeamsScreenState extends State<ManageTeamsScreen> {
               ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
               : _teams.isEmpty
                   ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noTeamsYet)))
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(12),
-                      itemCount: _teams.length,
-                      itemBuilder: (context, index) {
-                        final team = _teams[index];
-                        return Card(
-                          child: ListTile(
-                            leading: const Icon(Icons.groups_outlined),
-                            title: Text(team.name),
-                            subtitle: Text(l10n.teamMembersCountTitle(_memberCounts[team.id] ?? 0)),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete_outline),
-                              tooltip: l10n.deleteTeamTooltip,
-                              onPressed: () => _deleteTeam(team),
+                  : InstriqResponsiveContent(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: _teams.length,
+                        itemBuilder: (context, index) {
+                          final team = _teams[index];
+                          return Card(
+                            child: ListTile(
+                              leading: const Icon(Icons.groups_outlined),
+                              title: Text(team.name),
+                              subtitle: Text(l10n.teamMembersCountTitle(_memberCounts[team.id] ?? 0)),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete_outline),
+                                tooltip: l10n.deleteTeamTooltip,
+                                onPressed: () => _deleteTeam(team),
+                              ),
+                              onTap: () => _openMembers(team),
                             ),
-                            onTap: () => _openMembers(team),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
     );
   }
@@ -219,23 +222,25 @@ class _TeamMembersScreenState extends State<_TeamMembersScreen> {
           ? const Center(child: CircularProgressIndicator())
           : _error != null
               ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: _orgMembers.length,
-                  itemBuilder: (context, index) {
-                    final member = _orgMembers[index];
-                    final checked = _memberIds.contains(member.id);
-                    return Card(
-                      child: CheckboxListTile(
-                        secondary: const Icon(Icons.person),
-                        title: Text(member.displayName?.isNotEmpty == true ? member.displayName! : l10n.noName),
-                        value: checked,
-                        onChanged: _pending.contains(member.id)
-                            ? null
-                            : (value) => _toggle(member, value ?? false),
-                      ),
-                    );
-                  },
+              : InstriqResponsiveContent(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(12),
+                    itemCount: _orgMembers.length,
+                    itemBuilder: (context, index) {
+                      final member = _orgMembers[index];
+                      final checked = _memberIds.contains(member.id);
+                      return Card(
+                        child: CheckboxListTile(
+                          secondary: const Icon(Icons.person),
+                          title: Text(member.displayName?.isNotEmpty == true ? member.displayName! : l10n.noName),
+                          value: checked,
+                          onChanged: _pending.contains(member.id)
+                              ? null
+                              : (value) => _toggle(member, value ?? false),
+                        ),
+                      );
+                    },
+                  ),
                 ),
     );
   }

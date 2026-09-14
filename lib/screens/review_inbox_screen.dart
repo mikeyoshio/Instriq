@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_async_view.dart';
 import '../design_system/components/instriq_list_item.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../services/contributor_service.dart';
@@ -85,7 +86,8 @@ class ReviewInboxScreen extends StatelessWidget {
         errorMessage: (error) => l10n.entityUsageLoadError(error.toString()),
         retryLabel: l10n.retry,
         builder: (context, counts) => SafeArea(
-          child: ListView(
+          child: InstriqResponsiveContent(
+            child: ListView(
             padding: const EdgeInsets.all(InstriqSpacing.lg),
             children: [
               if (counts.groupContent != null)
@@ -121,6 +123,7 @@ class ReviewInboxScreen extends StatelessWidget {
                 ),
               ],
             ],
+          ),
           ),
         ),
       ),

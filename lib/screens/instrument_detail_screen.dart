@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../design_system/components/instriq_badge.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/catalog_community_photo.dart';
 import '../models/group_document.dart';
@@ -450,7 +451,8 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
             ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: InstriqResponsiveContent(
+        child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -527,6 +529,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
             ),
           ],
         ),
+        ),
       ),
     );
   }
@@ -564,10 +567,16 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           Center(
             child: GestureDetector(
               onTap: () => launchUrl(Uri.parse(instrument.image!.sourceUrl)),
-              child: Text(
-                l10n.photoAttribution(instrument.image!.attribution, instrument.image!.license),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(decoration: TextDecoration.underline),
-                textAlign: TextAlign.center,
+              // Padding vertical para que el área táctil llegue a ~44px de
+              // alto (el texto solo mide ~16px) — ver auditoría de
+              // accesibilidad, docs/BACKLOG.md.
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  l10n.photoAttribution(instrument.image!.attribution, instrument.image!.license),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(decoration: TextDecoration.underline),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -874,12 +883,17 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
             if (ifuDocument != null)
               GestureDetector(
                 onTap: () => launchUrl(Uri.parse(ifuDocument.url)),
-                child: Text(
-                  '${l10n.technicalIfuLabel}: ${ifuDocument.title}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(decoration: TextDecoration.underline),
+                // Padding vertical para un área táctil de ~44px de alto — ver
+                // auditoría de accesibilidad, docs/BACKLOG.md.
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    '${l10n.technicalIfuLabel}: ${ifuDocument.title}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(decoration: TextDecoration.underline),
+                  ),
                 ),
               ),
             if (_tags.isNotEmpty) ...[

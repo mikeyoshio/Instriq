@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../services/profile_service.dart';
 import 'router.dart';
 import 'work_mode_header.dart';
-
-/// Breakpoint tablet: por debajo, bottom nav (`NavigationBar`); a partir de
-/// aquí, rail fijo a la izquierda (`NavigationRail`). Mismo umbral que usa
-/// Material 3 para "medium window size class".
-const _tabletBreakpoint = 840.0;
 
 /// Índice de la rama "Activitat" dentro de `appDestinations`/las 5 ramas de
 /// `StatefulShellRoute.indexedStack` en `router.dart` (0 Inici, 1 Cercar,
@@ -67,7 +63,7 @@ class AppShell extends StatelessWidget {
     final safeSelectedUiIndex = selectedUiIndex == -1 ? 0 : selectedUiIndex;
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isWide = constraints.maxWidth >= _tabletBreakpoint;
+        final isWide = constraints.maxWidth >= InstriqBreakpoints.tablet;
         if (isWide) {
           return Scaffold(
             body: Row(

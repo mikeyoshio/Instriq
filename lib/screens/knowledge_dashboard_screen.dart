@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_badge.dart';
 import '../design_system/components/instriq_list_item.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/hospital_content_stats.dart';
@@ -137,7 +138,8 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
                 )
               : RefreshIndicator(
                   onRefresh: () => Future.wait([_load(), _loadUsage()]),
-                  child: ListView(
+                  child: InstriqResponsiveContent(
+                    child: ListView(
                     padding: const EdgeInsets.all(20),
                     children: [
                       const _HonestyBanner(),
@@ -175,6 +177,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
                         resolvedViews: _resolvedViews,
                       ),
                     ],
+                  ),
                   ),
                 ),
     );

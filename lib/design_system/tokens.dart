@@ -57,6 +57,22 @@ class InstriqSpacing {
   static const xxxl = 48.0;
 }
 
+/// Único punto de referencia para "¿esto es una pantalla ancha (escritorio/
+/// tablet apaisada) o estrecha (móvil)?" — antes de esto, `app_shell.dart` y
+/// `catalog_screen.dart` declaraban cada uno su propia constante local
+/// `_tabletBreakpoint = 840.0` sin compartirla (deriva de duplicación
+/// manual). [maxContentWidth] es el ancho máximo de columna de contenido en
+/// pantallas anchas (ver `InstriqResponsiveContent`) — no tiene por qué
+/// coincidir con [tablet]: uno decide cuándo la navegación cambia de forma,
+/// el otro cuánto se ensancha el contenido de una pantalla de detalle/
+/// formulario.
+class InstriqBreakpoints {
+  InstriqBreakpoints._();
+
+  static const tablet = 840.0;
+  static const maxContentWidth = 720.0;
+}
+
 class InstriqRadius {
   InstriqRadius._();
 
