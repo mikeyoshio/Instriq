@@ -95,12 +95,14 @@
     --display: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, "Liberation Mono", monospace;
     --body: "Iowan Old Style", "Palatino Linotype", "URW Palladio L", Georgia, "Times New Roman", serif;
     --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12);
+    --shadow-lift: 0 24px 60px -20px rgba(32, 28, 23, 0.22);
+    --grain-blend: multiply;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); }
+    :root { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; }
   }
-  :root[data-theme="dark"] { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); }
-  :root[data-theme="light"] { --paper: #f6f4f0; --paper-alt: #edeae2; --surface: #ffffff; --ink: #201c17; --ink-muted: #6e6459; --rule: #e2ddd3; --accent: #a34e1c; --accent-soft: #f1e3d7; --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12); }
+  :root[data-theme="dark"] { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; }
+  :root[data-theme="light"] { --paper: #f6f4f0; --paper-alt: #edeae2; --surface: #ffffff; --ink: #201c17; --ink-muted: #6e6459; --rule: #e2ddd3; --accent: #a34e1c; --accent-soft: #f1e3d7; --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12); --shadow-lift: 0 24px 60px -20px rgba(32, 28, 23, 0.22); --grain-blend: multiply; }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -139,16 +141,21 @@
   h3 { font-size: 1.15rem; margin: 0 0 8px; font-weight: 700; }
   p { color: var(--ink-muted); margin: 0 0 18px; }
   .lede { font-size: 1.22rem; line-height: 1.65; }
-  .hero { padding: 96px 0 88px; text-align: center; }
-  .hero .wrap { display: flex; flex-direction: column; align-items: center; }
-  .hero-icon { width: 76px; height: 76px; border-radius: 20px; margin-bottom: 32px; box-shadow: var(--shadow-soft); }
-  .hero h1 { max-width: 780px; }
-  .hero .lede { max-width: 620px; margin-left: auto; margin-right: auto; }
-  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
-  .data-row { display: flex; gap: 56px; flex-wrap: wrap; justify-content: center; margin-top: 56px; }
-  .data-cell { text-align: center; }
-  .data-cell .num { font-family: var(--display); font-size: 2.1rem; font-weight: 700; color: var(--ink); }
+  .hero { padding: 90px 0 70px; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
+  .hero-copy { text-align: left; }
+  .hero-copy h1 { max-width: 600px; }
+  .hero-copy .lede { max-width: 520px; margin-left: 0; margin-right: 0; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
+  .data-row { display: flex; gap: 48px; flex-wrap: wrap; margin-top: 48px; }
+  .data-cell { text-align: left; }
+  .data-cell .num { font-family: var(--display); font-size: 2.1rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
   .data-cell .label { font-size: 0.9rem; color: var(--ink-muted); margin-top: 2px; }
+  .hero-visual { position: relative; height: 480px; }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-visual { height: 400px; margin-top: 12px; }
+  }
   .showcase { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; margin-top: 48px; max-width: 620px; margin-left: auto; margin-right: auto; }
   @media (max-width: 640px) { .showcase { grid-template-columns: 1fr; max-width: 300px; } }
   .showcase figure { margin: 0; text-align: center; }
@@ -158,9 +165,47 @@
   .cards.cols-2 { grid-template-columns: 1fr; }
   .cards.cols-3 { grid-template-columns: 1fr; }
   @media (min-width: 720px) { .cards.cols-2 { grid-template-columns: 1fr 1fr; } .cards.cols-3 { grid-template-columns: repeat(3, 1fr); } }
-  .card { background: var(--surface); border-radius: 14px; padding: 30px; box-shadow: var(--shadow-soft); }
+  .card { background: var(--surface); border-radius: 14px; padding: 30px; box-shadow: var(--shadow-soft); position: relative; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease; }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
   .card h3 { color: var(--ink); }
   .card p { margin-bottom: 0; }
+  .card .mark { width: 34px; height: 34px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; justify-content: center; }
+  .card .mark svg { width: 17px; height: 17px; }
+
+  /* Grano de papel real i barra de progrés -- detalls d'acabat, no contingut. */
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    opacity: 0.045; mix-blend-mode: var(--grain-blend, multiply);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 30; width: 0%; }
+
+  /* Deck: carrusel en viu de funcionalitats reals, dins del hero -- purament
+     automàtic (sense fletxes ni punts). */
+  .deck-stage { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .deck-card {
+    position: absolute; top: 10px; left: 50%; width: 300px; height: 440px;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 20px;
+    box-shadow: var(--shadow-lift); padding: 26px; text-align: left;
+    transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease;
+    will-change: transform, opacity;
+  }
+  .deck-tag { font-family: var(--display); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+  .deck-title { font-family: var(--display); font-weight: 700; font-size: 1.06rem; color: var(--ink); margin: 10px 0 4px; letter-spacing: -0.01em; }
+  .deck-sub { font-size: 0.82rem; color: var(--ink-muted); margin: 0; }
+  .deck-rule { height: 1px; background: var(--rule); margin: 16px 0; }
+  .deck-row { display: flex; justify-content: space-between; gap: 10px; font-size: 0.78rem; color: var(--ink-muted); padding: 7px 0; border-bottom: 1px dashed var(--rule); }
+  .deck-row b { color: var(--ink); font-weight: 600; text-align: right; }
+  .deck-steps { margin: 4px 0 0; padding: 0; list-style: none; }
+  .deck-steps li { display: flex; gap: 9px; align-items: flex-start; font-size: 0.77rem; color: var(--ink-muted); padding: 5px 0; }
+  .deck-steps .chk { width: 15px; height: 15px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; margin-top: 1px; }
+  .deck-chip { display: inline-flex; align-items: center; gap: 6px; font-family: var(--display); font-size: 0.68rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 5px 11px; margin-top: 14px; }
+  .deck-dot-lead { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .deck-roles { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
+  .deck-role { font-family: var(--display); font-size: 0.66rem; font-weight: 700; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink-muted); }
+  .deck-role.on { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+  @media (max-width: 900px) { .deck-card { width: 260px; height: 380px; padding: 22px; } }
+  @media (prefers-reduced-motion: reduce) { .deck-card { transition: none; } }
   /* Timeline interactiu de novetats */
   .timeline { max-width: var(--measure); margin: 44px auto 0; text-align: left; }
   .timeline-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 32px 34px; box-shadow: var(--shadow-soft); min-height: 168px; display: flex; flex-direction: column; justify-content: center; }
@@ -215,14 +260,15 @@
   .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
   .skip-link:focus { left: 0; }
   .hero-note { font-family: var(--display); font-size: 0.82rem; letter-spacing: 0.01em; color: var(--ink-muted); margin-top: 18px; }
-  .hero-shot { margin-top: 48px; }
-  .hero-shot img { width: 240px; height: 533px; margin: 0 auto; border-radius: 28px; box-shadow: var(--shadow-soft); border: 1px solid var(--rule); }
   .github-stars { display: flex; width: fit-content; align-items: center; gap: 7px; margin-top: 14px; color: var(--ink-muted); font-family: var(--display); font-size: 0.85rem; text-decoration: none; transition: color 0.15s ease; }
   .github-stars:hover { color: var(--accent); }
   .github-stars svg { flex-shrink: 0; }
 </style>
 </head>
 <body>
+
+<div class="grain"></div>
+<div class="progress-bar" id="progressBar"></div>
 
 <a href="#main" class="skip-link" data-i18n="a11y.skip">Saltar al contingut</a>
 
@@ -247,24 +293,89 @@
 <main id="main" tabindex="-1">
 
 <section class="hero">
-  <div class="wrap">
-    <img src="favicon.png" alt="" class="hero-icon">
-    <span class="eyebrow" data-i18n="hero.eyebrow">Open source · Bloc quirúrgic</span>
-    <h1 data-i18n="hero.h1">El coneixement de quiròfan,<br>obert i compartit entre professionals.</h1>
-    <p class="lede" data-i18n="hero.lede">Instriq reuneix instrumental, protocols i l'experiència real del bloc quirúrgic en un sol lloc, accessible des de qualsevol tauleta o mòbil — perquè aprendre a moure's al quiròfan no depengui d'una carpeta de paper desactualitzada.</p>
-    <div class="hero-actions">
-      <a href="https://app.instriq.org" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
-      <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow" data-i18n="hero.eyebrow">Open source · Bloc quirúrgic</span>
+      <h1 data-i18n="hero.h1">El coneixement de quiròfan,<br>obert i compartit.</h1>
+      <p class="lede" data-i18n="hero.lede">Instriq reuneix instrumental, protocols i l'experiència real del bloc quirúrgic en un sol lloc — perquè aprendre a moure's al quiròfan no depengui d'una carpeta de paper desactualitzada.</p>
+      <div class="hero-actions">
+        <a href="https://app.instriq.org" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
+        <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
+      </div>
+      <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
+      <div class="data-row">
+        <div class="data-cell"><div class="num" data-count="118">0</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
+        <div class="data-cell"><div class="num" data-count="17">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
+        <div class="data-cell"><div class="num" data-count="3">0</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
+        <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
+      </div>
     </div>
-    <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
-    <div class="data-row">
-      <div class="data-cell"><div class="num">118</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
-      <div class="data-cell"><div class="num">17</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
-      <div class="data-cell"><div class="num">3</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
-      <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
-    </div>
-    <div class="hero-shot">
-      <img src="screenshots/instrumento.png" alt="Fitxa d'un instrument quirúrgic real, amb foto, fabricant i dades tècniques" width="240" height="533" loading="eager">
+    <div class="hero-visual">
+      <div class="deck-stage" id="deckStage" role="region" aria-roledescription="carrusel" aria-label="Funcionalitats d'Instriq">
+
+        <article class="deck-card">
+          <span class="deck-tag" data-i18n="deck.c1tag">Protocol · Cirurgia general</span>
+          <div class="deck-title" data-i18n="deck.c1title">Colecistectomia laparoscòpica</div>
+          <p class="deck-sub" data-i18n="deck.c1sub">v3 · publicat fa 4 dies</p>
+          <div class="deck-rule"></div>
+          <ul class="deck-steps">
+            <li><span class="chk">✓</span> <span data-i18n="deck.c1s1">Posicionament i camp estèril</span></li>
+            <li><span class="chk">✓</span> <span data-i18n="deck.c1s2">Creació del pneumoperitoneu</span></li>
+            <li><span class="chk">✓</span> <span data-i18n="deck.c1s3">Dissecció del triangle de Calot</span></li>
+            <li><span class="chk">4</span> <span data-i18n="deck.c1s4">Clipatge i secció del conducte cístic</span></li>
+          </ul>
+          <span class="deck-chip"><span class="deck-dot-lead"></span> <span data-i18n="deck.c1chip">Aprovat per l'equip</span></span>
+        </article>
+
+        <article class="deck-card">
+          <span class="deck-tag" data-i18n="deck.c2tag">Instrumental · Catàleg</span>
+          <div class="deck-title" data-i18n="deck.c2title">Kelly recta 18cm</div>
+          <p class="deck-sub" data-i18n="deck.c2sub">Aesculap · Pinça hemostàtica</p>
+          <div class="deck-rule"></div>
+          <div class="deck-row"><span data-i18n="deck.c2r1k">Esterilització</span><b data-i18n="deck.c2r1v">Vapor 134°C</b></div>
+          <div class="deck-row"><span data-i18n="deck.c2r2k">Usat a</span><b data-i18n="deck.c2r2v">Colecistectomia</b></div>
+          <div class="deck-row"><span data-i18n="deck.c2r3k">Compatible amb</span><b data-i18n="deck.c2r3v">Safata general</b></div>
+          <div class="deck-row" style="border-bottom:none;"><span data-i18n="deck.c2r4k">Estat</span><b data-i18n="deck.c2r4v">Publicat</b></div>
+          <span class="deck-chip"><span class="deck-dot-lead"></span> <span data-i18n="deck.c2chip">Fitxa tècnica completa</span></span>
+        </article>
+
+        <article class="deck-card">
+          <span class="deck-tag" data-i18n="deck.c3tag">Safata · Bandeja general</span>
+          <div class="deck-title" data-i18n="deck.c3title">Bandeja Laparoscòpia Bàsica</div>
+          <p class="deck-sub" data-i18n="deck.c3sub">14 instruments · esterilitzada</p>
+          <div class="deck-rule"></div>
+          <div class="deck-row"><span data-i18n="deck.c3r1k">Última preparació</span><b data-i18n="deck.c3r1v">Avui, 07:42</b></div>
+          <div class="deck-row"><span data-i18n="deck.c3r2k">Control de qualitat</span><b data-i18n="deck.c3r2v">Validat</b></div>
+          <div class="deck-row" style="border-bottom:none;"><span data-i18n="deck.c3r3k">Estat</span><b data-i18n="deck.c3r3v">Publicada</b></div>
+          <span class="deck-chip"><span class="deck-dot-lead"></span> <span data-i18n="deck.c3chip">Checklist complet</span></span>
+        </article>
+
+        <article class="deck-card">
+          <span class="deck-tag" data-i18n="deck.c4tag">Targeta de preferència</span>
+          <div class="deck-title" data-i18n="deck.c4title">Dr. Martí · Apendicectomia</div>
+          <p class="deck-sub" data-i18n="deck.c4sub">Validada pel cirurgià</p>
+          <div class="deck-rule"></div>
+          <div class="deck-row"><span data-i18n="deck.c4r1k">Instrumental</span><b data-i18n="deck.c4r1v">Safata bàsica +3</b></div>
+          <div class="deck-row"><span data-i18n="deck.c4r2k">Sutures</span><b>Vicryl 2-0</b></div>
+          <div class="deck-row" style="border-bottom:none;"><span data-i18n="deck.c4r3k">Posicionament</span><b data-i18n="deck.c4r3v">Decúbit supí</b></div>
+          <span class="deck-chip"><span class="deck-dot-lead"></span> <span data-i18n="deck.c4chip">Validada pel cirurgià</span></span>
+        </article>
+
+        <article class="deck-card">
+          <span class="deck-tag" data-i18n="deck.c5tag">Equip · Rols</span>
+          <div class="deck-title" data-i18n="deck.c5title">Quiròfan 3 · Cirurgia General</div>
+          <p class="deck-sub" data-i18n="deck.c5sub">8 membres actius</p>
+          <div class="deck-rule"></div>
+          <p class="deck-sub" style="margin-bottom:6px;" data-i18n="deck.c5rolesLabel">Rols per espai:</p>
+          <div class="deck-roles">
+            <span class="deck-role on" data-i18n="deck.c5role1">2 aprovadors</span>
+            <span class="deck-role" data-i18n="deck.c5role2">4 editors</span>
+            <span class="deck-role" data-i18n="deck.c5role3">2 lectors</span>
+          </div>
+          <span class="deck-chip"><span class="deck-dot-lead"></span> <span data-i18n="deck.c5chip">Auditoria activa</span></span>
+        </article>
+
+      </div>
     </div>
   </div>
 </section>
@@ -286,10 +397,22 @@
     <h2 data-i18n="valores.h1">La força d'Instriq és la intel·ligència col·lectiva.</h2>
     <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="valores.lede">Cada aportació construeix una base de coneixement més completa i revisada per a tota la comunitat. Com més persones comparteixin la seva experiència, millor la informació disponible per a totes.</p>
     <div class="cards cols-2" style="text-align: left;">
-      <div class="card"><h3 data-i18n="valores.c1t">Accés lliure</h3><p data-i18n="valores.c1p">Sense quota mensual ni preu per usuari, a diferència de la majoria d'eines del sector. El catàleg i l'aprenentatge bàsic no requereixen ni compte: ningú es queda fora per no tenir pressupost.</p></div>
-      <div class="card"><h3 data-i18n="valores.c2t">Transparència</h3><p data-i18n="valores.c2p">Codi obert, decisions públiques i, en el futur, comptes clars de com s'utilitza cada donació.</p></div>
-      <div class="card"><h3 data-i18n="valores.c3t">Col·laboració real</h3><p data-i18n="valores.c3p">Construït amb professionals sanitaris i desenvolupadors voluntaris, no per una empresa tancada.</p></div>
-      <div class="card"><h3 data-i18n="valores.c4t">Estàndards oberts</h3><p data-i18n="valores.c4p">Busquem alinear-nos amb estàndards reconeguts del sector (HL7, FHIR, DICOM) segons ho necessiti el projecte.</p></div>
+      <div class="card">
+        <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg></span>
+        <h3 data-i18n="valores.c1t">Accés lliure</h3><p data-i18n="valores.c1p">Sense quota mensual ni preu per usuari, a diferència de la majoria d'eines del sector. El catàleg i l'aprenentatge bàsic no requereixen ni compte: ningú es queda fora per no tenir pressupost.</p>
+      </div>
+      <div class="card">
+        <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7-10.5-7-10.5-7Z"/><circle cx="12" cy="12" r="2.8"/></svg></span>
+        <h3 data-i18n="valores.c2t">Transparència</h3><p data-i18n="valores.c2p">Codi obert, decisions públiques i, en el futur, comptes clars de com s'utilitza cada donació.</p>
+      </div>
+      <div class="card">
+        <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V21"/><circle cx="9.5" cy="7.5" r="3.5"/><path d="M22 21v-1.5a4 4 0 0 0-3-3.87"/><path d="M15.5 3.63a4 4 0 0 1 0 7.75"/></svg></span>
+        <h3 data-i18n="valores.c3t">Col·laboració real</h3><p data-i18n="valores.c3p">Construït amb professionals sanitaris i desenvolupadors voluntaris, no per una empresa tancada.</p>
+      </div>
+      <div class="card">
+        <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 14.5l5-5"/><path d="M8 16a3.2 3.2 0 0 1 0-4.5l2-2"/><path d="M16 8a3.2 3.2 0 0 1 0 4.5l-2 2"/></svg></span>
+        <h3 data-i18n="valores.c4t">Estàndards oberts</h3><p data-i18n="valores.c4p">Busquem alinear-nos amb estàndards reconeguts del sector (HL7, FHIR, DICOM) segons ho necessiti el projecte.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -520,6 +643,66 @@
 
 <script>
 (function () {
+  var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Barra de progrés de lectura.
+  (function () {
+    var bar = document.getElementById('progressBar');
+    if (!bar) return;
+    function update() {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    }
+    document.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
+  // Comptador de les xifres del hero (no la d'equips actius, que ja porta
+  // el seu propi valor real via fetch més avall).
+  (function () {
+    document.querySelectorAll('.data-cell .num[data-count]').forEach(function (el) {
+      var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+      if (reducedMotion) { el.textContent = target; return; }
+      var start = null, duration = 1100;
+      function step(ts) {
+        if (start === null) start = ts;
+        var p = Math.min((ts - start) / duration, 1);
+        el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target);
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  })();
+
+  // Carrusel "deck" del hero: purament automàtic, sense fletxes ni punts.
+  (function () {
+    var stage = document.getElementById('deckStage');
+    if (!stage) return;
+    var cards = Array.prototype.slice.call(stage.querySelectorAll('.deck-card'));
+    var n = cards.length, active = 0;
+    function place() {
+      cards.forEach(function (card, i) {
+        var diff = i - active;
+        if (diff > n / 2) diff -= n;
+        if (diff < -n / 2) diff += n;
+        var abs = Math.abs(diff);
+        var x = diff * 74, scale = 1, opacity = 1, z = 10, blur = 0;
+        if (abs === 1) { scale = 0.86; opacity = 0.45; z = 5; blur = 2; }
+        else if (abs >= 2) { scale = 0.72; opacity = 0; z = 1; blur = 4; }
+        card.style.transform = 'translateX(-50%) translateX(' + x + '%) scale(' + scale + ')';
+        card.style.opacity = opacity;
+        card.style.filter = blur ? 'blur(' + blur + 'px)' : 'none';
+        card.style.zIndex = z;
+        card.setAttribute('aria-hidden', i === active ? 'false' : 'true');
+      });
+    }
+    place();
+    if (!reducedMotion) {
+      setInterval(function () { active = (active + 1) % n; place(); }, 3800);
+    }
+  })();
+
   var DICT = {
     es: {
       "meta.title": "Instriq — Conocimiento de quirófano abierto y compartido",
@@ -527,11 +710,26 @@
       "a11y.skip": "Saltar al contenido",
       "nav.mision": "Misión", "nav.funciones": "Funcionalidades", "nav.hoy": "Hoy", "nav.colabora": "Colabora", "nav.transparencia": "Transparencia", "nav.cta": "Abrir la app",
       "hero.eyebrow": "Open source · Bloque quirúrgico",
-      "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido entre profesionales.",
-      "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar, accesible desde cualquier tablet o móvil — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
+      "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
+      "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
       "hero.cta1": "Abrir la app →", "hero.cta2": "Ver el código en GitHub",
       "hero.note": "Sin licencias. Sin cuota de SaaS. Sin sorpresas en la factura — abierto, siempre.",
       "hero.stat1": "Instrumentos", "hero.stat2": "Especialidades", "hero.stat3": "Plataformas", "hero.stat4": "Equipos activos",
+      "deck.c1tag": "Protocolo · Cirugía general", "deck.c1title": "Colecistectomía laparoscópica", "deck.c1sub": "v3 · publicado hace 4 días",
+      "deck.c1s1": "Posicionamiento y campo estéril", "deck.c1s2": "Creación del neumoperitoneo", "deck.c1s3": "Disección del triángulo de Calot", "deck.c1s4": "Clipado y sección del conducto cístico",
+      "deck.c1chip": "Aprobado por el equipo",
+      "deck.c2tag": "Instrumental · Catálogo", "deck.c2title": "Kelly recta 18cm", "deck.c2sub": "Aesculap · Pinza hemostática",
+      "deck.c2r1k": "Esterilización", "deck.c2r1v": "Vapor 134°C", "deck.c2r2k": "Usado en", "deck.c2r2v": "Colecistectomía", "deck.c2r3k": "Compatible con", "deck.c2r3v": "Bandeja general", "deck.c2r4k": "Estado", "deck.c2r4v": "Publicado",
+      "deck.c2chip": "Ficha técnica completa",
+      "deck.c3tag": "Bandeja · Bandeja general", "deck.c3title": "Bandeja Laparoscopia Básica", "deck.c3sub": "14 instrumentos · esterilizada",
+      "deck.c3r1k": "Última preparación", "deck.c3r1v": "Hoy, 07:42", "deck.c3r2k": "Control de calidad", "deck.c3r2v": "Validado", "deck.c3r3k": "Estado", "deck.c3r3v": "Publicada",
+      "deck.c3chip": "Checklist completo",
+      "deck.c4tag": "Tarjeta de preferencia", "deck.c4title": "Dr. Martí · Apendicectomía", "deck.c4sub": "Validada por el cirujano",
+      "deck.c4r1k": "Instrumental", "deck.c4r1v": "Bandeja básica +3", "deck.c4r2k": "Suturas", "deck.c4r3k": "Posicionamiento", "deck.c4r3v": "Decúbito supino",
+      "deck.c4chip": "Validada por el cirujano",
+      "deck.c5tag": "Equipo · Roles", "deck.c5title": "Quirófano 3 · Cirugía General", "deck.c5sub": "8 miembros activos",
+      "deck.c5rolesLabel": "Roles por espacio:", "deck.c5role1": "2 aprobadores", "deck.c5role2": "4 editores", "deck.c5role3": "2 lectores",
+      "deck.c5chip": "Auditoría activa",
       "mision.eyebrow1": "Misión", "mision.h1": "Reducir la curva de aprendizaje en quirófano.",
       "mision.p1": "Incorporarse a un bloque quirúrgico exige adquirir muchísimo conocimiento práctico en poco tiempo. Instriq existe para que cualquier instrumentista, enfermera, auxiliar o miembro del equipo quirúrgico encuentre información fiable, actualizada y basada en la experiencia real de otros profesionales — no en un manual genérico.",
       "mision.eyebrow2": "Visión", "mision.h2": "La plataforma de referencia del bloque quirúrgico.",
@@ -603,11 +801,26 @@
       "a11y.skip": "Skip to content",
       "nav.mision": "Mission", "nav.funciones": "Features", "nav.hoy": "Today", "nav.colabora": "Contribute", "nav.transparencia": "Transparency", "nav.cta": "Open the app",
       "hero.eyebrow": "Open source · Surgical block",
-      "hero.h1": "Operating room knowledge,<br>open and shared between professionals.",
-      "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place, accessible from any tablet or phone — so learning your way around the OR doesn't depend on an outdated paper binder.",
+      "hero.h1": "Operating room knowledge,<br>open and shared.",
+      "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
       "hero.cta1": "Open the app →", "hero.cta2": "View the code on GitHub",
       "hero.note": "No licenses. No SaaS fee. No surprises on the bill — open, always.",
       "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Platforms", "hero.stat4": "Active teams",
+      "deck.c1tag": "Protocol · General surgery", "deck.c1title": "Laparoscopic cholecystectomy", "deck.c1sub": "v3 · published 4 days ago",
+      "deck.c1s1": "Positioning and sterile field", "deck.c1s2": "Creating the pneumoperitoneum", "deck.c1s3": "Dissecting Calot's triangle", "deck.c1s4": "Clipping and dividing the cystic duct",
+      "deck.c1chip": "Approved by the team",
+      "deck.c2tag": "Instruments · Catalog", "deck.c2title": "Straight Kelly 18cm", "deck.c2sub": "Aesculap · Hemostatic forceps",
+      "deck.c2r1k": "Sterilization", "deck.c2r1v": "Steam 134°C", "deck.c2r2k": "Used in", "deck.c2r2v": "Cholecystectomy", "deck.c2r3k": "Compatible with", "deck.c2r3v": "General tray", "deck.c2r4k": "Status", "deck.c2r4v": "Published",
+      "deck.c2chip": "Full technical sheet",
+      "deck.c3tag": "Tray · General tray", "deck.c3title": "Basic Laparoscopy Tray", "deck.c3sub": "14 instruments · sterilized",
+      "deck.c3r1k": "Last prep", "deck.c3r1v": "Today, 07:42", "deck.c3r2k": "Quality control", "deck.c3r2v": "Validated", "deck.c3r3k": "Status", "deck.c3r3v": "Published",
+      "deck.c3chip": "Full checklist",
+      "deck.c4tag": "Preference card", "deck.c4title": "Dr. Martí · Appendectomy", "deck.c4sub": "Validated by the surgeon",
+      "deck.c4r1k": "Instruments", "deck.c4r1v": "Basic tray +3", "deck.c4r2k": "Sutures", "deck.c4r3k": "Positioning", "deck.c4r3v": "Supine",
+      "deck.c4chip": "Validated by the surgeon",
+      "deck.c5tag": "Team · Roles", "deck.c5title": "OR 3 · General Surgery", "deck.c5sub": "8 active members",
+      "deck.c5rolesLabel": "Roles per space:", "deck.c5role1": "2 approvers", "deck.c5role2": "4 editors", "deck.c5role3": "2 readers",
+      "deck.c5chip": "Audit trail active",
       "mision.eyebrow1": "Mission", "mision.h1": "Shortening the OR learning curve.",
       "mision.p1": "Joining a surgical team means absorbing a huge amount of practical knowledge in very little time. Instriq exists so any scrub nurse, nurse, aide or surgical team member can find reliable, up-to-date information grounded in other professionals' real experience — not a generic manual.",
       "mision.eyebrow2": "Vision", "mision.h2": "The reference platform for the surgical block.",
