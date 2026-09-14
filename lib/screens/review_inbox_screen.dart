@@ -5,6 +5,7 @@ import '../design_system/components/instriq_list_item.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../services/contributor_service.dart';
+import '../services/custom_instrument_service.dart';
 import '../services/group_document_service.dart';
 import '../services/preference_card_service.dart';
 import '../services/profile_service.dart';
@@ -51,6 +52,7 @@ class ReviewInboxScreen extends StatelessWidget {
           PreferenceCardService.instance.fetchReviewQueue(),
           SterilizationService.instance.fetchMethodReviewQueue(),
           SterilizationService.instance.fetchTechnicalInfoReviewQueue(),
+          CustomInstrumentService.instance.fetchReviewQueue(),
         ]).then((lists) => lists.fold<int>(0, (sum, l) => sum + l.length))
       else
         Future.value(null),

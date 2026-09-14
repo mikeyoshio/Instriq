@@ -3,12 +3,21 @@ import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/custom_instrument.dart';
-import 'profile_service.dart';
+import '../models/group_document_version.dart';
+import 'auth_service.dart';
 
-/// CRUD del instrumental personalizado de un equipo y de sus variantes/fotos.
-/// Ver supabase/schema_v13_custom_instruments.sql: cada fila está aislada por
-/// RLS al workspace/hospital que la creó — este servicio nunca mezcla ese
-/// contenido con el catálogo global (`lib/data/instruments_data.dart`).
+/// CRUD y workflow (borrador -> en revisión -> publicada -> archivada) del
+/// instrumental personalizado de un equipo. Calcado de [TrayService] (ver
+/// supabase/schema_v39_custom_instrument_versioning.sql) — las variantes
+/// (nombre/foto/nota) viven dentro de la versión como jsonb, igual que los
+/// items de una bandeja: editarlas exige un borrador nuevo, no un CRUD aparte
+/// como antes de esta migración (ver docs/ADR_004_VERSIONING.md §5).
+///
+/// A diferencia de [TrayService]/[GroupDocumentService], no pasa por
+/// [SyncQueueService]/[OfflineCacheService]: el modo sin conexión no se pidió
+/// para esta 4a instancia (ver docs/BACKLOG.md) — se puede generalizar más
+/// adelante si el uso real lo pide, siguiendo el mismo patrón ya probado en
+/// los otros 3 servicios.
 class CustomInstrumentService {
   CustomInstrumentService._();
   static final CustomInstrumentService instance = CustomInstrumentService._();
@@ -16,7 +25,7 @@ class CustomInstrumentService {
   SupabaseClient get _client => Supabase.instance.client;
 
   static const _bucket = 'custom-instrument-photos';
-  static const _variantsJoin = '*, custom_instrument_variants(*)';
+  static const _publishedJoin = '*, published_version:published_version_id(*)';
 
   List<CustomInstrument> _instruments = [];
 
@@ -29,14 +38,13 @@ class CustomInstrumentService {
   }
 
   Future<void> fetchForWorkspace(String workspaceId) async {
-    final rows = await _client
-        .from('custom_instruments')
-        .select(_variantsJoin)
-        .eq('workspace_id', workspaceId)
-        .order('name');
-    _instruments = (rows as List<dynamic>)
-        .map((r) => CustomInstrument.fromRow(r as Map<String, dynamic>))
-        .toList();
+    final rows = await _client.from('custom_instruments').select(_publishedJoin).eq('workspace_id', workspaceId);
+    final fetched = (rows as List<dynamic>).map((r) => CustomInstrument.fromRow(r as Map<String, dynamic>)).toList();
+    fetched.sort((a, b) => a.name.compareTo(b.name));
+    _instruments = [
+      ..._instruments.where((i) => i.workspaceId != workspaceId),
+      ...fetched,
+    ];
   }
 
   CustomInstrument? byId(String id) {
@@ -46,114 +54,168 @@ class CustomInstrumentService {
     return null;
   }
 
-  /// Fetch puntual por id (sin pasar por el caché de workspace) — usado por
-  /// [RecentActivityService]/[FavoritesService] para resolver un ref a título
-  /// humano sin haber cargado antes todo el workspace al que pertenece.
+  /// Fetch puntual por id (con la versión publicada resuelta), sin pasar por
+  /// el caché de workspace — usado por [RecentActivityService]/
+  /// [FavoritesService] para resolver un ref a título humano, y para
+  /// refrescar la ficha tras editar/aprobar.
   Future<CustomInstrument> fetchById(String id) async {
-    final row = await _client.from('custom_instruments').select().eq('id', id).single();
+    final row = await _client.from('custom_instruments').select(_publishedJoin).eq('id', id).single();
     return CustomInstrument.fromRow(row);
   }
 
-  Future<CustomInstrument> create(CustomInstrument instrument) async {
-    final organizationId = ProfileService.instance.organizationId;
-    if (organizationId == null) {
-      throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
-    }
-    final row = await _client
-        .from('custom_instruments')
-        .insert(instrument.copyWith().toRow())
-        .select(_variantsJoin)
-        .single();
-    final created = CustomInstrument.fromRow(row);
-    _instruments.add(created);
-    return created;
+  Future<List<CustomInstrumentVersion>> fetchVersionHistory(String instrumentId) async {
+    final rows = await _client
+        .from('custom_instrument_versions')
+        .select()
+        .eq('custom_instrument_id', instrumentId)
+        .order('version_number', ascending: false);
+    return (rows as List<dynamic>).map((r) => CustomInstrumentVersion.fromRow(r as Map<String, dynamic>)).toList();
   }
 
-  Future<CustomInstrument> update(CustomInstrument instrument) async {
-    final row = await _client
-        .from('custom_instruments')
-        .update(instrument.toRow())
-        .eq('id', instrument.id)
-        .select(_variantsJoin)
-        .single();
-    final updated = CustomInstrument.fromRow(row);
-    final index = _instruments.indexWhere((i) => i.id == updated.id);
-    if (index == -1) {
-      _instruments.add(updated);
-    } else {
-      _instruments[index] = updated;
+  /// Crea un instrumento nuevo con su primera versión en borrador.
+  Future<CustomInstrumentVersion> create(String workspaceId) async {
+    final versionRow = await _client.rpc('create_custom_instrument', params: {'p_workspace_id': workspaceId});
+    return CustomInstrumentVersion.fromRow(versionRow as Map<String, dynamic>);
+  }
+
+  /// Devuelve el borrador propio en curso para [instrument] si existe, o crea
+  /// uno nuevo a partir de la versión publicada.
+  Future<CustomInstrumentVersion> startEditing(CustomInstrument instrument) async {
+    final userId = AuthService.instance.currentUser?.id;
+    if (userId == null) {
+      throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
-    return updated;
+    final existing = await _client
+        .from('custom_instrument_versions')
+        .select()
+        .eq('custom_instrument_id', instrument.id)
+        .eq('author_id', userId)
+        .inFilter('status', ['draft', 'in_review'])
+        .order('version_number', ascending: false)
+        .limit(1)
+        .maybeSingle();
+    if (existing != null) {
+      final version = CustomInstrumentVersion.fromRow(existing);
+      // Ver la nota equivalente en TrayService.startEditing: una versión en
+      // revisión no es continuable (la política de UPDATE exige
+      // status = 'draft'), así que hay que avisar aquí, no dejar que falle
+      // al guardar con un error de Postgres críptico.
+      if (version.status == GroupDocumentVersionStatus.inReview) {
+        throw StateError(
+            'Ya tienes una versión enviada a revisión: no se puede editar hasta que se apruebe, se rechace o se retire.');
+      }
+      return version;
+    }
+
+    final published = instrument.publishedVersion;
+    if (published == null) {
+      throw StateError('Este instrumento todavía no tiene una versión publicada.');
+    }
+    final versions = await fetchVersionHistory(instrument.id);
+    final nextVersionNumber =
+        versions.isEmpty ? 1 : versions.map((v) => v.versionNumber).reduce((a, b) => a > b ? a : b) + 1;
+
+    final versionRow = await _client
+        .from('custom_instrument_versions')
+        .insert({
+          'custom_instrument_id': instrument.id,
+          'version_number': nextVersionNumber,
+          'status': GroupDocumentVersionStatus.draft.dbValue,
+          'name': published.name,
+          'category': published.category,
+          'specialty_id': published.specialtyId,
+          'description': published.description,
+          'use_text': published.useText,
+          'tip': published.tip,
+          'variants': published.variants.map((v) => v.toJson()).toList(),
+          'author_id': userId,
+          'based_on_version_id': published.id,
+        })
+        .select()
+        .single();
+    return CustomInstrumentVersion.fromRow(versionRow);
+  }
+
+  Future<CustomInstrumentVersion> saveDraft(CustomInstrumentVersion version) async {
+    final row =
+        await _client.from('custom_instrument_versions').update(version.toRow()).eq('id', version.id).select().single();
+    return CustomInstrumentVersion.fromRow(row);
+  }
+
+  Future<void> submitForReview(String versionId) async {
+    await _client.rpc('submit_custom_instrument_version_for_review', params: {'p_version_id': versionId});
+  }
+
+  Future<void> approve(String versionId, {String? comment}) async {
+    await _client.rpc('approve_custom_instrument_version', params: {
+      'p_version_id': versionId,
+      'p_review_comment': comment,
+    });
+  }
+
+  Future<void> reject(String versionId, {String? comment}) async {
+    await _client.rpc('reject_custom_instrument_version', params: {
+      'p_version_id': versionId,
+      'p_review_comment': comment,
+    });
+  }
+
+  Future<String> restore(String versionId) async {
+    final newId = await _client.rpc('restore_custom_instrument_version', params: {'p_version_id': versionId});
+    return newId as String;
+  }
+
+  /// Versiones en revisión de todo el grupo, para la cola de aprobación.
+  Future<List<CustomInstrumentVersion>> fetchReviewQueue() async {
+    final rows = await _client
+        .from('custom_instrument_versions')
+        .select()
+        .eq('status', GroupDocumentVersionStatus.inReview.dbValue)
+        .order('created_at');
+    return (rows as List<dynamic>).map((r) => CustomInstrumentVersion.fromRow(r as Map<String, dynamic>)).toList();
+  }
+
+  /// Nombre del espacio de cada instrumento, para mostrar contexto en la cola
+  /// de revisión (mismo patrón que [TrayService.fetchWorkspaceNamesForTrays]).
+  Future<Map<String, String>> fetchWorkspaceNamesForInstruments(List<String> instrumentIds) async {
+    if (instrumentIds.isEmpty) return {};
+    final rows =
+        await _client.from('custom_instruments').select('id, workspaces(name)').inFilter('id', instrumentIds);
+    final result = <String, String>{};
+    for (final r in (rows as List<dynamic>)) {
+      final row = r as Map<String, dynamic>;
+      final workspaceRow = row['workspaces'] as Map<String, dynamic>?;
+      if (workspaceRow?['name'] != null) {
+        result[row['id'] as String] = workspaceRow!['name'] as String;
+      }
+    }
+    return result;
   }
 
   Future<void> delete(String id) async {
-    await _client.from('custom_instruments').delete().eq('id', id);
+    await _client.rpc('delete_custom_instrument', params: {'p_instrument_id': id});
     _instruments.removeWhere((i) => i.id == id);
   }
 
-  Future<CustomInstrumentVariant> addVariant(CustomInstrumentVariant variant) async {
-    final row = await _client.from('custom_instrument_variants').insert(variant.toRow()).select().single();
-    final created = CustomInstrumentVariant.fromRow(row);
-    _replaceVariantInMemory(created);
-    return created;
-  }
-
-  Future<CustomInstrumentVariant> updateVariant(CustomInstrumentVariant variant) async {
-    final row = await _client
-        .from('custom_instrument_variants')
-        .update(variant.toRow())
-        .eq('id', variant.id)
-        .select()
-        .single();
-    final updated = CustomInstrumentVariant.fromRow(row);
-    _replaceVariantInMemory(updated);
-    return updated;
-  }
-
-  Future<void> deleteVariant(String variantId, String customInstrumentId) async {
-    await _client.from('custom_instrument_variants').delete().eq('id', variantId);
-    final index = _instruments.indexWhere((i) => i.id == customInstrumentId);
-    if (index != -1) {
-      final instrument = _instruments[index];
-      _instruments[index] = instrument.copyWith(
-        variants: instrument.variants.where((v) => v.id != variantId).toList(),
-      );
-    }
-  }
-
-  void _replaceVariantInMemory(CustomInstrumentVariant variant) {
-    final index = _instruments.indexWhere((i) => i.id == variant.customInstrumentId);
-    if (index == -1) return;
-    final instrument = _instruments[index];
-    final variants = List<CustomInstrumentVariant>.of(instrument.variants);
-    final variantIndex = variants.indexWhere((v) => v.id == variant.id);
-    if (variantIndex == -1) {
-      variants.add(variant);
-    } else {
-      variants[variantIndex] = variant;
-    }
-    _instruments[index] = instrument.copyWith(variants: variants);
-  }
-
-  /// Sube la foto de una variante al bucket privado, con la ruta convenida
-  /// `{organization_id}/{workspace_id}/{custom_instrument_id}/{variant_id}.<ext>`
-  /// (ver schema_v13), y guarda `photo_path` en la fila. El bucket NO es
-  /// público: para mostrarla hay que pedir una signed URL con
-  /// [getVariantPhotoUrl].
-  Future<CustomInstrumentVariant> uploadVariantPhoto({
-    required CustomInstrumentVariant variant,
+  /// Sube una foto de variante al bucket privado `custom-instrument-photos`,
+  /// con un nombre de archivo único por subida (timestamp, no
+  /// `{variant_id}.ext` fijo como antes de esta migración) para que una foto
+  /// nueva de un borrador nunca pise la que ya se muestra en la versión
+  /// publicada mientras se aprueba — mismo criterio que
+  /// [TrayService.uploadPhoto]. Devuelve el path guardado, que hay que
+  /// asignar a [CustomInstrumentVariant.photoPath] y persistir con
+  /// [saveDraft].
+  Future<String> uploadVariantPhoto({
     required String organizationId,
     required String workspaceId,
+    required String instrumentId,
     required File file,
   }) async {
     final ext = _extensionOf(file.path);
-    final path = '$organizationId/$workspaceId/${variant.customInstrumentId}/${variant.id}.$ext';
-    await _client.storage.from(_bucket).upload(
-          path,
-          file,
-          fileOptions: const FileOptions(upsert: true),
-        );
-    return updateVariant(variant.copyWith(photoPath: path));
+    final fileName = '${DateTime.now().microsecondsSinceEpoch}.$ext';
+    final path = '$organizationId/$workspaceId/$instrumentId/$fileName';
+    await _client.storage.from(_bucket).upload(path, file, fileOptions: const FileOptions(upsert: true));
+    return path;
   }
 
   String _extensionOf(String path) {
