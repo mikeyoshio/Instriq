@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../data/instruments_data.dart';
 import '../models/instrument.dart';
@@ -238,8 +239,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
 /// mòbil, on el gest de swipe és obvi, es manté el `ListView` horitzontal
 /// original per no perdre espai vertical.
 class _FilterChipRow extends StatelessWidget {
-  static const _tabletBreakpoint = 840.0;
-
   final List<Widget> chips;
 
   const _FilterChipRow({required this.chips});
@@ -248,7 +247,7 @@ class _FilterChipRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth >= _tabletBreakpoint) {
+        if (constraints.maxWidth >= InstriqBreakpoints.tablet) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Wrap(

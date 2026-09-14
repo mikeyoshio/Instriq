@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
@@ -256,7 +257,8 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : ListView(
+          : InstriqResponsiveContent(
+              child: ListView(
               padding: const EdgeInsets.all(20),
               children: [
                 if (_ownPendingDraft != null) ...[
@@ -401,6 +403,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                   ],
                 ],
               ],
+            ),
             ),
     );
   }

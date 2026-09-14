@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/workspace.dart';
@@ -67,7 +68,8 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
       body: _loadingRole
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
-              child: ListView(
+              child: InstriqResponsiveContent(
+                child: ListView(
                 padding: const EdgeInsets.all(20),
                 children: [
                   if (widget.workspace.description != null) ...[
@@ -145,6 +147,7 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
                     ),
                   ],
                 ],
+              ),
               ),
             ),
     );

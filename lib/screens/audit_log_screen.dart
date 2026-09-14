@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/audit_entry.dart';
 import '../services/audit_service.dart';
@@ -78,11 +79,13 @@ class _AuditLogScreenState extends State<AuditLogScreen> {
                           ),
                         ],
                       )
-                    : ListView.separated(
-                        padding: const EdgeInsets.all(12),
-                        itemCount: _entries.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 4),
-                        itemBuilder: (context, index) => _AuditEntryTile(entry: _entries[index]),
+                    : InstriqResponsiveContent(
+                        child: ListView.separated(
+                          padding: const EdgeInsets.all(12),
+                          itemCount: _entries.length,
+                          separatorBuilder: (_, __) => const SizedBox(height: 4),
+                          itemBuilder: (context, index) => _AuditEntryTile(entry: _entries[index]),
+                        ),
                       ),
       ),
     );

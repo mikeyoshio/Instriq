@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/specialty_entity.dart';
@@ -262,7 +263,8 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
     return Scaffold(
       appBar: AppBar(title: Text(isEditing ? l10n.editCustomInstrumentTitle : l10n.newCustomInstrumentLabel)),
       body: SafeArea(
-        child: ListView(
+        child: InstriqResponsiveContent(
+          child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             TextField(
@@ -416,6 +418,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
               Text(_error!, style: const TextStyle(color: Colors.red)),
             ],
           ],
+        ),
         ),
       ),
       bottomNavigationBar: SafeArea(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
@@ -260,7 +261,8 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
         title: Text(isEditing ? l10n.editDraftAppBarTitle(l10n.preferenceCardTitle) : l10n.newCardLabel),
       ),
       body: SafeArea(
-        child: ListView(
+        child: InstriqResponsiveContent(
+          child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             Autocomplete<Surgeon>(
@@ -381,6 +383,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
               child: Text(l10n.saveAsDraft),
             ),
           ],
+        ),
         ),
       ),
     );

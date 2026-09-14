@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../data/instruments_data.dart';
 import '../design_system/components/instriq_list_item.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/components/instriq_section_header.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
@@ -550,38 +551,40 @@ class _HomeScreenState extends State<HomeScreen> {
             : null,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: InstriqSpacing.lg, vertical: InstriqSpacing.sm),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: l10n.homeSearchHint,
-                  border: OutlineInputBorder(borderRadius: InstriqRadius.mdRadius),
-                  suffixIcon: _query.isEmpty
-                      ? null
-                      : IconButton(
-                          icon: const Icon(Icons.clear),
-                          tooltip: l10n.clearSearchTooltip,
-                          onPressed: () {
-                            _searchAnalyticsDebounce?.cancel();
-                            _searchController.clear();
-                            setState(() => _query = '');
-                          },
-                        ),
+        child: InstriqResponsiveContent(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: InstriqSpacing.lg, vertical: InstriqSpacing.sm),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    hintText: l10n.homeSearchHint,
+                    border: OutlineInputBorder(borderRadius: InstriqRadius.mdRadius),
+                    suffixIcon: _query.isEmpty
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.clear),
+                            tooltip: l10n.clearSearchTooltip,
+                            onPressed: () {
+                              _searchAnalyticsDebounce?.cancel();
+                              _searchController.clear();
+                              setState(() => _query = '');
+                            },
+                          ),
+                  ),
+                  onChanged: (value) {
+                    setState(() => _query = value);
+                    _scheduleSearchAnalytics(value);
+                  },
                 ),
-                onChanged: (value) {
-                  setState(() => _query = value);
-                  _scheduleSearchAnalytics(value);
-                },
               ),
-            ),
-            Expanded(
-              child: _query.isEmpty ? _buildDefaultBody(context, l10n) : _buildSearchResults(context, l10n),
-            ),
-          ],
+              Expanded(
+                child: _query.isEmpty ? _buildDefaultBody(context, l10n) : _buildSearchResults(context, l10n),
+              ),
+            ],
+          ),
         ),
       ),
     );

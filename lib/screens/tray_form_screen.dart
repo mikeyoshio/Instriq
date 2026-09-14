@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/specialty_entity.dart';
@@ -309,7 +310,8 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.editDraftAppBarTitle(l10n.trayTitle))),
       body: SafeArea(
-        child: ListView(
+        child: InstriqResponsiveContent(
+          child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             TextField(
@@ -431,6 +433,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
               child: Text(l10n.saveAsDraft),
             ),
           ],
+        ),
         ),
       ),
     );

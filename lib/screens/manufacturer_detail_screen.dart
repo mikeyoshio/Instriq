@@ -48,12 +48,17 @@ class ManufacturerDetailScreen extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () => launchUrl(Uri.parse(website)),
-                child: Text(
-                  website,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(decoration: TextDecoration.underline),
+                // Padding vertical para un área táctil de ~44px de alto — ver
+                // auditoría de accesibilidad, docs/BACKLOG.md.
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    website,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(decoration: TextDecoration.underline),
+                  ),
                 ),
               ),
             ),

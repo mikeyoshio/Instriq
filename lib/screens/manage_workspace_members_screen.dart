@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/team.dart';
 import '../models/workspace.dart';
@@ -109,7 +110,8 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
           ? const Center(child: CircularProgressIndicator())
           : _error != null
               ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
-              : ListView(
+              : InstriqResponsiveContent(
+                  child: ListView(
                   padding: const EdgeInsets.all(12),
                   children: [
                     ..._members.map((member) => Card(
@@ -140,6 +142,7 @@ class _ManageWorkspaceMembersScreenState extends State<ManageWorkspaceMembersScr
                           )),
                     ],
                   ],
+                ),
                 ),
     );
   }

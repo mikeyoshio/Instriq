@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_badge.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
@@ -550,7 +551,8 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
         ],
       ),
       body: SafeArea(
-        child: ListView(
+        child: InstriqResponsiveContent(
+          child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             if (_ownPendingInstrumentDraft != null) ...[
@@ -680,6 +682,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
             const Divider(height: 32),
             _buildIncidentsSection(context, l10n),
           ],
+        ),
         ),
       ),
     );

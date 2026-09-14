@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document_version.dart' show GroupDocumentVersionStatus;
 import '../models/instrument.dart';
@@ -152,7 +153,8 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : ListView(
+          : InstriqResponsiveContent(
+              child: ListView(
               padding: const EdgeInsets.all(20),
               children: [
                 if (_ownPendingDraft != null) ...[
@@ -188,12 +190,18 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
                                 onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(builder: (_) => SurgeonDetailScreen(surgeon: _surgeon!)),
                                 ),
-                                child: Text(
-                                  _surgeon!.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(decoration: TextDecoration.underline),
+                                // Padding vertical para un área táctil de
+                                // ~44px de alto — ver auditoría de
+                                // accesibilidad, docs/BACKLOG.md.
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    _surgeon!.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(decoration: TextDecoration.underline),
+                                  ),
                                 ),
                               )
                             : Text('—', style: Theme.of(context).textTheme.titleMedium),
@@ -241,6 +249,7 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
                   }),
                 ],
               ],
+            ),
             ),
     );
   }

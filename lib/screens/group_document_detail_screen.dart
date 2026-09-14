@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../data/instruments_data.dart';
 import '../data/sutures_data.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
@@ -408,7 +409,8 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
             IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.deleteTooltip, onPressed: _delete),
         ],
       ),
-      body: ListView(
+      body: InstriqResponsiveContent(
+        child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
           if (!_loadingHistory && _ownPendingDraft != null) ...[
@@ -673,6 +675,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
             ],
           ],
         ],
+      ),
       ),
     );
   }

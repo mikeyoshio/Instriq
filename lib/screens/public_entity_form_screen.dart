@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart' show DocumentKind;
 import '../models/group_document_version.dart' show ProtocolStep;
@@ -202,7 +203,8 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
         ],
       ),
       body: SafeArea(
-        child: ListView(
+        child: InstriqResponsiveContent(
+          child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             TextField(
@@ -266,6 +268,7 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
