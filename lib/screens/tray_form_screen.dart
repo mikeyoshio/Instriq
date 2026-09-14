@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -47,7 +45,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
   late final TextEditingController _commentController;
   late List<TrayItem> _items;
   late List<String> _photoPaths;
-  final List<File> _newPhotos = [];
+  final List<XFile> _newPhotos = [];
   TrayVersion? _draft;
   List<CustomInstrument> _customInstruments = [];
   final _tagPickerKey = GlobalKey<TagPickerState>();
@@ -205,7 +203,9 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
     if (source == null) return;
     final picked = await picker.pickImage(source: source, maxWidth: 1600, imageQuality: 85);
     if (picked != null) {
-      setState(() => _newPhotos.add(File(picked.path)));
+      // XFile, no dart:io.File: en Web, File(picked.path) no sirve para nada
+      // (path es una blob: URL) -- ver comentario de TrayService.uploadPhoto.
+      setState(() => _newPhotos.add(picked));
     }
   }
 
@@ -382,7 +382,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
                       onRemove: () => setState(() => _photoPaths.removeAt(entry.key)),
                     )),
                 ..._newPhotos.asMap().entries.map((entry) => _RemovableChip(
-                      label: entry.value.path.split(Platform.pathSeparator).last,
+                      label: entry.value.name,
                       onRemove: () => setState(() => _newPhotos.removeAt(entry.key)),
                     )),
               ],
