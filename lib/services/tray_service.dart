@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cross_file/cross_file.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/group_document_version.dart';
@@ -255,19 +254,30 @@ class TrayService {
   /// convenida `{organization_id}/{workspace_id}/{tray_id}/{filename}` (ver
   /// schema_v15 / can_access_tray_photo). Devuelve el path guardado, que hay
   /// que añadir a [TrayVersion.photoPaths] y persistir con [saveDraft].
+  ///
+  /// Recibe un [XFile] (lo que devuelve `image_picker`) y sube sus bytes con
+  /// `uploadBinary` en vez de envolverlo en un `dart:io.File` y usar
+  /// `upload`: en Flutter Web, `XFile.path` es una blob: URL, no una ruta de
+  /// disco real, así que un `File` construido a partir de ella no sirve para
+  /// nada -- bug real que rompía esta subida en Web, encontrado al construir
+  /// el escaneo OCR (ver `OcrService`, que recibe `XFile` por el mismo
+  /// motivo). `uploadBinary` funciona igual en todas las plataformas porque
+  /// solo necesita los bytes, nunca una ruta de disco.
   Future<String> uploadPhoto({
     required String trayId,
     required String workspaceId,
-    required File file,
+    required XFile file,
   }) async {
     final organizationId = ProfileService.instance.organizationId;
     if (organizationId == null) {
       throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
-    final ext = _extensionOf(file.path);
+    // file.name (no file.path): en Web, path es una blob: URL sin extensión.
+    final ext = _extensionOf(file.name);
     final fileName = '${DateTime.now().microsecondsSinceEpoch}.$ext';
     final path = '$organizationId/$workspaceId/$trayId/$fileName';
-    await _client.storage.from(_bucket).upload(path, file, fileOptions: const FileOptions(upsert: true));
+    final bytes = await file.readAsBytes();
+    await _client.storage.from(_bucket).uploadBinary(path, bytes, fileOptions: const FileOptions(upsert: true));
     return path;
   }
 

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,7 +38,12 @@ class _VariantDraft {
   final TextEditingController nameController;
   final TextEditingController noteController;
   String? photoPath;
-  File? pickedPhoto;
+  XFile? pickedPhoto;
+  // Bytes de [pickedPhoto], leídos una vez al escogerla, solo para la
+  // previsualización (Image.memory) -- Image.file no funciona en Web, donde
+  // XFile.path es una blob: URL, no una ruta de disco real (mismo motivo por
+  // el que uploadVariantPhoto recibe un XFile en vez de un dart:io.File).
+  Uint8List? pickedPhotoBytes;
 
   _VariantDraft({required this.id, String? name, this.photoPath, String? note})
       : nameController = TextEditingController(text: name ?? ''),
@@ -177,7 +182,11 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
     if (source == null) return;
     final picked = await picker.pickImage(source: source, maxWidth: 1600, imageQuality: 85);
     if (picked != null) {
-      setState(() => draft.pickedPhoto = File(picked.path));
+      final bytes = await picked.readAsBytes();
+      setState(() {
+        draft.pickedPhoto = picked;
+        draft.pickedPhotoBytes = bytes;
+      });
     }
   }
 
@@ -355,10 +364,10 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
                     children: [
                       GestureDetector(
                         onTap: () => _pickPhoto(draft),
-                        child: draft.pickedPhoto != null
+                        child: draft.pickedPhotoBytes != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.file(draft.pickedPhoto!, width: 64, height: 64, fit: BoxFit.cover),
+                                child: Image.memory(draft.pickedPhotoBytes!, width: 64, height: 64, fit: BoxFit.cover),
                               )
                             : CircleAvatar(
                                 radius: 32,

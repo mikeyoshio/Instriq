@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cross_file/cross_file.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/custom_instrument.dart';
@@ -205,16 +204,25 @@ class CustomInstrumentService {
   /// [TrayService.uploadPhoto]. Devuelve el path guardado, que hay que
   /// asignar a [CustomInstrumentVariant.photoPath] y persistir con
   /// [saveDraft].
+  ///
+  /// Recibe un [XFile] y sube sus bytes con `uploadBinary` en vez de
+  /// envolverlo en un `dart:io.File` y usar `upload` -- en Flutter Web,
+  /// `XFile.path` es una blob: URL, no una ruta de disco real, así que un
+  /// `File` construido a partir de ella no servía para nada (bug real que
+  /// rompía esta subida en Web, encontrado al construir el escaneo OCR, ver
+  /// `OcrService`).
   Future<String> uploadVariantPhoto({
     required String organizationId,
     required String workspaceId,
     required String instrumentId,
-    required File file,
+    required XFile file,
   }) async {
-    final ext = _extensionOf(file.path);
+    // file.name (no file.path): en Web, path es una blob: URL sin extensión.
+    final ext = _extensionOf(file.name);
     final fileName = '${DateTime.now().microsecondsSinceEpoch}.$ext';
     final path = '$organizationId/$workspaceId/$instrumentId/$fileName';
-    await _client.storage.from(_bucket).upload(path, file, fileOptions: const FileOptions(upsert: true));
+    final bytes = await file.readAsBytes();
+    await _client.storage.from(_bucket).uploadBinary(path, bytes, fileOptions: const FileOptions(upsert: true));
     return path;
   }
 

@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Instriq utilitza la càmera per fotografiar instrumental, bandejes i documents en paper (p. ex. per escanejar un procediment ja imprès).</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Instriq accedeix a les teves fotos per adjuntar-les a instrumental personalitzat, bandejes i altre contingut.</string>
 </dict>
 </plist>

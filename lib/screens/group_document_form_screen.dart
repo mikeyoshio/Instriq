@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../data/instruments_data.dart';
 import '../data/sutures_data.dart';
@@ -12,6 +13,7 @@ import '../models/suture.dart';
 import '../models/tray.dart';
 import '../services/connectivity_service.dart';
 import '../services/group_document_service.dart';
+import '../services/ocr_service.dart';
 import '../services/profile_service.dart';
 import '../services/specialty_service.dart';
 import '../services/tray_service.dart';
@@ -63,6 +65,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   final _tagPickerKey = GlobalKey<TagPickerState>();
   bool _loading = true;
   bool _saving = false;
+  bool _scanning = false;
   String? _error;
 
   @override
@@ -232,6 +235,49 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
             category: (resolvedCategory == null || resolvedCategory.isEmpty) ? null : resolvedCategory,
             text: step,
           )));
+    }
+  }
+
+  /// Fotografía un procedimiento ya impreso en papel y vuelca cada línea de
+  /// texto reconocida como un paso nuevo (nunca sustituye los que ya
+  /// hubiera) — el título solo se rellena si estaba vacío. Todo el
+  /// reconocimiento ocurre en el dispositivo (ver [OcrService]); el usuario
+  /// revisa/edita/reordena/fusiona los pasos resultantes como cualquier otro
+  /// paso, antes de guardar. Sin conexión funciona igual: solo el guardado
+  /// final del borrador depende de red (y ese ya sabe encolarse).
+  Future<void> _scanDocument() async {
+    final l10n = AppLocalizations.of(context)!;
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.camera, maxWidth: 2000, imageQuality: 90);
+    if (picked == null || !mounted) return;
+    setState(() => _scanning = true);
+    try {
+      final lines = await OcrService.instance.recognizeLines(picked);
+      if (lines.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.scanNoTextFoundSnackbar)));
+        }
+        return;
+      }
+      setState(() {
+        final remainingLines = _titleController.text.trim().isEmpty
+            ? lines.skip(1)
+            : lines;
+        if (_titleController.text.trim().isEmpty) {
+          _titleController.text = lines.first;
+        }
+        _steps.addAll(remainingLines.map((line) => ProtocolStep(text: line)));
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.scanSuccessSnackbar(lines.length))));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.scanErrorSnackbar(e.toString()))));
+      }
+    } finally {
+      if (mounted) setState(() => _scanning = false);
     }
   }
 
@@ -448,6 +494,14 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
               children: [
                 Text(l10n.stepsLabel, style: Theme.of(context).textTheme.titleMedium),
                 const Spacer(),
+                if (OcrService.isSupported)
+                  TextButton.icon(
+                    onPressed: _scanning ? null : _scanDocument,
+                    icon: _scanning
+                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Icon(Icons.document_scanner_outlined),
+                    label: Text(l10n.scanDocumentAction),
+                  ),
                 TextButton.icon(
                   onPressed: _addStep,
                   icon: const Icon(Icons.add),
