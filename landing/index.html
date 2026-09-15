@@ -151,7 +151,13 @@
   .data-cell { text-align: left; }
   .data-cell .num { font-family: var(--display); font-size: 2.1rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
   .data-cell .label { font-size: 0.9rem; color: var(--ink-muted); margin-top: 2px; }
-  .hero-visual { position: relative; height: 480px; }
+  /* z-index: 0 (no solo position: relative) es lo que importa aquí: crea un
+     contexto de apilamiento propio que CONTIENE el z-index:10 que el JS del
+     carrusel asigna a la tarjeta activa (ver más abajo) -- si no, ese 10
+     compite directamente con header.site (también z-index:10) en el
+     contexto raíz, y al empatar gana quien esté más abajo en el HTML: la
+     tarjeta, que entonces se pinta encima de la cabecera fija al hacer scroll. */
+  .hero-visual { position: relative; z-index: 0; height: 480px; }
   @media (max-width: 900px) {
     .hero-grid { grid-template-columns: 1fr; }
     .hero-visual { height: 400px; margin-top: 12px; }
@@ -505,7 +511,7 @@
         <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
         <div class="timeline-track-wrap">
           <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
-          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="34" value="0" step="1" aria-label="Línia del temps d'Instriq">
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="40" value="0" step="1" aria-label="Línia del temps d'Instriq">
         </div>
         <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
       </div>
@@ -961,6 +967,12 @@
       { badge: '#29', text: '<strong>Mode sense connexió per a totes les eines</strong> — safates, targetes de preferència, esterilització i fitxa tècnica ja es poden crear i desar sense xarxa, com ja passava amb tècniques i protocols; la sincronització és automàtica en recuperar la connexió, i una pantalla nova avisa si algun canvi concret no s\'ha pogut pujar.' },
       { badge: '#30', text: '<strong>Ronda de proves en viu i correccions de fiabilitat</strong> — s\'ha provat el flux complet (crear, revisar, aprovar, treballar sense connexió) amb comptes reals per primera vegada, i s\'han corregit diversos problemes que només apareixien en aquestes circumstàncies concretes.' },
       { badge: '#31', text: '<strong>Vídeos, material fungible, posicionament i anestèsia a les tècniques</strong> — cada tècnica o protocol ja pot enllaçar vídeos externs (moderats abans de publicar-se), llistar el material fungible necessari i descriure la posició del pacient i l\'anestèsia prevista. S\'hi suma un catàleg propi de sutures i la nova especialitat Anestesiologia i Reanimació, amb el seu instrumental.' },
+      { badge: '#32', text: '<strong>Escaneja un document</strong> — fotografia un protocol imprès (des del mòbil o des del navegador) i cada línia de text es converteix en un pas editable, sense enviar mai la imatge a cap tercer: el reconeixement passa sencer al dispositiu.' },
+      { badge: '#33', text: '<strong>Autoguardat</strong> — els formularis de tècniques, safates, targetes i esterilització es desen sols mentre escrius, amb avís de "guardat sense connexió" quan cal.' },
+      { badge: '#34', text: '<strong>Duplicar contingut</strong> — tècniques, protocols, targetes de preferència i instrumental personalitzat ja es poden duplicar com a punt de partida d\'un de nou, igual que ja passava amb les safates.' },
+      { badge: '#35', text: '<strong>Invitació per email</strong> — a més del codi d\'organització, ara es pot convidar una persona concreta per correu amb el rol de l\'espai ja assignat d\'entrada.' },
+      { badge: '#36', text: '<strong>Benvinguda de primer ús</strong> — qui obre l\'app per primera vegada veu una introducció curta de tres passos abans d\'entrar a Inici, amb selector d\'idioma inclòs.' },
+      { badge: '#37', text: '<strong>Adoptar contingut de la Biblioteca Pública</strong> — una safata publicada per la comunitat ja es pot adoptar com a punt de partida d\'una safata pròpia, amb avís quan l\'origen publiqui una versió nova.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
       { badge: 'Previst', future: true, text: 'Sistema de donacions transparent.' }
@@ -998,6 +1010,12 @@
       { badge: '#29', text: '<strong>Modo sin conexión para todas las herramientas</strong> — bandejas, tarjetas de preferencia, esterilización y ficha técnica ya se pueden crear y guardar sin red, como ya pasaba con técnicas y protocolos; la sincronización es automática al recuperar la conexión, y una pantalla nueva avisa si algún cambio concreto no se ha podido subir.' },
       { badge: '#30', text: '<strong>Ronda de pruebas en vivo y correcciones de fiabilidad</strong> — se ha probado el flujo completo (crear, revisar, aprobar, trabajar sin conexión) con cuentas reales por primera vez, y se han corregido varios problemas que solo aparecían en esas circunstancias concretas.' },
       { badge: '#31', text: '<strong>Vídeos, material fungible, posicionamiento y anestesia en las técnicas</strong> — cada técnica o protocolo ya puede enlazar vídeos externos (moderados antes de publicarse), listar el material fungible necesario y describir la posición del paciente y la anestesia prevista. Se suma un catálogo propio de suturas y la nueva especialidad Anestesiología y Reanimación, con su instrumental.' },
+      { badge: '#32', text: '<strong>Escanea un documento</strong> — fotografía un protocolo impreso (desde el móvil o desde el navegador) y cada línea de texto se convierte en un paso editable, sin enviar nunca la imagen a ningún tercero: el reconocimiento ocurre entero en el dispositivo.' },
+      { badge: '#33', text: '<strong>Autoguardado</strong> — los formularios de técnicas, bandejas, tarjetas y esterilización se guardan solos mientras escribes, con aviso de "guardado sin conexión" cuando hace falta.' },
+      { badge: '#34', text: '<strong>Duplicar contenido</strong> — técnicas, protocolos, tarjetas de preferencia e instrumental personalizado ya se pueden duplicar como punto de partida de uno nuevo, igual que ya pasaba con las bandejas.' },
+      { badge: '#35', text: '<strong>Invitación por email</strong> — además del código de organización, ya se puede invitar a una persona concreta por correo con el rol del espacio ya asignado de entrada.' },
+      { badge: '#36', text: '<strong>Bienvenida de primer uso</strong> — quien abre la app por primera vez ve una introducción corta de tres pasos antes de entrar a Inicio, con selector de idioma incluido.' },
+      { badge: '#37', text: '<strong>Adoptar contenido de la Biblioteca Pública</strong> — una bandeja publicada por la comunidad ya se puede adoptar como punto de partida de una bandeja propia, con aviso cuando el origen publique una versión nueva.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
       { badge: 'Previsto', future: true, text: 'Sistema de donaciones transparente.' }
@@ -1035,6 +1053,12 @@
       { badge: '#29', text: '<strong>Offline mode for every tool</strong> — trays, preference cards, sterilization and technical info can now be created and saved without network, just like techniques and protocols already could; sync happens automatically once connection returns, and a new screen flags if any specific change couldn\'t be uploaded.' },
       { badge: '#30', text: '<strong>Live testing round and reliability fixes</strong> — the full flow (create, review, approve, work offline) was tested end-to-end with real accounts for the first time, and several issues that only showed up under those specific conditions were fixed.' },
       { badge: '#31', text: '<strong>Videos, consumables, positioning and anesthesia on techniques</strong> — every technique or protocol can now link external videos (moderated before publishing), list the consumables needed and describe patient positioning and planned anesthesia. Also new: a dedicated suture catalog and the Anesthesiology and Resuscitation specialty, with its own instruments.' },
+      { badge: '#32', text: '<strong>Scan a document</strong> — photograph a printed protocol (from your phone or from the browser) and each line of text becomes an editable step, with the image never sent to any third party: recognition happens entirely on-device.' },
+      { badge: '#33', text: '<strong>Autosave</strong> — technique, tray, preference card and sterilization forms now save themselves as you type, with a "saved offline" notice when needed.' },
+      { badge: '#34', text: '<strong>Duplicate content</strong> — techniques, protocols, preference cards and custom instruments can now be duplicated as a starting point for a new one, just like trays already could.' },
+      { badge: '#35', text: '<strong>Email invitations</strong> — besides the organization code, you can now invite a specific person by email with their workspace role already assigned.' },
+      { badge: '#36', text: '<strong>First-run welcome</strong> — opening the app for the first time now shows a short 3-step introduction before landing on Home, with a language picker included.' },
+      { badge: '#37', text: '<strong>Adopt Public Library content</strong> — a tray published by the community can now be adopted as the starting point for your own tray, with a heads-up when the source publishes a new version.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
       { badge: 'Planned', future: true, text: 'A transparent donation system.' }
