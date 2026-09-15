@@ -530,6 +530,12 @@
   "pendingSyncBadge": "Pendent de sincronitzar",
   "savedOfflineSnackbar": "Sense connexió: guardat en local, se sincronitzarà sol quan tornis a tenir xarxa.",
 
+  "autosaveDirty": "Canvis sense desar",
+  "autosaveSaving": "Desant…",
+  "autosaveSaved": "Desat",
+  "autosaveOffline": "Desat sense connexió — es sincronitzarà",
+  "autosaveError": "No s'ha pogut desar automàticament",
+
   "syncIssuesTitle": "Problemes de sincronització",
   "syncIssuesMenuSubtitle": "Canvis que no s'han pogut pujar",
   "syncIssuesEmptyState": "No hi ha problemes de sincronització",

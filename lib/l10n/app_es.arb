@@ -530,6 +530,12 @@
   "pendingSyncBadge": "Pendiente de sincronizar",
   "savedOfflineSnackbar": "Sin conexión: guardado en local, se sincronizará solo cuando vuelva la red.",
 
+  "autosaveDirty": "Cambios sin guardar",
+  "autosaveSaving": "Guardando…",
+  "autosaveSaved": "Guardado",
+  "autosaveOffline": "Guardado sin conexión — se sincronizará",
+  "autosaveError": "No se pudo guardar automáticamente",
+
   "syncIssuesTitle": "Problemas de sincronización",
   "syncIssuesMenuSubtitle": "Cambios que no llegaron a subirse",
   "syncIssuesEmptyState": "No hay problemas de sincronización",
