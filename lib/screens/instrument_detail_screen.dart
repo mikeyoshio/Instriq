@@ -14,6 +14,8 @@ import '../models/instrument.dart';
 import '../models/instrument_incident.dart';
 import '../models/instrument_sterilization.dart';
 import '../models/manufacturer.dart';
+import '../models/public_document.dart';
+import '../models/public_tray.dart';
 import '../models/reference_document.dart';
 import '../models/tag.dart';
 import '../models/tray.dart';
@@ -27,6 +29,8 @@ import '../services/knowledge_link_service.dart';
 import '../services/manufacturer_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
+import '../services/public_document_service.dart';
+import '../services/public_tray_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/reference_document_service.dart';
 import '../services/sterilization_service.dart';
@@ -38,6 +42,7 @@ import '../widgets/clinical_data_form_sheet.dart';
 import '../widgets/instrument_incident_label.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
+import 'public_entity_detail_screen.dart';
 import 'group_document_detail_screen.dart';
 import 'manufacturer_detail_screen.dart';
 import 'review_session_screen.dart';
@@ -66,6 +71,8 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   List<Tag> _tags = [];
   List<GroupDocument> _usedInDocuments = [];
   List<Tray> _usedInTrays = [];
+  List<PublicDocument> _usedInPublicDocuments = [];
+  List<PublicTray> _usedInPublicTrays = [];
 
   /// Borrador/en revisión propio más reciente entre todos los métodos de
   /// esterilización del instrumento, si hay alguno -- mismo patrón que
@@ -171,6 +178,8 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       final tags = await TagService.instance.fetchTagsFor(_refType, widget.instrument.id);
       final usedInDocuments = <GroupDocument>[];
       final usedInTrays = <Tray>[];
+      final usedInPublicDocuments = <PublicDocument>[];
+      final usedInPublicTrays = <PublicTray>[];
       try {
         final links = await KnowledgeLinkService.instance.fetchRelatedTo(_refType, widget.instrument.id);
         for (final link in links) {
@@ -185,6 +194,18 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
               usedInTrays.add(await TrayService.instance.fetchTray(link.fromId));
             } catch (_) {
               // Enlace obsoleto (safata borrada sin limpiar a tiempo): se omite.
+            }
+          } else if (link.fromType == 'public_document') {
+            try {
+              usedInPublicDocuments.add(await PublicDocumentService.instance.fetchDocument(link.fromId));
+            } catch (_) {
+              // Enlace obsoleto: se omite.
+            }
+          } else if (link.fromType == 'public_tray') {
+            try {
+              usedInPublicTrays.add(await PublicTrayService.instance.fetchTray(link.fromId));
+            } catch (_) {
+              // Enlace obsoleto: se omite.
             }
           }
         }
@@ -243,6 +264,8 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
         _tags = tags;
         _usedInDocuments = usedInDocuments;
         _usedInTrays = usedInTrays;
+        _usedInPublicDocuments = usedInPublicDocuments;
+        _usedInPublicTrays = usedInPublicTrays;
         _ownPendingMethodDraft = ownPendingMethodDraft;
         _ownPendingInfoDraft = ownPendingInfoDraft;
         _loadingClinicalData = false;
@@ -921,7 +944,10 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   /// y safates que enlazan a este instrumento, resuelta a partir de
   /// `knowledge_links` (ver supabase/schema_v24_knowledge_links.sql).
   Widget _buildUsedInSection(BuildContext context, AppLocalizations l10n) {
-    final hasAnything = _usedInDocuments.isNotEmpty || _usedInTrays.isNotEmpty;
+    final hasAnything = _usedInDocuments.isNotEmpty ||
+        _usedInTrays.isNotEmpty ||
+        _usedInPublicDocuments.isNotEmpty ||
+        _usedInPublicTrays.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
@@ -951,6 +977,28 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: null)),
+                    ),
+                  ),
+                )),
+            ..._usedInPublicDocuments.map((doc) => Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.public_outlined),
+                    title: Text(doc.publishedVersion?.title ?? doc.id),
+                    subtitle: Text(l10n.publicLibraryTitle),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.document(document: doc)),
+                    ),
+                  ),
+                )),
+            ..._usedInPublicTrays.map((tray) => Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.public_outlined),
+                    title: Text(tray.publishedVersion?.name ?? tray.id),
+                    subtitle: Text(l10n.publicLibraryTitle),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.tray(tray: tray)),
                     ),
                   ),
                 )),
