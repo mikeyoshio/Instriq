@@ -1,5 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'supabase_config.dart';
+
 class AuthService {
   AuthService._();
   static final AuthService instance = AuthService._();
@@ -11,7 +13,7 @@ class AuthService {
   Stream<AuthState> get authStateChanges => _client.auth.onAuthStateChange;
 
   Future<void> signUp({required String email, required String password}) async {
-    await _client.auth.signUp(email: email, password: password);
+    await _client.auth.signUp(email: email, password: password, emailRedirectTo: appBaseUrl);
   }
 
   Future<void> signIn({required String email, required String password}) async {
@@ -23,7 +25,7 @@ class AuthService {
   }
 
   Future<void> resetPasswordForEmail(String email) async {
-    await _client.auth.resetPasswordForEmail(email.trim());
+    await _client.auth.resetPasswordForEmail(email.trim(), redirectTo: appBaseUrl);
   }
 
   Future<void> updatePassword(String newPassword) async {
