@@ -1,10 +1,16 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../design_system/components/instriq_responsive_content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/hospital.dart';
+import '../../models/invitation.dart';
+import '../../models/workspace.dart';
+import '../../models/workspace_role.dart';
 import '../../services/auth_service.dart';
+import '../../services/invitation_service.dart';
 import '../../services/profile_service.dart';
+import '../../services/workspace_service.dart';
+import '../../widgets/workspace_role_label.dart';
 
 class ManageHospitalScreen extends StatefulWidget {
   const ManageHospitalScreen({super.key});
@@ -17,6 +23,8 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
   bool _loading = true;
   bool _regenerating = false;
   List<HospitalMember> _members = [];
+  List<Invitation> _invitations = [];
+  List<Workspace> _workspaces = [];
   String? _error;
 
   @override
@@ -30,12 +38,141 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
       _loading = true;
       _error = null;
     });
+    final organizationId = ProfileService.instance.organizationId;
     try {
       _members = await ProfileService.instance.fetchMembers();
+      await WorkspaceService.instance.fetchWorkspaces();
+      _workspaces = WorkspaceService.instance.workspaces;
+      if (organizationId != null) {
+        _invitations = await InvitationService.instance.fetchForOrganization(organizationId);
+      }
     } catch (e) {
       if (mounted) _error = AppLocalizations.of(context)!.manageMembersLoadError(e.toString());
     }
     if (mounted) setState(() => _loading = false);
+  }
+
+  /// Invita a una persona concreta por email a un espacio con un rol ya
+  /// fijado (ver schema_v41_invitations.sql) -- vía adicional al código de
+  /// invitación de arriba, que sigue sirviendo para alta autoservicio.
+  Future<void> _openInviteDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    if (_workspaces.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.inviteNoWorkspacesError)));
+      return;
+    }
+    final emailController = TextEditingController();
+    String workspaceId = _workspaces.first.id;
+    WorkspaceRole role = WorkspaceRole.reader;
+    String? dialogError;
+    final sent = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text(l10n.inviteByEmailTitle),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: emailController,
+                  autofocus: true,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  initialValue: workspaceId,
+                  isExpanded: true,
+                  decoration: InputDecoration(labelText: l10n.workspaceLabel, border: const OutlineInputBorder()),
+                  items: _workspaces.map((w) => DropdownMenuItem(value: w.id, child: Text(w.name))).toList(),
+                  onChanged: (value) => setDialogState(() => workspaceId = value!),
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<WorkspaceRole>(
+                  initialValue: role,
+                  isExpanded: true,
+                  decoration: InputDecoration(labelText: l10n.roleLabel, border: const OutlineInputBorder()),
+                  items: const [WorkspaceRole.reader, WorkspaceRole.editor, WorkspaceRole.approver]
+                      .map((r) => DropdownMenuItem(value: r, child: Text(workspaceRoleLabel(l10n, r))))
+                      .toList(),
+                  onChanged: (value) => setDialogState(() => role = value!),
+                ),
+                if (dialogError != null) ...[
+                  const SizedBox(height: 12),
+                  Text(dialogError!, style: const TextStyle(color: Colors.red)),
+                ],
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+            FilledButton(
+              onPressed: () async {
+                final email = emailController.text.trim();
+                if (email.isEmpty) return;
+                try {
+                  await InvitationService.instance
+                      .create(workspaceId: workspaceId, email: email, role: role.dbValue);
+                  if (ctx.mounted) Navigator.pop(ctx, true);
+                } catch (e) {
+                  setDialogState(() => dialogError = l10n.genericError(e.toString()));
+                }
+              },
+              child: Text(l10n.sendInviteAction),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (sent == true) _load();
+  }
+
+  String _workspaceName(String workspaceId) {
+    for (final w in _workspaces) {
+      if (w.id == workspaceId) return w.name;
+    }
+    return '';
+  }
+
+  Future<void> _revokeInvitation(Invitation invitation) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.revokeInviteTitle),
+        content: Text(l10n.revokeInviteBody(invitation.email)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.revokeInviteAction)),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await InvitationService.instance.revoke(invitation.id);
+      _load();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError(e.toString()))));
+      }
+    }
+  }
+
+  Future<void> _resendInvitation(Invitation invitation) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      await InvitationService.instance.resend(invitation);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.inviteResentSnackbar)));
+      }
+      _load();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError(e.toString()))));
+      }
+    }
   }
 
   Future<void> _regenerateCode() async {
@@ -178,7 +315,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                           Text(l10n.inviteCodeLabel, style: Theme.of(context).textTheme.labelLarge),
                           const SizedBox(height: 8),
                           SelectableText(
-                            profile.inviteCode ?? '—',
+                            profile.inviteCode ?? 'â€”',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium
@@ -199,6 +336,64 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Text(l10n.pendingInvitesTitle, style: Theme.of(context).textTheme.titleMedium),
+                      const Spacer(),
+                      TextButton.icon(
+                        onPressed: _openInviteDialog,
+                        icon: const Icon(Icons.mail_outline),
+                        label: Text(l10n.inviteByEmailTitle),
+                      ),
+                    ],
+                  ),
+                  if (_invitations.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(l10n.noPendingInvites),
+                    )
+                  else
+                    ..._invitations.map((invitation) {
+                      final status = invitation.effectiveStatus;
+                      final statusLabel = switch (status) {
+                        InvitationStatus.pending => l10n.inviteStatusPending,
+                        InvitationStatus.accepted => l10n.inviteStatusAccepted,
+                        InvitationStatus.revoked => l10n.inviteStatusRevoked,
+                        InvitationStatus.expired => l10n.inviteStatusExpired,
+                      };
+                      final statusColor = switch (status) {
+                        InvitationStatus.pending => null,
+                        InvitationStatus.accepted => Colors.green,
+                        InvitationStatus.revoked => Colors.grey,
+                        InvitationStatus.expired => Colors.orange,
+                      };
+                      return Card(
+                        child: ListTile(
+                          leading: const Icon(Icons.mail_outline),
+                          title: Text(invitation.email),
+                          subtitle: Text('${workspaceRoleLabel(l10n, invitation.role)} · ${_workspaceName(invitation.workspaceId)}'),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Chip(label: Text(statusLabel), backgroundColor: statusColor?.withValues(alpha: 0.15)),
+                              if (status == InvitationStatus.pending || status == InvitationStatus.expired) ...[
+                                IconButton(
+                                  icon: const Icon(Icons.refresh),
+                                  tooltip: l10n.resendInviteTooltip,
+                                  onPressed: () => _resendInvitation(invitation),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.close),
+                                  tooltip: l10n.revokeInviteAction,
+                                  onPressed: () => _revokeInvitation(invitation),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
                   const SizedBox(height: 24),
                   Text(l10n.membersCountTitle(_members.length), style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 8),

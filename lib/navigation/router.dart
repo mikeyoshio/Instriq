@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../l10n/app_localizations.dart';
 import '../screens/activity_screen.dart';
+import '../screens/auth/accept_invitation_screen.dart';
 import '../screens/catalog_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/library_screen.dart';
@@ -27,6 +28,14 @@ GoRouter buildRouter(GlobalKey<NavigatorState> rootNavigatorKey) {
     navigatorKey: rootNavigatorKey,
     initialLocation: '/inicio',
     routes: [
+      // Ruta de nivel superior, fuera del shell (StatefulShellRoute de abajo):
+      // quien abre el enlace de una invitación por email puede no tener
+      // sesión ni pertenecer todavía a ningún espacio -- ver
+      // AcceptInvitationScreen y schema_v41_invitations.sql.
+      GoRoute(
+        path: '/invite/:token',
+        builder: (context, state) => AcceptInvitationScreen(token: state.pathParameters['token']!),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => AppShell(navigationShell: navigationShell),
         branches: [
