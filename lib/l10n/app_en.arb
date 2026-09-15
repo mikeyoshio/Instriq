@@ -869,5 +869,50 @@
   "incidentStatusValueResolved": "Resolved",
   "resolveIncidentAction": "Mark as resolved",
   "resolveIncidentDialogTitle": "Mark incident as resolved",
-  "resolutionNotesLabel": "Resolution notes"
+  "resolutionNotesLabel": "Resolution notes",
+
+  "helpCenterTitle": "Help center",
+  "helpHowItWorksEntryTitle": "How the app works",
+  "helpHowItWorksEntrySubtitle": "A general guide, meant to be read in one go",
+  "helpCategoryGettingStarted": "Getting started",
+  "helpCategoryCatalog": "Catalog and instruments",
+  "helpCategoryPublicLibrary": "Public Library",
+
+  "helpArticleLanguageTitle": "Change the language",
+  "helpArticleLanguageIntro": "You can change it anytime. It's saved on this device -- no account needed.",
+  "helpArticleLanguageStep1": "Open Profile and tap \"Language\".",
+  "helpArticleLanguageStep2": "Pick Catalan, Spanish or English. The change applies immediately, across the whole app.",
+
+  "helpArticleOnboardingTitle": "The first-run welcome",
+  "helpArticleOnboardingIntro": "The first time the app opens, a brief 3-step walkthrough explains what Instriq is before you dive in.",
+  "helpArticleOnboardingStep1": "You can step through it or tap \"Skip\" to go straight into the app.",
+  "helpArticleOnboardingStep2": "It only shows once per device -- it won't appear again on later visits.",
+
+  "helpArticleCatalogSearchTitle": "Search and filter instruments",
+  "helpArticleCatalogSearchIntro": "The Catalog can be browsed without an account, with search by name and filters by specialty and category.",
+  "helpArticleCatalogSearchStep1": "From the \"Search\" tab, type an instrument's name or brand.",
+  "helpArticleCatalogSearchStep2": "Or tap one or more specialties and categories to filter the list without typing anything.",
+
+  "helpArticleInstrumentDetailTitle": "View an instrument's detail page",
+  "helpArticleInstrumentDetailIntro": "Every instrument has a detail page with a photo, description, main use, and sterilization.",
+  "helpArticleInstrumentDetailStep1": "Tap any instrument in the Catalog to open its full detail page.",
+  "helpArticleInstrumentDetailStep2": "Further down are the compatible sterilization methods and, when available, the manufacturer's technical sheet.",
+
+  "helpArticlePublicLibraryTitle": "What the Public Library is",
+  "helpArticlePublicLibraryIntro": "Surgical techniques and instrument trays reviewed and published by the community, visible to everyone.",
+  "helpArticlePublicLibraryStep1": "From the \"Library\" tab, tap \"Public Library\".",
+  "helpArticlePublicLibraryStep2": "It has two tabs, techniques and trays. If nothing is published yet for a specialty, it's simply because no contributor has submitted it yet -- anyone can become a contributor from Profile.",
+
+  "helpCategoryOrganization": "Organization and workspaces",
+  "helpCategoryAccount": "My account",
+
+  "helpArticleWorkspacesTitle": "View your workspaces",
+  "helpArticleWorkspacesIntro": "If your hospital has more than one team or department, each can have its own workspace with independent content.",
+  "helpArticleWorkspacesStep1": "In Library, tap \"Workspaces\" to see every workspace in your hospital.",
+  "helpArticleWorkspacesStep2": "Each workspace has its own trays, documents, techniques, preference cards and custom instruments.",
+
+  "helpArticleAccountTitle": "Your account: preferences, privacy and syncing",
+  "helpArticleAccountIntro": "Once signed in, Profile adds new options on top of the ones already available as a guest.",
+  "helpArticleAccountStep1": "\"My account and privacy\" exports your personal data or deletes the account.",
+  "helpArticleAccountStep2": "\"Sync issues\" and \"Sign out\" sit right below it, always visible once you're signed in."
 }

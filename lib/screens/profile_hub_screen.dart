@@ -16,7 +16,7 @@ import 'admin/manage_hospital_screen.dart';
 import 'contributor_application_form_screen.dart';
 import 'contributor_profile_screen.dart';
 import 'global_catalog_review_queue_screen.dart';
-import 'how_it_works_screen.dart';
+import 'help/help_hub_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
 import 'review_inbox_screen.dart';
@@ -94,9 +94,9 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     _refreshContributorState();
   }
 
-  Future<void> _openHowItWorks() async {
+  Future<void> _openHelpHub() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
+      MaterialPageRoute(builder: (_) => const HelpHubScreen()),
     );
   }
 
@@ -179,8 +179,8 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
               const SizedBox(height: InstriqSpacing.sm),
               InstriqListItem(
                 icon: Icons.help_outline,
-                title: l10n.howItWorksTitle,
-                onTap: _openHowItWorks,
+                title: l10n.helpCenterTitle,
+                onTap: _openHelpHub,
               ),
               if (loggedIn) ...[
                 const SizedBox(height: InstriqSpacing.xl),

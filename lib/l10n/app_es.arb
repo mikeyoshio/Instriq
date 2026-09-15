@@ -869,5 +869,50 @@
   "incidentStatusValueResolved": "Resuelta",
   "resolveIncidentAction": "Marcar como resuelta",
   "resolveIncidentDialogTitle": "Marcar incidencia como resuelta",
-  "resolutionNotesLabel": "Notas de resolución"
+  "resolutionNotesLabel": "Notas de resolución",
+
+  "helpCenterTitle": "Centro de ayuda",
+  "helpHowItWorksEntryTitle": "Cómo funciona la app",
+  "helpHowItWorksEntrySubtitle": "Una guía general, pensada para leerse de un tirón",
+  "helpCategoryGettingStarted": "Primeros pasos",
+  "helpCategoryCatalog": "Catálogo e instrumental",
+  "helpCategoryPublicLibrary": "Biblioteca Pública",
+
+  "helpArticleLanguageTitle": "Cambiar el idioma",
+  "helpArticleLanguageIntro": "Se puede cambiar en cualquier momento. Se guarda en este dispositivo, no hace falta cuenta.",
+  "helpArticleLanguageStep1": "Abre Perfil y toca «Idioma».",
+  "helpArticleLanguageStep2": "Elige català, castellano o inglés. El cambio es inmediato, en toda la app.",
+
+  "helpArticleOnboardingTitle": "La bienvenida de primer uso",
+  "helpArticleOnboardingIntro": "La primera vez que se abre la app, una breve presentación en 3 pasos explica qué es Instriq antes de entrar.",
+  "helpArticleOnboardingStep1": "Se puede avanzar paso a paso o tocar «Saltar» para ir directamente a la app.",
+  "helpArticleOnboardingStep2": "Solo se muestra una vez por dispositivo; no vuelve a aparecer en los usos siguientes.",
+
+  "helpArticleCatalogSearchTitle": "Buscar y filtrar instrumental",
+  "helpArticleCatalogSearchIntro": "El Catálogo se puede explorar sin cuenta, con búsqueda por nombre y filtros por especialidad y categoría.",
+  "helpArticleCatalogSearchStep1": "Desde la pestaña «Buscar», escribe el nombre de un instrumento o marca comercial.",
+  "helpArticleCatalogSearchStep2": "O toca una o más especialidades y categorías para filtrar la lista sin escribir nada.",
+
+  "helpArticleInstrumentDetailTitle": "Consultar la ficha de un instrumento",
+  "helpArticleInstrumentDetailIntro": "Cada instrumento tiene una ficha con foto, descripción, uso principal y esterilización.",
+  "helpArticleInstrumentDetailStep1": "Toca cualquier instrumento del Catálogo para abrir su ficha completa.",
+  "helpArticleInstrumentDetailStep2": "Más abajo están los métodos de esterilización compatibles y, si los hay, la ficha técnica del fabricante.",
+
+  "helpArticlePublicLibraryTitle": "Qué es la Biblioteca Pública",
+  "helpArticlePublicLibraryIntro": "Técnicas quirúrgicas y bandejas de instrumental revisadas y publicadas por la comunidad, visibles para todo el mundo.",
+  "helpArticlePublicLibraryStep1": "Desde la pestaña «Biblioteca», toca «Biblioteca Pública».",
+  "helpArticlePublicLibraryStep2": "Tiene dos pestañas, técnicas y bandejas. Si aún no hay nada publicado en una especialidad es porque ningún colaborador lo ha enviado todavía -- cualquiera puede convertirse en colaborador desde Perfil.",
+
+  "helpCategoryOrganization": "Organización y espacios de trabajo",
+  "helpCategoryAccount": "Mi cuenta",
+
+  "helpArticleWorkspacesTitle": "Consultar los espacios de trabajo",
+  "helpArticleWorkspacesIntro": "Si tu hospital tiene más de un equipo o servicio, cada uno puede tener su propio espacio con contenido independiente.",
+  "helpArticleWorkspacesStep1": "En Biblioteca, toca «Espacios» para ver todos los espacios de tu hospital.",
+  "helpArticleWorkspacesStep2": "Cada espacio tiene sus propias bandejas, documentos, técnicas, tarjetas de preferencia e instrumental propio.",
+
+  "helpArticleAccountTitle": "Tu cuenta: preferencias, privacidad y sincronización",
+  "helpArticleAccountIntro": "Con una cuenta iniciada, Perfil suma opciones nuevas a las que ya había en modo invitado.",
+  "helpArticleAccountStep1": "«Mi cuenta y privacidad» permite exportar tus datos personales o eliminar la cuenta.",
+  "helpArticleAccountStep2": "«Problemas de sincronización» y «Cerrar sesión» están justo debajo, siempre visibles con una cuenta iniciada."
 }
