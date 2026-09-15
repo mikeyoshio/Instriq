@@ -168,6 +168,35 @@ class ProfileService {
     return hospital;
   }
 
+  /// Acepta una invitación por email a un espacio concreto (ver
+  /// schema_v41_invitations.sql, `accept_invitation`) -- vía adicional a
+  /// [joinHospitalWithCode]: el rol de espacio ya viene fijado en la propia
+  /// invitación, así que aquí no hace falta un `set_workspace_member_role`
+  /// posterior. Mismo criterio de actualización del estado en caché que
+  /// [joinHospitalWithCode]/[registerHospital].
+  Future<Hospital?> acceptInvitation(String token, {String? displayName}) async {
+    final user = AuthService.instance.currentUser;
+    if (user == null) return null;
+
+    final rows = await _client.rpc('accept_invitation', params: {
+      'p_token': token,
+      if (displayName != null && displayName.isNotEmpty) 'p_display_name': displayName,
+    }) as List<dynamic>;
+    if (rows.isEmpty) return null;
+
+    final hospital = Hospital.fromRow(rows.first as Map<String, dynamic>);
+    _clearGroupContentCaches();
+    _organizationId = hospital.id;
+    _organizationName = hospital.name;
+    _hospitalCif = hospital.cif;
+    _inviteCode = hospital.inviteCode;
+    _ownerId = hospital.ownerId;
+    _isAdmin = false;
+    _isOwner = false;
+    profileRevision.value++;
+    return hospital;
+  }
+
   /// Registra un hospital nuevo (autoservicio) y lo liga como admin al usuario actual.
   ///
   /// Vía RPC (`register_hospital`, ver schema_v31_profile_security_hardening.sql):

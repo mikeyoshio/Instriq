@@ -94,6 +94,16 @@ Evolució funcional. Els dos primers punts es relacionen amb **ADR-004** (veure 
 
   `flutter analyze`/`flutter test` nets. **Pendent, com sempre**: aplicar la migració al projecte Supabase real i provar el flux complet en viu (duplicar, verificar que no arrossega fotos/validació, editar i publicar la còpia).
 
+* ~~Invitació per email a una persona concreta, amb rol de espai ja assignat d'entrada.~~ **Fet.** Tercer i últim punt de la revisió UX externa d'aquesta sessió. Decisions preses explícitament amb el propietari abans de construir-ho: (1) el codi únic d'organització **es manté** per a l'alta autoservei, la invitació és una via addicional, no un reemplaçament; (2) només Owner/Administrator D'ORGANITZACIÓ pot enviar invitacions (no Administrator d'espai).
+
+  Nou `supabase/schema_v41_invitations.sql`: taula `invitations` (email, workspace_id, rol reader/editor/approver, token, status pending/accepted/revoked — "expired" és un estat DERIVAT comparant `expires_at` amb `now()`, no una columna que calgui actualitzar amb cron) + `create_invitation`/`revoke_invitation`/`accept_invitation`/`decline_invitation`/`get_invitation_preview` (aquestes 2 últimes callable per `anon`: qui rep l'enllaç pot no tenir compte encara). `accept_invitation` calcada de `join_hospital_with_code` (mateix `bypass_profile_guard`, mateixa restricció "ja pertanys a un grup"), més comprovació que el correu de qui accepta coincideix amb el de la invitació. L'enviament real del correu viu fora del SQL: nova Edge Function `supabase/functions/send-invitation-email/index.ts` (Resend, mateix esquelet que `send-push`), disparada per un Database Webhook manual sobre INSERT a `invitations` (mateix patró de configuració manual que `send-push`/schema_v12 — requereix un secret nou `RESEND_API_KEY`, diferent del SMTP que ja fa servir Supabase Auth). "Reenviar" es resol al client (revoke + create_invitation altra vegada) sense necessitat d'un segon esdeveniment de webhook.
+
+  Codi Dart: `Invitation`/`InvitationPreview` (`lib/models/invitation.dart`), `InvitationService`, `ProfileService.acceptInvitation` (mateix patró d'actualització d'estat en caché que `joinHospitalWithCode`). UI: secció "Invitacions" + diàleg "Convidar per correu" a `manage_hospital_screen.dart` (llista amb estat, reenviar, revocar); nova `AcceptInvitationScreen` (pantalla pròpia, no reutilitza `GroupEntryScreen` — flux diferent, aquí ja se sap a quin espai i amb quin rol) accessible a la ruta nova `/invite/:token` (primera ruta amb paràmetre d'aquesta app, afegida com a germana del `StatefulShellRoute` al router). L'enllaç de l'email apunta a la forma amb `#` (`app.instriq.org/#/invite/...`) perquè l'app no fa servir `usePathUrlStrategy()`.
+
+  **Decisió conscient, fora d'abast**: fer algú Administrator d'organització segueix sent una acció separada i posterior (`set_hospital_admin`), no es folda dins la invitació — el rol assignable per invitació és només reader/editor/approver.
+
+  `flutter analyze`/`flutter test` nets. **Pendent, com sempre**: aplicar la migració al projecte Supabase real, configurar a mà el Database Webhook + el secret `RESEND_API_KEY` + `supabase functions deploy send-invitation-email`, i provar el flux complet en viu (enviar, rebre el correu, acceptar amb compte nou i amb compte existent, revocar, reenviar).
+
 ---
 
 ## Aprenentatge
