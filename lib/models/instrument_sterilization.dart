@@ -127,6 +127,19 @@ class SterilizationMethodEntry {
       publishedVersion: versionRow != null ? SterilizationMethodVersion.fromRow(versionRow) : null,
     );
   }
+
+  /// Fila completa para [OfflineCacheService] — ver [Tray.toCacheRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'instrument_ref_type': instrumentRefType,
+        'instrument_ref_id': instrumentRefId,
+        'organization_id': organizationId,
+        'workspace_id': workspaceId,
+        'created_by': createdBy,
+        'created_at': createdAt?.toIso8601String(),
+        'published_version_id': publishedVersionId,
+        'published_version': publishedVersion?.toCacheRow(),
+      };
 }
 
 /// Una versión concreta del contenido de una [SterilizationMethodEntry].
@@ -291,6 +304,33 @@ class SterilizationMethodVersion {
       pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }
+
+  /// Fila completa para [OfflineCacheService] — ver [GroupDocumentVersion.toCacheRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'method_id': methodId,
+        'version_number': versionNumber,
+        'status': status.dbValue,
+        'method': method.dbValue,
+        'temperature': temperature,
+        'time_minutes': timeMinutes,
+        'pressure': pressure,
+        'drying': drying,
+        'recommended_cycle': recommendedCycle,
+        'compatibility_notes': compatibilityNotes,
+        'restrictions': restrictions,
+        'observations': observations,
+        'lubrication_required': lubricationRequired,
+        'lubrication_type': lubricationType,
+        'lubrication_notes': lubricationNotes,
+        'author_id': authorId,
+        'approved_by': approvedBy,
+        'approved_at': approvedAt?.toIso8601String(),
+        'comment': comment,
+        'based_on_version_id': basedOnVersionId,
+        'created_at': createdAt?.toIso8601String(),
+        'pending_sync': pendingSync,
+      };
 }
 
 /// Cabecera (única por instrumento) de `instrument_technical_info`. El
@@ -350,6 +390,19 @@ class InstrumentTechnicalInfo {
       publishedVersion: versionRow != null ? InstrumentTechnicalInfoVersion.fromRow(versionRow) : null,
     );
   }
+
+  /// Fila completa para [OfflineCacheService] — ver [Tray.toCacheRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'instrument_ref_type': instrumentRefType,
+        'instrument_ref_id': instrumentRefId,
+        'organization_id': organizationId,
+        'workspace_id': workspaceId,
+        'created_by': createdBy,
+        'created_at': createdAt?.toIso8601String(),
+        'published_version_id': publishedVersionId,
+        'published_version': publishedVersion?.toCacheRow(),
+      };
 }
 
 /// Una versión concreta del contenido de un [InstrumentTechnicalInfo].
@@ -479,4 +532,26 @@ class InstrumentTechnicalInfoVersion {
       pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }
+
+  /// Fila completa para [OfflineCacheService] — ver [GroupDocumentVersion.toCacheRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'info_id': infoId,
+        'version_number': versionNumber,
+        'status': status.dbValue,
+        'manufacturer_id': manufacturerId,
+        'ifu_document_id': ifuDocumentId,
+        'maintenance_notes': maintenanceNotes,
+        'inspection_notes': inspectionNotes,
+        'useful_life_notes': usefulLifeNotes,
+        'maintenance_interval_days': maintenanceIntervalDays,
+        'last_maintenance_at': lastMaintenanceAt?.toIso8601String(),
+        'author_id': authorId,
+        'approved_by': approvedBy,
+        'approved_at': approvedAt?.toIso8601String(),
+        'comment': comment,
+        'based_on_version_id': basedOnVersionId,
+        'created_at': createdAt?.toIso8601String(),
+        'pending_sync': pendingSync,
+      };
 }
