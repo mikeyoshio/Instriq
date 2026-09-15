@@ -200,6 +200,15 @@ class GroupDocumentService {
     return GroupDocumentVersion.fromRow(versionRow);
   }
 
+  /// Crea un documento nuevo en el mismo espacio a partir del contenido
+  /// PUBLICADO de [documentId] (ver `duplicate_group_document` en
+  /// schema_v40_duplicate_content.sql, calcado de `duplicate_tray`). Devuelve
+  /// el borrador (versión 1) ya listo para editar.
+  Future<GroupDocumentVersion> duplicateDocument(String documentId) async {
+    final versionRow = await _client.rpc('duplicate_group_document', params: {'p_document_id': documentId});
+    return GroupDocumentVersion.fromRow(versionRow as Map<String, dynamic>);
+  }
+
   Future<GroupDocumentVersion> saveDraft(GroupDocumentVersion version) async {
     if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(version.id)) {
       // Un id "local_..." significa que ni el documento llegó a crearse en

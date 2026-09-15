@@ -164,6 +164,16 @@ class PreferenceCardService {
     return PreferenceCardVersion.fromRow(versionRow);
   }
 
+  /// Crea una tarjeta nueva en el mismo espacio a partir del contenido
+  /// PUBLICADO de [cardId] (ver `duplicate_preference_card` en
+  /// schema_v40_duplicate_content.sql). Devuelve el borrador (versión 1) ya
+  /// listo para editar -- `validated_by_surgeon` vuelve a false, es una
+  /// copia nueva sin validar todavía.
+  Future<PreferenceCardVersion> duplicateCard(String cardId) async {
+    final versionRow = await _client.rpc('duplicate_preference_card', params: {'p_card_id': cardId});
+    return PreferenceCardVersion.fromRow(versionRow as Map<String, dynamic>);
+  }
+
   Future<PreferenceCardVersion> saveDraft(PreferenceCardVersion version) async {
     if (!ConnectivityService.instance.isOnline.value || SyncQueueService.instance.isPendingLocalId(version.id)) {
       // Un id "local_..." significa que ni la tarjeta llegó a crearse en el
