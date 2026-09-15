@@ -9,6 +9,8 @@ import '../models/group_document_version.dart' show GroupDocumentVersionStatus;
 import '../models/instrument_incident.dart';
 import '../models/instrument_sterilization.dart';
 import '../models/manufacturer.dart';
+import '../models/public_document.dart';
+import '../models/public_tray.dart';
 import '../models/reference_document.dart';
 import '../models/specialty_entity.dart';
 import '../models/tag.dart';
@@ -22,6 +24,8 @@ import '../services/instrument_incident_service.dart';
 import '../services/knowledge_link_service.dart';
 import '../services/manufacturer_service.dart';
 import '../services/profile_service.dart';
+import '../services/public_document_service.dart';
+import '../services/public_tray_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/reference_document_service.dart';
 import '../services/specialty_service.dart';
@@ -36,6 +40,7 @@ import '../widgets/sterilization_method_label.dart';
 import 'custom_instrument_form_screen.dart';
 import 'custom_instrument_version_history_screen.dart';
 import 'group_document_detail_screen.dart';
+import 'public_entity_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'sterilization_method_version_history_screen.dart';
 import 'tag_detail_screen.dart';
@@ -66,6 +71,8 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
   List<Tag> _tags = [];
   List<GroupDocument> _usedInDocuments = [];
   List<Tray> _usedInTrays = [];
+  List<PublicDocument> _usedInPublicDocuments = [];
+  List<PublicTray> _usedInPublicTrays = [];
 
   // Esterilització/fitxa tècnica (EPIC 3 · CSSD Workspace): el backend
   // (schema_v32) ja accepta `instrument_ref_type = 'custom'` des del
@@ -463,6 +470,8 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
       final links = await KnowledgeLinkService.instance.fetchRelatedTo(_refType, _instrument.id);
       final usedInDocuments = <GroupDocument>[];
       final usedInTrays = <Tray>[];
+      final usedInPublicDocuments = <PublicDocument>[];
+      final usedInPublicTrays = <PublicTray>[];
       for (final link in links) {
         if (link.fromType == 'group_document') {
           try {
@@ -476,12 +485,26 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
           } catch (_) {
             // Enlace obsoleto (safata borrada sin limpiar a tiempo): se omite.
           }
+        } else if (link.fromType == 'public_document') {
+          try {
+            usedInPublicDocuments.add(await PublicDocumentService.instance.fetchDocument(link.fromId));
+          } catch (_) {
+            // Enlace obsoleto: se omite.
+          }
+        } else if (link.fromType == 'public_tray') {
+          try {
+            usedInPublicTrays.add(await PublicTrayService.instance.fetchTray(link.fromId));
+          } catch (_) {
+            // Enlace obsoleto: se omite.
+          }
         }
       }
       if (!mounted) return;
       setState(() {
         _usedInDocuments = usedInDocuments;
         _usedInTrays = usedInTrays;
+        _usedInPublicDocuments = usedInPublicDocuments;
+        _usedInPublicTrays = usedInPublicTrays;
       });
     } catch (_) {
       // Grafo de conocimiento es metadato accesorio: no bloquea el resto de la ficha.
@@ -675,7 +698,10 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
             _buildSterilizationSection(context, l10n),
             const SizedBox(height: 8),
             _buildTechnicalSection(context, l10n),
-            if (_usedInDocuments.isNotEmpty || _usedInTrays.isNotEmpty) ...[
+            if (_usedInDocuments.isNotEmpty ||
+                _usedInTrays.isNotEmpty ||
+                _usedInPublicDocuments.isNotEmpty ||
+                _usedInPublicTrays.isNotEmpty) ...[
               const Divider(height: 32),
               Text(l10n.knowledgeGraphUsedInTitle, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
@@ -698,6 +724,28 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: widget.myRole)),
+                      ),
+                    ),
+                  )),
+              ..._usedInPublicDocuments.map((doc) => Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.public_outlined),
+                      title: Text(doc.publishedVersion?.title ?? doc.id),
+                      subtitle: Text(l10n.publicLibraryTitle),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.document(document: doc)),
+                      ),
+                    ),
+                  )),
+              ..._usedInPublicTrays.map((tray) => Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.public_outlined),
+                      title: Text(tray.publishedVersion?.name ?? tray.id),
+                      subtitle: Text(l10n.publicLibraryTitle),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.tray(tray: tray)),
                       ),
                     ),
                   )),
