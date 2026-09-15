@@ -14,6 +14,7 @@ import '../services/custom_instrument_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/knowledge_link_service.dart';
+import '../services/public_tray_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/tag_service.dart';
@@ -52,6 +53,13 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
   SpecialtyEntity? _specialty;
   List<Tag> _tags = [];
   List<GroupDocument> _usedInDocuments = [];
+
+  /// true si el origen público de esta bandeja (ADR-001 / EPIC 9) ha
+  /// publicado una versión distinta de la que se adoptó/actualizó por
+  /// última vez. Solo tiene sentido comprobarlo cuando `syncStatus ==
+  /// synced` -- una bandeja `customized` ya avisa de otra forma (ver
+  /// `_buildUpstreamBanner`), e `independent` ya no recibe avisos por diseño.
+  bool _upstreamHasNewerVersion = false;
 
   @override
   void initState() {
@@ -153,6 +161,18 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
     } catch (_) {
       // Grafo de conocimiento es metadato accesorio: no bloquea el resto de la ficha.
     }
+    try {
+      final upstreamId = _tray.upstreamPublicTrayId;
+      if (upstreamId != null && _tray.syncStatus == TraySyncStatus.synced) {
+        final upstream = await PublicTrayService.instance.fetchTray(upstreamId);
+        _upstreamHasNewerVersion = upstream.publishedVersionId != null &&
+            upstream.publishedVersionId != _tray.upstreamAdoptedVersionId;
+      } else {
+        _upstreamHasNewerVersion = false;
+      }
+    } catch (_) {
+      // Comprobación de staleness accesoria: no bloquea el resto de la ficha.
+    }
     if (mounted) setState(() => _loading = false);
   }
 
@@ -211,6 +231,136 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
       }
     }
+  }
+
+  /// "Actualitzar" (ADR-001 §4): trae el contenido actual del origen público
+  /// al borrador propio en curso (o crea uno) -- nunca publica sola, sigue
+  /// exigiendo "Enviar a revisión" como cualquier otro cambio.
+  Future<void> _updateFromUpstream() async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final newDraft = await TrayService.instance.updateFromUpstream(_tray.id);
+      if (!mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => TrayFormScreen(workspaceId: _tray.workspaceId, existingDraft: newDraft),
+        ),
+      );
+      if (mounted) {
+        final updated = await TrayService.instance.fetchTray(_tray.id);
+        setState(() => _tray = updated);
+        _load();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
+  Future<void> _stopFollowing() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.trayStopFollowingConfirmTitle),
+        content: Text(l10n.trayStopFollowingConfirmBody),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.trayStopFollowingAction)),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await TrayService.instance.stopFollowingUpstream(_tray.id);
+      if (mounted) {
+        final updated = await TrayService.instance.fetchTray(_tray.id);
+        setState(() {
+          _tray = updated;
+          _upstreamHasNewerVersion = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
+  String _syncStatusLabel(AppLocalizations l10n, TraySyncStatus status) {
+    switch (status) {
+      case TraySyncStatus.synced:
+        return l10n.traySyncedLabel;
+      case TraySyncStatus.customized:
+        return l10n.trayCustomizedLabel;
+      case TraySyncStatus.independent:
+        return l10n.trayIndependentLabel;
+    }
+  }
+
+  Color _syncStatusColor(TraySyncStatus status) {
+    switch (status) {
+      case TraySyncStatus.synced:
+        return Colors.green;
+      case TraySyncStatus.customized:
+        return Colors.orange;
+      case TraySyncStatus.independent:
+        return Colors.grey;
+    }
+  }
+
+  /// ADR-001 §4: los 3 estados visuales ("Sincronitzat"/"Personalitzat"/
+  /// "Independent") nunca usan vocabulario de implementación ("fork",
+  /// "branch", "merge") -- ni aquí ni en ningún texto de la UI.
+  Widget _buildUpstreamBanner(BuildContext context, AppLocalizations l10n, bool canEdit) {
+    final status = _tray.syncStatus;
+    if (status == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.public_outlined, size: 18, color: _syncStatusColor(status)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '${l10n.trayUpstreamBadgeTooltip} · ${_syncStatusLabel(l10n, status)}',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ),
+                ],
+              ),
+              if (status == TraySyncStatus.synced && _upstreamHasNewerVersion) ...[
+                const SizedBox(height: 8),
+                Text(l10n.trayUpdateAvailableBanner, style: Theme.of(context).textTheme.bodyMedium),
+                if (canEdit) ...[
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      FilledButton(onPressed: _updateFromUpstream, child: Text(l10n.trayUpdateAction)),
+                      const SizedBox(width: 8),
+                      TextButton(onPressed: _stopFollowing, child: Text(l10n.trayStopFollowingAction)),
+                    ],
+                  ),
+                ],
+              ] else if (status != TraySyncStatus.independent && canEdit) ...[
+                const SizedBox(height: 4),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(onPressed: _stopFollowing, child: Text(l10n.trayStopFollowingAction)),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _delete() async {
@@ -278,6 +428,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                   ),
                   const SizedBox(height: 16),
                 ],
+                _buildUpstreamBanner(context, l10n, canEdit),
                 if (published == null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 24),

@@ -245,6 +245,37 @@ class TrayService {
     return TrayVersion.fromRow(versionRow as Map<String, dynamic>);
   }
 
+  /// Adopta una bandeja de la Biblioteca Pública como punto de partida de una
+  /// bandeja propia (ADR-001 §0 / EPIC 9 "adopción de organización sobre
+  /// contenido público", ver schema_v42_tray_adoption.sql). Crea una bandeja
+  /// PRIVADA nueva marcada como `synced` con el origen -- nunca modifica ni
+  /// depende de la bandeja pública en sí.
+  Future<TrayVersion> adoptPublicTray({required String publicTrayId, required String workspaceId}) async {
+    final versionRow = await _client.rpc('adopt_public_tray', params: {
+      'p_public_tray_id': publicTrayId,
+      'p_workspace_id': workspaceId,
+    });
+    return TrayVersion.fromRow(versionRow as Map<String, dynamic>);
+  }
+
+  /// "Dejar de seguir": deja de avisar de actualizaciones del origen público,
+  /// sin perder de dónde vino la bandeja (ver comentario en
+  /// schema_v42_tray_adoption.sql). Acción irreversible desde el cliente.
+  Future<void> stopFollowingUpstream(String trayId) async {
+    await _client.rpc('stop_following_public_tray', params: {'p_tray_id': trayId});
+  }
+
+  /// "Actualizar": solo tiene sentido si la bandeja está `synced` (si ya
+  /// está `customized`, el cliente debe ofrecer "Revisar cambios" en vez de
+  /// esto -- fuera de alcance de esta primera ronda, ver ADR-001 §5). Trae el
+  /// contenido ACTUAL del origen público al borrador propio en curso (o crea
+  /// uno); nunca publica sola, sigue exigiendo "Enviar a revisión" como
+  /// cualquier otro cambio.
+  Future<TrayVersion> updateFromUpstream(String trayId) async {
+    final versionRow = await _client.rpc('update_tray_from_upstream', params: {'p_tray_id': trayId});
+    return TrayVersion.fromRow(versionRow as Map<String, dynamic>);
+  }
+
   Future<void> deleteTray(String id) async {
     await _client.from('trays').delete().eq('id', id);
     _trays.removeWhere((t) => t.id == id);
