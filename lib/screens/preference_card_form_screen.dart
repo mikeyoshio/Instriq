@@ -267,11 +267,20 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
         clearGeneralNotes: _notesController.text.trim().isEmpty,
         comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
       );
+      final wasOffline = !ConnectivityService.instance.isOnline.value;
       final updated = await PreferenceCardService.instance.saveDraft(updatedDraft);
       if (andSubmit) {
         await PreferenceCardService.instance.submitForReview(updated.id);
       }
-      if (mounted) Navigator.of(context).pop(true);
+      if (mounted) {
+        if (wasOffline) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(l10n.savedOfflineSnackbar)));
+          await Future.delayed(const Duration(milliseconds: 900));
+        }
+        if (mounted) Navigator.of(context).pop(true);
+      }
     } catch (e) {
       setState(() => _error = l10n.saveError(e.toString()));
     } finally {

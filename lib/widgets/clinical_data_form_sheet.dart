@@ -419,6 +419,7 @@ class _ClinicalDataFormSheetState extends State<ClinicalDataFormSheet> {
       _error = null;
     });
     try {
+      final wasOffline = !ConnectivityService.instance.isOnline.value;
       final savedMethod = await _persistMethodDraft();
       if (submit) {
         await SterilizationService.instance.submitMethodVersionForReview(savedMethod.id);
@@ -428,7 +429,16 @@ class _ClinicalDataFormSheetState extends State<ClinicalDataFormSheet> {
         await SterilizationService.instance.submitTechnicalInfoVersionForReview(savedInfo.id);
       }
       await _tagPickerKey.currentState?.save();
-      if (mounted) Navigator.of(context).pop(true);
+      if (mounted) {
+        if (wasOffline) {
+          final l10n = AppLocalizations.of(context)!;
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(l10n.savedOfflineSnackbar)));
+          await Future.delayed(const Duration(milliseconds: 900));
+        }
+        if (mounted) Navigator.of(context).pop(true);
+      }
     } catch (e) {
       if (mounted) setState(() => _error = AppLocalizations.of(context)!.saveError(e.toString()));
     } finally {

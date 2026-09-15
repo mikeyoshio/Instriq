@@ -4,6 +4,7 @@ import '../models/group_document_version.dart';
 import '../models/instrument_sterilization.dart';
 import 'auth_service.dart';
 import 'connectivity_service.dart';
+import 'offline_cache_service.dart';
 import 'sync_queue_service.dart';
 
 /// CRUD y workflow (borrador -> en revisión -> publicada -> archivada) de
@@ -42,27 +43,59 @@ class SterilizationService {
   /// publicada resuelta en [SterilizationMethodEntry.publishedVersion] (join,
   /// mismo patrón que [TrayService.fetchTray]). Un mismo instrumento puede
   /// tener varias cabeceras (una por método posible: vapor, plasma...).
+  /// Offline (EPIC 7): mismo criterio de lectura que [TrayService.fetchTrays]
+  /// -- sin conexión (o si la petición falla por un problema de red) sirve el
+  /// último [OfflineCacheService] conocido para este instrumento en vez de
+  /// lanzar. Sin campos `methodsFromCache`/`methodsCachedAt` a nivel de
+  /// servicio (a diferencia de [TrayService]): quien consulta esto es siempre
+  /// una ficha de instrumento con su propio estado local, no una lista que
+  /// necesite un aviso "sin conexión" propio.
   Future<List<SterilizationMethodEntry>> fetchMethods(String refType, String refId) async {
-    final rows = await _client
-        .from('instrument_sterilization_methods')
-        .select(_publishedJoin)
-        .eq('instrument_ref_type', refType)
-        .eq('instrument_ref_id', refId);
-    final entries =
-        (rows as List<dynamic>).map((r) => SterilizationMethodEntry.fromRow(r as Map<String, dynamic>)).toList();
-    entries.sort((a, b) => (a.publishedVersion?.method.dbValue ?? '').compareTo(b.publishedVersion?.method.dbValue ?? ''));
-    return entries;
+    Future<List<SterilizationMethodEntry>> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedSterilizationMethods(refType, refId);
+      return cached?.data ?? [];
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) return fallbackToCache();
+    try {
+      final rows = await _client
+          .from('instrument_sterilization_methods')
+          .select(_publishedJoin)
+          .eq('instrument_ref_type', refType)
+          .eq('instrument_ref_id', refId);
+      final entries =
+          (rows as List<dynamic>).map((r) => SterilizationMethodEntry.fromRow(r as Map<String, dynamic>)).toList();
+      entries.sort(
+          (a, b) => (a.publishedVersion?.method.dbValue ?? '').compareTo(b.publishedVersion?.method.dbValue ?? ''));
+      await OfflineCacheService.instance.cacheSterilizationMethods(refType, refId, entries);
+      return entries;
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return fallbackToCache();
+    }
   }
 
   Future<InstrumentTechnicalInfo?> fetchTechnicalInfo(String refType, String refId) async {
-    final row = await _client
-        .from('instrument_technical_info')
-        .select(_publishedJoin)
-        .eq('instrument_ref_type', refType)
-        .eq('instrument_ref_id', refId)
-        .maybeSingle();
-    if (row == null) return null;
-    return InstrumentTechnicalInfo.fromRow(row);
+    Future<InstrumentTechnicalInfo?> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedTechnicalInfo(refType, refId);
+      return cached?.data;
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) return fallbackToCache();
+    try {
+      final row = await _client
+          .from('instrument_technical_info')
+          .select(_publishedJoin)
+          .eq('instrument_ref_type', refType)
+          .eq('instrument_ref_id', refId)
+          .maybeSingle();
+      final info = row == null ? null : InstrumentTechnicalInfo.fromRow(row);
+      await OfflineCacheService.instance.cacheTechnicalInfo(refType, refId, info);
+      return info;
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return fallbackToCache();
+    }
   }
 
   /// Todos los métodos de esterilización PUBLICADOS del catálogo global,
