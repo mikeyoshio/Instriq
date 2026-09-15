@@ -102,6 +102,23 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
     _load();
   }
 
+  Future<void> _duplicate() async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final newDraft = await PreferenceCardService.instance.duplicateCard(_card.id);
+      if (!mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PreferenceCardFormScreen(workspaceId: _card.workspaceId, existingDraft: newDraft),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
   /// Ver comentario de [PreferenceCardService.setValidatedBySurgeon]: es una
   /// anotación directa sobre la versión publicada, fuera del workflow de
   /// borrador/revisión.
@@ -147,6 +164,12 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
         actions: [
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
+          if (canEdit && published != null)
+            IconButton(
+              icon: const Icon(Icons.copy_all_outlined),
+              tooltip: l10n.duplicateTrayAction,
+              onPressed: _duplicate,
+            ),
           if (canApprove)
             IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.deleteTooltip, onPressed: _delete),
         ],

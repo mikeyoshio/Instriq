@@ -245,6 +245,23 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
     _loadOwnPendingInstrumentDraft();
   }
 
+  Future<void> _duplicate() async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final newDraft = await CustomInstrumentService.instance.duplicate(_instrument.id);
+      if (!mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => CustomInstrumentFormScreen(workspaceId: _instrument.workspaceId, existingDraft: newDraft),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
   Future<void> _loadIncidents() async {
     try {
       final incidents = await InstrumentIncidentService.instance.fetchForInstrument(_refType, _instrument.id);
@@ -541,6 +558,12 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
               icon: const Icon(Icons.edit_note),
               tooltip: l10n.editClinicalDataTooltip,
               onPressed: _openEditClinicalDataSheet,
+            ),
+          if (canEdit && _instrument.publishedVersion != null)
+            IconButton(
+              icon: const Icon(Icons.copy_all_outlined),
+              tooltip: l10n.duplicateTrayAction,
+              onPressed: _duplicate,
             ),
           if (canDelete)
             IconButton(

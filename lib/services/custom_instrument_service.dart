@@ -135,6 +135,17 @@ class CustomInstrumentService {
     return CustomInstrumentVersion.fromRow(versionRow);
   }
 
+  /// Crea un instrumento nuevo en el mismo espacio a partir del contenido
+  /// PUBLICADO de [instrumentId] (ver `duplicate_custom_instrument` en
+  /// schema_v40_duplicate_content.sql). Devuelve el borrador (versión 1) ya
+  /// listo para editar -- las variantes se copian, pero nunca su foto (una
+  /// variante duplicada es un punto de partida nuevo, no el mismo objeto
+  /// físico fotografiado).
+  Future<CustomInstrumentVersion> duplicate(String instrumentId) async {
+    final versionRow = await _client.rpc('duplicate_custom_instrument', params: {'p_instrument_id': instrumentId});
+    return CustomInstrumentVersion.fromRow(versionRow as Map<String, dynamic>);
+  }
+
   Future<CustomInstrumentVersion> saveDraft(CustomInstrumentVersion version) async {
     final row =
         await _client.from('custom_instrument_versions').update(version.toRow()).eq('id', version.id).select().single();

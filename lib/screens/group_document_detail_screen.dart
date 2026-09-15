@@ -358,6 +358,27 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     }
   }
 
+  Future<void> _duplicate() async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final newDraft = await GroupDocumentService.instance.duplicateDocument(_document.id);
+      if (!mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => GroupDocumentFormScreen(
+            kind: _document.kind,
+            workspaceId: _document.workspaceId,
+            existingDraft: newDraft,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
   Future<void> _openHistory() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -405,6 +426,12 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
             ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
+          if (canEdit && published != null)
+            IconButton(
+              icon: const Icon(Icons.copy_all_outlined),
+              tooltip: l10n.duplicateTrayAction,
+              onPressed: _duplicate,
+            ),
           if (canApprove)
             IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.deleteTooltip, onPressed: _delete),
         ],
