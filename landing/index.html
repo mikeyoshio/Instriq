@@ -260,6 +260,13 @@
   .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
   .skip-link:focus { left: 0; }
   .hero-note { font-family: var(--display); font-size: 0.82rem; letter-spacing: 0.01em; color: var(--ink-muted); margin-top: 18px; }
+  .hero-scope { font-size: 0.96rem; line-height: 1.55; color: var(--ink-muted); max-width: 500px; margin: 0 0 22px; }
+  .hero-scope strong { color: var(--ink); font-weight: 600; }
+  .hero-signals { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .signal-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; color: var(--ink-muted); border: 1px solid var(--rule); border-radius: 999px; padding: 7px 13px 7px 11px; background: var(--surface); text-decoration: none; transition: border-color 0.15s ease, color 0.15s ease; }
+  .signal-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+  a.signal-chip:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 480px) { .signal-chip { font-size: 0.78rem; padding: 6px 11px 6px 9px; } }
   .github-stars { display: flex; width: fit-content; align-items: center; gap: 7px; margin-top: 14px; color: var(--ink-muted); font-family: var(--display); font-size: 0.85rem; text-decoration: none; transition: color 0.15s ease; }
   .github-stars:hover { color: var(--accent); }
   .github-stars svg { flex-shrink: 0; }
@@ -298,9 +305,28 @@
       <span class="eyebrow" data-i18n="hero.eyebrow">Open source · Bloc quirúrgic</span>
       <h1 data-i18n="hero.h1">El coneixement de quiròfan,<br>obert i compartit.</h1>
       <p class="lede" data-i18n="hero.lede">Instriq reuneix instrumental, protocols i l'experiència real del bloc quirúrgic en un sol lloc — perquè aprendre a moure's al quiròfan no depengui d'una carpeta de paper desactualitzada.</p>
+      <p class="hero-scope" data-i18n="hero.scope">Coneixement d'equip — instrumental, tècniques i protocols. <strong>No emmagatzema dades de pacients ni substitueix la història clínica.</strong></p>
       <div class="hero-actions">
         <a href="https://app.instriq.org" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
         <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
+      </div>
+      <div class="hero-signals">
+        <a href="privacidad.html" class="signal-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6Z"/></svg>
+          <span data-i18n="hero.trust1">Sense dades de pacients</span>
+        </a>
+        <a href="#funciones" class="signal-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 3h6v3H9z"/><path d="m9.5 13 2 2 3.5-3.5"/></svg>
+          <span data-i18n="hero.trust2">Auditoria i rols</span>
+        </a>
+        <a href="#funciones" class="signal-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14.5-4.5M20 12a8 8 0 0 1-14.5 4.5"/><path d="M18 4v4h-4M6 20v-4h4"/></svg>
+          <span data-i18n="hero.trust3">Sense connexió</span>
+        </a>
+        <a href="#transparencia" class="signal-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 8-4 4 4 4M15 8l4 4-4 4"/></svg>
+          <span data-i18n="hero.trust4">Codi obert · AGPL-3.0</span>
+        </a>
       </div>
       <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
       <div class="data-row">
@@ -712,7 +738,9 @@
       "hero.eyebrow": "Open source · Bloque quirúrgico",
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
+      "hero.scope": "Conocimiento de equipo — instrumental, técnicas y protocolos. <strong>No almacena datos de pacientes ni sustituye la historia clínica.</strong>",
       "hero.cta1": "Abrir la app →", "hero.cta2": "Ver el código en GitHub",
+      "hero.trust1": "Sin datos de pacientes", "hero.trust2": "Auditoría y roles", "hero.trust3": "Sin conexión", "hero.trust4": "Código abierto · AGPL-3.0",
       "hero.note": "Sin licencias. Sin cuota de SaaS. Sin sorpresas en la factura — abierto, siempre.",
       "hero.stat1": "Instrumentos", "hero.stat2": "Especialidades", "hero.stat3": "Plataformas", "hero.stat4": "Equipos activos",
       "deck.c1tag": "Protocolo · Cirugía general", "deck.c1title": "Colecistectomía laparoscópica", "deck.c1sub": "v3 · publicado hace 4 días",
@@ -803,7 +831,9 @@
       "hero.eyebrow": "Open source · Surgical block",
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
+      "hero.scope": "Team knowledge — instruments, techniques and protocols. <strong>Stores no patient data and does not replace the clinical record.</strong>",
       "hero.cta1": "Open the app →", "hero.cta2": "View the code on GitHub",
+      "hero.trust1": "No patient data", "hero.trust2": "Audit trail & roles", "hero.trust3": "Offline", "hero.trust4": "Open source · AGPL-3.0",
       "hero.note": "No licenses. No SaaS fee. No surprises on the bill — open, always.",
       "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Platforms", "hero.stat4": "Active teams",
       "deck.c1tag": "Protocol · General surgery", "deck.c1title": "Laparoscopic cholecystectomy", "deck.c1sub": "v3 · published 4 days ago",
