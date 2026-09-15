@@ -61,3 +61,7 @@ ios/Runner/GoogleService-Info.plist
 landing/node_modules/
 landing/package.json
 landing/package-lock.json
+
+# supabase/.temp/: estado local de `supabase link` (project-ref, etc.) de la
+# CLI de Supabase -- por máquina, no forma parte del proyecto versionado.
+supabase/.temp/

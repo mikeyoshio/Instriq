@@ -15,6 +15,7 @@ import 'l10n/app_localizations.dart';
 import 'navigation/router.dart';
 import 'screens/app_root.dart';
 import 'screens/auth/reset_password_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'services/app_version_service.dart';
 import 'services/auth_service.dart';
 import 'services/connectivity_service.dart';
@@ -88,9 +89,29 @@ class _InstriqAppState extends State<InstriqApp> {
         ReminderService.instance.cancel();
       }
     });
-    if (!kIsWeb) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _checkForUpdate());
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Bienvenida antes que el aviso de versión (si aplica): un usuario
+      // completamente nuevo debería ver primero "qué es esto", no un aviso
+      // de actualización -- el orden importa aquí, no son independientes.
+      await _checkOnboarding();
+      if (!kIsWeb) _checkForUpdate();
+    });
+  }
+
+  /// Bienvenida de 3 pasos mostrada UNA SOLA VEZ (ver OnboardingScreen) -- no
+  /// depende de sesión ni de conexión, así que se comprueba siempre, tanto en
+  /// invitado como con cuenta. Mismo patrón que el flag `dismissed_version_notice_*`
+  /// de _checkForUpdate: SharedPreferences inline, sin servicio dedicado, para
+  /// un flag de un único uso que no necesita reaccionar a nada más.
+  Future<void> _checkOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('has_seen_onboarding') == true) return;
+    final context = _navigatorKey.currentContext;
+    if (context == null || !context.mounted) return;
+    await _navigatorKey.currentState?.push(
+      MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+    );
+    await prefs.setBool('has_seen_onboarding', true);
   }
 
   Future<void> _checkForUpdate() async {
