@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../data/instruments_data.dart';
 import '../data/sutures_data.dart';
+import '../design_system/components/instriq_autosave.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
@@ -67,6 +68,8 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   bool _saving = false;
   bool _scanning = false;
   String? _error;
+  late final AutosaveController _autosave;
+  InstriqAutosaveStatus _autosaveStatus = InstriqAutosaveStatus.idle;
 
   @override
   void initState() {
@@ -81,7 +84,41 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     _relatedTrayIds = [];
     _consumables = [];
     _relatedSutureIds = [];
+    _autosave = AutosaveController(
+      save: _autosaveSave,
+      onStatusChanged: (s) {
+        if (mounted) setState(() => _autosaveStatus = s);
+      },
+    );
     _init();
+  }
+
+  /// Persiste en segundo plano los campos de texto/listas del borrador
+  /// (mismo `saveDraft` que el guardado manual). Deliberadamente fuera de
+  /// alcance: subir fotos nuevas y guardar etiquetas (`_tagPickerKey`) —
+  /// ambas ya se hacen explícitamente al pulsar "Guardar"/"Enviar a
+  /// revisión", y repetirlas en cada autoguardado sería coste sin beneficio
+  /// (una foto no se "pierde" por no autoguardarse: sigue en memoria hasta
+  /// que el usuario guarda o cierra la pantalla, igual que antes de que
+  /// existiera el autoguardado).
+  Future<void> _autosaveSave() async {
+    if (_draft == null) return;
+    _draft = await GroupDocumentService.instance.saveDraft(_draftWithFormValues());
+  }
+
+  /// Los controladores ya tienen texto cargado por [_applyDraft] antes de
+  /// llamar a esto -- si se enganchara el listener antes, el propio volcado
+  /// inicial dispararía un autoguardado espurio nada más abrir la pantalla.
+  void _attachAutosaveListeners() {
+    for (final c in [
+      _titleController,
+      _contentController,
+      _commentController,
+      _positioningController,
+      _anesthesiaController,
+    ]) {
+      c.addListener(_autosave.markDirty);
+    }
   }
 
   Future<void> _init() async {
@@ -108,6 +145,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       }
       final draft = await _loadDraft();
       _applyDraft(draft);
+      _attachAutosaveListeners();
     } catch (e) {
       setState(() => _error = AppLocalizations.of(context)!.formPrepareDraftError(e.toString()));
     } finally {
@@ -141,6 +179,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
 
   @override
   void dispose() {
+    _autosave.dispose();
     _titleController.dispose();
     _contentController.dispose();
     _commentController.dispose();
@@ -235,6 +274,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
             category: (resolvedCategory == null || resolvedCategory.isEmpty) ? null : resolvedCategory,
             text: step,
           )));
+      _autosave.markDirty();
     }
   }
 
@@ -268,6 +308,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
         }
         _steps.addAll(remainingLines.map((line) => ProtocolStep(text: line)));
       });
+      _autosave.markDirty();
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l10n.scanSuccessSnackbar(lines.length))));
@@ -289,6 +330,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     );
     if (selected != null && !_relatedInstrumentIds.contains(selected.id)) {
       setState(() => _relatedInstrumentIds.add(selected.id));
+      _autosave.markDirty();
     }
   }
 
@@ -300,6 +342,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     );
     if (selected != null && !_relatedTrayIds.contains(selected.id)) {
       setState(() => _relatedTrayIds.add(selected.id));
+      _autosave.markDirty();
     }
   }
 
@@ -311,6 +354,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     );
     if (selected != null && !_relatedSutureIds.contains(selected.id)) {
       setState(() => _relatedSutureIds.add(selected.id));
+      _autosave.markDirty();
     }
   }
 
@@ -363,6 +407,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
             quantity: quantityController.text.trim().isEmpty ? null : quantityController.text.trim(),
             notes: notesController.text.trim().isEmpty ? null : notesController.text.trim(),
           )));
+      _autosave.markDirty();
     }
   }
 
@@ -394,6 +439,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
       setState(() => _error = l10n.titleRequired);
       return;
     }
+    _autosave.cancelPending();
     setState(() {
       _saving = true;
       _error = null;
@@ -436,7 +482,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
             DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
             ..._specialties.map((s) => DropdownMenuItem<String?>(value: s.id, child: Text(s.label))),
           ],
-          onChanged: (value) => setState(() => _specialtyId = value),
+          onChanged: (value) {
+            setState(() => _specialtyId = value);
+            _autosave.markDirty();
+          },
         ),
         if (_legacySpecialtyText != null && _legacySpecialtyText!.isNotEmpty) ...[
           const SizedBox(height: 4),
@@ -467,7 +516,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.editDraftAppBarTitle(kindLabel))),
+      appBar: AppBar(
+        title: Text(l10n.editDraftAppBarTitle(kindLabel)),
+        actions: [InstriqAutosaveIndicator(status: _autosaveStatus)],
+      ),
       body: SafeArea(
         child: InstriqResponsiveContent(
           child: ListView(
@@ -523,6 +575,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                   final step = _steps.removeAt(oldIndex);
                   _steps.insert(newIndex, step);
                 });
+                _autosave.markDirty();
               },
               itemBuilder: (context, index) {
                 final step = _steps[index];
@@ -534,7 +587,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline),
                     tooltip: l10n.removeStepTooltip,
-                    onPressed: () => setState(() => _steps.removeAt(index)),
+                    onPressed: () {
+                      setState(() => _steps.removeAt(index));
+                      _autosave.markDirty();
+                    },
                   ),
                 );
               },
@@ -566,7 +622,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   tooltip: l10n.removeRelatedInstrumentTooltip,
-                  onPressed: () => setState(() => _relatedInstrumentIds.remove(id)),
+                  onPressed: () {
+                    setState(() => _relatedInstrumentIds.remove(id));
+                    _autosave.markDirty();
+                  },
                 ),
               );
             }),
@@ -595,7 +654,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   tooltip: l10n.removeRelatedTrayTooltip,
-                  onPressed: () => setState(() => _relatedTrayIds.remove(id)),
+                  onPressed: () {
+                    setState(() => _relatedTrayIds.remove(id));
+                    _autosave.markDirty();
+                  },
                 ),
               );
             }),
@@ -624,7 +686,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   tooltip: l10n.removeRelatedSutureTooltip,
-                  onPressed: () => setState(() => _relatedSutureIds.remove(id)),
+                  onPressed: () {
+                    setState(() => _relatedSutureIds.remove(id));
+                    _autosave.markDirty();
+                  },
                 ),
               );
             }),
@@ -657,7 +722,10 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 trailing: IconButton(
                   icon: const Icon(Icons.delete_outline),
                   tooltip: l10n.removeConsumableTooltip,
-                  onPressed: () => setState(() => _consumables.removeAt(index)),
+                  onPressed: () {
+                    setState(() => _consumables.removeAt(index));
+                    _autosave.markDirty();
+                  },
                 ),
               );
             }),

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../design_system/components/instriq_autosave.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
@@ -81,6 +82,8 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
   bool _loading = true;
   bool _saving = false;
   String? _error;
+  late final AutosaveController _autosave;
+  InstriqAutosaveStatus _autosaveStatus = InstriqAutosaveStatus.idle;
 
   @override
   void initState() {
@@ -92,7 +95,42 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
     _tipController = TextEditingController();
     _commentController = TextEditingController();
     _variants = [];
+    _autosave = AutosaveController(
+      save: _autosaveSave,
+      onStatusChanged: (s) {
+        if (mounted) setState(() => _autosaveStatus = s);
+      },
+    );
     _init();
+  }
+
+  /// Igual criterio que en los demás formularios: fuera de alcance subir
+  /// fotos nuevas de variante (`pickedPhoto`), que sigue atado al guardado
+  /// manual explícito.
+  Future<void> _autosaveSave() async {
+    if (_draft == null) return;
+    _draft = await CustomInstrumentService.instance.saveDraft(_draftWithFormValues());
+  }
+
+  void _attachAutosaveListeners() {
+    for (final c in [
+      _nameController,
+      _categoryController,
+      _descriptionController,
+      _useController,
+      _tipController,
+      _commentController,
+    ]) {
+      c.addListener(_autosave.markDirty);
+    }
+    for (final v in _variants) {
+      _attachVariantAutosaveListeners(v);
+    }
+  }
+
+  void _attachVariantAutosaveListeners(_VariantDraft v) {
+    v.nameController.addListener(_autosave.markDirty);
+    v.noteController.addListener(_autosave.markDirty);
   }
 
   Future<void> _init() async {
@@ -112,6 +150,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
         draft = await CustomInstrumentService.instance.create(widget.workspaceId);
       }
       _applyDraft(draft);
+      _attachAutosaveListeners();
     } catch (e) {
       setState(() => _error = AppLocalizations.of(context)!.formPrepareDraftError(e.toString()));
     } finally {
@@ -133,6 +172,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
 
   @override
   void dispose() {
+    _autosave.dispose();
     _nameController.dispose();
     _categoryController.dispose();
     _descriptionController.dispose();
@@ -147,7 +187,10 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
   }
 
   void _addVariant() {
-    setState(() => _variants.add(_VariantDraft(id: '${DateTime.now().microsecondsSinceEpoch}')));
+    final variant = _VariantDraft(id: '${DateTime.now().microsecondsSinceEpoch}');
+    _attachVariantAutosaveListeners(variant);
+    setState(() => _variants.add(variant));
+    _autosave.markDirty();
   }
 
   void _removeVariant(int index) {
@@ -155,6 +198,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
     removed.nameController.dispose();
     removed.noteController.dispose();
     setState(() {});
+    _autosave.markDirty();
   }
 
   Future<void> _pickPhoto(_VariantDraft draft) async {
@@ -223,6 +267,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
       return;
     }
 
+    _autosave.cancelPending();
     setState(() {
       _saving = true;
       _error = null;
@@ -270,7 +315,10 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
       );
     }
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? l10n.editCustomInstrumentTitle : l10n.newCustomInstrumentLabel)),
+      appBar: AppBar(
+        title: Text(isEditing ? l10n.editCustomInstrumentTitle : l10n.newCustomInstrumentLabel),
+        actions: [InstriqAutosaveIndicator(status: _autosaveStatus)],
+      ),
       body: SafeArea(
         child: InstriqResponsiveContent(
           child: ListView(
@@ -303,7 +351,10 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
                 DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
                 ..._specialties.map((s) => DropdownMenuItem<String?>(value: s.id, child: Text(s.label))),
               ],
-              onChanged: (value) => setState(() => _specialtyId = value),
+              onChanged: (value) {
+                setState(() => _specialtyId = value);
+                _autosave.markDirty();
+              },
             ),
             if (_legacySpecialtyText != null && _legacySpecialtyText!.isNotEmpty) ...[
               const SizedBox(height: 4),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../design_system/components/instriq_autosave.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
@@ -46,6 +47,8 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
   bool _loading = true;
   bool _saving = false;
   String? _error;
+  late final AutosaveController _autosave;
+  InstriqAutosaveStatus _autosaveStatus = InstriqAutosaveStatus.idle;
 
   @override
   void initState() {
@@ -54,7 +57,38 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
     _notesController = TextEditingController();
     _commentController = TextEditingController();
     _items = [];
+    _autosave = AutosaveController(
+      save: _autosaveSave,
+      onStatusChanged: (s) {
+        if (mounted) setState(() => _autosaveStatus = s);
+      },
+    );
     _init();
+  }
+
+  /// A diferencia de los demás formularios, deliberadamente NO incluye
+  /// `surgeonId`: resolverlo implica `SurgeonService.createOrGet`, que puede
+  /// crear un cirujano nuevo en base de datos -- un efecto secundario real
+  /// que no debe dispararse solo porque el usuario está tecleando un nombre
+  /// a medias. El autoguardado deja el cirujano tal cual estuviera ya
+  /// persistido en el borrador; solo el guardado manual ([_save]) lo
+  /// resuelve o crea.
+  Future<void> _autosaveSave() async {
+    if (_draft == null) return;
+    final snapshot = _draft!.copyWith(
+      procedureName: _procedureController.text.trim(),
+      items: _items,
+      generalNotes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      clearGeneralNotes: _notesController.text.trim().isEmpty,
+      comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
+    );
+    _draft = await PreferenceCardService.instance.saveDraft(snapshot);
+  }
+
+  void _attachAutosaveListeners() {
+    for (final c in [_procedureController, _notesController, _commentController]) {
+      c.addListener(_autosave.markDirty);
+    }
   }
 
   Future<void> _init() async {
@@ -84,6 +118,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
         draft = await PreferenceCardService.instance.createCard(widget.workspaceId);
       }
       _applyDraft(draft);
+      _attachAutosaveListeners();
     } catch (e) {
       if (mounted) {
         setState(() => _error = AppLocalizations.of(context)!.formPrepareDraftError(e.toString()));
@@ -108,6 +143,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
 
   @override
   void dispose() {
+    _autosave.dispose();
     _surgeonFieldController.dispose();
     _procedureController.dispose();
     _notesController.dispose();
@@ -133,6 +169,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
       setState(() {
         _items.add(PreferenceCardItem(instrumentId: selected.id, customName: selected.name));
       });
+      _autosave.markDirty();
     }
   }
 
@@ -161,6 +198,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
       setState(() {
         _items.add(PreferenceCardItem(customName: name));
       });
+      _autosave.markDirty();
     }
   }
 
@@ -194,6 +232,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
           note: note.isEmpty ? null : note,
         );
       });
+      _autosave.markDirty();
     }
   }
 
@@ -205,6 +244,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
       setState(() => _error = l10n.missingFieldsSnackbar);
       return;
     }
+    _autosave.cancelPending();
     setState(() {
       _saving = true;
       _error = null;
@@ -259,6 +299,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditing ? l10n.editDraftAppBarTitle(l10n.preferenceCardTitle) : l10n.newCardLabel),
+        actions: [InstriqAutosaveIndicator(status: _autosaveStatus)],
       ),
       body: SafeArea(
         child: InstriqResponsiveContent(
@@ -349,7 +390,10 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
                           tooltip: l10n.removeItemTooltip,
-                          onPressed: () => setState(() => _items.removeAt(index)),
+                          onPressed: () {
+                            setState(() => _items.removeAt(index));
+                            _autosave.markDirty();
+                          },
                         ),
                       ],
                     ),

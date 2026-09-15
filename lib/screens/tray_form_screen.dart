@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../design_system/components/instriq_autosave.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
@@ -52,6 +53,8 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
   bool _loading = true;
   bool _saving = false;
   String? _error;
+  late final AutosaveController _autosave;
+  InstriqAutosaveStatus _autosaveStatus = InstriqAutosaveStatus.idle;
 
   @override
   void initState() {
@@ -62,7 +65,27 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
     _commentController = TextEditingController();
     _items = [];
     _photoPaths = [];
+    _autosave = AutosaveController(
+      save: _autosaveSave,
+      onStatusChanged: (s) {
+        if (mounted) setState(() => _autosaveStatus = s);
+      },
+    );
     _init();
+  }
+
+  /// Igual que en `GroupDocumentFormScreen`: fuera de alcance del
+  /// autoguardado subir fotos nuevas (`_newPhotos`) y guardar etiquetas —
+  /// ambas siguen atadas al guardado manual explícito.
+  Future<void> _autosaveSave() async {
+    if (_draft == null) return;
+    _draft = await TrayService.instance.saveDraft(_draftWithFormValues());
+  }
+
+  void _attachAutosaveListeners() {
+    for (final c in [_nameController, _descriptionController, _observationsController, _commentController]) {
+      c.addListener(_autosave.markDirty);
+    }
   }
 
   Future<void> _init() async {
@@ -94,6 +117,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
         draft = await TrayService.instance.createTray(widget.workspaceId);
       }
       _applyDraft(draft);
+      _attachAutosaveListeners();
     } catch (e) {
       setState(() => _error = AppLocalizations.of(context)!.formPrepareDraftError(e.toString()));
     } finally {
@@ -114,6 +138,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
 
   @override
   void dispose() {
+    _autosave.dispose();
     _nameController.dispose();
     _descriptionController.dispose();
     _observationsController.dispose();
@@ -133,6 +158,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
     );
     if (!alreadyThere) {
       setState(() => _items.add(selected));
+      _autosave.markDirty();
     }
   }
 
@@ -176,6 +202,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
         clearPosition: position.isEmpty,
       );
     });
+    _autosave.markDirty();
   }
 
   Future<void> _pickPhoto() async {
@@ -231,6 +258,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
       setState(() => _error = l10n.titleRequired);
       return;
     }
+    _autosave.cancelPending();
     setState(() {
       _saving = true;
       _error = null;
@@ -278,7 +306,10 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
             DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
             ..._specialties.map((s) => DropdownMenuItem<String?>(value: s.id, child: Text(s.label))),
           ],
-          onChanged: (value) => setState(() => _specialtyId = value),
+          onChanged: (value) {
+            setState(() => _specialtyId = value);
+            _autosave.markDirty();
+          },
         ),
         if (_legacySpecialtyText != null && _legacySpecialtyText!.isNotEmpty) ...[
           const SizedBox(height: 4),
@@ -308,7 +339,10 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.editDraftAppBarTitle(l10n.trayTitle))),
+      appBar: AppBar(
+        title: Text(l10n.editDraftAppBarTitle(l10n.trayTitle)),
+        actions: [InstriqAutosaveIndicator(status: _autosaveStatus)],
+      ),
       body: SafeArea(
         child: InstriqResponsiveContent(
           child: ListView(
@@ -359,7 +393,10 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   tooltip: l10n.removeItemTooltip,
-                  onPressed: () => setState(() => _items.removeAt(index)),
+                  onPressed: () {
+                    setState(() => _items.removeAt(index));
+                    _autosave.markDirty();
+                  },
                 ),
               );
             }),
@@ -379,7 +416,10 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
               children: [
                 ..._photoPaths.asMap().entries.map((entry) => _RemovableChip(
                       label: '${l10n.trayPhotosLabel} ${entry.key + 1}',
-                      onRemove: () => setState(() => _photoPaths.removeAt(entry.key)),
+                      onRemove: () {
+                        setState(() => _photoPaths.removeAt(entry.key));
+                        _autosave.markDirty();
+                      },
                     )),
                 ..._newPhotos.asMap().entries.map((entry) => _RemovableChip(
                       label: entry.value.name,

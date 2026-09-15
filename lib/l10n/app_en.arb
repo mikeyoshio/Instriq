@@ -530,6 +530,12 @@
   "pendingSyncBadge": "Pending sync",
   "savedOfflineSnackbar": "Offline: saved locally, it will sync automatically once you're back online.",
 
+  "autosaveDirty": "Unsaved changes",
+  "autosaveSaving": "Saving…",
+  "autosaveSaved": "Saved",
+  "autosaveOffline": "Saved offline — will sync",
+  "autosaveError": "Couldn't autosave",
+
   "syncIssuesTitle": "Sync issues",
   "syncIssuesMenuSubtitle": "Changes that didn't make it to the server",
   "syncIssuesEmptyState": "No sync issues",
