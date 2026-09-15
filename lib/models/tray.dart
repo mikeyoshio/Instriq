@@ -78,6 +78,38 @@ class TrayItem {
   }
 }
 
+/// Estado de sincronización con el origen público (ADR-001 §0 / EPIC 9 ·
+/// "adopción de organización sobre contenido público"). `null` en [Tray]
+/// significa "nunca adoptada de la Biblioteca Pública" — solo tiene un valor
+/// cuando [Tray.upstreamPublicTrayId] también lo tiene (ver constraint
+/// `trays_sync_status_requires_upstream`, schema_v42_tray_adoption.sql).
+enum TraySyncStatus {
+  /// Idéntica al origen público en el momento de la última adopción/actualización.
+  synced,
+
+  /// Tiene ediciones locales propias desde que se adoptó (o se actualizó por
+  /// última vez) — transición automática, nunca manual (ver el trigger
+  /// `mark_tray_customized_on_content_change`).
+  customized,
+
+  /// "Dejar de seguir": ya no recibe ningún aviso de actualización del
+  /// origen, aunque se conserva de dónde vino (decisión de este proyecto,
+  /// ver comentario en schema_v42_tray_adoption.sql).
+  independent,
+}
+
+extension TraySyncStatusLabel on TraySyncStatus {
+  String get dbValue => name;
+
+  static TraySyncStatus? fromDb(String? value) {
+    if (value == null) return null;
+    for (final s in TraySyncStatus.values) {
+      if (s.dbValue == value) return s;
+    }
+    return null;
+  }
+}
+
 /// Cabecera de una bandeja de instrumental. El contenido (nombre,
 /// especialidad, fotos, items, observaciones) vive en [TrayVersion] — igual
 /// que [GroupDocument]/[GroupDocumentVersion].
@@ -90,6 +122,16 @@ class Tray {
   final String? publishedVersionId;
   final TrayVersion? publishedVersion;
 
+  /// Origen público de esta bandeja si se adoptó de la Biblioteca Pública
+  /// (`public_trays.id`) — `null` si es contenido propio desde el principio.
+  final String? upstreamPublicTrayId;
+
+  /// Versión pública concreta adoptada/sincronizada por última vez
+  /// (`public_tray_versions.id`) — se usa para detectar si el origen ha
+  /// publicado algo más nuevo desde entonces.
+  final String? upstreamAdoptedVersionId;
+  final TraySyncStatus? syncStatus;
+
   const Tray({
     required this.id,
     required this.organizationId,
@@ -98,6 +140,9 @@ class Tray {
     this.createdAt,
     this.publishedVersionId,
     this.publishedVersion,
+    this.upstreamPublicTrayId,
+    this.upstreamAdoptedVersionId,
+    this.syncStatus,
   });
 
   Tray copyWith({String? publishedVersionId, TrayVersion? publishedVersion}) {
@@ -109,6 +154,9 @@ class Tray {
       createdAt: createdAt,
       publishedVersionId: publishedVersionId ?? this.publishedVersionId,
       publishedVersion: publishedVersion ?? this.publishedVersion,
+      upstreamPublicTrayId: upstreamPublicTrayId,
+      upstreamAdoptedVersionId: upstreamAdoptedVersionId,
+      syncStatus: syncStatus,
     );
   }
 
@@ -122,6 +170,9 @@ class Tray {
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
       publishedVersionId: row['published_version_id'] as String?,
       publishedVersion: versionRow != null ? TrayVersion.fromRow(versionRow) : null,
+      upstreamPublicTrayId: row['upstream_public_tray_id'] as String?,
+      upstreamAdoptedVersionId: row['upstream_adopted_version_id'] as String?,
+      syncStatus: TraySyncStatusLabel.fromDb(row['sync_status'] as String?),
     );
   }
 
@@ -134,6 +185,9 @@ class Tray {
         'created_at': createdAt?.toIso8601String(),
         'published_version_id': publishedVersionId,
         'published_version': publishedVersion?.toCacheRow(),
+        'upstream_public_tray_id': upstreamPublicTrayId,
+        'upstream_adopted_version_id': upstreamAdoptedVersionId,
+        'sync_status': syncStatus?.dbValue,
       };
 }
 

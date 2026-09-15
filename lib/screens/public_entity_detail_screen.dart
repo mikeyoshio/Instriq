@@ -5,14 +5,20 @@ import '../l10n/app_localizations.dart';
 import '../models/group_document.dart' show DocumentKind;
 import '../models/public_document.dart';
 import '../models/public_tray.dart';
+import '../services/auth_service.dart';
+import '../services/profile_service.dart';
+import '../services/tray_service.dart';
+import '../services/workspace_service.dart';
 import 'contributor_public_profile_screen.dart';
 import 'public_entity_form_screen.dart' show PublicEntityKind, PublicEntityKindX;
+import 'tray_form_screen.dart';
 
 /// Vista de lectura d'una tècnica/protocol o safata publicada a la
-/// Biblioteca Pública -- oberta a tothom, inclosos convidats. Deliberadament
-/// nomes lectura en aquest tram: adoptar-la com a versió local d'una
-/// organització depèn de com s'apliqui en detall ADR-001
-/// (docs/ADR_001_KNOWLEDGE_GOVERNANCE.md), encara no fet.
+/// Biblioteca Pública -- oberta a tothom, inclosos convidats. Les bandejas
+/// (només, de moment) es poden "adoptar" com a punt de partida d'una bandeja
+/// pròpia -- ADR-001 §0 / EPIC 9 "adopció d'organització sobre contingut
+/// públic" (ver schema_v42_tray_adoption.sql): primer candidat real segons
+/// el propi ADR §8, tècniques/targetes queden per a una ronda futura.
 class PublicEntityDetailScreen extends StatelessWidget {
   final PublicEntityKind entityKind;
   final PublicDocument? document;
@@ -46,6 +52,10 @@ class PublicEntityDetailScreen extends StatelessWidget {
                 child: ListView(
                 padding: const EdgeInsets.all(20),
                 children: [
+                  if (isTray) ...[
+                    _AdoptTrayButton(tray: tray!),
+                    const SizedBox(height: 20),
+                  ],
                   ...isTray
                       ? _trayContent(context, l10n, trayVersion!)
                       : _documentContent(context, l10n, documentVersion!),
@@ -127,5 +137,89 @@ class PublicEntityDetailScreen extends StatelessWidget {
         Text(version.observations!, style: Theme.of(context).textTheme.bodyLarge),
       ],
     ];
+  }
+}
+
+/// Su propio widget con estado (en vez de convertir toda la pantalla, que es
+/// [StatelessWidget]) solo para no perder esa simplicidad por un único botón
+/// que necesita su propio spinner de carga.
+class _AdoptTrayButton extends StatefulWidget {
+  final PublicTray tray;
+
+  const _AdoptTrayButton({required this.tray});
+
+  @override
+  State<_AdoptTrayButton> createState() => _AdoptTrayButtonState();
+}
+
+class _AdoptTrayButtonState extends State<_AdoptTrayButton> {
+  bool _loading = false;
+
+  /// Igual que `_openWorkspaceCollection` en `home_screen.dart`: si solo hay
+  /// un espacio, se salta el selector; si hay varios, se elige con una hoja
+  /// simple (no hace falta la pantalla completa de `WorkspaceListScreen`,
+  /// pensada para navegar contenido, no para elegir-y-volver).
+  Future<String?> _pickWorkspaceId(AppLocalizations l10n) async {
+    await WorkspaceService.instance.fetchWorkspaces();
+    final workspaces = WorkspaceService.instance.workspaces;
+    if (workspaces.isEmpty) return null;
+    if (workspaces.length == 1) return workspaces.first.id;
+    if (!mounted) return null;
+    return showModalBottomSheet<String>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(l10n.workspaceLabel, style: Theme.of(ctx).textTheme.titleMedium),
+            ),
+            for (final w in workspaces) ListTile(title: Text(w.name), onTap: () => Navigator.pop(ctx, w.id)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _adopt() async {
+    final l10n = AppLocalizations.of(context)!;
+    if (!ProfileService.instance.hasHospital) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.adoptNoWorkspaceError)));
+      return;
+    }
+    final workspaceId = await _pickWorkspaceId(l10n);
+    if (workspaceId == null || !mounted) return;
+    setState(() => _loading = true);
+    try {
+      final draft = await TrayService.instance.adoptPublicTray(publicTrayId: widget.tray.id, workspaceId: workspaceId);
+      if (mounted) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => TrayFormScreen(workspaceId: workspaceId, existingDraft: draft)),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError(e.toString()))));
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    if (AuthService.instance.currentUser == null) return const SizedBox.shrink();
+    return SizedBox(
+      width: double.infinity,
+      child: FilledButton.icon(
+        onPressed: _loading ? null : _adopt,
+        icon: _loading
+            ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
+            : const Icon(Icons.download_outlined),
+        label: Text(l10n.adoptTrayAction),
+      ),
+    );
   }
 }
