@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/language_picker.dart';
 
 class _OnboardingPage {
   final IconData icon;
@@ -84,20 +85,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(InstriqSpacing.sm),
-                  child: Visibility(
-                    visible: !isLast,
-                    maintainSize: true,
-                    maintainAnimation: true,
-                    maintainState: true,
-                    child: TextButton(
-                      onPressed: _finish,
-                      child: Text(l10n.onboardingSkip),
+              Padding(
+                padding: const EdgeInsets.all(InstriqSpacing.sm),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.language),
+                      tooltip: l10n.languageTooltip,
+                      onPressed: () => pickLanguage(context),
                     ),
-                  ),
+                    const Spacer(),
+                    Visibility(
+                      visible: !isLast,
+                      maintainSize: true,
+                      maintainAnimation: true,
+                      maintainState: true,
+                      child: TextButton(
+                        onPressed: _finish,
+                        child: Text(l10n.onboardingSkip),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(

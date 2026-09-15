@@ -7,10 +7,10 @@ import '../l10n/app_localizations.dart';
 import '../models/contributor_application.dart';
 import '../services/auth_service.dart';
 import '../services/contributor_service.dart';
-import '../services/locale_service.dart';
 import '../services/profile_service.dart';
 import '../services/sync_queue_service.dart';
 import '../services/theme_service.dart';
+import '../widgets/language_picker.dart';
 import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'contributor_application_form_screen.dart';
@@ -94,31 +94,6 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     _refreshContributorState();
   }
 
-  Future<void> _pickLanguage() async {
-    final l10n = AppLocalizations.of(context)!;
-    final locale = await showDialog<Locale>(
-      context: context,
-      builder: (ctx) => SimpleDialog(
-        title: Text(l10n.languageDialogTitle),
-        children: [
-          SimpleDialogOption(
-            onPressed: () => Navigator.pop(ctx, const Locale('ca')),
-            child: Text(l10n.languageCatalan),
-          ),
-          SimpleDialogOption(
-            onPressed: () => Navigator.pop(ctx, const Locale('es')),
-            child: Text(l10n.languageSpanish),
-          ),
-          SimpleDialogOption(
-            onPressed: () => Navigator.pop(ctx, const Locale('en')),
-            child: Text(l10n.languageEnglish),
-          ),
-        ],
-      ),
-    );
-    if (locale != null) await LocaleService.instance.setLocale(locale);
-  }
-
   Future<void> _openHowItWorks() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const HowItWorksScreen()),
@@ -186,7 +161,7 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
               InstriqListItem(
                 icon: Icons.language,
                 title: l10n.languageTooltip,
-                onTap: _pickLanguage,
+                onTap: () => pickLanguage(context),
               ),
               const SizedBox(height: InstriqSpacing.sm),
               ValueListenableBuilder<ThemeMode>(
