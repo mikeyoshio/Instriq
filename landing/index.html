@@ -511,7 +511,7 @@
         <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
         <div class="timeline-track-wrap">
           <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
-          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="40" value="0" step="1" aria-label="Línia del temps d'Instriq">
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="41" value="0" step="1" aria-label="Línia del temps d'Instriq">
         </div>
         <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
       </div>
@@ -933,7 +933,7 @@
   CA_DEFAULTS['meta.title'] = document.title;
 
   // Timeline interactiu de novetats: 1 origen + 31 desplegaments + 3 previstos.
-  var TIMELINE_SHIPPED = 32; // origen (índex 0) + 31 novetats (índexs 1-31)
+  var TIMELINE_SHIPPED = 39; // origen (índex 0) + 38 novetats (índexs 1-38)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -974,6 +974,7 @@
       { badge: '#35', text: '<strong>Invitació per email</strong> — a més del codi d\'organització, ara es pot convidar una persona concreta per correu amb el rol de l\'espai ja assignat d\'entrada.' },
       { badge: '#36', text: '<strong>Benvinguda de primer ús</strong> — qui obre l\'app per primera vegada veu una introducció curta de tres passos abans d\'entrar a Inici, amb selector d\'idioma inclòs.' },
       { badge: '#37', text: '<strong>Adoptar contingut de la Biblioteca Pública</strong> — una safata publicada per la comunitat ja es pot adoptar com a punt de partida d\'una safata pròpia, amb avís quan l\'origen publiqui una versió nova.' },
+      { badge: '#38', text: '<strong>Centre d\'ajuda</strong> — noves guies pas a pas amb captures reals de cada pantalla, dins de Perfil i també a la web, perquè aprendre a fer servir Instriq no depengui de preguntar a algú altre.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
       { badge: 'Previst', future: true, text: 'Sistema de donacions transparent.' }
@@ -1017,6 +1018,7 @@
       { badge: '#35', text: '<strong>Invitación por email</strong> — además del código de organización, ya se puede invitar a una persona concreta por correo con el rol del espacio ya asignado de entrada.' },
       { badge: '#36', text: '<strong>Bienvenida de primer uso</strong> — quien abre la app por primera vez ve una introducción corta de tres pasos antes de entrar a Inicio, con selector de idioma incluido.' },
       { badge: '#37', text: '<strong>Adoptar contenido de la Biblioteca Pública</strong> — una bandeja publicada por la comunidad ya se puede adoptar como punto de partida de una bandeja propia, con aviso cuando el origen publique una versión nueva.' },
+      { badge: '#38', text: '<strong>Centro de ayuda</strong> — nuevas guías paso a paso con capturas reales de cada pantalla, dentro de Perfil y también en la web, para que aprender a usar Instriq no dependa de preguntarle a otra persona.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
       { badge: 'Previsto', future: true, text: 'Sistema de donaciones transparente.' }
@@ -1060,6 +1062,7 @@
       { badge: '#35', text: '<strong>Email invitations</strong> — besides the organization code, you can now invite a specific person by email with their workspace role already assigned.' },
       { badge: '#36', text: '<strong>First-run welcome</strong> — opening the app for the first time now shows a short 3-step introduction before landing on Home, with a language picker included.' },
       { badge: '#37', text: '<strong>Adopt Public Library content</strong> — a tray published by the community can now be adopted as the starting point for your own tray, with a heads-up when the source publishes a new version.' },
+      { badge: '#38', text: '<strong>Help center</strong> — new step-by-step guides with real screenshots of every screen, inside Profile and also on the website, so learning to use Instriq never depends on asking someone else.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
       { badge: 'Planned', future: true, text: 'A transparent donation system.' }
