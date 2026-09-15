@@ -16,4 +16,14 @@
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://instriq.org/ayuda.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/ayuda.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/ayuda.html?lang=es" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/ayuda.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/ayuda.html" />
+  </url>
 </urlset>

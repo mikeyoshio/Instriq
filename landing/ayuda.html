@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16191a" media="(prefers-color-scheme: dark)">
+<title data-i18n="meta.title">Centre d'ajuda — Instriq</title>
+<meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Guies pas a pas, amb captures reals, per treure profit d'Instriq: catàleg, biblioteca pública i primers passos." content="Guies pas a pas, amb captures reals, per treure profit d'Instriq.">
+<link rel="canonical" href="https://instriq.org/ayuda.html" id="canonicalLink">
+<link rel="alternate" hreflang="ca" href="https://instriq.org/ayuda.html">
+<link rel="alternate" hreflang="es" href="https://instriq.org/ayuda.html?lang=es">
+<link rel="alternate" hreflang="en" href="https://instriq.org/ayuda.html?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://instriq.org/ayuda.html">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://instriq.org/ayuda.html">
+<meta property="og:site_name" content="Instriq">
+<meta property="og:title" data-i18n-attr="content" data-i18n="meta.title" content="Centre d'ajuda — Instriq">
+<meta property="og:image" content="https://instriq.org/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --paper: #f6f4f0; --paper-alt: #edeae2; --surface: #ffffff;
+    --ink: #201c17; --ink-muted: #6e6459; --rule: #e2ddd3;
+    --accent: #a34e1c; --accent-soft: #f1e3d7;
+    --max-w: 1120px; --measure: 720px;
+    --display: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, "Liberation Mono", monospace;
+    --body: "Iowan Old Style", "Palatino Linotype", "URW Palladio L", Georgia, "Times New Roman", serif;
+    --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12);
+    --shadow-lift: 0 24px 60px -20px rgba(32, 28, 23, 0.22);
+    --grain-blend: multiply;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; }
+  }
+  :root[data-theme="dark"] { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; }
+  :root[data-theme="light"] { --paper: #f6f4f0; --paper-alt: #edeae2; --surface: #ffffff; --ink: #201c17; --ink-muted: #6e6459; --rule: #e2ddd3; --accent: #a34e1c; --accent-soft: #f1e3d7; --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12); --shadow-lift: 0 24px 60px -20px rgba(32, 28, 23, 0.22); --grain-blend: multiply; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 72px; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 19px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  img { max-width: 100%; display: block; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+  .measure { max-width: var(--measure); }
+  header.site { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em; }
+  .brand img { width: 26px; height: 26px; border-radius: 7px; }
+  .nav-links { display: flex; gap: 20px; align-items: center; }
+  .nav-links a.plain { color: var(--ink-muted); text-decoration: none; font-size: 0.95rem; white-space: nowrap; transition: color 0.15s ease; }
+  .nav-links a.plain:hover { color: var(--accent); }
+  .lang-switch { display: flex; gap: 6px; font-family: var(--display); font-size: 0.78rem; }
+  .lang-switch button { background: none; border: none; color: var(--ink-muted); cursor: pointer; padding: 4px 6px; font-family: var(--display); font-size: 0.78rem; border-radius: 4px; }
+  .lang-switch button.active { color: var(--ink); font-weight: 700; background: var(--paper-alt); }
+  @media (max-width: 760px) { .nav-links a.plain { display: none; } .nav-links { gap: 12px; } }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; font-weight: 600; font-size: 0.95rem; font-family: var(--body); text-decoration: none; border-radius: 10px; cursor: pointer; border: 1px solid var(--ink); transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .section { padding: 64px 0; }
+  @media (max-width: 720px) { .section { padding: 44px 0; } }
+  .eyebrow { display: inline-block; font-family: var(--display); font-size: 0.8rem; font-weight: 600; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: 1.15; margin: 0 0 20px; }
+  h2 { font-size: clamp(1.4rem, 2.8vw, 1.8rem); margin: 0 0 6px; }
+  h3 { font-size: 1.1rem; margin: 0 0 4px; font-weight: 700; }
+  p { color: var(--ink-muted); margin: 0 0 18px; }
+  .lede { font-size: 1.15rem; line-height: 1.65; max-width: var(--measure); }
+  footer.site { padding: 56px 0 36px; border-top: 1px solid var(--rule); }
+  footer.site .cols { display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; }
+  footer.site .col h4 { font-family: var(--display); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); margin: 0 0 12px; font-weight: 700; }
+  footer.site .col a { display: block; color: var(--ink-muted); text-decoration: none; font-size: 0.96rem; margin-bottom: 8px; transition: color 0.15s ease; }
+  footer.site .col a:hover { color: var(--accent); }
+  .fine { font-size: 0.85rem; color: var(--ink-muted); margin-top: 40px; }
+  .grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.045; mix-blend-mode: var(--grain-blend, multiply); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 30; width: 0%; }
+  .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
+  .skip-link:focus { left: 0; }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  /* Contingut propi d'aquesta pàgina: índex de categories + articles. */
+  .help-toc { display: flex; flex-wrap: wrap; gap: 10px; margin: 36px 0 0; padding: 0; list-style: none; }
+  .help-toc a { display: inline-block; font-family: var(--display); font-size: 0.85rem; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 999px; padding: 8px 16px; text-decoration: none; transition: border-color 0.15s ease, color 0.15s ease; }
+  .help-toc a:hover { border-color: var(--accent); color: var(--accent); }
+  .help-category { padding-top: 56px; }
+  .help-category-title { display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--rule); padding-bottom: 14px; margin-bottom: 36px; }
+  .help-category-title .n { font-family: var(--display); color: var(--accent); font-weight: 700; }
+  .help-article { max-width: var(--measure); margin: 0 0 52px; }
+  .help-article:last-child { margin-bottom: 0; }
+  .help-article-intro { font-size: 1.02rem; }
+  .help-step { display: flex; gap: 16px; align-items: flex-start; margin-top: 22px; }
+  .help-step-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-family: var(--display); font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+  .help-step-body { flex: 1; min-width: 0; }
+  .help-step-body p { margin: 0 0 12px; color: var(--ink); }
+  .help-step-body img { border-radius: 12px; border: 1px solid var(--rule); box-shadow: var(--shadow-soft); }
+  .help-empty-note { background: var(--paper-alt); border-radius: 12px; padding: 18px 22px; margin-top: 40px; }
+  .help-empty-note p { margin: 0; color: var(--ink); font-size: 0.96rem; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<a href="#main" class="skip-link" data-i18n="a11y.skip">Saltar al contingut</a>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="index.html" class="brand"><img src="favicon.png" alt=""> Instriq</a>
+    <nav class="nav-links">
+      <a class="plain" href="index.html" data-i18n="nav.back">← Torna a l'inici</a>
+      <a class="plain" href="https://github.com/mikeyoshio/Instriq">GitHub</a>
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button>
+      </div>
+      <a href="https://app.instriq.org" class="btn btn-primary" data-i18n="nav.cta">Obre l'app</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="hero.eyebrow">Centre d'ajuda</span>
+    <h1 data-i18n="hero.h1">Com fer cada cosa a Instriq, pas a pas.</h1>
+    <p class="lede" data-i18n="hero.lede">Guies curtes amb captures reals de l'app. Aquesta wiki creix a mesura que Instriq creix — el mateix contingut es pot consultar dins de l'app, a Perfil → Centre d'ajuda.</p>
+    <ul class="help-toc" id="helpToc">
+      <li><a href="#primers-passos" data-i18n="cat.gettingStarted">Primers passos</a></li>
+      <li><a href="#catalog" data-i18n="cat.catalog">Catàleg i instrumental</a></li>
+      <li><a href="#biblioteca" data-i18n="cat.library">Biblioteca Pública</a></li>
+      <li><a href="#organitzacio" data-i18n="cat.organization">Organització i espais de treball</a></li>
+      <li><a href="#compte" data-i18n="cat.account">El meu compte</a></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section help-category reveal" id="primers-passos">
+  <div class="wrap">
+    <div class="help-category-title"><span class="n">01</span><h2 data-i18n="cat.gettingStarted">Primers passos</h2></div>
+
+    <article class="help-article">
+      <h3 data-i18n="a.onboarding.title">La benvinguda de primer ús</h3>
+      <p class="help-article-intro" data-i18n="a.onboarding.intro">La primera vegada que s'obre l'app, una breu presentació en 3 passos explica què és Instriq abans d'entrar-hi.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.onboarding.step1">Es pot avançar pas a pas o tocar «Saltar» per anar directament a l'app.</p>
+          <img src="help-screens/onboarding_welcome.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.onboarding.step2">Només es mostra una vegada per dispositiu; no torna a aparèixer en els usos següents.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="help-article">
+      <h3 data-i18n="a.language.title">Canviar l'idioma</h3>
+      <p class="help-article-intro" data-i18n="a.language.intro">Es pot canviar en qualsevol moment. Es desa en aquest dispositiu, no cal compte.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.language.step1">Obre Perfil i toca «Idioma».</p>
+          <img src="help-screens/profile_guest.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.language.step2">Tria català, castellà o anglès. El canvi és immediat, a tota l'app.</p>
+          <img src="help-screens/language_dialog.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section help-category reveal" id="catalog">
+  <div class="wrap">
+    <div class="help-category-title"><span class="n">02</span><h2 data-i18n="cat.catalog">Catàleg i instrumental</h2></div>
+
+    <article class="help-article">
+      <h3 data-i18n="a.search.title">Buscar i filtrar instrumental</h3>
+      <p class="help-article-intro" data-i18n="a.search.intro">El Catàleg es pot explorar sense compte, amb cerca per nom i filtres per especialitat i categoria.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.search.step1">Des de la pestanya «Cercar», escriu el nom d'un instrument o marca comercial.</p>
+          <img src="help-screens/catalog_filters.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.search.step2">O toca una o més especialitats i categories per filtrar la llista sense escriure res.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="help-article">
+      <h3 data-i18n="a.detail.title">Consultar la fitxa d'un instrument</h3>
+      <p class="help-article-intro" data-i18n="a.detail.intro">Cada instrument té una fitxa amb foto, descripció, ús principal i esterilització.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.detail.step1">Toca qualsevol instrument del Catàleg per obrir la seva fitxa completa.</p>
+          <img src="help-screens/instrument_detail.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.detail.step2">Més avall hi ha els mètodes d'esterilització compatibles i, si n'hi ha, la fitxa tècnica del fabricant.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section help-category reveal" id="biblioteca">
+  <div class="wrap">
+    <div class="help-category-title"><span class="n">03</span><h2 data-i18n="cat.library">Biblioteca Pública</h2></div>
+
+    <article class="help-article">
+      <h3 data-i18n="a.library.title">Què és la Biblioteca Pública</h3>
+      <p class="help-article-intro" data-i18n="a.library.intro">Tècniques quirúrgiques i safates d'instrumental revisades i publicades per la comunitat, visibles per a tothom.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.library.step1">Des de la pestanya «Biblioteca», toca «Biblioteca Pública».</p>
+          <img src="help-screens/library_hub.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.library.step2">Té dues pestanyes, tècniques i safates.</p>
+          <img src="help-screens/public_library_empty.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-empty-note">
+        <p data-i18n="a.library.note">Si encara no hi ha res publicat en una especialitat és perquè cap col·laborador ho ha enviat encara — qualsevol s'hi pot convertir des de Perfil.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section help-category reveal" id="organitzacio">
+  <div class="wrap">
+    <div class="help-category-title"><span class="n">04</span><h2 data-i18n="cat.organization">Organització i espais de treball</h2></div>
+
+    <article class="help-article">
+      <h3 data-i18n="a.workspaces.title">Consultar els espais de treball</h3>
+      <p class="help-article-intro" data-i18n="a.workspaces.intro">Si el teu hospital té més d'un equip o servei, cadascun pot tenir el seu propi espai amb contingut independent.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.workspaces.step1">A Biblioteca, toca «Espais» per veure tots els espais del teu hospital.</p>
+          <img src="help-screens/workspace_list.png" alt="" loading="lazy" width="1440" height="708">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.workspaces.step2">Cada espai té les seves pròpies safates, documents, tècniques, targetes de preferència i instrumental propi.</p>
+          <img src="help-screens/workspace_detail.png" alt="" loading="lazy" width="1440" height="708">
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section help-category reveal" id="compte">
+  <div class="wrap">
+    <div class="help-category-title"><span class="n">05</span><h2 data-i18n="cat.account">El meu compte</h2></div>
+
+    <article class="help-article">
+      <h3 data-i18n="a.account.title">El teu compte: preferències, privacitat i sincronització</h3>
+      <p class="help-article-intro" data-i18n="a.account.intro">Amb un compte iniciat, Perfil suma opcions noves a les que ja hi havia en mode convidat.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.account.step1">«El meu compte i privacitat» permet exportar les teves dades personals o eliminar el compte.</p>
+          <img src="help-screens/profile_authenticated.png" alt="" loading="lazy" width="1440" height="708">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.account.step2">«Problemes de sincronització» i «Tanca la sessió» hi són just a sota, sempre visibles amb un compte iniciat.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="cols">
+      <div class="col">
+        <h4>Instriq</h4>
+        <a href="https://app.instriq.org" data-i18n="footer.app">Obre l'app</a>
+        <a href="https://github.com/mikeyoshio/Instriq">GitHub</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h1">Projecte</h4>
+        <a href="index.html#mision" data-i18n="footer.l1">Missió i visió</a>
+        <a href="index.html#colabora" data-i18n="footer.l2">Com col·laborar</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h2">Legal</h4>
+        <a href="privacidad.html" data-i18n="footer.l4">Política de privacitat</a>
+        <a href="https://github.com/mikeyoshio/Instriq/blob/main/LICENSE" data-i18n="footer.l5">Llicència (AGPL-3.0)</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h3">Contacte</h4>
+        <a href="mailto:hola@instriq.org">hola@instriq.org</a>
+      </div>
+    </div>
+    <p class="fine" data-i18n="footer.fine">Instriq® — projecte open source per i per al bloc quirúrgic. Codi sota AGPL-3.0.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var CA_DEFAULTS = {
+    'meta.title': "Centre d'ajuda — Instriq",
+    'meta.description': "Guies pas a pas, amb captures reals, per treure profit d'Instriq.",
+    'a11y.skip': 'Saltar al contingut',
+    'nav.back': "← Torna a l'inici",
+    'nav.cta': "Obre l'app",
+    'hero.eyebrow': "Centre d'ajuda",
+    'hero.h1': 'Com fer cada cosa a Instriq, pas a pas.',
+    'hero.lede': "Guies curtes amb captures reals de l'app. Aquesta wiki creix a mesura que Instriq creix — el mateix contingut es pot consultar dins de l'app, a Perfil → Centre d'ajuda.",
+    'cat.gettingStarted': 'Primers passos',
+    'cat.catalog': 'Catàleg i instrumental',
+    'cat.library': 'Biblioteca Pública',
+    'cat.organization': 'Organització i espais de treball',
+    'cat.account': 'El meu compte',
+    'a.workspaces.title': 'Consultar els espais de treball',
+    'a.workspaces.intro': "Si el teu hospital té més d'un equip o servei, cadascun pot tenir el seu propi espai amb contingut independent.",
+    'a.workspaces.step1': 'A Biblioteca, toca «Espais» per veure tots els espais del teu hospital.',
+    'a.workspaces.step2': 'Cada espai té les seves pròpies safates, documents, tècniques, targetes de preferència i instrumental propi.',
+    'a.account.title': 'El teu compte: preferències, privacitat i sincronització',
+    'a.account.intro': 'Amb un compte iniciat, Perfil suma opcions noves a les que ja hi havia en mode convidat.',
+    'a.account.step1': '«El meu compte i privacitat» permet exportar les teves dades personals o eliminar el compte.',
+    'a.account.step2': '«Problemes de sincronització» i «Tanca la sessió» hi són just a sota, sempre visibles amb un compte iniciat.',
+    'a.onboarding.title': 'La benvinguda de primer ús',
+    'a.onboarding.intro': "La primera vegada que s'obre l'app, una breu presentació en 3 passos explica què és Instriq abans d'entrar-hi.",
+    'a.onboarding.step1': 'Es pot avançar pas a pas o tocar «Saltar» per anar directament a l\'app.',
+    'a.onboarding.step2': 'Només es mostra una vegada per dispositiu; no torna a aparèixer en els usos següents.',
+    'a.language.title': "Canviar l'idioma",
+    'a.language.intro': 'Es pot canviar en qualsevol moment. Es desa en aquest dispositiu, no cal compte.',
+    'a.language.step1': 'Obre Perfil i toca «Idioma».',
+    'a.language.step2': 'Tria català, castellà o anglès. El canvi és immediat, a tota l\'app.',
+    'a.search.title': 'Buscar i filtrar instrumental',
+    'a.search.intro': 'El Catàleg es pot explorar sense compte, amb cerca per nom i filtres per especialitat i categoria.',
+    'a.search.step1': 'Des de la pestanya «Cercar», escriu el nom d\'un instrument o marca comercial.',
+    'a.search.step2': 'O toca una o més especialitats i categories per filtrar la llista sense escriure res.',
+    'a.detail.title': "Consultar la fitxa d'un instrument",
+    'a.detail.intro': 'Cada instrument té una fitxa amb foto, descripció, ús principal i esterilització.',
+    'a.detail.step1': 'Toca qualsevol instrument del Catàleg per obrir la seva fitxa completa.',
+    'a.detail.step2': "Més avall hi ha els mètodes d'esterilització compatibles i, si n'hi ha, la fitxa tècnica del fabricant.",
+    'a.library.title': 'Què és la Biblioteca Pública',
+    'a.library.intro': "Tècniques quirúrgiques i safates d'instrumental revisades i publicades per la comunitat, visibles per a tothom.",
+    'a.library.step1': 'Des de la pestanya «Biblioteca», toca «Biblioteca Pública».',
+    'a.library.step2': 'Té dues pestanyes, tècniques i safates.',
+    'a.library.note': "Si encara no hi ha res publicat en una especialitat és perquè cap col·laborador ho ha enviat encara — qualsevol s'hi pot convertir des de Perfil.",
+    'footer.app': "Obre l'app",
+    'footer.h1': 'Projecte',
+    'footer.l1': 'Missió i visió',
+    'footer.l2': 'Com col·laborar',
+    'footer.h2': 'Legal',
+    'footer.l4': 'Política de privacitat',
+    'footer.l5': 'Llicència (AGPL-3.0)',
+    'footer.h3': 'Contacte',
+    'footer.fine': 'Instriq® — projecte open source per i per al bloc quirúrgic. Codi sota AGPL-3.0.'
+  };
+  var DICT = { es: {
+    'meta.title': 'Centro de ayuda — Instriq',
+    'meta.description': 'Guías paso a paso, con capturas reales, para sacar partido a Instriq.',
+    'a11y.skip': 'Saltar al contenido',
+    'nav.back': '← Volver al inicio',
+    'nav.cta': 'Abre la app',
+    'hero.eyebrow': 'Centro de ayuda',
+    'hero.h1': 'Cómo hacer cada cosa en Instriq, paso a paso.',
+    'hero.lede': 'Guías cortas con capturas reales de la app. Esta wiki crece a medida que Instriq crece — el mismo contenido se puede consultar dentro de la app, en Perfil → Centro de ayuda.',
+    'cat.gettingStarted': 'Primeros pasos',
+    'cat.catalog': 'Catálogo e instrumental',
+    'cat.library': 'Biblioteca Pública',
+    'cat.organization': 'Organización y espacios de trabajo',
+    'cat.account': 'Mi cuenta',
+    'a.workspaces.title': 'Consultar los espacios de trabajo',
+    'a.workspaces.intro': 'Si tu hospital tiene más de un equipo o servicio, cada uno puede tener su propio espacio con contenido independiente.',
+    'a.workspaces.step1': 'En Biblioteca, toca «Espacios» para ver todos los espacios de tu hospital.',
+    'a.workspaces.step2': 'Cada espacio tiene sus propias bandejas, documentos, técnicas, tarjetas de preferencia e instrumental propio.',
+    'a.account.title': 'Tu cuenta: preferencias, privacidad y sincronización',
+    'a.account.intro': 'Con una cuenta iniciada, Perfil suma opciones nuevas a las que ya había en modo invitado.',
+    'a.account.step1': '«Mi cuenta y privacidad» permite exportar tus datos personales o eliminar la cuenta.',
+    'a.account.step2': '«Problemas de sincronización» y «Cerrar sesión» están justo debajo, siempre visibles con una cuenta iniciada.',
+    'a.onboarding.title': 'La bienvenida de primer uso',
+    'a.onboarding.intro': 'La primera vez que se abre la app, una breve presentación en 3 pasos explica qué es Instriq antes de entrar.',
+    'a.onboarding.step1': 'Se puede avanzar paso a paso o tocar «Saltar» para ir directamente a la app.',
+    'a.onboarding.step2': 'Solo se muestra una vez por dispositivo; no vuelve a aparecer en los usos siguientes.',
+    'a.language.title': 'Cambiar el idioma',
+    'a.language.intro': 'Se puede cambiar en cualquier momento. Se guarda en este dispositivo, no hace falta cuenta.',
+    'a.language.step1': 'Abre Perfil y toca «Idioma».',
+    'a.language.step2': 'Elige català, castellano o inglés. El cambio es inmediato, en toda la app.',
+    'a.search.title': 'Buscar y filtrar instrumental',
+    'a.search.intro': 'El Catálogo se puede explorar sin cuenta, con búsqueda por nombre y filtros por especialidad y categoría.',
+    'a.search.step1': 'Desde la pestaña «Buscar», escribe el nombre de un instrumento o marca comercial.',
+    'a.search.step2': 'O toca una o más especialidades y categorías para filtrar la lista sin escribir nada.',
+    'a.detail.title': 'Consultar la ficha de un instrumento',
+    'a.detail.intro': 'Cada instrumento tiene una ficha con foto, descripción, uso principal y esterilización.',
+    'a.detail.step1': 'Toca cualquier instrumento del Catálogo para abrir su ficha completa.',
+    'a.detail.step2': 'Más abajo están los métodos de esterilización compatibles y, si los hay, la ficha técnica del fabricante.',
+    'a.library.title': 'Qué es la Biblioteca Pública',
+    'a.library.intro': 'Técnicas quirúrgicas y bandejas de instrumental revisadas y publicadas por la comunidad, visibles para todo el mundo.',
+    'a.library.step1': 'Desde la pestaña «Biblioteca», toca «Biblioteca Pública».',
+    'a.library.step2': 'Tiene dos pestañas, técnicas y bandejas.',
+    'a.library.note': 'Si aún no hay nada publicado en una especialidad es porque ningún colaborador lo ha enviado todavía — cualquiera puede convertirse en colaborador desde Perfil.',
+    'footer.app': 'Abre la app',
+    'footer.h1': 'Proyecto',
+    'footer.l1': 'Misión y visión',
+    'footer.l2': 'Cómo colaborar',
+    'footer.h2': 'Legal',
+    'footer.l4': 'Política de privacidad',
+    'footer.l5': 'Licencia (AGPL-3.0)',
+    'footer.h3': 'Contacto',
+    'footer.fine': 'Instriq® — proyecto open source por y para el quirófano. Código bajo AGPL-3.0.'
+  }, en: {
+    'meta.title': 'Help center — Instriq',
+    'meta.description': 'Step-by-step guides, with real screenshots, to get the most out of Instriq.',
+    'a11y.skip': 'Skip to content',
+    'nav.back': '← Back to home',
+    'nav.cta': 'Open the app',
+    'hero.eyebrow': 'Help center',
+    'hero.h1': 'How to do everything in Instriq, step by step.',
+    'hero.lede': "Short guides with real screenshots of the app. This wiki grows as Instriq grows — the same content is also available inside the app, under Profile → Help center.",
+    'cat.gettingStarted': 'Getting started',
+    'cat.catalog': 'Catalog and instruments',
+    'cat.library': 'Public Library',
+    'cat.organization': 'Organization and workspaces',
+    'cat.account': 'My account',
+    'a.workspaces.title': 'View your workspaces',
+    'a.workspaces.intro': 'If your hospital has more than one team or department, each can have its own workspace with independent content.',
+    'a.workspaces.step1': 'In Library, tap "Workspaces" to see every workspace in your hospital.',
+    'a.workspaces.step2': 'Each workspace has its own trays, documents, techniques, preference cards and custom instruments.',
+    'a.account.title': 'Your account: preferences, privacy and syncing',
+    'a.account.intro': 'Once signed in, Profile adds new options on top of the ones already available as a guest.',
+    'a.account.step1': '"My account and privacy" exports your personal data or deletes the account.',
+    'a.account.step2': '"Sync issues" and "Sign out" sit right below it, always visible once you\'re signed in.',
+    'a.onboarding.title': 'The first-run welcome',
+    'a.onboarding.intro': 'The first time the app opens, a brief 3-step walkthrough explains what Instriq is before you dive in.',
+    'a.onboarding.step1': 'You can step through it or tap "Skip" to go straight into the app.',
+    'a.onboarding.step2': "It only shows once per device — it won't appear again on later visits.",
+    'a.language.title': 'Change the language',
+    'a.language.intro': "You can change it anytime. It's saved on this device — no account needed.",
+    'a.language.step1': 'Open Profile and tap "Language".',
+    'a.language.step2': 'Pick Catalan, Spanish or English. The change applies immediately, across the whole app.',
+    'a.search.title': 'Search and filter instruments',
+    'a.search.intro': 'The Catalog can be browsed without an account, with search by name and filters by specialty and category.',
+    'a.search.step1': "From the \"Search\" tab, type an instrument's name or brand.",
+    'a.search.step2': 'Or tap one or more specialties and categories to filter the list without typing anything.',
+    'a.detail.title': "View an instrument's detail page",
+    'a.detail.intro': 'Every instrument has a detail page with a photo, description, main use, and sterilization.',
+    'a.detail.step1': 'Tap any instrument in the Catalog to open its full detail page.',
+    'a.detail.step2': "Further down are the compatible sterilization methods and, when available, the manufacturer's technical sheet.",
+    'a.library.title': 'What the Public Library is',
+    'a.library.intro': 'Surgical techniques and instrument trays reviewed and published by the community, visible to everyone.',
+    'a.library.step1': 'From the "Library" tab, tap "Public Library".',
+    'a.library.step2': 'It has two tabs, techniques and trays.',
+    'a.library.note': "If nothing is published yet for a specialty, it's simply because no contributor has submitted it yet — anyone can become a contributor from Profile.",
+    'footer.app': 'Open the app',
+    'footer.h1': 'Project',
+    'footer.l1': 'Mission and vision',
+    'footer.l2': 'How to contribute',
+    'footer.h2': 'Legal',
+    'footer.l4': 'Privacy policy',
+    'footer.l5': 'License (AGPL-3.0)',
+    'footer.h3': 'Contact',
+    'footer.fine': 'Instriq® — an open source project by and for the OR. Code under AGPL-3.0.'
+  } };
+
+  function applyLang(lang, opts) {
+    opts = opts || {};
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      var attr = el.getAttribute('data-i18n-attr');
+      var value = lang === 'ca' ? CA_DEFAULTS[key] : (DICT[lang] && DICT[lang][key]) || CA_DEFAULTS[key];
+      if (attr) { el.setAttribute(attr, value); } else { el.innerHTML = value; }
+    });
+    document.title = lang === 'ca' ? CA_DEFAULTS['meta.title'] : (DICT[lang] && DICT[lang]['meta.title']) || CA_DEFAULTS['meta.title'];
+    document.querySelectorAll('#langSwitch button').forEach(function (b) {
+      var isActive = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/ayuda.html' : 'https://instriq.org/ayuda.html?lang=' + lang;
+    var canonicalEl = document.getElementById('canonicalLink');
+    if (canonicalEl) canonicalEl.setAttribute('href', canonicalUrl);
+    try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
+    if (opts.updateUrl) {
+      var url = new URL(window.location.href);
+      if (lang === 'ca') { url.searchParams.delete('lang'); } else { url.searchParams.set('lang', lang); }
+      window.history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
+    }
+  }
+
+  document.querySelectorAll('#langSwitch button').forEach(function (b) {
+    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), { updateUrl: true }); });
+  });
+
+  var validLangs = ['ca', 'es', 'en'];
+  var urlLang = null;
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var fromUrl = params.get('lang');
+    if (fromUrl && validLangs.indexOf(fromUrl) !== -1) urlLang = fromUrl;
+  } catch (e) {}
+  var saved = null;
+  try { saved = localStorage.getItem('instriq_lang'); } catch (e) {}
+  applyLang(urlLang || saved || 'ca');
+
+  var els = document.querySelectorAll('.reveal');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) {
+    els.forEach(function (r) { r.classList.add('is-visible'); });
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (r) { observer.observe(r); });
+  }
+
+  var bar = document.getElementById('progressBar');
+  if (bar) {
+    function update() {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    }
+    document.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+})();
+</script>
+
+</body>
+</html>

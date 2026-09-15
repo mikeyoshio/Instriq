@@ -869,5 +869,50 @@
   "incidentStatusValueResolved": "Resolta",
   "resolveIncidentAction": "Marcar com a resolta",
   "resolveIncidentDialogTitle": "Marcar incidència com a resolta",
-  "resolutionNotesLabel": "Notes de resolució"
+  "resolutionNotesLabel": "Notes de resolució",
+
+  "helpCenterTitle": "Centre d'ajuda",
+  "helpHowItWorksEntryTitle": "Com funciona l'app",
+  "helpHowItWorksEntrySubtitle": "Una guia general, pensada per llegir-se d'una tirada",
+  "helpCategoryGettingStarted": "Primers passos",
+  "helpCategoryCatalog": "Catàleg i instrumental",
+  "helpCategoryPublicLibrary": "Biblioteca Pública",
+
+  "helpArticleLanguageTitle": "Canviar l'idioma",
+  "helpArticleLanguageIntro": "Es pot canviar en qualsevol moment. Es desa en aquest dispositiu, no cal compte.",
+  "helpArticleLanguageStep1": "Obre Perfil i toca «Idioma».",
+  "helpArticleLanguageStep2": "Tria català, castellà o anglès. El canvi és immediat, a tota l'app.",
+
+  "helpArticleOnboardingTitle": "La benvinguda de primer ús",
+  "helpArticleOnboardingIntro": "La primera vegada que s'obre l'app, una breu presentació en 3 passos explica què és Instriq abans d'entrar-hi.",
+  "helpArticleOnboardingStep1": "Es pot avançar pas a pas o tocar «Saltar» per anar directament a l'app.",
+  "helpArticleOnboardingStep2": "Només es mostra una vegada per dispositiu; no torna a aparèixer en els usos següents.",
+
+  "helpArticleCatalogSearchTitle": "Buscar i filtrar instrumental",
+  "helpArticleCatalogSearchIntro": "El Catàleg es pot explorar sense compte, amb cerca per nom i filtres per especialitat i categoria.",
+  "helpArticleCatalogSearchStep1": "Des de la pestanya «Cercar», escriu el nom d'un instrument o marca comercial.",
+  "helpArticleCatalogSearchStep2": "O toca una o més especialitats i categories per filtrar la llista sense escriure res.",
+
+  "helpArticleInstrumentDetailTitle": "Consultar la fitxa d'un instrument",
+  "helpArticleInstrumentDetailIntro": "Cada instrument té una fitxa amb foto, descripció, ús principal i esterilització.",
+  "helpArticleInstrumentDetailStep1": "Toca qualsevol instrument del Catàleg per obrir la seva fitxa completa.",
+  "helpArticleInstrumentDetailStep2": "Més avall hi ha els mètodes d'esterilització compatibles i, si n'hi ha, la fitxa tècnica del fabricant.",
+
+  "helpArticlePublicLibraryTitle": "Què és la Biblioteca Pública",
+  "helpArticlePublicLibraryIntro": "Tècniques quirúrgiques i safates d'instrumental revisades i publicades per la comunitat, visibles per a tothom.",
+  "helpArticlePublicLibraryStep1": "Des de la pestanya «Biblioteca», toca «Biblioteca Pública».",
+  "helpArticlePublicLibraryStep2": "Té dues pestanyes, tècniques i safates. Si encara no hi ha res publicat en una especialitat és perquè cap col·laborador ho ha enviat encara -- qualsevol s'hi pot convertir des de Perfil.",
+
+  "helpCategoryOrganization": "Organització i espais de treball",
+  "helpCategoryAccount": "El meu compte",
+
+  "helpArticleWorkspacesTitle": "Consultar els espais de treball",
+  "helpArticleWorkspacesIntro": "Si el teu hospital té més d'un equip o servei, cadascun pot tenir el seu propi espai amb contingut independent.",
+  "helpArticleWorkspacesStep1": "A Biblioteca, toca «Espais» per veure tots els espais del teu hospital.",
+  "helpArticleWorkspacesStep2": "Cada espai té les seves pròpies safates, documents, tècniques, targetes de preferència i instrumental propi.",
+
+  "helpArticleAccountTitle": "El teu compte: preferències, privacitat i sincronització",
+  "helpArticleAccountIntro": "Amb un compte iniciat, Perfil suma opcions noves a les que ja hi havia en mode convidat.",
+  "helpArticleAccountStep1": "«El meu compte i privacitat» permet exportar les teves dades personals o eliminar el compte.",
+  "helpArticleAccountStep2": "«Problemes de sincronització» i «Tanca la sessió» hi són just a sota, sempre visibles amb un compte iniciat."
 }
