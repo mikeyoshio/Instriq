@@ -898,6 +898,11 @@
   "helpArticleInstrumentDetailStep1": "Toca qualsevol instrument del Catàleg per obrir la seva fitxa completa.",
   "helpArticleInstrumentDetailStep2": "Més avall hi ha els mètodes d'esterilització compatibles i, si n'hi ha, la fitxa tècnica del fabricant.",
 
+  "helpArticleSuturesTitle": "Catàleg de sutures",
+  "helpArticleSuturesIntro": "Un catàleg de referència de materials i calibres de sutura, filtrable per material, independent de l'instrumental.",
+  "helpArticleSuturesStep1": "Des de l'inici, toca «Sutures». Filtra per material (seda, vicryl, nylon...) o cerca pel nom.",
+  "helpArticleSuturesStep2": "Cada sutura té la seva fitxa: descripció, ús principal i on s'utilitza (tècniques, protocols o safates).",
+
   "helpArticlePublicLibraryTitle": "Què és la Biblioteca Pública",
   "helpArticlePublicLibraryIntro": "Tècniques quirúrgiques i safates d'instrumental revisades i publicades per la comunitat, visibles per a tothom.",
   "helpArticlePublicLibraryStep1": "Des de la pestanya «Biblioteca», toca «Biblioteca Pública».",
@@ -914,5 +919,17 @@
   "helpArticleAccountTitle": "El teu compte: preferències, privacitat i sincronització",
   "helpArticleAccountIntro": "Amb un compte iniciat, Perfil suma opcions noves a les que ja hi havia en mode convidat.",
   "helpArticleAccountStep1": "«El meu compte i privacitat» permet exportar les teves dades personals o eliminar el compte.",
-  "helpArticleAccountStep2": "«Problemes de sincronització» i «Tanca la sessió» hi són just a sota, sempre visibles amb un compte iniciat."
+  "helpArticleAccountStep2": "«Problemes de sincronització» i «Tanca la sessió» hi són just a sota, sempre visibles amb un compte iniciat.",
+
+  "helpCategoryLearning": "Aprenentatge",
+
+  "helpArticleLearnModesTitle": "Flashcards i qüestionari",
+  "helpArticleLearnModesIntro": "Repassa l'instrumental amb targetes de memòria o posa't a prova amb un qüestionari de deu preguntes, tot en mode convidat.",
+  "helpArticleLearnModesStep1": "Des de l'inici, toca «Aprèn» i tria «Flashcards» o «Qüestionari».",
+  "helpArticleLearnModesStep2": "A les flashcards, toca la targeta per veure la descripció i l'ús de l'instrument; «Marca com a après» ho suma al teu progrés.",
+  "helpArticleLearnModesStep3": "Al qüestionari, cada resposta es marca a l'instant: verd si l'has encertat, vermell si no.",
+
+  "helpArticleMyProgressTitle": "El meu progrés",
+  "helpArticleMyProgressIntro": "Un resum de quant instrumental has après, per categoria, i la teva millor puntuació al qüestionari.",
+  "helpArticleMyProgressStep1": "Des de l'inici, toca «El meu progrés». El progrés es guarda en aquest dispositiu i, amb compte, també al servidor."
 }

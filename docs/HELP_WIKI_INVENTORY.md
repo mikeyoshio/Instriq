@@ -42,7 +42,7 @@ Niveles de colaborador: Contributor < Reviewer < Editorial Board.
 - [ ] Ficha de especialidad (`specialty_detail_screen.dart`) — invitado/cuenta+espacio.
 - [ ] Ficha de etiqueta (`tag_detail_screen.dart`) — invitado/cuenta.
 - [ ] Ficha de cirujano (`surgeon_detail_screen.dart`) — cuenta+espacio.
-- [ ] Catálogo de suturas (`suture_catalog_screen.dart`, `suture_detail_screen.dart`) — invitado.
+- [x] Catálogo de suturas (`suture_catalog_screen.dart`, `suture_detail_screen.dart`) — invitado.
 
 ## 3. Bandejas (trays)
 
@@ -125,11 +125,11 @@ Niveles de colaborador: Contributor < Reviewer < Editorial Board.
 
 ## 12. Aprendizaje (flashcards/quiz/repaso)
 
-- [ ] Elegir modo de repaso (`learn_screen.dart`) — invitado.
-- [ ] Flashcards (`flashcards_screen.dart`) — invitado.
-- [ ] Quiz de opción múltiple (`quiz_screen.dart`) — invitado.
+- [x] Elegir modo de repaso (`learn_screen.dart`) — invitado.
+- [x] Flashcards (`flashcards_screen.dart`) — invitado.
+- [x] Quiz de opción múltiple (`quiz_screen.dart`) — invitado.
 - [ ] Repaso contextual de un instrumento, Leitner (`review_session_screen.dart`) — invitado.
-- [ ] Ver mi progreso (`progress_screen.dart`) — invitado (local) / cuenta (sincronizado).
+- [x] Ver mi progreso (`progress_screen.dart`) — invitado (local) / cuenta (sincronizado).
 
 ## 13. Colaboradores y revisión de contenido
 
