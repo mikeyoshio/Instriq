@@ -59,6 +59,16 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
             HelpStep(text: l10n.helpArticleInstrumentDetailStep2),
           ],
         ),
+        HelpArticle(
+          id: 'sutures',
+          icon: Icons.linear_scale,
+          title: l10n.helpArticleSuturesTitle,
+          intro: l10n.helpArticleSuturesIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleSuturesStep1, image: '$_imagesPath/sutures_list.png'),
+            HelpStep(text: l10n.helpArticleSuturesStep2, image: '$_imagesPath/suture_detail.png'),
+          ],
+        ),
       ],
     ),
     HelpCategory(
@@ -102,6 +112,31 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           steps: [
             HelpStep(text: l10n.helpArticleAccountStep1, image: '$_imagesPath/profile_authenticated.png'),
             HelpStep(text: l10n.helpArticleAccountStep2),
+          ],
+        ),
+      ],
+    ),
+    HelpCategory(
+      title: l10n.helpCategoryLearning,
+      articles: [
+        HelpArticle(
+          id: 'learn_modes',
+          icon: Icons.school_outlined,
+          title: l10n.helpArticleLearnModesTitle,
+          intro: l10n.helpArticleLearnModesIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleLearnModesStep1, image: '$_imagesPath/learn_hub.png'),
+            HelpStep(text: l10n.helpArticleLearnModesStep2, image: '$_imagesPath/flashcard_front.png'),
+            HelpStep(text: l10n.helpArticleLearnModesStep3, image: '$_imagesPath/quiz_answered.png'),
+          ],
+        ),
+        HelpArticle(
+          id: 'my_progress',
+          icon: Icons.insights_outlined,
+          title: l10n.helpArticleMyProgressTitle,
+          intro: l10n.helpArticleMyProgressIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleMyProgressStep1, image: '$_imagesPath/my_progress.png'),
           ],
         ),
       ],

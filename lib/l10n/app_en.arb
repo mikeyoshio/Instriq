@@ -898,6 +898,11 @@
   "helpArticleInstrumentDetailStep1": "Tap any instrument in the Catalog to open its full detail page.",
   "helpArticleInstrumentDetailStep2": "Further down are the compatible sterilization methods and, when available, the manufacturer's technical sheet.",
 
+  "helpArticleSuturesTitle": "Suture catalog",
+  "helpArticleSuturesIntro": "A reference catalog of suture materials and gauges, filterable by material, separate from the instrument catalog.",
+  "helpArticleSuturesStep1": "From Home, tap \"Sutures\". Filter by material (silk, vicryl, nylon...) or search by name.",
+  "helpArticleSuturesStep2": "Each suture has its own detail page: description, main use, and where it's used (techniques, protocols or trays).",
+
   "helpArticlePublicLibraryTitle": "What the Public Library is",
   "helpArticlePublicLibraryIntro": "Surgical techniques and instrument trays reviewed and published by the community, visible to everyone.",
   "helpArticlePublicLibraryStep1": "From the \"Library\" tab, tap \"Public Library\".",
@@ -914,5 +919,17 @@
   "helpArticleAccountTitle": "Your account: preferences, privacy and syncing",
   "helpArticleAccountIntro": "Once signed in, Profile adds new options on top of the ones already available as a guest.",
   "helpArticleAccountStep1": "\"My account and privacy\" exports your personal data or deletes the account.",
-  "helpArticleAccountStep2": "\"Sync issues\" and \"Sign out\" sit right below it, always visible once you're signed in."
+  "helpArticleAccountStep2": "\"Sync issues\" and \"Sign out\" sit right below it, always visible once you're signed in.",
+
+  "helpCategoryLearning": "Learning",
+
+  "helpArticleLearnModesTitle": "Flashcards and quiz",
+  "helpArticleLearnModesIntro": "Review instruments with flashcards or test yourself with a ten-question quiz, all without an account.",
+  "helpArticleLearnModesStep1": "From Home, tap \"Learn\" and choose \"Flashcards\" or \"Quiz\".",
+  "helpArticleLearnModesStep2": "In flashcards, tap the card to see the instrument's description and use; \"Mark as learned\" adds it to your progress.",
+  "helpArticleLearnModesStep3": "In the quiz, every answer is marked instantly: green if correct, red if not.",
+
+  "helpArticleMyProgressTitle": "My progress",
+  "helpArticleMyProgressIntro": "A summary of how much instrument knowledge you've learned, by category, and your best quiz score.",
+  "helpArticleMyProgressStep1": "From Home, tap \"My progress\". Progress is saved on this device and, with an account, also on the server."
 }

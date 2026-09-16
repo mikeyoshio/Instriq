@@ -898,6 +898,11 @@
   "helpArticleInstrumentDetailStep1": "Toca cualquier instrumento del Catálogo para abrir su ficha completa.",
   "helpArticleInstrumentDetailStep2": "Más abajo están los métodos de esterilización compatibles y, si los hay, la ficha técnica del fabricante.",
 
+  "helpArticleSuturesTitle": "Catálogo de suturas",
+  "helpArticleSuturesIntro": "Un catálogo de referencia de materiales y calibres de sutura, filtrable por material, independiente del instrumental.",
+  "helpArticleSuturesStep1": "Desde el inicio, toca «Suturas». Filtra por material (seda, vicryl, nylon...) o busca por el nombre.",
+  "helpArticleSuturesStep2": "Cada sutura tiene su ficha: descripción, uso principal y dónde se utiliza (técnicas, protocolos o bandejas).",
+
   "helpArticlePublicLibraryTitle": "Qué es la Biblioteca Pública",
   "helpArticlePublicLibraryIntro": "Técnicas quirúrgicas y bandejas de instrumental revisadas y publicadas por la comunidad, visibles para todo el mundo.",
   "helpArticlePublicLibraryStep1": "Desde la pestaña «Biblioteca», toca «Biblioteca Pública».",
@@ -914,5 +919,17 @@
   "helpArticleAccountTitle": "Tu cuenta: preferencias, privacidad y sincronización",
   "helpArticleAccountIntro": "Con una cuenta iniciada, Perfil suma opciones nuevas a las que ya había en modo invitado.",
   "helpArticleAccountStep1": "«Mi cuenta y privacidad» permite exportar tus datos personales o eliminar la cuenta.",
-  "helpArticleAccountStep2": "«Problemas de sincronización» y «Cerrar sesión» están justo debajo, siempre visibles con una cuenta iniciada."
+  "helpArticleAccountStep2": "«Problemas de sincronización» y «Cerrar sesión» están justo debajo, siempre visibles con una cuenta iniciada.",
+
+  "helpCategoryLearning": "Aprendizaje",
+
+  "helpArticleLearnModesTitle": "Flashcards y cuestionario",
+  "helpArticleLearnModesIntro": "Repasa el instrumental con tarjetas de memoria o ponte a prueba con un cuestionario de diez preguntas, todo en modo invitado.",
+  "helpArticleLearnModesStep1": "Desde el inicio, toca «Aprèn» y elige «Flashcards» o «Cuestionario».",
+  "helpArticleLearnModesStep2": "En las flashcards, toca la tarjeta para ver la descripción y el uso del instrumento; «Marcar como aprendido» lo suma a tu progreso.",
+  "helpArticleLearnModesStep3": "En el cuestionario, cada respuesta se marca al instante: verde si aciertas, rojo si no.",
+
+  "helpArticleMyProgressTitle": "Mi progreso",
+  "helpArticleMyProgressIntro": "Un resumen de cuánto instrumental has aprendido, por categoría, y tu mejor puntuación en el cuestionario.",
+  "helpArticleMyProgressStep1": "Desde el inicio, toca «Mi progreso». El progreso se guarda en este dispositivo y, con cuenta, también en el servidor."
 }

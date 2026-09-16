@@ -138,6 +138,7 @@
       <li><a href="#biblioteca" data-i18n="cat.library">Biblioteca Pública</a></li>
       <li><a href="#organitzacio" data-i18n="cat.organization">Organització i espais de treball</a></li>
       <li><a href="#compte" data-i18n="cat.account">El meu compte</a></li>
+      <li><a href="#aprenentatge" data-i18n="cat.learning">Aprenentatge</a></li>
     </ul>
   </div>
 </section>
@@ -224,6 +225,25 @@
         </div>
       </div>
     </article>
+
+    <article class="help-article">
+      <h3 data-i18n="a.sutures.title">Catàleg de sutures</h3>
+      <p class="help-article-intro" data-i18n="a.sutures.intro">Un catàleg de referència de materials i calibres de sutura, filtrable per material, independent de l'instrumental.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.sutures.step1">Des de l'inici, toca «Sutures». Filtra per material (seda, vicryl, nylon...) o cerca pel nom.</p>
+          <img src="help-screens/sutures_list.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.sutures.step2">Cada sutura té la seva fitxa: descripció, ús principal i on s'utilitza (tècniques, protocols o safates).</p>
+          <img src="help-screens/suture_detail.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -304,6 +324,50 @@
   </div>
 </section>
 
+<section class="section help-category reveal" id="aprenentatge">
+  <div class="wrap">
+    <div class="help-category-title"><span class="n">06</span><h2 data-i18n="cat.learning">Aprenentatge</h2></div>
+
+    <article class="help-article">
+      <h3 data-i18n="a.learn.title">Flashcards i qüestionari</h3>
+      <p class="help-article-intro" data-i18n="a.learn.intro">Repassa l'instrumental amb targetes de memòria o posa't a prova amb un qüestionari de deu preguntes, tot en mode convidat.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.learn.step1">Des de l'inici, toca «Aprèn» i tria «Flashcards» o «Qüestionari».</p>
+          <img src="help-screens/learn_hub.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <p data-i18n="a.learn.step2">A les flashcards, toca la targeta per veure la descripció i l'ús de l'instrument; «Marca com a après» ho suma al teu progrés.</p>
+          <img src="help-screens/flashcard_front.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">3</div>
+        <div class="help-step-body">
+          <p data-i18n="a.learn.step3">Al qüestionari, cada resposta es marca a l'instant: verd si l'has encertat, vermell si no.</p>
+          <img src="help-screens/quiz_answered.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+    </article>
+
+    <article class="help-article">
+      <h3 data-i18n="a.progress.title">El meu progrés</h3>
+      <p class="help-article-intro" data-i18n="a.progress.intro">Un resum de quant instrumental has après, per categoria, i la teva millor puntuació al qüestionari.</p>
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <p data-i18n="a.progress.step1">Des de l'inici, toca «El meu progrés». El progrés es guarda en aquest dispositiu i, amb compte, també al servidor.</p>
+          <img src="help-screens/my_progress.png" alt="" loading="lazy" width="1440" height="900">
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
 </main>
 
 <footer class="site">
@@ -349,6 +413,7 @@
     'cat.library': 'Biblioteca Pública',
     'cat.organization': 'Organització i espais de treball',
     'cat.account': 'El meu compte',
+    'cat.learning': 'Aprenentatge',
     'a.workspaces.title': 'Consultar els espais de treball',
     'a.workspaces.intro': "Si el teu hospital té més d'un equip o servei, cadascun pot tenir el seu propi espai amb contingut independent.",
     'a.workspaces.step1': 'A Biblioteca, toca «Espais» per veure tots els espais del teu hospital.',
@@ -373,6 +438,18 @@
     'a.detail.intro': 'Cada instrument té una fitxa amb foto, descripció, ús principal i esterilització.',
     'a.detail.step1': 'Toca qualsevol instrument del Catàleg per obrir la seva fitxa completa.',
     'a.detail.step2': "Més avall hi ha els mètodes d'esterilització compatibles i, si n'hi ha, la fitxa tècnica del fabricant.",
+    'a.sutures.title': 'Catàleg de sutures',
+    'a.sutures.intro': "Un catàleg de referència de materials i calibres de sutura, filtrable per material, independent de l'instrumental.",
+    'a.sutures.step1': "Des de l'inici, toca «Sutures». Filtra per material (seda, vicryl, nylon...) o cerca pel nom.",
+    'a.sutures.step2': 'Cada sutura té la seva fitxa: descripció, ús principal i on s\'utilitza (tècniques, protocols o safates).',
+    'a.learn.title': 'Flashcards i qüestionari',
+    'a.learn.intro': "Repassa l'instrumental amb targetes de memòria o posa't a prova amb un qüestionari de deu preguntes, tot en mode convidat.",
+    'a.learn.step1': 'Des de l\'inici, toca «Aprèn» i tria «Flashcards» o «Qüestionari».',
+    'a.learn.step2': 'A les flashcards, toca la targeta per veure la descripció i l\'ús de l\'instrument; «Marca com a après» ho suma al teu progrés.',
+    'a.learn.step3': "Al qüestionari, cada resposta es marca a l'instant: verd si l'has encertat, vermell si no.",
+    'a.progress.title': 'El meu progrés',
+    'a.progress.intro': 'Un resum de quant instrumental has après, per categoria, i la teva millor puntuació al qüestionari.',
+    'a.progress.step1': "Des de l'inici, toca «El meu progrés». El progrés es guarda en aquest dispositiu i, amb compte, també al servidor.",
     'a.library.title': 'Què és la Biblioteca Pública',
     'a.library.intro': "Tècniques quirúrgiques i safates d'instrumental revisades i publicades per la comunitat, visibles per a tothom.",
     'a.library.step1': 'Des de la pestanya «Biblioteca», toca «Biblioteca Pública».',
@@ -402,6 +479,7 @@
     'cat.library': 'Biblioteca Pública',
     'cat.organization': 'Organización y espacios de trabajo',
     'cat.account': 'Mi cuenta',
+    'cat.learning': 'Aprendizaje',
     'a.workspaces.title': 'Consultar los espacios de trabajo',
     'a.workspaces.intro': 'Si tu hospital tiene más de un equipo o servicio, cada uno puede tener su propio espacio con contenido independiente.',
     'a.workspaces.step1': 'En Biblioteca, toca «Espacios» para ver todos los espacios de tu hospital.',
@@ -426,6 +504,18 @@
     'a.detail.intro': 'Cada instrumento tiene una ficha con foto, descripción, uso principal y esterilización.',
     'a.detail.step1': 'Toca cualquier instrumento del Catálogo para abrir su ficha completa.',
     'a.detail.step2': 'Más abajo están los métodos de esterilización compatibles y, si los hay, la ficha técnica del fabricante.',
+    'a.sutures.title': 'Catálogo de suturas',
+    'a.sutures.intro': 'Un catálogo de referencia de materiales y calibres de sutura, filtrable por material, independiente del instrumental.',
+    'a.sutures.step1': 'Desde el inicio, toca «Suturas». Filtra por material (seda, vicryl, nylon...) o busca por el nombre.',
+    'a.sutures.step2': 'Cada sutura tiene su ficha: descripción, uso principal y dónde se utiliza (técnicas, protocolos o bandejas).',
+    'a.learn.title': 'Flashcards y cuestionario',
+    'a.learn.intro': 'Repasa el instrumental con tarjetas de memoria o ponte a prueba con un cuestionario de diez preguntas, todo en modo invitado.',
+    'a.learn.step1': 'Desde el inicio, toca «Aprèn» y elige «Flashcards» o «Cuestionario».',
+    'a.learn.step2': 'En las flashcards, toca la tarjeta para ver la descripción y el uso del instrumento; «Marcar como aprendido» lo suma a tu progreso.',
+    'a.learn.step3': 'En el cuestionario, cada respuesta se marca al instante: verde si aciertas, rojo si no.',
+    'a.progress.title': 'Mi progreso',
+    'a.progress.intro': 'Un resumen de cuánto instrumental has aprendido, por categoría, y tu mejor puntuación en el cuestionario.',
+    'a.progress.step1': 'Desde el inicio, toca «Mi progreso». El progreso se guarda en este dispositivo y, con cuenta, también en el servidor.',
     'a.library.title': 'Qué es la Biblioteca Pública',
     'a.library.intro': 'Técnicas quirúrgicas y bandejas de instrumental revisadas y publicadas por la comunidad, visibles para todo el mundo.',
     'a.library.step1': 'Desde la pestaña «Biblioteca», toca «Biblioteca Pública».',
@@ -454,6 +544,7 @@
     'cat.library': 'Public Library',
     'cat.organization': 'Organization and workspaces',
     'cat.account': 'My account',
+    'cat.learning': 'Learning',
     'a.workspaces.title': 'View your workspaces',
     'a.workspaces.intro': 'If your hospital has more than one team or department, each can have its own workspace with independent content.',
     'a.workspaces.step1': 'In Library, tap "Workspaces" to see every workspace in your hospital.',
@@ -478,6 +569,18 @@
     'a.detail.intro': 'Every instrument has a detail page with a photo, description, main use, and sterilization.',
     'a.detail.step1': 'Tap any instrument in the Catalog to open its full detail page.',
     'a.detail.step2': "Further down are the compatible sterilization methods and, when available, the manufacturer's technical sheet.",
+    'a.sutures.title': 'Suture catalog',
+    'a.sutures.intro': 'A reference catalog of suture materials and gauges, filterable by material, separate from the instrument catalog.',
+    'a.sutures.step1': 'From Home, tap "Sutures". Filter by material (silk, vicryl, nylon...) or search by name.',
+    'a.sutures.step2': "Each suture has its own detail page: description, main use, and where it's used (techniques, protocols or trays).",
+    'a.learn.title': 'Flashcards and quiz',
+    'a.learn.intro': 'Review instruments with flashcards or test yourself with a ten-question quiz, all without an account.',
+    'a.learn.step1': 'From Home, tap "Learn" and choose "Flashcards" or "Quiz".',
+    'a.learn.step2': 'In flashcards, tap the card to see the instrument\'s description and use; "Mark as learned" adds it to your progress.',
+    'a.learn.step3': 'In the quiz, every answer is marked instantly: green if correct, red if not.',
+    'a.progress.title': 'My progress',
+    'a.progress.intro': "A summary of how much instrument knowledge you've learned, by category, and your best quiz score.",
+    'a.progress.step1': 'From Home, tap "My progress". Progress is saved on this device and, with an account, also on the server.',
     'a.library.title': 'What the Public Library is',
     'a.library.intro': 'Surgical techniques and instrument trays reviewed and published by the community, visible to everyone.',
     'a.library.step1': 'From the "Library" tab, tap "Public Library".',
