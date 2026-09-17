@@ -18,6 +18,13 @@
 //                                  completo del service account de Firebase
 //                                  del proyecto instriq-53015. Nunca se
 //                                  escribe ese valor en este archivo.)
+//   - WEBHOOK_SHARED_SECRET       (secret compartido con el trigger
+//                                  `trigger_send_push()` -- ver
+//                                  schema_v43_security_hardening.sql. Sin
+//                                  esto, cualquiera con la anon key publica
+//                                  podia llamar a este endpoint directamente
+//                                  con un payload fabricado e inyectar
+//                                  contenido en una notificacion push real.)
 
 import { createClient, type SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { SignJWT, importPKCS8 } from "https://esm.sh/jose@5";
@@ -72,6 +79,12 @@ const RELEVANT_ACTIONS = new Set([...SUBMITTED_ACTIONS, ...APPROVED_ACTIONS, ...
 
 Deno.serve(async (req: Request) => {
   try {
+    const expectedSecret = Deno.env.get("WEBHOOK_SHARED_SECRET");
+    const providedSecret = req.headers.get("x-webhook-secret");
+    if (!expectedSecret || providedSecret !== expectedSecret) {
+      return jsonResponse({ ok: false, error: "unauthorized" }, 401);
+    }
+
     const payload = (await req.json()) as WebhookPayload;
     const record = payload?.record;
 
