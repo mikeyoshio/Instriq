@@ -27,7 +27,7 @@ import 'group_document_detail_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_form_screen.dart';
-import 'tray_preparation_form_screen.dart';
+import 'tray_preparation_or_mode_screen.dart';
 import 'tray_preparation_sessions_screen.dart';
 import 'tray_version_history_screen.dart';
 
@@ -218,7 +218,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
 
   Future<void> _prepare() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => TrayPreparationFormScreen(tray: _tray)),
+      MaterialPageRoute(builder: (_) => TrayPreparationOrModeScreen(tray: _tray)),
     );
   }
 
