@@ -155,6 +155,12 @@ const List<Instrument> kInstruments = [
       es: 'Manipulación de tejidos delicados: vasos, intestino, peritoneo.',
       en: 'Handling delicate tissue: vessels, bowel, peritoneum.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/28/Dissecting_forceps_01.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'AfroBrazilian, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Dissecting_forceps_01.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-kocher',
@@ -217,6 +223,12 @@ const List<Instrument> kInstruments = [
       ca: 'Hemostàsia de vasos petits i superficials.',
       es: 'Hemostasia de vasos pequeños y superficiales.',
       en: 'Hemostasis of small, superficial vessels.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Medical_Instrument_Mosquito_forceps.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Sarindam7, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Medical_Instrument_Mosquito_forceps.jpg',
     ),
   ),
   Instrument(
@@ -391,6 +403,12 @@ const List<Instrument> kInstruments = [
       es: 'Microcirugía: oftalmología, cirugía vascular y de nervios, anastomosis muy finas.',
       en: 'Microsurgery: ophthalmology, vascular and nerve surgery, very fine anastomoses.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Titanium_Castroveijo_Needle_holders.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Bszsurgico, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Titanium_Castroveijo_Needle_holders.jpg',
+    ),
   ),
 
   // ---- SEPARACIÓN / EXPOSICIÓN ----
@@ -456,6 +474,12 @@ const List<Instrument> kInstruments = [
       es: 'Retracción de la vejiga o el útero en cirugía abdominal y pélvica.',
       en: 'Retraction of the bladder or uterus in abdominal and pelvic surgery.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Doyen%27s_Retractor.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Sarindam7, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Doyen%27s_Retractor.jpg',
+    ),
   ),
   Instrument(
     id: 'separador-richardson',
@@ -514,6 +538,12 @@ const List<Instrument> kInstruments = [
       ca: 'Aspiració de líquid abundant en cavitats (ascites, rentats peritoneals) evitant succionar teixit.',
       es: 'Aspiración de líquido abundante en cavidades (ascitis, lavados peritoneales) evitando succionar tejido.',
       en: 'Suctioning large volumes of fluid from cavities (ascites, peritoneal lavage) while avoiding tissue suction.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Suction_head_._poole.jpg',
+      license: 'CC0 1.0',
+      attribution: 'دماوندی, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Suction_head_._poole.jpg',
     ),
   ),
 
@@ -906,6 +936,12 @@ const List<Instrument> kInstruments = [
       es: 'Perforación y colocación de tornillos en huesos largos.',
       en: 'Drilling and screw placement in long bones.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Pneumatic_surgical_drill.jpg',
+      license: 'CC BY 2.0',
+      attribution: 'Phalinn Ooi, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pneumatic_surgical_drill.jpg',
+    ),
   ),
   Instrument(
     id: 'fijador-externo',
@@ -923,6 +959,12 @@ const List<Instrument> kInstruments = [
       ca: 'Estabilització temporal o definitiva de fractures complexes d\'ossos llargs i pelvis.',
       es: 'Estabilización temporal o definitiva de fracturas complejas de huesos largos y pelvis.',
       en: 'Temporary or definitive stabilization of complex long-bone and pelvic fractures.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/AO_external_fixator.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Netha Hussain, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:AO_external_fixator.jpg',
     ),
   ),
   Instrument(
@@ -942,6 +984,12 @@ const List<Instrument> kInstruments = [
       es: 'Fijación interna de fracturas de fémur, tibia o húmero.',
       en: 'Internal fixation of femoral, tibial or humeral fractures.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/0/04/Kuntshner_intramedullary_nail.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Netha Hussain, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Kuntshner_intramedullary_nail.jpg',
+    ),
   ),
   Instrument(
     id: 'placa-fijacion',
@@ -959,6 +1007,12 @@ const List<Instrument> kInstruments = [
       ca: 'Fixació interna de fractures i fragments ossis petits (mà, peu, canell).',
       es: 'Fijación interna de fracturas y fragmentos óseos pequeños (mano, pie, muñeca).',
       en: 'Internal fixation of small bone fractures and fragments (hand, foot, wrist).',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/2016-10-27-Osteosynthesematerial-8690.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Superbass, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:2016-10-27-Osteosynthesematerial-8690.jpg',
     ),
   ),
   Instrument(
@@ -1090,6 +1144,12 @@ const List<Instrument> kInstruments = [
       es: 'Clipaje microquirúrgico de aneurismas cerebrales.',
       en: 'Microsurgical clipping of cerebral aneurysms.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/AneurysmClips.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Sjschen, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:AneurysmClips.jpg',
+    ),
   ),
 
   // ==================================================================
@@ -1165,6 +1225,12 @@ const List<Instrument> kInstruments = [
       ca: 'Clampatge atraumàtic de vasos en cirurgia cardiovascular.',
       es: 'Clampaje atraumático de vasos en cirugía cardiovascular.',
       en: 'Atraumatic vessel clamping in cardiovascular surgery.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/c/c4/Debakey_forceps.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Phyo WP, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Debakey_forceps.jpg',
     ),
   ),
   Instrument(
@@ -1504,6 +1570,12 @@ const List<Instrument> kInstruments = [
       es: 'Oclusión temporal de vasos de pequeño y mediano calibre durante anastomosis microvasculares o vasculares.',
       en: 'Temporary occlusion of small and medium-caliber vessels during microvascular or vascular anastomoses.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Bulldog_1.jpg',
+      license: 'CC0 1.0',
+      attribution: 'دماوندی, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bulldog_1.jpg',
+    ),
   ),
   Instrument(
     id: 'cateter-fogarty',
@@ -1544,6 +1616,12 @@ const List<Instrument> kInstruments = [
       ca: 'Substitució o bypass de segments arterials malalts o oclosos (aorta, ilíaques, femorals).',
       es: 'Sustitución o bypass de segmentos arteriales enfermos u ocluidos (aorta, ilíacas, femorales).',
       en: 'Replacement or bypass of diseased or occluded arterial segments (aorta, iliac, femoral).',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/12/DeBakey_knitted_arterial_graft_of_Dacron_-_DPLA_-_dd1abcad21a8fa85d05a69b6c4957c17_%28page_1%29.jpg',
+      license: 'Dominio público',
+      attribution: 'United States Catheter & Instrument Corporation / Science History Institute, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:DeBakey_knitted_arterial_graft_of_Dacron_-_DPLA_-_dd1abcad21a8fa85d05a69b6c4957c17_(page_1).jpg',
     ),
   ),
   Instrument(
@@ -1603,6 +1681,12 @@ const List<Instrument> kInstruments = [
       es: 'Luxación y extracción de piezas dentarias en exodoncia quirúrgica.',
       en: 'Luxation and extraction of teeth in surgical extraction.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Dental_extraction_forceps.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Revolver00870, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Dental_extraction_forceps.jpg',
+    ),
   ),
   Instrument(
     id: 'elevador-periostotomo',
@@ -1620,6 +1704,12 @@ const List<Instrument> kInstruments = [
       ca: 'Despreniment de colgalls mucoperiòstics i luxació prèvia a l\'extracció dental.',
       es: 'Despegamiento de colgajos mucoperiósticos y luxación previa a la extracción dental.',
       en: 'Raising mucoperiosteal flaps and luxation prior to tooth extraction.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Farabeauf_periosteal_elevator.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Netha Hussain, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Farabeauf_periosteal_elevator.jpg',
     ),
   ),
   Instrument(
@@ -1769,6 +1859,12 @@ const List<Instrument> kInstruments = [
       es: 'Separación de bordes de la herida en campos operatorios pequeños de cirugía pediátrica.',
       en: 'Retracting wound edges in small operative fields in pediatric surgery.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/2b/Weitlaner_Retraktor.jpg',
+      license: 'CC BY 3.0',
+      attribution: 'MacPiek, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Weitlaner_Retraktor.jpg',
+    ),
   ),
   Instrument(
     id: 'cateter-umbilical',
@@ -1845,6 +1941,12 @@ const List<Instrument> kInstruments = [
       es: 'Separación superficial de piel y tejido subcutáneo en incisiones pequeñas y medianas.',
       en: 'Superficial retraction of skin and subcutaneous tissue in small and medium incisions.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Miler-Sen_retractors_01.JPG',
+      license: 'CC0 1.0',
+      attribution: 'آرمین, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Miler-Sen_retractors_01.JPG',
+    ),
   ),
   Instrument(
     id: 'canula-liposuccion',
@@ -1862,6 +1964,12 @@ const List<Instrument> kInstruments = [
       ca: 'Extracció de teixit adipós subcutani mitjançant moviments de vaivé sota buit controlat.',
       es: 'Extracción de tejido adiposo subcutáneo mediante movimientos de vaivén bajo vacío controlado.',
       en: 'Removal of subcutaneous adipose tissue through back-and-forth movements under controlled vacuum.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Liposuction_Cannula_Set.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'RobozTech, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Liposuction_Cannula_Set.jpg',
     ),
   ),
   Instrument(
@@ -1957,6 +2065,12 @@ const List<Instrument> kInstruments = [
       es: 'Drenaje de aire, sangre o líquido de la cavidad pleural tras cirugía torácica, evitando la entrada de aire con la inspiración.',
       en: 'Draining air, blood or fluid from the pleural cavity after thoracic surgery, preventing air entry during inspiration.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Drainage_Canisters_-_Pleur-Evac_Sahara.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Bentplate84, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Drainage_Canisters_-_Pleur-Evac_Sahara.jpg',
+    ),
   ),
   Instrument(
     id: 'sistema-vats',
@@ -2015,6 +2129,12 @@ const List<Instrument> kInstruments = [
       es: 'Obtención de una muestra cutánea de espesor completo mediante rotación, para diagnóstico histológico de lesiones dérmicas.',
       en: 'Obtaining a full-thickness skin sample by rotation, for histological diagnosis of dermal lesions.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/65/Disposable_Biopsy_Punch-4_mm.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Ajay Kumar Chaurasiya, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Disposable_Biopsy_Punch-4_mm.jpg',
+    ),
   ),
   Instrument(
     id: 'cureta-dermatologica',
@@ -2032,6 +2152,12 @@ const List<Instrument> kInstruments = [
       ca: 'Raspat de lesions cutànies superficials (queratosis, berrugues, carcinomes basocel·lulars superficials) mitjançant curetatge.',
       es: 'Raspado de lesiones cutáneas superficiales (queratosis, verrugas, carcinomas basocelulares superficiales) mediante curetaje.',
       en: 'Scraping of superficial skin lesions (keratoses, warts, superficial basal cell carcinomas) by curettage.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/61/Curette_face.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Bpierreb, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Curette_face.jpg',
     ),
   ),
   Instrument(
@@ -2109,6 +2235,12 @@ const List<Instrument> kInstruments = [
       es: 'Exposición del globo ocular en cirugía oftalmológica, evitando el parpadeo involuntario.',
       en: 'Exposing the eyeball in ophthalmic surgery, preventing involuntary blinking.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/0/07/Lid_speculums_for_sterilization.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Timothy Holdiness (Ktkvtsh), Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Lid_speculums_for_sterilization.jpg',
+    ),
   ),
   Instrument(
     id: 'facoemulsificador',
@@ -2181,6 +2313,12 @@ const List<Instrument> kInstruments = [
       es: 'Sutura de precisión de la córnea, esclera y conjuntiva en microcirugía oftalmológica.',
       en: 'Precision suturing of the cornea, sclera and conjunctiva in ophthalmic microsurgery.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Medical_Instrument_Eye_Barraquer%27s_needle_holder.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Sarindam7, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Medical_Instrument_Eye_Barraquer%27s_needle_holder.jpg',
+    ),
   ),
 
   // ---- ANESTESIOLOGIA I REANIMACIÓ ----
@@ -2206,6 +2344,12 @@ const List<Instrument> kInstruments = [
       es: 'La hoja Macintosh se introduce en la valécula (delante de la epiglotis); la Miller levanta la epiglotis directamente.',
       en: 'The Macintosh blade is placed in the vallecula (in front of the epiglottis); the Miller lifts the epiglottis directly.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Macintosh_Blades.jpg',
+      license: 'CC BY 3.0',
+      attribution: 'Sasata, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Macintosh_Blades.jpg',
+    ),
   ),
   Instrument(
     id: 'tubo-endotraqueal',
@@ -2228,6 +2372,12 @@ const List<Instrument> kInstruments = [
       ca: 'Calibre habitual en dones adultes: 7-7.5 mm; en homes adults: 7.5-8 mm.',
       es: 'Calibre habitual en mujeres adultas: 7-7.5 mm; en hombres adultos: 7.5-8 mm.',
       en: 'Typical size in adult women: 7-7.5 mm; in adult men: 7.5-8 mm.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Endotracheal_Tube.JPG',
+      license: 'CC BY-SA 4.0',
+      attribution: 'ICUnurses, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Endotracheal_Tube.JPG',
     ),
   ),
   Instrument(
@@ -2252,6 +2402,12 @@ const List<Instrument> kInstruments = [
       es: 'No protege frente a la aspiración de contenido gástrico — contraindicada si hay riesgo elevado de aspiración.',
       en: 'Does not protect against gastric content aspiration — contraindicated when aspiration risk is high.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Airway.larynxmasker.laryngeal.mask.gelei.JPG',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Qqq1, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Airway.larynxmasker.laryngeal.mask.gelei.JPG',
+    ),
   ),
   Instrument(
     id: 'canula-guedel',
@@ -2275,6 +2431,12 @@ const List<Instrument> kInstruments = [
       es: 'La talla se elige midiendo desde la comisura labial hasta el lóbulo de la oreja.',
       en: 'Size is chosen by measuring from the corner of the mouth to the earlobe.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/5/58/One-piece_Guedel_Airways.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Intersurgical Ltd, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:One-piece_Guedel_Airways.jpg',
+    ),
   ),
   Instrument(
     id: 'mascarilla-facial-anestesia',
@@ -2292,6 +2454,12 @@ const List<Instrument> kInstruments = [
       ca: 'Preoxigenació i ventilació manual abans de la intubació o durant una anestèsia amb mascareta.',
       es: 'Preoxigenación y ventilación manual antes de la intubación o durante una anestesia con mascarilla.',
       en: 'Preoxygenation and manual ventilation before intubation or during mask anesthesia.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/0/04/FPV_masque_anesth%C3%A9sie.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'CYP3A42D6, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:FPV_masque_anesth%C3%A9sie.jpg',
     ),
   ),
   Instrument(
@@ -2311,6 +2479,12 @@ const List<Instrument> kInstruments = [
       es: 'Ventilación manual de urgencia en parada respiratoria o antes de disponer de una vía aérea definitiva.',
       en: 'Emergency manual ventilation during respiratory arrest or before a definitive airway is secured.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Ambu_Bag_valve_mask.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Mike6271, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ambu_Bag_valve_mask.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-magill',
@@ -2328,6 +2502,12 @@ const List<Instrument> kInstruments = [
       ca: 'Guien el tub endotraqueal cap a la glotis en intubacions difícils, o retiren cossos estranys de la orofaringe.',
       es: 'Guían el tubo endotraqueal hacia la glotis en intubaciones difíciles, o retiran cuerpos extraños de la orofaringe.',
       en: 'Guide the endotracheal tube toward the glottis in difficult intubations, or remove foreign bodies from the oropharynx.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/e/e9/Magill_forceps_open.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Dctrzl, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Magill_forceps_open.jpg',
     ),
   ),
   Instrument(
