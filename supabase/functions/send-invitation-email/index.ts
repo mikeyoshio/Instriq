@@ -23,6 +23,15 @@
 //                                  este es solo para el envio directo via
 //                                  API de Resend que hace esta funcion.
 //                                  Nunca se escribe ese valor en este archivo.)
+//   - WEBHOOK_SHARED_SECRET       (secret compartido con el trigger `invitations`
+//                                  -- ver schema_v43_security_hardening.sql.
+//                                  Sin esto, cualquiera con la anon key
+//                                  publica podia llamar a este endpoint
+//                                  directamente con un payload fabricado y
+//                                  hacer que Instriq enviase un correo real
+//                                  desde hola@instriq.org con contenido casi
+//                                  libre -- relay de phishing/spam con
+//                                  dominio legitimo.)
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -60,10 +69,16 @@ const ROLE_LABELS: Record<string, string> = {
 
 Deno.serve(async (req: Request) => {
   try {
+    const expectedSecret = Deno.env.get("WEBHOOK_SHARED_SECRET");
+    const providedSecret = req.headers.get("x-webhook-secret");
+    if (!expectedSecret || providedSecret !== expectedSecret) {
+      return jsonResponse({ ok: false, error: "unauthorized" }, 401);
+    }
+
     const payload = (await req.json()) as WebhookPayload;
     const record = payload?.record;
-    if (!record || record.status !== "pending") {
-      return jsonResponse({ ok: true, skipped: true, reason: "no es una invitacion pendiente nueva" });
+    if (!record) {
+      return jsonResponse({ ok: true, skipped: true, reason: "sin registro" });
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -78,16 +93,35 @@ Deno.serve(async (req: Request) => {
 
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
 
+    // Defensa en profundidad: aunque ya se exige el secreto compartido de
+    // arriba, no confiamos en el resto del payload del webhook para el
+    // contenido del correo -- se vuelve a leer la fila real de `invitations`
+    // por su id y se usan solo esos valores (nunca los del payload) para
+    // email/rol/token/estado. Así, aunque algo llegase a construir un POST
+    // con el secreto correcto pero datos inventados, el correo real solo
+    // puede reflejar una invitación que de verdad existe y sigue pendiente.
+    const { data: invitation, error: invitationError } = await admin
+      .from("invitations")
+      .select("id, organization_id, workspace_id, email, role, token, status, invited_by_name")
+      .eq("id", record.id)
+      .maybeSingle();
+
+    if (invitationError || !invitation || invitation.status !== "pending") {
+      return jsonResponse({ ok: true, skipped: true, reason: "no es una invitacion pendiente nueva" });
+    }
+
     const [{ data: org }, { data: workspace }] = await Promise.all([
-      admin.from("organizations").select("name").eq("id", record.organization_id).maybeSingle(),
-      admin.from("workspaces").select("name").eq("id", record.workspace_id).maybeSingle(),
+      admin.from("organizations").select("name").eq("id", invitation.organization_id).maybeSingle(),
+      admin.from("workspaces").select("name").eq("id", invitation.workspace_id).maybeSingle(),
     ]);
 
     const orgName = (org?.name as string | undefined) ?? "tu organización";
     const workspaceName = (workspace?.name as string | undefined) ?? "un espacio de trabajo";
-    const roleLabel = ROLE_LABELS[record.role] ?? record.role;
-    const inviterName = record.invited_by_name?.trim() ? record.invited_by_name : "Alguien de tu equipo";
-    const inviteUrl = `${APP_BASE_URL}/#/invite/${record.token}`;
+    const roleLabel = ROLE_LABELS[invitation.role as string] ?? invitation.role;
+    const inviterName = (invitation.invited_by_name as string | null)?.trim()
+      ? (invitation.invited_by_name as string)
+      : "Alguien de tu equipo";
+    const inviteUrl = `${APP_BASE_URL}/#/invite/${invitation.token}`;
 
     const subject = `${inviterName} te ha invitado a ${workspaceName} en Instriq`;
     const html = buildEmailHtml({ inviterName, orgName, workspaceName, roleLabel, inviteUrl });
@@ -100,7 +134,7 @@ Deno.serve(async (req: Request) => {
       },
       body: JSON.stringify({
         from: FROM_ADDRESS,
-        to: [record.email],
+        to: [invitation.email],
         subject,
         html,
       }),
@@ -111,7 +145,7 @@ Deno.serve(async (req: Request) => {
       return jsonResponse({ ok: false, error: `Resend respondio ${response.status}: ${text}` }, 200);
     }
 
-    return jsonResponse({ ok: true, invitation_id: record.id });
+    return jsonResponse({ ok: true, invitation_id: invitation.id });
   } catch (error) {
     // Nunca devolvemos un status de error: un Database Webhook reintenta
     // indefinidamente ante un fallo no 2xx, y esto no es una operacion
