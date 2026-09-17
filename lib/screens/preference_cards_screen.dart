@@ -6,6 +6,7 @@ import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
+import '../utils/fuzzy_match.dart';
 import '../widgets/offline_banner.dart';
 import 'preference_card_detail_screen.dart';
 import 'preference_card_form_screen.dart';
@@ -91,10 +92,8 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
     }
 
     final cards = PreferenceCardService.instance.cardsOfWorkspace(widget.workspace.id).where((c) {
-      if (_query.isEmpty) return true;
-      final q = _query.toLowerCase();
-      return _surgeonLabel(l10n, c).toLowerCase().contains(q) ||
-          (c.publishedVersion?.procedureName ?? '').toLowerCase().contains(q);
+      return fuzzyContains(_surgeonLabel(l10n, c), _query) ||
+          fuzzyContains(c.publishedVersion?.procedureName ?? '', _query);
     }).toList();
 
     final bySurgeon = <String, List<PreferenceCard>>{};

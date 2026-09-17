@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../data/instruments_data.dart';
 import '../data/sutures_data.dart';
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/components/instriq_stale_content_banner.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
@@ -23,6 +24,7 @@ import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/group_document_video_service.dart';
 import '../services/manufacturer_service.dart';
+import '../services/pdf_export.dart';
 import '../services/preference_card_service.dart';
 import '../services/profile_service.dart';
 import '../services/recent_activity_service.dart';
@@ -388,6 +390,17 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     _loadOwnDraft();
   }
 
+  Future<void> _exportPdf() async {
+    final published = _document.publishedVersion;
+    if (published == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    await exportGroupDocumentPdf(
+      published: published,
+      specialtyLabel: _specialty?.label,
+      l10n: l10n,
+    );
+  }
+
   Future<void> _delete() async {
     final l10n = AppLocalizations.of(context)!;
     final title = _document.publishedVersion?.title ?? '';
@@ -425,6 +438,12 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               onPressed: _toggleFavorite,
             ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.picture_as_pdf_outlined),
+              tooltip: l10n.exportPdfAction,
+              onPressed: _exportPdf,
+            ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canEdit && published != null)
             IconButton(
@@ -463,6 +482,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               child: Text(l10n.docNotPublishedYet),
             )
           else ...[
+            InstriqStaleContentBanner(approvedAt: published.approvedAt),
             if (_specialty != null || published.specialty != null) ...[
               _specialty != null
                   ? InputChip(

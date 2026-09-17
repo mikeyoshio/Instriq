@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/instrument.dart';
 import '../models/tray.dart';
+import '../utils/fuzzy_match.dart';
 import 'category_icon.dart';
 
 /// Hoja modal para añadir un item a una bandeja: a diferencia de
@@ -28,11 +29,8 @@ class _TrayItemPickerSheetState extends State<TrayItemPickerSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final filteredCatalog =
-        kInstruments.where((i) => _query.isEmpty || i.name.toLowerCase().contains(_query.toLowerCase())).toList();
-    final filteredCustom = widget.customInstruments
-        .where((i) => _query.isEmpty || i.name.toLowerCase().contains(_query.toLowerCase()))
-        .toList();
+    final filteredCatalog = kInstruments.where((i) => fuzzyContains(i.name, _query)).toList();
+    final filteredCustom = widget.customInstruments.where((i) => fuzzyContains(i.name, _query)).toList();
 
     return DraggableScrollableSheet(
       initialChildSize: 0.85,

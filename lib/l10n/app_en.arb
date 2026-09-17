@@ -931,5 +931,17 @@
 
   "helpArticleMyProgressTitle": "My progress",
   "helpArticleMyProgressIntro": "A summary of how much instrument knowledge you've learned, by category, and your best quiz score.",
-  "helpArticleMyProgressStep1": "From Home, tap \"My progress\". Progress is saved on this device and, with an account, also on the server."
+  "helpArticleMyProgressStep1": "From Home, tap \"My progress\". Progress is saved on this device and, with an account, also on the server.",
+
+  "staleContentWarning": "This content hasn't been reviewed in {months} months. Check that it's still accurate.",
+  "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
+
+  "exportPdfAction": "Export to PDF",
+  "pdfGeneratedOn": "Generated from Instriq on {date}",
+  "@pdfGeneratedOn": {"placeholders": {"date": {"type": "String"}}},
+  "pdfPositionColumn": "Position",
+  "pdfInstrumentColumn": "Instrument",
+  "pdfQuantityColumn": "Quantity",
+  "pdfObservationsLabel": "Observations",
+  "pdfConsumablesLabel": "Consumables"
 }

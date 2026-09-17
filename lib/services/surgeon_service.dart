@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/surgeon.dart';
+import '../utils/fuzzy_match.dart';
 import 'profile_service.dart';
 
 /// Cirujanas/os del grupo actual (`surgeons`, ver Fase C) — RLS los aísla al
@@ -43,9 +44,8 @@ class SurgeonService {
   /// Filtro en memoria sobre el caché ya cargado (ver [fetchForOrganization]),
   /// mismo patrón que [ManufacturerService.searchByName].
   List<Surgeon> searchByName(String query) {
-    final q = query.trim().toLowerCase();
-    if (q.isEmpty) return surgeons;
-    return _surgeons.where((s) => s.name.toLowerCase().contains(q)).toList();
+    if (query.trim().isEmpty) return surgeons;
+    return _surgeons.where((s) => fuzzyContains(s.name, query)).toList();
   }
 
   /// Da de alta un cirujano nuevo del grupo actual, o reutiliza el existente

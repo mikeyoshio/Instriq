@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/sutures_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/suture.dart';
+import '../utils/fuzzy_match.dart';
 import 'suture_detail_screen.dart';
 
 /// Catàleg de sutures, paral·lel a [CatalogScreen] però deliberadament
@@ -32,7 +33,7 @@ class _SutureCatalogScreenState extends State<SutureCatalogScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final filtered = kSutures.where((s) {
-      final matchesQuery = _query.isEmpty || s.name.toLowerCase().contains(_query.toLowerCase());
+      final matchesQuery = fuzzyContains(s.name, _query);
       final matchesMaterial = _materialFilters.isEmpty || _materialFilters.contains(s.material);
       return matchesQuery && matchesMaterial;
     }).toList();

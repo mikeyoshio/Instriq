@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/sutures_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/suture.dart';
+import '../utils/fuzzy_match.dart';
 
 /// Fulla modal per triar una sutura del catàleg. Calcada de
 /// [CatalogPickerSheet], deliberadament no compartida (catàleg propi, no
@@ -21,7 +22,7 @@ class _SuturePickerSheetState extends State<SuturePickerSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final filtered = kSutures
-        .where((s) => _query.isEmpty || s.name.toLowerCase().contains(_query.toLowerCase()))
+        .where((s) => fuzzyContains(s.name, _query))
         .toList();
     return DraggableScrollableSheet(
       initialChildSize: 0.8,

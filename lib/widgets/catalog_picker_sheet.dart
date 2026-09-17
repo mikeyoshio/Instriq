@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/instruments_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
+import '../utils/fuzzy_match.dart';
 import 'category_icon.dart';
 
 /// Hoja modal para elegir un instrumento del catálogo. Se usa en tarjetas de
@@ -22,7 +23,7 @@ class _CatalogPickerSheetState extends State<CatalogPickerSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final filtered = kInstruments
-        .where((i) => _query.isEmpty || i.name.toLowerCase().contains(_query.toLowerCase()))
+        .where((i) => fuzzyContains(i.name, _query))
         .toList();
     return DraggableScrollableSheet(
       initialChildSize: 0.8,
