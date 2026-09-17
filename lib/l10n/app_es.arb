@@ -871,6 +871,15 @@
   "resolveIncidentDialogTitle": "Marcar incidencia como resuelta",
   "resolutionNotesLabel": "Notas de resolución",
 
+  "reportContentErrorAction": "Reportar un error",
+  "reportContentErrorDialogTitle": "Reportar un error de contenido",
+  "contentErrorDescriptionLabel": "¿Qué está mal?",
+  "reportContentErrorSubmitSuccess": "Gracias, hemos recibido tu aviso.",
+  "catalogContentReportsTabTitle": "Reportes de contenido",
+  "catalogContentReportsEmptyState": "No hay reportes de contenido pendientes.",
+  "resolveContentReportAction": "Marcar como resuelto",
+  "resolveContentReportDialogTitle": "Marcar reporte como resuelto",
+
   "helpCenterTitle": "Centro de ayuda",
   "helpHowItWorksEntryTitle": "Cómo funciona la app",
   "helpHowItWorksEntrySubtitle": "Una guía general, pensada para leerse de un tirón",

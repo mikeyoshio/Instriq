@@ -871,6 +871,15 @@
   "resolveIncidentDialogTitle": "Marcar incidència com a resolta",
   "resolutionNotesLabel": "Notes de resolució",
 
+  "reportContentErrorAction": "Reportar un error",
+  "reportContentErrorDialogTitle": "Reportar un error de contingut",
+  "contentErrorDescriptionLabel": "Què hi ha malament?",
+  "reportContentErrorSubmitSuccess": "Gràcies, hem rebut el teu avís.",
+  "catalogContentReportsTabTitle": "Informes de contingut",
+  "catalogContentReportsEmptyState": "No hi ha informes de contingut pendents.",
+  "resolveContentReportAction": "Marcar com a resolt",
+  "resolveContentReportDialogTitle": "Marcar informe com a resolt",
+
   "helpCenterTitle": "Centre d'ajuda",
   "helpHowItWorksEntryTitle": "Com funciona l'app",
   "helpHowItWorksEntrySubtitle": "Una guia general, pensada per llegir-se d'una tirada",

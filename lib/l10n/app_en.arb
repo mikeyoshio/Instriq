@@ -871,6 +871,15 @@
   "resolveIncidentDialogTitle": "Mark incident as resolved",
   "resolutionNotesLabel": "Resolution notes",
 
+  "reportContentErrorAction": "Report an error",
+  "reportContentErrorDialogTitle": "Report a content error",
+  "contentErrorDescriptionLabel": "What's wrong?",
+  "reportContentErrorSubmitSuccess": "Thanks, we've received your report.",
+  "catalogContentReportsTabTitle": "Content reports",
+  "catalogContentReportsEmptyState": "No content reports pending.",
+  "resolveContentReportAction": "Mark as resolved",
+  "resolveContentReportDialogTitle": "Mark report as resolved",
+
   "helpCenterTitle": "Help center",
   "helpHowItWorksEntryTitle": "How the app works",
   "helpHowItWorksEntrySubtitle": "A general guide, meant to be read in one go",

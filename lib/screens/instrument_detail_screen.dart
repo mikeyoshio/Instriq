@@ -22,6 +22,7 @@ import '../models/tray.dart';
 import '../models/work_mode.dart';
 import '../services/auth_service.dart';
 import '../services/catalog_community_photo_service.dart';
+import '../services/catalog_content_report_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/instrument_incident_service.dart';
@@ -402,6 +403,59 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     }
   }
 
+  /// Reportar un error de contenido (descripción/foto/uso incorrectos) en la
+  /// ficha del catálogo global -- a diferencia de una incidencia (arriba),
+  /// no exige pertenecer a una organización, ni gravedad: cualquier usuaria/o
+  /// autenticada puede hacerlo, ver
+  /// supabase/schema_v39_catalog_content_reports.sql.
+  Future<void> _openReportContentErrorDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final descriptionController = TextEditingController();
+    final reported = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text(l10n.reportContentErrorDialogTitle),
+          content: TextField(
+            controller: descriptionController,
+            autofocus: true,
+            maxLines: 4,
+            onChanged: (_) => setDialogState(() {}),
+            decoration: InputDecoration(
+              labelText: l10n.contentErrorDescriptionLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+            FilledButton(
+              onPressed: descriptionController.text.trim().isEmpty ? null : () => Navigator.pop(ctx, true),
+              child: Text(l10n.reportContentErrorAction),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (reported != true || !mounted) return;
+    final description = descriptionController.text.trim();
+    if (description.isEmpty) return;
+    try {
+      await CatalogContentReportService.instance.report(
+        refType: _refType,
+        refId: widget.instrument.id,
+        description: description,
+      );
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.reportContentErrorSubmitSuccess)));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
   Future<void> _openResolveIncidentDialog(InstrumentIncident incident) async {
     final l10n = AppLocalizations.of(context)!;
     final notesController = TextEditingController();
@@ -516,6 +570,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
               },
             ),
             _buildIncidentsSection(context, l10n),
+            _buildContentReportAction(context, l10n),
             const SizedBox(height: 28),
             SizedBox(
               width: double.infinity,
@@ -1102,6 +1157,25 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
             ],
           ],
         ),
+      ),
+    );
+  }
+
+  /// Enlace discreto para reportar un error de contenido de esta ficha
+  /// (descripción, uso, foto...) -- separado a propósito de las incidencias
+  /// de arriba: aquello es "este instrumento físico está roto" (asunto de la
+  /// organización), esto es "esta ficha del catálogo está mal" (asunto
+  /// editorial global, ver supabase/schema_v39_catalog_content_reports.sql).
+  /// Cualquier usuaria/o autenticada puede reportar, sin pertenecer a
+  /// ninguna organización.
+  Widget _buildContentReportAction(BuildContext context, AppLocalizations l10n) {
+    if (AuthService.instance.currentUser == null) return const SizedBox.shrink();
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: TextButton.icon(
+        onPressed: _openReportContentErrorDialog,
+        icon: const Icon(Icons.flag_outlined, size: 18),
+        label: Text(l10n.reportContentErrorAction),
       ),
     );
   }

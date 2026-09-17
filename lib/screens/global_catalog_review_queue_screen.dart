@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_review_queue.dart';
 import '../l10n/app_localizations.dart';
+import '../models/catalog_content_report.dart';
 import '../models/instrument_sterilization.dart';
+import '../services/catalog_content_report_service.dart';
 import '../services/sterilization_service.dart';
 import '../widgets/sterilization_method_label.dart';
 import 'sterilization_method_diff_screen.dart';
@@ -23,7 +25,7 @@ class GlobalCatalogReviewQueueScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.globalCatalogReviewQueueTitle),
@@ -31,6 +33,7 @@ class GlobalCatalogReviewQueueScreen extends StatelessWidget {
             tabs: [
               Tab(text: l10n.sterilizationMethodsTabTitle),
               Tab(text: l10n.technicalInfoTabTitle),
+              Tab(text: l10n.catalogContentReportsTabTitle),
             ],
           ),
         ),
@@ -38,6 +41,7 @@ class GlobalCatalogReviewQueueScreen extends StatelessWidget {
           children: [
             _GlobalMethodReviewQueue(),
             _GlobalTechnicalInfoReviewQueue(),
+            _CatalogContentReportsQueue(),
           ],
         ),
       ),
@@ -190,6 +194,150 @@ class _GlobalTechnicalInfoReviewQueueState extends State<_GlobalTechnicalInfoRev
           child: Padding(
               padding: const EdgeInsets.all(24),
               child: Text(l10n.noPendingReviews))),
+    );
+  }
+}
+
+/// Cola de reportes de error de contenido (schema_v39). Más simple que las
+/// dos colas de arriba: no hay versión/diff que comparar, solo "esto está
+/// mal" (descripción libre) + resolver, mismo patrón que
+/// `_buildIncidentCard`/`_openResolveIncidentDialog` de
+/// [InstrumentDetailScreen] pero a nivel de catálogo global en vez de por
+/// instrumento.
+class _CatalogContentReportsQueue extends StatefulWidget {
+  const _CatalogContentReportsQueue();
+
+  @override
+  State<_CatalogContentReportsQueue> createState() => _CatalogContentReportsQueueState();
+}
+
+class _CatalogContentReportsQueueState extends State<_CatalogContentReportsQueue> {
+  bool _loading = true;
+  String? _error;
+  List<CatalogContentReport> _reports = [];
+  Map<String, String> _instrumentNames = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final reports = await CatalogContentReportService.instance.fetchOpenQueue();
+      final names = await resolveInstrumentNames(reports.map((r) => SterilizationHeaderInfo(
+            id: r.id ?? '',
+            organizationId: null,
+            instrumentRefType: r.instrumentRefType,
+            instrumentRefId: r.instrumentRefId,
+            workspaceName: null,
+          )));
+      if (!mounted) return;
+      setState(() {
+        _reports = reports;
+        _instrumentNames = names;
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _openResolveDialog(CatalogContentReport report) async {
+    final l10n = AppLocalizations.of(context)!;
+    final notesController = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.resolveContentReportDialogTitle),
+        content: TextField(
+          controller: notesController,
+          autofocus: true,
+          maxLines: 3,
+          decoration: InputDecoration(
+            labelText: l10n.resolutionNotesLabel,
+            border: const OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.resolveContentReportAction)),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      final notes = notesController.text.trim();
+      await CatalogContentReportService.instance.resolve(report.id!, resolutionNotes: notes.isEmpty ? null : notes);
+      await _load();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    if (_loading) return const Center(child: CircularProgressIndicator());
+    if (_error != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.reviewQueueLoadError(_error!)),
+              const SizedBox(height: 12),
+              OutlinedButton(onPressed: _load, child: Text(l10n.retry)),
+            ],
+          ),
+        ),
+      );
+    }
+    if (_reports.isEmpty) {
+      return Center(
+          child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.catalogContentReportsEmptyState)));
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: _reports.length,
+      itemBuilder: (context, index) {
+        final report = _reports[index];
+        final name = _instrumentNames[report.instrumentRefId] ?? report.instrumentRefId;
+        return Card(
+          margin: const EdgeInsets.only(bottom: 8),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name, style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 6),
+                Text(report.description, style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => _openResolveDialog(report),
+                    child: Text(l10n.resolveContentReportAction),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
