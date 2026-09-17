@@ -931,5 +931,17 @@
 
   "helpArticleMyProgressTitle": "Mi progreso",
   "helpArticleMyProgressIntro": "Un resumen de cuánto instrumental has aprendido, por categoría, y tu mejor puntuación en el cuestionario.",
-  "helpArticleMyProgressStep1": "Desde el inicio, toca «Mi progreso». El progreso se guarda en este dispositivo y, con cuenta, también en el servidor."
+  "helpArticleMyProgressStep1": "Desde el inicio, toca «Mi progreso». El progreso se guarda en este dispositivo y, con cuenta, también en el servidor.",
+
+  "staleContentWarning": "Este contenido no se ha revisado desde hace {months} meses. Comprueba que siga siendo correcto.",
+  "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
+
+  "exportPdfAction": "Exportar a PDF",
+  "pdfGeneratedOn": "Generado desde Instriq el {date}",
+  "@pdfGeneratedOn": {"placeholders": {"date": {"type": "String"}}},
+  "pdfPositionColumn": "Posición",
+  "pdfInstrumentColumn": "Instrumento",
+  "pdfQuantityColumn": "Cantidad",
+  "pdfObservationsLabel": "Observaciones",
+  "pdfConsumablesLabel": "Material fungible"
 }

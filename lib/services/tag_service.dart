@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/tag.dart';
 import '../models/tagging.dart';
+import '../utils/fuzzy_match.dart';
 import 'auth_service.dart';
 
 /// Etiquetado libre de cualquier entidad (`tags` + `taggings`, Fase C).
@@ -33,9 +34,8 @@ class TagService {
   /// [ManufacturerService.searchByName]/[SurgeonService.searchByName].
   Future<List<Tag>> searchByName(String query) async {
     await _ensureLoaded();
-    final q = query.trim().toLowerCase();
-    if (q.isEmpty) return List.unmodifiable(_tags);
-    return _tags.where((t) => t.name.toLowerCase().contains(q)).toList();
+    if (query.trim().isEmpty) return List.unmodifiable(_tags);
+    return _tags.where((t) => fuzzyContains(t.name, query)).toList();
   }
 
   /// Da de alta una etiqueta nueva, o reutiliza la existente si otra persona

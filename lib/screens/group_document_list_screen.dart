@@ -7,6 +7,7 @@ import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/group_document_service.dart';
 import '../services/specialty_service.dart';
+import '../utils/fuzzy_match.dart';
 import '../widgets/offline_banner.dart';
 import 'group_document_detail_screen.dart';
 import 'group_document_form_screen.dart';
@@ -99,9 +100,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
 
     final documents = GroupDocumentService.instance
         .documentsOfKind(widget.kind, widget.workspace.id)
-        .where((d) =>
-            _query.isEmpty ||
-            (d.publishedVersion?.title ?? '').toLowerCase().contains(_query.toLowerCase()))
+        .where((d) => fuzzyContains(d.publishedVersion?.title ?? '', _query))
         .toList();
 
     final canEdit = widget.myRole?.canEdit ?? false;

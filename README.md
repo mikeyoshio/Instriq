@@ -137,6 +137,9 @@ flutter run -d chrome        # navegador
 - [x] Auditoría de seguridad completa (RLS, funciones `security definer`, coherencia cliente-servidor) con los hallazgos críticos corregidos: sin auto-promoción a admin, `organizations` ya no es legible por cualquiera, expulsar/promover un miembro pasa por función verificada en servidor
 - [x] Segunda ronda de auditoría de seguridad (2026-09) sobre las migraciones más recientes (`schema_v43_security_hardening.sql`): `organizations.owner_id` ya no se puede modificar directamente (mismo guard de columna que `profiles`, solo `transfer_hospital_ownership()` puede cambiarlo); `group_document_videos` ya no expone vídeos pendientes/rechazados a cualquier miembro del workspace; las Edge Functions `send-push`/`send-invitation-email` exigen un secreto compartido (`WEBHOOK_SHARED_SECRET`, guardado también en Supabase Vault) para no poder invocarse directamente con la publishable key pública — antes permitía enviar correos/notificaciones arbitrarios suplantando a Instriq
 - [x] SEO de la landing: `hreflang` real para las 3 variantes de idioma (antes solo la catalana era indexable), metadatos Open Graph/Twitter traducibles, schema `Organization`, cabeceras de seguridad
+- [x] Búsqueda tolerante a erratas en todo el catálogo y los listados (`lib/utils/fuzzy_match.dart`, distancia de Levenshtein acotada + normalización de acentos) — antes exigía coincidencia exacta de subcadena
+- [x] Aviso de contenido desactualizado (más de 12 meses sin revisar) en técnicas/protocolos, bandejas y tarjetas de preferencia publicadas
+- [x] Exportar/imprimir en PDF el checklist de una bandeja, los pasos de una técnica/protocolo o una tarjeta de preferencia (`lib/services/pdf_export.dart`, paquetes `pdf`/`printing`)
 
 Backlog completo (pendientes, EPICs de producto y revisión arquitectónica previa a cada uno): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
 

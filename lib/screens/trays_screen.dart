@@ -6,6 +6,7 @@ import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../services/specialty_service.dart';
 import '../services/tray_service.dart';
+import '../utils/fuzzy_match.dart';
 import '../widgets/offline_banner.dart';
 import 'tray_detail_screen.dart';
 import 'tray_form_screen.dart';
@@ -88,7 +89,7 @@ class _TraysScreenState extends State<TraysScreen> {
 
     final trays = TrayService.instance
         .traysOfWorkspace(widget.workspace.id)
-        .where((t) => _query.isEmpty || (t.publishedVersion?.name ?? '').toLowerCase().contains(_query.toLowerCase()))
+        .where((t) => fuzzyContains(t.publishedVersion?.name ?? '', _query))
         .toList();
 
     final canEdit = widget.myRole?.canEdit ?? false;

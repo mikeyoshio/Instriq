@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/components/instriq_stale_content_banner.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document_version.dart' show GroupDocumentVersionStatus;
 import '../models/instrument.dart';
@@ -9,6 +10,7 @@ import '../models/preference_card.dart';
 import '../models/surgeon.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
+import '../services/pdf_export.dart';
 import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
 import '../widgets/category_icon.dart';
@@ -76,6 +78,13 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
       if (i.id == item.instrumentId) return i;
     }
     return null;
+  }
+
+  Future<void> _exportPdf() async {
+    final published = _card.publishedVersion;
+    if (published == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    await exportPreferenceCardPdf(published: published, surgeonName: _surgeon?.name ?? '', l10n: l10n);
   }
 
   Future<void> _edit() async {
@@ -163,6 +172,12 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
         title: Text(published?.procedureName ?? l10n.unpublished),
         actions: [
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.picture_as_pdf_outlined),
+              tooltip: l10n.exportPdfAction,
+              onPressed: _exportPdf,
+            ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canEdit && published != null)
             IconButton(
@@ -203,6 +218,7 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
                     child: Text(l10n.docNotPublishedYet),
                   )
                 else ...[
+                  InstriqStaleContentBanner(approvedAt: published.approvedAt),
                   Row(
                     children: [
                       const Icon(Icons.person),

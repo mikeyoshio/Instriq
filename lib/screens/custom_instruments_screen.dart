@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/workspace_role.dart';
 import '../services/custom_instrument_service.dart';
+import '../utils/fuzzy_match.dart';
 import 'custom_instrument_detail_screen.dart';
 import 'custom_instrument_form_screen.dart';
 
@@ -72,7 +73,7 @@ class _CustomInstrumentsScreenState extends State<CustomInstrumentsScreen> {
     }
 
     final instruments = CustomInstrumentService.instance.instruments
-        .where((i) => _query.isEmpty || i.name.toLowerCase().contains(_query.toLowerCase()))
+        .where((i) => fuzzyContains(i.name, _query))
         .toList();
 
     final canEdit = widget.myRole?.canEdit ?? false;

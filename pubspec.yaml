@@ -65,6 +65,12 @@ dependencies:
   go_router: ^14.6.2
   flutter_local_notifications: ^18.0.1
   timezone: ^0.9.4
+  # Exportar/imprimir un checklist de bandeja en PDF (mejora de producto,
+  # 2026-09): pdf construye el documento, printing lo manda al diálogo de
+  # impresión/guardado nativo de cada plataforma (incl. el diálogo de
+  # impresión del navegador en Flutter Web, sin dependencias nativas extra).
+  pdf: ^3.11.3
+  printing: ^5.14.2
 
 dev_dependencies:
   flutter_test:

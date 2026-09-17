@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/components/instriq_stale_content_banner.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
@@ -17,6 +18,7 @@ import '../services/knowledge_link_service.dart';
 import '../services/public_tray_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
+import '../services/pdf_export.dart';
 import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
@@ -200,6 +202,18 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
       ),
     );
     _load();
+  }
+
+  Future<void> _exportPdf() async {
+    final published = _tray.publishedVersion;
+    if (published == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    await exportTrayChecklistPdf(
+      published: published,
+      customInstruments: _customInstruments,
+      specialtyLabel: _specialty?.label,
+      l10n: l10n,
+    );
   }
 
   Future<void> _prepare() async {
@@ -400,6 +414,12 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
               onPressed: _toggleFavorite,
             ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.picture_as_pdf_outlined),
+              tooltip: l10n.exportPdfAction,
+              onPressed: _exportPdf,
+            ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canApprove)
             IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.deleteTooltip, onPressed: _delete),
@@ -429,6 +449,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                   const SizedBox(height: 16),
                 ],
                 _buildUpstreamBanner(context, l10n, canEdit),
+                InstriqStaleContentBanner(approvedAt: published?.approvedAt),
                 if (published == null)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 24),

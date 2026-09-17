@@ -7,6 +7,7 @@ import '../models/instrument.dart';
 import '../services/catalog_community_photo_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
+import '../utils/fuzzy_match.dart';
 import '../widgets/category_icon.dart';
 import 'community_photos_review_screen.dart';
 import 'instrument_detail_screen.dart';
@@ -71,9 +72,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final filtered = kInstruments.where((i) {
-      final matchesQuery = _query.isEmpty ||
-          i.name.toLowerCase().contains(_query.toLowerCase()) ||
-          i.aliases.any((a) => a.toLowerCase().contains(_query.toLowerCase()));
+      final matchesQuery = fuzzyContains(i.name, _query) || i.aliases.any((a) => fuzzyContains(a, _query));
       final matchesCategory = _categoryFilters.isEmpty || _categoryFilters.contains(i.category);
       final matchesSpecialty = _specialtyFilters.isEmpty || _specialtyFilters.contains(i.specialty);
       return matchesQuery && matchesCategory && matchesSpecialty;

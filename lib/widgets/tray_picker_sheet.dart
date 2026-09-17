@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/tray.dart';
 import '../services/tray_service.dart';
+import '../utils/fuzzy_match.dart';
 
 /// Hoja modal para elegir una safata del espacio. Calcada de
 /// [CatalogPickerSheet] (`lib/widgets/catalog_picker_sheet.dart`), pero las
@@ -44,7 +45,7 @@ class _TrayPickerSheetState extends State<TrayPickerSheet> {
     final trays = TrayService.instance
         .traysOfWorkspace(widget.workspaceId)
         .where((t) => t.publishedVersion != null)
-        .where((t) => _query.isEmpty || (t.publishedVersion!.name.toLowerCase().contains(_query.toLowerCase())))
+        .where((t) => fuzzyContains(t.publishedVersion!.name, _query))
         .toList();
     return DraggableScrollableSheet(
       initialChildSize: 0.8,

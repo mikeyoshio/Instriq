@@ -35,6 +35,7 @@ import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../services/workspace_service.dart';
+import '../utils/fuzzy_match.dart';
 import '../utils/ref_resolver.dart';
 import '../widgets/sterilization_method_label.dart';
 import 'catalog_screen.dart';
@@ -442,7 +443,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final customInstruments = _customInstruments.where((i) => _matchesCustomInstrument(i, q)).toList();
     final manufacturers = ManufacturerService.instance.searchByName(q);
     final surgeons = SurgeonService.instance.searchByName(q);
-    final tags = _tags.where((t) => t.name.toLowerCase().contains(q)).toList();
+    final tags = _tags.where((t) => fuzzyContains(t.name, q)).toList();
     return _SearchResults(
       instruments: instruments,
       techniques: techniques,
@@ -477,14 +478,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool _matchesInstrument(Instrument instrument, String query, String languageCode, AppLocalizations l10n) {
-    return instrument.name.toLowerCase().contains(query) ||
-        instrument.aliases.any((alias) => alias.toLowerCase().contains(query)) ||
-        instrument.description.forLanguageCode(languageCode).toLowerCase().contains(query) ||
-        instrument.use.forLanguageCode(languageCode).toLowerCase().contains(query) ||
-        instrument.specialty.label.toLowerCase().contains(query) ||
-        instrument.category.label.toLowerCase().contains(query) ||
+    return fuzzyContains(instrument.name, query) ||
+        instrument.aliases.any((alias) => fuzzyContains(alias, query)) ||
+        fuzzyContains(instrument.description.forLanguageCode(languageCode), query) ||
+        fuzzyContains(instrument.use.forLanguageCode(languageCode), query) ||
+        fuzzyContains(instrument.specialty.label, query) ||
+        fuzzyContains(instrument.category.label, query) ||
         (_catalogSterilizationMethods[instrument.id] ?? const [])
-            .any((m) => sterilizationMethodValueLabel(l10n, m).toLowerCase().contains(query));
+            .any((m) => fuzzyContains(sterilizationMethodValueLabel(l10n, m), query));
   }
 
   /// Especialidad resuelta de una versión publicada (`specialtyId` → label,
@@ -498,20 +499,20 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _matchesGroupDocument(GroupDocument document, String query) {
     final published = document.publishedVersion;
     if (published == null) return false;
-    return published.title.toLowerCase().contains(query) ||
-        _resolvedSpecialtyLabel(published.specialtyId, published.specialty).toLowerCase().contains(query);
+    return fuzzyContains(published.title, query) ||
+        fuzzyContains(_resolvedSpecialtyLabel(published.specialtyId, published.specialty), query);
   }
 
   bool _matchesTray(Tray tray, String query) {
     final published = tray.publishedVersion;
     if (published == null) return false;
-    return published.name.toLowerCase().contains(query) ||
-        _resolvedSpecialtyLabel(published.specialtyId, published.specialty).toLowerCase().contains(query);
+    return fuzzyContains(published.name, query) ||
+        fuzzyContains(_resolvedSpecialtyLabel(published.specialtyId, published.specialty), query);
   }
 
   bool _matchesCustomInstrument(CustomInstrument instrument, String query) {
-    return instrument.name.toLowerCase().contains(query) ||
-        _resolvedSpecialtyLabel(instrument.specialtyId, instrument.specialty).toLowerCase().contains(query);
+    return fuzzyContains(instrument.name, query) ||
+        fuzzyContains(_resolvedSpecialtyLabel(instrument.specialtyId, instrument.specialty), query);
   }
 
   String _timeAgo(AppLocalizations l10n, DateTime dateTime) {

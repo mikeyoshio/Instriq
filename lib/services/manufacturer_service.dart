@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/manufacturer.dart';
+import '../utils/fuzzy_match.dart';
 
 /// Catálogo compartido de fabricantes (`manufacturers`, ver Fase C): select
 /// público, insert abierto a cualquier autenticado, sin update/delete. Se
@@ -34,9 +35,8 @@ class ManufacturerService {
   /// para alimentar un `Autocomplete` mientras la persona teclea, sin ida y
   /// vuelta al servidor por cada letra.
   List<Manufacturer> searchByName(String query) {
-    final q = query.trim().toLowerCase();
-    if (q.isEmpty) return manufacturers;
-    return _manufacturers.where((m) => m.name.toLowerCase().contains(q)).toList();
+    if (query.trim().isEmpty) return manufacturers;
+    return _manufacturers.where((m) => fuzzyContains(m.name, query)).toList();
   }
 
   /// Da de alta un fabricante nuevo, o reutiliza el existente si otro

@@ -931,5 +931,17 @@
 
   "helpArticleMyProgressTitle": "El meu progrés",
   "helpArticleMyProgressIntro": "Un resum de quant instrumental has après, per categoria, i la teva millor puntuació al qüestionari.",
-  "helpArticleMyProgressStep1": "Des de l'inici, toca «El meu progrés». El progrés es guarda en aquest dispositiu i, amb compte, també al servidor."
+  "helpArticleMyProgressStep1": "Des de l'inici, toca «El meu progrés». El progrés es guarda en aquest dispositiu i, amb compte, també al servidor.",
+
+  "staleContentWarning": "Aquest contingut no s'ha revisat des de fa {months} mesos. Comprova que encara sigui correcte.",
+  "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
+
+  "exportPdfAction": "Exportar a PDF",
+  "pdfGeneratedOn": "Generat des d'Instriq el {date}",
+  "@pdfGeneratedOn": {"placeholders": {"date": {"type": "String"}}},
+  "pdfPositionColumn": "Posició",
+  "pdfInstrumentColumn": "Instrument",
+  "pdfQuantityColumn": "Quantitat",
+  "pdfObservationsLabel": "Observacions",
+  "pdfConsumablesLabel": "Material fungible"
 }
