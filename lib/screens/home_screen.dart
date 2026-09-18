@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import '../data/instruments_data.dart';
 import '../design_system/components/instriq_list_item.dart';
@@ -144,7 +143,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _searchController = TextEditingController();
   String _query = '';
-  String? _appVersion;
 
   // Debounce solo para el registro de analítica de uso (ver
   // supabase/schema_v23_usage_analytics.sql) — el filtrado en vivo de
@@ -174,9 +172,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    PackageInfo.fromPlatform().then((info) {
-      if (mounted) setState(() => _appVersion = info.version);
-    });
     _loadGroupContent();
     _loadRecentAndFavorites();
     // Inici vive en su propia rama del shell (ver app_shell.dart): cerrar
@@ -541,16 +536,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: _appVersion != null
-            ? Text(
-                'v$_appVersion',
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              )
-            : null,
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: InstriqResponsiveContent(
           child: Column(

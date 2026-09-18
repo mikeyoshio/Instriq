@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../design_system/components/instriq_list_item.dart';
 import '../design_system/components/instriq_section_header.dart';
@@ -285,8 +287,87 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                   onTap: _openManageTeams,
                 ),
               ],
+              const SizedBox(height: InstriqSpacing.xl),
+              const Center(child: _VersionEasterEgg()),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Versión de la app, discretamente al final de Perfil (vivía suelta en el
+/// AppBar de Inici). Tocarla 7 veces seguidas (en menos de 3s entre toque y
+/// toque) desvela una broma sobre campo estéril — sin efecto real, solo un
+/// guiño para quien la encuentre.
+class _VersionEasterEgg extends StatefulWidget {
+  const _VersionEasterEgg();
+
+  @override
+  State<_VersionEasterEgg> createState() => _VersionEasterEggState();
+}
+
+class _VersionEasterEggState extends State<_VersionEasterEgg> {
+  static const _requiredTaps = 7;
+  static const _tapWindow = Duration(seconds: 3);
+
+  String? _version;
+  int _tapCount = 0;
+  DateTime? _firstTapAt;
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((info) {
+      if (mounted) setState(() => _version = info.version);
+    });
+  }
+
+  void _onTap() {
+    final now = DateTime.now();
+    if (_firstTapAt == null || now.difference(_firstTapAt!) > _tapWindow) {
+      _firstTapAt = now;
+      _tapCount = 1;
+      return;
+    }
+    _tapCount++;
+    if (_tapCount >= _requiredTaps) {
+      _tapCount = 0;
+      _firstTapAt = null;
+      _showEasterEgg();
+    }
+  }
+
+  Future<void> _showEasterEgg() async {
+    HapticFeedback.mediumImpact();
+    final l10n = AppLocalizations.of(context)!;
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.easterEggTitle),
+        content: Text(l10n.easterEggMessage),
+        actions: [
+          FilledButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(l10n.easterEggAction)),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final version = _version;
+    if (version == null) return const SizedBox.shrink();
+    return GestureDetector(
+      onTap: _onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: InstriqSpacing.md),
+        child: Text(
+          'Instriq v$version',
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
         ),
       ),
     );
