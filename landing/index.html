@@ -172,6 +172,10 @@
   .cards.cols-3 { grid-template-columns: 1fr; }
   @media (min-width: 720px) { .cards.cols-2 { grid-template-columns: 1fr 1fr; } .cards.cols-3 { grid-template-columns: repeat(3, 1fr); } }
   .card { background: var(--surface); border-radius: 14px; padding: 30px; box-shadow: var(--shadow-soft); position: relative; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease; }
+  .cards.plain { gap: 4px; }
+  .cards.plain .card { background: none; box-shadow: none; padding: 16px 0; border-bottom: 1px solid var(--rule); border-radius: 0; }
+  .cards.plain .card:last-child { border-bottom: none; }
+  .cards.plain .card h3 { font-size: 1rem; }
   .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
   .card h3 { color: var(--ink); }
   .card p { margin-bottom: 0; }
@@ -291,7 +295,7 @@
     <nav class="nav-links">
       <a class="plain" href="#mision" data-i18n="nav.mision">Missió</a>
       <a class="plain" href="#funciones" data-i18n="nav.funciones">Funcionalitats</a>
-      <a class="plain" href="#hoy" data-i18n="nav.hoy">Avui</a>
+      <a class="plain" href="#organiza" data-i18n="nav.organiza">Organització</a>
       <a class="plain" href="#colabora" data-i18n="nav.colabora">Col·labora</a>
       <a class="plain" href="#transparencia" data-i18n="nav.transparencia">Transparència</a>
       <a class="plain" href="https://github.com/mikeyoshio/Instriq">GitHub</a>
@@ -417,17 +421,8 @@
     <span class="eyebrow" data-i18n="mision.eyebrow1">Missió</span>
     <h2 data-i18n="mision.h1">Reduir la corba d'aprenentatge al quiròfan.</h2>
     <p class="lede" data-i18n="mision.p1">Incorporar-se a un bloc quirúrgic exigeix adquirir molt coneixement pràctic en poc temps. Instriq existeix perquè qualsevol instrumentista, infermera, auxiliar o membre de l'equip quirúrgic trobi informació fiable, actualitzada i basada en l'experiència real d'altres professionals — no en un manual genèric.</p>
-    <span class="eyebrow" style="margin-top: 24px;" data-i18n="mision.eyebrow2">Visió</span>
-    <h2 data-i18n="mision.h2">La plataforma de referència del bloc quirúrgic.</h2>
-    <p class="lede" data-i18n="mision.p2">A llarg termini, que Instriq sigui el lloc on el coneixement compartit, la col·laboració entre professionals i la tecnologia oberta ajudin a millorar la formació, la seguretat del pacient, la pràctica clínica i la investigació mèdica en hospitals de tot el món.</p>
-  </div>
-</section>
-
-<section class="section band reveal">
-  <div class="wrap center">
-    <span class="eyebrow" data-i18n="valores.eyebrow">Valors</span>
-    <h2 data-i18n="valores.h1">La força d'Instriq és la intel·ligència col·lectiva.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="valores.lede">Cada aportació construeix una base de coneixement més completa i revisada per a tota la comunitat. Com més persones comparteixin la seva experiència, millor la informació disponible per a totes.</p>
+    <p class="lede" data-i18n="mision.p2">A llarg termini, volem que sigui la plataforma de referència del bloc quirúrgic: el lloc on el coneixement compartit i la tecnologia oberta ajudin a millorar la formació, la seguretat del pacient i la pràctica clínica en hospitals de tot el món.</p>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;margin-top:40px;" data-i18n="valores.lede">Cada aportació construeix una base de coneixement més completa i revisada per a tota la comunitat — per això aquesta és la força d'Instriq.</p>
     <div class="cards cols-2" style="text-align: left;">
       <div class="card">
         <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg></span>
@@ -449,11 +444,11 @@
   </div>
 </section>
 
-<section id="hoy" class="section reveal">
+<section id="funciones" class="section band reveal">
   <div class="wrap center">
-    <span class="eyebrow" data-i18n="hoy.eyebrow">Disponible avui</span>
-    <h2 data-i18n="hoy.h1">Sense compte, sense fricció.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="hoy.lede">L'aprenentatge bàsic funciona com a convidat. Només cal compte si el teu grup vol compartir el seu propi coneixement.</p>
+    <span class="eyebrow" data-i18n="funciones.eyebrow">Funcionalitats</span>
+    <h2 data-i18n="funciones.h1">Tot el que necessita un bloc quirúrgic, en un sol lloc.</h2>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="funciones.lede">Des del catàleg bàsic fins a la gestió completa del coneixement del teu grup. L'aprenentatge bàsic funciona com a convidat — només cal compte si el teu grup vol compartir el seu propi coneixement.</p>
     <div class="showcase">
       <figure>
         <img src="screenshots/home.png" alt="Pantalla d'inici amb cercador global" width="260" height="578" loading="lazy">
@@ -472,16 +467,6 @@
       <div class="card"><h3 data-i18n="hoy.c1t">Catàleg</h3><p data-i18n="hoy.c1p">110 instruments organitzats per 16 especialitats i per categoria funcional, amb noms comercials i fabricant.</p></div>
       <div class="card"><h3 data-i18n="hoy.c2t">Aprèn</h3><p data-i18n="hoy.c2p">Flashcards i qüestionaris de repàs, amb progrés guardat al teu propi dispositiu.</p></div>
       <div class="card"><h3 data-i18n="hoy.c3t">Targetes de preferència</h3><p data-i18n="hoy.c3p">Instrumental específic per cirurgià i procediment, compartit i validat dins del teu grup.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="funciones" class="section band reveal">
-  <div class="wrap center">
-    <span class="eyebrow" data-i18n="funciones.eyebrow">Funcionalitats</span>
-    <h2 data-i18n="funciones.h1">Tot el que necessita un bloc quirúrgic, en un sol lloc.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="funciones.lede">Des del catàleg bàsic fins a la gestió completa del coneixement del teu grup — cada peça es pot fer servir sola o combinada amb la resta.</p>
-    <div class="cards cols-3" style="text-align: left;">
       <div class="card"><h3 data-i18n="funciones.c1t">Tècniques i protocols</h3><p data-i18n="funciones.c1p">Documenta pas a pas com treballa el teu equip. Cada canvi passa per esborrany, revisió i publicació — res se sobreescriu, tot l'historial és consultable i restaurable.</p></div>
       <div class="card"><h3 data-i18n="funciones.c2t">Safates d'instrumental</h3><p data-i18n="funciones.c2p">Sets amb checklist de quantitats i fotos, versionades i aprovades, per verificar caixes completes després del rentat i l'esterilització.</p></div>
       <div class="card"><h3 data-i18n="funciones.c3t">Esterilització i fitxa tècnica</h3><p data-i18n="funciones.c3p">Mètodes d'esterilització amb els seus paràmetres, més fabricant, IFU, manteniment i vida útil per a cada instrument.</p></div>
@@ -524,6 +509,7 @@
   <div class="wrap center">
     <span class="eyebrow" data-i18n="colabora.eyebrow">Col·labora</span>
     <h2 data-i18n="colabora.h1">Instriq creix amb qui l'utilitza.</h2>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="colabora.lede">Instriq l'impulsa un petit equip inicial, però el seu creixement depèn d'una xarxa de professionals sanitaris, docents, investigadors i desenvolupadors que col·laboren de manera voluntària i sense ànim de lucre.</p>
     <div class="cards cols-2" style="text-align: left; margin-top: 40px;">
       <div class="card">
         <h3 data-i18n="colabora.c1t">Ets professional sanitari</h3>
@@ -577,41 +563,14 @@
     <div class="org-criterion">
       <p data-i18n="organiza.criterion">Organitza els espais per <strong>especialitat o servei</strong>, no per cada tècnica individual. ✓ "Traumatologia", "Quiròfan 3". ✗ Un espai per cada protocol.</p>
     </div>
-  </div>
-</section>
-
-<section id="quien" class="section reveal">
-  <div class="wrap center">
-    <span class="eyebrow" data-i18n="quien.eyebrow">Per a qui és</span>
-    <h2 data-i18n="quien.h1">Un grup pot ser el que necessitis.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="quien.lede">Instriq no dona per fet que ets un hospital gran. Un grup és qualsevol equip que vulgui documentar com treballa — des d'un consultori de tres persones fins a una xarxa hospitalària sencera. Comences petit i creixes sense canviar d'eina.</p>
-    <div class="cards cols-3" style="text-align: left;">
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;margin-top:48px;" data-i18n="quien.lede">Instriq no dona per fet que ets un hospital gran. Un grup és qualsevol equip que vulgui documentar com treballa — des d'un consultori de tres persones fins a una xarxa hospitalària sencera. Comences petit i creixes sense canviar d'eina.</p>
+    <div class="cards plain cols-3" style="text-align: left;">
       <div class="card"><h3 data-i18n="quien.c1t">Equip o consultori petit</h3><p data-i18n="quien.c1p">Comença amb 2-3 persones i un únic espai de treball. Sense mínims, sense complicar-te.</p></div>
       <div class="card"><h3 data-i18n="quien.c2t">Servei o bloc quirúrgic</h3><p data-i18n="quien.c2p">Un espai per la teva especialitat, amb les teves pròpies tècniques, targetes i safates.</p></div>
       <div class="card"><h3 data-i18n="quien.c3t">Hospital amb diverses especialitats</h3><p data-i18n="quien.c3p">Un grup, tants espais com facin falta, cadascun amb el seu contingut i els seus rols propis.</p></div>
       <div class="card"><h3 data-i18n="quien.c4t">Centre de formació o universitat</h3><p data-i18n="quien.c4p">Documenta protocols d'aprenentatge i dona accés controlat a estudiants i personal en formació.</p></div>
       <div class="card"><h3 data-i18n="quien.c5t">Fabricant d'instrumental</h3><p data-i18n="quien.c5p">Comparteix fitxes tècniques i documentació oficial del teu catàleg amb qui l'utilitza cada dia.</p></div>
       <div class="card"><h3 data-i18n="quien.c6t">Xarxa de diversos centres</h3><p data-i18n="quien.c6p">Cada hospital amb el seu propi grup i les seves dades privades, amb la Biblioteca Pública com a punt de trobada comú.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="section band reveal">
-  <div class="wrap measure center">
-    <span class="eyebrow" data-i18n="equipo.eyebrow">Equip</span>
-    <h2 data-i18n="equipo.h1">Un equip petit, amb vocació de comunitat.</h2>
-    <p class="lede" data-i18n="equipo.p1">Instriq l'impulsa un petit equip inicial, però el seu creixement depèn d'una xarxa de professionals sanitaris, docents, investigadors i desenvolupadors que col·laboren de manera voluntària i sense ànim de lucre. Si vols formar-ne part, escriu-nos.</p>
-  </div>
-</section>
-
-<section class="section reveal">
-  <div class="wrap measure center">
-    <span class="eyebrow" data-i18n="analitica.eyebrow">Analítica</span>
-    <h2 data-i18n="analitica.h1">Dades per prioritzar, sense vigilar ningú.</h2>
-    <p class="lede" data-i18n="analitica.p1">Quan hi hagi prou activitat, publicarem aquí de forma agregada i anònima: l'instrumental més consultat, les especialitats amb més activitat, els protocols més llegits, i les guies que la comunitat més demana.</p>
-    <div class="notice">
-      <span class="tag" data-i18n="analitica.proxTag">Properament</span>
-      <p data-i18n="analitica.prox">Instriq acaba de començar — encara no hi ha dades d'ús a mostrar. Sigues de les primeres persones a construir aquesta comunitat. Quan existeixi aquest apartat, serà agregat i respectuós amb la privacitat: mai dades individuals d'una persona o un grup concrets.</p>
     </div>
   </div>
 </section>
@@ -628,17 +587,23 @@
     </div>
     <p style="margin-top: 24px; font-size: 0.92rem; max-width: var(--measure); margin-left:auto;margin-right:auto;" data-i18n="transparencia.p1">El nom i la marca "Instriq" queden reservats per protegir la identitat del projecte i evitar usos que confonguin la comunitat — el codi en si és lliure sota AGPL-3.0.</p>
     <p style="margin-top: 14px; font-size: 0.92rem; max-width: var(--measure); margin-left:auto;margin-right:auto;" data-i18n="transparencia.p2">Cap contracte et lliga a nosaltres: si mai el projecte s'atura, el codi és teu i el pots seguir executant tu mateix o encarregar-ho a qui vulguis.</p>
-  </div>
-</section>
-
-<section class="section reveal">
-  <div class="wrap measure center">
-    <span class="eyebrow" data-i18n="donaciones.eyebrow">Donacions</span>
-    <h2 data-i18n="donaciones.h1">Un sistema de finançament transparent.</h2>
-    <p class="lede" data-i18n="donaciones.p1">A llarg termini habilitarem donacions completament transparents, amb la destinació de cada aportació publicada: mantenir la infraestructura i els dominis, cobrir servidors, desenvolupar noves funcionalitats, integrar estàndards i intel·ligència artificial, i donar suport a projectes d'investigació mèdica i biomèdica que repercuteixin en una millor atenció als pacients.</p>
-    <div class="notice">
-      <span class="tag" data-i18n="donaciones.proxTag">Properament</span>
-      <p data-i18n="donaciones.prox">Encara no hi ha un sistema de donacions actiu. Quan n'hi hagi, la distribució de fons serà pública, indicant la destinació de cada aportació i les investigacions recolzades.</p>
+    <div class="cards cols-2" style="text-align: left; margin-top: 40px;">
+      <div class="card">
+        <h3 data-i18n="analitica.eyebrow">Analítica</h3>
+        <p data-i18n="analitica.p1">Quan hi hagi prou activitat, publicarem aquí de forma agregada i anònima: l'instrumental més consultat, les especialitats amb més activitat i les guies que la comunitat més demana — mai dades individuals d'una persona o un grup concrets.</p>
+        <div class="notice">
+          <span class="tag" data-i18n="analitica.proxTag">Properament</span>
+          <p data-i18n="analitica.prox">Instriq acaba de començar — encara no hi ha dades d'ús a mostrar. Sigues de les primeres persones a construir aquesta comunitat.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3 data-i18n="donaciones.eyebrow">Donacions</h3>
+        <p data-i18n="donaciones.p1">A llarg termini habilitarem donacions completament transparents, amb la destinació de cada aportació publicada: infraestructura, noves funcionalitats, i suport a projectes d'investigació mèdica i biomèdica.</p>
+        <div class="notice">
+          <span class="tag" data-i18n="donaciones.proxTag">Properament</span>
+          <p data-i18n="donaciones.prox">Encara no hi ha un sistema de donacions actiu. Quan n'hi hagi, la distribució de fons serà pública.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -742,7 +707,7 @@
       "meta.title": "Instriq — Conocimiento de quirófano abierto y compartido",
       "meta.description": "Catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidos entre profesionales de quirófano. Open source.",
       "a11y.skip": "Saltar al contenido",
-      "nav.mision": "Misión", "nav.funciones": "Funcionalidades", "nav.hoy": "Hoy", "nav.colabora": "Colabora", "nav.transparencia": "Transparencia", "nav.cta": "Abrir la app",
+      "nav.mision": "Misión", "nav.funciones": "Funcionalidades", "nav.organiza": "Organización", "nav.colabora": "Colabora", "nav.transparencia": "Transparencia", "nav.cta": "Abrir la app",
       "hero.eyebrow": "Open source · Bloque quirúrgico",
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
@@ -768,10 +733,8 @@
       "deck.c5chip": "Auditoría activa",
       "mision.eyebrow1": "Misión", "mision.h1": "Reducir la curva de aprendizaje en quirófano.",
       "mision.p1": "Incorporarse a un bloque quirúrgico exige adquirir muchísimo conocimiento práctico en poco tiempo. Instriq existe para que cualquier instrumentista, enfermera, auxiliar o miembro del equipo quirúrgico encuentre información fiable, actualizada y basada en la experiencia real de otros profesionales — no en un manual genérico.",
-      "mision.eyebrow2": "Visión", "mision.h2": "La plataforma de referencia del bloque quirúrgico.",
-      "mision.p2": "A largo plazo, que Instriq sea el lugar donde el conocimiento compartido, la colaboración entre profesionales y la tecnología abierta ayuden a mejorar la formación, la seguridad del paciente, la práctica clínica y la investigación médica en hospitales de todo el mundo.",
-      "valores.eyebrow": "Valores", "valores.h1": "La fuerza de Instriq es la inteligencia colectiva.",
-      "valores.lede": "Cada aportación construye una base de conocimiento más completa y revisada para toda la comunidad. Cuantas más personas compartan su experiencia, mejor la información disponible para todas.",
+      "mision.p2": "A largo plazo, queremos que sea la plataforma de referencia del bloque quirúrgico: el lugar donde el conocimiento compartido y la tecnología abierta ayuden a mejorar la formación, la seguridad del paciente y la práctica clínica en hospitales de todo el mundo.",
+      "valores.lede": "Cada aportación construye una base de conocimiento más completa y revisada para toda la comunidad — por eso esta es la fuerza de Instriq.",
       "valores.c1t": "Acceso libre", "valores.c1p": "Sin cuota mensual ni precio por usuario, a diferencia de la mayoría de herramientas del sector. El catálogo y el aprendizaje básico no requieren ni cuenta: nadie se queda fuera por no tener presupuesto.",
       "valores.c2t": "Transparencia", "valores.c2p": "Código abierto, decisiones públicas y, a futuro, cuentas claras de cómo se usa cada donación.",
       "valores.c3t": "Colaboración real", "valores.c3p": "Construido con profesionales sanitarios y desarrolladores voluntarios, no por una empresa cerrada.",
@@ -783,7 +746,7 @@
       "hoy.c2t": "Aprende", "hoy.c2p": "Flashcards y quiz de repaso, con progreso guardado en tu propio dispositivo.",
       "hoy.c3t": "Tarjetas de preferencia", "hoy.c3p": "Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu grupo.",
       "funciones.eyebrow": "Funcionalidades", "funciones.h1": "Todo lo que necesita un bloque quirúrgico, en un solo lugar.",
-      "funciones.lede": "Desde el catálogo básico hasta la gestión completa del conocimiento de tu grupo — cada pieza se puede usar sola o combinada con el resto.",
+      "funciones.lede": "Desde el catálogo básico hasta la gestión completa del conocimiento de tu grupo. El aprendizaje básico funciona como invitado — solo hace falta cuenta si tu grupo quiere compartir su propio conocimiento.",
       "funciones.c1t": "Técnicas y protocolos", "funciones.c1p": "Documenta paso a paso cómo trabaja tu equipo. Cada cambio pasa por borrador, revisión y publicación — nada se sobrescribe, todo el historial es consultable y restaurable.",
       "funciones.c2t": "Bandejas de instrumental", "funciones.c2p": "Sets con checklist de cantidades y fotos, versionadas y aprobadas, para verificar cajas completas tras el lavado y la esterilización.",
       "funciones.c3t": "Esterilización y ficha técnica", "funciones.c3p": "Métodos de esterilización con sus parámetros, más fabricante, IFU, mantenimiento y vida útil para cada instrumento.",
@@ -803,6 +766,7 @@
       "quien.c6t": "Red de varios centros", "quien.c6p": "Cada hospital con su propio grupo y sus datos privados, con la Biblioteca Pública como punto de encuentro común.",
       "novedades.eyebrow": "Novedades", "novedades.h1": "Construido en abierto, en público.",
       "colabora.eyebrow": "Colabora", "colabora.h1": "Instriq crece con quien lo usa.",
+      "colabora.lede": "Instriq lo impulsa un pequeño equipo inicial, pero su crecimiento depende de una red de profesionales sanitarios, docentes, investigadores y desarrolladores que colaboran de forma voluntaria y sin ánimo de lucro.",
       "colabora.c1t": "Eres profesional sanitario", "colabora.c1p": "Comparte el instrumental y las técnicas de tu equipo dentro de tu grupo, ayúdanos a revisar contenido del catálogo, o dinos qué protocolo o guía te falta.",
       "colabora.c1l1": "Crea o únete al espacio de tu grupo desde la app", "colabora.c1l2": "Propón correcciones o instrumental nuevo", "colabora.c1l3": "Cuéntanos qué guías necesitas — nos ayuda a priorizar",
       "colabora.c2t": "Eres desarrolladora/or", "colabora.c2p": "El código es público. Flutter (Android/iOS/Web) + Supabase. Empieza por el README del repo.",
@@ -817,15 +781,15 @@
       "equipo.eyebrow": "Equipo", "equipo.h1": "Un equipo pequeño, con vocación de comunidad.",
       "equipo.p1": "Instriq lo impulsa un pequeño equipo inicial, pero su crecimiento depende de una red de profesionales sanitarios, docentes, investigadores y desarrolladores que colaboran de forma voluntaria y sin ánimo de lucro. Si quieres formar parte, escríbenos.",
       "analitica.eyebrow": "Analítica", "analitica.h1": "Datos para priorizar, sin vigilar a nadie.",
-      "analitica.p1": "Cuando haya suficiente actividad, publicaremos aquí de forma agregada y anónima: el instrumental más consultado, las especialidades con más actividad, los protocolos más leídos, y las guías que la comunidad más está pidiendo.",
-      "analitica.proxTag": "Próximamente", "analitica.prox": "Instriq acaba de empezar — todavía no hay datos de uso que mostrar. Sé de las primeras personas en construir esta comunidad. Cuando exista este apartado, será agregado y respetuoso con la privacidad: nunca datos individuales de una persona o un grupo concretos.",
+      "analitica.p1": "Cuando haya suficiente actividad, publicaremos aquí de forma agregada y anónima: el instrumental más consultado, las especialidades con más actividad y las guías que la comunidad más pide — nunca datos individuales de una persona o un grupo concretos.",
+      "analitica.proxTag": "Próximamente", "analitica.prox": "Instriq acaba de empezar — todavía no hay datos de uso que mostrar. Sé de las primeras personas en construir esta comunidad.",
       "transparencia.eyebrow": "Transparencia", "transparencia.h1": "Abierto también en las condiciones.",
       "transparencia.k1": "Código", "transparencia.k2": "Documentación", "transparencia.k3": "APIs", "transparencia.v3": "Abiertas", "transparencia.k4": "Estándares",
       "transparencia.p1": "El nombre y la marca \"Instriq\" quedan reservados para proteger la identidad del proyecto y evitar usos que confundan a la comunidad — el código en sí es libre bajo AGPL-3.0.",
       "transparencia.p2": "Ningún contrato te ata a nosotros: si alguna vez el proyecto se detiene, el código es tuyo y puedes seguir ejecutándolo tú mismo o encargárselo a quien quieras.",
       "donaciones.eyebrow": "Donaciones", "donaciones.h1": "Un sistema de financiación transparente.",
-      "donaciones.p1": "A largo plazo habilitaremos donaciones completamente transparentes, con el destino de cada aportación publicado: mantener la infraestructura y los dominios, cubrir servidores, desarrollar nuevas funcionalidades, integrar estándares e inteligencia artificial, y apoyar proyectos de investigación médica y biomédica que repercutan en una mejor atención a los pacientes.",
-      "donaciones.proxTag": "Próximamente", "donaciones.prox": "Todavía no hay un sistema de donaciones activo. Cuando lo haya, la distribución de fondos será pública, indicando el destino de cada aportación y las investigaciones apoyadas.",
+      "donaciones.p1": "A largo plazo habilitaremos donaciones completamente transparentes, con el destino de cada aportación publicado: infraestructura, nuevas funcionalidades, y apoyo a proyectos de investigación médica y biomédica.",
+      "donaciones.proxTag": "Próximamente", "donaciones.prox": "Todavía no hay un sistema de donaciones activo. Cuando lo haya, la distribución de fondos será pública.",
       "footer.app": "Abrir la app", "footer.help": "Centro de ayuda", "footer.h1": "Proyecto", "footer.l1": "Misión y visión", "footer.l2": "Cómo colaborar", "footer.l3": "Licencias", "footer.l6": "Sugerencias",
       "footer.h2": "Legal", "footer.l4": "Política de privacidad", "footer.l5": "Licencia (AGPL-3.0)",
       "footer.h3": "Contacto",
@@ -835,7 +799,7 @@
       "meta.title": "Instriq — Open, shared operating room knowledge",
       "meta.description": "Instrument catalog, techniques, protocols and preference cards shared among operating room professionals. Open source.",
       "a11y.skip": "Skip to content",
-      "nav.mision": "Mission", "nav.funciones": "Features", "nav.hoy": "Today", "nav.colabora": "Contribute", "nav.transparencia": "Transparency", "nav.cta": "Open the app",
+      "nav.mision": "Mission", "nav.funciones": "Features", "nav.organiza": "Structure", "nav.colabora": "Contribute", "nav.transparencia": "Transparency", "nav.cta": "Open the app",
       "hero.eyebrow": "Open source · Surgical block",
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
@@ -861,10 +825,8 @@
       "deck.c5chip": "Audit trail active",
       "mision.eyebrow1": "Mission", "mision.h1": "Shortening the OR learning curve.",
       "mision.p1": "Joining a surgical team means absorbing a huge amount of practical knowledge in very little time. Instriq exists so any scrub nurse, nurse, aide or surgical team member can find reliable, up-to-date information grounded in other professionals' real experience — not a generic manual.",
-      "mision.eyebrow2": "Vision", "mision.h2": "The reference platform for the surgical block.",
-      "mision.p2": "In the long run, Instriq should be the place where shared knowledge, collaboration between professionals and open technology help improve training, patient safety, clinical practice and medical research in hospitals worldwide.",
-      "valores.eyebrow": "Values", "valores.h1": "Instriq's strength is collective intelligence.",
-      "valores.lede": "Every contribution builds a more complete, better-reviewed knowledge base for the whole community. The more people share their experience, the better the information available to everyone.",
+      "mision.p2": "In the long run, we want it to be the reference platform for the surgical block: the place where shared knowledge and open technology help improve training, patient safety and clinical practice in hospitals worldwide.",
+      "valores.lede": "Every contribution builds a more complete, better-reviewed knowledge base for the whole community — that's Instriq's strength.",
       "valores.c1t": "Free access", "valores.c1p": "No monthly fee, no per-user pricing, unlike most tools in the sector. The catalog and basic learning don't even need an account: no one is left out for lack of budget.",
       "valores.c2t": "Transparency", "valores.c2p": "Open source, public decisions and, eventually, clear accounts of how each donation is used.",
       "valores.c3t": "Real collaboration", "valores.c3p": "Built with healthcare professionals and volunteer developers, not by a closed company.",
@@ -876,7 +838,7 @@
       "hoy.c2t": "Learn", "hoy.c2p": "Flashcards and review quizzes, with progress saved on your own device.",
       "hoy.c3t": "Preference cards", "hoy.c3p": "Instruments specific to surgeon and procedure, shared and validated within your group.",
       "funciones.eyebrow": "Features", "funciones.h1": "Everything a surgical block needs, in one place.",
-      "funciones.lede": "From the basic catalog to your group's full knowledge management — every piece works alone or combined with the rest.",
+      "funciones.lede": "From the basic catalog to your group's full knowledge management. Basic learning works as a guest — an account is only needed if your group wants to share its own knowledge.",
       "funciones.c1t": "Techniques and protocols", "funciones.c1p": "Document step by step how your team works. Every change goes through draft, review and publish — nothing is overwritten, full history stays viewable and restorable.",
       "funciones.c2t": "Instrument trays", "funciones.c2p": "Sets with a quantity checklist and photos, versioned and approved, to verify complete trays after washing and sterilization.",
       "funciones.c3t": "Sterilization and technical info", "funciones.c3p": "Sterilization methods with their own parameters, plus manufacturer, IFU, maintenance and useful life for each instrument.",
@@ -896,6 +858,7 @@
       "quien.c6t": "Network of several centers", "quien.c6p": "Each hospital with its own group and its own private data, with the Public Library as a shared meeting point.",
       "novedades.eyebrow": "Latest", "novedades.h1": "Built in the open, in public.",
       "colabora.eyebrow": "Contribute", "colabora.h1": "Instriq grows with the people who use it.",
+      "colabora.lede": "Instriq is driven by a small initial team, but its growth depends on a network of healthcare professionals, educators, researchers and developers collaborating voluntarily and not-for-profit.",
       "colabora.c1t": "You're a healthcare professional", "colabora.c1p": "Share your team's instruments and techniques within your group, help us review catalog content, or tell us which protocol or guide is missing.",
       "colabora.c1l1": "Create or join your group's space from the app", "colabora.c1l2": "Propose corrections or new instruments", "colabora.c1l3": "Tell us which guides you need — it helps us prioritize",
       "colabora.c2t": "You're a developer", "colabora.c2p": "The code is public. Flutter (Android/iOS/Web) + Supabase. Start with the repo's README.",
@@ -910,15 +873,15 @@
       "equipo.eyebrow": "Team", "equipo.h1": "A small team, with a community mindset.",
       "equipo.p1": "Instriq is driven by a small initial team, but its growth depends on a network of healthcare professionals, educators, researchers and developers collaborating voluntarily and not-for-profit. If you want to get involved, reach out.",
       "analitica.eyebrow": "Analytics", "analitica.h1": "Data to prioritize, without watching anyone.",
-      "analitica.p1": "Once there's enough activity, we'll publish here, aggregated and anonymous: the most consulted instruments, the most active specialties, the most-read protocols, and the guides the community is asking for most.",
-      "analitica.proxTag": "Coming soon", "analitica.prox": "Instriq just started — there's no usage data to show yet. Be among the first people building this community. When this section exists, it will be aggregated and privacy-respectful: never individual data about a specific person or group.",
+      "analitica.p1": "Once there's enough activity, we'll publish here, aggregated and anonymous: the most consulted instruments, the most active specialties and the guides the community asks for most — never individual data about a specific person or group.",
+      "analitica.proxTag": "Coming soon", "analitica.prox": "Instriq just started — there's no usage data to show yet. Be among the first people building this community.",
       "transparencia.eyebrow": "Transparency", "transparencia.h1": "Open in its terms too.",
       "transparencia.k1": "Code", "transparencia.k2": "Documentation", "transparencia.k3": "APIs", "transparencia.v3": "Open", "transparencia.k4": "Reference standards",
       "transparencia.p1": "The \"Instriq\" name and brand are reserved to protect the project's identity and prevent uses that could confuse the community — the code itself is free under AGPL-3.0.",
       "transparencia.p2": "No contract ties you to us: if the project ever stops, the code is yours and you can keep running it yourself or hand it to whoever you want.",
       "donaciones.eyebrow": "Donations", "donaciones.h1": "A transparent funding system.",
-      "donaciones.p1": "In the long run we'll enable fully transparent donations, with the destination of each contribution published: maintaining infrastructure and domains, covering servers, developing new features, integrating standards and AI, and supporting medical and biomedical research that improves patient care.",
-      "donaciones.proxTag": "Coming soon", "donaciones.prox": "There's no active donation system yet. Once there is, fund distribution will be public, showing the destination of each contribution and the research supported.",
+      "donaciones.p1": "In the long run we'll enable fully transparent donations, with the destination of each contribution published: infrastructure, new features, and support for medical and biomedical research projects.",
+      "donaciones.proxTag": "Coming soon", "donaciones.prox": "There's no active donation system yet. Once there is, fund distribution will be public.",
       "footer.app": "Open the app", "footer.help": "Help center", "footer.h1": "Project", "footer.l1": "Mission and vision", "footer.l2": "How to contribute", "footer.l3": "Licenses", "footer.l6": "Suggestions",
       "footer.h2": "Legal", "footer.l4": "Privacy policy", "footer.l5": "License (AGPL-3.0)",
       "footer.h3": "Contact",
