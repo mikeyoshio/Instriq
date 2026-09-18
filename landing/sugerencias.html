@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16191a" media="(prefers-color-scheme: dark)">
+<title data-i18n="meta.title">Suggeriments — Instriq</title>
+<meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Proposa canvis a Instriq i vota els que ja han proposat altres persones. Sense compte.">
+<link rel="canonical" href="https://instriq.org/sugerencias.html" id="canonicalLink">
+<link rel="alternate" hreflang="ca" href="https://instriq.org/sugerencias.html">
+<link rel="alternate" hreflang="es" href="https://instriq.org/sugerencias.html?lang=es">
+<link rel="alternate" hreflang="en" href="https://instriq.org/sugerencias.html?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://instriq.org/sugerencias.html">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://instriq.org/sugerencias.html">
+<meta property="og:site_name" content="Instriq">
+<meta property="og:title" data-i18n-attr="content" data-i18n="meta.title" content="Suggeriments — Instriq">
+<meta property="og:image" content="https://instriq.org/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --paper: #f6f4f0; --paper-alt: #edeae2; --surface: #ffffff;
+    --ink: #201c17; --ink-muted: #6e6459; --rule: #e2ddd3;
+    --accent: #a34e1c; --accent-soft: #f1e3d7;
+    --max-w: 1120px; --measure: 720px;
+    --display: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, "Liberation Mono", monospace;
+    --body: "Iowan Old Style", "Palatino Linotype", "URW Palladio L", Georgia, "Times New Roman", serif;
+    --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12);
+    --shadow-lift: 0 24px 60px -20px rgba(32, 28, 23, 0.22);
+    --grain-blend: multiply;
+    --green: #3f7d4a; --green-soft: #e3ede4;
+    --violet: #6b5b95; --violet-soft: #e9e6f2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; --green: #7fb88a; --green-soft: #223328; --violet: #a99cd6; --violet-soft: #292440; }
+  }
+  :root[data-theme="dark"] { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; --green: #7fb88a; --green-soft: #223328; --violet: #a99cd6; --violet-soft: #292440; }
+  :root[data-theme="light"] { --paper: #f6f4f0; --paper-alt: #edeae2; --surface: #ffffff; --ink: #201c17; --ink-muted: #6e6459; --rule: #e2ddd3; --accent: #a34e1c; --accent-soft: #f1e3d7; --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12); --shadow-lift: 0 24px 60px -20px rgba(32, 28, 23, 0.22); --grain-blend: multiply; --green: #3f7d4a; --green-soft: #e3ede4; --violet: #6b5b95; --violet-soft: #e9e6f2; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 19px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  img { max-width: 100%; display: block; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+  .measure { max-width: var(--measure); }
+  header.site { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em; }
+  .brand img { width: 26px; height: 26px; border-radius: 7px; }
+  .nav-links { display: flex; gap: 20px; align-items: center; }
+  .nav-links a.plain { color: var(--ink-muted); text-decoration: none; font-size: 0.95rem; white-space: nowrap; transition: color 0.15s ease; }
+  .nav-links a.plain:hover { color: var(--accent); }
+  .lang-switch { display: flex; gap: 6px; font-family: var(--display); font-size: 0.78rem; }
+  .lang-switch button { background: none; border: none; color: var(--ink-muted); cursor: pointer; padding: 4px 6px; font-family: var(--display); font-size: 0.78rem; border-radius: 4px; }
+  .lang-switch button.active { color: var(--ink); font-weight: 700; background: var(--paper-alt); }
+  @media (max-width: 760px) { .nav-links a.plain { display: none; } .nav-links { gap: 12px; } }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; font-weight: 600; font-size: 0.95rem; font-family: var(--body); text-decoration: none; border-radius: 10px; cursor: pointer; border: 1px solid var(--ink); transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+  .section { padding: 64px 0; }
+  @media (max-width: 720px) { .section { padding: 44px 0; } }
+  .eyebrow { display: inline-block; font-family: var(--display); font-size: 0.8rem; font-weight: 600; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: 1.15; margin: 0 0 20px; }
+  h2 { font-size: clamp(1.3rem, 2.4vw, 1.6rem); margin: 0 0 6px; }
+  p { color: var(--ink-muted); margin: 0 0 18px; }
+  .lede { font-size: 1.15rem; line-height: 1.65; max-width: var(--measure); }
+  footer.site { padding: 56px 0 36px; border-top: 1px solid var(--rule); }
+  footer.site .cols { display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; }
+  footer.site .col h4 { font-family: var(--display); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); margin: 0 0 12px; font-weight: 700; }
+  footer.site .col a { display: block; color: var(--ink-muted); text-decoration: none; font-size: 0.96rem; margin-bottom: 8px; transition: color 0.15s ease; }
+  footer.site .col a:hover { color: var(--accent); }
+  .fine { font-size: 0.85rem; color: var(--ink-muted); margin-top: 40px; }
+  .grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.045; mix-blend-mode: var(--grain-blend, multiply); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
+  .skip-link:focus { left: 0; }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  /* Contingut propi d'aquesta pàgina: formulari + llista de suggeriments. */
+  .suggest-form { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 28px 30px; box-shadow: var(--shadow-soft); max-width: var(--measure); }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-family: var(--display); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 7px; }
+  .field input, .field textarea { width: 100%; font-family: var(--body); font-size: 1rem; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .field-hint { font-size: 0.82rem; color: var(--ink-muted); margin-top: 12px; margin-bottom: 0; }
+  .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-msg { font-size: 0.9rem; margin: 14px 0 0; display: none; }
+  .form-msg.show { display: block; }
+  .form-msg.ok { color: var(--green); }
+  .form-msg.error { color: var(--accent); }
+
+  .suggestion-list { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; max-width: var(--measure); }
+  .suggestion-card { display: flex; gap: 18px; align-items: flex-start; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 18px 20px; }
+  .vote-btn { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; background: var(--paper-alt); border: 1px solid var(--rule); border-radius: 10px; padding: 8px 14px; cursor: pointer; font-family: var(--display); color: var(--ink); transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease; }
+  .vote-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .vote-btn .n { font-size: 1.05rem; font-weight: 700; line-height: 1; }
+  .vote-btn .arrow { font-size: 0.75rem; line-height: 1; }
+  .vote-btn.voted { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); cursor: default; }
+  .suggestion-body { flex: 1; min-width: 0; }
+  .suggestion-body h3 { font-size: 1.02rem; margin: 0 0 4px; }
+  .suggestion-body p { font-size: 0.92rem; margin: 0; color: var(--ink-muted); }
+  .status-pill { display: inline-block; font-family: var(--display); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-bottom: 6px; }
+  .status-pill.planned { background: var(--accent-soft); color: var(--accent); }
+  .status-pill.shipped { background: var(--green-soft); color: var(--green); }
+  .status-pill.declined { background: var(--paper-alt); color: var(--ink-muted); }
+  .suggest-loading, .suggest-empty { color: var(--ink-muted); font-size: 0.95rem; padding: 10px 0; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<a href="#main" class="skip-link" data-i18n="a11y.skip">Saltar al contingut</a>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="index.html" class="brand"><img src="favicon.png" alt=""> Instriq</a>
+    <nav class="nav-links">
+      <a class="plain" href="index.html" data-i18n="nav.back">← Torna a l'inici</a>
+      <a class="plain" href="https://github.com/mikeyoshio/Instriq">GitHub</a>
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button>
+      </div>
+      <a href="https://app.instriq.org" class="btn btn-primary" data-i18n="nav.cta">Obre l'app</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="hero.eyebrow">Suggeriments</span>
+    <h1 class="reveal" data-i18n="hero.h1">Ajuda'ns a decidir què construïm</h1>
+    <p class="lede reveal" data-i18n="hero.lede">Proposa un canvi o vota els que ja hi ha. Sense compte — el vot es recorda només en aquest navegador.</p>
+
+    <form class="suggest-form reveal" id="suggestForm">
+      <div class="field">
+        <label for="f-title" data-i18n="form.titleLabel">Títol</label>
+        <input type="text" id="f-title" name="title" minlength="4" maxlength="140" required
+               data-i18n-attr="placeholder" data-i18n="form.titlePlaceholder"
+               placeholder="Per exemple: exportar la targeta de preferència en PDF">
+      </div>
+      <div class="field">
+        <label for="f-desc" data-i18n="form.descLabel">Descripció (opcional)</label>
+        <textarea id="f-desc" name="description" maxlength="1000"
+                  data-i18n-attr="placeholder" data-i18n="form.descPlaceholder"
+                  placeholder="Explica una mica més el context o per què et seria útil"></textarea>
+      </div>
+      <div class="hp-field" aria-hidden="true">
+        <label for="f-website">Website</label>
+        <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+      <button type="submit" class="btn btn-primary" id="submitBtn" data-i18n="form.submit">Enviar suggeriment</button>
+      <p class="field-hint" data-i18n="form.privacyNote">No cal compte. Es desa un identificador anònim en aquest navegador només per evitar votar dues vegades el mateix suggeriment.</p>
+      <p class="form-msg" id="formMsg"></p>
+    </form>
+
+    <h2 style="margin-top:52px" data-i18n="list.title">Suggeriments de la comunitat</h2>
+    <div class="suggestion-list" id="suggestionList">
+      <p class="suggest-loading" data-i18n="list.loading">Carregant…</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="cols">
+      <div class="col">
+        <h4>Instriq</h4>
+        <a href="https://app.instriq.org" data-i18n="footer.app">Obre l'app</a>
+        <a href="https://github.com/mikeyoshio/Instriq">GitHub</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h1">Projecte</h4>
+        <a href="index.html#mision" data-i18n="footer.l1">Missió i visió</a>
+        <a href="index.html#colabora" data-i18n="footer.l2">Com col·laborar</a>
+        <a href="ayuda.html" data-i18n="footer.help">Centre d'ajuda</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h2">Legal</h4>
+        <a href="privacidad.html" data-i18n="footer.l4">Política de privacitat</a>
+        <a href="https://github.com/mikeyoshio/Instriq/blob/main/LICENSE" data-i18n="footer.l5">Llicència (AGPL-3.0)</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h3">Contacte</h4>
+        <a href="mailto:hola@instriq.org">hola@instriq.org</a>
+      </div>
+    </div>
+    <p class="fine" data-i18n="footer.fine">Instriq® — projecte open source per i per al bloc quirúrgic. Codi sota AGPL-3.0.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var CA_DEFAULTS = {
+    'meta.title': 'Suggeriments — Instriq',
+    'meta.description': 'Proposa canvis a Instriq i vota els que ja han proposat altres persones. Sense compte.',
+    'a11y.skip': 'Saltar al contingut',
+    'nav.back': "← Torna a l'inici",
+    'nav.cta': "Obre l'app",
+    'hero.eyebrow': 'Suggeriments',
+    'hero.h1': "Ajuda'ns a decidir què construïm",
+    'hero.lede': 'Proposa un canvi o vota els que ja hi ha. Sense compte — el vot es recorda només en aquest navegador.',
+    'form.titleLabel': 'Títol',
+    'form.titlePlaceholder': 'Per exemple: exportar la targeta de preferència en PDF',
+    'form.descLabel': 'Descripció (opcional)',
+    'form.descPlaceholder': "Explica una mica més el context o per què et seria útil",
+    'form.submit': 'Enviar suggeriment',
+    'form.privacyNote': "No cal compte. Es desa un identificador anònim en aquest navegador només per evitar votar dues vegades el mateix suggeriment.",
+    'form.success': 'Gràcies! El teu suggeriment ja és a la llista.',
+    'form.error': "No s'ha pogut enviar. Torna-ho a provar.",
+    'form.tooShort': 'El títol ha de tenir almenys 4 caràcters.',
+    'list.title': 'Suggeriments de la comunitat',
+    'list.loading': 'Carregant…',
+    'list.empty': "Encara no hi ha cap suggeriment. Sigues la primera persona a proposar-ne un.",
+    'list.error': "No s'han pogut carregar els suggeriments.",
+    'vote.button': 'Vota',
+    'vote.voted': 'Votat',
+    'status.planned': 'En marxa',
+    'status.shipped': 'Fet',
+    'status.declined': 'Descartat',
+    'footer.app': "Obre l'app",
+    'footer.help': "Centre d'ajuda",
+    'footer.h1': 'Projecte',
+    'footer.l1': 'Missió i visió',
+    'footer.l2': 'Com col·laborar',
+    'footer.h2': 'Legal',
+    'footer.l4': 'Política de privacitat',
+    'footer.l5': 'Llicència (AGPL-3.0)',
+    'footer.h3': 'Contacte',
+    'footer.fine': 'Instriq® — projecte open source per i per al bloc quirúrgic. Codi sota AGPL-3.0.'
+  };
+
+  var DICT = { es: {
+    'meta.title': 'Sugerencias — Instriq',
+    'meta.description': 'Propón cambios a Instriq y vota los que ya han propuesto otras personas. Sin cuenta.',
+    'a11y.skip': 'Saltar al contenido',
+    'nav.back': '← Volver al inicio',
+    'nav.cta': 'Abrir la app',
+    'hero.eyebrow': 'Sugerencias',
+    'hero.h1': 'Ayúdanos a decidir qué construimos',
+    'hero.lede': 'Propón un cambio o vota los que ya hay. Sin cuenta — el voto se recuerda solo en este navegador.',
+    'form.titleLabel': 'Título',
+    'form.titlePlaceholder': 'Por ejemplo: exportar la tarjeta de preferencia en PDF',
+    'form.descLabel': 'Descripción (opcional)',
+    'form.descPlaceholder': 'Explica un poco más el contexto o por qué te sería útil',
+    'form.submit': 'Enviar sugerencia',
+    'form.privacyNote': 'No hace falta cuenta. Se guarda un identificador anónimo en este navegador solo para evitar votar dos veces la misma sugerencia.',
+    'form.success': '¡Gracias! Tu sugerencia ya está en la lista.',
+    'form.error': 'No se ha podido enviar. Inténtalo de nuevo.',
+    'form.tooShort': 'El título debe tener al menos 4 caracteres.',
+    'list.title': 'Sugerencias de la comunidad',
+    'list.loading': 'Cargando…',
+    'list.empty': 'Todavía no hay ninguna sugerencia. Sé la primera persona en proponer una.',
+    'list.error': 'No se han podido cargar las sugerencias.',
+    'vote.button': 'Vota',
+    'vote.voted': 'Votado',
+    'status.planned': 'En marcha',
+    'status.shipped': 'Hecho',
+    'status.declined': 'Descartado',
+    'footer.app': 'Abrir la app',
+    'footer.help': 'Centro de ayuda',
+    'footer.h1': 'Proyecto',
+    'footer.l1': 'Misión y visión',
+    'footer.l2': 'Cómo colaborar',
+    'footer.h2': 'Legal',
+    'footer.l4': 'Política de privacidad',
+    'footer.l5': 'Licencia (AGPL-3.0)',
+    'footer.h3': 'Contacto',
+    'footer.fine': 'Instriq® — proyecto open source por y para el bloque quirúrgico. Código bajo AGPL-3.0.'
+  }, en: {
+    'meta.title': 'Suggestions — Instriq',
+    'meta.description': 'Propose changes to Instriq and vote on what others have already proposed. No account needed.',
+    'a11y.skip': 'Skip to content',
+    'nav.back': '← Back home',
+    'nav.cta': 'Open the app',
+    'hero.eyebrow': 'Suggestions',
+    'hero.h1': 'Help us decide what to build',
+    'hero.lede': "Propose a change or vote on existing ones. No account — your vote is remembered only in this browser.",
+    'form.titleLabel': 'Title',
+    'form.titlePlaceholder': 'For example: export the preference card as PDF',
+    'form.descLabel': 'Description (optional)',
+    'form.descPlaceholder': "Add a bit more context, or why it'd be useful to you",
+    'form.submit': 'Send suggestion',
+    'form.privacyNote': "No account needed. An anonymous identifier is stored in this browser only to prevent voting twice on the same suggestion.",
+    'form.success': 'Thanks! Your suggestion is now on the list.',
+    'form.error': "Couldn't send it. Please try again.",
+    'form.tooShort': 'The title must be at least 4 characters.',
+    'list.title': 'Community suggestions',
+    'list.loading': 'Loading…',
+    'list.empty': 'No suggestions yet. Be the first to propose one.',
+    'list.error': "Couldn't load the suggestions.",
+    'vote.button': 'Vote',
+    'vote.voted': 'Voted',
+    'status.planned': 'In progress',
+    'status.shipped': 'Shipped',
+    'status.declined': 'Declined',
+    'footer.app': 'Open the app',
+    'footer.help': 'Help center',
+    'footer.h1': 'Project',
+    'footer.l1': 'Mission and vision',
+    'footer.l2': 'How to contribute',
+    'footer.h2': 'Legal',
+    'footer.l4': 'Privacy policy',
+    'footer.l5': 'License (AGPL-3.0)',
+    'footer.h3': 'Contact',
+    'footer.fine': 'Instriq® — an open source project by and for the OR. Code under AGPL-3.0.'
+  } };
+
+  var currentLang = 'ca';
+  function t(key) {
+    return currentLang === 'ca' ? CA_DEFAULTS[key] : (DICT[currentLang] && DICT[currentLang][key]) || CA_DEFAULTS[key];
+  }
+
+  function applyLang(lang, opts) {
+    opts = opts || {};
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      var attr = el.getAttribute('data-i18n-attr');
+      var value = t(key);
+      if (attr) { el.setAttribute(attr, value); } else { el.innerHTML = value; }
+    });
+    document.title = t('meta.title');
+    document.querySelectorAll('#langSwitch button').forEach(function (b) {
+      var isActive = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/sugerencias.html' : 'https://instriq.org/sugerencias.html?lang=' + lang;
+    var canonicalEl = document.getElementById('canonicalLink');
+    if (canonicalEl) canonicalEl.setAttribute('href', canonicalUrl);
+    try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
+    if (opts.updateUrl) {
+      var url = new URL(window.location.href);
+      if (lang === 'ca') { url.searchParams.delete('lang'); } else { url.searchParams.set('lang', lang); }
+      window.history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
+    }
+    renderSuggestions(lastRows);
+    if (lastFormMsgKey) {
+      document.getElementById('formMsg').textContent = t(lastFormMsgKey);
+    }
+  }
+  var lastFormMsgKey = null;
+
+  document.querySelectorAll('#langSwitch button').forEach(function (b) {
+    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), { updateUrl: true }); });
+  });
+
+  var validLangs = ['ca', 'es', 'en'];
+  var urlLang = null;
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var fromUrl = params.get('lang');
+    if (fromUrl && validLangs.indexOf(fromUrl) !== -1) urlLang = fromUrl;
+  } catch (e) {}
+  var saved = null;
+  try { saved = localStorage.getItem('instriq_lang'); } catch (e) {}
+  applyLang(urlLang || saved || 'ca');
+
+  var els = document.querySelectorAll('.reveal');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) {
+    els.forEach(function (r) { r.classList.add('is-visible'); });
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    els.forEach(function (r) { observer.observe(r); });
+  }
+
+  // ---- Suggeriments: Supabase directe amb anon key (mateix patró que
+  // el comptador públic de la portada) — sense backend propi. ----
+  var SUPABASE_URL = 'https://ssskgmlubgcjvhdmayhp.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzc2tnbWx1YmdjanZoZG1heWhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyMjU0NjcsImV4cCI6MjA5OTgwMTQ2N30.w6SBsnM8QCWEiPxB5sTtiRZk_-rh3Q0ceE7U89HjaoY';
+
+  function getClientId() {
+    var id = null;
+    try { id = localStorage.getItem('instriq_suggest_client_id'); } catch (e) {}
+    if (!id) {
+      id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('c-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+      try { localStorage.setItem('instriq_suggest_client_id', id); } catch (e) {}
+    }
+    return id;
+  }
+  var clientId = getClientId();
+
+  function sb(path, opts) {
+    opts = opts || {};
+    var headers = { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' };
+    for (var k in (opts.headers || {})) headers[k] = opts.headers[k];
+    opts.headers = headers;
+    return fetch(SUPABASE_URL + path, opts);
+  }
+
+  var listEl = document.getElementById('suggestionList');
+  var lastRows = [];
+
+  function escapeHtml(s) {
+    return (s || '').replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function renderSuggestions(rows) {
+    lastRows = rows || [];
+    if (!rows) return;
+    if (rows.length === 0) {
+      listEl.innerHTML = '<p class="suggest-empty">' + t('list.empty') + '</p>';
+      return;
+    }
+    listEl.innerHTML = '';
+    rows.forEach(function (row) {
+      var card = document.createElement('div');
+      card.className = 'suggestion-card';
+      var statusHtml = (row.status && row.status !== 'open')
+        ? '<span class="status-pill ' + row.status + '">' + t('status.' + row.status) + '</span><br>'
+        : '';
+      card.innerHTML =
+        '<button class="vote-btn' + (row.voted_by_me ? ' voted' : '') + '" ' + (row.voted_by_me ? 'disabled' : '') + '>' +
+          '<span class="arrow">▲</span><span class="n">' + row.vote_count + '</span>' +
+        '</button>' +
+        '<div class="suggestion-body">' + statusHtml +
+          '<h3>' + escapeHtml(row.title) + '</h3>' +
+          (row.description ? '<p>' + escapeHtml(row.description) + '</p>' : '') +
+        '</div>';
+      var btn = card.querySelector('.vote-btn');
+      if (!row.voted_by_me) {
+        btn.addEventListener('click', function () {
+          btn.disabled = true;
+          sb('/rest/v1/feature_suggestion_votes', {
+            method: 'POST',
+            body: JSON.stringify({ suggestion_id: row.id, client_id: clientId })
+          }).then(function () { loadSuggestions(); }).catch(function () { btn.disabled = false; });
+        });
+      }
+      listEl.appendChild(card);
+    });
+  }
+
+  function loadSuggestions() {
+    sb('/rest/v1/rpc/list_feature_suggestions', {
+      method: 'POST',
+      body: JSON.stringify({ p_client_id: clientId })
+    }).then(function (res) { return res.ok ? res.json() : Promise.reject(res); })
+      .then(renderSuggestions)
+      .catch(function () { listEl.innerHTML = '<p class="suggest-empty">' + t('list.error') + '</p>'; });
+  }
+  loadSuggestions();
+
+  var form = document.getElementById('suggestForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var formMsg = document.getElementById('formMsg');
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (document.getElementById('f-website').value) return; // honeypot
+    var title = document.getElementById('f-title').value.trim();
+    var description = document.getElementById('f-desc').value.trim();
+    formMsg.className = 'form-msg';
+    if (title.length < 4) {
+      lastFormMsgKey = 'form.tooShort';
+      formMsg.textContent = t(lastFormMsgKey);
+      formMsg.className = 'form-msg show error';
+      return;
+    }
+    submitBtn.disabled = true;
+    sb('/rest/v1/feature_suggestions', {
+      method: 'POST',
+      body: JSON.stringify({ title: title, description: description || null, client_id: clientId })
+    }).then(function (res) {
+      if (!res.ok) return Promise.reject(res);
+      form.reset();
+      lastFormMsgKey = 'form.success';
+      formMsg.textContent = t(lastFormMsgKey);
+      formMsg.className = 'form-msg show ok';
+      loadSuggestions();
+    }).catch(function () {
+      lastFormMsgKey = 'form.error';
+      formMsg.textContent = t(lastFormMsgKey);
+      formMsg.className = 'form-msg show error';
+    }).finally(function () {
+      setTimeout(function () { submitBtn.disabled = false; }, 1500);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
