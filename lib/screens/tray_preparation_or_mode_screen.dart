@@ -119,6 +119,9 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
                       Switch(
                         value: present,
                         activeThumbColor: _accent,
+                        activeTrackColor: _accent.withValues(alpha: 0.3),
+                        inactiveThumbColor: _textMuted,
+                        inactiveTrackColor: _track,
                         onChanged: (v) => setSheetState(() {
                           present = v;
                           if (!v) {
@@ -209,6 +212,14 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
     );
   }
 
+  SnackBar _orSnackBar(String text, {Duration? duration}) {
+    return SnackBar(
+      content: Text(text, style: const TextStyle(color: _textPrimary)),
+      backgroundColor: _cardBg,
+      duration: duration ?? const Duration(seconds: 4),
+    );
+  }
+
   Future<void> _submit() async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _saving = true);
@@ -227,7 +238,7 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
+        ScaffoldMessenger.of(context).showSnackBar(_orSnackBar(l10n.saveError(e.toString())));
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -246,7 +257,7 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.orModeExitToast), duration: const Duration(seconds: 2)),
+            _orSnackBar(l10n.orModeExitToast, duration: const Duration(seconds: 2)),
           );
         }
       },
