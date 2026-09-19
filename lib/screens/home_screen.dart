@@ -478,8 +478,8 @@ class _HomeScreenState extends State<HomeScreen> {
         instrument.aliases.any((alias) => fuzzyContains(alias, query)) ||
         fuzzyContains(instrument.description.forLanguageCode(languageCode), query) ||
         fuzzyContains(instrument.use.forLanguageCode(languageCode), query) ||
-        fuzzyContains(instrument.specialty.label, query) ||
-        fuzzyContains(instrument.category.label, query) ||
+        fuzzyContains(instrument.specialty.label(l10n), query) ||
+        fuzzyContains(instrument.category.label(l10n), query) ||
         (_catalogSterilizationMethods[instrument.id] ?? const [])
             .any((m) => fuzzyContains(sterilizationMethodValueLabel(l10n, m), query));
   }

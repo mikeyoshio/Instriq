@@ -70,7 +70,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(c.label, style: const TextStyle(fontWeight: FontWeight.w600)),
+                        Text(c.label(l10n), style: const TextStyle(fontWeight: FontWeight.w600)),
                         const SizedBox(height: 4),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(6),

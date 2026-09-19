@@ -732,14 +732,15 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
   }
 
   Widget _buildSpecialtySection(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final instrument = widget.instrument;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Wrap(
         spacing: 8,
         children: [
-          Chip(label: Text(instrument.specialty.label)),
-          Chip(label: Text(instrument.category.label)),
+          Chip(label: Text(instrument.specialty.label(l10n))),
+          Chip(label: Text(instrument.category.label(l10n))),
         ],
       ),
     );

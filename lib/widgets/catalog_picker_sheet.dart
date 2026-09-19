@@ -58,7 +58,7 @@ class _CatalogPickerSheetState extends State<CatalogPickerSheet> {
                         size: 40,
                       ),
                       title: Text(instrument.name),
-                      subtitle: Text(instrument.category.label),
+                      subtitle: Text(instrument.category.label(l10n)),
                       onTap: () => Navigator.of(context).pop(instrument),
                     );
                   },

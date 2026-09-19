@@ -1,3 +1,5 @@
+import '../l10n/app_localizations.dart';
+
 enum InstrumentCategory {
   corte,
   diseccion,
@@ -8,23 +10,28 @@ enum InstrumentCategory {
   equipos,
 }
 
+/// Antes esto era un `get label` con el texto en castellano fijo -- el
+/// catalogo global es el unico contenido de la app que se sirve en los 3
+/// idiomas (ver [LocalizedText] mas abajo, para nombre/descripcion/uso), pero
+/// categoria y especialidad se habian quedado fuera de ese criterio. Ahora
+/// requiere `l10n` como cualquier otra etiqueta de la interfaz.
 extension InstrumentCategoryLabel on InstrumentCategory {
-  String get label {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case InstrumentCategory.corte:
-        return 'Corte';
+        return l10n.catalogCategoryCorte;
       case InstrumentCategory.diseccion:
-        return 'Disección y prensión';
+        return l10n.catalogCategoryDiseccion;
       case InstrumentCategory.sutura:
-        return 'Sutura';
+        return l10n.catalogCategorySutura;
       case InstrumentCategory.separacion:
-        return 'Separación';
+        return l10n.catalogCategorySeparacion;
       case InstrumentCategory.succion:
-        return 'Succión';
+        return l10n.catalogCategorySuccion;
       case InstrumentCategory.especiales:
-        return 'Especiales';
+        return l10n.catalogCategoryEspeciales;
       case InstrumentCategory.equipos:
-        return 'Equipos y máquinas';
+        return l10n.catalogCategoryEquipos;
     }
   }
 }
@@ -49,43 +56,45 @@ enum Specialty {
   anestesiologiaReanimacio,
 }
 
+/// Mismo criterio que [InstrumentCategoryLabel]: requiere `l10n` en vez de
+/// devolver texto fijo en castellano.
 extension SpecialtyLabel on Specialty {
-  String get label {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case Specialty.general:
-        return 'Cirugía general';
+        return l10n.catalogSpecialtyGeneral;
       case Specialty.laparoscopiaEnergia:
-        return 'Laparoscopia y energía avanzada';
+        return l10n.catalogSpecialtyLaparoscopiaEnergia;
       case Specialty.roboticaAsistida:
-        return 'Cirugía robótica';
+        return l10n.catalogSpecialtyRoboticaAsistida;
       case Specialty.ortopediaTrauma:
-        return 'Traumatología y ortopedia';
+        return l10n.catalogSpecialtyOrtopediaTrauma;
       case Specialty.neurocirugia:
-        return 'Neurocirugía';
+        return l10n.catalogSpecialtyNeurocirugia;
       case Specialty.cardiovascular:
-        return 'Cardiovascular';
+        return l10n.catalogSpecialtyCardiovascular;
       case Specialty.ginecologiaObstetricia:
-        return 'Ginecología y obstetricia';
+        return l10n.catalogSpecialtyGinecologiaObstetricia;
       case Specialty.urologia:
-        return 'Urología';
+        return l10n.catalogSpecialtyUrologia;
       case Specialty.otorrino:
-        return 'Otorrinolaringología';
+        return l10n.catalogSpecialtyOtorrino;
       case Specialty.vascular:
-        return 'Angiología y Cirugía Vascular';
+        return l10n.catalogSpecialtyVascular;
       case Specialty.maxilofacial:
-        return 'Cirugía Oral y Maxilofacial';
+        return l10n.catalogSpecialtyMaxilofacial;
       case Specialty.pediatrica:
-        return 'Cirugía Pediátrica';
+        return l10n.catalogSpecialtyPediatrica;
       case Specialty.plastica:
-        return 'Cirugía Plástica, Estética y Reparadora';
+        return l10n.catalogSpecialtyPlastica;
       case Specialty.toracica:
-        return 'Cirugía Torácica';
+        return l10n.catalogSpecialtyToracica;
       case Specialty.dermatologia:
-        return 'Dermatología Médico-Quirúrgica y Venereología';
+        return l10n.catalogSpecialtyDermatologia;
       case Specialty.oftalmologia:
-        return 'Oftalmología';
+        return l10n.catalogSpecialtyOftalmologia;
       case Specialty.anestesiologiaReanimacio:
-        return 'Anestesiología y Reanimación';
+        return l10n.catalogSpecialtyAnestesiologiaReanimacio;
     }
   }
 }
