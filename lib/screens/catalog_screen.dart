@@ -127,7 +127,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
             chips: [
               for (final s in Specialty.values)
                 _MultiFilterChip(
-                  label: s.label,
+                  label: s.label(l10n),
                   selected: _specialtyFilters.contains(s),
                   onTap: () => _toggleSpecialty(s),
                 ),
@@ -145,7 +145,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
             chips: [
               for (final c in InstrumentCategory.values)
                 _MultiFilterChip(
-                  label: c.label,
+                  label: c.label(l10n),
                   selected: _categoryFilters.contains(c),
                   onTap: () => _toggleCategory(c),
                 ),
@@ -207,7 +207,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                               ],
                             ],
                           ),
-                          subtitle: Text('${instrument.specialty.label} · ${instrument.category.label}'),
+                          subtitle: Text('${instrument.specialty.label(l10n)} · ${instrument.category.label(l10n)}'),
                           trailing: learned
                               ? const Icon(Icons.check_circle, color: Colors.green)
                               : const Icon(Icons.chevron_right),

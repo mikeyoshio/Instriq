@@ -75,7 +75,7 @@ class _TrayItemPickerSheetState extends State<TrayItemPickerSheet> {
                               size: 40,
                             ),
                             title: Text(instrument.name),
-                            subtitle: Text(instrument.category.label),
+                            subtitle: Text(instrument.category.label(l10n)),
                             onTap: () => Navigator.of(context).pop(
                               TrayItem(instrumentRefType: InstrumentRefType.catalog, instrumentRefId: instrument.id),
                             ),

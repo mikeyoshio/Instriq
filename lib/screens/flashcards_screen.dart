@@ -62,7 +62,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
             itemBuilder: (context) => [
               PopupMenuItem(value: null, child: Text(l10n.allCategoriesLabel)),
               ...InstrumentCategory.values.map(
-                (c) => PopupMenuItem(value: c, child: Text(c.label)),
+                (c) => PopupMenuItem(value: c, child: Text(c.label(l10n))),
               ),
             ],
           ),
@@ -143,6 +143,7 @@ class _CardFront extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -154,7 +155,7 @@ class _CardFront extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 8),
-        Text(instrument.category.label, style: Theme.of(context).textTheme.bodyMedium),
+        Text(instrument.category.label(l10n), style: Theme.of(context).textTheme.bodyMedium),
       ],
     );
   }
