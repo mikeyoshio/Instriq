@@ -42,6 +42,7 @@ import 'custom_instrument_detail_screen.dart';
 import 'group_document_detail_screen.dart';
 import 'group_document_list_screen.dart';
 import 'group_document_review_queue_screen.dart';
+import 'home_dashboard_panel.dart';
 import 'instrument_detail_screen.dart';
 import 'learn_screen.dart';
 import 'manufacturer_detail_screen.dart';
@@ -535,44 +536,56 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    // Panel de escritorio (ver home_dashboard_panel.dart): solo sustituye el
+    // cuerpo por defecto (sin búsqueda activa) en ventanas de clase PC, y
+    // solo para quien ya tiene acceso a los datos que agrega (mismo gate que
+    // ya usa cada pantalla destino) — para cualquier otro caso, Inici se
+    // comporta exactamente igual que antes, tablet incluida.
+    final showDashboard = _query.isEmpty &&
+        MediaQuery.sizeOf(context).width >= InstriqBreakpoints.desktop &&
+        ProfileService.instance.hasHospital &&
+        (ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace);
+    final content = Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: InstriqSpacing.lg, vertical: InstriqSpacing.sm),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: l10n.homeSearchHint,
+              border: OutlineInputBorder(borderRadius: InstriqRadius.mdRadius),
+              suffixIcon: _query.isEmpty
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.clear),
+                      tooltip: l10n.clearSearchTooltip,
+                      onPressed: () {
+                        _searchAnalyticsDebounce?.cancel();
+                        _searchController.clear();
+                        setState(() => _query = '');
+                      },
+                    ),
+            ),
+            onChanged: (value) {
+              setState(() => _query = value);
+              _scheduleSearchAnalytics(value);
+            },
+          ),
+        ),
+        Expanded(
+          child: _query.isNotEmpty
+              ? _buildSearchResults(context, l10n)
+              : showDashboard
+                  ? const HomeDashboardPanel()
+                  : _buildDefaultBody(context, l10n),
+        ),
+      ],
+    );
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: InstriqResponsiveContent(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: InstriqSpacing.lg, vertical: InstriqSpacing.sm),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
-                    hintText: l10n.homeSearchHint,
-                    border: OutlineInputBorder(borderRadius: InstriqRadius.mdRadius),
-                    suffixIcon: _query.isEmpty
-                        ? null
-                        : IconButton(
-                            icon: const Icon(Icons.clear),
-                            tooltip: l10n.clearSearchTooltip,
-                            onPressed: () {
-                              _searchAnalyticsDebounce?.cancel();
-                              _searchController.clear();
-                              setState(() => _query = '');
-                            },
-                          ),
-                  ),
-                  onChanged: (value) {
-                    setState(() => _query = value);
-                    _scheduleSearchAnalytics(value);
-                  },
-                ),
-              ),
-              Expanded(
-                child: _query.isEmpty ? _buildDefaultBody(context, l10n) : _buildSearchResults(context, l10n),
-              ),
-            ],
-          ),
-        ),
+        child: showDashboard ? content : InstriqResponsiveContent(child: content),
       ),
     );
   }

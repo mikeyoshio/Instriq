@@ -65,11 +65,17 @@ class InstriqSpacing {
 /// pantallas anchas (ver `InstriqResponsiveContent`) — no tiene por qué
 /// coincidir con [tablet]: uno decide cuándo la navegación cambia de forma,
 /// el otro cuánto se ensancha el contenido de una pantalla de detalle/
-/// formulario.
+/// formulario. [desktop] es un tercer umbral, bastante más ancho que
+/// [tablet]: a partir de aquí hay sitio real para un layout multi-columna
+/// (ver `HomeDashboardPanel`), no solo para centrar la misma columna de
+/// [maxContentWidth]. Deliberadamente por encima del ancho apaisado de un
+/// iPad Pro 12.9" (~1194px) para no activar el panel de escritorio en una
+/// tablet grande sostenida en las manos.
 class InstriqBreakpoints {
   InstriqBreakpoints._();
 
   static const tablet = 840.0;
+  static const desktop = 1280.0;
   static const maxContentWidth = 720.0;
 }
 

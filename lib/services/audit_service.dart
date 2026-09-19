@@ -21,6 +21,7 @@ class AuditService {
     String? organizationId,
     String? workspaceId,
     DateTime? since,
+    int? limit,
   }) async {
     var query = _client.from('audit_log').select('*, workspaces(name)');
     if (organizationId != null) {
@@ -32,7 +33,8 @@ class AuditService {
     if (since != null) {
       query = query.gte('created_at', since.toIso8601String());
     }
-    final rows = await query.order('created_at', ascending: false);
+    final ordered = query.order('created_at', ascending: false);
+    final rows = await (limit != null ? ordered.limit(limit) : ordered);
     final entries = (rows as List<dynamic>)
         .map((r) => AuditEntry.fromRow(r as Map<String, dynamic>))
         .toList();
