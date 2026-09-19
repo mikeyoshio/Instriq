@@ -216,6 +216,24 @@
   .deck-role.on { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
   @media (max-width: 900px) { .deck-card { width: 260px; height: 380px; padding: 22px; } }
   @media (prefers-reduced-motion: reduce) { .deck-card { transition: none; } }
+
+  /* Carrusel "shot": mateix mecanisme que el deck del hero (targetes en pila,
+     la del darrere desenfocada i mig transparent), aplicat a captures reals
+     en comptes de targetes de contingut sintètic. */
+  .shot-stage { position: relative; width: 100%; max-width: 640px; height: 500px; margin: 48px auto 0; }
+  .shot-card {
+    position: absolute; top: 0; left: 50%; width: 480px;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 20px;
+    box-shadow: var(--shadow-lift); padding: 22px; text-align: center;
+    transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease;
+    will-change: transform, opacity;
+  }
+  .shot-card img { display: block; width: 100%; max-height: 320px; object-fit: contain; border-radius: 10px; margin: 0 auto; background: var(--paper-alt); }
+  .shot-card figcaption { margin-top: 16px; font-size: 0.92rem; color: var(--ink-muted); line-height: 1.5; }
+  .shot-card figcaption b { color: var(--ink); font-family: var(--display); }
+  @media (max-width: 720px) { .shot-stage { height: 460px; } .shot-card { width: 300px; padding: 18px; } .shot-card img { max-height: 300px; } }
+  @media (prefers-reduced-motion: reduce) { .shot-card { transition: none; } }
+
   /* Timeline interactiu de novetats */
   .timeline { max-width: var(--measure); margin: 44px auto 0; text-align: left; }
   .timeline-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; padding: 32px 34px; box-shadow: var(--shadow-soft); min-height: 168px; display: flex; flex-direction: column; justify-content: center; }
@@ -480,6 +498,24 @@
   </div>
 </section>
 
+<section id="pantalles" class="section reveal">
+  <div class="wrap center">
+    <span class="eyebrow" data-i18n="pantalles.eyebrow">S'adapta a on el fas servir</span>
+    <h2 data-i18n="pantalles.h1">El mateix Instriq, diferent segons qui l'obre.</h2>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="pantalles.lede">Dins de quirófano, una checklist a pantalla completa pensada per tocar-la amb guants. Al despatx, un panell per a qui coordina el grup sencer — no la mateixa pantalla estreta, ampliada.</p>
+    <div class="shot-stage" id="shotStage">
+      <figure class="shot-card">
+        <img src="screenshots/dashboard_pc.png" alt="Panell d'escriptori d'Instriq amb pendents d'aprovació, cua de revisió i incidències" loading="lazy">
+        <figcaption data-i18n="pantalles.cap1"><b>Panell d'escriptori.</b> Per a qui coordina el grup: pendents d'aprovació, cua de revisió i incidències, d'un cop d'ull.</figcaption>
+      </figure>
+      <figure class="shot-card">
+        <img src="screenshots/modo_quirofano.png" alt="Mode Quiròfan: checklist de preparació d'una safata d'instrumental" loading="lazy">
+        <figcaption data-i18n="pantalles.cap2"><b>Mode Quiròfan.</b> Checklist de preparació de safates a pantalla completa, pensada per usar-se amb guants.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <section class="section band reveal">
   <div class="wrap center">
     <span class="eyebrow" data-i18n="novedades.eyebrow">Novetats</span>
@@ -496,7 +532,7 @@
         <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
         <div class="timeline-track-wrap">
           <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
-          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="41" value="0" step="1" aria-label="Línia del temps d'Instriq">
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="45" value="0" step="1" aria-label="Línia del temps d'Instriq">
         </div>
         <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
       </div>
@@ -702,6 +738,35 @@
     }
   })();
 
+  // Carrusel "shot": mateix mecanisme que el deck de dalt, sobre captures
+  // reals en comptes de targetes de contingut sintètic.
+  (function () {
+    var stage = document.getElementById('shotStage');
+    if (!stage) return;
+    var cards = Array.prototype.slice.call(stage.querySelectorAll('.shot-card'));
+    var n = cards.length, active = 0;
+    function place() {
+      cards.forEach(function (card, i) {
+        var diff = i - active;
+        if (diff > n / 2) diff -= n;
+        if (diff < -n / 2) diff += n;
+        var abs = Math.abs(diff);
+        var x = diff * 78, scale = 1, opacity = 1, z = 10, blur = 0;
+        if (abs === 1) { scale = 0.86, opacity = 0.4, z = 5, blur = 2; }
+        else if (abs >= 2) { scale = 0.72, opacity = 0, z = 1, blur = 4; }
+        card.style.transform = 'translateX(-50%) translateX(' + x + '%) scale(' + scale + ')';
+        card.style.opacity = opacity;
+        card.style.filter = blur ? 'blur(' + blur + 'px)' : 'none';
+        card.style.zIndex = z;
+        card.setAttribute('aria-hidden', i === active ? 'false' : 'true');
+      });
+    }
+    place();
+    if (!reducedMotion) {
+      setInterval(function () { active = (active + 1) % n; place(); }, 4200);
+    }
+  })();
+
   var DICT = {
     es: {
       "meta.title": "Instriq — Conocimiento de quirófano abierto y compartido",
@@ -756,6 +821,10 @@
       "funciones.c7t": "Instrumental personalizado", "funciones.c7p": "Da de alta el material propio de tu equipo, con variantes y fotos, privado y nunca compartido fuera de vuestro espacio.",
       "funciones.c8t": "Biblioteca Pública", "funciones.c8p": "Contenido abierto a toda la comunidad, revisado y aprobado por un consejo editorial — nunca una autoridad clínica, siempre una referencia de partida.",
       "funciones.c9t": "Auditoría y privacidad", "funciones.c9p": "Registro de quién ha hecho qué y cuándo en acciones sensibles. Exporta o elimina tus datos personales cuando quieras (GDPR).",
+      "pantalles.eyebrow": "Se adapta a dónde lo usas", "pantalles.h1": "El mismo Instriq, distinto según quién lo abre.",
+      "pantalles.lede": "Dentro de quirófano, una checklist a pantalla completa pensada para tocarla con guantes. En el despacho, un panel para quien coordina el grupo entero — no la misma pantalla estrecha, ampliada.",
+      "pantalles.cap1": "<b>Panel de escritorio.</b> Para quien coordina el grupo: pendientes de aprobación, cola de revisión e incidencias, de un vistazo.",
+      "pantalles.cap2": "<b>Modo Quirófano.</b> Checklist de preparación de bandejas a pantalla completa, pensada para usarse con guantes.",
       "quien.eyebrow": "Para quién es", "quien.h1": "Un grupo puede ser lo que necesites.",
       "quien.lede": "Instriq no da por hecho que eres un hospital grande. Un grupo es cualquier equipo que quiera documentar cómo trabaja — desde una consulta de tres personas hasta una red hospitalaria entera. Empiezas pequeño y creces sin cambiar de herramienta.",
       "quien.c1t": "Equipo o consulta pequeña", "quien.c1p": "Empieza con 2-3 personas y un único espacio de trabajo. Sin mínimos, sin complicarte.",
@@ -848,6 +917,10 @@
       "funciones.c7t": "Team-specific instruments", "funciones.c7p": "Add your team's own instruments, with variants and photos, private and never shared outside your space.",
       "funciones.c8t": "Public Library", "funciones.c8p": "Content open to the whole community, reviewed and approved by an editorial board — never a clinical authority, always a starting reference.",
       "funciones.c9t": "Audit trail and privacy", "funciones.c9p": "A record of who did what and when for sensitive actions. Export or delete your personal data whenever you want (GDPR).",
+      "pantalles.eyebrow": "Adapts to where you use it", "pantalles.h1": "The same Instriq, different depending on who opens it.",
+      "pantalles.lede": "Inside the operating room, a full-screen checklist meant to be used with gloves on. In the office, a panel for whoever coordinates the whole group — not the same narrow screen, just bigger.",
+      "pantalles.cap1": "<b>Desktop panel.</b> For whoever coordinates the group: pending approvals, the review queue and sync issues, at a glance.",
+      "pantalles.cap2": "<b>OR Mode.</b> A full-screen tray-preparation checklist, built to be used with gloves on.",
       "quien.eyebrow": "Who it's for", "quien.h1": "A group can be whatever you need it to be.",
       "quien.lede": "Instriq doesn't assume you're a large hospital. A group is any team that wants to document how it works — from a three-person practice to an entire hospital network. Start small and grow without switching tools.",
       "quien.c1t": "Small team or practice", "quien.c1p": "Start with 2-3 people and a single workspace. No minimums, no complications.",
@@ -896,8 +969,8 @@
   });
   CA_DEFAULTS['meta.title'] = document.title;
 
-  // Timeline interactiu de novetats: 1 origen + 31 desplegaments + 3 previstos.
-  var TIMELINE_SHIPPED = 39; // origen (índex 0) + 38 novetats (índexs 1-38)
+  // Timeline interactiu de novetats: 1 origen + 42 desplegaments + 3 previstos.
+  var TIMELINE_SHIPPED = 43; // origen (índex 0) + 42 novetats (índexs 1-42)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -939,6 +1012,10 @@
       { badge: '#36', text: '<strong>Benvinguda de primer ús</strong> — qui obre l\'app per primera vegada veu una introducció curta de tres passos abans d\'entrar a Inici, amb selector d\'idioma inclòs.' },
       { badge: '#37', text: '<strong>Adoptar contingut de la Biblioteca Pública</strong> — una safata publicada per la comunitat ja es pot adoptar com a punt de partida d\'una safata pròpia, amb avís quan l\'origen publiqui una versió nova.' },
       { badge: '#38', text: '<strong>Centre d\'ajuda</strong> — noves guies pas a pas amb captures reals de cada pantalla, dins de Perfil i també a la web, perquè aprendre a fer servir Instriq no depengui de preguntar a algú altre.' },
+      { badge: '#39', text: '<strong>Reporta un error al catàleg</strong> — si alguna dada d\'un instrument no és correcta, ara es pot avisar directament des de la seva fitxa, sense sortir de l\'app.' },
+      { badge: '#40', text: '<strong>Mode Quiròfan</strong> — checklist de preparació de safates a pantalla completa i fons fosc, pensada per fer-se servir amb guants dins de quiròfan.' },
+      { badge: '#41', text: '<strong>Bústia de suggeriments pública</strong> — qualsevol persona pot proposar una millora des de la web i votar les que ja existeixen, sense necessitat de compte.' },
+      { badge: '#42', text: '<strong>Panell d\'escriptori per a qui coordina</strong> — en pantalles grans, Inici mostra pendents d\'aprovació, cua de revisió, incidències i activitat del grup, per a qui gestiona un hospital o servei sencer.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
       { badge: 'Previst', future: true, text: 'Sistema de donacions transparent.' }
@@ -983,6 +1060,10 @@
       { badge: '#36', text: '<strong>Bienvenida de primer uso</strong> — quien abre la app por primera vez ve una introducción corta de tres pasos antes de entrar a Inicio, con selector de idioma incluido.' },
       { badge: '#37', text: '<strong>Adoptar contenido de la Biblioteca Pública</strong> — una bandeja publicada por la comunidad ya se puede adoptar como punto de partida de una bandeja propia, con aviso cuando el origen publique una versión nueva.' },
       { badge: '#38', text: '<strong>Centro de ayuda</strong> — nuevas guías paso a paso con capturas reales de cada pantalla, dentro de Perfil y también en la web, para que aprender a usar Instriq no dependa de preguntarle a otra persona.' },
+      { badge: '#39', text: '<strong>Reporta un error en el catálogo</strong> — si algún dato de un instrumento no es correcto, ya se puede avisar directamente desde su ficha, sin salir de la app.' },
+      { badge: '#40', text: '<strong>Modo Quirófano</strong> — checklist de preparación de bandejas a pantalla completa y fondo oscuro, pensada para usarse con guantes dentro de quirófano.' },
+      { badge: '#41', text: '<strong>Buzón de sugerencias público</strong> — cualquier persona puede proponer una mejora desde la web y votar las que ya existen, sin necesidad de cuenta.' },
+      { badge: '#42', text: '<strong>Panel de escritorio para quien coordina</strong> — en pantallas grandes, Inicio muestra pendientes de aprobación, cola de revisión, incidencias y actividad del grupo, para quien gestiona un hospital o servicio entero.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
       { badge: 'Previsto', future: true, text: 'Sistema de donaciones transparente.' }
@@ -1027,6 +1108,10 @@
       { badge: '#36', text: '<strong>First-run welcome</strong> — opening the app for the first time now shows a short 3-step introduction before landing on Home, with a language picker included.' },
       { badge: '#37', text: '<strong>Adopt Public Library content</strong> — a tray published by the community can now be adopted as the starting point for your own tray, with a heads-up when the source publishes a new version.' },
       { badge: '#38', text: '<strong>Help center</strong> — new step-by-step guides with real screenshots of every screen, inside Profile and also on the website, so learning to use Instriq never depends on asking someone else.' },
+      { badge: '#39', text: '<strong>Report a catalog error</strong> — if something about an instrument\'s entry is wrong, you can now flag it straight from its page, without leaving the app.' },
+      { badge: '#40', text: '<strong>OR Mode</strong> — a full-screen, dark tray-preparation checklist built to be used with gloves on, inside the operating room.' },
+      { badge: '#41', text: '<strong>Public suggestions board</strong> — anyone can propose an improvement from the website and vote on existing ones, no account required.' },
+      { badge: '#42', text: '<strong>Desktop panel for whoever coordinates</strong> — on wide screens, Home now shows pending approvals, the review queue, sync issues and group activity, for whoever manages a whole hospital or department.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
       { badge: 'Planned', future: true, text: 'A transparent donation system.' }
