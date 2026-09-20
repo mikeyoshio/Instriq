@@ -15,6 +15,7 @@ import '../services/public_instrument_service.dart';
 import '../services/public_tray_service.dart';
 import 'auth/sign_in_screen.dart';
 import 'contributor_application_form_screen.dart';
+import 'my_public_contributions_screen.dart';
 import 'public_entity_detail_screen.dart';
 import 'public_entity_form_screen.dart';
 import 'public_library_review_queue_screen.dart';
@@ -135,6 +136,13 @@ class _PublicLibraryScreenState extends State<PublicLibraryScreen> {
             ],
           ),
           actions: [
+            if (_canContribute)
+              IconButton(
+                icon: const Icon(Icons.folder_shared_outlined),
+                tooltip: l10n.myPublicSubmissionsTitle,
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => const MyPublicContributionsScreen())),
+              ),
             if (_canReview)
               IconButton(
                 icon: const Icon(Icons.fact_check_outlined),

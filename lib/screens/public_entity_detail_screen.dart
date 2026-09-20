@@ -157,13 +157,14 @@ class PublicEntityDetailScreen extends StatelessWidget {
   List<Widget> _instrumentContent(BuildContext context, AppLocalizations l10n, PublicInstrumentVersion version) {
     return [
       if (version.photoPath != null) ...[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.network(
-            PublicInstrumentService.instance.photoUrl(version.photoPath!),
-            width: double.infinity,
-            height: 220,
-            fit: BoxFit.cover,
+        Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.network(
+              PublicInstrumentService.instance.photoUrl(version.photoPath!),
+              height: 220,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
         const SizedBox(height: 6),
