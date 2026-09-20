@@ -4,9 +4,11 @@ import '../design_system/components/instriq_review_queue.dart';
 import '../l10n/app_localizations.dart';
 import '../models/editorial_comment.dart';
 import '../models/public_document.dart';
+import '../models/public_instrument.dart';
 import '../models/public_tray.dart';
 import '../services/editorial_comment_service.dart';
 import '../services/public_document_service.dart';
+import '../services/public_instrument_service.dart';
 import '../services/public_tray_service.dart';
 
 /// Cua de revisio de la Biblioteca Publica, nomes per a reviewer/editorial
@@ -22,13 +24,17 @@ class PublicLibraryReviewQueueScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.publicLibraryReviewQueueTitle),
-          bottom: TabBar(tabs: [Tab(text: l10n.techniquesTitle), Tab(text: l10n.traysTitle)]),
+          bottom: TabBar(tabs: [
+            Tab(text: l10n.techniquesTitle),
+            Tab(text: l10n.traysTitle),
+            Tab(text: l10n.publicLibraryInstrumentsTab),
+          ]),
         ),
-        body: const TabBarView(children: [_DocumentReviewQueue(), _TrayReviewQueue()]),
+        body: const TabBarView(children: [_DocumentReviewQueue(), _TrayReviewQueue(), _InstrumentReviewQueue()]),
       ),
     );
   }
@@ -88,6 +94,38 @@ class _TrayReviewQueue extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return InstriqReviewQueue<PublicTrayVersion>.navigate(
       load: PublicTrayService.instance.fetchReviewQueue,
+      titleOf: (v) => v.name ?? l10n.auditDocumentUntitledLabel,
+      onTap: _openComments,
+      errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),
+      retryLabel: l10n.retry,
+      emptyBuilder: (_) =>
+          Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.noPendingReviews))),
+    );
+  }
+}
+
+class _InstrumentReviewQueue extends StatelessWidget {
+  const _InstrumentReviewQueue();
+
+  Future<void> _openComments(BuildContext context, PublicInstrumentVersion version) {
+    return Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => _EditorialCommentsScreen(
+          refType: 'public_instrument_version',
+          refId: version.id,
+          title: version.name ?? '',
+          onApprove: () => PublicInstrumentService.instance.approve(version.id),
+          onReject: (comment) => PublicInstrumentService.instance.reject(version.id, comment: comment),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return InstriqReviewQueue<PublicInstrumentVersion>.navigate(
+      load: PublicInstrumentService.instance.fetchReviewQueue,
       titleOf: (v) => v.name ?? l10n.auditDocumentUntitledLabel,
       onTap: _openComments,
       errorMessage: (e) => l10n.reviewQueueLoadError(e.toString()),

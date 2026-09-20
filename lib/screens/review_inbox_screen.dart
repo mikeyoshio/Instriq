@@ -11,6 +11,7 @@ import '../services/group_document_service.dart';
 import '../services/preference_card_service.dart';
 import '../services/profile_service.dart';
 import '../services/public_document_service.dart';
+import '../services/public_instrument_service.dart';
 import '../services/public_tray_service.dart';
 import '../services/sterilization_service.dart';
 import '../services/tray_service.dart';
@@ -65,6 +66,7 @@ class ReviewInboxScreen extends StatelessWidget {
         Future.wait([
           PublicDocumentService.instance.fetchReviewQueue(),
           PublicTrayService.instance.fetchReviewQueue(),
+          PublicInstrumentService.instance.fetchReviewQueue(),
         ]).then((lists) => lists.fold<int>(0, (sum, l) => sum + l.length))
       else
         Future.value(null),
