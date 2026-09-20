@@ -123,8 +123,8 @@ class ContributorService {
         .toList();
   }
 
-  /// Contribucions publicades (tècniques/protocols + safates) d'un
-  /// col·laborador a la Biblioteca Pública.
+  /// Contribucions publicades (tècniques/protocols + safates + instrumental)
+  /// d'un col·laborador a la Biblioteca Pública.
   Future<int> fetchPublishedContributionCount(String userId) async {
     final docs = await _client
         .from('public_document_versions')
@@ -138,7 +138,13 @@ class ContributorService {
         .eq('author_id', userId)
         .eq('status', 'published')
         .count(CountOption.exact);
-    return docs.count + trays.count;
+    final instruments = await _client
+        .from('public_instrument_versions')
+        .select('id')
+        .eq('author_id', userId)
+        .eq('status', 'published')
+        .count(CountOption.exact);
+    return docs.count + trays.count + instruments.count;
   }
 
   Future<void> updateMyProfile({
