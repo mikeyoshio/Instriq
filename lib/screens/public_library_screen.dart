@@ -4,11 +4,14 @@ import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/contributor_application.dart';
 import '../models/group_document.dart' show DocumentKind;
+import '../models/instrument.dart' show InstrumentCategoryLabel;
 import '../models/public_document.dart';
+import '../models/public_instrument.dart';
 import '../models/public_tray.dart';
 import '../services/auth_service.dart';
 import '../services/contributor_service.dart';
 import '../services/public_document_service.dart';
+import '../services/public_instrument_service.dart';
 import '../services/public_tray_service.dart';
 import 'auth/sign_in_screen.dart';
 import 'contributor_application_form_screen.dart';
@@ -104,11 +107,23 @@ class _PublicLibraryScreenState extends State<PublicLibraryScreen> {
     if (mounted) setState(() {});
   }
 
+  Future<void> _proposeInstrument() async {
+    final instrumentId = await PublicInstrumentService.instance.createDraft();
+    final draft = await PublicInstrumentService.instance.fetchDraftVersion(instrumentId);
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PublicEntityFormScreen.instrument(instrumentId: instrumentId, draft: draft),
+      ),
+    );
+    if (mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.publicLibraryTitle),
@@ -116,6 +131,7 @@ class _PublicLibraryScreenState extends State<PublicLibraryScreen> {
             tabs: [
               Tab(text: l10n.techniquesTitle),
               Tab(text: l10n.traysTitle),
+              Tab(text: l10n.publicLibraryInstrumentsTab),
             ],
           ),
           actions: [
@@ -142,6 +158,7 @@ class _PublicLibraryScreenState extends State<PublicLibraryScreen> {
                 children: [
                   _PublicDocumentList(canContribute: _canContribute, onPropose: _proposeDocument),
                   _PublicTrayList(canContribute: _canContribute, onPropose: _proposeTray),
+                  _PublicInstrumentList(canContribute: _canContribute, onPropose: _proposeInstrument),
                 ],
               ),
             ),
@@ -390,6 +407,89 @@ class _PublicTrayListState extends State<_PublicTrayList> {
                               title: Text(tray.publishedVersion?.name ?? l10n.auditDocumentUntitledLabel),
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.tray(tray: tray)),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+      floatingActionButton: widget.canContribute
+          ? FloatingActionButton.extended(
+              onPressed: widget.onPropose,
+              icon: const Icon(Icons.add),
+              label: Text(l10n.publicLibraryProposeAction),
+            )
+          : null,
+    );
+  }
+}
+
+class _PublicInstrumentList extends StatefulWidget {
+  final bool canContribute;
+  final VoidCallback onPropose;
+
+  const _PublicInstrumentList({required this.canContribute, required this.onPropose});
+
+  @override
+  State<_PublicInstrumentList> createState() => _PublicInstrumentListState();
+}
+
+class _PublicInstrumentListState extends State<_PublicInstrumentList> {
+  bool _loading = true;
+  String? _error;
+  List<PublicInstrument> _instruments = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      _instruments = await PublicInstrumentService.instance.fetchPublished();
+    } catch (e) {
+      if (mounted) _error = AppLocalizations.of(context)!.publicLibraryLoadError(e.toString());
+    }
+    if (mounted) setState(() => _loading = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _error != null
+              ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
+              : _instruments.isEmpty
+                  ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.publicLibraryEmptyState)))
+                  : RefreshIndicator(
+                      onRefresh: _load,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: _instruments.length,
+                        itemBuilder: (context, index) {
+                          final instrument = _instruments[index];
+                          final version = instrument.publishedVersion;
+                          final photoPath = version?.photoPath;
+                          return Card(
+                            child: ListTile(
+                              leading: photoPath != null
+                                  ? CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                        PublicInstrumentService.instance.photoUrl(photoPath),
+                                      ),
+                                    )
+                                  : const CircleAvatar(child: Icon(Icons.precision_manufacturing_outlined)),
+                              title: Text(version?.name ?? l10n.auditDocumentUntitledLabel),
+                              subtitle: version?.category != null ? Text(version!.category!.label(l10n)) : null,
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.instrument(instrument: instrument)),
                               ),
                             ),
                           );

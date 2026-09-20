@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart' show DocumentKind;
+import '../models/instrument.dart' show InstrumentCategoryLabel;
 import '../models/public_document.dart';
+import '../models/public_instrument.dart';
 import '../models/public_tray.dart';
 import '../services/auth_service.dart';
 import '../services/profile_service.dart';
+import '../services/public_instrument_service.dart';
 import '../services/tray_service.dart';
 import '../services/workspace_service.dart';
 import 'contributor_public_profile_screen.dart';
@@ -23,25 +26,35 @@ class PublicEntityDetailScreen extends StatelessWidget {
   final PublicEntityKind entityKind;
   final PublicDocument? document;
   final PublicTray? tray;
+  final PublicInstrument? instrument;
 
   PublicEntityDetailScreen.document({super.key, required PublicDocument document})
       : entityKind = document.kind == DocumentKind.protocol ? PublicEntityKind.protocol : PublicEntityKind.technique,
         document = document,
-        tray = null;
+        tray = null,
+        instrument = null;
 
   const PublicEntityDetailScreen.tray({super.key, required this.tray})
       : entityKind = PublicEntityKind.tray,
-        document = null;
+        document = null,
+        instrument = null;
+
+  const PublicEntityDetailScreen.instrument({super.key, required this.instrument})
+      : entityKind = PublicEntityKind.instrument,
+        document = null,
+        tray = null;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isTray = entityKind.isTray;
+    final isInstrument = entityKind.isInstrument;
     final documentVersion = document?.publishedVersion;
     final trayVersion = tray?.publishedVersion;
-    final title = isTray ? trayVersion?.name : documentVersion?.title;
-    final hasVersion = isTray ? trayVersion != null : documentVersion != null;
-    final authorId = isTray ? trayVersion?.authorId : documentVersion?.authorId;
+    final instrumentVersion = instrument?.publishedVersion;
+    final title = isTray ? trayVersion?.name : (isInstrument ? instrumentVersion?.name : documentVersion?.title);
+    final hasVersion = isTray ? trayVersion != null : (isInstrument ? instrumentVersion != null : documentVersion != null);
+    final authorId = isTray ? trayVersion?.authorId : (isInstrument ? instrumentVersion?.authorId : documentVersion?.authorId);
 
     return Scaffold(
       appBar: AppBar(title: Text(title ?? l10n.auditDocumentUntitledLabel)),
@@ -56,9 +69,11 @@ class PublicEntityDetailScreen extends StatelessWidget {
                     _AdoptTrayButton(tray: tray!),
                     const SizedBox(height: 20),
                   ],
-                  ...isTray
-                      ? _trayContent(context, l10n, trayVersion!)
-                      : _documentContent(context, l10n, documentVersion!),
+                  ...isInstrument
+                      ? _instrumentContent(context, l10n, instrumentVersion!)
+                      : isTray
+                          ? _trayContent(context, l10n, trayVersion!)
+                          : _documentContent(context, l10n, documentVersion!),
                   if (authorId != null) ...[
                     const SizedBox(height: 20),
                     ListTile(
@@ -135,6 +150,51 @@ class PublicEntityDetailScreen extends StatelessWidget {
         Text(l10n.sterilizationObservationsLabel, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         Text(version.observations!, style: Theme.of(context).textTheme.bodyLarge),
+      ],
+    ];
+  }
+
+  List<Widget> _instrumentContent(BuildContext context, AppLocalizations l10n, PublicInstrumentVersion version) {
+    return [
+      if (version.photoPath != null) ...[
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.network(
+            PublicInstrumentService.instance.photoUrl(version.photoPath!),
+            width: double.infinity,
+            height: 220,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          l10n.publicInstrumentPhotoDisclaimer,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.outline),
+        ),
+        const SizedBox(height: 16),
+      ],
+      if (version.category != null)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Wrap(
+            spacing: 8,
+            children: [Chip(label: Text(version.category!.label(l10n)))],
+          ),
+        ),
+      if (version.description != null && version.description!.isNotEmpty) ...[
+        Text(version.description!, style: Theme.of(context).textTheme.bodyLarge),
+        const SizedBox(height: 16),
+      ],
+      if (version.useText != null && version.useText!.isNotEmpty) ...[
+        Text(l10n.customInstrumentUseLabel, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 6),
+        Text(version.useText!, style: Theme.of(context).textTheme.bodyLarge),
+        const SizedBox(height: 16),
+      ],
+      if (version.tip != null && version.tip!.isNotEmpty) ...[
+        Text(l10n.customInstrumentTipLabel, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 6),
+        Text(version.tip!, style: Theme.of(context).textTheme.bodyLarge),
       ],
     ];
   }
