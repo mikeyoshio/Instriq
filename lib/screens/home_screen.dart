@@ -14,6 +14,7 @@ import '../models/group_document.dart';
 import '../models/instrument.dart';
 import '../models/instrument_sterilization.dart';
 import '../models/manufacturer.dart';
+import '../models/public_instrument.dart';
 import '../models/surgeon.dart';
 import '../models/tag.dart';
 import '../models/tray.dart';
@@ -26,6 +27,7 @@ import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/manufacturer_service.dart';
 import '../services/profile_service.dart';
+import '../services/public_instrument_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/sterilization_service.dart';
@@ -47,6 +49,7 @@ import 'instrument_detail_screen.dart';
 import 'learn_screen.dart';
 import 'manufacturer_detail_screen.dart';
 import 'progress_screen.dart';
+import 'public_entity_detail_screen.dart';
 import 'surgeon_detail_screen.dart';
 import 'suture_catalog_screen.dart';
 import 'tag_detail_screen.dart';
@@ -102,6 +105,7 @@ class _SearchResults {
   final List<GroupDocument> protocols;
   final List<Tray> trays;
   final List<CustomInstrument> customInstruments;
+  final List<PublicInstrument> publicInstruments;
   final List<Manufacturer> manufacturers;
   final List<Surgeon> surgeons;
   final List<Tag> tags;
@@ -112,6 +116,7 @@ class _SearchResults {
     required this.protocols,
     required this.trays,
     required this.customInstruments,
+    required this.publicInstruments,
     required this.manufacturers,
     required this.surgeons,
     required this.tags,
@@ -123,6 +128,7 @@ class _SearchResults {
       protocols.isEmpty &&
       trays.isEmpty &&
       customInstruments.isEmpty &&
+      publicInstruments.isEmpty &&
       manufacturers.isEmpty &&
       surgeons.isEmpty &&
       tags.isEmpty;
@@ -157,6 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<GroupDocument> _protocols = [];
   List<Tray> _trays = [];
   List<CustomInstrument> _customInstruments = [];
+  List<PublicInstrument> _publicInstruments = [];
   List<Tag> _tags = [];
   Map<String, String> _specialtyLabelById = {};
   Map<String, List<SterilizationMethod>> _catalogSterilizationMethods = {};
@@ -207,6 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var tags = <Tag>[];
     var specialtyLabelById = <String, String>{};
     var catalogSterilizationMethods = <String, List<SterilizationMethod>>{};
+    var publicInstruments = <PublicInstrument>[];
     try {
       await ManufacturerService.instance.fetchAll();
     } catch (_) {
@@ -228,11 +236,19 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (_) {
       // Metadato accesorio de búsqueda: no bloquea el resto de Inicio si falla.
     }
+    try {
+      // Instrumental de la Biblioteca Pública: contenido comunitario, igual
+      // de disponible en modo invitado que el resto de metadatos de aquí.
+      publicInstruments = await PublicInstrumentService.instance.fetchPublished();
+    } catch (_) {
+      // Metadato accesorio de búsqueda: no bloquea el resto de Inicio si falla.
+    }
     if (mounted) {
       setState(() {
         _tags = tags;
         _specialtyLabelById = specialtyLabelById;
         _catalogSterilizationMethods = catalogSterilizationMethods;
+        _publicInstruments = publicInstruments;
       });
     }
 
@@ -408,6 +424,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _refreshAfterReturn();
   }
 
+  Future<void> _openPublicInstrument(PublicInstrument instrument) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.instrument(instrument: instrument)),
+    );
+  }
+
   Future<void> _openManufacturer(Manufacturer manufacturer) async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => ManufacturerDetailScreen(manufacturer: manufacturer)),
@@ -437,6 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final protocols = _protocols.where((d) => _matchesGroupDocument(d, q)).toList();
     final trays = _trays.where((t) => _matchesTray(t, q)).toList();
     final customInstruments = _customInstruments.where((i) => _matchesCustomInstrument(i, q)).toList();
+    final publicInstruments = _publicInstruments.where((i) => _matchesPublicInstrument(i, q)).toList();
     final manufacturers = ManufacturerService.instance.searchByName(q);
     final surgeons = SurgeonService.instance.searchByName(q);
     final tags = _tags.where((t) => fuzzyContains(t.name, q)).toList();
@@ -446,6 +469,7 @@ class _HomeScreenState extends State<HomeScreen> {
       protocols: protocols,
       trays: trays,
       customInstruments: customInstruments,
+      publicInstruments: publicInstruments,
       manufacturers: manufacturers,
       surgeons: surgeons,
       tags: tags,
@@ -509,6 +533,13 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _matchesCustomInstrument(CustomInstrument instrument, String query) {
     return fuzzyContains(instrument.name, query) ||
         fuzzyContains(_resolvedSpecialtyLabel(instrument.specialtyId, instrument.specialty), query);
+  }
+
+  bool _matchesPublicInstrument(PublicInstrument instrument, String query) {
+    final published = instrument.publishedVersion;
+    if (published == null) return false;
+    return fuzzyContains(published.name ?? '', query) ||
+        fuzzyContains(_resolvedSpecialtyLabel(published.specialtyId, null), query);
   }
 
   String _timeAgo(AppLocalizations l10n, DateTime dateTime) {
@@ -666,6 +697,19 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icons.precision_manufacturing_outlined,
               title: instrument.name,
               onTap: () => _openCustomInstrument(instrument),
+            ),
+            const SizedBox(height: InstriqSpacing.sm),
+          ],
+          const SizedBox(height: InstriqSpacing.md),
+        ],
+        if (results.publicInstruments.isNotEmpty) ...[
+          InstriqSectionHeader(l10n.publicLibraryTitle),
+          const SizedBox(height: InstriqSpacing.sm),
+          for (final instrument in results.publicInstruments) ...[
+            InstriqListItem(
+              icon: Icons.precision_manufacturing_outlined,
+              title: instrument.publishedVersion?.name ?? l10n.unpublished,
+              onTap: () => _openPublicInstrument(instrument),
             ),
             const SizedBox(height: InstriqSpacing.sm),
           ],
