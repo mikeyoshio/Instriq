@@ -26,6 +26,18 @@ abstract class PublicVersionedContentService<TVersion> {
     return (rows as List).map((r) => versionFromRow((r as Map).cast<String, dynamic>())).toList();
   }
 
+  /// Totes les meves versions, sigui quin sigui l'estat -- a diferencia de
+  /// `fetchReviewQueue` (nomes `in_review`, per a qui revisa) o de
+  /// `fetchPublished` (nomes publicat, per a tothom), aquesta és la que
+  /// permet a qui proposa retrobar el seu propi esborrany/candidatura
+  /// rebutjada (que torna a `draft`, ver `reject_public_*_version`) per
+  /// seguir editant-la.
+  Future<List<TVersion>> fetchMine(String userId) async {
+    final rows =
+        await client.from(versionTable).select().eq('author_id', userId).order('created_at', ascending: false);
+    return (rows as List).map((r) => versionFromRow((r as Map).cast<String, dynamic>())).toList();
+  }
+
   Future<void> submitForReview(String versionId) async {
     await client.rpc(submitRpcName, params: {'p_version_id': versionId});
   }
