@@ -145,6 +145,10 @@ flutter run -d chrome        # navegador
 
 Backlog completo (pendientes, EPICs de producto y revisión arquitectónica previa a cada uno): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
 
+## Patrocina
+
+Instriq es gratuito y sin inversores, mantenido fuera de horas. Si te resulta útil, puedes patrocinar el proyecto en [GitHub Sponsors](https://github.com/sponsors/mikeyoshio) — cualquier aportación ayuda a cubrir el coste del servidor y el tiempo dedicado.
+
 ## Contacto
 
 [hola@instriq.org](mailto:hola@instriq.org)
