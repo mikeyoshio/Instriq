@@ -217,22 +217,25 @@
   @media (max-width: 900px) { .deck-card { width: 260px; height: 380px; padding: 22px; } }
   @media (prefers-reduced-motion: reduce) { .deck-card { transition: none; } }
 
-  /* Carrusel "shot": mateix mecanisme que el deck del hero (targetes en pila,
-     la del darrere desenfocada i mig transparent), aplicat a captures reals
-     en comptes de targetes de contingut sintètic. */
-  .shot-stage { position: relative; width: 100%; max-width: 640px; height: 500px; margin: 48px auto 0; }
+  /* Captures estàtiques: panell d'escriptori (ample) i Mode Quiròfan (mòbil,
+     estret i alt) l'una al costat de l'altra, cadascuna a la seva proporció
+     real -- la diferència de forma entre les dues targetes ja il·lustra
+     "s'adapta a on el fas servir" sense necessitat de cap animació. */
+  .shot-grid { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px; margin: 48px auto 0; max-width: 900px; }
   .shot-card {
-    position: absolute; top: 0; left: 50%; width: 480px;
     background: var(--surface); border: 1px solid var(--rule); border-radius: 20px;
     box-shadow: var(--shadow-lift); padding: 22px; text-align: center;
-    transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease;
-    will-change: transform, opacity;
   }
+  .shot-card.is-desktop { flex: 3 1 480px; max-width: 640px; }
+  .shot-card.is-mobile { flex: 1 1 220px; max-width: 260px; }
   .shot-card img { display: block; width: 100%; max-height: 320px; object-fit: contain; border-radius: 10px; margin: 0 auto; background: var(--paper-alt); }
   .shot-card figcaption { margin-top: 16px; font-size: 0.92rem; color: var(--ink-muted); line-height: 1.5; }
   .shot-card figcaption b { color: var(--ink); font-family: var(--display); }
-  @media (max-width: 720px) { .shot-stage { height: 460px; } .shot-card { width: 300px; padding: 18px; } .shot-card img { max-height: 300px; } }
-  @media (prefers-reduced-motion: reduce) { .shot-card { transition: none; } }
+  @media (max-width: 720px) {
+    .shot-grid { flex-direction: column; align-items: center; }
+    .shot-card.is-desktop, .shot-card.is-mobile { width: 100%; max-width: 340px; }
+    .shot-card img { max-height: 280px; }
+  }
 
   /* Timeline interactiu de novetats */
   .timeline { max-width: var(--measure); margin: 44px auto 0; text-align: left; }
@@ -503,12 +506,12 @@
     <span class="eyebrow" data-i18n="pantalles.eyebrow">S'adapta a on el fas servir</span>
     <h2 data-i18n="pantalles.h1">El mateix Instriq, diferent segons qui l'obre.</h2>
     <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="pantalles.lede">Dins de quirófano, una checklist a pantalla completa pensada per tocar-la amb guants. Al despatx, un panell per a qui coordina el grup sencer — no la mateixa pantalla estreta, ampliada.</p>
-    <div class="shot-stage" id="shotStage">
-      <figure class="shot-card">
+    <div class="shot-grid">
+      <figure class="shot-card is-desktop">
         <img src="screenshots/dashboard_pc.png" alt="Panell d'escriptori d'Instriq amb pendents d'aprovació, cua de revisió i incidències" loading="lazy">
         <figcaption data-i18n="pantalles.cap1"><b>Panell d'escriptori.</b> Per a qui coordina el grup: pendents d'aprovació, cua de revisió i incidències, d'un cop d'ull.</figcaption>
       </figure>
-      <figure class="shot-card">
+      <figure class="shot-card is-mobile">
         <img src="screenshots/modo_quirofano.png" alt="Mode Quiròfan: checklist de preparació d'una safata d'instrumental" loading="lazy">
         <figcaption data-i18n="pantalles.cap2"><b>Mode Quiròfan.</b> Checklist de preparació de safates a pantalla completa, pensada per usar-se amb guants.</figcaption>
       </figure>
@@ -735,35 +738,6 @@
     place();
     if (!reducedMotion) {
       setInterval(function () { active = (active + 1) % n; place(); }, 3800);
-    }
-  })();
-
-  // Carrusel "shot": mateix mecanisme que el deck de dalt, sobre captures
-  // reals en comptes de targetes de contingut sintètic.
-  (function () {
-    var stage = document.getElementById('shotStage');
-    if (!stage) return;
-    var cards = Array.prototype.slice.call(stage.querySelectorAll('.shot-card'));
-    var n = cards.length, active = 0;
-    function place() {
-      cards.forEach(function (card, i) {
-        var diff = i - active;
-        if (diff > n / 2) diff -= n;
-        if (diff < -n / 2) diff += n;
-        var abs = Math.abs(diff);
-        var x = diff * 78, scale = 1, opacity = 1, z = 10, blur = 0;
-        if (abs === 1) { scale = 0.86, opacity = 0.4, z = 5, blur = 2; }
-        else if (abs >= 2) { scale = 0.72, opacity = 0, z = 1, blur = 4; }
-        card.style.transform = 'translateX(-50%) translateX(' + x + '%) scale(' + scale + ')';
-        card.style.opacity = opacity;
-        card.style.filter = blur ? 'blur(' + blur + 'px)' : 'none';
-        card.style.zIndex = z;
-        card.setAttribute('aria-hidden', i === active ? 'false' : 'true');
-      });
-    }
-    place();
-    if (!reducedMotion) {
-      setInterval(function () { active = (active + 1) % n; place(); }, 4200);
     }
   })();
 
