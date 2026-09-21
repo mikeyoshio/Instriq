@@ -121,6 +121,8 @@
   .nav-links { display: flex; gap: 20px; align-items: center; }
   .nav-links a.plain { color: var(--ink-muted); text-decoration: none; font-size: 0.95rem; white-space: nowrap; transition: color 0.15s ease; }
   .nav-links a.plain:hover { color: var(--accent); }
+  .nav-links a.plain.nav-collab { color: var(--accent); font-weight: 700; }
+  .nav-links a.plain.nav-collab:hover { opacity: 0.8; }
   .lang-switch { display: flex; gap: 6px; font-family: var(--display); font-size: 0.78rem; }
   .lang-switch button { background: none; border: none; color: var(--ink-muted); cursor: pointer; padding: 4px 6px; font-family: var(--display); font-size: 0.78rem; border-radius: 4px; }
   .lang-switch button.active { color: var(--ink); font-weight: 700; background: var(--paper-alt); }
@@ -133,6 +135,7 @@
   .btn-ghost:hover { border-color: var(--ink); }
   .section { padding: 100px 0; }
   .section.band { background: var(--paper-alt); }
+  .section.spotlight { background: var(--accent-soft); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
   @media (max-width: 720px) { .section { padding: 64px 0; } }
   .eyebrow { display: inline-block; font-family: var(--display); font-size: 0.8rem; font-weight: 600; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
   h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; letter-spacing: -0.01em; }
@@ -147,6 +150,8 @@
   .hero-copy h1 { max-width: 600px; }
   .hero-copy .lede { max-width: 520px; margin-left: 0; margin-right: 0; }
   .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
+  .hero-collab-link { display: inline-block; margin-top: 16px; font-family: var(--display); font-size: 0.85rem; font-weight: 700; color: var(--accent); text-decoration: none; }
+  .hero-collab-link:hover { text-decoration: underline; }
   .data-row { display: flex; gap: 48px; flex-wrap: wrap; margin-top: 48px; }
   .data-cell { text-align: left; }
   .data-cell .num { font-family: var(--display); font-size: 2.1rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -317,7 +322,7 @@
       <a class="plain" href="#mision" data-i18n="nav.mision">Missió</a>
       <a class="plain" href="#funciones" data-i18n="nav.funciones">Funcionalitats</a>
       <a class="plain" href="#organiza" data-i18n="nav.organiza">Organització</a>
-      <a class="plain" href="#colabora" data-i18n="nav.colabora">Col·labora</a>
+      <a class="plain nav-collab" href="#colabora" data-i18n="nav.colabora">Col·labora</a>
       <a class="plain" href="#transparencia" data-i18n="nav.transparencia">Transparència</a>
       <a class="plain" href="https://github.com/mikeyoshio/Instriq">GitHub</a>
       <div class="lang-switch" id="langSwitch">
@@ -341,6 +346,7 @@
         <a href="https://app.instriq.org" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
         <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
       </div>
+      <a href="#colabora" class="hero-collab-link" data-i18n="hero.cta3">Vols col·laborar-hi? →</a>
       <div class="hero-signals">
         <a href="privacidad.html" class="signal-chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6Z"/></svg>
@@ -544,7 +550,7 @@
   </div>
 </section>
 
-<section id="colabora" class="section reveal">
+<section id="colabora" class="section spotlight reveal">
   <div class="wrap center">
     <span class="eyebrow" data-i18n="colabora.eyebrow">Col·labora</span>
     <h2 data-i18n="colabora.h1">Instriq creix amb qui l'utilitza.</h2>
@@ -558,6 +564,7 @@
           <li data-i18n="colabora.c1l2">Proposa correccions o instrumental nou</li>
           <li data-i18n="colabora.c1l3">Digues quines guies necessites — ens ajuda a prioritzar</li>
         </ul>
+        <a href="https://app.instriq.org" class="btn btn-ghost" style="margin-top: 12px;" data-i18n="colabora.c1cta">Obre l'app →</a>
       </div>
       <div class="card">
         <h3 data-i18n="colabora.c2t">Ets desenvolupador/a</h3>
@@ -751,7 +758,7 @@
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
       "hero.scope": "Conocimiento de equipo — instrumental, técnicas y protocolos. <strong>No almacena datos de pacientes ni sustituye la historia clínica.</strong>",
-      "hero.cta1": "Abrir la app →", "hero.cta2": "Ver el código en GitHub",
+      "hero.cta1": "Abrir la app →", "hero.cta2": "Ver el código en GitHub", "hero.cta3": "¿Quieres colaborar? →",
       "hero.trust1": "Sin datos de pacientes", "hero.trust2": "Auditoría y roles", "hero.trust3": "Sin conexión", "hero.trust4": "Código abierto · AGPL-3.0",
       "hero.note": "Sin licencias. Sin cuota de SaaS. Sin sorpresas en la factura — abierto, siempre.",
       "hero.stat1": "Instrumentos", "hero.stat2": "Especialidades", "hero.stat3": "Plataformas", "hero.stat4": "Equipos activos",
@@ -811,7 +818,7 @@
       "colabora.eyebrow": "Colabora", "colabora.h1": "Instriq crece con quien lo usa.",
       "colabora.lede": "Instriq lo impulsa un pequeño equipo inicial, pero su crecimiento depende de una red de profesionales sanitarios, docentes, investigadores y desarrolladores que colaboran de forma voluntaria y sin ánimo de lucro.",
       "colabora.c1t": "Eres profesional sanitario", "colabora.c1p": "Comparte el instrumental y las técnicas de tu equipo dentro de tu grupo, ayúdanos a revisar contenido del catálogo, o dinos qué protocolo o guía te falta.",
-      "colabora.c1l1": "Crea o únete al espacio de tu grupo desde la app", "colabora.c1l2": "Propón correcciones o instrumental nuevo", "colabora.c1l3": "Cuéntanos qué guías necesitas — nos ayuda a priorizar",
+      "colabora.c1l1": "Crea o únete al espacio de tu grupo desde la app", "colabora.c1l2": "Propón correcciones o instrumental nuevo", "colabora.c1l3": "Cuéntanos qué guías necesitas — nos ayuda a priorizar", "colabora.c1cta": "Abrir la app →",
       "colabora.c2t": "Eres desarrolladora/or", "colabora.c2p": "El código es público. Flutter (Android/iOS/Web) + Supabase. Empieza por el README del repo.",
       "colabora.c2l1": "Clona el repo y levanta el proyecto en minutos", "colabora.c2l2": "Revisa los issues abiertos en GitHub", "colabora.c2l3": "Propón mejoras vía pull request", "colabora.c2cta": "Ir al repositorio →", "colabora.c2star": "Dale una estrella al repositorio",
       "organiza.eyebrow": "Estructura", "organiza.h1": "Organiza tu grupo antes de empezar.",
@@ -847,7 +854,7 @@
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
       "hero.scope": "Team knowledge — instruments, techniques and protocols. <strong>Stores no patient data and does not replace the clinical record.</strong>",
-      "hero.cta1": "Open the app →", "hero.cta2": "View the code on GitHub",
+      "hero.cta1": "Open the app →", "hero.cta2": "View the code on GitHub", "hero.cta3": "Want to contribute? →",
       "hero.trust1": "No patient data", "hero.trust2": "Audit trail & roles", "hero.trust3": "Offline", "hero.trust4": "Open source · AGPL-3.0",
       "hero.note": "No licenses. No SaaS fee. No surprises on the bill — open, always.",
       "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Platforms", "hero.stat4": "Active teams",
@@ -907,7 +914,7 @@
       "colabora.eyebrow": "Contribute", "colabora.h1": "Instriq grows with the people who use it.",
       "colabora.lede": "Instriq is driven by a small initial team, but its growth depends on a network of healthcare professionals, educators, researchers and developers collaborating voluntarily and not-for-profit.",
       "colabora.c1t": "You're a healthcare professional", "colabora.c1p": "Share your team's instruments and techniques within your group, help us review catalog content, or tell us which protocol or guide is missing.",
-      "colabora.c1l1": "Create or join your group's space from the app", "colabora.c1l2": "Propose corrections or new instruments", "colabora.c1l3": "Tell us which guides you need — it helps us prioritize",
+      "colabora.c1l1": "Create or join your group's space from the app", "colabora.c1l2": "Propose corrections or new instruments", "colabora.c1l3": "Tell us which guides you need — it helps us prioritize", "colabora.c1cta": "Open the app →",
       "colabora.c2t": "You're a developer", "colabora.c2p": "The code is public. Flutter (Android/iOS/Web) + Supabase. Start with the repo's README.",
       "colabora.c2l1": "Clone the repo and get it running in minutes", "colabora.c2l2": "Check the open issues on GitHub", "colabora.c2l3": "Propose improvements via pull request", "colabora.c2cta": "Go to the repository →", "colabora.c2star": "Star the repository",
       "organiza.eyebrow": "Structure", "organiza.h1": "Organize your group before you start.",
