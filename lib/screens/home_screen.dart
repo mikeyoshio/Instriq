@@ -614,7 +614,25 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        // El panell d'escriptori substitueix per complet el cos per defecte,
+        // que és l'únic altre lloc des d'on s'arriba a "El meu progrés" --
+        // sense aquesta icona, qui té accés al panell (admin/approver) es
+        // queda sense cap camí per veure el seu propi progrés d'aprenentatge
+        // mentre estigui en vista d'escriptori. Trobat en una verificació en
+        // viu (2026-09-22).
+        actions: showDashboard
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.bar_chart),
+                  tooltip: l10n.myProgressTitle,
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ProgressScreen()),
+                  ),
+                ),
+              ]
+            : null,
+      ),
       body: SafeArea(
         child: showDashboard ? content : InstriqResponsiveContent(child: content),
       ),

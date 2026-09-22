@@ -3,6 +3,27 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/instruments_data.dart';
 import '../models/instrument_sterilization.dart';
 
+/// Recuento de la cola de métodos/fichas técnicas que SÍ es accionable desde
+/// `ReviewQueueScreen` (`organization_id` no nulo) -- las filas de catálogo
+/// global (`organization_id` nulo) exigen Editorial Board y solo se ven/
+/// resuelven desde `GlobalCatalogReviewQueueScreen`. Sin este filtro, el
+/// recuento agregado de "Bústia de revisió" (`home_dashboard_panel.dart`,
+/// `review_inbox_screen.dart`) infla el número con propuestas que un admin
+/// de espacio corriente no puede ver ni actuar desde esa pantalla -- bug
+/// real encontrado en una pasada de verificación en vivo (2026-09-22): dos
+/// cambios de catálogo global quedaron sumando al contador sin ninguna fila
+/// visible en la cola, ni pista de por qué.
+Future<int> countOrgScopedSterilizationReviewItems(
+  List<SterilizationMethodVersion> methodQueue,
+  List<InstrumentTechnicalInfoVersion> infoQueue,
+) async {
+  final methodHeaders = await fetchMethodHeaders(methodQueue.map((v) => v.methodId).toSet().toList());
+  final infoHeaders = await fetchTechnicalInfoHeaders(infoQueue.map((v) => v.infoId).toSet().toList());
+  final methodCount = methodQueue.where((v) => methodHeaders[v.methodId]?.organizationId != null).length;
+  final infoCount = infoQueue.where((v) => infoHeaders[v.infoId]?.organizationId != null).length;
+  return methodCount + infoCount;
+}
+
 /// Datos mínimos de la cabecera (`instrument_sterilization_methods`/
 /// `instrument_technical_info`) que las colas de revisión de EPIC 3 · Bloc B
 /// necesitan y que la propia versión pendiente no lleva: a qué

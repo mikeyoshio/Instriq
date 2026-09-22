@@ -26,6 +26,7 @@ import 'group_document_review_queue_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
 import 'review_inbox_screen.dart';
+import 'sterilization_review_queue_support.dart';
 import 'sync_issues_screen.dart';
 
 /// Contenido de la rama "Inici" en pantallas de clase PC (ver
@@ -123,17 +124,7 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
     final canSeeGroupContent =
         ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace;
     final results = await Future.wait([
-      if (canSeeGroupContent)
-        Future.wait([
-          GroupDocumentService.instance.fetchReviewQueue(),
-          TrayService.instance.fetchReviewQueue(),
-          PreferenceCardService.instance.fetchReviewQueue(),
-          SterilizationService.instance.fetchMethodReviewQueue(),
-          SterilizationService.instance.fetchTechnicalInfoReviewQueue(),
-          CustomInstrumentService.instance.fetchReviewQueue(),
-        ]).then((lists) => lists.fold<int>(0, (sum, l) => sum + l.length))
-      else
-        Future.value(null),
+      if (canSeeGroupContent) _groupContentReviewCount() else Future.value(null),
       if (_canSeeCommunityQueues)
         ContributorService.instance.fetchPendingApplications().then((l) => l.length)
       else
@@ -152,6 +143,24 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
       contributorApplications: results[1],
       publicLibrary: results[2],
     );
+  }
+
+  /// Métodes/fitxes tècniques de catàleg global (`organization_id` nul)
+  /// s'exclouen d'aquest recompte -- exigeixen Editorial Board i només es
+  /// veuen/resolen a `GlobalCatalogReviewQueueScreen`, no aquí. Sense aquest
+  /// filtre, el número inflava amb propostes que un admin d'espai corrent
+  /// no pot ni veure ni actuar des d'aquesta safata.
+  Future<int> _groupContentReviewCount() async {
+    final nonSterilization = await Future.wait([
+      GroupDocumentService.instance.fetchReviewQueue(),
+      TrayService.instance.fetchReviewQueue(),
+      PreferenceCardService.instance.fetchReviewQueue(),
+      CustomInstrumentService.instance.fetchReviewQueue(),
+    ]).then((lists) => lists.fold<int>(0, (sum, l) => sum + l.length));
+    final methodQueue = await SterilizationService.instance.fetchMethodReviewQueue();
+    final infoQueue = await SterilizationService.instance.fetchTechnicalInfoReviewQueue();
+    final sterilizationCount = await countOrgScopedSterilizationReviewItems(methodQueue, infoQueue);
+    return nonSterilization + sterilizationCount;
   }
 
   Future<void> _open(Widget screen) async {
