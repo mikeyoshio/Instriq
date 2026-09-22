@@ -122,7 +122,7 @@ class _CustomInstrumentsScreenState extends State<CustomInstrumentsScreen> {
                       return Card(
                         child: ListTile(
                           leading: const CircleAvatar(child: Icon(Icons.build_circle_outlined)),
-                          title: Text(instrument.name),
+                          title: Text(instrument.publishedVersion?.name ?? l10n.unpublished),
                           subtitle: instrument.category != null ? Text(instrument.category!) : null,
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () async {

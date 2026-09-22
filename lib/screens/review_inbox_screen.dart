@@ -18,6 +18,7 @@ import '../services/tray_service.dart';
 import 'contributor_review_queue_screen.dart';
 import 'group_document_review_queue_screen.dart';
 import 'public_library_review_queue_screen.dart';
+import 'sterilization_review_queue_support.dart';
 
 class _InboxCounts {
   final int? groupContent;
@@ -47,17 +48,7 @@ class ReviewInboxScreen extends StatelessWidget {
 
   Future<_InboxCounts> _load() async {
     final results = await Future.wait([
-      if (_canSeeGroupContent)
-        Future.wait([
-          GroupDocumentService.instance.fetchReviewQueue(),
-          TrayService.instance.fetchReviewQueue(),
-          PreferenceCardService.instance.fetchReviewQueue(),
-          SterilizationService.instance.fetchMethodReviewQueue(),
-          SterilizationService.instance.fetchTechnicalInfoReviewQueue(),
-          CustomInstrumentService.instance.fetchReviewQueue(),
-        ]).then((lists) => lists.fold<int>(0, (sum, l) => sum + l.length))
-      else
-        Future.value(null),
+      if (_canSeeGroupContent) _groupContentReviewCount() else Future.value(null),
       if (_canSeeCommunityQueues)
         ContributorService.instance.fetchPendingApplications().then((l) => l.length)
       else
@@ -76,6 +67,24 @@ class ReviewInboxScreen extends StatelessWidget {
       contributorApplications: results[1],
       publicLibrary: results[2],
     );
+  }
+
+  /// Métodes/fitxes tècniques de catàleg global (`organization_id` nul)
+  /// s'exclouen d'aquest recompte -- exigeixen Editorial Board i només es
+  /// veuen/resolen a `GlobalCatalogReviewQueueScreen`, no aquí. Sense aquest
+  /// filtre, el número inflava amb propostes que un admin d'espai corrent
+  /// no pot ni veure ni actuar des d'aquesta safata.
+  Future<int> _groupContentReviewCount() async {
+    final nonSterilization = await Future.wait([
+      GroupDocumentService.instance.fetchReviewQueue(),
+      TrayService.instance.fetchReviewQueue(),
+      PreferenceCardService.instance.fetchReviewQueue(),
+      CustomInstrumentService.instance.fetchReviewQueue(),
+    ]).then((lists) => lists.fold<int>(0, (sum, l) => sum + l.length));
+    final methodQueue = await SterilizationService.instance.fetchMethodReviewQueue();
+    final infoQueue = await SterilizationService.instance.fetchTechnicalInfoReviewQueue();
+    final sterilizationCount = await countOrgScopedSterilizationReviewItems(methodQueue, infoQueue);
+    return nonSterilization + sterilizationCount;
   }
 
   @override
