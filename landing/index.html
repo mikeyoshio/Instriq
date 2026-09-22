@@ -150,8 +150,6 @@
   .hero-copy h1 { max-width: 600px; }
   .hero-copy .lede { max-width: 520px; margin-left: 0; margin-right: 0; }
   .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
-  .hero-collab-link { display: inline-block; margin-top: 16px; font-family: var(--display); font-size: 0.85rem; font-weight: 700; color: var(--accent); text-decoration: none; }
-  .hero-collab-link:hover { text-decoration: underline; }
   .data-row { display: flex; gap: 48px; flex-wrap: wrap; margin-top: 48px; }
   .data-cell { text-align: left; }
   .data-cell .num { font-family: var(--display); font-size: 2.1rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -284,6 +282,9 @@
   .license-card { background: var(--surface); border-radius: 12px; padding: 20px 22px; display: flex; justify-content: space-between; align-items: center; gap: 12px; box-shadow: var(--shadow-soft); }
   .license-card .k { color: var(--ink-muted); font-size: 0.95rem; }
   .license-card .v { font-family: var(--display); font-weight: 700; color: var(--ink); text-align: right; }
+  .notice { margin-top: 14px; padding: 12px 14px; background: var(--paper-alt); border-radius: 10px; }
+  .notice .tag { display: inline-block; font-family: var(--display); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .notice p { margin: 0; font-size: 0.88rem; color: var(--ink-muted); }
   footer.site { padding: 56px 0 36px; border-top: 1px solid var(--rule); }
   footer.site .cols { display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; }
   footer.site .col h4 { font-family: var(--display); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); margin: 0 0 12px; font-weight: 700; }
@@ -346,7 +347,6 @@
         <a href="https://app.instriq.org" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
         <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
       </div>
-      <a href="#colabora" class="hero-collab-link" data-i18n="hero.cta3">Vols col·laborar-hi? →</a>
       <div class="hero-signals">
         <a href="privacidad.html" class="signal-chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6Z"/></svg>
@@ -457,7 +457,7 @@
       </div>
       <div class="card">
         <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7-10.5-7-10.5-7Z"/><circle cx="12" cy="12" r="2.8"/></svg></span>
-        <h3 data-i18n="valores.c2t">Transparència</h3><p data-i18n="valores.c2p">Codi obert, decisions públiques i, en el futur, comptes clars de com s'utilitza cada donació.</p>
+        <h3 data-i18n="valores.c2t">Transparència</h3><p data-i18n="valores.c2p">Codi obert, decisions públiques i, més endavant, comptes clars de com es reparteix cada donació.</p>
       </div>
       <div class="card">
         <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V21"/><circle cx="9.5" cy="7.5" r="3.5"/><path d="M22 21v-1.5a4 4 0 0 0-3-3.87"/><path d="M15.5 3.63a4 4 0 0 1 0 7.75"/></svg></span>
@@ -511,7 +511,7 @@
   <div class="wrap center">
     <span class="eyebrow" data-i18n="pantalles.eyebrow">S'adapta a on el fas servir</span>
     <h2 data-i18n="pantalles.h1">El mateix Instriq, diferent segons qui l'obre.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="pantalles.lede">Dins de quirófano, una checklist a pantalla completa pensada per tocar-la amb guants. Al despatx, un panell per a qui coordina el grup sencer — no la mateixa pantalla estreta, ampliada.</p>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="pantalles.lede">Dins del quiròfan, una checklist a pantalla completa pensada per tocar-la amb guants. Al despatx, un panell per a qui coordina el grup sencer — no la mateixa pantalla estreta, ampliada.</p>
     <div class="shot-grid">
       <figure class="shot-card is-desktop">
         <img src="screenshots/dashboard_pc.png" alt="Panell d'escriptori d'Instriq amb pendents d'aprovació, cua de revisió i incidències" loading="lazy">
@@ -653,10 +653,10 @@
       </div>
       <div class="card">
         <h3 data-i18n="donaciones.eyebrow">Donacions</h3>
-        <p data-i18n="donaciones.p1">A llarg termini habilitarem donacions completament transparents, amb la destinació de cada aportació publicada: infraestructura, noves funcionalitats, i suport a projectes d'investigació mèdica i biomèdica.</p>
+        <p data-i18n="donaciones.p1">Ja pots fer una donació a través de <a href="https://github.com/sponsors/mikeyoshio">GitHub Sponsors</a> (secció Col·labora, més amunt) per ajudar a cobrir infraestructura i el temps dedicat al projecte.</p>
         <div class="notice">
-          <span class="tag" data-i18n="donaciones.proxTag">Properament</span>
-          <p data-i18n="donaciones.prox">Encara no hi ha un sistema de donacions actiu. Quan n'hi hagi, la distribució de fons serà pública.</p>
+          <span class="tag" data-i18n="donaciones.proxTag">Objectiu</span>
+          <p data-i18n="donaciones.prox">Encara no hi ha un registre públic de com es reparteixen els fons. El publicarem quan hi hagi prou volum perquè tingui sentit.</p>
         </div>
       </div>
     </div>
@@ -767,7 +767,7 @@
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
       "hero.scope": "Conocimiento de equipo — instrumental, técnicas y protocolos. <strong>No almacena datos de pacientes ni sustituye la historia clínica.</strong>",
-      "hero.cta1": "Abrir la app →", "hero.cta2": "Ver el código en GitHub", "hero.cta3": "¿Quieres colaborar? →",
+      "hero.cta1": "Abrir la app →", "hero.cta2": "Ver el código en GitHub",
       "hero.trust1": "Sin datos de pacientes", "hero.trust2": "Auditoría y roles", "hero.trust3": "Sin conexión", "hero.trust4": "Código abierto · AGPL-3.0",
       "hero.note": "Sin licencias. Sin cuota de SaaS. Sin sorpresas en la factura — abierto, siempre.",
       "hero.stat1": "Instrumentos", "hero.stat2": "Especialidades", "hero.stat3": "Plataformas", "hero.stat4": "Equipos activos",
@@ -791,7 +791,7 @@
       "mision.p2": "A largo plazo, queremos que sea la plataforma de referencia del bloque quirúrgico: el lugar donde el conocimiento compartido y la tecnología abierta ayuden a mejorar la formación, la seguridad del paciente y la práctica clínica en hospitales de todo el mundo.",
       "valores.lede": "Cada aportación construye una base de conocimiento más completa y revisada para toda la comunidad — por eso esta es la fuerza de Instriq.",
       "valores.c1t": "Acceso libre", "valores.c1p": "Sin cuota mensual ni precio por usuario, a diferencia de la mayoría de herramientas del sector. El catálogo y el aprendizaje básico no requieren ni cuenta: nadie se queda fuera por no tener presupuesto.",
-      "valores.c2t": "Transparencia", "valores.c2p": "Código abierto, decisiones públicas y, a futuro, cuentas claras de cómo se usa cada donación.",
+      "valores.c2t": "Transparencia", "valores.c2p": "Código abierto, decisiones públicas y, más adelante, cuentas claras de cómo se reparte cada donación.",
       "valores.c3t": "Colaboración real", "valores.c3p": "Construido con profesionales sanitarios y desarrolladores voluntarios, no por una empresa cerrada.",
       "valores.c4t": "Estándares abiertos", "valores.c4p": "Buscamos alinearnos con estándares reconocidos del sector (HL7, FHIR, DICOM) según el proyecto lo necesite.",
       "hoy.eyebrow": "Disponible hoy", "hoy.h1": "Sin cuenta, sin fricción.",
@@ -812,7 +812,7 @@
       "funciones.c8t": "Biblioteca Pública", "funciones.c8p": "Contenido abierto a toda la comunidad, revisado y aprobado por un consejo editorial — nunca una autoridad clínica, siempre una referencia de partida.",
       "funciones.c9t": "Auditoría y privacidad", "funciones.c9p": "Registro de quién ha hecho qué y cuándo en acciones sensibles. Exporta o elimina tus datos personales cuando quieras (GDPR).",
       "pantalles.eyebrow": "Se adapta a dónde lo usas", "pantalles.h1": "El mismo Instriq, distinto según quién lo abre.",
-      "pantalles.lede": "Dentro de quirófano, una checklist a pantalla completa pensada para tocarla con guantes. En el despacho, un panel para quien coordina el grupo entero — no la misma pantalla estrecha, ampliada.",
+      "pantalles.lede": "Dentro del quirófano, una checklist a pantalla completa pensada para tocarla con guantes. En el despacho, un panel para quien coordina el grupo entero — no la misma pantalla estrecha, ampliada.",
       "pantalles.cap1": "<b>Panel de escritorio.</b> Para quien coordina el grupo: pendientes de aprobación, cola de revisión e incidencias, de un vistazo.",
       "pantalles.cap2": "<b>Modo Quirófano.</b> Checklist de preparación de bandejas a pantalla completa, pensada para usarse con guantes.",
       "quien.eyebrow": "Para quién es", "quien.h1": "Un grupo puede ser lo que necesites.",
@@ -841,16 +841,16 @@
       "organiza.criterion": "Organiza los espacios por <strong>especialidad o servicio</strong>, no por cada técnica individual. ✓ \"Traumatología\", \"Quirófano 3\". ✗ Un espacio por cada protocolo.",
       "equipo.eyebrow": "Equipo", "equipo.h1": "Un equipo pequeño, con vocación de comunidad.",
       "equipo.p1": "Instriq lo impulsa un pequeño equipo inicial, pero su crecimiento depende de una red de profesionales sanitarios, docentes, investigadores y desarrolladores que colaboran de forma voluntaria y sin ánimo de lucro. Si quieres formar parte, escríbenos.",
-      "analitica.eyebrow": "Analítica", "analitica.h1": "Datos para priorizar, sin vigilar a nadie.",
+      "analitica.eyebrow": "Analítica",
       "analitica.p1": "Cuando haya suficiente actividad, publicaremos aquí de forma agregada y anónima: el instrumental más consultado, las especialidades con más actividad y las guías que la comunidad más pide — nunca datos individuales de una persona o un grupo concretos.",
       "analitica.proxTag": "Próximamente", "analitica.prox": "Instriq acaba de empezar — todavía no hay datos de uso que mostrar. Sé de las primeras personas en construir esta comunidad.",
       "transparencia.eyebrow": "Transparencia", "transparencia.h1": "Abierto también en las condiciones.",
       "transparencia.k1": "Código", "transparencia.k2": "Documentación", "transparencia.k3": "Esquema de datos", "transparencia.v3": "Público", "transparencia.k4": "Estándares",
       "transparencia.p1": "El nombre y la marca \"Instriq\" quedan reservados para proteger la identidad del proyecto y evitar usos que confundan a la comunidad — el código en sí es libre bajo AGPL-3.0.",
       "transparencia.p2": "Ningún contrato te ata a nosotros: si alguna vez el proyecto se detiene, el código es tuyo y puedes seguir ejecutándolo tú mismo o encargárselo a quien quieras.",
-      "donaciones.eyebrow": "Donaciones", "donaciones.h1": "Un sistema de financiación transparente.",
-      "donaciones.p1": "A largo plazo habilitaremos donaciones completamente transparentes, con el destino de cada aportación publicado: infraestructura, nuevas funcionalidades, y apoyo a proyectos de investigación médica y biomédica.",
-      "donaciones.proxTag": "Próximamente", "donaciones.prox": "Todavía no hay un sistema de donaciones activo. Cuando lo haya, la distribución de fondos será pública.",
+      "donaciones.eyebrow": "Donaciones",
+      "donaciones.p1": "Ya puedes hacer una donación a través de <a href=\"https://github.com/sponsors/mikeyoshio\">GitHub Sponsors</a> (sección Colabora, más arriba) para ayudar a cubrir infraestructura y el tiempo dedicado al proyecto.",
+      "donaciones.proxTag": "Objetivo", "donaciones.prox": "Todavía no hay un registro público de cómo se reparten los fondos. Lo publicaremos cuando haya volumen suficiente para que tenga sentido.",
       "footer.app": "Abrir la app", "footer.help": "Centro de ayuda", "footer.h1": "Proyecto", "footer.l1": "Misión y visión", "footer.l2": "Cómo colaborar", "footer.l3": "Licencias", "footer.l6": "Sugerencias",
       "footer.h2": "Legal", "footer.l4": "Política de privacidad", "footer.l5": "Licencia (AGPL-3.0)",
       "footer.h3": "Contacto",
@@ -865,7 +865,7 @@
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
       "hero.scope": "Team knowledge — instruments, techniques and protocols. <strong>Stores no patient data and does not replace the clinical record.</strong>",
-      "hero.cta1": "Open the app →", "hero.cta2": "View the code on GitHub", "hero.cta3": "Want to contribute? →",
+      "hero.cta1": "Open the app →", "hero.cta2": "View the code on GitHub",
       "hero.trust1": "No patient data", "hero.trust2": "Audit trail & roles", "hero.trust3": "Offline", "hero.trust4": "Open source · AGPL-3.0",
       "hero.note": "No licenses. No SaaS fee. No surprises on the bill — open, always.",
       "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Platforms", "hero.stat4": "Active teams",
@@ -889,7 +889,7 @@
       "mision.p2": "In the long run, we want it to be the reference platform for the surgical block: the place where shared knowledge and open technology help improve training, patient safety and clinical practice in hospitals worldwide.",
       "valores.lede": "Every contribution builds a more complete, better-reviewed knowledge base for the whole community — that's Instriq's strength.",
       "valores.c1t": "Free access", "valores.c1p": "No monthly fee, no per-user pricing, unlike most tools in the sector. The catalog and basic learning don't even need an account: no one is left out for lack of budget.",
-      "valores.c2t": "Transparency", "valores.c2p": "Open source, public decisions and, eventually, clear accounts of how each donation is used.",
+      "valores.c2t": "Transparency", "valores.c2p": "Open source, public decisions and, further down the line, a clear account of how each donation is spent.",
       "valores.c3t": "Real collaboration", "valores.c3p": "Built with healthcare professionals and volunteer developers, not by a closed company.",
       "valores.c4t": "Open standards", "valores.c4p": "We aim to align with recognized industry standards (HL7, FHIR, DICOM) as the project needs.",
       "hoy.eyebrow": "Available today", "hoy.h1": "No account, no friction.",
@@ -939,16 +939,16 @@
       "organiza.criterion": "Organize workspaces by <strong>specialty or service</strong>, not by individual technique. ✓ \"Trauma\", \"OR 3\". ✗ One workspace per protocol.",
       "equipo.eyebrow": "Team", "equipo.h1": "A small team, with a community mindset.",
       "equipo.p1": "Instriq is driven by a small initial team, but its growth depends on a network of healthcare professionals, educators, researchers and developers collaborating voluntarily and not-for-profit. If you want to get involved, reach out.",
-      "analitica.eyebrow": "Analytics", "analitica.h1": "Data to prioritize, without watching anyone.",
+      "analitica.eyebrow": "Analytics",
       "analitica.p1": "Once there's enough activity, we'll publish here, aggregated and anonymous: the most consulted instruments, the most active specialties and the guides the community asks for most — never individual data about a specific person or group.",
       "analitica.proxTag": "Coming soon", "analitica.prox": "Instriq just started — there's no usage data to show yet. Be among the first people building this community.",
       "transparencia.eyebrow": "Transparency", "transparencia.h1": "Open in its terms too.",
       "transparencia.k1": "Code", "transparencia.k2": "Documentation", "transparencia.k3": "Database schema", "transparencia.v3": "Public", "transparencia.k4": "Reference standards",
       "transparencia.p1": "The \"Instriq\" name and brand are reserved to protect the project's identity and prevent uses that could confuse the community — the code itself is free under AGPL-3.0.",
       "transparencia.p2": "No contract ties you to us: if the project ever stops, the code is yours and you can keep running it yourself or hand it to whoever you want.",
-      "donaciones.eyebrow": "Donations", "donaciones.h1": "A transparent funding system.",
-      "donaciones.p1": "In the long run we'll enable fully transparent donations, with the destination of each contribution published: infrastructure, new features, and support for medical and biomedical research projects.",
-      "donaciones.proxTag": "Coming soon", "donaciones.prox": "There's no active donation system yet. Once there is, fund distribution will be public.",
+      "donaciones.eyebrow": "Donations",
+      "donaciones.p1": "You can already donate through <a href=\"https://github.com/sponsors/mikeyoshio\">GitHub Sponsors</a> (Collaborate section, above) to help cover infrastructure and the time put into the project.",
+      "donaciones.proxTag": "Goal", "donaciones.prox": "There's no public record yet of how funds are distributed. We'll publish one once there's enough volume for it to be meaningful.",
       "footer.app": "Open the app", "footer.help": "Help center", "footer.h1": "Project", "footer.l1": "Mission and vision", "footer.l2": "How to contribute", "footer.l3": "Licenses", "footer.l6": "Suggestions",
       "footer.h2": "Legal", "footer.l4": "Privacy policy", "footer.l5": "License (AGPL-3.0)",
       "footer.h3": "Contact",
