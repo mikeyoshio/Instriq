@@ -541,7 +541,7 @@
         <button class="timeline-btn" id="tlPrev" type="button" aria-label="Anterior">‹</button>
         <div class="timeline-track-wrap">
           <div class="timeline-rail"><div class="timeline-fill" id="tlFill"></div></div>
-          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="45" value="0" step="1" aria-label="Línia del temps d'Instriq">
+          <input class="timeline-slider" id="tlSlider" type="range" min="0" max="47" value="0" step="1" aria-label="Línia del temps d'Instriq">
         </div>
         <button class="timeline-btn" id="tlNext" type="button" aria-label="Següent">›</button>
       </div>
@@ -964,7 +964,7 @@
   CA_DEFAULTS['meta.title'] = document.title;
 
   // Timeline interactiu de novetats: 1 origen + 42 desplegaments + 3 previstos.
-  var TIMELINE_SHIPPED = 43; // origen (índex 0) + 42 novetats (índexs 1-42)
+  var TIMELINE_SHIPPED = 45; // origen (índex 0) + 44 novetats (índexs 1-44)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -1010,9 +1010,11 @@
       { badge: '#40', text: '<strong>Mode Quiròfan</strong> — checklist de preparació de safates a pantalla completa i fons fosc, pensada per fer-se servir amb guants dins de quiròfan.' },
       { badge: '#41', text: '<strong>Bústia de suggeriments pública</strong> — qualsevol persona pot proposar una millora des de la web i votar les que ja existeixen, sense necessitat de compte.' },
       { badge: '#42', text: '<strong>Panell d\'escriptori per a qui coordina</strong> — en pantalles grans, Inici mostra pendents d\'aprovació, cua de revisió, incidències i activitat del grup, per a qui gestiona un hospital o servei sencer.' },
+      { badge: '#43', text: '<strong>Instrumental a la Biblioteca Pública</strong> — un tercer tipus de contingut comunitari, a més de tècniques/protocols i safates, amb foto pujada per qui col·labora i visible també des del cercador global.' },
+      { badge: '#44', text: '<strong>Donacions via GitHub Sponsors</strong> — qualsevol persona pot ajudar a cobrir la infraestructura del projecte amb una aportació puntual o mensual, des de la secció Col·labora.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
-      { badge: 'Previst', future: true, text: 'Sistema de donacions transparent.' }
+      { badge: 'Previst', future: true, text: 'Registre públic de com es reparteixen les donacions.' }
     ],
     es: [
       { badge: 'Origen', text: '<strong>Nace Instriq</strong> — de la idea de una pareja: un ingeniero informático y una enfermera de quirófano, cansada de ver el conocimiento del bloque quirúrgico vivir en carpetas de papel desactualizadas.' },
@@ -1058,9 +1060,11 @@
       { badge: '#40', text: '<strong>Modo Quirófano</strong> — checklist de preparación de bandejas a pantalla completa y fondo oscuro, pensada para usarse con guantes dentro de quirófano.' },
       { badge: '#41', text: '<strong>Buzón de sugerencias público</strong> — cualquier persona puede proponer una mejora desde la web y votar las que ya existen, sin necesidad de cuenta.' },
       { badge: '#42', text: '<strong>Panel de escritorio para quien coordina</strong> — en pantallas grandes, Inicio muestra pendientes de aprobación, cola de revisión, incidencias y actividad del grupo, para quien gestiona un hospital o servicio entero.' },
+      { badge: '#43', text: '<strong>Instrumental en la Biblioteca Pública</strong> — un tercer tipo de contenido comunitario, además de técnicas/protocolos y bandejas, con foto subida por quien colabora y visible también desde el buscador global.' },
+      { badge: '#44', text: '<strong>Donaciones vía GitHub Sponsors</strong> — cualquier persona puede ayudar a cubrir la infraestructura del proyecto con una aportación puntual o mensual, desde la sección Colabora.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
-      { badge: 'Previsto', future: true, text: 'Sistema de donaciones transparente.' }
+      { badge: 'Previsto', future: true, text: 'Registro público de cómo se reparten las donaciones.' }
     ],
     en: [
       { badge: 'Origin', text: '<strong>Instriq is born</strong> — from the idea of a couple: a software engineer and an operating room nurse, tired of watching the surgical block\'s knowledge live in outdated paper folders.' },
@@ -1106,9 +1110,11 @@
       { badge: '#40', text: '<strong>OR Mode</strong> — a full-screen, dark tray-preparation checklist built to be used with gloves on, inside the operating room.' },
       { badge: '#41', text: '<strong>Public suggestions board</strong> — anyone can propose an improvement from the website and vote on existing ones, no account required.' },
       { badge: '#42', text: '<strong>Desktop panel for whoever coordinates</strong> — on wide screens, Home now shows pending approvals, the review queue, sync issues and group activity, for whoever manages a whole hospital or department.' },
+      { badge: '#43', text: '<strong>Instruments in the Public Library</strong> — a third type of community content, alongside techniques/protocols and trays, with a photo uploaded by the contributor and also visible from the global search.' },
+      { badge: '#44', text: '<strong>Donations via GitHub Sponsors</strong> — anyone can help cover the project\'s infrastructure with a one-off or monthly contribution, from the Collaborate section.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
-      { badge: 'Planned', future: true, text: 'A transparent donation system.' }
+      { badge: 'Planned', future: true, text: 'A public record of how donations are distributed.' }
     ]
   };
   var tlLang = 'ca';
