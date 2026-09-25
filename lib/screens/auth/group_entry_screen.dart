@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../models/org_type.dart';
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
 import 'sign_in_screen.dart';
@@ -38,6 +39,7 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
 
   bool _loading = false;
   String? _error;
+  OrgType _orgType = OrgType.hospital;
 
   @override
   void dispose() {
@@ -128,6 +130,7 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
       final hospital = await ProfileService.instance.registerHospital(
         name: name,
         displayName: _nameController.text.trim(),
+        orgType: _orgType.dbValue,
       );
       if (!mounted) return;
       await _showCreatedDialog(hospital.inviteCode);
@@ -309,6 +312,20 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(l10n.createGroupExplainer),
+        const SizedBox(height: 20),
+        Text(l10n.orgTypeQuestion, style: Theme.of(context).textTheme.labelLarge),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: OrgType.values.map((type) {
+            return ChoiceChip(
+              label: Text(type.label(l10n)),
+              selected: _orgType == type,
+              onSelected: (_) => setState(() => _orgType = type),
+            );
+          }).toList(),
+        ),
         const SizedBox(height: 20),
         TextField(
           controller: _nameController,

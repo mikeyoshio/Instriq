@@ -206,6 +206,7 @@ class ProfileService {
   Future<Hospital> registerHospital({
     required String name,
     String? displayName,
+    String orgType = 'hospital',
   }) async {
     final user = AuthService.instance.currentUser;
     if (user == null) throw StateError('No hay sesión activa.');
@@ -213,6 +214,7 @@ class ProfileService {
     final rows = await _client.rpc('register_hospital', params: {
       'p_name': name.trim(),
       if (displayName != null && displayName.isNotEmpty) 'p_display_name': displayName,
+      'p_org_type': orgType,
     }) as List<dynamic>;
 
     final hospital = Hospital.fromRow(rows.first as Map<String, dynamic>);

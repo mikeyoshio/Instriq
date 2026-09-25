@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import '../models/public_tray.dart';
+import '../models/specialty_entity.dart';
 import '../models/workspace.dart';
 import '../services/profile_service.dart';
+import '../services/public_tray_service.dart';
+import '../services/specialty_service.dart';
 import '../services/workspace_service.dart';
 import 'workspace_detail_screen.dart';
+import 'workspace_starter_pack_screen.dart';
 
 /// Espacios de trabajo del grupo (p. ej. Traumatología, Neurocirugía,
 /// Formación). Cada espacio agrupa sus propias técnicas, protocolos y
@@ -85,45 +90,89 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
   Future<void> _createWorkspace() async {
     final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
+    // Selector auxiliar del dialeg: si falla (p. ex. sense connexio), el
+    // dialeg segueix sent usable sense especialitat, mateix criteri que
+    // `public_entity_form_screen.dart`/`custom_instrument_form_screen.dart`.
+    List<SpecialtyEntity> specialties = [];
+    try {
+      specialties = await SpecialtyService.instance.fetchAll();
+    } catch (_) {}
+    String? specialtyId;
+    if (!mounted) return;
     final name = await showDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.workspaceNewTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.workspaceOrgHint,
-              style: Theme.of(ctx).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: controller,
-              autofocus: true,
-              decoration: InputDecoration(hintText: l10n.workspaceNameHint),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text(l10n.workspaceNewTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.workspaceOrgHint,
+                style: Theme.of(ctx).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: controller,
+                autofocus: true,
+                decoration: InputDecoration(hintText: l10n.workspaceNameHint),
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String?>(
+                initialValue: specialtyId,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  labelText: l10n.specialtyLabel,
+                  border: const OutlineInputBorder(),
+                ),
+                items: [
+                  DropdownMenuItem<String?>(value: null, child: Text(l10n.noSpecialty)),
+                  ...specialties.map((s) => DropdownMenuItem<String?>(value: s.id, child: Text(s.label))),
+                ],
+                onChanged: (value) => setDialogState(() => specialtyId = value),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+              child: Text(l10n.create),
             ),
           ],
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: Text(l10n.create),
-          ),
-        ],
       ),
     );
     if (name == null || name.isEmpty) return;
     try {
-      await WorkspaceService.instance.createWorkspace(name);
-      _load();
+      final workspace = await WorkspaceService.instance.createWorkspace(name, specialtyId: specialtyId);
+      await _load();
+      if (specialtyId != null) await _offerStarterPack(workspace, specialtyId!);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l10n.workspaceCreateError(e.toString()))));
       }
     }
+  }
+
+  /// Cap del wizard, no un error si `starter_sets` encara no té cap fila per
+  /// a aquesta especialitat -- normal mentre la Biblioteca Pública tingui
+  /// poc contingut curat; en aquest cas no es mostra cap pas addicional.
+  Future<void> _offerStarterPack(Workspace workspace, String specialtyId) async {
+    List<PublicTray> recommended;
+    try {
+      recommended = await PublicTrayService.instance.fetchStarterSet(specialtyId);
+    } catch (_) {
+      return;
+    }
+    if (recommended.isEmpty || !mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => WorkspaceStarterPackScreen(workspace: workspace, recommended: recommended),
+      ),
+    );
   }
 
   Widget _buildEmptyState(BuildContext context, AppLocalizations l10n) {

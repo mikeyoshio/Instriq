@@ -4,6 +4,7 @@ class Hospital {
   final String inviteCode;
   final String? cif;
   final String? ownerId;
+  final String orgType;
 
   const Hospital({
     required this.id,
@@ -11,6 +12,7 @@ class Hospital {
     required this.inviteCode,
     this.cif,
     this.ownerId,
+    this.orgType = 'hospital',
   });
 
   factory Hospital.fromRow(Map<String, dynamic> row) {
@@ -20,6 +22,7 @@ class Hospital {
       inviteCode: row['invite_code'] as String? ?? '',
       cif: row['cif'] as String?,
       ownerId: row['owner_id'] as String?,
+      orgType: row['org_type'] as String? ?? 'hospital',
     );
   }
 }
