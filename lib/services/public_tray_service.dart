@@ -37,6 +37,24 @@ class PublicTrayService extends PublicVersionedContentService<PublicTrayVersion>
     return PublicTray.fromRow(row);
   }
 
+  /// Safates recomanades per a una especialitat (wizard de creació d'espai,
+  /// `starter_sets` -- ver schema_v49_workspace_wizard.sql), ordenades pel
+  /// `sort_order` curat pel Consell Editorial. Llista buida si encara no hi
+  /// ha cap curació per a aquesta especialitat -- cas normal mentre la
+  /// Biblioteca Pública tingui poc contingut publicat, no un error.
+  Future<List<PublicTray>> fetchStarterSet(String specialtyId) async {
+    final rows = await client
+        .from('starter_sets')
+        .select('public_trays(*, published_version:public_tray_versions!published_version_id(*))')
+        .eq('specialty_id', specialtyId)
+        .order('sort_order');
+    return (rows as List)
+        .map((r) => (r as Map)['public_trays'] as Map<String, dynamic>?)
+        .where((t) => t != null)
+        .map((t) => PublicTray.fromRow(t!))
+        .toList();
+  }
+
   Future<List<PublicTrayVersion>> fetchVersionHistory(String trayId) async {
     final rows = await client
         .from('public_tray_versions')

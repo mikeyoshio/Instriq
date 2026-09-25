@@ -35,14 +35,19 @@ class WorkspaceService {
         (rows as List<dynamic>).map((r) => Workspace.fromRow(r as Map<String, dynamic>)).toList();
   }
 
-  Future<Workspace> createWorkspace(String name, {String? description}) async {
+  Future<Workspace> createWorkspace(String name, {String? description, String? specialtyId}) async {
     final organizationId = ProfileService.instance.organizationId;
     if (organizationId == null) {
       throw StateError('Tu usuario no pertenece a ningún grupo todavía.');
     }
     final row = await _client
         .from('workspaces')
-        .insert({'organization_id': organizationId, 'name': name, 'description': description})
+        .insert({
+          'organization_id': organizationId,
+          'name': name,
+          'description': description,
+          'specialty_id': specialtyId,
+        })
         .select()
         .single();
     final workspace = Workspace.fromRow(row);
@@ -62,6 +67,7 @@ class WorkspaceService {
         description: current.description,
         createdBy: current.createdBy,
         createdAt: current.createdAt,
+        specialtyId: current.specialtyId,
       );
     }
   }
