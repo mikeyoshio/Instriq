@@ -84,6 +84,7 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
 
   Future<void> _openExceptionSheet(_ItemDraft draft) async {
     final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
     bool present = draft.present;
     int qty = draft.actualQty;
     final noteController = TextEditingController(text: draft.note ?? '');
@@ -103,7 +104,7 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    draft.item.resolveName(_customInstruments),
+                    draft.item.resolveName(_customInstruments, languageCode: languageCode),
                     style: const TextStyle(
                       fontFamily: 'Manrope',
                       fontWeight: FontWeight.w800,
@@ -436,7 +437,8 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    draft.item.resolveName(_customInstruments),
+                    draft.item.resolveName(_customInstruments,
+                        languageCode: Localizations.localeOf(context).languageCode),
                     style: TextStyle(
                       fontFamily: 'Manrope',
                       fontWeight: FontWeight.w700,

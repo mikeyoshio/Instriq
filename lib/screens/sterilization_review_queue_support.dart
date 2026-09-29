@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../data/instruments_data.dart';
 import '../models/instrument_sterilization.dart';
+import '../services/locale_service.dart';
 
 /// Recuento de la cola de métodos/fichas técnicas que SÍ es accionable desde
 /// `ReviewQueueScreen` (`organization_id` no nulo) -- las filas de catálogo
@@ -122,7 +123,8 @@ Future<Map<String, String>> resolveInstrumentNames(Iterable<SterilizationHeaderI
     if (h.instrumentRefType == 'catalog') {
       for (final instrument in kInstruments) {
         if (instrument.id == h.instrumentRefId) {
-          names[h.instrumentRefId] = instrument.name;
+          names[h.instrumentRefId] =
+              instrument.name.forLanguageCode(LocaleService.instance.locale.value.languageCode);
           break;
         }
       }

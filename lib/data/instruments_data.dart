@@ -4,7 +4,7 @@ const List<Instrument> kInstruments = [
   // ---- CORTE ----
   Instrument(
     id: 'bisturi',
-    name: 'Bisturí (mango + hoja)',
+    name: LocalizedText(ca: 'Bisturí (mànec + fulla)', es: 'Bisturí (mango + hoja)', en: 'Scalpel (handle + blade)'),
     category: InstrumentCategory.corte,
     aliases: ['Mango de bisturí', 'Scalpel'],
     icon: 'cut',
@@ -32,7 +32,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'tijera-mayo',
-    name: 'Tijera de Mayo',
+    name: LocalizedText(ca: 'Tisora de Mayo', es: 'Tijera de Mayo', en: 'Mayo scissors'),
     category: InstrumentCategory.corte,
     aliases: ['Mayo scissors'],
     icon: 'cut',
@@ -60,7 +60,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'tijera-metzenbaum',
-    name: 'Tijera de Metzenbaum',
+    name: LocalizedText(ca: 'Tisora de Metzenbaum', es: 'Tijera de Metzenbaum', en: 'Metzenbaum scissors'),
     category: InstrumentCategory.corte,
     aliases: ['Metzenbaum scissors'],
     icon: 'cut',
@@ -88,7 +88,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'tijera-iris',
-    name: 'Tijera de Iris',
+    name: LocalizedText(ca: 'Tisora d\'Iris', es: 'Tijera de Iris', en: 'Iris scissors'),
     category: InstrumentCategory.corte,
     aliases: ['Iris scissors', 'Tijera de plástica'],
     icon: 'cut',
@@ -113,7 +113,7 @@ const List<Instrument> kInstruments = [
   // ---- DISECCIÓN / PRENSIÓN ----
   Instrument(
     id: 'pinza-diseccion-dientes',
-    name: 'Pinza de disección con dientes',
+    name: LocalizedText(ca: 'Pinça de dissecció amb dents', es: 'Pinza de disección con dientes', en: 'Toothed dissecting forceps'),
     category: InstrumentCategory.diseccion,
     aliases: ['Pinza de Adson con dientes'],
     icon: 'pinch',
@@ -141,7 +141,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-diseccion-sin-dientes',
-    name: 'Pinza de disección sin dientes',
+    name: LocalizedText(ca: 'Pinça de dissecció sense dents', es: 'Pinza de disección sin dientes', en: 'Non-toothed dissecting forceps'),
     category: InstrumentCategory.diseccion,
     aliases: ['Pinza de disección lisa'],
     icon: 'pinch',
@@ -164,7 +164,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-kocher',
-    name: 'Pinza de Kocher',
+    name: LocalizedText(ca: 'Pinça de Kocher', es: 'Pinza de Kocher', en: 'Kocher forceps'),
     category: InstrumentCategory.diseccion,
     aliases: ['Kocher forceps'],
     icon: 'pinch',
@@ -187,7 +187,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-kelly',
-    name: 'Pinza de Kelly',
+    name: LocalizedText(ca: 'Pinça de Kelly', es: 'Pinza de Kelly', en: 'Kelly forceps'),
     category: InstrumentCategory.diseccion,
     aliases: ['Kelly forceps', 'Pinza de Crile', 'Crile forceps'],
     icon: 'pinch',
@@ -210,7 +210,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-mosquito',
-    name: 'Pinza mosquito (Halstead)',
+    name: LocalizedText(ca: 'Pinça mosquit (Halstead)', es: 'Pinza mosquito (Halstead)', en: 'Mosquito forceps (Halstead)'),
     category: InstrumentCategory.diseccion,
     aliases: ['Mosquito forceps'],
     icon: 'pinch',
@@ -233,7 +233,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-allis',
-    name: 'Pinza de Allis',
+    name: LocalizedText(ca: 'Pinça d\'Allis', es: 'Pinza de Allis', en: 'Allis forceps'),
     category: InstrumentCategory.diseccion,
     aliases: ['Allis forceps'],
     icon: 'pinch',
@@ -256,7 +256,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-babcock',
-    name: 'Pinza de Babcock',
+    name: LocalizedText(ca: 'Pinça de Babcock', es: 'Pinza de Babcock', en: 'Babcock forceps'),
     category: InstrumentCategory.diseccion,
     aliases: ['Babcock forceps'],
     icon: 'pinch',
@@ -279,7 +279,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-foerster',
-    name: 'Pinza de anillos (Foerster)',
+    name: LocalizedText(ca: 'Pinça d\'anelles (Foerster)', es: 'Pinza de anillos (Foerster)', en: 'Ring forceps (Foerster)'),
     category: InstrumentCategory.diseccion,
     aliases: ['Pinza de aro', 'Sponge forceps', 'Pinza Foster (común)'],
     icon: 'pinch',
@@ -302,7 +302,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-backhaus',
-    name: 'Pinza de Backhaus',
+    name: LocalizedText(ca: 'Pinça de Backhaus', es: 'Pinza de Backhaus', en: 'Backhaus towel clamp'),
     category: InstrumentCategory.diseccion,
     aliases: ['Pinza de campo', 'Pinza para paños', 'Towel clamp', 'Towel forceps'],
     icon: 'pinch',
@@ -327,7 +327,7 @@ const List<Instrument> kInstruments = [
   // ---- SUJECIÓN / SUTURA ----
   Instrument(
     id: 'portaagujas-mayo-hegar',
-    name: 'Portaagujas de Mayo-Hegar',
+    name: LocalizedText(ca: 'Portaagulles de Mayo-Hegar', es: 'Portaagujas de Mayo-Hegar', en: 'Mayo-Hegar needle holder'),
     category: InstrumentCategory.sutura,
     aliases: ['Needle holder'],
     icon: 'needle',
@@ -355,7 +355,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'portaagujas-webster',
-    name: 'Portaagujas de Webster',
+    name: LocalizedText(ca: 'Portaagulles de Webster', es: 'Portaagujas de Webster', en: 'Webster needle holder'),
     category: InstrumentCategory.sutura,
     aliases: ['Webster needle holder'],
     icon: 'needle',
@@ -372,7 +372,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'portaagujas-vascular',
-    name: 'Portaagujas vascular',
+    name: LocalizedText(ca: 'Portaagulles vascular', es: 'Portaagujas vascular', en: 'Vascular needle holder'),
     category: InstrumentCategory.sutura,
     aliases: ['Vascular needle holder'],
     icon: 'needle',
@@ -389,7 +389,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'portaagujas-castroviejo',
-    name: 'Portaagujas de Castroviejo (microcirugía)',
+    name: LocalizedText(ca: 'Portaagulles de Castroviejo (microcirurgia)', es: 'Portaagujas de Castroviejo (microcirugía)', en: 'Castroviejo needle holder (microsurgery)'),
     category: InstrumentCategory.sutura,
     aliases: ['Castroviejo needle holder'],
     icon: 'needle',
@@ -414,7 +414,7 @@ const List<Instrument> kInstruments = [
   // ---- SEPARACIÓN / EXPOSICIÓN ----
   Instrument(
     id: 'separador-farabeuf',
-    name: 'Separador de Farabeuf',
+    name: LocalizedText(ca: 'Separador de Farabeuf', es: 'Separador de Farabeuf', en: 'Farabeuf retractor'),
     category: InstrumentCategory.separacion,
     aliases: ['Farabeuf retractor'],
     icon: 'expand',
@@ -437,7 +437,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'separador-weitlaner',
-    name: 'Separador de Weitlaner',
+    name: LocalizedText(ca: 'Separador de Weitlaner', es: 'Separador de Weitlaner', en: 'Weitlaner retractor'),
     category: InstrumentCategory.separacion,
     aliases: ['Weitlaner retractor'],
     icon: 'expand',
@@ -460,7 +460,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'valva-doyen',
-    name: 'Valva de Doyen',
+    name: LocalizedText(ca: 'Valva de Doyen', es: 'Valva de Doyen', en: 'Doyen retractor'),
     category: InstrumentCategory.separacion,
     aliases: ['Doyen retractor'],
     icon: 'expand',
@@ -483,7 +483,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'separador-richardson',
-    name: 'Separador de Richardson',
+    name: LocalizedText(ca: 'Separador de Richardson', es: 'Separador de Richardson', en: 'Richardson retractor'),
     category: InstrumentCategory.separacion,
     aliases: ['Richardson retractor'],
     icon: 'expand',
@@ -502,7 +502,7 @@ const List<Instrument> kInstruments = [
   // ---- SUCCIÓN / ASPIRACIÓN ----
   Instrument(
     id: 'canula-yankauer',
-    name: 'Cánula de Yankauer',
+    name: LocalizedText(ca: 'Cànula de Yankauer', es: 'Cánula de Yankauer', en: 'Yankauer cannula'),
     category: InstrumentCategory.succion,
     aliases: ['Yankauer suction tip'],
     icon: 'suction',
@@ -525,7 +525,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'canula-poole',
-    name: 'Cánula de Poole',
+    name: LocalizedText(ca: 'Cànula de Poole', es: 'Cánula de Poole', en: 'Poole cannula'),
     category: InstrumentCategory.succion,
     aliases: ['Poole suction tip', 'Cánula multiperforada'],
     icon: 'suction',
@@ -550,7 +550,7 @@ const List<Instrument> kInstruments = [
   // ---- SONDAS / ESPECIALES ----
   Instrument(
     id: 'sonda-acanalada',
-    name: 'Sonda acanalada',
+    name: LocalizedText(ca: 'Sonda acanalada', es: 'Sonda acanalada', en: 'Grooved director'),
     category: InstrumentCategory.especiales,
     aliases: ['Grooved director'],
     icon: 'tool',
@@ -573,7 +573,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'legra',
-    name: 'Legra (cureta)',
+    name: LocalizedText(ca: 'Cureta', es: 'Legra (cureta)', en: 'Curette'),
     category: InstrumentCategory.especiales,
     aliases: ['Curette'],
     icon: 'tool',
@@ -596,7 +596,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'electrobisturi',
-    name: 'Lápiz de electrobisturí',
+    name: LocalizedText(ca: 'Llapis d\'electrobisturí', es: 'Lápiz de electrobisturí', en: 'Electrocautery pencil'),
     category: InstrumentCategory.especiales,
     aliases: ['Electrocautery pencil', 'Bovie'],
     icon: 'bolt',
@@ -618,7 +618,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-disección-bipolar',
-    name: 'Pinza bipolar',
+    name: LocalizedText(ca: 'Pinça bipolar', es: 'Pinza bipolar', en: 'Bipolar forceps'),
     category: InstrumentCategory.especiales,
     aliases: ['Bipolar forceps'],
     icon: 'bolt',
@@ -635,7 +635,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'trocar',
-    name: 'Trócar',
+    name: LocalizedText(ca: 'Tròcar', es: 'Trocar', en: 'Trocar'),
     category: InstrumentCategory.especiales,
     aliases: ['Trocar laparoscópico'],
     icon: 'tool',
@@ -658,7 +658,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-rochester-pean',
-    name: 'Pinza de Rochester-Péan',
+    name: LocalizedText(ca: 'Pinça de Rochester-Pean', es: 'Pinza de Rochester-Pean', en: 'Rochester-Pean forceps'),
     category: InstrumentCategory.diseccion,
     aliases: ['Pean forceps'],
     icon: 'pinch',
@@ -679,7 +679,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'bisturi-armonico',
-    name: 'Bisturí armónico',
+    name: LocalizedText(ca: 'Bisturí harmònic', es: 'Bisturí armónico', en: 'Harmonic scalpel'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['Harmonic Scalpel', 'Harmonic 1100 Shears (Ethicon/J&J MedTech)'],
@@ -697,7 +697,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'ligasure',
-    name: 'Sellador de vasos bipolar avanzado',
+    name: LocalizedText(ca: 'Segellador de vasos bipolar avançat', es: 'Sellador de vasos bipolar avanzado', en: 'Advanced bipolar vessel sealer'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['LigaSure (Medtronic)', 'LigaSure Atlas/Exact/Impact'],
@@ -715,7 +715,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'thunderbeat',
-    name: 'Sistema de energía híbrida bipolar + ultrasónica',
+    name: LocalizedText(ca: 'Sistema d\'energia híbrida bipolar + ultrasònica', es: 'Sistema de energía híbrida bipolar + ultrasónica', en: 'Hybrid bipolar + ultrasonic energy system'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['ThunderBeat (Olympus)'],
@@ -733,7 +733,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'enseal',
-    name: 'Sellador de tejido bipolar adaptativo',
+    name: LocalizedText(ca: 'Segellador de teixit bipolar adaptatiu', es: 'Sellador de tejido bipolar adaptativo', en: 'Adaptive bipolar tissue sealer'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['EnSeal X1 (Ethicon/J&J MedTech)'],
@@ -751,7 +751,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'grapadora-signia',
-    name: 'Grapadora laparoscópica motorizada adaptativa',
+    name: LocalizedText(ca: 'Grapadora laparoscòpica motoritzada adaptativa', es: 'Grapadora laparoscópica motorizada adaptativa', en: 'Adaptive motorized laparoscopic stapler'),
     category: InstrumentCategory.sutura,
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['Signia Stapling System (Medtronic)', 'Tri-Staple'],
@@ -769,7 +769,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'grapadora-circular-motorizada',
-    name: 'Grapadora circular motorizada',
+    name: LocalizedText(ca: 'Grapadora circular motoritzada', es: 'Grapadora circular motorizada', en: 'Motorized circular stapler'),
     category: InstrumentCategory.sutura,
     specialty: Specialty.laparoscopiaEnergia,
     aliases: ['Echelon Circular Powered Stapler (Ethicon)'],
@@ -791,7 +791,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'davinci-sistema',
-    name: 'Plataforma robótica quirúrgica',
+    name: LocalizedText(ca: 'Plataforma robòtica quirúrgica', es: 'Plataforma robótica quirúrgica', en: 'Robotic surgical platform'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.roboticaAsistida,
     aliases: ['da Vinci (Intuitive Surgical)', 'da Vinci Xi / da Vinci 5'],
@@ -809,7 +809,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-cadiere',
-    name: 'Pinza grasper articulada robótica',
+    name: LocalizedText(ca: 'Pinça grasper articulada robòtica', es: 'Pinza grasper articulada robótica', en: 'Robotic articulated grasping forceps'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.roboticaAsistida,
     aliases: ['Cadiere Forceps (EndoWrist, Intuitive)'],
@@ -827,7 +827,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-prograsp',
-    name: 'Pinza de agarre firme robótica',
+    name: LocalizedText(ca: 'Pinça d\'agafament ferm robòtica', es: 'Pinza de agarre firme robótica', en: 'Robotic firm-grip forceps'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.roboticaAsistida,
     aliases: ['ProGrasp Forceps (EndoWrist, Intuitive)'],
@@ -845,7 +845,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'vessel-sealer-robotico',
-    name: 'Sellador de vasos robótico',
+    name: LocalizedText(ca: 'Segellador de vasos robòtic', es: 'Sellador de vasos robótico', en: 'Robotic vessel sealer'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.roboticaAsistida,
     aliases: ['Vessel Sealer Extend', 'SynchroSeal (Intuitive)'],
@@ -863,7 +863,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'hugo-ras',
-    name: 'Sistema robótico modular multipuerto',
+    name: LocalizedText(ca: 'Sistema robòtic modular multiport', es: 'Sistema robótico modular multipuerto', en: 'Modular multi-port robotic system'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.roboticaAsistida,
     aliases: ['Hugo RAS (Medtronic)'],
@@ -881,7 +881,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'versius',
-    name: 'Sistema robótico de puerto pequeño',
+    name: LocalizedText(ca: 'Sistema robòtic de port petit', es: 'Sistema robótico de puerto pequeño', en: 'Small-port robotic system'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.roboticaAsistida,
     aliases: ['Versius (CMR Surgical)'],
@@ -903,7 +903,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'sierra-oscilante-ortopedica',
-    name: 'Sierra oscilante ortopédica',
+    name: LocalizedText(ca: 'Serra oscil·lant ortopèdica', es: 'Sierra oscilante ortopédica', en: 'Orthopedic oscillating saw'),
     category: InstrumentCategory.corte,
     specialty: Specialty.ortopediaTrauma,
     aliases: ['Stryker System 9/CORE Precision Saw'],
@@ -921,7 +921,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'driver-quirurgico',
-    name: 'Taladro/driver quirúrgico motorizado',
+    name: LocalizedText(ca: 'Trepant/driver quirúrgic motoritzat', es: 'Taladro/driver quirúrgico motorizado', en: 'Motorized surgical drill/driver'),
     category: InstrumentCategory.corte,
     specialty: Specialty.ortopediaTrauma,
     aliases: ['Stryker System 8 Dual Trigger Driver'],
@@ -945,7 +945,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'fijador-externo',
-    name: 'Fijador externo',
+    name: LocalizedText(ca: 'Fixador extern', es: 'Fijador externo', en: 'External fixator'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.ortopediaTrauma,
     aliases: ['Hoffmann 3 (Stryker)', 'XtraFix / FastFrame (Zimmer Biomet)'],
@@ -969,7 +969,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'clavo-intramedular',
-    name: 'Clavo intramedular (sistema de enclavado)',
+    name: LocalizedText(ca: 'Clau intramedul·lar (sistema d\'enclavament)', es: 'Clavo intramedular (sistema de enclavado)', en: 'Intramedullary nail (nailing system)'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.ortopediaTrauma,
     aliases: ['Gamma3/Gamma4 (Stryker)', 'T2 Alpha Nailing System'],
@@ -993,7 +993,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'placa-fijacion',
-    name: 'Placa de fijación de fragmento pequeño',
+    name: LocalizedText(ca: 'Placa de fixació de fragment petit', es: 'Placa de fijación de fragmento pequeño', en: 'Small fragment fixation plate'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.ortopediaTrauma,
     aliases: ['DePuy Synthes VOLT', 'TriLEAP Anatomic Plating System'],
@@ -1017,7 +1017,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'navegacion-ortopedica',
-    name: 'Sistema de navegación quirúrgica ortopédica',
+    name: LocalizedText(ca: 'Sistema de navegació quirúrgica ortopèdica', es: 'Sistema de navegación quirúrgica ortopédica', en: 'Orthopedic surgical navigation system'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.ortopediaTrauma,
     aliases: ['StealthStation (Medtronic)', 'Brainlab'],
@@ -1039,7 +1039,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'aspirador-ultrasonico',
-    name: 'Aspirador ultrasónico',
+    name: LocalizedText(ca: 'Aspirador ultrasònic', es: 'Aspirador ultrasónico', en: 'Ultrasonic aspirator'),
     category: InstrumentCategory.succion,
     specialty: Specialty.neurocirugia,
     aliases: ['CUSA (Integra LifeSciences)', 'CUSA Clarity/Excel+/NXT'],
@@ -1057,7 +1057,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'craniotomo',
-    name: 'Craniótomo',
+    name: LocalizedText(ca: 'Craniòtom', es: 'Craniótomo', en: 'Craniotome'),
     category: InstrumentCategory.corte,
     specialty: Specialty.neurocirugia,
     aliases: ['Midas Rex Legend (Medtronic)', 'Stryker CORE Craniotome'],
@@ -1075,7 +1075,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'perforador-craneal',
-    name: 'Perforador craneal desechable',
+    name: LocalizedText(ca: 'Perforador cranial d\'un sol ús', es: 'Perforador craneal desechable', en: 'Disposable cranial perforator'),
     category: InstrumentCategory.corte,
     specialty: Specialty.neurocirugia,
     aliases: ['Aesculap Disposable Cranial Perforator'],
@@ -1093,7 +1093,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'neuronavegacion',
-    name: 'Sistema de neuronavegación',
+    name: LocalizedText(ca: 'Sistema de neuronavegació', es: 'Sistema de neuronavegación', en: 'Neuronavigation system'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.neurocirugia,
     aliases: ['StealthStation (Medtronic)', 'Brainlab Curve'],
@@ -1111,7 +1111,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'microscopio-quirurgico',
-    name: 'Microscopio quirúrgico',
+    name: LocalizedText(ca: 'Microscopi quirúrgic', es: 'Microscopio quirúrgico', en: 'Surgical microscope'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.neurocirugia,
     aliases: ['Zeiss KINEVO 900 / OPMI Pentero', 'Leica M530 OHX'],
@@ -1129,7 +1129,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'clip-aneurisma',
-    name: 'Clip de aneurisma',
+    name: LocalizedText(ca: 'Clip d\'aneurisma', es: 'Clip de aneurisma', en: 'Aneurysm clip'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.neurocirugia,
     aliases: ['Yasargil Aneurysm Clip (Aesculap/B.Braun)'],
@@ -1157,7 +1157,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'sierra-esternal',
-    name: 'Sierra esternal',
+    name: LocalizedText(ca: 'Serra esternal', es: 'Sierra esternal', en: 'Sternal saw'),
     category: InstrumentCategory.corte,
     specialty: Specialty.cardiovascular,
     aliases: ['Stryker System 7/8/9 Sternum Saw'],
@@ -1175,7 +1175,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'canula-aortica',
-    name: 'Cánula aórtica / de perfusión',
+    name: LocalizedText(ca: 'Cànula aòrtica / de perfusió', es: 'Cánula aórtica / de perfusión', en: 'Aortic / perfusion cannula'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.cardiovascular,
     aliases: ['Bio-Medicus NextGen (Medtronic)'],
@@ -1193,7 +1193,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'clamp-aortico',
-    name: 'Clamp aórtico (cross-clamp)',
+    name: LocalizedText(ca: 'Clamp aòrtic (cross-clamp)', es: 'Clamp aórtico (cross-clamp)', en: 'Aortic cross-clamp'),
     category: InstrumentCategory.separacion,
     specialty: Specialty.cardiovascular,
     aliases: ['DeBakey Aorta Clamp', 'Cygnet (Peters Surgical)'],
@@ -1211,7 +1211,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-debakey',
-    name: 'Pinza vascular atraumática tipo DeBakey',
+    name: LocalizedText(ca: 'Pinça vascular atraumàtica tipus DeBakey', es: 'Pinza vascular atraumática tipo DeBakey', en: 'DeBakey atraumatic vascular forceps'),
     category: InstrumentCategory.separacion,
     specialty: Specialty.cardiovascular,
     aliases: ['DALE ATRAUMATA (B.Braun/Aesculap)'],
@@ -1235,7 +1235,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'anastomosis-distal',
-    name: 'Dispositivo de anastomosis distal automatizado',
+    name: LocalizedText(ca: 'Dispositiu d\'anastomosi distal automatitzat', es: 'Dispositivo de anastomosis distal automatizado', en: 'Automated distal anastomosis device'),
     category: InstrumentCategory.sutura,
     specialty: Specialty.cardiovascular,
     aliases: ['C-Port xA / C-Port Flex A'],
@@ -1253,7 +1253,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'cierre-esternal',
-    name: 'Sistema de cierre esternal',
+    name: LocalizedText(ca: 'Sistema de tancament esternal', es: 'Sistema de cierre esternal', en: 'Sternal closure system'),
     category: InstrumentCategory.sutura,
     specialty: Specialty.cardiovascular,
     aliases: ['Synthes ZipFix', 'FiberTape Sternal Closure (Arthrex)'],
@@ -1275,7 +1275,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'histeroscopio',
-    name: 'Histeroscopio',
+    name: LocalizedText(ca: 'Histeroscopi', es: 'Histeroscopio', en: 'Hysteroscope'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.ginecologiaObstetricia,
     aliases: ['Bettocchi Hysteroscope (Karl Storz)'],
@@ -1293,7 +1293,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'morcelador',
-    name: 'Morcelador electromecánico',
+    name: LocalizedText(ca: 'Morcel·lador electromecànic', es: 'Morcelador electromecánico', en: 'Electromechanical morcellator'),
     category: InstrumentCategory.corte,
     specialty: Specialty.ginecologiaObstetricia,
     aliases: ['moresolution Power Morcellator (Olympus)'],
@@ -1316,7 +1316,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'bolsa-contencion-morcelacion',
-    name: 'Sistema de contención para morcelación',
+    name: LocalizedText(ca: 'Sistema de contenció per a la morcel·lació', es: 'Sistema de contención para morcelación', en: 'Containment system for morcellation'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.ginecologiaObstetricia,
     aliases: ['PneumoLiner (Olympus)', 'LapBox POWER (Ark Surgical)'],
@@ -1334,7 +1334,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-green-armytage',
-    name: 'Pinza de Green-Armytage',
+    name: LocalizedText(ca: 'Pinça de Green-Armytage', es: 'Pinza de Green-Armytage', en: 'Green-Armytage forceps'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.ginecologiaObstetricia,
     aliases: ['Green-Armytage Forceps'],
@@ -1356,7 +1356,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'resectoscopio-bipolar',
-    name: 'Resectoscopio bipolar',
+    name: LocalizedText(ca: 'Resectoscopi bipolar', es: 'Resectoscopio bipolar', en: 'Bipolar resectoscope'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.urologia,
     aliases: ['Olympus PLASMA System (TURis)'],
@@ -1374,7 +1374,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'laser-holmio',
-    name: 'Láser de holmio:YAG',
+    name: LocalizedText(ca: 'Làser d\'holmi:YAG', es: 'Láser de holmio:YAG', en: 'Holmium:YAG laser'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.urologia,
     aliases: ['Lumenis Pulse 120H', 'Moses 2.0'],
@@ -1392,7 +1392,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'laser-tulio',
-    name: 'Láser de fibra de tulio',
+    name: LocalizedText(ca: 'Làser de fibra de tuli', es: 'Láser de fibra de tulio', en: 'Thulium fiber laser'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.urologia,
     aliases: ['Soltive SuperPulsed Laser (Olympus)'],
@@ -1410,7 +1410,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'ureteroscopio-flexible',
-    name: 'Ureteroscopio flexible digital',
+    name: LocalizedText(ca: 'Ureteroscopi flexible digital', es: 'Ureteroscopio flexible digital', en: 'Flexible digital ureteroscope'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.urologia,
     aliases: ['LithoVue (Stryker)'],
@@ -1432,7 +1432,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'microdebridador-ent',
-    name: 'Microdebridador / shaver ENT',
+    name: LocalizedText(ca: 'Microdebridador / shaver ORL', es: 'Microdebridador / shaver ORL', en: 'ENT microdebrider / shaver'),
     category: InstrumentCategory.corte,
     specialty: Specialty.otorrino,
     aliases: ['StraightShot M4/M5 (Medtronic)', 'Stryker Pello'],
@@ -1450,7 +1450,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'navegacion-ent',
-    name: 'Sistema de navegación ENT',
+    name: LocalizedText(ca: 'Sistema de navegació ORL', es: 'Sistema de navegación ORL', en: 'ENT navigation system'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.otorrino,
     aliases: ['Fusion ENT Navigation (Medtronic)', 'Karl Storz NAV1'],
@@ -1468,7 +1468,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'dilatacion-sinusal-balon',
-    name: 'Sistema de dilatación sinusal con balón',
+    name: LocalizedText(ca: 'Sistema de dilatació sinusal amb baló', es: 'Sistema de dilatación sinusal con balón', en: 'Balloon sinus dilation system'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.otorrino,
     aliases: ['Relieva (Acclarent)', 'NuVent EM (Medtronic)'],
@@ -1486,7 +1486,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'coblator',
-    name: 'Sistema de coblation (radiofrecuencia bipolar)',
+    name: LocalizedText(ca: 'Sistema de coblació (radiofreqüència bipolar)', es: 'Sistema de coblación (radiofrecuencia bipolar)', en: 'Coblation system (bipolar radiofrequency)'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.otorrino,
     aliases: ['Coblator II (Smith+Nephew)'],
@@ -1504,7 +1504,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'laser-co2-laringeo',
-    name: 'Láser CO2 para microcirugía laríngea',
+    name: LocalizedText(ca: 'Làser de CO2 per a microcirurgia laríngia', es: 'Láser CO2 para microcirugía laríngea', en: 'CO2 laser for laryngeal microsurgery'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.otorrino,
     aliases: ['UltraPulse (Lumenis)', 'Digital AcuBlade'],
@@ -1526,7 +1526,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'pinza-satinsky',
-    name: 'Pinza vascular de Satinsky',
+    name: LocalizedText(ca: 'Pinça vascular de Satinsky', es: 'Pinza vascular de Satinsky', en: 'Satinsky vascular clamp'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.vascular,
     aliases: ['Satinsky clamp'],
@@ -1555,7 +1555,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'clamp-bulldog',
-    name: 'Clamp vascular tipo bulldog',
+    name: LocalizedText(ca: 'Clamp vascular tipus bulldog', es: 'Clamp vascular tipo bulldog', en: 'Bulldog vascular clamp'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.vascular,
     aliases: ['Bulldog clamp', 'Pinza de Dieffenbach'],
@@ -1579,7 +1579,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'cateter-fogarty',
-    name: 'Catéter-balón de Fogarty',
+    name: LocalizedText(ca: 'Catèter-baló de Fogarty', es: 'Catéter-balón de Fogarty', en: 'Fogarty balloon catheter'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.vascular,
     aliases: ['Fogarty embolectomy catheter'],
@@ -1602,7 +1602,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'injerto-vascular-protesico',
-    name: 'Injerto vascular protésico (Dacron/PTFE)',
+    name: LocalizedText(ca: 'Empelt vascular protètic (Dacron/PTFE)', es: 'Injerto vascular protésico (Dacron/PTFE)', en: 'Prosthetic vascular graft (Dacron/PTFE)'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.vascular,
     aliases: ['Gore-Tex vascular graft (W. L. Gore)'],
@@ -1626,7 +1626,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'ecografo-doppler-intraoperatorio',
-    name: 'Ecógrafo Doppler intraoperatorio',
+    name: LocalizedText(ca: 'Ecògraf Doppler intraoperatori', es: 'Ecógrafo Doppler intraoperatorio', en: 'Intraoperative Doppler ultrasound'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.vascular,
     aliases: [],
@@ -1644,7 +1644,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'sistema-trombectomia-mecanica',
-    name: 'Sistema de trombectomía mecánica',
+    name: LocalizedText(ca: 'Sistema de trombectomia mecànica', es: 'Sistema de trombectomía mecánica', en: 'Mechanical thrombectomy system'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.vascular,
     aliases: ['FlowTriever / ClotTriever / Artix (Inari Medical, Stryker)', 'Indigo Aspiration System (Penumbra)'],
@@ -1666,7 +1666,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'forceps-extraccion-dental',
-    name: 'Fórceps de extracción dental quirúrgica',
+    name: LocalizedText(ca: 'Fòrceps d\'extracció dental quirúrgica', es: 'Fórceps de extracción dental quirúrgica', en: 'Surgical dental extraction forceps'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.maxilofacial,
     aliases: ['Dental extraction forceps'],
@@ -1690,7 +1690,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'elevador-periostotomo',
-    name: 'Elevador dental / periostótomo',
+    name: LocalizedText(ca: 'Elevador dental / periostòtom', es: 'Elevador dental / periostótomo', en: 'Dental elevator / periosteal elevator'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.maxilofacial,
     aliases: ['Periosteal elevator'],
@@ -1714,7 +1714,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'placa-osteosintesis-maxilofacial',
-    name: 'Placa de osteosíntesis maxilofacial',
+    name: LocalizedText(ca: 'Placa d\'osteosíntesi maxil·lofacial', es: 'Placa de osteosíntesis maxilofacial', en: 'Maxillofacial osteosynthesis plate'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.maxilofacial,
     aliases: [],
@@ -1732,7 +1732,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'motor-piezoelectrico-oral',
-    name: 'Motor de cirugía oral piezoeléctrico',
+    name: LocalizedText(ca: 'Motor de cirurgia oral piezoelèctric', es: 'Motor de cirugía oral piezoeléctrico', en: 'Piezoelectric oral surgery motor'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.maxilofacial,
     aliases: ['Piezosurgery plus / MT-BONE (Mectron)'],
@@ -1750,7 +1750,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'distractor-mandibular',
-    name: 'Distractor óseo mandibular',
+    name: LocalizedText(ca: 'Distractor ossi mandibular', es: 'Distractor óseo mandibular', en: 'Mandibular bone distractor'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.maxilofacial,
     aliases: ['Mandibular distractor (KLS Martin)'],
@@ -1768,7 +1768,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'fresa-quirurgica-dental',
-    name: 'Fresa quirúrgica dental/ósea',
+    name: LocalizedText(ca: 'Fresa quirúrgica dental/òssia', es: 'Fresa quirúrgica dental/ósea', en: 'Dental/bone surgical bur'),
     category: InstrumentCategory.corte,
     specialty: Specialty.maxilofacial,
     aliases: ['Surgical bur'],
@@ -1790,7 +1790,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'set-pediatrico-escala-reducida',
-    name: 'Set de instrumental pediátrico/neonatal de escala reducida',
+    name: LocalizedText(ca: 'Set d\'instrumental pediàtric/neonatal d\'escala reduïda', es: 'Set de instrumental pediátrico/neonatal de escala reducida', en: 'Reduced-scale pediatric/neonatal instrument set'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.pediatrica,
     aliases: [],
@@ -1808,7 +1808,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'trocar-laparoscopico-pediatrico',
-    name: 'Trócar laparoscópico pediátrico de calibre reducido',
+    name: LocalizedText(ca: 'Tròcar laparoscòpic pediàtric de calibre reduït', es: 'Trócar laparoscópico pediátrico de calibre reducido', en: 'Reduced-caliber pediatric laparoscopic trocar'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.pediatrica,
     aliases: [],
@@ -1826,7 +1826,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'tijera-potts-smith-pediatrica',
-    name: 'Tijera de Potts-Smith pediátrica',
+    name: LocalizedText(ca: 'Tisora de Potts-Smith pediàtrica', es: 'Tijera de Potts-Smith pediátrica', en: 'Pediatric Potts-Smith scissors'),
     category: InstrumentCategory.corte,
     specialty: Specialty.pediatrica,
     aliases: ['Potts-Smith scissors'],
@@ -1844,7 +1844,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'separador-weitlaner-pediatrico',
-    name: 'Separador de Weitlaner pediátrico',
+    name: LocalizedText(ca: 'Separador de Weitlaner pediàtric', es: 'Separador de Weitlaner pediátrico', en: 'Pediatric Weitlaner retractor'),
     category: InstrumentCategory.separacion,
     specialty: Specialty.pediatrica,
     aliases: ['Weitlaner retractor (versión pediátrica)'],
@@ -1868,7 +1868,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'cateter-umbilical',
-    name: 'Catéter umbilical (arterial/venoso)',
+    name: LocalizedText(ca: 'Catèter umbilical (arterial/venós)', es: 'Catéter umbilical (arterial/venoso)', en: 'Umbilical catheter (arterial/venous)'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.pediatrica,
     aliases: ['Umbilical arterial/venous catheter'],
@@ -1886,7 +1886,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'sistema-ecmo-neonatal',
-    name: 'Sistema de circulación extracorpórea/ECMO neonatal',
+    name: LocalizedText(ca: 'Sistema de circulació extracorpòria/ECMO neonatal', es: 'Sistema de circulación extracorpórea/ECMO neonatal', en: 'Neonatal extracorporeal circulation/ECMO system'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.pediatrica,
     aliases: ['Cardiohelp II (Getinge)'],
@@ -1908,7 +1908,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'gancho-piel-doble-punta',
-    name: 'Gancho de piel de doble punta',
+    name: LocalizedText(ca: 'Ganxo de pell de doble punta', es: 'Gancho de piel de doble punta', en: 'Double-pointed skin hook'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.plastica,
     aliases: ['Skin hook', 'Gancho de Joseph'],
@@ -1926,7 +1926,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'separador-senn-miller',
-    name: 'Separador de Senn-Miller',
+    name: LocalizedText(ca: 'Separador de Senn-Miller', es: 'Separador de Senn-Miller', en: 'Senn-Miller retractor'),
     category: InstrumentCategory.separacion,
     specialty: Specialty.plastica,
     aliases: ['Senn retractor'],
@@ -1950,7 +1950,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'canula-liposuccion',
-    name: 'Cánula de liposucción',
+    name: LocalizedText(ca: 'Cànula de liposucció', es: 'Cánula de liposucción', en: 'Liposuction cannula'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.plastica,
     aliases: [],
@@ -1974,7 +1974,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'expansor-tisular',
-    name: 'Expansor tisular',
+    name: LocalizedText(ca: 'Expansor tissular', es: 'Expansor tisular', en: 'Tissue expander'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.plastica,
     aliases: ['Tissue expander (Mentor, Allergan)'],
@@ -1992,7 +1992,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'dermatomo',
-    name: 'Dermatomo (dispositivo de toma de injertos cutáneos)',
+    name: LocalizedText(ca: 'Dermàtom (dispositiu de presa d\'empelts cutanis)', es: 'Dermatomo (dispositivo de toma de injertos cutáneos)', en: 'Dermatome (skin graft harvesting device)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.plastica,
     aliases: ['Zimmer Air/Electric Dermatome'],
@@ -2014,7 +2014,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'separador-finochietto',
-    name: 'Separador costal de Finochietto',
+    name: LocalizedText(ca: 'Separador costal de Finochietto', es: 'Separador costal de Finochietto', en: 'Finochietto rib retractor'),
     category: InstrumentCategory.separacion,
     specialty: Specialty.toracica,
     aliases: ['Finochietto retractor', 'Rib spreader'],
@@ -2032,7 +2032,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'grapadora-toracica-motorizada',
-    name: 'Grapadora quirúrgica motorizada de resección pulmonar',
+    name: LocalizedText(ca: 'Grapadora quirúrgica motoritzada de resecció pulmonar', es: 'Grapadora quirúrgica motorizada de resección pulmonar', en: 'Motorized surgical stapler for lung resection'),
     category: InstrumentCategory.sutura,
     specialty: Specialty.toracica,
     aliases: ['Echelon 3000 / Echelon Flex (Ethicon/J&J MedTech)'],
@@ -2050,7 +2050,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'drenaje-toracico-sello-agua',
-    name: 'Sistema de drenaje torácico con sello de agua',
+    name: LocalizedText(ca: 'Sistema de drenatge toràcic amb segell d\'aigua', es: 'Sistema de drenaje torácico con sello de agua', en: 'Thoracic drainage system with water seal'),
     category: InstrumentCategory.especiales,
     specialty: Specialty.toracica,
     aliases: ['Pleur-evac (Teleflex)'],
@@ -2074,7 +2074,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'sistema-vats',
-    name: 'Sistema de videotoracoscopia (VATS)',
+    name: LocalizedText(ca: 'Sistema de videotoracoscòpia (VATS)', es: 'Sistema de videotoracoscopia (VATS)', en: 'Video-assisted thoracoscopic surgery system (VATS)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.toracica,
     aliases: ['IMAGE1 S (Karl Storz)', 'ENDOEYE Flex (Olympus)'],
@@ -2092,7 +2092,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-duval',
-    name: 'Pinza pulmonar de Duval',
+    name: LocalizedText(ca: 'Pinça pulmonar de Duval', es: 'Pinza pulmonar de Duval', en: 'Duval lung forceps'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.toracica,
     aliases: ['Duval lung forceps'],
@@ -2114,7 +2114,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'punch-biopsia-cutanea',
-    name: 'Punch de biopsia cutánea',
+    name: LocalizedText(ca: 'Punch de biòpsia cutània', es: 'Punch de biopsia cutánea', en: 'Skin biopsy punch'),
     category: InstrumentCategory.corte,
     specialty: Specialty.dermatologia,
     aliases: ['Skin biopsy punch'],
@@ -2138,7 +2138,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'cureta-dermatologica',
-    name: 'Cureta dermatológica',
+    name: LocalizedText(ca: 'Cureta dermatològica', es: 'Cureta dermatológica', en: 'Dermal curette'),
     category: InstrumentCategory.corte,
     specialty: Specialty.dermatologia,
     aliases: ['Dermal curette'],
@@ -2162,7 +2162,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'criosonda-crioterapia',
-    name: 'Dispositivo de crioterapia / criosonda',
+    name: LocalizedText(ca: 'Dispositiu de crioteràpia / criosonda', es: 'Dispositivo de crioterapia / criosonda', en: 'Cryotherapy device / cryoprobe'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.dermatologia,
     aliases: ['CryoProbe XP'],
@@ -2180,7 +2180,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'dermatoscopio-digital',
-    name: 'Dermatoscopio digital',
+    name: LocalizedText(ca: 'Dermatoscopi digital', es: 'Dermatoscopio digital', en: 'Digital dermatoscope'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.dermatologia,
     aliases: ['FotoFinder skeen'],
@@ -2198,7 +2198,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'laser-dermatologico',
-    name: 'Láser dermatológico vascular/pigmentario',
+    name: LocalizedText(ca: 'Làser dermatològic vascular/pigmentari', es: 'Láser dermatológico vascular/pigmentario', en: 'Vascular/pigmented dermatological laser'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.dermatologia,
     aliases: ['DermaV (Cynosure/Lutronic)'],
@@ -2220,7 +2220,7 @@ const List<Instrument> kInstruments = [
   // ==================================================================
   Instrument(
     id: 'especulo-palpebral',
-    name: 'Espéculo palpebral',
+    name: LocalizedText(ca: 'Espècul palpebral', es: 'Espéculo palpebral', en: 'Eyelid speculum'),
     category: InstrumentCategory.separacion,
     specialty: Specialty.oftalmologia,
     aliases: ['Eyelid speculum'],
@@ -2244,7 +2244,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'facoemulsificador',
-    name: 'Facoemulsificador',
+    name: LocalizedText(ca: 'Facoemulsificador', es: 'Facoemulsificador', en: 'Phacoemulsifier'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.oftalmologia,
     aliases: ['Centurion Vision System con Active Sentry (Alcon)'],
@@ -2262,7 +2262,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'vitrectomo',
-    name: 'Vitrectomo',
+    name: LocalizedText(ca: 'Vitrectom', es: 'Vitrectomo', en: 'Vitrector'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.oftalmologia,
     aliases: ['Constellation Vision System (Alcon)'],
@@ -2280,7 +2280,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-capsulorrexis',
-    name: 'Pinza de capsulorrexis',
+    name: LocalizedText(ca: 'Pinça de capsulorrexi', es: 'Pinza de capsulorrexis', en: 'Capsulorhexis forceps'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.oftalmologia,
     aliases: ['Utrata forceps'],
@@ -2298,7 +2298,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'portaagujas-barraquer',
-    name: 'Portaagujas de Barraquer',
+    name: LocalizedText(ca: 'Portaagulles de Barraquer', es: 'Portaagujas de Barraquer', en: 'Barraquer needle holder'),
     category: InstrumentCategory.sutura,
     specialty: Specialty.oftalmologia,
     aliases: ['Barraquer needle holder'],
@@ -2324,7 +2324,7 @@ const List<Instrument> kInstruments = [
   // ---- ANESTESIOLOGIA I REANIMACIÓ ----
   Instrument(
     id: 'laringoscopio',
-    name: 'Laringoscopi (mànec + fulla)',
+    name: LocalizedText(ca: 'Laringoscopi (mànec + fulla)', es: 'Laringoscopio (mango + hoja)', en: 'Laryngoscope (handle + blade)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
     aliases: ['Laringoscopio', 'Laryngoscope'],
@@ -2353,7 +2353,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'tubo-endotraqueal',
-    name: 'Tub endotraqueal (TET)',
+    name: LocalizedText(ca: 'Tub endotraqueal (TET)', es: 'Tubo endotraqueal (TET)', en: 'Endotracheal tube (ETT)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
     aliases: ['Tubo endotraqueal', 'Endotracheal tube', 'ETT'],
@@ -2382,7 +2382,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'mascarilla-laringea',
-    name: 'Mascareta laríngia (LMA)',
+    name: LocalizedText(ca: 'Mascareta laríngia (LMA)', es: 'Mascarilla laríngea (LMA)', en: 'Laryngeal mask airway (LMA)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
     aliases: ['Mascarilla laríngea', 'Laryngeal mask airway'],
@@ -2411,7 +2411,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'canula-guedel',
-    name: 'Cànula de Guedel',
+    name: LocalizedText(ca: 'Cànula de Guedel', es: 'Cánula de Guedel', en: 'Guedel cannula'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
     aliases: ['Cánula de Guedel', 'Oropharyngeal airway'],
@@ -2440,7 +2440,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'mascarilla-facial-anestesia',
-    name: 'Mascareta facial d\'anestèsia',
+    name: LocalizedText(ca: 'Mascareta facial d\'anestèsia', es: 'Mascarilla facial de anestesia', en: 'Anesthesia face mask'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
     aliases: ['Mascarilla facial de anestesia', 'Anesthesia face mask'],
@@ -2464,7 +2464,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'bolsa-reanimacion-autoinflable',
-    name: 'Bossa autoinflable de reanimació',
+    name: LocalizedText(ca: 'Bossa autoinflable de reanimació', es: 'Bolsa autoinflable de reanimación', en: 'Self-inflating resuscitation bag'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
     aliases: ['Bolsa autoinflable', 'Ambú', 'Bag valve mask', 'BVM'],
@@ -2488,7 +2488,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-magill',
-    name: 'Pinces de Magill',
+    name: LocalizedText(ca: 'Pinces de Magill', es: 'Pinzas de Magill', en: 'Magill forceps'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.anestesiologiaReanimacio,
     aliases: ['Pinzas de Magill', 'Magill forceps'],
@@ -2512,7 +2512,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'fiador-intubacion',
-    name: 'Fiador d\'intubació (bougie/estilet)',
+    name: LocalizedText(ca: 'Fiador d\'intubació (bougie/estilet)', es: 'Fiador de intubación (bougie/estilete)', en: 'Intubating stylet (bougie/stylet)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
     aliases: ['Fiador de intubación', 'Bougie', 'Estilete', 'Intubating stylet'],

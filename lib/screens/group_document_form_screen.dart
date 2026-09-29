@@ -501,6 +501,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
     final kindLabel = widget.kind.label;
     if (_loading) {
       return Scaffold(
@@ -618,7 +619,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
                 leading: instrument != null
                     ? InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 36)
                     : const Icon(Icons.build_outlined),
-                title: Text(instrument?.name ?? id),
+                title: Text(instrument != null ? instrument.name.forLanguageCode(languageCode) : id),
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   tooltip: l10n.removeRelatedInstrumentTooltip,

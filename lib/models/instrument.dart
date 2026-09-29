@@ -139,7 +139,7 @@ class InstrumentImage {
 
 class Instrument {
   final String id;
-  final String name;
+  final LocalizedText name;
   final InstrumentCategory category;
   final Specialty specialty;
   final List<String> aliases;

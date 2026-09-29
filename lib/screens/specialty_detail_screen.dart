@@ -138,7 +138,7 @@ class SpecialtyDetailScreen extends StatelessWidget {
               rows: _catalogInstruments
                   .map((i) => EntityUsageRow(
                         icon: Icons.build_outlined,
-                        title: i.name,
+                        title: i.name.forLanguageCode(Localizations.localeOf(context).languageCode),
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => InstrumentDetailScreen(instrument: i)),
                         ),

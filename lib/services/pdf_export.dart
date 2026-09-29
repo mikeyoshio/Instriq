@@ -17,6 +17,7 @@ Future<void> exportTrayChecklistPdf({
   required List<CustomInstrument> customInstruments,
   required String? specialtyLabel,
   required AppLocalizations l10n,
+  required String languageCode,
 }) async {
   final hasPositions = published.items.any((i) => (i.position ?? '').trim().isNotEmpty);
 
@@ -38,7 +39,7 @@ Future<void> exportTrayChecklistPdf({
         pw.TableRow(
           children: [
             if (hasPositions) _cell(item.position ?? ''),
-            _cell(item.resolveName(customInstruments)),
+            _cell(item.resolveName(customInstruments, languageCode: languageCode)),
             _cell('${item.expectedQty}', alignment: pw.Alignment.centerRight),
           ],
         ),

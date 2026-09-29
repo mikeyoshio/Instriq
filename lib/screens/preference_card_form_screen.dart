@@ -166,8 +166,11 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
       builder: (context) => const CatalogPickerSheet(),
     );
     if (selected != null) {
+      if (!mounted) return;
+      final languageCode = Localizations.localeOf(context).languageCode;
       setState(() {
-        _items.add(PreferenceCardItem(instrumentId: selected.id, customName: selected.name));
+        _items.add(PreferenceCardItem(
+            instrumentId: selected.id, customName: selected.name.forLanguageCode(languageCode)));
       });
       _autosave.markDirty();
     }

@@ -9,6 +9,7 @@ import '../models/preference_card.dart';
 import '../models/specialty_entity.dart';
 import '../models/surgeon.dart';
 import '../models/tray.dart';
+import '../services/locale_service.dart';
 import '../screens/custom_instrument_detail_screen.dart';
 import '../screens/group_document_detail_screen.dart';
 import '../screens/instrument_detail_screen.dart';
@@ -60,7 +61,7 @@ Future<ResolvedRef?> resolveRef(String refType, String refId) async {
             return ResolvedRef(
               refType: refType,
               refId: refId,
-              title: instrument.name,
+              title: instrument.name.forLanguageCode(LocaleService.instance.locale.value.languageCode),
               workspaceId: null,
               data: instrument,
             );

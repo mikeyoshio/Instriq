@@ -498,7 +498,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool _matchesInstrument(Instrument instrument, String query, String languageCode, AppLocalizations l10n) {
-    return fuzzyContains(instrument.name, query) ||
+    return fuzzyContains(instrument.name.forLanguageCode(languageCode), query) ||
         instrument.aliases.any((alias) => fuzzyContains(alias, query)) ||
         fuzzyContains(instrument.description.forLanguageCode(languageCode), query) ||
         fuzzyContains(instrument.use.forLanguageCode(languageCode), query) ||
@@ -661,7 +661,7 @@ class _HomeScreenState extends State<HomeScreen> {
           for (final instrument in results.instruments) ...[
             InstriqListItem(
               icon: Icons.build_outlined,
-              title: instrument.name,
+              title: instrument.name.forLanguageCode(languageCode),
               onTap: () => _openInstrument(instrument),
             ),
             const SizedBox(height: InstriqSpacing.sm),

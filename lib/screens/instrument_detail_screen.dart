@@ -512,7 +512,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(instrument.name),
+        title: Text(instrument.name.forLanguageCode(Localizations.localeOf(context).languageCode)),
         actions: [
           if (AuthService.instance.currentUser != null)
             IconButton(
