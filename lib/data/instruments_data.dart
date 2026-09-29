@@ -6,7 +6,7 @@ const List<Instrument> kInstruments = [
     id: 'bisturi',
     name: LocalizedText(ca: 'Bisturí (mànec + fulla)', es: 'Bisturí (mango + hoja)', en: 'Scalpel (handle + blade)'),
     category: InstrumentCategory.corte,
-    aliases: ['Mango de bisturí', 'Scalpel'],
+    aliases: ['Scalpel handle', 'Scalpel'],
     icon: 'cut',
     description: LocalizedText(
       ca: 'Instrument de tall format per un mànec i una fulla d\'un sol ús. El mànec núm. 3 munta fulles del 10 al 15 (no existeix la fulla núm. 14); el mànec núm. 4, fulles més grans, del 18 al 24.',
@@ -90,7 +90,7 @@ const List<Instrument> kInstruments = [
     id: 'tijera-iris',
     name: LocalizedText(ca: 'Tisora d\'Iris', es: 'Tijera de Iris', en: 'Iris scissors'),
     category: InstrumentCategory.corte,
-    aliases: ['Iris scissors', 'Tijera de plástica'],
+    aliases: ['Iris scissors', 'Plastic surgery scissors'],
     icon: 'cut',
     description: LocalizedText(
       ca: 'Tisora petita de punta fina, recta o corba. També utilitzada en cirurgia plàstica.',
@@ -115,7 +115,7 @@ const List<Instrument> kInstruments = [
     id: 'pinza-diseccion-dientes',
     name: LocalizedText(ca: 'Pinça de dissecció amb dents', es: 'Pinza de disección con dientes', en: 'Toothed dissecting forceps'),
     category: InstrumentCategory.diseccion,
-    aliases: ['Pinza de Adson con dientes'],
+    aliases: ['Toothed Adson forceps'],
     icon: 'pinch',
     description: LocalizedText(
       ca: 'Pinça de subjecció amb dents fines a la punta (tipus "ratolí").',
@@ -143,7 +143,7 @@ const List<Instrument> kInstruments = [
     id: 'pinza-diseccion-sin-dientes',
     name: LocalizedText(ca: 'Pinça de dissecció sense dents', es: 'Pinza de disección sin dientes', en: 'Non-toothed dissecting forceps'),
     category: InstrumentCategory.diseccion,
-    aliases: ['Pinza de disección lisa'],
+    aliases: ['Smooth dissecting forceps'],
     icon: 'pinch',
     description: LocalizedText(
       ca: 'Pinça de subjecció amb superfície llisa o estriada, sense dents.',
@@ -189,7 +189,7 @@ const List<Instrument> kInstruments = [
     id: 'pinza-kelly',
     name: LocalizedText(ca: 'Pinça de Kelly', es: 'Pinza de Kelly', en: 'Kelly forceps'),
     category: InstrumentCategory.diseccion,
-    aliases: ['Kelly forceps', 'Pinza de Crile', 'Crile forceps'],
+    aliases: ['Kelly forceps', 'Crile forceps'],
     icon: 'pinch',
     description: LocalizedText(
       ca: 'Pinça hemostàtica recta o corba (com una Kocher corba), normalment sense dents, amb estries transversals. Molt semblant a la pinça de Crile.',
@@ -281,7 +281,7 @@ const List<Instrument> kInstruments = [
     id: 'pinza-foerster',
     name: LocalizedText(ca: 'Pinça d\'anelles (Foerster)', es: 'Pinza de anillos (Foerster)', en: 'Ring forceps (Foerster)'),
     category: InstrumentCategory.diseccion,
-    aliases: ['Pinza de aro', 'Sponge forceps', 'Pinza Foster (común)'],
+    aliases: ['Ring forceps', 'Sponge forceps', 'Foster forceps (common)'],
     icon: 'pinch',
     description: LocalizedText(
       ca: 'Pinça llarga amb extrem en anella, amb o sense dents. Coneguda col·loquialment com a "Foster".',
@@ -304,7 +304,7 @@ const List<Instrument> kInstruments = [
     id: 'pinza-backhaus',
     name: LocalizedText(ca: 'Pinça de Backhaus', es: 'Pinza de Backhaus', en: 'Backhaus towel clamp'),
     category: InstrumentCategory.diseccion,
-    aliases: ['Pinza de campo', 'Pinza para paños', 'Towel clamp', 'Towel forceps'],
+    aliases: ['Field clamp', 'Drape clamp', 'Towel clamp', 'Towel forceps'],
     icon: 'pinch',
     description: LocalizedText(
       ca: 'Pinça amb puntes afilades corbes que es creuen, tipus clip.',
@@ -527,7 +527,7 @@ const List<Instrument> kInstruments = [
     id: 'canula-poole',
     name: LocalizedText(ca: 'Cànula de Poole', es: 'Cánula de Poole', en: 'Poole cannula'),
     category: InstrumentCategory.succion,
-    aliases: ['Poole suction tip', 'Cánula multiperforada'],
+    aliases: ['Poole suction tip', 'Multi-perforated cannula'],
     icon: 'suction',
     description: LocalizedText(
       ca: 'Cànula d\'aspiració amb múltiples orificis laterals protegits per una carcassa. Coneguda vulgarment com a "multiperforada".',
@@ -637,7 +637,7 @@ const List<Instrument> kInstruments = [
     id: 'trocar',
     name: LocalizedText(ca: 'Tròcar', es: 'Trocar', en: 'Trocar'),
     category: InstrumentCategory.especiales,
-    aliases: ['Trocar laparoscópico'],
+    aliases: ['Laparoscopic trocar'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Instrument punxegut amb camisa buida per crear un accés a una cavitat. Gran varietat: punta tallant o roma, diferents gruixos (5, 10, 12 mm...) i longituds, inclosos models pediàtrics.',
@@ -1558,7 +1558,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Clamp vascular tipus bulldog', es: 'Clamp vascular tipo bulldog', en: 'Bulldog vascular clamp'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.vascular,
-    aliases: ['Bulldog clamp', 'Pinza de Dieffenbach'],
+    aliases: ['Bulldog clamp', 'Dieffenbach clamp'],
     icon: 'pinch',
     description: LocalizedText(
       ca: 'Pinça petita de molla amb mossegada atraumàtica, d\'oclusió temporal i baixa força de tancament.',
@@ -1847,7 +1847,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Separador de Weitlaner pediàtric', es: 'Separador de Weitlaner pediátrico', en: 'Pediatric Weitlaner retractor'),
     category: InstrumentCategory.separacion,
     specialty: Specialty.pediatrica,
-    aliases: ['Weitlaner retractor (versión pediátrica)'],
+    aliases: ['Weitlaner retractor (pediatric version)'],
     icon: 'expand',
     description: LocalizedText(
       ca: 'Separador autoestàtic de branques romes o dentades, en mida reduïda respecte al model estàndard d\'adult.',
@@ -1911,7 +1911,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Ganxo de pell de doble punta', es: 'Gancho de piel de doble punta', en: 'Double-pointed skin hook'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.plastica,
-    aliases: ['Skin hook', 'Gancho de Joseph'],
+    aliases: ['Skin hook', 'Joseph hook'],
     icon: 'pinch',
     description: LocalizedText(
       ca: 'Instrument fi amb una o dues puntes romes o agudes en angle, sense mossegada de pinça.',
@@ -2327,7 +2327,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Laringoscopi (mànec + fulla)', es: 'Laringoscopio (mango + hoja)', en: 'Laryngoscope (handle + blade)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
-    aliases: ['Laringoscopio', 'Laryngoscope'],
+    aliases: ['Laryngoscope'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Mànec amb llum i fulla intercanviable (Macintosh, corba, o Miller, recta) per visualitzar la glotis.',
@@ -2356,7 +2356,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Tub endotraqueal (TET)', es: 'Tubo endotraqueal (TET)', en: 'Endotracheal tube (ETT)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
-    aliases: ['Tubo endotraqueal', 'Endotracheal tube', 'ETT'],
+    aliases: ['Endotracheal tube', 'ETT'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Tub flexible d\'un sol ús amb baló pneumotaponador inflable, en diferents calibres (mesurats en mm de diàmetre intern).',
@@ -2385,7 +2385,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Mascareta laríngia (LMA)', es: 'Mascarilla laríngea (LMA)', en: 'Laryngeal mask airway (LMA)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
-    aliases: ['Mascarilla laríngea', 'Laryngeal mask airway'],
+    aliases: ['Laryngeal mask airway'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Dispositiu de via aèria supraglòtica amb baló inflable que segella al voltant de l\'entrada de la laringe.',
@@ -2414,7 +2414,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Cànula de Guedel', es: 'Cánula de Guedel', en: 'Guedel cannula'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
-    aliases: ['Cánula de Guedel', 'Oropharyngeal airway'],
+    aliases: ['Oropharyngeal airway'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Cànula corba d\'un sol ús que es col·loca a la boca per mantenir la via aèria oberta.',
@@ -2443,7 +2443,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Mascareta facial d\'anestèsia', es: 'Mascarilla facial de anestesia', en: 'Anesthesia face mask'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
-    aliases: ['Mascarilla facial de anestesia', 'Anesthesia face mask'],
+    aliases: ['Anesthesia face mask'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Mascareta de silicona amb coixinet inflable que s\'adapta a la cara, connectada al circuit anestèsic.',
@@ -2467,7 +2467,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Bossa autoinflable de reanimació', es: 'Bolsa autoinflable de reanimación', en: 'Self-inflating resuscitation bag'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
-    aliases: ['Bolsa autoinflable', 'Ambú', 'Bag valve mask', 'BVM'],
+    aliases: ['Ambú', 'Bag valve mask', 'BVM'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Bossa de ventilació manual amb vàlvula unidireccional, no depèn de font de gas per inflar-se.',
@@ -2491,7 +2491,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Pinces de Magill', es: 'Pinzas de Magill', en: 'Magill forceps'),
     category: InstrumentCategory.diseccion,
     specialty: Specialty.anestesiologiaReanimacio,
-    aliases: ['Pinzas de Magill', 'Magill forceps'],
+    aliases: ['Magill forceps'],
     icon: 'pinch',
     description: LocalizedText(
       ca: 'Pinces corbes sense mossegada dentada, dissenyades per encaixar amb la línia de visió del laringoscopi.',
@@ -2515,7 +2515,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Fiador d\'intubació (bougie/estilet)', es: 'Fiador de intubación (bougie/estilete)', en: 'Intubating stylet (bougie/stylet)'),
     category: InstrumentCategory.equipos,
     specialty: Specialty.anestesiologiaReanimacio,
-    aliases: ['Fiador de intubación', 'Bougie', 'Estilete', 'Intubating stylet'],
+    aliases: ['Bougie', 'Intubating stylet'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Guia semirígida i corbable que s\'introdueix dins o al costat del tub endotraqueal per facilitar-ne el pas.',
