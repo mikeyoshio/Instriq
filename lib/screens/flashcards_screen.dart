@@ -144,13 +144,14 @@ class _CardFront extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 100),
         const SizedBox(height: 20),
         Text(
-          instrument.name,
+          instrument.name.forLanguageCode(languageCode),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineSmall,
         ),

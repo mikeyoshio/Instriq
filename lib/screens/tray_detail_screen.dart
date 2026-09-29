@@ -213,6 +213,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
       customInstruments: _customInstruments,
       specialtyLabel: _specialty?.label,
       l10n: l10n,
+      languageCode: Localizations.localeOf(context).languageCode,
     );
   }
 
@@ -523,7 +524,8 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                                   ? Icons.build_outlined
                                   : Icons.precision_manufacturing_outlined,
                             ),
-                            title: Text(item.resolveName(_customInstruments)),
+                            title: Text(item.resolveName(_customInstruments,
+                                languageCode: Localizations.localeOf(context).languageCode)),
                             subtitle: item.position != null ? Text(item.position!) : null,
                             trailing: Text(l10n.expectedQtyValue(item.expectedQty)),
                           ),

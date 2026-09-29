@@ -4,6 +4,7 @@ import '../data/instruments_data.dart';
 import '../design_system/components/instriq_version_diff.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document_version.dart';
+import '../services/locale_service.dart';
 import '../services/tray_service.dart';
 
 /// Comparación campo a campo entre dos versiones: qué cambió, no un diff de
@@ -23,7 +24,7 @@ class GroupDocumentDiffScreen extends StatelessWidget {
   /// en vez de un id crudo (bug antiguo de esta pantalla).
   String _resolveInstrumentName(String id, AppLocalizations l10n) {
     for (final instrument in kInstruments) {
-      if (instrument.id == id) return instrument.name;
+      if (instrument.id == id) return instrument.name.forLanguageCode(LocaleService.instance.locale.value.languageCode);
     }
     return l10n.unknownIdLabel(id);
   }

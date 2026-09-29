@@ -610,7 +610,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                 return Card(
                   child: ListTile(
                     leading: InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 40),
-                    title: Text(instrument.name),
+                    title: Text(instrument.name.forLanguageCode(Localizations.localeOf(context).languageCode)),
                     subtitle: summary != null ? Text(summary) : null,
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
@@ -664,7 +664,8 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                         : items.map((item) {
                             return ListTile(
                               dense: true,
-                              title: Text(item.resolveName(_customInstruments)),
+                              title: Text(item.resolveName(_customInstruments,
+                                  languageCode: Localizations.localeOf(context).languageCode)),
                               subtitle: item.position != null ? Text(item.position!) : null,
                               trailing: Text(l10n.expectedQtyValue(item.expectedQty)),
                             );

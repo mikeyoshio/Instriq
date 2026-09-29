@@ -50,7 +50,8 @@ class TrayDiffScreen extends StatelessWidget {
             label: l10n.trayItemsLabel,
             itemsOf: (v) => v.items,
             keyOf: _itemKey,
-            displayOf: (i) => '${i.resolveName(customInstruments)} (${l10n.expectedQtyValue(i.expectedQty)})',
+            displayOf: (i) =>
+                '${i.resolveName(customInstruments, languageCode: Localizations.localeOf(context).languageCode)} (${l10n.expectedQtyValue(i.expectedQty)})',
             fingerprintOf: _itemFingerprint,
           ),
         ],

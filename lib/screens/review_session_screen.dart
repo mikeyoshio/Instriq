@@ -115,7 +115,7 @@ class _ReviewCardFront extends StatelessWidget {
         InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 100),
         const SizedBox(height: 20),
         Text(
-          instrument.name,
+          instrument.name.forLanguageCode(Localizations.localeOf(context).languageCode),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineSmall,
         ),

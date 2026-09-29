@@ -383,7 +383,8 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
                       ? Icons.build_outlined
                       : Icons.precision_manufacturing_outlined,
                 ),
-                title: Text(item.resolveName(_customInstruments)),
+                title: Text(item.resolveName(_customInstruments,
+                    languageCode: Localizations.localeOf(context).languageCode)),
                 subtitle: Text(
                   item.position == null
                       ? l10n.expectedQtyValue(item.expectedQty)

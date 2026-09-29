@@ -64,10 +64,10 @@ class TrayItem {
   /// resolución que se usa para `related_instrument_ids` en técnicas/
   /// protocolos). Si no se encuentra (p.ej. instrumento personalizado
   /// borrado), devuelve el id crudo para no perder la referencia.
-  String resolveName(List<CustomInstrument> customInstruments) {
+  String resolveName(List<CustomInstrument> customInstruments, {required String languageCode}) {
     if (instrumentRefType == InstrumentRefType.catalog) {
       for (final i in kInstruments) {
-        if (i.id == instrumentRefId) return i.name;
+        if (i.id == instrumentRefId) return i.name.forLanguageCode(languageCode);
       }
       return instrumentRefId;
     }

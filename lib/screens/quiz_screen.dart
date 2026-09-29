@@ -174,7 +174,10 @@ class _QuizScreenState extends State<QuizScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () => _select(option),
-                    child: Text(option.name, textAlign: TextAlign.center),
+                    child: Text(
+                      option.name.forLanguageCode(Localizations.localeOf(context).languageCode),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               }),

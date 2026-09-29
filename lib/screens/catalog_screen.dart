@@ -71,8 +71,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
     final filtered = kInstruments.where((i) {
-      final matchesQuery = fuzzyContains(i.name, _query) || i.aliases.any((a) => fuzzyContains(a, _query));
+      final matchesQuery = fuzzyContains(i.name.forLanguageCode(languageCode), _query) ||
+          i.aliases.any((a) => fuzzyContains(a, _query));
       final matchesCategory = _categoryFilters.isEmpty || _categoryFilters.contains(i.category);
       final matchesSpecialty = _specialtyFilters.isEmpty || _specialtyFilters.contains(i.specialty);
       return matchesQuery && matchesCategory && matchesSpecialty;
@@ -193,7 +195,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                           ),
                           title: Row(
                             children: [
-                              Flexible(child: Text(instrument.name)),
+                              Flexible(child: Text(instrument.name.forLanguageCode(languageCode))),
                               if (!_hasAnyPhoto(instrument)) ...[
                                 const SizedBox(width: 6),
                                 Tooltip(

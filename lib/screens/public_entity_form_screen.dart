@@ -449,7 +449,7 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
                 for (var i = 0; i < _items.length; i++)
                   ListTile(
                     leading: const Icon(Icons.build_outlined),
-                    title: Text(_items[i].resolveName(const [])),
+                    title: Text(_items[i].resolveName(const [], languageCode: Localizations.localeOf(context).languageCode)),
                     trailing: IconButton(
                       icon: const Icon(Icons.close),
                       tooltip: l10n.removeItemTooltip,

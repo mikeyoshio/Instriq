@@ -29,7 +29,9 @@ class _TrayItemPickerSheetState extends State<TrayItemPickerSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final filteredCatalog = kInstruments.where((i) => fuzzyContains(i.name, _query)).toList();
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final filteredCatalog =
+        kInstruments.where((i) => fuzzyContains(i.name.forLanguageCode(languageCode), _query)).toList();
     final filteredCustom = widget.customInstruments.where((i) => fuzzyContains(i.name, _query)).toList();
 
     return DraggableScrollableSheet(
@@ -74,7 +76,7 @@ class _TrayItemPickerSheetState extends State<TrayItemPickerSheet> {
                               category: instrument.category,
                               size: 40,
                             ),
-                            title: Text(instrument.name),
+                            title: Text(instrument.name.forLanguageCode(languageCode)),
                             subtitle: Text(instrument.category.label(l10n)),
                             onTap: () => Navigator.of(context).pop(
                               TrayItem(instrumentRefType: InstrumentRefType.catalog, instrumentRefId: instrument.id),

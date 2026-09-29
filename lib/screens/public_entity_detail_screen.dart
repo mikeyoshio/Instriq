@@ -158,7 +158,7 @@ class PublicEntityDetailScreen extends StatelessWidget {
         ListTile(
           contentPadding: EdgeInsets.zero,
           leading: const Icon(Icons.build_outlined),
-          title: Text(item.resolveName(const [])),
+          title: Text(item.resolveName(const [], languageCode: Localizations.localeOf(context).languageCode)),
           subtitle: item.position != null ? Text(item.position!) : null,
         ),
       if (version.observations != null && version.observations!.isNotEmpty) ...[
