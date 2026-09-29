@@ -71,6 +71,11 @@ dependencies:
   # impresión del navegador en Flutter Web, sin dependencias nativas extra).
   pdf: ^3.11.3
   printing: ^5.14.2
+  # Cachea en disco (no solo en memoria durante el proceso) las fotos de
+  # Wikimedia del catálogo y demás imágenes remotas de la app: sin esto,
+  # cada arranque en frío las volvía a descargar aunque no hubieran
+  # cambiado nunca (hallazgo de auditoría de rendimiento, 2026-09).
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

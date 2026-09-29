@@ -151,11 +151,18 @@ class _HomeScreenState extends State<HomeScreen> {
   final _searchController = TextEditingController();
   String _query = '';
 
-  // Debounce solo para el registro de analítica de uso (ver
-  // supabase/schema_v23_usage_analytics.sql) — el filtrado en vivo de
-  // _buildSearchResults sigue sin debounce, tecla a tecla, para no introducir
-  // latencia percibida en la búsqueda en sí.
+  // Debounce para el registro de analítica de uso (ver
+  // supabase/schema_v23_usage_analytics.sql) -- deliberadamente más largo que
+  // el del filtrado en vivo, no hace falta registrar cada tecla intermedia.
   Timer? _searchAnalyticsDebounce;
+
+  // El filtrado en vivo también lleva un debounce corto (por debajo del
+  // umbral de percepción humana, ~150ms) desde que _computeSearchResults
+  // pasó a recorrer también todo el contenido de espacio agregado (no solo
+  // el catálogo): sin él, cada tecla repetía un escaneo difuso completo del
+  // catálogo (118 instrumentos) más técnicas/protocolos/safates/instrumental
+  // de todos los espacios del usuario, de forma síncrona dentro de build().
+  Timer? _liveSearchDebounce;
 
   bool _loadingGroupContent = true;
   List<Workspace> _workspaces = [];
@@ -193,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     ProfileService.instance.profileRevision.removeListener(_onProfileChanged);
     _searchAnalyticsDebounce?.cancel();
+    _liveSearchDebounce?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -593,13 +601,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       tooltip: l10n.clearSearchTooltip,
                       onPressed: () {
                         _searchAnalyticsDebounce?.cancel();
+                        _liveSearchDebounce?.cancel();
                         _searchController.clear();
                         setState(() => _query = '');
                       },
                     ),
             ),
             onChanged: (value) {
-              setState(() => _query = value);
+              _liveSearchDebounce?.cancel();
+              _liveSearchDebounce = Timer(const Duration(milliseconds: 150), () {
+                if (!mounted) return;
+                setState(() => _query = value);
+              });
               _scheduleSearchAnalytics(value);
             },
           ),

@@ -139,14 +139,14 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     final relatedIds = _document.publishedVersion?.relatedInstrumentIds ?? const <String>[];
     final methods = <String, List<SterilizationMethodEntry>>{};
     final technicalInfo = <String, InstrumentTechnicalInfo?>{};
-    for (final id in relatedIds) {
+    await Future.wait(relatedIds.map((id) async {
       try {
         methods[id] = await SterilizationService.instance.fetchMethods('catalog', id);
         technicalInfo[id] = await SterilizationService.instance.fetchTechnicalInfo('catalog', id);
       } catch (_) {
         // Metadato accesorio: un instrumento fallando no bloquea el resto de la ficha.
       }
-    }
+    }));
     try {
       // No hace falta guardar la lista devuelta: ManufacturerService.byId lee
       // de su propio caché interno, calentado por este fetchAll.

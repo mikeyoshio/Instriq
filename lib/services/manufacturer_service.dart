@@ -18,6 +18,7 @@ class ManufacturerService {
   List<Manufacturer> get manufacturers => List.unmodifiable(_manufacturers);
 
   Future<List<Manufacturer>> fetchAll() async {
+    if (_manufacturers.isNotEmpty) return _manufacturers;
     final rows = await _client.from('manufacturers').select().order('name');
     _manufacturers =
         (rows as List<dynamic>).map((r) => Manufacturer.fromRow(r as Map<String, dynamic>)).toList();

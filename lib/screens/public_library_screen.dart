@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../design_system/tokens.dart';
@@ -287,9 +288,11 @@ class _PublicDocumentListState extends State<_PublicDocumentList> {
       _error = null;
     });
     try {
-      final techniques = await PublicDocumentService.instance.fetchPublished(DocumentKind.technique);
-      final protocols = await PublicDocumentService.instance.fetchPublished(DocumentKind.protocol);
-      _documents = [...techniques, ...protocols];
+      final results = await Future.wait([
+        PublicDocumentService.instance.fetchPublished(DocumentKind.technique),
+        PublicDocumentService.instance.fetchPublished(DocumentKind.protocol),
+      ]);
+      _documents = [...results[0], ...results[1]];
     } catch (e) {
       if (mounted) _error = AppLocalizations.of(context)!.publicLibraryLoadError(e.toString());
     }
@@ -492,7 +495,7 @@ class _PublicInstrumentListState extends State<_PublicInstrumentList> {
                             child: ListTile(
                               leading: photoPath != null
                                   ? CircleAvatar(
-                                      backgroundImage: NetworkImage(
+                                      backgroundImage: CachedNetworkImageProvider(
                                         PublicInstrumentService.instance.photoUrl(photoPath),
                                       ),
                                     )

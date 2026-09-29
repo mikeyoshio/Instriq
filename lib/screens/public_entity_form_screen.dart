@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -324,7 +325,7 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
                 child: _pickedPhotoBytes != null
                     ? Image.memory(_pickedPhotoBytes!, width: 72, height: 72, fit: BoxFit.cover)
                     : existingUrl != null
-                        ? Image.network(existingUrl, width: 72, height: 72, fit: BoxFit.cover)
+                        ? CachedNetworkImage(imageUrl: existingUrl, width: 72, height: 72, fit: BoxFit.cover)
                         : Container(
                             width: 72,
                             height: 72,
