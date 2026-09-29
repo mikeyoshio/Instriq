@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
@@ -141,8 +142,11 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
     try {
       final published = _tray.publishedVersion;
       if (published != null) {
-        for (final path in published.photoPaths) {
-          _photoUrls[path] = await TrayService.instance.getPhotoUrl(path);
+        final urls = await Future.wait(
+          published.photoPaths.map((path) => TrayService.instance.getPhotoUrl(path)),
+        );
+        for (var i = 0; i < published.photoPaths.length; i++) {
+          _photoUrls[published.photoPaths[i]] = urls[i];
         }
       }
     } catch (_) {
@@ -151,14 +155,13 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
     try {
       final links = await KnowledgeLinkService.instance.fetchRelatedTo('tray', _tray.id);
       final usedInDocuments = <GroupDocument>[];
-      for (final link in links) {
-        if (link.fromType != 'group_document') continue;
+      await Future.wait(links.where((link) => link.fromType == 'group_document').map((link) async {
         try {
           usedInDocuments.add(await GroupDocumentService.instance.fetchDocument(link.fromId));
         } catch (_) {
           // Enlace obsoleto (documento borrado sin limpiar a tiempo): se omite.
         }
-      }
+      }));
       _usedInDocuments = usedInDocuments;
     } catch (_) {
       // Grafo de conocimiento es metadato accesorio: no bloquea el resto de la ficha.
@@ -546,7 +549,7 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                           if (url == null) return const SizedBox(width: 120, height: 120);
                           return ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(url, width: 120, height: 120, fit: BoxFit.cover),
+                            child: CachedNetworkImage(imageUrl: url, width: 120, height: 120, fit: BoxFit.cover),
                           );
                         },
                       ),

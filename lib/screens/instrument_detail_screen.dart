@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -157,9 +158,19 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
 
   Future<void> _loadClinicalData() async {
     try {
-      final methods = await SterilizationService.instance.fetchMethods(_refType, widget.instrument.id);
-      final technicalInfo =
-          await SterilizationService.instance.fetchTechnicalInfo(_refType, widget.instrument.id);
+      // Se lanzan las 4 peticiones independientes de golpe (sin `await`
+      // todavía) para que viajen en paralelo por la red, pero cada una se
+      // espera en su sitio original de siempre: así una petición no
+      // condiciona el aislamiento de errores de otra (p.ej. que falle el
+      // grafo de conocimiento sigue sin bloquear el resto de la ficha).
+      final methodsFuture = SterilizationService.instance.fetchMethods(_refType, widget.instrument.id);
+      final technicalInfoFuture =
+          SterilizationService.instance.fetchTechnicalInfo(_refType, widget.instrument.id);
+      final tagsFuture = TagService.instance.fetchTagsFor(_refType, widget.instrument.id);
+      final linksFuture = KnowledgeLinkService.instance.fetchRelatedTo(_refType, widget.instrument.id);
+
+      final methods = await methodsFuture;
+      final technicalInfo = await technicalInfoFuture;
       Manufacturer? manufacturer;
       final manufacturerId = technicalInfo?.publishedVersion?.manufacturerId;
       if (manufacturerId != null) {
@@ -176,14 +187,14 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       if (ifuDocumentId != null) {
         ifuDocument = await ReferenceDocumentService.instance.fetchById(ifuDocumentId);
       }
-      final tags = await TagService.instance.fetchTagsFor(_refType, widget.instrument.id);
+      final tags = await tagsFuture;
       final usedInDocuments = <GroupDocument>[];
       final usedInTrays = <Tray>[];
       final usedInPublicDocuments = <PublicDocument>[];
       final usedInPublicTrays = <PublicTray>[];
       try {
-        final links = await KnowledgeLinkService.instance.fetchRelatedTo(_refType, widget.instrument.id);
-        for (final link in links) {
+        final links = await linksFuture;
+        await Future.wait(links.map((link) async {
           if (link.fromType == 'group_document') {
             try {
               usedInDocuments.add(await GroupDocumentService.instance.fetchDocument(link.fromId));
@@ -209,7 +220,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
               // Enlace obsoleto: se omite.
             }
           }
-        }
+        }));
       } catch (_) {
         // Grafo de conocimiento es metadato accesorio: no bloquea el resto de la ficha.
       }
@@ -623,20 +634,17 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                instrument.image!.url,
+              child: CachedNetworkImage(
+                imageUrl: instrument.image!.url,
                 height: 200,
                 fit: BoxFit.contain,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return SizedBox(
-                    height: 200,
-                    child: Center(
-                      child: InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stack) =>
+                placeholder: (context, url) => SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
+                  ),
+                ),
+                errorWidget: (context, url, error) =>
                     InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
               ),
             ),
@@ -682,11 +690,11 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                CatalogCommunityPhotoService.instance.getPublicUrl(approved.photoPath),
+              child: CachedNetworkImage(
+                imageUrl: CatalogCommunityPhotoService.instance.getPublicUrl(approved.photoPath),
                 height: 200,
                 fit: BoxFit.contain,
-                errorBuilder: (context, error, stack) =>
+                errorWidget: (context, url, error) =>
                     InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
               ),
             ),

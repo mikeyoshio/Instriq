@@ -67,11 +67,25 @@ class ProfileService {
       profileRevision.value++;
       return;
     }
-    final row = await _client
-        .from('profiles')
-        .select('organization_id, is_admin, active_work_mode, organizations(name, cif, invite_code, owner_id)')
-        .eq('id', user.id)
-        .maybeSingle();
+    // Las dos consultas son independientes entre sí (la segunda solo
+    // necesita user.id, ya conocido) -- se lanzan en paralelo en vez de una
+    // tras otra para no duplicar la latencia de red en cada carga de perfil.
+    final results = await Future.wait([
+      _client
+          .from('profiles')
+          .select('organization_id, is_admin, active_work_mode, organizations(name, cif, invite_code, owner_id)')
+          .eq('id', user.id)
+          .maybeSingle(),
+      _client
+          .from('workspace_members')
+          .select('id')
+          .eq('user_id', user.id)
+          .inFilter('role', ['approver', 'administrator'])
+          .limit(1)
+          .maybeSingle(),
+    ]);
+    final row = results[0];
+    final approverRow = results[1];
     final newOrganizationId = row?['organization_id'] as String?;
     if (newOrganizationId != _organizationId) {
       _clearGroupContentCaches();
@@ -85,17 +99,6 @@ class ProfileService {
     _ownerId = hospitalRow?['owner_id'] as String?;
     _isOwner = _ownerId == user.id;
     activeWorkModeNotifier.value = WorkModeLabel.fromDb(row?['active_work_mode'] as String?);
-
-    // Consulta barata (RLS ya permite leer las filas propias de
-    // workspace_members, ver "workspace_members_select" en schema_v7): solo
-    // existencia, no hace falta RPC ni traer contenido.
-    final approverRow = await _client
-        .from('workspace_members')
-        .select('id')
-        .eq('user_id', user.id)
-        .inFilter('role', ['approver', 'administrator'])
-        .limit(1)
-        .maybeSingle();
     _canApproveAnyWorkspace = approverRow != null;
     profileRevision.value++;
   }

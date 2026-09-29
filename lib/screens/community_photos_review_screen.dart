@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -146,11 +147,11 @@ class _CommunityPhotosReviewScreenState extends State<CommunityPhotosReviewScree
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      CatalogCommunityPhotoService.instance.getPublicUrl(photo.photoPath),
+                                    child: CachedNetworkImage(
+                                      imageUrl: CatalogCommunityPhotoService.instance.getPublicUrl(photo.photoPath),
                                       height: 160,
                                       fit: BoxFit.contain,
-                                      errorBuilder: (context, error, stack) =>
+                                      errorWidget: (context, url, error) =>
                                           const SizedBox(height: 160, child: Icon(Icons.broken_image_outlined)),
                                     ),
                                   ),

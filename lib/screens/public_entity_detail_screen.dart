@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
@@ -176,8 +177,8 @@ class PublicEntityDetailScreen extends StatelessWidget {
         Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              PublicInstrumentService.instance.photoUrl(version.photoPath!),
+            child: CachedNetworkImage(
+              imageUrl: PublicInstrumentService.instance.photoUrl(version.photoPath!),
               height: 220,
               fit: BoxFit.contain,
             ),

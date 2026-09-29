@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_badge.dart';
@@ -472,7 +473,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
       final usedInTrays = <Tray>[];
       final usedInPublicDocuments = <PublicDocument>[];
       final usedInPublicTrays = <PublicTray>[];
-      for (final link in links) {
+      await Future.wait(links.map((link) async {
         if (link.fromType == 'group_document') {
           try {
             usedInDocuments.add(await GroupDocumentService.instance.fetchDocument(link.fromId));
@@ -498,7 +499,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
             // Enlace obsoleto: se omite.
           }
         }
-      }
+      }));
       if (!mounted) return;
       setState(() {
         _usedInDocuments = usedInDocuments;
@@ -1023,12 +1024,12 @@ class _VariantTile extends StatelessWidget {
                             child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
                           )
                         : (photoUrl != null
-                            ? Image.network(
-                                photoUrl!,
+                            ? CachedNetworkImage(
+                                imageUrl: photoUrl!,
                                 width: 72,
                                 height: 72,
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => const SizedBox(
+                                errorWidget: (_, __, ___) => const SizedBox(
                                   width: 72,
                                   height: 72,
                                   child: Icon(Icons.broken_image_outlined),

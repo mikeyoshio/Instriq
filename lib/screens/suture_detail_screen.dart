@@ -36,15 +36,13 @@ class _SutureDetailScreenState extends State<SutureDetailScreen> {
     try {
       final links = await KnowledgeLinkService.instance.fetchRelatedTo(_refType, widget.suture.id);
       final usedInDocuments = <GroupDocument>[];
-      for (final link in links) {
-        if (link.fromType == 'group_document') {
-          try {
-            usedInDocuments.add(await GroupDocumentService.instance.fetchDocument(link.fromId));
-          } catch (_) {
-            // Enllaç obsolet (document esborrat sense netejar a temps): s'omet.
-          }
+      await Future.wait(links.where((link) => link.fromType == 'group_document').map((link) async {
+        try {
+          usedInDocuments.add(await GroupDocumentService.instance.fetchDocument(link.fromId));
+        } catch (_) {
+          // Enllaç obsolet (document esborrat sense netejar a temps): s'omet.
         }
-      }
+      }));
       if (!mounted) return;
       setState(() {
         _usedInDocuments = usedInDocuments;
