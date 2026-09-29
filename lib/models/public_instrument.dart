@@ -15,6 +15,8 @@ class PublicInstrument {
   final DateTime createdAt;
   final String? publishedVersionId;
   final PublicInstrumentVersion? publishedVersion;
+  final String locale;
+  final String translationGroupId;
 
   const PublicInstrument({
     required this.id,
@@ -22,6 +24,8 @@ class PublicInstrument {
     required this.createdAt,
     this.publishedVersionId,
     this.publishedVersion,
+    this.locale = 'ca',
+    required this.translationGroupId,
   });
 
   factory PublicInstrument.fromRow(Map<String, dynamic> row) {
@@ -32,6 +36,8 @@ class PublicInstrument {
       createdAt: DateTime.parse(row['created_at'] as String),
       publishedVersionId: row['published_version_id'] as String?,
       publishedVersion: versionRow == null ? null : PublicInstrumentVersion.fromRow(versionRow),
+      locale: row['locale'] as String? ?? 'ca',
+      translationGroupId: row['translation_group_id'] as String? ?? row['id'] as String,
     );
   }
 }

@@ -13,6 +13,7 @@ import '../services/contributor_service.dart';
 import '../services/public_document_service.dart';
 import '../services/public_instrument_service.dart';
 import '../services/public_tray_service.dart';
+import '../utils/public_content_locale_label.dart';
 import 'auth/sign_in_screen.dart';
 import 'contributor_application_form_screen.dart';
 import 'my_public_contributions_screen.dart';
@@ -319,6 +320,7 @@ class _PublicDocumentListState extends State<_PublicDocumentList> {
                                   ? Icons.checklist_outlined
                                   : Icons.menu_book_outlined),
                               title: Text(version?.title ?? l10n.auditDocumentUntitledLabel),
+                              trailing: Text(publicContentLocaleLabel(l10n, document.locale), style: Theme.of(context).textTheme.labelSmall),
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.document(document: document)),
                               ),
@@ -413,6 +415,7 @@ class _PublicTrayListState extends State<_PublicTrayList> {
                             child: ListTile(
                               leading: const Icon(Icons.inventory_2_outlined),
                               title: Text(tray.publishedVersion?.name ?? l10n.auditDocumentUntitledLabel),
+                              trailing: Text(publicContentLocaleLabel(l10n, tray.locale), style: Theme.of(context).textTheme.labelSmall),
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.tray(tray: tray)),
                               ),
@@ -496,6 +499,7 @@ class _PublicInstrumentListState extends State<_PublicInstrumentList> {
                                   : const CircleAvatar(child: Icon(Icons.precision_manufacturing_outlined)),
                               title: Text(version?.name ?? l10n.auditDocumentUntitledLabel),
                               subtitle: version?.category != null ? Text(version!.category!.label(l10n)) : null,
+                              trailing: Text(publicContentLocaleLabel(l10n, instrument.locale), style: Theme.of(context).textTheme.labelSmall),
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.instrument(instrument: instrument)),
                               ),
