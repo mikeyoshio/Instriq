@@ -1,154 +1,127 @@
 # Instriq
 
-Plataforma profesional de conocimiento colaborativo para el bloque quirúrgico (Flutter: Android, iOS, Web). Reúne instrumental, técnicas, protocolos y la experiencia real del equipo en un solo lugar, y permite a cualquier grupo (un hospital, un bloque quirúrgico, un servicio, un equipo de instrumentistas, un centro de formación...) documentar su propia forma de trabajar — sustituyendo las carpetas de papel desactualizadas por algo que se lleva en la tablet o el móvil.
+🌐 **Català** · [Castellano](README.es.md) · [English](README.en.md)
 
-El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. Solo hace falta iniciar sesión si quieres unirte o crear el espacio compartido de tu grupo.
+Plataforma professional de coneixement col·laboratiu per al bloc quirúrgic (Flutter: Android, iOS, Web). Reuneix instrumental, tècniques, protocols i l'experiència real de l'equip en un sol lloc, i permet a qualsevol grup (un hospital, un bloc quirúrgic, un servei, un equip d'instrumentistes, un centre de formació...) documentar la seva pròpia manera de treballar — substituint les carpetes de paper desactualitzades per alguna cosa que es porta a la tauleta o al mòbil.
 
-## Capturas
+L'ús bàsic (catàleg, flashcards, quiz, progrés) **no requereix compte**. Només cal iniciar sessió si vols unir-te o crear l'espai compartit del teu grup.
 
-| Entrada al grupo | Catálogo | Detalle | Flashcards |
+## Captures
+
+| Entrada al grup | Catàleg | Detall | Flashcards |
 |---|---|---|---|
-| ![Entrada al grupo](docs/screenshots/welcome.png) | ![Catálogo](docs/screenshots/catalogo.png) | ![Detalle](docs/screenshots/detalle_instrumento.png) | ![Flashcards](docs/screenshots/flashcards.png) |
+| ![Entrada al grup](docs/screenshots/welcome.png) | ![Catàleg](docs/screenshots/catalogo.png) | ![Detall](docs/screenshots/detalle_instrumento.png) | ![Flashcards](docs/screenshots/flashcards.png) |
 
-## Funcionalidades
+## Funcionalitats
 
-- **Catálogo**: 110 instrumentos organizados por 16 especialidades/áreas (cirugía general, laparoscopia/energía avanzada, robótica, ortopedia/trauma, neurocirugía, cardiovascular, ginecología/obstetricia, urología, ORL, angiología/vascular, maxilofacial, pediátrica, plástica/estética, torácica, dermatología, oftalmología) y por categoría funcional (corte, disección, sutura, separación, succión, equipos y máquinas, especiales). Cada instrumento incluye nombres comerciales y fabricante como alias (ej. "LigaSure" de Medtronic, "Harmonic" de Ethicon).
-- **Aprende**: flashcards y quiz de opción múltiple con mejor puntuación guardada.
-- **Progreso**: seguimiento local de instrumentos aprendidos por categoría.
-- **Organización, no solo hospital**: el grupo puede ser un hospital, una clínica, una universidad, un centro de simulación, un fabricante o un equipo privado (`org_type`), cada uno organizado en varios **espacios de trabajo** (por especialidad, servicio, formación...); técnicas, protocolos y tarjetas de preferencia cuelgan de un espacio, no solo de la organización entera.
-- **Modelo de datos relacional**: fabricante, cirujano, especialidad y etiquetas son entidades propias con sus propias tablas y FK, no texto libre — "no guardar texto cuando puede existir una relación". Menos duplicación, búsquedas y filtros más fiables.
-- **Técnicas quirúrgicas y protocolos**: contenido propio del espacio, con **versionado y flujo de aprobación** — cada edición crea un borrador; quien aprueba lo revisa, compara campo a campo con la versión publicada y aprueba o rechaza. Nada se sobrescribe: hay historial completo y restauración a versiones anteriores. Especialidad estandarizada según el catálogo oficial de especialidades quirúrgicas (Real Decreto 183/2008). Los pasos de un protocolo pueden agruparse en **categorías opcionales** (estilo checklist de seguridad quirúrgica de la OMS: Preoperatorio, Anestesia, Equipamiento, Instrumental, Seguridad, o una categoría propia).
-- **Tarjetas de preferencia**: instrumental específico por cirujano y procedimiento, compartido entre el personal del mismo espacio vía Supabase, con marca de "validado por el cirujano" y el **mismo versionado y flujo de aprobación** (borrador → revisión → publicada → archivada) que técnicas/protocolos/bandejas.
-- **Roles granulares por espacio, individuales o por equipo**: Owner y Administrator a nivel de organización; Approver, Editor y Reader asignados por espacio a una persona o a un **equipo entero** de una vez (`teams`/`team_members`) — el rol efectivo es el máximo entre el directo y el heredado del equipo.
-- **Alta de grupo por autoservicio**: cualquier persona (jefa de quirófano o quien quiera) puede registrar su organización. La persona que lo crea es Owner y Administrator — puede regenerar el código de invitación, gestionar miembros, equipos, roles por espacio y transferir la propiedad.
-- **Auditoría**: registro de quién hizo qué y cuándo sobre acciones sensibles (aprobar/rechazar, crear/borrar documentos, cambios de rol, transferencia de propiedad, inicio de sesión), visible para admin/owner.
-- **Cobertura de conocimiento y analítica de uso**: dashboard agregado de cuántas técnicas/protocolos hay documentados por especialidad (publicados vs. en revisión) y totales de espacios/miembros, más **analítica de uso real** (instrumental y contenido más consultado, búsquedas más frecuentes, búsquedas sin resultado) — agregada por organización y visible solo para admin, sin datos individuales por persona.
-- **GDPR**: exportar los propios datos (perfil, contenido creado/aprobado, roles) como JSON, y eliminar la cuenta — el contenido que se haya creado o aprobado se conserva anonimizado para el equipo ("Usuario eliminado"), no se pierde el conocimiento compartido.
-- **Aviso de actualización** (Android/iOS): comprueba si hay una versión más reciente publicada y lo notifica sin bloquear el uso.
-- **Multiidioma**: català por defecto, castellano e inglés seleccionables desde un icono en el propio Home, con la elección guardada en el dispositivo. La landing pública sigue el mismo criterio.
-- **Instrumental personalizado del equipo**: cada espacio de trabajo puede dar de alta su propio instrumental (con variantes y foto), privado a ese hospital/espacio — nunca se mezcla con el catálogo global ni es visible fuera de tu equipo. Cada foto subida por un equipo lleva un aviso explícito de que no está verificada por Instriq (a diferencia de las del catálogo global, con licencia libre comprobada).
-- **Modo sin conexión**: técnicas, protocolos y tarjetas de preferencia se cachean localmente y se pueden consultar sin red; crear o editar contenido sin conexión se encola y se sincroniza solo al recuperarla.
-- **Notificaciones push**: aviso cuando un contenido entra en revisión, se aprueba o se rechaza (Firebase Cloud Messaging), sin depender de abrir la app para enterarse.
-- **Modo de Treball**: cada persona activa un único modo (instrumentista, supervisión de quirófano, esterilización/CSSD, enfermería quirúrgica, cirujano/a, estudiante, docente), cambiable al instante desde la cabecera. No es un sistema de permisos — solo reordena qué información de cada instrumento se muestra primero según ese modo, sin ocultar nunca el resto de la ficha.
-- **Esterilización estructurada**: cada instrumento puede llevar uno o varios métodos de esterilización (vapor, plasma de peróxido, óxido de etileno, baja temperatura, desechable, no esterilizable) con sus propios parámetros (temperatura, tiempo, presión, ciclo recomendado, compatibilidad, restricciones), más una ficha técnica (fabricante, IFU, mantenimiento, inspección, vida útil) — no es texto libre, es un dato consultable.
-- **Bandejas de instrumental**: sets de instrumental (cajas/bandejas) con checklist de instrumentos, cantidad esperada y posición física de cada uno, fotos, versionado y flujo de aprobación igual que técnicas/protocolos, duplicar una bandeja como base de otra, y **sesiones reales de preparación**: cada montaje físico tras lavado/esterilización queda registrado item a item, con control de calidad/validación de otra persona (o la misma) sobre esa sesión concreta.
-- **Diseño propio y navegación responsive**: sistema de diseño unificado (tipografía, color, espaciados) con una única experiencia de navegación — barra lateral en escritorio, navegación inferior en móvil — igual en todas las pantallas.
-- **Inicio centrado en la búsqueda**: la pantalla de inicio abre con un buscador global (instrumental, técnicas, protocolos, tarjetas, bandejas), actividad reciente y favoritos, en vez de un dashboard estático.
-- **Modo claro/oscuro** con toggle manual persistente.
+- **Catàleg**: 118 instruments organitzats per 17 especialitats/àrees (cirurgia general, laparoscòpia i energia avançada, cirurgia robòtica, traumatologia i ortopèdia, neurocirurgia, cardiovascular, ginecologia i obstetrícia, urologia, otorinolaringologia, angiologia i cirurgia vascular, cirurgia oral i maxil·lofacial, cirurgia pediàtrica, cirurgia plàstica/estètica i reparadora, cirurgia toràcica, dermatologia medicoquirúrgica i venereologia, oftalmologia, anestesiologia i reanimació) i per categoria funcional (tall, dissecció, sutura, separació, succió, equips i màquines, especials). Cada instrument té el nom i els àlies (noms comercials i fabricant, ex. "LigaSure" de Medtronic, "Harmonic" d'Ethicon) i, per a la resta de contingut (descripció, ús, consell clínic), tot completament traduït als 3 idiomes de l'app — no un simple text fix en un únic idioma.
+- **Aprèn**: flashcards i quiz d'opció múltiple amb millor puntuació guardada.
+- **Progrés**: seguiment local d'instruments apresos per categoria.
+- **Assistent de creació d'espai de treball**: en donar d'alta un grup nou, un assistent guiat demana el tipus d'organització i l'especialitat principal, i ofereix adoptar d'entrada un paquet inicial de safates recomanades ja publicades a la Biblioteca Pública — en comptes de començar de zero.
+- **Organització, no només hospital**: el grup pot ser un hospital, una clínica, una universitat, un centre de simulació, un fabricant o un equip privat (`org_type`), cadascun organitzat en diversos **espais de treball** (per especialitat, servei, formació...); tècniques, protocols i targetes de preferència pengen d'un espai, no només de l'organització sencera.
+- **Model de dades relacional**: fabricant, cirurgià, especialitat i etiquetes són entitats pròpies amb les seves pròpies taules i FK, no text lliure — "no desar text quan pot existir una relació". Menys duplicació, cerques i filtres més fiables.
+- **Tècniques quirúrgiques i protocols**: contingut propi de l'espai, amb **versionat i flux d'aprovació** — cada edició crea un esborrany; qui aprova el revisa, el compara camp a camp amb la versió publicada i l'aprova o el rebutja. Res se sobreescriu: hi ha historial complet i restauració a versions anteriors. Especialitat estandarditzada segons el catàleg oficial d'especialitats quirúrgiques (Real Decret 183/2008). Els passos d'un protocol es poden agrupar en **categories opcionals** (estil checklist de seguretat quirúrgica de l'OMS: Preoperatori, Anestèsia, Equipament, Instrumental, Seguretat, o una categoria pròpia).
+- **Targetes de preferència**: instrumental específic per cirurgià i procediment, compartit entre el personal del mateix espai via Supabase, amb marca de "validat pel cirurgià" i el **mateix versionat i flux d'aprovació** (esborrany → revisió → publicada → arxivada) que tècniques/protocols/safates.
+- **Rols granulars per espai, individuals o per equip**: Owner i Administrator a nivell d'organització; Approver, Editor i Reader assignats per espai a una persona o a un **equip sencer** d'un cop (`teams`/`team_members`) — el rol efectiu és el màxim entre el directe i l'heretat de l'equip.
+- **Alta de grup per autoservei**: qualsevol persona (cap de quiròfan o qui vulgui) pot registrar la seva organització. La persona que la crea és Owner i Administrator — pot regenerar el codi d'invitació, gestionar membres, equips, rols per espai i transferir la propietat.
+- **Auditoria**: registre de qui va fer què i quan sobre accions sensibles (aprovar/rebutjar, crear/esborrar documents, canvis de rol, transferència de propietat, inici de sessió), visible per a admin/owner.
+- **Cobertura de coneixement i analítica d'ús**: dashboard agregat de quantes tècniques/protocols hi ha documentats per especialitat (publicats vs. en revisió) i totals d'espais/membres, més **analítica d'ús real** (instrumental i contingut més consultat, cerques més freqüents, cerques sense resultat) — agregada per organització i visible només per a admin, sense dades individuals per persona.
+- **RGPD**: exportar les pròpies dades (perfil, contingut creat/aprovat, rols) com a JSON, i eliminar el compte — el contingut que s'hagi creat o aprovat es conserva anonimitzat per a l'equip ("Usuari eliminat"), no es perd el coneixement compartit.
+- **Avís d'actualització** (Android/iOS): comprova si hi ha una versió més recent publicada i ho notifica sense bloquejar l'ús.
+- **Multiidioma**: català per defecte, castellà i anglès seleccionables des d'una icona al mateix Inici, amb l'elecció desada al dispositiu. La landing pública segueix el mateix criteri.
+- **Instrumental personalitzat de l'equip**: cada espai de treball pot donar d'alta el seu propi instrumental (amb variants i foto), privat a aquell hospital/espai — mai es barreja amb el catàleg global ni és visible fora del teu equip. Cada foto pujada per un equip porta un avís explícit de que no està verificada per Instriq (a diferència de les del catàleg global, amb llicència lliure comprovada).
+- **Mode sense connexió**: tècniques, protocols i targetes de preferència es cauen localment i es poden consultar sense xarxa; crear o editar contingut sense connexió es posa a la cua i es sincronitza només en recuperar-la.
+- **Notificacions push**: avís quan un contingut entra en revisió, s'aprova o es rebutja (Firebase Cloud Messaging), sense dependre d'obrir l'app per assabentar-se'n.
+- **Mode de Treball**: cada persona activa un únic mode (instrumentista, supervisió de quiròfan, esterilització/CSSD, infermeria quirúrgica, cirurgià/ana, estudiant, docent), canviable a l'instant des de la capçalera. No és un sistema de permisos — només reordena quina informació de cada instrument es mostra primer segons aquest mode, sense amagar mai la resta de la fitxa.
+- **Esterilització estructurada**: cada instrument pot portar un o diversos mètodes d'esterilització (vapor, plasma de peròxid, òxid d'etilè, baixa temperatura, d'un sol ús, no esterilitzable) amb els seus propis paràmetres (temperatura, temps, pressió, cicle recomanat, compatibilitat, restriccions), més una fitxa tècnica (fabricant, IFU, manteniment, inspecció, vida útil) — no és text lliure, és una dada consultable.
+- **Safates d'instrumental**: sets d'instrumental (caixes/safates) amb checklist d'instruments, quantitat esperada i posició física de cadascun, fotos, versionat i flux d'aprovació igual que tècniques/protocols, duplicar una safata com a base d'una altra, i **sessions reals de preparació**: cada muntatge físic després de rentat/esterilització queda registrat ítem a ítem, amb control de qualitat/validació d'una altra persona (o la mateixa) sobre aquesta sessió concreta.
+- **Biblioteca Pública amb traduccions comunitàries**: tècniques/protocols, safates i instrumental publicats a nivell públic (no lligats a cap organització), amb el mateix flux esborrany → revisió → publicació. Qualsevol contribuïdor pot proposar una traducció d'un contingut ja publicat a un altre idioma (ca/es/en): es clona com un esborrany independent en el nou idioma, que passa pel mateix flux de revisió — mai traducció automàtica, sempre revisat per una persona. **Les meves aportacions**: pantalla dedicada perquè un contribuïdor trobi i reprengui els seus propis esborranys de contingut públic, encara no publicats.
+- **Disseny propi i navegació responsive**: sistema de disseny unificat (tipografia, color, espaiats) amb una única experiència de navegació — barra lateral en escriptori, navegació inferior en mòbil — igual a totes les pantalles; el contingut es centra amb una amplada màxima en pantalles grans, en comptes d'estirar-se de vora a vora.
+- **Inici centrat en la cerca**: la pantalla d'inici s'obre amb un cercador global (instrumental, tècniques, protocols, targetes, safates), activitat recent i preferits, en comptes d'un dashboard estàtic.
+- **Mode clar/fosc** amb interruptor manual persistent.
 
-## Stack técnico
+## Stack tècnic
 
-- **Flutter** (Dart) — Android, iOS y Web desde el mismo código.
-- **Supabase** — Auth (email/contraseña), Postgres con Row Level Security, Storage (fotos de instrumental personalizado), Edge Functions, API REST autogenerada.
-- **Firebase Cloud Messaging** — envío de notificaciones push (disparadas por un Database Webhook sobre el log de auditoría).
-- **Resend** — email transaccional de Supabase Auth (confirmación de cuenta, recuperar contraseña) desde `hola@instriq.org`.
-- **connectivity_plus + shared_preferences** — detección de conexión y caché/cola de sincronización para el modo sin conexión (sin base de datos local nueva).
-- **shared_preferences** para progreso y preferencia de tema local (funciona sin cuenta).
+- **Flutter** (Dart) — Android, iOS i Web des del mateix codi.
+- **Supabase** — Auth (email/contrasenya), Postgres amb Row Level Security, Storage (fotos d'instrumental personalitzat), Edge Functions, API REST autogenerada.
+- **Firebase Cloud Messaging** — enviament de notificacions push (disparades per un Database Webhook sobre el log d'auditoria).
+- **Resend** — email transaccional de Supabase Auth (confirmació de compte, recuperar contrasenya) des de `hola@instriq.org`.
+- **connectivity_plus + shared_preferences** — detecció de connexió i caché/cua de sincronització per al mode sense connexió (sense base de dades local nova).
+- **shared_preferences** per a progrés i preferència de tema local (funciona sense compte).
 
-## Estructura del proyecto
+## Estructura del projecte
 
 ```
 lib/
-  l10n/         # ARB (català/castellano/inglés) + AppLocalizations generado (flutter gen-l10n)
+  l10n/         # ARB (català/castellà/anglès) + AppLocalizations generat (flutter gen-l10n)
   models/       # Instrument, PreferenceCard(Version), GroupDocument(Version, ProtocolStep), Workspace(Role/Member),
-                # Organization (= grupo, con org_type), AuditEntry, HospitalContentStats, CustomInstrument(Variant),
+                # Organization (= grup, amb org_type), AuditEntry, HospitalContentStats, CustomInstrument(Variant),
                 # WorkMode, SterilizationMethodEntry/InstrumentTechnicalInfo, Tray(Version, Item),
                 # Manufacturer, Surgeon, SpecialtyEntity, Tag, ReferenceDocument, Team, UsageStats
-  data/         # Catálogo de instrumental (110) y especialidades quirúrgicas estándar
-  design_system/ # Tokens (color, tipografía, espaciado) y componentes compartidos del sistema visual
-  navigation/   # Shell responsive (StatefulShellRoute): barra lateral en escritorio, navegación inferior en móvil
-  services/     # Supabase, auth, perfil/organización, espacios, progreso, tema, idioma, cuenta (GDPR),
-                # versión de la app, auditoría, analítica de uso, instrumental personalizado,
-                # conectividad, caché/cola de sincronización offline, notificaciones push,
-                # esterilización, bandejas, equipos (teams), tarjetas de preferencia (versionado)
+  data/         # Catàleg d'instrumental (118) i especialitats quirúrgiques estàndard
+  design_system/ # Tokens (color, tipografia, espaiat) i components compartits del sistema visual
+  navigation/   # Shell responsive (StatefulShellRoute): barra lateral en escriptori, navegació inferior en mòbil
+  services/     # Supabase, auth, perfil/organització, espais, progrés, tema, idioma, compte (RGPD),
+                # versió de l'app, auditoria, analítica d'ús, instrumental personalitzat,
+                # connectivitat, caché/cua de sincronització sense connexió, notificacions push,
+                # esterilització, safates, equips (teams), targetes de preferència (versionat)
   screens/
-    auth/       # Entrada única (unirse/crear grupo con cuenta en el mismo formulario), login, flujo de conexión
-    admin/      # Gestión de la organización (código, miembros, equipos, propiedad)
-    ...         # Inicio (búsqueda global), Catálogo, Aprende, progreso, espacios, técnicas/protocolos,
-                # tarjetas de preferencia (versionado), cuenta y privacidad, auditoría, cobertura de
-                # conocimiento y analítica de uso, instrumental personalizado del equipo, bandejas
-  utils/        # Generador de código de invitación
+    auth/       # Entrada única (unir-se/crear grup amb compte en el mateix formulari), login, flux de connexió
+    admin/      # Gestió de l'organització (codi, membres, equips, propietat)
+    ...         # Inici (cerca global), Catàleg, Aprèn, progrés, espais, tècniques/protocols,
+                # targetes de preferència (versionat), compte i privacitat, auditoria, cobertura de
+                # coneixement i analítica d'ús, instrumental personalitzat de l'equip, safates,
+                # Biblioteca Pública (contingut i traduccions), les meves aportacions
+  utils/        # Generador de codi d'invitació
 supabase/
-  schema_v*.sql    # Esquema SQL (ejecutar en orden: schema.sql → schema_v29_public_library.sql)
-  functions/       # Edge Functions (send-push: envía notificaciones vía FCM a partir del log de auditoría)
+  schema_v*.sql    # Esquema SQL (executa en ordre: schema.sql → schema_v29_public_library.sql → ...)
+  functions/       # Edge Functions (send-push: envia notificacions via FCM a partir del log d'auditoria)
 ```
 
-## Desarrollo
+## Desenvolupament
 
 ```bash
 flutter pub get
-flutter run                 # dispositivo/emulador Android o iOS conectado
+flutter run                 # dispositiu/emulador Android o iOS connectat
 flutter run -d chrome        # navegador
 ```
 
 ### Backend (Supabase)
 
-1. Crea un proyecto en [supabase.com](https://supabase.com).
-2. En el SQL Editor, ejecuta en orden todos los `supabase/schema_v*.sql` (y `schema.sql` primero):
-   `schema.sql` → `schema_v2_hospital_admin.sql` → `schema_v3_fix_rls_recursion.sql` → `schema_v4_group_documents.sql` → `schema_v5_group_document_versions.sql` → `schema_v6_workspaces.sql` → `schema_v7_roles.sql` → `schema_v8_app_config.sql` → `schema_v9_gdpr.sql` → `schema_v10_audit.sql` → `schema_v11_analytics.sql` → `schema_v12_push_notifications.sql` → `schema_v13_custom_instruments.sql` → `schema_v14_security_hardening.sql` → `schema_v15_clinical_knowledge_model.sql` → `schema_v16_community_photos.sql` → `schema_v17_fix_anon_sterilization_read.sql` → `schema_v18_work_mode_favorites_recent.sql` → `schema_v19_core_domain_model.sql` → `schema_v20_organizations_rename.sql` → `schema_v21_teams_and_login_audit.sql` → `schema_v22_preference_card_versioning.sql` → `schema_v23_usage_analytics.sql` → `schema_v24_knowledge_links.sql` → `schema_v25_tray_preparation.sql` → `schema_v26_learning_progress.sql` → `schema_v27_contributors.sql` → `schema_v28_preference_card_constraints_fix.sql` → `schema_v29_public_library.sql` → `schema_v30_hospital_admin_promotion.sql` → `schema_v31_profile_security_hardening.sql` → `schema_v32_cssd_workspace.sql` → `schema_v33_public_knowledge_links_and_profile.sql` → `schema_v34_rpc_grants_hardening.sql` → `schema_v35_rpc_grants_hardening_fix.sql` → `schema_v36_public_growth_counter.sql` → `schema_v37_fix_stale_updated_at_triggers.sql` → `schema_v38_epic2_expansion.sql` → `schema_v39_custom_instrument_versioning.sql` → `schema_v40_duplicate_content.sql` → `schema_v41_invitations.sql` → `schema_v42_tray_adoption.sql` → `schema_v43_security_hardening.sql` → `schema_v44_storage_path_validation.sql` → `schema_v45_catalog_content_reports.sql` → `schema_v46_feature_suggestions.sql` → `schema_v47_authz_null_bypass_fix.sql` → `schema_v48_public_instruments.sql`.
-3. Copia la URL y la **publishable key** (Project Settings → API) a `lib/services/supabase_config.dart`. Es pública/segura de commitear — la seguridad real la da Row Level Security, no el secreto de esta key.
-4. Para las notificaciones push: despliega `supabase/functions/send-push` (`supabase functions deploy send-push`), añade el secret `FCM_SERVICE_ACCOUNT_JSON` (JSON del service account de Firebase) en Edge Functions → Secrets, y confirma que exista un Database Webhook o trigger que llame a esa función en cada `insert` sobre `audit_log` (`schema_v12` ya deja el trigger listo si tu proyecto tiene `pg_net`).
-5. Para las invitaciones por email: despliega `supabase/functions/send-invitation-email` (`supabase functions deploy send-invitation-email`), añade el secret `RESEND_API_KEY` (distinto del SMTP que ya usa Supabase Auth para sus propios correos), y configura en el dashboard (Database → Webhooks) un webhook sobre `insert` en `invitations` que apunte a esa función.
-6. Ambos webhooks anteriores deben autenticarse ante su función con un secreto compartido, para que nadie con la publishable key pública pueda invocarlos directamente (ver `schema_v43_security_hardening.sql`): genera un valor aleatorio, guárdalo como secret `WEBHOOK_SHARED_SECRET` en Edge Functions → Secrets (para ambas funciones), guárdalo también en Supabase Vault con el nombre `webhook_shared_secret` (`select vault.create_secret('<valor>', 'webhook_shared_secret', '...')`, `trigger_send_push()` ya lo lee de ahí), y añade la cabecera `X-Webhook-Secret: <mismo valor>` al webhook de `invitations` que configuraste en el paso anterior.
-7. Para el instrumental personalizado: confirma que el bucket privado `custom-instrument-photos` existe en Storage (la migración `schema_v13` lo crea; en algunos proyectos hay que crearlo a mano desde el dashboard con el mismo nombre).
-8. Ejecuta `flutterfire configure` (requiere un proyecto Firebase) para generar `lib/firebase_options.dart` y el `google-services.json`/`GoogleService-Info.plist` de cada plataforma — ninguno de los tres se commitea (ver `.gitignore`): son claves de cliente Firebase, no secretas en sí mismas, pero cada quien las genera contra su propio proyecto en vez de compartir uno común. La protección real de esas claves es restringirlas en Google Cloud Console (paquete Android + SHA-1, bundle iOS, referrer HTTP en Web), no mantenerlas fuera del repo.
+1. Crea un projecte a [supabase.com](https://supabase.com).
+2. Al SQL Editor, executa en ordre tots els `supabase/schema_v*.sql` (i `schema.sql` primer):
+   `schema.sql` → `schema_v2_hospital_admin.sql` → `schema_v3_fix_rls_recursion.sql` → `schema_v4_group_documents.sql` → `schema_v5_group_document_versions.sql` → `schema_v6_workspaces.sql` → `schema_v7_roles.sql` → `schema_v8_app_config.sql` → `schema_v9_gdpr.sql` → `schema_v10_audit.sql` → `schema_v11_analytics.sql` → `schema_v12_push_notifications.sql` → `schema_v13_custom_instruments.sql` → `schema_v14_security_hardening.sql` → `schema_v15_clinical_knowledge_model.sql` → `schema_v16_community_photos.sql` → `schema_v17_fix_anon_sterilization_read.sql` → `schema_v18_work_mode_favorites_recent.sql` → `schema_v19_core_domain_model.sql` → `schema_v20_organizations_rename.sql` → `schema_v21_teams_and_login_audit.sql` → `schema_v22_preference_card_versioning.sql` → `schema_v23_usage_analytics.sql` → `schema_v24_knowledge_links.sql` → `schema_v25_tray_preparation.sql` → `schema_v26_learning_progress.sql` → `schema_v27_contributors.sql` → `schema_v28_preference_card_constraints_fix.sql` → `schema_v29_public_library.sql` → `schema_v30_hospital_admin_promotion.sql` → `schema_v31_profile_security_hardening.sql` → `schema_v32_cssd_workspace.sql` → `schema_v33_public_knowledge_links_and_profile.sql` → `schema_v34_rpc_grants_hardening.sql` → `schema_v35_rpc_grants_hardening_fix.sql` → `schema_v36_public_growth_counter.sql` → `schema_v37_fix_stale_updated_at_triggers.sql` → `schema_v38_epic2_expansion.sql` → `schema_v39_custom_instrument_versioning.sql` → `schema_v40_duplicate_content.sql` → `schema_v41_invitations.sql` → `schema_v42_tray_adoption.sql` → `schema_v43_security_hardening.sql` → `schema_v44_storage_path_validation.sql` → `schema_v45_catalog_content_reports.sql` → `schema_v46_feature_suggestions.sql` → `schema_v47_authz_null_bypass_fix.sql` → `schema_v48_public_instruments.sql` → `schema_v49_workspace_wizard.sql` → `schema_v50_public_translations.sql`.
+3. Copia la URL i la **publishable key** (Project Settings → API) a `lib/services/supabase_config.dart`. És pública/segura de fer commit — la seguretat real la dona Row Level Security, no el secret d'aquesta key.
+4. Per a les notificacions push: desplega `supabase/functions/send-push` (`supabase functions deploy send-push`), afegeix el secret `FCM_SERVICE_ACCOUNT_JSON` (JSON del service account de Firebase) a Edge Functions → Secrets, i confirma que existeixi un Database Webhook o trigger que cridi aquesta funció en cada `insert` sobre `audit_log` (`schema_v12` ja deixa el trigger llest si el teu projecte té `pg_net`).
+5. Per a les invitacions per email: desplega `supabase/functions/send-invitation-email` (`supabase functions deploy send-invitation-email`), afegeix el secret `RESEND_API_KEY` (diferent del SMTP que ja fa servir Supabase Auth per als seus propis correus), i configura al dashboard (Database → Webhooks) un webhook sobre `insert` a `invitations` que apunti a aquesta funció.
+6. Tots dos webhooks anteriors s'han d'autenticar davant la seva funció amb un secret compartit, perquè ningú amb la publishable key pública els pugui invocar directament (veure `schema_v43_security_hardening.sql`): genera un valor aleatori, desa'l com a secret `WEBHOOK_SHARED_SECRET` a Edge Functions → Secrets (per a totes dues funcions), desa'l també a Supabase Vault amb el nom `webhook_shared_secret` (`select vault.create_secret('<valor>', 'webhook_shared_secret', '...')`, `trigger_send_push()` ja el llegeix d'allà), i afegeix la capçalera `X-Webhook-Secret: <mateix valor>` al webhook d'`invitations` que vas configurar al pas anterior.
+7. Per a l'instrumental personalitzat: confirma que el bucket privat `custom-instrument-photos` existeix a Storage (la migració `schema_v13` el crea; en alguns projectes cal crear-lo a mà des del dashboard amb el mateix nom).
+8. Executa `flutterfire configure` (requereix un projecte Firebase) per generar `lib/firebase_options.dart` i el `google-services.json`/`GoogleService-Info.plist` de cada plataforma — cap dels tres es fa commit (veure `.gitignore`): són claus de client Firebase, no secretes en si mateixes, però cadascú les genera contra el seu propi projecte en comptes de compartir-ne un de comú. La protecció real d'aquestes claus és restringir-les a Google Cloud Console (paquet Android + SHA-1, bundle iOS, referrer HTTP a Web), no mantenir-les fora del repositori.
 
-## Despliegue
+## Desplegament
 
-- **App** (`app.instriq.org`): Vercel. El repo incluye `vercel.json` + `vercel_build.sh` — como Vercel no trae Flutter preinstalado, el script clona el SDK stable en cada build, genera las localizaciones (`flutter gen-l10n`) y compila con `flutter build web --release`. Basta con importar el repo en Vercel (framework preset "Other") y conectar el subdominio desde Cloudflare con un CNAME a `cname.vercel-dns.com`. `lib/firebase_options.dart` no se commitea (ver `.gitignore` — claves de cliente Firebase, seguras de exponer solo si están restringidas en Google Cloud Console, pero cada entorno genera las suyas en vez de compartir un archivo común); `vercel_build.sh` lo regenera en build time a partir de estas variables de entorno de Vercel (Project Settings → Environment Variables), con los valores de la app **Web** en Firebase Console → Project Settings → General:
+- **App** (`app.instriq.org`): Vercel. El repositori inclou `vercel.json` + `vercel_build.sh` — com que Vercel no porta Flutter preinstal·lat, l'script clona l'SDK stable a cada build, genera les localitzacions (`flutter gen-l10n`) i compila amb `flutter build web --release`. N'hi ha prou amb importar el repositori a Vercel (framework preset "Other") i connectar el subdomini des de Cloudflare amb un CNAME a `cname.vercel-dns.com`. `lib/firebase_options.dart` no es fa commit (veure `.gitignore` — claus de client Firebase, segures d'exposar només si estan restringides a Google Cloud Console, però cada entorn genera les seves en comptes de compartir un fitxer comú); `vercel_build.sh` el regenera en build time a partir d'aquestes variables d'entorn de Vercel (Project Settings → Environment Variables), amb els valors de l'app **Web** a Firebase Console → Project Settings → General:
   - `FIREBASE_WEB_API_KEY`, `FIREBASE_WEB_APP_ID`, `FIREBASE_MESSAGING_SENDER_ID`, `FIREBASE_PROJECT_ID`, `FIREBASE_AUTH_DOMAIN`, `FIREBASE_STORAGE_BUCKET`, `FIREBASE_MEASUREMENT_ID`.
-- **Landing** (`instriq.org` y `www.instriq.org`): carpeta `landing/`, HTML estático sin build, servido por un Cloudflare Worker (Route `instriq.org/*` y `www.instriq.org/*`, ambos registros DNS proxied). Català por defecto, con selector ES/EN persistido en `localStorage` **y** en la URL (`?lang=es`/`?lang=en`) — cada variante tiene su propio `hreflang`/canonical, para que los buscadores puedan indexar las tres versiones, no solo la catalana. Cabeceras de seguridad (`landing/_headers`: CSP, X-Frame-Options, HSTS...). Incluye la política de privacidad (`landing/privacidad.html`).
-- **Android (Google Play)**: `targetSdk`/`compileSdk` 36 (Android 16), requisito de Google Play desde 2026-08-31 — Flutter 3.44.8, AGP 9.0.1, Kotlin 2.3.20, Gradle 9.1.0, JDK 17. AAB firmado generado (`android/app/instriq-release.jks`, `android/key.properties` no versionado); falta solo la subida manual a Play Console.
+- **Landing** (`instriq.org` i `www.instriq.org`): carpeta `landing/`, HTML estàtic sense build, servit per un Cloudflare Worker (Route `instriq.org/*` i `www.instriq.org/*`, tots dos registres DNS proxied). Català per defecte, amb selector ES/EN persistit a `localStorage` **i** a la URL (`?lang=es`/`?lang=en`) — cada variant té el seu propi `hreflang`/canonical, perquè els cercadors puguin indexar les tres versions, no només la catalana. Capçaleres de seguretat (`landing/_headers`: CSP, X-Frame-Options, HSTS...). Inclou la política de privacitat (`landing/privacidad.html`).
+- **Android (Google Play)**: `targetSdk`/`compileSdk` 36 (Android 16), requisit de Google Play des de 2026-08-31 — Flutter 3.44.8, AGP 9.0.1, Kotlin 2.3.20, Gradle 9.1.0, JDK 17. AAB signat generat (`android/app/instriq-release.jks`, `android/key.properties` no versionat); falta només la pujada manual a Play Console.
 
-## Licencias
+## Llicències
 
-- **Código**: [AGPL-3.0](LICENSE).
-- **Documentación**: CC BY-SA 4.0.
-- **Fotos de instrumental**: Wikimedia Commons con licencia libre verificada (CC0/CC-BY/CC-BY-SA); la atribución de cada una se muestra en la propia app, junto a la imagen.
+- **Codi**: [AGPL-3.0](LICENSE).
+- **Documentació**: CC BY-SA 4.0.
+- **Fotos d'instrumental**: Wikimedia Commons amb llicència lliure verificada (CC0/CC-BY/CC-BY-SA); l'atribució de cadascuna es mostra a la mateixa app, al costat de la imatge.
 
-## Estado / roadmap
+## Estat / roadmap
 
-- [x] Fotos reales de instrumental con licencia libre (parcial, resto sigue con icono por categoría)
-- [x] Landing informativa + política de privacidad en `instriq.org` y `www.instriq.org`
-- [x] Organización → Espacios de trabajo
-- [x] Técnicas quirúrgicas y protocolos, con versionado y flujo de aprobación, y pasos categorizables tipo OMS
-- [x] Roles granulares por espacio (Owner, Administrator, Approver, Editor, Reader)
-- [x] Exportar/eliminar cuenta (GDPR)
-- [x] Aviso de actualización de la app
-- [x] Interfaz en catalán (por defecto), castellano e inglés — app y landing
-- [x] Auditoría de acciones sensibles (aprobar/rechazar, roles, propiedad, crear/borrar documentos)
-- [x] Cobertura de conocimiento documentado por especialidad (publicado vs. en revisión)
-- [x] Instrumental personalizado del equipo, con fotos y variantes, privado por espacio
-- [x] Modo sin conexión con cola de sincronización
-- [x] Notificaciones push (Firebase Cloud Messaging)
-- [x] Modo de Treball (instrumentista, supervisión, esterilización, enfermería, cirujano, estudiante, docente) — modo único y activo, reordena la ficha de instrumento sin ocultar nada
-- [x] Esterilización estructurada por instrumento (método, parámetros, ficha técnica/IFU/fabricante)
-- [x] Bandejas de instrumental: checklist, fotos, versionado y aprobación
-- [x] Diseño propio y navegación responsive (sidebar escritorio / bottom-nav móvil, un único sistema visual)
-- [x] Inicio centrado en búsqueda global, con actividad reciente y favoritos
-- [x] Modelo de datos relacional: fabricante, cirujano, especialidad y etiquetas como entidades, no texto libre
-- [x] Organización generalizada (hospital, clínica, universidad, centro de simulación, fabricante, equipo privado)
-- [x] Roles asignados a equipos enteros, además de a personas individuales
-- [x] Auditoría de inicio de sesión (además de acciones sensibles)
-- [x] Analítica de uso real por organización (instrumental/contenido más visto, búsquedas, búsquedas sin resultado)
-- [x] Versionado y flujo de aprobación en tarjetas de preferencia (antes se editaban directo)
-- [x] Actualización de toolchain para el requisito de Google Play de `targetSdk` 36/Android 16 (Flutter, AGP, Kotlin, Gradle, JDK 17)
-- [x] Design System propio consolidado: componentes genéricos (historial/diff de versión, cola de revisión, listado de entidad-retroenlace, formulario/detalle de Biblioteca Pública) sustituyendo patrones triplicados; selector de espacio de trabajo que se salta el paso cuando solo hay uno; embudo de autenticación unificado en una sola pantalla (unirse/crear grupo con cuenta en el mismo formulario, sin pantalla de éxito dedicada)
-- [x] Auditoría de seguridad completa (RLS, funciones `security definer`, coherencia cliente-servidor) con los hallazgos críticos corregidos: sin auto-promoción a admin, `organizations` ya no es legible por cualquiera, expulsar/promover un miembro pasa por función verificada en servidor
-- [x] Segunda ronda de auditoría de seguridad (2026-09) sobre las migraciones más recientes (`schema_v43_security_hardening.sql`): `organizations.owner_id` ya no se puede modificar directamente (mismo guard de columna que `profiles`, solo `transfer_hospital_ownership()` puede cambiarlo); `group_document_videos` ya no expone vídeos pendientes/rechazados a cualquier miembro del workspace; las Edge Functions `send-push`/`send-invitation-email` exigen un secreto compartido (`WEBHOOK_SHARED_SECRET`, guardado también en Supabase Vault) para no poder invocarse directamente con la publishable key pública — antes permitía enviar correos/notificaciones arbitrarios suplantando a Instriq
-- [x] SEO de la landing: `hreflang` real para las 3 variantes de idioma (antes solo la catalana era indexable), metadatos Open Graph/Twitter traducibles, schema `Organization`, cabeceras de seguridad
-- [x] Tercera ronda de auditoría de seguridad (2026-09, `docs/SECURITY_AUDIT_2026-09.md`): corregido un fallo crítico en ~34 funciones `security definer` donde el guard `rol not in (lista)` no rechazaba a quien no tenía ningún rol (NULL tratado como falso en PL/pgSQL) — cualquier cuenta recién registrada podía escribir en organizaciones ajenas; cerrado también el mismo hueco de `EXECUTE` a `anon` (ya corregido una vez para otra función) en 17 funciones adicionales
-- [x] Búsqueda tolerante a erratas en todo el catálogo y los listados (`lib/utils/fuzzy_match.dart`, distancia de Levenshtein acotada + normalización de acentos) — antes exigía coincidencia exacta de subcadena
-- [x] Aviso de contenido desactualizado (más de 12 meses sin revisar) en técnicas/protocolos, bandejas y tarjetas de preferencia publicadas
-- [x] Exportar/imprimir en PDF el checklist de una bandeja, los pasos de una técnica/protocolo o una tarjeta de preferencia (`lib/services/pdf_export.dart`, paquetes `pdf`/`printing`)
-- [x] Instrumental en la Biblioteca Pública: tercer tipo de contenido comunitario (junto a técnicas/protocolos y bandejas), con foto subida por quien colabora (con aviso de no verificada, a diferencia de las del catálogo global) — visible también desde el buscador global de Inicio
+El projecte està en desenvolupament actiu. Tot el que hi ha a la secció "Funcionalitats" de dalt ja està desplegat i funcionant en producció.
 
-Backlog completo (pendientes, EPICs de producto y revisión arquitectónica previa a cada uno): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
+- **Historial complet de tot el que s'ha lliurat** (ordre cronològic, amb el context/bug/decisió de cada entrada): **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
+- **Pendent** (EPICs de producte, deute tècnic i revisió arquitectònica prèvia a cadascun): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
 
 ## Patrocina
 
-Instriq es gratuito y sin inversores, mantenido fuera de horas. Si te resulta útil, puedes patrocinar el proyecto en [GitHub Sponsors](https://github.com/sponsors/mikeyoshio) — cualquier aportación ayuda a cubrir el coste del servidor y el tiempo dedicado.
+Instriq és gratuït i sense inversors, mantingut fora d'hores. Si et resulta útil, pots patrocinar el projecte a [GitHub Sponsors](https://github.com/sponsors/mikeyoshio) — qualsevol aportació ajuda a cobrir el cost del servidor i el temps dedicat.
 
-## Contacto
+## Contacte
 
 [hola@instriq.org](mailto:hola@instriq.org)
