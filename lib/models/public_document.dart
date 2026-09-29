@@ -24,6 +24,8 @@ class PublicDocument {
   final DateTime createdAt;
   final String? publishedVersionId;
   final PublicDocumentVersion? publishedVersion;
+  final String locale;
+  final String translationGroupId;
 
   const PublicDocument({
     required this.id,
@@ -32,6 +34,8 @@ class PublicDocument {
     required this.createdAt,
     this.publishedVersionId,
     this.publishedVersion,
+    this.locale = 'ca',
+    required this.translationGroupId,
   });
 
   factory PublicDocument.fromRow(Map<String, dynamic> row) {
@@ -43,6 +47,8 @@ class PublicDocument {
       createdAt: DateTime.parse(row['created_at'] as String),
       publishedVersionId: row['published_version_id'] as String?,
       publishedVersion: versionRow == null ? null : PublicDocumentVersion.fromRow(versionRow),
+      locale: row['locale'] as String? ?? 'ca',
+      translationGroupId: row['translation_group_id'] as String? ?? row['id'] as String,
     );
   }
 }

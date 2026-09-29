@@ -71,4 +71,31 @@ class PublicDocumentService extends PublicVersionedContentService<PublicDocument
   Future<void> saveDraft(String versionId, PublicDocumentVersion draft) async {
     await client.from('public_document_versions').update(draft.toRow()).eq('id', versionId);
   }
+
+  /// Totes les variants d'idioma d'"el mateix" document (mateix
+  /// `translation_group_id`) -- inclou l'actual. Sense sessió: nomes es
+  /// veuen les que ja tenen versió publicada, mateix criteri de
+  /// `fetchPublished`.
+  Future<List<PublicDocument>> fetchTranslations(String translationGroupId) async {
+    final rows = await client
+        .from('public_documents')
+        .select('*, published_version:public_document_versions!published_version_id(*)')
+        .eq('translation_group_id', translationGroupId)
+        .not('published_version_id', 'is', null);
+    return (rows as List).map((r) => PublicDocument.fromRow((r as Map).cast<String, dynamic>())).toList();
+  }
+
+  /// Proposa una traducció a `locale` a partir de la versió PUBLICADA de
+  /// `sourceDocumentId` -- mai traducció automàtica (`propose_document_
+  /// translation`, schema_v50): crea un document nou (mateix
+  /// `translation_group_id`) amb un primer esborrany ja precarregat amb el
+  /// contingut d'origen, perquè qui tradueix parteixi d'un text real i no
+  /// d'una pàgina en blanc. Retorna l'id del document nou.
+  Future<String> proposeTranslation(String sourceDocumentId, String locale) async {
+    final result = await client.rpc('propose_document_translation', params: {
+      'p_source_document_id': sourceDocumentId,
+      'p_locale': locale,
+    });
+    return result as String;
+  }
 }

@@ -8,12 +8,16 @@ import '../models/public_document.dart';
 import '../models/public_instrument.dart';
 import '../models/public_tray.dart';
 import '../services/auth_service.dart';
+import '../services/contributor_service.dart';
 import '../services/profile_service.dart';
+import '../services/public_document_service.dart';
 import '../services/public_instrument_service.dart';
+import '../services/public_tray_service.dart';
 import '../services/tray_service.dart';
 import '../services/workspace_service.dart';
+import '../utils/public_content_locale_label.dart';
 import 'contributor_public_profile_screen.dart';
-import 'public_entity_form_screen.dart' show PublicEntityKind, PublicEntityKindX;
+import 'public_entity_form_screen.dart';
 import 'tray_form_screen.dart';
 
 /// Vista de lectura d'una tècnica/protocol o safata publicada a la
@@ -55,6 +59,9 @@ class PublicEntityDetailScreen extends StatelessWidget {
     final title = isTray ? trayVersion?.name : (isInstrument ? instrumentVersion?.name : documentVersion?.title);
     final hasVersion = isTray ? trayVersion != null : (isInstrument ? instrumentVersion != null : documentVersion != null);
     final authorId = isTray ? trayVersion?.authorId : (isInstrument ? instrumentVersion?.authorId : documentVersion?.authorId);
+    final translationGroupId = isTray ? tray?.translationGroupId : (isInstrument ? instrument?.translationGroupId : document?.translationGroupId);
+    final sourceId = isTray ? tray?.id : (isInstrument ? instrument?.id : document?.id);
+    final currentLocale = isTray ? tray?.locale : (isInstrument ? instrument?.locale : document?.locale);
 
     return Scaffold(
       appBar: AppBar(title: Text(title ?? l10n.auditDocumentUntitledLabel)),
@@ -65,6 +72,15 @@ class PublicEntityDetailScreen extends StatelessWidget {
                 child: ListView(
                 padding: const EdgeInsets.all(20),
                 children: [
+                  if (translationGroupId != null && sourceId != null && currentLocale != null) ...[
+                    _TranslationBar(
+                      entityKind: entityKind,
+                      translationGroupId: translationGroupId,
+                      sourceId: sourceId,
+                      currentLocale: currentLocale,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                   if (isTray) ...[
                     _AdoptTrayButton(tray: tray!),
                     const SizedBox(height: 20),
@@ -198,6 +214,151 @@ class PublicEntityDetailScreen extends StatelessWidget {
         Text(version.tip!, style: Theme.of(context).textTheme.bodyLarge),
       ],
     ];
+  }
+}
+
+/// Fila de traduccions d'aquest contingut (schema_v50): xips per a cada
+/// idioma ja publicat (tocar-ne un navega a aquella variant) i, si qui mira
+/// és col·laborador actiu, un menú per proposar-ne una que encara no
+/// existeixi -- mai generada a màquina, sempre un esborrany real que passa
+/// pel mateix cicle de revisió que qualsevol altra proposta.
+class _TranslationBar extends StatefulWidget {
+  final PublicEntityKind entityKind;
+  final String translationGroupId;
+  final String sourceId;
+  final String currentLocale;
+
+  const _TranslationBar({
+    required this.entityKind,
+    required this.translationGroupId,
+    required this.sourceId,
+    required this.currentLocale,
+  });
+
+  @override
+  State<_TranslationBar> createState() => _TranslationBarState();
+}
+
+class _TranslationBarState extends State<_TranslationBar> {
+  static const _locales = ['ca', 'es', 'en'];
+
+  bool _loading = true;
+  Map<String, dynamic> _byLocale = {};
+  bool _proposing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final List<dynamic> siblings;
+      if (widget.entityKind.isTray) {
+        siblings = await PublicTrayService.instance.fetchTranslations(widget.translationGroupId);
+      } else if (widget.entityKind.isInstrument) {
+        siblings = await PublicInstrumentService.instance.fetchTranslations(widget.translationGroupId);
+      } else {
+        siblings = await PublicDocumentService.instance.fetchTranslations(widget.translationGroupId);
+      }
+      _byLocale = {
+        for (final s in siblings) (s.locale as String): s,
+      };
+    } catch (_) {
+      // Barra auxiliar: si falla, simplement no es mostren xips, no bloqueja la fitxa.
+    }
+    if (mounted) setState(() => _loading = false);
+  }
+
+
+  void _openSibling(dynamic entity) {
+    final Widget screen;
+    if (widget.entityKind.isTray) {
+      screen = PublicEntityDetailScreen.tray(tray: entity as PublicTray);
+    } else if (widget.entityKind.isInstrument) {
+      screen = PublicEntityDetailScreen.instrument(instrument: entity as PublicInstrument);
+    } else {
+      screen = PublicEntityDetailScreen.document(document: entity as PublicDocument);
+    }
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => screen));
+  }
+
+  Future<void> _proposeTranslation(String locale) async {
+    setState(() => _proposing = true);
+    try {
+      if (widget.entityKind.isTray) {
+        final newId = await PublicTrayService.instance.proposeTranslation(widget.sourceId, locale);
+        final draft = await PublicTrayService.instance.fetchDraftVersion(newId);
+        if (!mounted) return;
+        await Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => PublicEntityFormScreen.tray(trayId: newId, draft: draft),
+        ));
+      } else if (widget.entityKind.isInstrument) {
+        final newId = await PublicInstrumentService.instance.proposeTranslation(widget.sourceId, locale);
+        final draft = await PublicInstrumentService.instance.fetchDraftVersion(newId);
+        if (!mounted) return;
+        await Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => PublicEntityFormScreen.instrument(instrumentId: newId, draft: draft),
+        ));
+      } else {
+        final newId = await PublicDocumentService.instance.proposeTranslation(widget.sourceId, locale);
+        final draft = await PublicDocumentService.instance.fetchDraftVersion(newId);
+        if (!mounted) return;
+        final kind = widget.entityKind == PublicEntityKind.protocol ? DocumentKind.protocol : DocumentKind.technique;
+        await Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => PublicEntityFormScreen.document(kind: kind, documentId: newId, draft: draft),
+        ));
+      }
+      if (mounted) setState(() => _proposing = false);
+    } catch (e) {
+      if (mounted) {
+        setState(() => _proposing = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.translationProposeError(e.toString()))),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    if (_loading) return const SizedBox.shrink();
+    final canContribute = ContributorService.instance.myProfile != null;
+    final missing = _locales.where((l) => !_byLocale.containsKey(l)).toList();
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        for (final locale in _locales)
+          if (_byLocale.containsKey(locale))
+            ChoiceChip(
+              label: Text(publicContentLocaleLabel(l10n, locale)),
+              selected: locale == widget.currentLocale,
+              onSelected: locale == widget.currentLocale ? null : (_) => _openSibling(_byLocale[locale]),
+            ),
+        if (canContribute && missing.isNotEmpty)
+          _proposing
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2)),
+                )
+              : PopupMenuButton<String>(
+                  onSelected: _proposeTranslation,
+                  itemBuilder: (context) => [
+                    for (final locale in missing)
+                      PopupMenuItem(value: locale, child: Text(publicContentLocaleLabel(l10n, locale))),
+                  ],
+                  child: Chip(
+                    avatar: const Icon(Icons.translate, size: 18),
+                    label: Text(l10n.proposeTranslationAction),
+                  ),
+                ),
+      ],
+    );
   }
 }
 

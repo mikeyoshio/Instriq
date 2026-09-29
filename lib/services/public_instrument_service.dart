@@ -75,6 +75,31 @@ class PublicInstrumentService extends PublicVersionedContentService<PublicInstru
     await client.from('public_instrument_versions').update(draft.toRow()).eq('id', versionId);
   }
 
+  /// Totes les variants d'idioma d'"el mateix" instrument (mateix
+  /// `translation_group_id`) -- inclou l'actual. Sense sessió: nomes es
+  /// veuen les que ja tenen versió publicada, mateix criteri de
+  /// `fetchPublished`.
+  Future<List<PublicInstrument>> fetchTranslations(String translationGroupId) async {
+    final rows = await client
+        .from('public_instruments')
+        .select('*, published_version:public_instrument_versions!published_version_id(*)')
+        .eq('translation_group_id', translationGroupId)
+        .not('published_version_id', 'is', null);
+    return (rows as List).map((r) => PublicInstrument.fromRow((r as Map).cast<String, dynamic>())).toList();
+  }
+
+  /// Proposa una traducció a `locale` a partir de la versió PUBLICADA de
+  /// `sourceInstrumentId` -- mai traducció automàtica
+  /// (`propose_instrument_translation`, schema_v50). Retorna l'id de
+  /// l'instrument nou.
+  Future<String> proposeTranslation(String sourceInstrumentId, String locale) async {
+    final result = await client.rpc('propose_instrument_translation', params: {
+      'p_source_instrument_id': sourceInstrumentId,
+      'p_locale': locale,
+    });
+    return result as String;
+  }
+
   /// Bucket públic (a diferència de `custom-instrument-photos`, que és
   /// privat): la ruta és `{user_id}/{fitxer}`, no cal `workspace_id` perquè
   /// la Biblioteca Pública és ortogonal al model d'organitzacions.

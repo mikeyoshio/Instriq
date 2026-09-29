@@ -84,4 +84,28 @@ class PublicTrayService extends PublicVersionedContentService<PublicTrayVersion>
   Future<void> saveDraft(String versionId, PublicTrayVersion draft) async {
     await client.from('public_tray_versions').update(draft.toRow()).eq('id', versionId);
   }
+
+  /// Totes les variants d'idioma d'"la mateixa" safata (mateix
+  /// `translation_group_id`) -- inclou l'actual. Sense sessió: nomes es
+  /// veuen les que ja tenen versió publicada, mateix criteri de
+  /// `fetchPublished`.
+  Future<List<PublicTray>> fetchTranslations(String translationGroupId) async {
+    final rows = await client
+        .from('public_trays')
+        .select('*, published_version:public_tray_versions!published_version_id(*)')
+        .eq('translation_group_id', translationGroupId)
+        .not('published_version_id', 'is', null);
+    return (rows as List).map((r) => PublicTray.fromRow((r as Map).cast<String, dynamic>())).toList();
+  }
+
+  /// Proposa una traducció a `locale` a partir de la versió PUBLICADA de
+  /// `sourceTrayId` -- mai traducció automàtica (`propose_tray_translation`,
+  /// schema_v50). Retorna l'id de la safata nova.
+  Future<String> proposeTranslation(String sourceTrayId, String locale) async {
+    final result = await client.rpc('propose_tray_translation', params: {
+      'p_source_tray_id': sourceTrayId,
+      'p_locale': locale,
+    });
+    return result as String;
+  }
 }

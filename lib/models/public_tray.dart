@@ -7,6 +7,8 @@ class PublicTray {
   final DateTime createdAt;
   final String? publishedVersionId;
   final PublicTrayVersion? publishedVersion;
+  final String locale;
+  final String translationGroupId;
 
   const PublicTray({
     required this.id,
@@ -14,6 +16,8 @@ class PublicTray {
     required this.createdAt,
     this.publishedVersionId,
     this.publishedVersion,
+    this.locale = 'ca',
+    required this.translationGroupId,
   });
 
   factory PublicTray.fromRow(Map<String, dynamic> row) {
@@ -24,6 +28,8 @@ class PublicTray {
       createdAt: DateTime.parse(row['created_at'] as String),
       publishedVersionId: row['published_version_id'] as String?,
       publishedVersion: versionRow == null ? null : PublicTrayVersion.fromRow(versionRow),
+      locale: row['locale'] as String? ?? 'ca',
+      translationGroupId: row['translation_group_id'] as String? ?? row['id'] as String,
     );
   }
 }
