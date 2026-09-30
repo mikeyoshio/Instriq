@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
@@ -21,7 +22,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.myProgressTitle)),
-      body: ListView(
+      body: InstriqResponsiveContent(
+        child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
           Text(l10n.overallProgressLabel, style: Theme.of(context).textTheme.titleMedium),
@@ -108,6 +110,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
             label: Text(l10n.resetProgressTitle),
           ),
         ],
+      ),
       ),
     );
   }

@@ -67,4 +67,46 @@ void main() {
     expect(card.publishedVersion?.validatedBySurgeon, true);
     expect(card.publishedVersion?.status, GroupDocumentVersionStatus.published);
   });
+
+  group('PreferenceCardVersion.copyWith validatedBySurgeon contract', () {
+    const validated = PreferenceCardVersion(
+      id: 'version-1',
+      cardId: 'card-1',
+      versionNumber: 1,
+      status: GroupDocumentVersionStatus.published,
+      procedureName: 'Colecistectomía',
+      items: [PreferenceCardItem(customName: 'Trócar')],
+      validatedBySurgeon: true,
+    );
+
+    test('editing items resets validatedBySurgeon to false', () {
+      final edited = validated.copyWith(items: [const PreferenceCardItem(customName: 'Bisturí')]);
+      expect(edited.validatedBySurgeon, false);
+    });
+
+    test('editing procedureName resets validatedBySurgeon to false', () {
+      final edited = validated.copyWith(procedureName: 'Apendicectomía');
+      expect(edited.validatedBySurgeon, false);
+    });
+
+    test('an explicit validatedBySurgeon passed alongside edited content is honored', () {
+      final edited = validated.copyWith(
+        items: [const PreferenceCardItem(customName: 'Bisturí')],
+        validatedBySurgeon: true,
+      );
+      expect(edited.validatedBySurgeon, true);
+    });
+
+    test('editing unrelated fields (notes/comment) preserves validatedBySurgeon', () {
+      final edited = validated.copyWith(generalNotes: 'Nota nueva');
+      expect(edited.validatedBySurgeon, true);
+    });
+
+    test('toggling validatedBySurgeon alone (no content change) works as before', () {
+      final toggled = validated.copyWith(validatedBySurgeon: false);
+      expect(toggled.validatedBySurgeon, false);
+      expect(toggled.items, validated.items);
+      expect(toggled.procedureName, validated.procedureName);
+    });
+  });
 }

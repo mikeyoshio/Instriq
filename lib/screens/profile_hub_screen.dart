@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../design_system/components/instriq_list_item.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/components/instriq_section_header.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
@@ -153,6 +154,7 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navProfile)),
       body: SafeArea(
+        child: InstriqResponsiveContent(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InstriqSpacing.xl),
           child: Column(
@@ -291,6 +293,7 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
               const Center(child: _VersionEasterEgg()),
             ],
           ),
+        ),
         ),
       ),
     );

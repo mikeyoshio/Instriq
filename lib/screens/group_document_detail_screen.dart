@@ -37,6 +37,7 @@ import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
+import '../widgets/suture_labels.dart';
 import 'group_document_form_screen.dart';
 import 'group_document_version_history_screen.dart';
 import 'instrument_detail_screen.dart';
@@ -630,8 +631,8 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
                 return Card(
                   child: ListTile(
                     leading: const Icon(Icons.line_style),
-                    title: Text(suture.name),
-                    subtitle: Text(suture.material.label),
+                    title: Text(suture.name.forLanguageCode(Localizations.localeOf(context).languageCode)),
+                    subtitle: Text(sutureMaterialValueLabel(l10n, suture.material)),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => SutureDetailScreen(suture: suture)),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../services/sync_queue_service.dart';
 
@@ -38,6 +39,7 @@ class SyncIssuesScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
+        child: InstriqResponsiveContent(
         child: ValueListenableBuilder<List<SyncFailure>>(
           valueListenable: SyncQueueService.instance.failures,
           builder: (context, failures, _) {
@@ -97,6 +99,7 @@ class SyncIssuesScreen extends StatelessWidget {
               },
             );
           },
+        ),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import '../models/group_document.dart';
 import '../models/suture.dart';
 import '../services/group_document_service.dart';
 import '../services/knowledge_link_service.dart';
+import '../widgets/suture_labels.dart';
 import 'group_document_detail_screen.dart';
 
 /// Fitxa d'una sutura del catàleg. Deliberadament sense esterilització/fitxa
@@ -60,7 +61,7 @@ class _SutureDetailScreenState extends State<SutureDetailScreen> {
     final suture = widget.suture;
     final languageCode = Localizations.localeOf(context).languageCode;
     return Scaffold(
-      appBar: AppBar(title: Text(suture.name)),
+      appBar: AppBar(title: Text(suture.name.forLanguageCode(languageCode))),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -69,9 +70,9 @@ class _SutureDetailScreenState extends State<SutureDetailScreen> {
             Wrap(
               spacing: 8,
               children: [
-                Chip(label: Text(suture.material.label)),
+                Chip(label: Text(sutureMaterialValueLabel(l10n, suture.material))),
                 Chip(label: Text(suture.gauge)),
-                Chip(label: Text(suture.needleType.label)),
+                Chip(label: Text(needleTypeValueLabel(l10n, suture.needleType))),
                 Chip(label: Text(suture.absorbable ? l10n.sutureAbsorbable : l10n.sutureNonAbsorbable)),
               ],
             ),

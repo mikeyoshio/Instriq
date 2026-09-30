@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/preference_card.dart';
 import '../models/workspace.dart';
@@ -119,7 +120,8 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
               label: Text(l10n.newCardLabel),
             )
           : null,
-      body: Column(
+      body: InstriqResponsiveContent(
+        child: Column(
         children: [
           if (_fromCache)
             const Padding(
@@ -189,6 +191,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                   ),
           ),
         ],
+      ),
       ),
     );
   }

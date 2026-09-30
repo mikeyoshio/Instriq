@@ -9,6 +9,12 @@ import 'auth_service.dart';
 /// simple (EPIC 8), no un algoritmo adaptativo tipo SM-2. Índice = caja - 1.
 const List<int> kLeitnerIntervalsDays = [1, 3, 7, 14, 30];
 
+/// Progresión pura de caja Leitner, extraída de [ProgressService.recordReviewResult]
+/// para poder testearla sin depender de sesión/red: un acierto sube de caja
+/// (tope en la última, sin RangeError); un fallo siempre vuelve a la 1.
+int nextLeitnerBox(int currentBox, bool correct) =>
+    correct ? (currentBox + 1).clamp(1, kLeitnerIntervalsDays.length) : 1;
+
 class _LearningEntry {
   bool learned;
   int box;
@@ -222,7 +228,7 @@ class ProgressService {
     final userId = AuthService.instance.currentUser?.id;
     if (userId == null) return;
     final currentBox = _serverEntries[id]?.box ?? 1;
-    final newBox = correct ? (currentBox + 1).clamp(1, kLeitnerIntervalsDays.length) : 1;
+    final newBox = nextLeitnerBox(currentBox, correct);
     final nextReview = DateTime.now().add(Duration(days: kLeitnerIntervalsDays[newBox - 1]));
     final entry = _serverEntries.putIfAbsent(id, () => _LearningEntry());
     entry.box = newBox;

@@ -7,8 +7,22 @@ import 'instrument.dart' show InstrumentImage, LocalizedText, Specialty;
 /// a tècniques — però model i pantalles pròpies, deliberadament no
 /// compartides amb `Instrument` (duplicar abans que abstraure prematurament,
 /// mateix criteri que la resta del projecte).
-enum SutureMaterial { seda, vicryl, monocryl, nylon, pds, catgut, prolene, dexon, altres }
+enum SutureMaterial {
+  seda,
+  vicryl,
+  monocryl,
+  nylon,
+  pds,
+  catgut,
+  prolene,
+  dexon,
+  altres
+}
 
+/// `.label` es texto fijo en castellano, solo para depuración o contextos
+/// sin `AppLocalizations` a mano -- mismo criterio que `SterilizationMethod`
+/// (ver `sterilizationMethodValueLabel`): la traducción real vive en
+/// `sutureMaterialValueLabel` (lib/widgets/suture_labels.dart), no en el modelo.
 extension SutureMaterialLabel on SutureMaterial {
   String get label {
     switch (this) {
@@ -36,6 +50,10 @@ extension SutureMaterialLabel on SutureMaterial {
 
 enum NeedleType { cortante, redonda, cortanteInversa, tapercut }
 
+/// `.label` es texto fijo en castellano, solo para depuración o contextos
+/// sin `AppLocalizations` a mano -- mismo criterio que `SutureMaterialLabel`:
+/// la traducción real vive en `needleTypeValueLabel`
+/// (lib/widgets/suture_labels.dart), no en el modelo.
 extension NeedleTypeLabel on NeedleType {
   String get label {
     switch (this) {
@@ -53,7 +71,7 @@ extension NeedleTypeLabel on NeedleType {
 
 class Suture {
   final String id;
-  final String name;
+  final LocalizedText name;
   final SutureMaterial material;
   final String gauge;
   final NeedleType needleType;

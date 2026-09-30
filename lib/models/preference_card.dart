@@ -147,6 +147,15 @@ class PreferenceCardVersion {
   /// [clearSurgeonId]/[clearGeneralNotes]: campos nullable donde pasar `null`
   /// no basta para vaciarlos (se confundiría con "no lo toques") — hay que
   /// pedirlo explícitamente, mismo patrón que [TrayVersion.copyWith].
+  ///
+  /// [validatedBySurgeon] se resetea a `false` en cuanto se tocan [items] o
+  /// [procedureName] -- es justo el contenido clínico que el cirujano valida
+  /// -- a menos que la propia llamada pase [validatedBySurgeon] explícito
+  /// (p.ej. el toggle de `preference_card_detail_screen.dart`, que no toca
+  /// ni items ni procedureName). Sin esto, editar el instrumental de una
+  /// tarjeta ya validada la dejaba mostrándose como "validado por el
+  /// cirujano" sobre contenido que nunca llegó a revisar (hallazgo de
+  /// auditoría de cara a la v1.0).
   PreferenceCardVersion copyWith({
     String? surgeonId,
     bool clearSurgeonId = false,
@@ -158,6 +167,7 @@ class PreferenceCardVersion {
     String? comment,
     bool? pendingSync,
   }) {
+    final contentChanged = items != null || procedureName != null;
     return PreferenceCardVersion(
       id: id,
       cardId: cardId,
@@ -167,7 +177,7 @@ class PreferenceCardVersion {
       procedureName: procedureName ?? this.procedureName,
       items: items ?? this.items,
       generalNotes: clearGeneralNotes ? null : (generalNotes ?? this.generalNotes),
-      validatedBySurgeon: validatedBySurgeon ?? this.validatedBySurgeon,
+      validatedBySurgeon: validatedBySurgeon ?? (contentChanged ? false : this.validatedBySurgeon),
       authorId: authorId,
       approvedBy: approvedBy,
       approvedAt: approvedAt,

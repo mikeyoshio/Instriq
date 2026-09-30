@@ -25,9 +25,8 @@ import '../utils/ref_resolver.dart';
 /// pendientes de revision por especialidad, y totales de espacios/miembros —
 /// no cuanto se lee; la seccion de uso, mas abajo, es la que si mide lectura.
 ///
-/// Pantalla standalone: todavia no esta enlazada desde ningun otro screen
-/// (home_screen.dart u otro) a proposito, para no chocar con cambios en
-/// paralelo. Clase: [KnowledgeDashboardScreen].
+/// Alcanzable desde home_dashboard_panel.dart y profile_hub_screen.dart.
+/// Clase: [KnowledgeDashboardScreen].
 class KnowledgeDashboardScreen extends StatefulWidget {
   const KnowledgeDashboardScreen({super.key});
 
@@ -102,7 +101,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
     if (organizationId == null) {
       setState(() {
         _loading = false;
-        _error = 'Tu usuario no pertenece a ningún grupo todavía.';
+        _error = AppLocalizations.of(context)!.knowledgeCoverageNotInGroupError;
       });
       return;
     }
@@ -116,7 +115,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = 'No se pudo cargar la cobertura de conocimiento: $e';
+        _error = AppLocalizations.of(context)!.knowledgeCoverageLoadError(e.toString());
         _loading = false;
       });
     }
@@ -126,7 +125,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Cobertura de conocimiento')),
+      appBar: AppBar(title: Text(l10n.knowledgeDashboardTitle)),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
@@ -144,21 +143,21 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
                     children: [
                       const _HonestyBanner(),
                       const SizedBox(height: 20),
-                      Text('Totales del grupo', style: Theme.of(context).textTheme.titleMedium),
+                      Text(l10n.knowledgeCoverageGroupTotalsTitle, style: Theme.of(context).textTheme.titleMedium),
                       const SizedBox(height: 8),
                       _TotalsCard(stats: _stats!),
                       const SizedBox(height: 24),
-                      Text('Por especialidad', style: Theme.of(context).textTheme.titleMedium),
+                      Text(l10n.knowledgeCoverageBySpecialtyTitle, style: Theme.of(context).textTheme.titleMedium),
                       const SizedBox(height: 4),
                       Text(
-                        'Técnicas y protocolos documentados, ordenado por nº publicado.',
+                        l10n.knowledgeCoverageBySpecialtySubtitle,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 8),
                       if (_stats!.bySpecialty.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Text('Todavía no hay técnicas ni protocolos documentados en este grupo.'),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Text(l10n.knowledgeCoverageEmptyState),
                         )
                       else
                         _SpecialtyList(stats: _stats!.bySpecialty),
@@ -196,20 +195,20 @@ class _HonestyBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: const Padding(
-        padding: EdgeInsets.all(14),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.info_outline, size: 20),
-            SizedBox(width: 10),
+            const Icon(Icons.info_outline, size: 20),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Esto mide cuánto conocimiento tiene documentado el grupo, '
-                'no cuánto se consulta o se usa — para eso, ver la sección "Uso" más abajo.',
-                style: TextStyle(fontSize: 13),
+                l10n.knowledgeCoverageHonestyBanner,
+                style: const TextStyle(fontSize: 13),
               ),
             ),
           ],
@@ -226,6 +225,7 @@ class _TotalsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final roles = stats.membersByRole;
     return Card(
       child: Padding(
@@ -233,15 +233,17 @@ class _TotalsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _StatRow(label: 'Espacios de trabajo', value: stats.workspacesCount.toString()),
-            _StatRow(label: 'Tarjetas de preferencia', value: stats.preferenceCardsCount.toString()),
+            _StatRow(label: l10n.knowledgeCoverageWorkspacesCountLabel, value: stats.workspacesCount.toString()),
+            _StatRow(
+                label: l10n.knowledgeCoveragePreferenceCardsCountLabel,
+                value: stats.preferenceCardsCount.toString()),
             const Divider(height: 24),
-            Text('Miembros por rol', style: Theme.of(context).textTheme.labelLarge),
+            Text(l10n.knowledgeCoverageMembersByRoleTitle, style: Theme.of(context).textTheme.labelLarge),
             const SizedBox(height: 8),
-            _StatRow(label: 'Administradores', value: roles.administrator.toString()),
-            _StatRow(label: 'Aprobadores (en algún espacio)', value: roles.approver.toString()),
-            _StatRow(label: 'Editores (en algún espacio)', value: roles.editor.toString()),
-            _StatRow(label: 'Lectores (en algún espacio)', value: roles.reader.toString()),
+            _StatRow(label: l10n.knowledgeCoverageAdministratorsLabel, value: roles.administrator.toString()),
+            _StatRow(label: l10n.knowledgeCoverageApproversLabel, value: roles.approver.toString()),
+            _StatRow(label: l10n.knowledgeCoverageEditorsLabel, value: roles.editor.toString()),
+            _StatRow(label: l10n.knowledgeCoverageReadersLabel, value: roles.reader.toString()),
           ],
         ),
       ),
@@ -277,6 +279,7 @@ class _SpecialtyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final maxPublished = stats
         .map((s) => s.publishedCount)
         .fold<int>(0, (a, b) => a > b ? a : b);
@@ -303,13 +306,13 @@ class _SpecialtyList extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${s.publishedCount} publicada${s.publishedCount == 1 ? '' : 's'}',
+                      l10n.knowledgeCoveragePublishedCount(s.publishedCount),
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     if (s.draftReviewCount > 0) ...[
                       const SizedBox(width: 10),
                       Text(
-                        '· ${s.draftReviewCount} pendiente${s.draftReviewCount == 1 ? '' : 's'} de revisión',
+                        '· ${l10n.knowledgeCoveragePendingReviewCount(s.draftReviewCount)}',
                         style: TextStyle(color: Colors.grey[600]),
                       ),
                     ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_list_item.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/components/instriq_section_header.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
@@ -72,6 +73,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navLibrary)),
       body: SafeArea(
+        child: InstriqResponsiveContent(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InstriqSpacing.xl),
           child: Column(
@@ -139,6 +141,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   ],
             ],
           ),
+        ),
         ),
       ),
     );

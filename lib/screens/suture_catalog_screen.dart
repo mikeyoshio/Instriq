@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../data/sutures_data.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/suture.dart';
 import '../utils/fuzzy_match.dart';
+import '../widgets/suture_labels.dart';
 import 'suture_detail_screen.dart';
 
 /// Catàleg de sutures, paral·lel a [CatalogScreen] però deliberadament
@@ -32,8 +34,9 @@ class _SutureCatalogScreenState extends State<SutureCatalogScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
     final filtered = kSutures.where((s) {
-      final matchesQuery = fuzzyContains(s.name, _query);
+      final matchesQuery = fuzzyContains(s.name.forLanguageCode(languageCode), _query);
       final matchesMaterial = _materialFilters.isEmpty || _materialFilters.contains(s.material);
       return matchesQuery && matchesMaterial;
     }).toList();
@@ -52,7 +55,8 @@ class _SutureCatalogScreenState extends State<SutureCatalogScreen> {
             ),
         ],
       ),
-      body: Column(
+      body: InstriqResponsiveContent(
+        child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12),
@@ -75,7 +79,7 @@ class _SutureCatalogScreenState extends State<SutureCatalogScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: FilterChip(
-                      label: Text(m.label),
+                      label: Text(sutureMaterialValueLabel(l10n, m)),
                       selected: _materialFilters.contains(m),
                       onSelected: (_) => _toggleMaterial(m),
                       showCheckmark: true,
@@ -96,8 +100,8 @@ class _SutureCatalogScreenState extends State<SutureCatalogScreen> {
                       return Card(
                         child: ListTile(
                           leading: const Icon(Icons.line_style),
-                          title: Text(suture.name),
-                          subtitle: Text('${suture.material.label} · ${suture.gauge}'),
+                          title: Text(suture.name.forLanguageCode(languageCode)),
+                          subtitle: Text('${sutureMaterialValueLabel(l10n, suture.material)} · ${suture.gauge}'),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => SutureDetailScreen(suture: suture)),
@@ -108,6 +112,7 @@ class _SutureCatalogScreenState extends State<SutureCatalogScreen> {
                   ),
           ),
         ],
+      ),
       ),
     );
   }
