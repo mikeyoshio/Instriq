@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_list_item.dart';
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../services/profile_service.dart';
 import 'audit_log_screen.dart';
@@ -43,6 +44,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navActivity)),
       body: SafeArea(
+        child: InstriqResponsiveContent(
         child: canAccessActivity
             ? SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
@@ -66,6 +68,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 ),
               )
             : Center(child: Text(l10n.activityAdminOnly)),
+        ),
       ),
     );
   }

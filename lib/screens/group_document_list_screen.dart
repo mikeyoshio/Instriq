@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_document_version.dart';
@@ -121,7 +122,8 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
               label: Text(l10n.newKindLabel(widget.kind.label.toLowerCase())),
             )
           : null,
-      body: Column(
+      body: InstriqResponsiveContent(
+        child: Column(
         children: [
           if (_fromCache)
             const Padding(
@@ -176,6 +178,7 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
                   ),
           ),
         ],
+      ),
       ),
     );
   }

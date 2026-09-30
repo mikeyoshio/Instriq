@@ -531,45 +531,57 @@ class _HoldToExitControlState extends State<_HoldToExitControl> with SingleTicke
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPressStart: (_) => _controller.forward(from: 0),
-      onLongPressEnd: (_) => _controller.reverse(),
-      onLongPressCancel: () => _controller.reverse(),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (_, __) => SizedBox(
-              width: 20,
-              height: 20,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.fromBorderSide(BorderSide(color: Color(0xFF2A3530), width: 2.5)),
+    return Semantics(
+      // El gesto visual (mantener pulsado 650ms) no llega a completarse
+      // cuando lo activa el bridge de accesibilidad: onLongPressStart y
+      // onLongPressEnd se disparan sin que transcurra tiempo real entre
+      // ambos, así que _controller nunca llega a AnimationStatus.completed
+      // y onConfirmExit no se invoca -- dejaba a quien usa TalkBack/VoiceOver
+      // sin ninguna forma de salir de esta pantalla (hallazgo de auditoría de
+      // accesibilidad). Esta acción discreta es la vía alternativa real.
+      label: widget.label,
+      onLongPress: widget.onConfirmExit,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onLongPressStart: (_) => _controller.forward(from: 0),
+        onLongPressEnd: (_) => _controller.reverse(),
+        onLongPressCancel: () => _controller.reverse(),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (_, __) => SizedBox(
+                width: 20,
+                height: 20,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.fromBorderSide(BorderSide(color: Color(0xFF2A3530), width: 2.5)),
+                      ),
                     ),
-                  ),
-                  if (_controller.value > 0)
-                    CircularProgressIndicator(
-                      value: _controller.value,
-                      strokeWidth: 2.5,
-                      strokeCap: StrokeCap.round,
-                      backgroundColor: Colors.transparent,
-                      valueColor: const AlwaysStoppedAnimation(_accent),
-                    ),
-                ],
+                    if (_controller.value > 0)
+                      CircularProgressIndicator(
+                        value: _controller.value,
+                        strokeWidth: 2.5,
+                        strokeCap: StrokeCap.round,
+                        backgroundColor: Colors.transparent,
+                        valueColor: const AlwaysStoppedAnimation(_accent),
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 7),
-          Text(
-            widget.label.toUpperCase(),
-            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.4, color: _textMuted),
-          ),
-        ],
+            const SizedBox(width: 7),
+            Text(
+              widget.label.toUpperCase(),
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.4, color: _textMuted),
+            ),
+          ],
+        ),
       ),
     );
   }

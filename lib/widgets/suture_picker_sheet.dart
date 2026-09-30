@@ -4,6 +4,7 @@ import '../data/sutures_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/suture.dart';
 import '../utils/fuzzy_match.dart';
+import 'suture_labels.dart';
 
 /// Fulla modal per triar una sutura del catàleg. Calcada de
 /// [CatalogPickerSheet], deliberadament no compartida (catàleg propi, no
@@ -21,8 +22,9 @@ class _SuturePickerSheetState extends State<SuturePickerSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
     final filtered = kSutures
-        .where((s) => fuzzyContains(s.name, _query))
+        .where((s) => fuzzyContains(s.name.forLanguageCode(languageCode), _query))
         .toList();
     return DraggableScrollableSheet(
       initialChildSize: 0.8,
@@ -52,8 +54,8 @@ class _SuturePickerSheetState extends State<SuturePickerSheet> {
                     final suture = filtered[index];
                     return ListTile(
                       leading: const Icon(Icons.line_style),
-                      title: Text(suture.name),
-                      subtitle: Text(suture.material.label),
+                      title: Text(suture.name.forLanguageCode(languageCode)),
+                      subtitle: Text(sutureMaterialValueLabel(l10n, suture.material)),
                       onTap: () => Navigator.of(context).pop(suture),
                     );
                   },

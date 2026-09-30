@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import 'flashcards_screen.dart';
 import 'quiz_screen.dart';
@@ -13,6 +14,7 @@ class LearnScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.learnTitle)),
       body: SafeArea(
+        child: InstriqResponsiveContent(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -42,6 +44,7 @@ class LearnScreen extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

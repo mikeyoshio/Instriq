@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/workspace_role.dart';
 import '../services/custom_instrument_service.dart';
@@ -93,7 +94,8 @@ class _CustomInstrumentsScreenState extends State<CustomInstrumentsScreen> {
               label: Text(l10n.newCustomInstrumentLabel),
             )
           : null,
-      body: Column(
+      body: InstriqResponsiveContent(
+        child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12),
@@ -142,6 +144,7 @@ class _CustomInstrumentsScreenState extends State<CustomInstrumentsScreen> {
                   ),
           ),
         ],
+      ),
       ),
     );
   }

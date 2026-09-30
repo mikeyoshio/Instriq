@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/tray.dart';
 import '../models/workspace.dart';
@@ -109,7 +110,8 @@ class _TraysScreenState extends State<TraysScreen> {
               label: Text(l10n.newTrayLabel),
             )
           : null,
-      body: Column(
+      body: InstriqResponsiveContent(
+        child: Column(
         children: [
           if (_fromCache)
             const Padding(
@@ -160,6 +162,7 @@ class _TraysScreenState extends State<TraysScreen> {
                   ),
           ),
         ],
+      ),
       ),
     );
   }

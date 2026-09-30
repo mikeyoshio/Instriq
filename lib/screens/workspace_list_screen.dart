@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/public_tray.dart';
 import '../models/specialty_entity.dart';
@@ -214,7 +215,8 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
               label: Text(l10n.workspaceNewTitle),
             )
           : null,
-      body: _loading
+      body: InstriqResponsiveContent(
+        child: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
               ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
@@ -250,6 +252,7 @@ class _WorkspaceListScreenState extends State<WorkspaceListScreen> {
                     );
                   },
                 ),
+      ),
     );
   }
 }

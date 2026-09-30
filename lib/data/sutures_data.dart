@@ -4,7 +4,7 @@ import '../models/suture.dart';
 const List<Suture> kSutures = [
   Suture(
     id: 'seda-3-0',
-    name: 'Seda 3-0',
+    name: LocalizedText(ca: 'Seda 3-0', es: 'Seda 3-0', en: 'Silk 3-0'),
     material: SutureMaterial.seda,
     gauge: '3-0',
     needleType: NeedleType.cortante,
@@ -22,7 +22,7 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'seda-0',
-    name: 'Seda 0',
+    name: LocalizedText(ca: 'Seda 0', es: 'Seda 0', en: 'Silk 0'),
     material: SutureMaterial.seda,
     gauge: '0',
     needleType: NeedleType.cortante,
@@ -40,7 +40,7 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'vicryl-2-0',
-    name: 'Vicryl 2-0',
+    name: LocalizedText(ca: 'Vicryl 2-0', es: 'Vicryl 2-0', en: 'Vicryl 2-0'),
     material: SutureMaterial.vicryl,
     gauge: '2-0',
     needleType: NeedleType.tapercut,
@@ -58,7 +58,7 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'vicryl-3-0',
-    name: 'Vicryl 3-0',
+    name: LocalizedText(ca: 'Vicryl 3-0', es: 'Vicryl 3-0', en: 'Vicryl 3-0'),
     material: SutureMaterial.vicryl,
     gauge: '3-0',
     needleType: NeedleType.tapercut,
@@ -76,7 +76,8 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'vicryl-rapid-4-0',
-    name: 'Vicryl Rapid 4-0',
+    name: LocalizedText(
+        ca: 'Vicryl Rapid 4-0', es: 'Vicryl Rapid 4-0', en: 'Vicryl Rapid 4-0'),
     material: SutureMaterial.vicryl,
     gauge: '4-0',
     needleType: NeedleType.cortante,
@@ -95,7 +96,8 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'monocryl-4-0',
-    name: 'Monocryl 4-0',
+    name: LocalizedText(
+        ca: 'Monocryl 4-0', es: 'Monocryl 4-0', en: 'Monocryl 4-0'),
     material: SutureMaterial.monocryl,
     gauge: '4-0',
     needleType: NeedleType.cortante,
@@ -114,7 +116,8 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'monocryl-5-0',
-    name: 'Monocryl 5-0',
+    name: LocalizedText(
+        ca: 'Monocryl 5-0', es: 'Monocryl 5-0', en: 'Monocryl 5-0'),
     material: SutureMaterial.monocryl,
     gauge: '5-0',
     needleType: NeedleType.cortante,
@@ -133,7 +136,7 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'nylon-4-0',
-    name: 'Nylon 4-0',
+    name: LocalizedText(ca: 'Nylon 4-0', es: 'Nylon 4-0', en: 'Nylon 4-0'),
     material: SutureMaterial.nylon,
     gauge: '4-0',
     needleType: NeedleType.cortante,
@@ -151,7 +154,7 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'nylon-5-0',
-    name: 'Nylon 5-0',
+    name: LocalizedText(ca: 'Nylon 5-0', es: 'Nylon 5-0', en: 'Nylon 5-0'),
     material: SutureMaterial.nylon,
     gauge: '5-0',
     needleType: NeedleType.cortante,
@@ -169,7 +172,7 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'pds-1',
-    name: 'PDS 1',
+    name: LocalizedText(ca: 'PDS 1', es: 'PDS 1', en: 'PDS 1'),
     material: SutureMaterial.pds,
     gauge: '1',
     needleType: NeedleType.tapercut,
@@ -187,7 +190,7 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'pds-2-0',
-    name: 'PDS 2-0',
+    name: LocalizedText(ca: 'PDS 2-0', es: 'PDS 2-0', en: 'PDS 2-0'),
     material: SutureMaterial.pds,
     gauge: '2-0',
     needleType: NeedleType.tapercut,
@@ -206,7 +209,10 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'catgut-cromico-2-0',
-    name: 'Catgut cròmic 2-0',
+    name: LocalizedText(
+        ca: 'Catgut cròmic 2-0',
+        es: 'Catgut crómico 2-0',
+        en: 'Chromic catgut 2-0'),
     material: SutureMaterial.catgut,
     gauge: '2-0',
     needleType: NeedleType.tapercut,
@@ -225,7 +231,8 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'prolene-5-0',
-    name: 'Prolene 5-0',
+    name:
+        LocalizedText(ca: 'Prolene 5-0', es: 'Prolene 5-0', en: 'Prolene 5-0'),
     material: SutureMaterial.prolene,
     gauge: '5-0',
     needleType: NeedleType.tapercut,
@@ -244,7 +251,8 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'prolene-6-0',
-    name: 'Prolene 6-0',
+    name:
+        LocalizedText(ca: 'Prolene 6-0', es: 'Prolene 6-0', en: 'Prolene 6-0'),
     material: SutureMaterial.prolene,
     gauge: '6-0',
     needleType: NeedleType.tapercut,
@@ -263,7 +271,7 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'dexon-3-0',
-    name: 'Dexon 3-0',
+    name: LocalizedText(ca: 'Dexon 3-0', es: 'Dexon 3-0', en: 'Dexon 3-0'),
     material: SutureMaterial.dexon,
     gauge: '3-0',
     needleType: NeedleType.tapercut,
@@ -281,7 +289,11 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'acero-esternal',
-    name: 'Fil d\'acer per a esternotomia',
+    name: LocalizedText(
+      ca: 'Fil d\'acer per a esternotomia',
+      es: 'Alambre de acero para esternotomía',
+      en: 'Steel wire for sternotomy',
+    ),
     material: SutureMaterial.altres,
     gauge: '5',
     needleType: NeedleType.redonda,
@@ -300,7 +312,10 @@ const List<Suture> kSutures = [
   ),
   Suture(
     id: 'seda-oftalmica-8-0',
-    name: 'Seda oftàlmica 8-0',
+    name: LocalizedText(
+        ca: 'Seda oftàlmica 8-0',
+        es: 'Seda oftálmica 8-0',
+        en: 'Ophthalmic silk 8-0'),
     material: SutureMaterial.seda,
     gauge: '8-0',
     needleType: NeedleType.tapercut,

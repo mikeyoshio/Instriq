@@ -683,7 +683,7 @@ class _GroupDocumentFormScreenState extends State<GroupDocumentFormScreen> {
               final suture = _sutureFor(id);
               return ListTile(
                 leading: const Icon(Icons.line_style),
-                title: Text(suture?.name ?? id),
+                title: Text(suture != null ? suture.name.forLanguageCode(languageCode) : id),
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   tooltip: l10n.removeRelatedSutureTooltip,

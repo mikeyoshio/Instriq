@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/work_mode.dart';
 import '../services/account_service.dart';
@@ -127,7 +128,8 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.accountPrivacyTitle)),
-      body: ListView(
+      body: InstriqResponsiveContent(
+        child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
           Row(
@@ -206,6 +208,7 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
             label: Text(l10n.deleteMyAccountTitle),
           ),
         ],
+      ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../data/instruments_data.dart';
@@ -102,7 +103,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
             ),
         ],
       ),
-      body: Column(
+      body: InstriqResponsiveContent(
+        child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12),
@@ -229,6 +231,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   ),
           ),
         ],
+      ),
       ),
     );
   }

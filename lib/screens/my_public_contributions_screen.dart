@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/public_document.dart';
 import '../models/public_instrument.dart';
@@ -46,7 +47,9 @@ class MyPublicContributionsScreen extends StatelessWidget {
             Tab(text: l10n.publicLibraryInstrumentsTab),
           ]),
         ),
-        body: const TabBarView(children: [_MyDocuments(), _MyTrays(), _MyInstruments()]),
+        body: const InstriqResponsiveContent(
+          child: TabBarView(children: [_MyDocuments(), _MyTrays(), _MyInstruments()]),
+        ),
       ),
     );
   }
