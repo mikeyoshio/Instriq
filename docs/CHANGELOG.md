@@ -2,6 +2,8 @@
 
 Registre cronològic de tot el que s'ha lliurat a Instriq. Per al que queda pendent (EPICs de producte i deute tècnic), veure **[BACKLOG.md](BACKLOG.md)**.
 
+## 1.0.0 — 2026-09-30
+
 - Fotos reals d'instrumental amb llicència lliure (parcial, la resta segueix amb icona per categoria)
 - Landing informativa + política de privacitat a `instriq.org` i `www.instriq.org`
 - Organització → Espais de treball
@@ -41,3 +43,5 @@ Registre cronològic de tot el que s'ha lliurat a Instriq. Per al que queda pend
 - Traduccions comunitàries de la Biblioteca Pública: cada idioma (ca/es/en) d'un contingut públic és una fila independent enllaçada per un `translation_group_id` compartit; proposar una traducció clona el contingut publicat en un esborrany nou en l'idioma triat, que passa pel mateix flux de revisió — mai traducció automàtica
 - Catàleg 100% traduït als 3 idiomes: el nom de cada instrument (abans fix en castellà, amb 8 excepcions ja en català per inconsistència) passa a ser traduït com la resta de camps; els àlies (noms comercials/sinònims) es normalitzen a l'anglès quan són un terme descriptiu genèric, mantenint intactes els noms de marca/fabricant/epònim (que ja eren invariants per naturalesa)
 - Auditoria SEO de la landing i correcció de metadades incompletes (Open Graph/Twitter, sitemap) a les pàgines secundàries
+- Auditoria de rendiment: debounce de la cerca en viu d'Inici (abans recalculava tot el catàleg i el contingut d'espai a cada tecla), peticions de xarxa independents llançades en paral·lel en comptes de seqüencials a 6 pantalles, `ManufacturerService` usant per fi la seva pròpia caché, fotos amb `cached_network_image` (abans es tornaven a descarregar a cada arrencada en fred) i arrencada de l'app no bloquejant a l'espera del perfil
+- Quarta ronda d'auditoria (7 dimensions) de cara a la v1.0: seguretat neta (l'única troballa candidata era el model wiki-style intencionat de la Biblioteca Pública, no un forat real); corregit que esborrar el compte fallava per a qualsevol equip privat amb safates/instrumental/esterilització propis (faltava `ON DELETE CASCADE`); corregida una trampa d'accessibilitat real al mode quiròfan (la sortida per lector de pantalla mai es completava); sutures i el dashboard de cobertura de coneixement completament traduïts (mateix bug que el catàleg d'instrumental); ample màxim en escriptori aplicat a les 4 pestanyes principals i 11 pantalles més que faltaven; cobertura de tests de 11 a 29, incloent un bug real trobat de pas (`PreferenceCardVersion.copyWith` no reiniciava "validat pel cirurgià" en editar l'instrumental d'una versió ja validada)
