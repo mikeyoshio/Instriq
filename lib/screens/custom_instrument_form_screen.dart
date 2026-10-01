@@ -263,7 +263,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
     }
     final organizationId = ProfileService.instance.organizationId;
     if (organizationId == null) {
-      setState(() => _error = l10n.customInstrumentSaveError('Sin organización'));
+      setState(() => _error = l10n.customInstrumentMissingOrganizationError);
       return;
     }
 
