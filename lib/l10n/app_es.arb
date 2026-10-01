@@ -214,6 +214,7 @@
   "customPhotoDisclaimer": "Foto subida por tu equipo — la responsabilidad sobre los derechos de la imagen es del equipo, no verificada por Instriq.",
   "customInstrumentSaveError": "No se pudo guardar: {error}",
   "@customInstrumentSaveError": {"placeholders": {"error": {"type": "String"}}},
+  "customInstrumentMissingOrganizationError": "No se pudo guardar: no perteneces a ninguna organización.",
   "customInstrumentMissingFieldsSnackbar": "Hace falta al menos un nombre y una descripción.",
   "deleteCustomInstrumentTitle": "Eliminar instrumento",
   "deleteCustomInstrumentConfirm": "¿Seguro que quieres eliminar este instrumento y todas sus variantes?",

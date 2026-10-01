@@ -214,6 +214,7 @@
   "customPhotoDisclaimer": "Foto pujada pel vostre equip — la responsabilitat sobre els drets de la imatge és de l'equip, no verificada per Instriq.",
   "customInstrumentSaveError": "No s'ha pogut desar: {error}",
   "@customInstrumentSaveError": {"placeholders": {"error": {"type": "String"}}},
+  "customInstrumentMissingOrganizationError": "No s'ha pogut desar: no pertanys a cap organització.",
   "customInstrumentMissingFieldsSnackbar": "Cal almenys un nom i una descripció.",
   "deleteCustomInstrumentTitle": "Eliminar instrument",
   "deleteCustomInstrumentConfirm": "Segur que vols eliminar aquest instrument i totes les seves variants?",

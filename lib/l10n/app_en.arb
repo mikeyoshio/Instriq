@@ -214,6 +214,7 @@
   "customPhotoDisclaimer": "Photo uploaded by your team — responsibility for the image rights lies with the team, not verified by Instriq.",
   "customInstrumentSaveError": "Couldn't save: {error}",
   "@customInstrumentSaveError": {"placeholders": {"error": {"type": "String"}}},
+  "customInstrumentMissingOrganizationError": "Couldn't save: you don't belong to an organization.",
   "customInstrumentMissingFieldsSnackbar": "You need at least a name and a description.",
   "deleteCustomInstrumentTitle": "Delete instrument",
   "deleteCustomInstrumentConfirm": "Are you sure you want to delete this instrument and all its variants?",
