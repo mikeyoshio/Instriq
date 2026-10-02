@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -10,6 +12,7 @@ import '../l10n/app_localizations.dart';
 import '../models/contributor_application.dart';
 import '../services/auth_service.dart';
 import '../services/contributor_service.dart';
+import '../services/offline_download_service.dart';
 import '../services/profile_service.dart';
 import '../services/sync_queue_service.dart';
 import '../services/theme_service.dart';
@@ -103,6 +106,68 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     );
   }
 
+  Future<void> _downloadForOfflineUse() async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    var stepLabel = '';
+    var done = 0;
+    var total = 0;
+    StateSetter? dialogSetState;
+
+    unawaited(showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (dialogContext, setState) {
+          dialogSetState = setState;
+          return AlertDialog(
+            title: Text(l10n.offlineDownloadInProgressTitle),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(stepLabel, maxLines: 2, overflow: TextOverflow.ellipsis),
+                const SizedBox(height: InstriqSpacing.sm),
+                LinearProgressIndicator(value: total > 0 ? done / total : null),
+              ],
+            ),
+          );
+        },
+      ),
+    ));
+
+    OfflineDownloadResult? result;
+    Object? error;
+    try {
+      result = await OfflineDownloadService.instance.downloadForOfflineUse(
+        onProgress: (progress) {
+          stepLabel = progress.stepLabel;
+          done = progress.done;
+          total = progress.total;
+          dialogSetState?.call(() {});
+        },
+      );
+    } catch (e) {
+      error = e;
+    }
+
+    if (!mounted) return;
+    Navigator.of(context, rootNavigator: true).pop();
+
+    if (error != null) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.offlineDownloadError(error.toString()))));
+      return;
+    }
+    final items = result!.documentsCached +
+        result.traysCached +
+        result.preferenceCardsCached +
+        result.publicItemsCached;
+    messenger.showSnackBar(SnackBar(
+      content: Text(l10n.offlineDownloadSuccess(items, result.imagesCached)),
+      duration: const Duration(seconds: 5),
+    ));
+  }
+
   Future<void> _openAccountPrivacy() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const AccountPrivacyScreen()),
@@ -185,6 +250,12 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                 icon: Icons.help_outline,
                 title: l10n.helpCenterTitle,
                 onTap: _openHelpHub,
+              ),
+              const SizedBox(height: InstriqSpacing.sm),
+              InstriqListItem(
+                icon: Icons.download_for_offline_outlined,
+                title: l10n.offlineDownloadTitle,
+                onTap: _downloadForOfflineUse,
               ),
               if (loggedIn) ...[
                 const SizedBox(height: InstriqSpacing.xl),

@@ -2,6 +2,8 @@ import 'package:cross_file/cross_file.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/public_instrument.dart';
+import 'connectivity_service.dart';
+import 'offline_cache_service.dart';
 import 'public_versioned_content_service.dart';
 
 class PublicInstrumentService extends PublicVersionedContentService<PublicInstrumentVersion> {
@@ -22,15 +24,38 @@ class PublicInstrumentService extends PublicVersionedContentService<PublicInstru
   @override
   PublicInstrumentVersion versionFromRow(Map<String, dynamic> row) => PublicInstrumentVersion.fromRow(row);
 
+  /// true si el darrer [fetchPublished] s'ha servit d'[OfflineCacheService]
+  /// en comptes de xarxa -- mateix patró que [PublicDocumentService].
+  bool lastFetchFromCache = false;
+  DateTime? lastFetchCachedAt;
+
   /// Instruments publicats -- llista pública, llegible sense sessió (RLS:
   /// `public_instruments_select` és `using (true)`).
   Future<List<PublicInstrument>> fetchPublished() async {
-    final rows = await client
-        .from('public_instruments')
-        .select('*, published_version:public_instrument_versions!published_version_id(*)')
-        .not('published_version_id', 'is', null)
-        .order('created_at', ascending: false);
-    return (rows as List).map((r) => PublicInstrument.fromRow((r as Map).cast<String, dynamic>())).toList();
+    Future<List<PublicInstrument>> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedPublicInstruments();
+      lastFetchFromCache = true;
+      lastFetchCachedAt = cached?.cachedAt;
+      return cached?.data ?? [];
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) return fallbackToCache();
+    try {
+      final rows = await client
+          .from('public_instruments')
+          .select('*, published_version:public_instrument_versions!published_version_id(*)')
+          .not('published_version_id', 'is', null)
+          .order('created_at', ascending: false);
+      final fetched =
+          (rows as List).map((r) => PublicInstrument.fromRow((r as Map).cast<String, dynamic>())).toList();
+      lastFetchFromCache = false;
+      lastFetchCachedAt = null;
+      await OfflineCacheService.instance.cachePublicInstruments(fetched);
+      return fetched;
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return fallbackToCache();
+    }
   }
 
   Future<PublicInstrument> fetchInstrument(String id) async {

@@ -6,6 +6,9 @@ import '../models/group_document.dart';
 import '../models/group_document_version.dart';
 import '../models/instrument_sterilization.dart';
 import '../models/preference_card.dart';
+import '../models/public_document.dart';
+import '../models/public_instrument.dart';
+import '../models/public_tray.dart';
 import '../models/tray.dart';
 
 /// Envuelve un resultado que puede venir de red o de caché, para que la UI
@@ -20,10 +23,12 @@ class CachedResult<T> {
 
 /// Guarda en `shared_preferences` (como JSON, mismo patrón que
 /// [ThemeService]/[LocaleService]) el último resultado conocido de red para
-/// técnicas/protocolos/bandejas/tarjetas, para que las pantallas de lectura
-/// sigan funcionando sin conexión con el último contenido sincronizado. No es
-/// una base de datos: solo el último snapshot por workspace/documento,
-/// suficiente para el volumen de datos de la app.
+/// técnicas/protocolos/bandejas/tarjetas (propias de organización) y para el
+/// contenido publicado de la Biblioteca Pública, para que las pantallas de
+/// lectura sigan funcionando sin conexión con el último contenido
+/// sincronizado. No es una base de datos: solo el último snapshot por
+/// workspace/documento/listado público, suficiente para el volumen de datos
+/// de la app.
 ///
 /// ADR-003 (`docs/ADR_003_OFFLINE_STRATEGY.md`, punto 3): la lectura offline
 /// es la prioridad real de EPIC 7 -- consultar una bandeja o tarjeta durante
@@ -46,6 +51,9 @@ class OfflineCacheService {
   static String _sterilizationMethodsKey(String refType, String refId) =>
       'cache_sterilization_methods_${refType}_$refId';
   static String _technicalInfoKey(String refType, String refId) => 'cache_technical_info_${refType}_$refId';
+  static String _publicDocumentsKey(String kind) => 'cache_public_documents_$kind';
+  static const _publicTraysKey = 'cache_public_trays';
+  static const _publicInstrumentsKey = 'cache_public_instruments';
   static const _timestampSuffix = '_cached_at';
 
   Future<void> _write(String key, dynamic jsonValue) async {
@@ -162,5 +170,49 @@ class OfflineCacheService {
     final decoded = jsonDecode(raw);
     final info = decoded == null ? null : InstrumentTechnicalInfo.fromRow((decoded as Map).cast<String, dynamic>());
     return CachedResult(data: info, isFromCache: true, cachedAt: _timestampFor(prefs, key));
+  }
+
+  // --- Biblioteca Pública: tècniques/protocols (per kind), safates i instrumental (llista plana) ---
+
+  Future<void> cachePublicDocuments(String kind, List<PublicDocument> documents) async {
+    await _write(_publicDocumentsKey(kind), documents.map((d) => d.toCacheRow()).toList());
+  }
+
+  Future<CachedResult<List<PublicDocument>>?> getCachedPublicDocuments(String kind) async {
+    final prefs = await _sp;
+    final key = _publicDocumentsKey(kind);
+    final raw = prefs.getString(key);
+    if (raw == null) return null;
+    final list = (jsonDecode(raw) as List<dynamic>)
+        .map((r) => PublicDocument.fromRow((r as Map).cast<String, dynamic>()))
+        .toList();
+    return CachedResult(data: list, isFromCache: true, cachedAt: _timestampFor(prefs, key));
+  }
+
+  Future<void> cachePublicTrays(List<PublicTray> trays) async {
+    await _write(_publicTraysKey, trays.map((t) => t.toCacheRow()).toList());
+  }
+
+  Future<CachedResult<List<PublicTray>>?> getCachedPublicTrays() async {
+    final prefs = await _sp;
+    final raw = prefs.getString(_publicTraysKey);
+    if (raw == null) return null;
+    final list =
+        (jsonDecode(raw) as List<dynamic>).map((r) => PublicTray.fromRow((r as Map).cast<String, dynamic>())).toList();
+    return CachedResult(data: list, isFromCache: true, cachedAt: _timestampFor(prefs, _publicTraysKey));
+  }
+
+  Future<void> cachePublicInstruments(List<PublicInstrument> instruments) async {
+    await _write(_publicInstrumentsKey, instruments.map((i) => i.toCacheRow()).toList());
+  }
+
+  Future<CachedResult<List<PublicInstrument>>?> getCachedPublicInstruments() async {
+    final prefs = await _sp;
+    final raw = prefs.getString(_publicInstrumentsKey);
+    if (raw == null) return null;
+    final list = (jsonDecode(raw) as List<dynamic>)
+        .map((r) => PublicInstrument.fromRow((r as Map).cast<String, dynamic>()))
+        .toList();
+    return CachedResult(data: list, isFromCache: true, cachedAt: _timestampFor(prefs, _publicInstrumentsKey));
   }
 }

@@ -1,5 +1,7 @@
 import '../models/group_document.dart' show DocumentKindLabel, DocumentKind;
 import '../models/public_document.dart';
+import 'connectivity_service.dart';
+import 'offline_cache_service.dart';
 import 'public_versioned_content_service.dart';
 
 class PublicDocumentService extends PublicVersionedContentService<PublicDocumentVersion> {
@@ -18,16 +20,40 @@ class PublicDocumentService extends PublicVersionedContentService<PublicDocument
   @override
   PublicDocumentVersion versionFromRow(Map<String, dynamic> row) => PublicDocumentVersion.fromRow(row);
 
+  /// true si el darrer [fetchPublished] s'ha servit d'[OfflineCacheService]
+  /// en comptes de xarxa (sense connexió, o la petició ha fallat per un
+  /// problema de xarxa) -- la UI ho llegeix just després per mostrar l'avís
+  /// offline, mateix patró que [GroupDocumentService].
+  bool lastFetchFromCache = false;
+  DateTime? lastFetchCachedAt;
+
   /// Documents publicats, agrupats per `kind` -- llista pública, llegible
   /// sense sessió (RLS: `public_documents_select` és `using (true)`).
   Future<List<PublicDocument>> fetchPublished(DocumentKind kind) async {
-    final rows = await client
-        .from('public_documents')
-        .select('*, published_version:public_document_versions!published_version_id(*)')
-        .eq('kind', kind.dbValue)
-        .not('published_version_id', 'is', null)
-        .order('created_at', ascending: false);
-    return (rows as List).map((r) => PublicDocument.fromRow((r as Map).cast<String, dynamic>())).toList();
+    Future<List<PublicDocument>> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedPublicDocuments(kind.dbValue);
+      lastFetchFromCache = true;
+      lastFetchCachedAt = cached?.cachedAt;
+      return cached?.data ?? [];
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) return fallbackToCache();
+    try {
+      final rows = await client
+          .from('public_documents')
+          .select('*, published_version:public_document_versions!published_version_id(*)')
+          .eq('kind', kind.dbValue)
+          .not('published_version_id', 'is', null)
+          .order('created_at', ascending: false);
+      final fetched = (rows as List).map((r) => PublicDocument.fromRow((r as Map).cast<String, dynamic>())).toList();
+      lastFetchFromCache = false;
+      lastFetchCachedAt = null;
+      await OfflineCacheService.instance.cachePublicDocuments(kind.dbValue, fetched);
+      return fetched;
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return fallbackToCache();
+    }
   }
 
   Future<PublicDocument> fetchDocument(String id) async {

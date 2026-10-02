@@ -1,4 +1,4 @@
-import 'public_document.dart' show PublicContentStatus, publicContentStatusFromRow;
+import 'public_document.dart' show PublicContentStatus, publicContentStatusFromRow, publicContentStatusToDb;
 import 'tray.dart' show TrayItem;
 
 class PublicTray {
@@ -32,6 +32,18 @@ class PublicTray {
       translationGroupId: row['translation_group_id'] as String? ?? row['id'] as String,
     );
   }
+
+  /// Fila completa per a [OfflineCacheService] -- mateixa forma que retorna
+  /// Supabase (amb `published_version` niat), reutilitzable amb [fromRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'created_by': createdBy,
+        'created_at': createdAt.toIso8601String(),
+        'published_version_id': publishedVersionId,
+        'published_version': publishedVersion?.toCacheRow(),
+        'locale': locale,
+        'translation_group_id': translationGroupId,
+      };
 }
 
 class PublicTrayVersion {
@@ -97,5 +109,23 @@ class PublicTrayVersion {
         'description': description,
         'items': items.map((i) => i.toJson()).toList(),
         'observations': observations,
+      };
+
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'tray_id': trayId,
+        'version_number': versionNumber,
+        'status': publicContentStatusToDb(status),
+        'name': name,
+        'specialty_id': specialtyId,
+        'description': description,
+        'items': items.map((i) => i.toJson()).toList(),
+        'observations': observations,
+        'author_id': authorId,
+        'comment': comment,
+        'based_on_version_id': basedOnVersionId,
+        'approved_by': approvedBy,
+        'approved_at': approvedAt?.toIso8601String(),
+        'created_at': createdAt.toIso8601String(),
       };
 }

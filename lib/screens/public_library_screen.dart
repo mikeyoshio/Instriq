@@ -15,6 +15,7 @@ import '../services/public_document_service.dart';
 import '../services/public_instrument_service.dart';
 import '../services/public_tray_service.dart';
 import '../utils/public_content_locale_label.dart';
+import '../widgets/offline_banner.dart';
 import 'auth/sign_in_screen.dart';
 import 'contributor_application_form_screen.dart';
 import 'my_public_contributions_screen.dart';
@@ -274,6 +275,7 @@ class _PublicDocumentList extends StatefulWidget {
 class _PublicDocumentListState extends State<_PublicDocumentList> {
   bool _loading = true;
   String? _error;
+  bool _fromCache = false;
   List<PublicDocument> _documents = [];
 
   @override
@@ -293,6 +295,7 @@ class _PublicDocumentListState extends State<_PublicDocumentList> {
         PublicDocumentService.instance.fetchPublished(DocumentKind.protocol),
       ]);
       _documents = [...results[0], ...results[1]];
+      _fromCache = PublicDocumentService.instance.lastFetchFromCache;
     } catch (e) {
       if (mounted) _error = AppLocalizations.of(context)!.publicLibraryLoadError(e.toString());
     }
@@ -303,35 +306,48 @@ class _PublicDocumentListState extends State<_PublicDocumentList> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-              ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
-              : _documents.isEmpty
-                  ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.publicLibraryEmptyState)))
-                  : RefreshIndicator(
-                      onRefresh: _load,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(12),
-                        itemCount: _documents.length,
-                        itemBuilder: (context, index) {
-                          final document = _documents[index];
-                          final version = document.publishedVersion;
-                          return Card(
-                            child: ListTile(
-                              leading: Icon(document.kind == DocumentKind.protocol
-                                  ? Icons.checklist_outlined
-                                  : Icons.menu_book_outlined),
-                              title: Text(version?.title ?? l10n.auditDocumentUntitledLabel),
-                              trailing: Text(publicContentLocaleLabel(l10n, document.locale), style: Theme.of(context).textTheme.labelSmall),
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.document(document: document)),
-                              ),
+      body: Column(
+        children: [
+          if (_fromCache)
+            const Padding(
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: OfflineBanner(),
+            ),
+          Expanded(
+            child: _loading
+                ? const Center(child: CircularProgressIndicator())
+                : _error != null
+                    ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
+                    : _documents.isEmpty
+                        ? Center(
+                            child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.publicLibraryEmptyState)))
+                        : RefreshIndicator(
+                            onRefresh: _load,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(12),
+                              itemCount: _documents.length,
+                              itemBuilder: (context, index) {
+                                final document = _documents[index];
+                                final version = document.publishedVersion;
+                                return Card(
+                                  child: ListTile(
+                                    leading: Icon(document.kind == DocumentKind.protocol
+                                        ? Icons.checklist_outlined
+                                        : Icons.menu_book_outlined),
+                                    title: Text(version?.title ?? l10n.auditDocumentUntitledLabel),
+                                    trailing: Text(publicContentLocaleLabel(l10n, document.locale),
+                                        style: Theme.of(context).textTheme.labelSmall),
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.document(document: document)),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    ),
+                          ),
+          ),
+        ],
+      ),
       floatingActionButton: widget.canContribute
           ? FloatingActionButton.extended(
               onPressed: () async {
@@ -376,6 +392,7 @@ class _PublicTrayList extends StatefulWidget {
 class _PublicTrayListState extends State<_PublicTrayList> {
   bool _loading = true;
   String? _error;
+  bool _fromCache = false;
   List<PublicTray> _trays = [];
 
   @override
@@ -391,6 +408,7 @@ class _PublicTrayListState extends State<_PublicTrayList> {
     });
     try {
       _trays = await PublicTrayService.instance.fetchPublished();
+      _fromCache = PublicTrayService.instance.lastFetchFromCache;
     } catch (e) {
       if (mounted) _error = AppLocalizations.of(context)!.publicLibraryLoadError(e.toString());
     }
@@ -401,32 +419,45 @@ class _PublicTrayListState extends State<_PublicTrayList> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-              ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
-              : _trays.isEmpty
-                  ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.publicLibraryEmptyState)))
-                  : RefreshIndicator(
-                      onRefresh: _load,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(12),
-                        itemCount: _trays.length,
-                        itemBuilder: (context, index) {
-                          final tray = _trays[index];
-                          return Card(
-                            child: ListTile(
-                              leading: const Icon(Icons.inventory_2_outlined),
-                              title: Text(tray.publishedVersion?.name ?? l10n.auditDocumentUntitledLabel),
-                              trailing: Text(publicContentLocaleLabel(l10n, tray.locale), style: Theme.of(context).textTheme.labelSmall),
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.tray(tray: tray)),
-                              ),
+      body: Column(
+        children: [
+          if (_fromCache)
+            const Padding(
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: OfflineBanner(),
+            ),
+          Expanded(
+            child: _loading
+                ? const Center(child: CircularProgressIndicator())
+                : _error != null
+                    ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
+                    : _trays.isEmpty
+                        ? Center(
+                            child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.publicLibraryEmptyState)))
+                        : RefreshIndicator(
+                            onRefresh: _load,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(12),
+                              itemCount: _trays.length,
+                              itemBuilder: (context, index) {
+                                final tray = _trays[index];
+                                return Card(
+                                  child: ListTile(
+                                    leading: const Icon(Icons.inventory_2_outlined),
+                                    title: Text(tray.publishedVersion?.name ?? l10n.auditDocumentUntitledLabel),
+                                    trailing: Text(publicContentLocaleLabel(l10n, tray.locale),
+                                        style: Theme.of(context).textTheme.labelSmall),
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.tray(tray: tray)),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    ),
+                          ),
+          ),
+        ],
+      ),
       floatingActionButton: widget.canContribute
           ? FloatingActionButton.extended(
               onPressed: widget.onPropose,
@@ -451,6 +482,7 @@ class _PublicInstrumentList extends StatefulWidget {
 class _PublicInstrumentListState extends State<_PublicInstrumentList> {
   bool _loading = true;
   String? _error;
+  bool _fromCache = false;
   List<PublicInstrument> _instruments = [];
 
   @override
@@ -466,6 +498,7 @@ class _PublicInstrumentListState extends State<_PublicInstrumentList> {
     });
     try {
       _instruments = await PublicInstrumentService.instance.fetchPublished();
+      _fromCache = PublicInstrumentService.instance.lastFetchFromCache;
     } catch (e) {
       if (mounted) _error = AppLocalizations.of(context)!.publicLibraryLoadError(e.toString());
     }
@@ -476,41 +509,55 @@ class _PublicInstrumentListState extends State<_PublicInstrumentList> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-              ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
-              : _instruments.isEmpty
-                  ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.publicLibraryEmptyState)))
-                  : RefreshIndicator(
-                      onRefresh: _load,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(12),
-                        itemCount: _instruments.length,
-                        itemBuilder: (context, index) {
-                          final instrument = _instruments[index];
-                          final version = instrument.publishedVersion;
-                          final photoPath = version?.photoPath;
-                          return Card(
-                            child: ListTile(
-                              leading: photoPath != null
-                                  ? CircleAvatar(
-                                      backgroundImage: CachedNetworkImageProvider(
-                                        PublicInstrumentService.instance.photoUrl(photoPath),
-                                      ),
-                                    )
-                                  : const CircleAvatar(child: Icon(Icons.precision_manufacturing_outlined)),
-                              title: Text(version?.name ?? l10n.auditDocumentUntitledLabel),
-                              subtitle: version?.category != null ? Text(version!.category!.label(l10n)) : null,
-                              trailing: Text(publicContentLocaleLabel(l10n, instrument.locale), style: Theme.of(context).textTheme.labelSmall),
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => PublicEntityDetailScreen.instrument(instrument: instrument)),
-                              ),
+      body: Column(
+        children: [
+          if (_fromCache)
+            const Padding(
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: OfflineBanner(),
+            ),
+          Expanded(
+            child: _loading
+                ? const Center(child: CircularProgressIndicator())
+                : _error != null
+                    ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(_error!)))
+                    : _instruments.isEmpty
+                        ? Center(
+                            child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.publicLibraryEmptyState)))
+                        : RefreshIndicator(
+                            onRefresh: _load,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(12),
+                              itemCount: _instruments.length,
+                              itemBuilder: (context, index) {
+                                final instrument = _instruments[index];
+                                final version = instrument.publishedVersion;
+                                final photoPath = version?.photoPath;
+                                return Card(
+                                  child: ListTile(
+                                    leading: photoPath != null
+                                        ? CircleAvatar(
+                                            backgroundImage: CachedNetworkImageProvider(
+                                              PublicInstrumentService.instance.photoUrl(photoPath),
+                                            ),
+                                          )
+                                        : const CircleAvatar(child: Icon(Icons.precision_manufacturing_outlined)),
+                                    title: Text(version?.name ?? l10n.auditDocumentUntitledLabel),
+                                    subtitle: version?.category != null ? Text(version!.category!.label(l10n)) : null,
+                                    trailing: Text(publicContentLocaleLabel(l10n, instrument.locale),
+                                        style: Theme.of(context).textTheme.labelSmall),
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (_) => PublicEntityDetailScreen.instrument(instrument: instrument)),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    ),
+                          ),
+          ),
+        ],
+      ),
       floatingActionButton: widget.canContribute
           ? FloatingActionButton.extended(
               onPressed: widget.onPropose,
