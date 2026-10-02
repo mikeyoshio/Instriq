@@ -981,6 +981,12 @@
   "resolveContentReportDialogTitle": "Marcar informe com a resolt",
 
   "helpCenterTitle": "Centre d'ajuda",
+  "offlineDownloadTitle": "Descarrega per a ús sense connexió",
+  "offlineDownloadInProgressTitle": "Descarregant...",
+  "offlineDownloadSuccess": "Llest: {items} elements i {images} fotos desades per a ús sense connexió.",
+  "@offlineDownloadSuccess": {"placeholders": {"items": {"type": "int"}, "images": {"type": "int"}}},
+  "offlineDownloadError": "No s'ha pogut completar la descàrrega: {error}",
+  "@offlineDownloadError": {"placeholders": {"error": {"type": "String"}}},
   "helpHowItWorksEntryTitle": "Com funciona l'app",
   "helpHowItWorksEntrySubtitle": "Una guia general, pensada per llegir-se d'una tirada",
   "helpCategoryGettingStarted": "Primers passos",

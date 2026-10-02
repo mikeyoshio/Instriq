@@ -76,6 +76,11 @@ dependencies:
   # cada arranque en frío las volvía a descargar aunque no hubieran
   # cambiado nunca (hallazgo de auditoría de rendimiento, 2026-09).
   cached_network_image: ^3.4.1
+  # Ya era dependencia transitiva de cached_network_image -- se declara
+  # explícita porque OfflineDownloadService la usa directamente para
+  # forzar la descarga a disco de fotos sin pasar por ningún widget
+  # (precarga para "Descarrega per a ús sense connexió").
+  flutter_cache_manager: ^3.4.5
 
 dev_dependencies:
   flutter_test:

@@ -981,6 +981,12 @@
   "resolveContentReportDialogTitle": "Mark report as resolved",
 
   "helpCenterTitle": "Help center",
+  "offlineDownloadTitle": "Download for offline use",
+  "offlineDownloadInProgressTitle": "Downloading...",
+  "offlineDownloadSuccess": "Done: {items} items and {images} photos saved for offline use.",
+  "@offlineDownloadSuccess": {"placeholders": {"items": {"type": "int"}, "images": {"type": "int"}}},
+  "offlineDownloadError": "Couldn't complete the download: {error}",
+  "@offlineDownloadError": {"placeholders": {"error": {"type": "String"}}},
   "helpHowItWorksEntryTitle": "How the app works",
   "helpHowItWorksEntrySubtitle": "A general guide, meant to be read in one go",
   "helpCategoryGettingStarted": "Getting started",

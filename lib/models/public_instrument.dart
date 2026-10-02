@@ -1,5 +1,5 @@
 import 'instrument.dart' show InstrumentCategory;
-import 'public_document.dart' show PublicContentStatus, publicContentStatusFromRow;
+import 'public_document.dart' show PublicContentStatus, publicContentStatusFromRow, publicContentStatusToDb;
 
 InstrumentCategory? _categoryFromRow(String? value) {
   if (value == null) return null;
@@ -40,6 +40,18 @@ class PublicInstrument {
       translationGroupId: row['translation_group_id'] as String? ?? row['id'] as String,
     );
   }
+
+  /// Fila completa per a [OfflineCacheService] -- mateixa forma que retorna
+  /// Supabase (amb `published_version` niat), reutilitzable amb [fromRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'created_by': createdBy,
+        'created_at': createdAt.toIso8601String(),
+        'published_version_id': publishedVersionId,
+        'published_version': publishedVersion?.toCacheRow(),
+        'locale': locale,
+        'translation_group_id': translationGroupId,
+      };
 }
 
 /// Camps de contingut alineats amb `CustomInstrumentVersion` (mateix
@@ -114,5 +126,25 @@ class PublicInstrumentVersion {
         'use_text': useText,
         'tip': tip,
         'photo_path': photoPath,
+      };
+
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'instrument_id': instrumentId,
+        'version_number': versionNumber,
+        'status': publicContentStatusToDb(status),
+        'name': name,
+        'category': category?.name,
+        'specialty_id': specialtyId,
+        'description': description,
+        'use_text': useText,
+        'tip': tip,
+        'photo_path': photoPath,
+        'author_id': authorId,
+        'comment': comment,
+        'based_on_version_id': basedOnVersionId,
+        'approved_by': approvedBy,
+        'approved_at': approvedAt?.toIso8601String(),
+        'created_at': createdAt.toIso8601String(),
       };
 }

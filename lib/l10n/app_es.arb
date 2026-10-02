@@ -981,6 +981,12 @@
   "resolveContentReportDialogTitle": "Marcar reporte como resuelto",
 
   "helpCenterTitle": "Centro de ayuda",
+  "offlineDownloadTitle": "Descargar para uso sin conexión",
+  "offlineDownloadInProgressTitle": "Descargando...",
+  "offlineDownloadSuccess": "Listo: {items} elementos y {images} fotos guardadas para uso sin conexión.",
+  "@offlineDownloadSuccess": {"placeholders": {"items": {"type": "int"}, "images": {"type": "int"}}},
+  "offlineDownloadError": "No se pudo completar la descarga: {error}",
+  "@offlineDownloadError": {"placeholders": {"error": {"type": "String"}}},
   "helpHowItWorksEntryTitle": "Cómo funciona la app",
   "helpHowItWorksEntrySubtitle": "Una guía general, pensada para leerse de un tirón",
   "helpCategoryGettingStarted": "Primeros pasos",

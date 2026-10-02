@@ -17,6 +17,19 @@ PublicContentStatus publicContentStatusFromRow(String value) {
   }
 }
 
+String publicContentStatusToDb(PublicContentStatus status) {
+  switch (status) {
+    case PublicContentStatus.inReview:
+      return 'in_review';
+    case PublicContentStatus.published:
+      return 'published';
+    case PublicContentStatus.archived:
+      return 'archived';
+    case PublicContentStatus.draft:
+      return 'draft';
+  }
+}
+
 class PublicDocument {
   final String id;
   final DocumentKind kind;
@@ -51,6 +64,19 @@ class PublicDocument {
       translationGroupId: row['translation_group_id'] as String? ?? row['id'] as String,
     );
   }
+
+  /// Fila completa per a [OfflineCacheService] -- mateixa forma que retorna
+  /// Supabase (amb `published_version` niat), reutilitzable amb [fromRow].
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'kind': kind.dbValue,
+        'created_by': createdBy,
+        'created_at': createdAt.toIso8601String(),
+        'published_version_id': publishedVersionId,
+        'published_version': publishedVersion?.toCacheRow(),
+        'locale': locale,
+        'translation_group_id': translationGroupId,
+      };
 }
 
 class PublicDocumentVersion {
@@ -118,5 +144,24 @@ class PublicDocumentVersion {
         'steps': steps.map((s) => s.toJson()).toList(),
         'related_instrument_ids': relatedInstrumentIds,
         'related_tray_ids': relatedTrayIds,
+      };
+
+  Map<String, dynamic> toCacheRow() => {
+        'id': id,
+        'document_id': documentId,
+        'version_number': versionNumber,
+        'status': publicContentStatusToDb(status),
+        'title': title,
+        'specialty_id': specialtyId,
+        'content': content,
+        'steps': steps.map((s) => s.toJson()).toList(),
+        'related_instrument_ids': relatedInstrumentIds,
+        'related_tray_ids': relatedTrayIds,
+        'author_id': authorId,
+        'comment': comment,
+        'based_on_version_id': basedOnVersionId,
+        'approved_by': approvedBy,
+        'approved_at': approvedAt?.toIso8601String(),
+        'created_at': createdAt.toIso8601String(),
       };
 }

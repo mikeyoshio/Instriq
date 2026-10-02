@@ -1,4 +1,6 @@
 import '../models/public_tray.dart';
+import 'connectivity_service.dart';
+import 'offline_cache_service.dart';
 import 'public_versioned_content_service.dart';
 
 class PublicTrayService extends PublicVersionedContentService<PublicTrayVersion> {
@@ -17,15 +19,37 @@ class PublicTrayService extends PublicVersionedContentService<PublicTrayVersion>
   @override
   PublicTrayVersion versionFromRow(Map<String, dynamic> row) => PublicTrayVersion.fromRow(row);
 
+  /// true si el darrer [fetchPublished] s'ha servit d'[OfflineCacheService]
+  /// en comptes de xarxa -- mateix patró que [PublicDocumentService].
+  bool lastFetchFromCache = false;
+  DateTime? lastFetchCachedAt;
+
   /// Safates publicades -- llista pública, llegible sense sessió (RLS:
   /// `public_trays_select` és `using (true)`).
   Future<List<PublicTray>> fetchPublished() async {
-    final rows = await client
-        .from('public_trays')
-        .select('*, published_version:public_tray_versions!published_version_id(*)')
-        .not('published_version_id', 'is', null)
-        .order('created_at', ascending: false);
-    return (rows as List).map((r) => PublicTray.fromRow((r as Map).cast<String, dynamic>())).toList();
+    Future<List<PublicTray>> fallbackToCache() async {
+      final cached = await OfflineCacheService.instance.getCachedPublicTrays();
+      lastFetchFromCache = true;
+      lastFetchCachedAt = cached?.cachedAt;
+      return cached?.data ?? [];
+    }
+
+    if (!ConnectivityService.instance.isOnline.value) return fallbackToCache();
+    try {
+      final rows = await client
+          .from('public_trays')
+          .select('*, published_version:public_tray_versions!published_version_id(*)')
+          .not('published_version_id', 'is', null)
+          .order('created_at', ascending: false);
+      final fetched = (rows as List).map((r) => PublicTray.fromRow((r as Map).cast<String, dynamic>())).toList();
+      lastFetchFromCache = false;
+      lastFetchCachedAt = null;
+      await OfflineCacheService.instance.cachePublicTrays(fetched);
+      return fetched;
+    } catch (e) {
+      if (!ConnectivityService.isNetworkError(e)) rethrow;
+      return fallbackToCache();
+    }
   }
 
   Future<PublicTray> fetchTray(String id) async {
