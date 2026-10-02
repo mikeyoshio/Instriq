@@ -149,6 +149,12 @@ class Instrument {
   final LocalizedText? tip;
   final InstrumentImage? image;
 
+  /// Marca manual, sense data de caducitat automàtica: s'ha d'esborrar a mà
+  /// (aquí, no amb lògica de dates) quan ja no tingui sentit mostrar-ho com
+  /// a novetat -- mateix criteri de simplicitat que la resta del catàleg,
+  /// que és una llista `const` compilada a l'app, no dades amb timestamps.
+  final bool isNew;
+
   const Instrument({
     required this.id,
     required this.name,
@@ -160,5 +166,6 @@ class Instrument {
     required this.use,
     this.tip,
     this.image,
+    this.isNew = false,
   });
 }
