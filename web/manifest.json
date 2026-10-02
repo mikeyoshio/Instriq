@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#162B56",
     "theme_color": "#162B56",
-    "description": "Aprende instrumental quirúrgico y comparte tarjetas de preferencia con tu hospital.",
+    "description": "Catàleg d'instrumental, tècniques, protocols i targetes de preferència compartits entre professionals de quiròfan. Open source.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
