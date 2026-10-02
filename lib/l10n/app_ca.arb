@@ -746,6 +746,7 @@
   "unknownPerson": "Algú del teu equip",
 
   "noPhotoBadgeTooltip": "Aquest instrument encara no té foto",
+  "catalogNewInstrumentBadge": "Nou",
   "uploadPhotoButtonLabel": "Puja una foto",
   "communityPhotoDialogTitle": "Pujar una foto",
   "communityPhotoConsentText": "Al pujar aquesta imatge, acceptes que serà d'ús públic dins d'Instriq i que serà revisada per l'equip abans de fer-se visible per a tothom.",

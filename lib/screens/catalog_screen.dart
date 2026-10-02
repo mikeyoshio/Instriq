@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_badge.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
@@ -198,6 +199,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
                           title: Row(
                             children: [
                               Flexible(child: Text(instrument.name.forLanguageCode(languageCode))),
+                              if (instrument.isNew) ...[
+                                const SizedBox(width: 6),
+                                InstriqBadge(label: l10n.catalogNewInstrumentBadge, color: InstriqColors.accent),
+                              ],
                               if (!_hasAnyPhoto(instrument)) ...[
                                 const SizedBox(width: 6),
                                 Tooltip(
