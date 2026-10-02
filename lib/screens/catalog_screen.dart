@@ -27,9 +27,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
   String _query = '';
   final Set<InstrumentCategory> _categoryFilters = {};
   final Set<Specialty> _specialtyFilters = {};
+  bool _newOnlyFilter = false;
   Set<String> _approvedCommunityPhotoIds = {};
 
-  int get _activeFilterCount => _categoryFilters.length + _specialtyFilters.length;
+  int get _activeFilterCount =>
+      _categoryFilters.length + _specialtyFilters.length + (_newOnlyFilter ? 1 : 0);
 
   @override
   void initState() {
@@ -63,10 +65,15 @@ class _CatalogScreenState extends State<CatalogScreen> {
     });
   }
 
+  void _toggleNewOnly() {
+    setState(() => _newOnlyFilter = !_newOnlyFilter);
+  }
+
   void _clearFilters() {
     setState(() {
       _specialtyFilters.clear();
       _categoryFilters.clear();
+      _newOnlyFilter = false;
     });
   }
 
@@ -79,7 +86,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
           i.aliases.any((a) => fuzzyContains(a, _query));
       final matchesCategory = _categoryFilters.isEmpty || _categoryFilters.contains(i.category);
       final matchesSpecialty = _specialtyFilters.isEmpty || _specialtyFilters.contains(i.specialty);
-      return matchesQuery && matchesCategory && matchesSpecialty;
+      final matchesNew = !_newOnlyFilter || i.isNew;
+      return matchesQuery && matchesCategory && matchesSpecialty && matchesNew;
     }).toList();
 
     return Scaffold(
@@ -118,6 +126,16 @@ class _CatalogScreenState extends State<CatalogScreen> {
               onChanged: (v) => setState(() => _query = v),
             ),
           ),
+          _FilterChipRow(
+            chips: [
+              _MultiFilterChip(
+                label: l10n.catalogNewOnlyFilterLabel,
+                selected: _newOnlyFilter,
+                onTap: _toggleNewOnly,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Align(

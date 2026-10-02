@@ -747,6 +747,7 @@
 
   "noPhotoBadgeTooltip": "Este instrumento todavía no tiene foto",
   "catalogNewInstrumentBadge": "Nuevo",
+  "catalogNewOnlyFilterLabel": "Añadido recientemente",
   "uploadPhotoButtonLabel": "Subir una foto",
   "communityPhotoDialogTitle": "Subir una foto",
   "communityPhotoConsentText": "Al subir esta imagen, aceptas que será de uso público dentro de Instriq y que será revisada por el equipo antes de hacerse visible para todo el mundo.",
