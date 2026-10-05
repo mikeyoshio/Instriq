@@ -375,7 +375,7 @@
       </div>
       <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
       <div class="data-row">
-        <div class="data-cell"><div class="num" data-count="326">0</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
+        <div class="data-cell"><div class="num" data-count="335">0</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
         <div class="data-cell"><div class="num" data-count="17">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
         <div class="data-cell"><div class="num" data-count="3">0</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
         <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
@@ -986,7 +986,7 @@
   CA_DEFAULTS['meta.title'] = document.title;
 
   // Timeline interactiu de novetats: 1 origen + 46 desplegaments + previstos.
-  var TIMELINE_SHIPPED = 53; // origen (índex 0) + 52 novetats (índexs 1-52)
+  var TIMELINE_SHIPPED = 54; // origen (índex 0) + 53 novetats (índexs 1-53)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -1042,6 +1042,7 @@
       { badge: '#50', text: '<strong>Catàleg complet a les 17 especialitats</strong> — 95 instruments nous (de 216 a 311) completen la cobertura d\'otorinolaringologia, angiologia i cirurgia vascular, cirurgia oral i maxil·lofacial, cirurgia pediàtrica, cirurgia plàstica, cirurgia toràcica, dermatologia, oftalmologia i anestesiologia i reanimació.' },
       { badge: '#51', text: '<strong>Gases i apòsits quirúrgics</strong> — 10 tipus de gasa, compreses i material hemostàtic (compresa de laparotomia, Surgicel, Gelfoam, cottonoid neuroquirúrgic, paquet de Mikulicz, entre d\'altres) s\'afegeixen al catàleg com a material quirúrgic no reutilitzable.' },
       { badge: '#52', text: '<strong>Equips de protecció individual (EPI)</strong> — 5 elements de protecció lligats a tècniques concretes ja presents al catàleg: davantal i collar tiroïdal plomats (fluoroscòpia), ulleres de protecció làser, respirador per a procediments generadors d\'aerosols i sistema de doble guant amb indicador de perforació.' },
+      { badge: '#53', text: '<strong>Materials de sutura</strong> — 9 tipus de fil de sutura (Vicryl, Monocryl, PDS, seda, Prolene, niló, catgut cròmic, filferro d\'acer per a tancament esternal, i sutura barbada autoancorant per a cirurgia laparoscòpica/robòtica), completant el catàleg amb el material que fins ara només hi era representat pels portaagulles.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
       { badge: 'Previst', future: true, text: 'Registre públic de com es reparteixen les donacions.' }
@@ -1100,6 +1101,7 @@
       { badge: '#50', text: '<strong>Catálogo completo en las 17 especialidades</strong> — 95 instrumentos nuevos (de 216 a 311) completan la cobertura de otorrinolaringología, angiología y cirugía vascular, cirugía oral y maxilofacial, cirugía pediátrica, cirugía plástica, cirugía torácica, dermatología, oftalmología y anestesiología y reanimación.' },
       { badge: '#51', text: '<strong>Gasas y apósitos quirúrgicos</strong> — 10 tipos de gasa, compresas y material hemostático (compresa de laparotomía, Surgicel, Gelfoam, cottonoid neuroquirúrgico, paquete de Mikulicz, entre otros) se añaden al catálogo como material quirúrgico no reutilizable.' },
       { badge: '#52', text: '<strong>Equipos de protección individual (EPI)</strong> — 5 elementos de protección ligados a técnicas concretas ya presentes en el catálogo: delantal y collar tiroideo plomados (fluoroscopia), gafas de protección láser, respirador para procedimientos generadores de aerosoles y sistema de doble guante con indicador de perforación.' },
+      { badge: '#53', text: '<strong>Materiales de sutura</strong> — 9 tipos de hilo de sutura (Vicryl, Monocryl, PDS, seda, Prolene, nailon, catgut crómico, alambre de acero para cierre esternal, y sutura barbada autoanclante para cirugía laparoscópica/robótica), completando el catálogo con el material que hasta ahora solo estaba representado por los portaagujas.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
       { badge: 'Previsto', future: true, text: 'Registro público de cómo se reparten las donaciones.' }
@@ -1158,6 +1160,7 @@
       { badge: '#50', text: '<strong>Full catalog coverage across all 17 specialties</strong> — 95 new instruments (from 216 to 311) complete the coverage of otolaryngology, vascular surgery, oral and maxillofacial surgery, pediatric surgery, plastic surgery, thoracic surgery, dermatology, ophthalmology, and anesthesiology and resuscitation.' },
       { badge: '#51', text: '<strong>Surgical gauze and dressings</strong> — 10 types of gauze, pads and hemostatic material (laparotomy pad, Surgicel, Gelfoam, neurosurgical cottonoid, Mikulicz pack, among others) are added to the catalog as non-reusable surgical material.' },
       { badge: '#52', text: '<strong>Personal protective equipment (PPE)</strong> — 5 protective items tied to specific techniques already in the catalog: lead apron and thyroid shield (fluoroscopy), laser safety goggles, a respirator for aerosol-generating procedures, and a double-glove perforation indicator system.' },
+      { badge: '#53', text: '<strong>Suture materials</strong> — 9 types of suture thread (Vicryl, Monocryl, PDS, silk, Prolene, nylon, chromic catgut, stainless steel wire for sternal closure, and barbed self-anchoring suture for laparoscopic/robotic surgery), completing the catalog with the material that was previously represented only by needle holders.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
       { badge: 'Planned', future: true, text: 'A public record of how donations are distributed.' }
