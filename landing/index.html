@@ -375,7 +375,7 @@
       </div>
       <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
       <div class="data-row">
-        <div class="data-cell"><div class="num" data-count="216">0</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
+        <div class="data-cell"><div class="num" data-count="311">0</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
         <div class="data-cell"><div class="num" data-count="17">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
         <div class="data-cell"><div class="num" data-count="3">0</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
         <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
@@ -986,7 +986,7 @@
   CA_DEFAULTS['meta.title'] = document.title;
 
   // Timeline interactiu de novetats: 1 origen + 46 desplegaments + previstos.
-  var TIMELINE_SHIPPED = 47; // origen (índex 0) + 46 novetats (índexs 1-46)
+  var TIMELINE_SHIPPED = 51; // origen (índex 0) + 50 novetats (índexs 1-50)
   var TL = {
     ca: [
       { badge: 'Origen', text: '<strong>Neix Instriq</strong> — de la idea d\'una parella: un enginyer informàtic i una infermera de quiròfan, cansada de veure el coneixement del bloc quirúrgic viure en carpetes de paper desactualitzades.' },
@@ -1036,6 +1036,10 @@
       { badge: '#44', text: '<strong>Donacions via GitHub Sponsors</strong> — qualsevol persona pot ajudar a cobrir la infraestructura del projecte amb una aportació puntual o mensual, des de la secció Col·labora.' },
       { badge: '#45', text: '<strong>Rendiment</strong> — cerca d\'Inici més fluida, dades que es carreguen en paral·lel en comptes d\'una a una, i fotos que ja no es tornen a descarregar cada vegada que obres l\'app.' },
       { badge: '#46', text: '<strong>v1.0.0</strong> — auditoria completa (seguretat, accessibilitat, traduccions, disseny responsive i tests) abans del primer llançament estable.' },
+      { badge: '#47', text: '<strong>Catàleg ampliat a 216 instruments</strong> — de 118 a 216, amb una revisió addicional de traduccions en 38 fitxes.' },
+      { badge: '#48', text: '<strong>Suport offline ampliat</strong> — la Biblioteca Pública (tècniques, safates i instrumental compartits) ja es pot consultar sense connexió, i una nova opció permet descarregar tot el contingut d\'un cop per a ús totalment desconnectat.' },
+      { badge: '#49', text: '<strong>Etiqueta "Nou" i filtre "Afegit recentment"</strong> — els instruments incorporats més recentment al catàleg es marquen amb una etiqueta visible i es poden filtrar de manera independent.' },
+      { badge: '#50', text: '<strong>Catàleg complet a les 17 especialitats</strong> — 95 instruments nous (de 216 a 311) completen la cobertura d\'otorinolaringologia, angiologia i cirurgia vascular, cirurgia oral i maxil·lofacial, cirurgia pediàtrica, cirurgia plàstica, cirurgia toràcica, dermatologia, oftalmologia i anestesiologia i reanimació.' },
       { badge: 'Previst', future: true, text: 'Publicació a Google Play.' },
       { badge: 'Previst', future: true, text: 'Sincronitzar el progrés d\'aprenentatge al núvol.' },
       { badge: 'Previst', future: true, text: 'Registre públic de com es reparteixen les donacions.' }
@@ -1088,6 +1092,10 @@
       { badge: '#44', text: '<strong>Donaciones vía GitHub Sponsors</strong> — cualquier persona puede ayudar a cubrir la infraestructura del proyecto con una aportación puntual o mensual, desde la sección Colabora.' },
       { badge: '#45', text: '<strong>Rendimiento</strong> — búsqueda de Inicio más fluida, datos que se cargan en paralelo en lugar de uno a uno, y fotos que ya no se vuelven a descargar cada vez que abres la app.' },
       { badge: '#46', text: '<strong>v1.0.0</strong> — auditoría completa (seguridad, accesibilidad, traducciones, diseño responsive y tests) antes del primer lanzamiento estable.' },
+      { badge: '#47', text: '<strong>Catálogo ampliado a 216 instrumentos</strong> — de 118 a 216, con una revisión adicional de traducciones en 38 fichas.' },
+      { badge: '#48', text: '<strong>Soporte offline ampliado</strong> — la Biblioteca Pública (técnicas, bandejas e instrumental compartidos) ya se puede consultar sin conexión, y una nueva opción permite descargar todo el contenido de una vez para uso totalmente desconectado.' },
+      { badge: '#49', text: '<strong>Etiqueta "Nuevo" y filtro "Añadido recientemente"</strong> — los instrumentos incorporados más recientemente al catálogo se marcan con una etiqueta visible y se pueden filtrar de forma independiente.' },
+      { badge: '#50', text: '<strong>Catálogo completo en las 17 especialidades</strong> — 95 instrumentos nuevos (de 216 a 311) completan la cobertura de otorrinolaringología, angiología y cirugía vascular, cirugía oral y maxilofacial, cirugía pediátrica, cirugía plástica, cirugía torácica, dermatología, oftalmología y anestesiología y reanimación.' },
       { badge: 'Previsto', future: true, text: 'Publicación en Google Play.' },
       { badge: 'Previsto', future: true, text: 'Sincronizar el progreso de aprendizaje en la nube.' },
       { badge: 'Previsto', future: true, text: 'Registro público de cómo se reparten las donaciones.' }
@@ -1140,6 +1148,10 @@
       { badge: '#44', text: '<strong>Donations via GitHub Sponsors</strong> — anyone can help cover the project\'s infrastructure with a one-off or monthly contribution, from the Collaborate section.' },
       { badge: '#45', text: '<strong>Performance</strong> — smoother Home search, data that loads in parallel instead of one item at a time, and photos that no longer re-download every time you open the app.' },
       { badge: '#46', text: '<strong>v1.0.0</strong> — a full audit (security, accessibility, translations, responsive design and tests) ahead of the first stable release.' },
+      { badge: '#47', text: '<strong>Catalog expanded to 216 instruments</strong> — from 118 to 216, with an additional translation review across 38 entries.' },
+      { badge: '#48', text: '<strong>Extended offline support</strong> — the Public Library (shared techniques, trays and instruments) can now be browsed offline, and a new option lets you download all content at once for fully disconnected use.' },
+      { badge: '#49', text: '<strong>"New" badge and "Recently added" filter</strong> — instruments most recently added to the catalog are now marked with a visible badge and can be filtered independently.' },
+      { badge: '#50', text: '<strong>Full catalog coverage across all 17 specialties</strong> — 95 new instruments (from 216 to 311) complete the coverage of otolaryngology, vascular surgery, oral and maxillofacial surgery, pediatric surgery, plastic surgery, thoracic surgery, dermatology, ophthalmology, and anesthesiology and resuscitation.' },
       { badge: 'Planned', future: true, text: 'Google Play release.' },
       { badge: 'Planned', future: true, text: 'Syncing learning progress to the cloud.' },
       { badge: 'Planned', future: true, text: 'A public record of how donations are distributed.' }
