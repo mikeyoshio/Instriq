@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://instriq.org/sitemap.xml
+Sitemap: https://instriq.org/sitemap-vademecum.xml
