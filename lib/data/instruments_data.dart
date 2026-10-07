@@ -615,6 +615,12 @@ const List<Instrument> kInstruments = [
       es: 'Requiere placa de retorno de paciente conectada correctamente para evitar quemaduras.',
       en: 'Requires a properly connected patient return electrode to prevent burns.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Electrocauter_00.jpg',
+      license: 'CC0 1.0 Universal (Public Domain Dedication)',
+      attribution: 'SnowBink',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Electrocauter_00.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-disección-bipolar',
@@ -671,6 +677,12 @@ const List<Instrument> kInstruments = [
       ca: 'Hemostàsia de vasos de més calibre i subjecció de teixit gruixut.',
       es: 'Hemostasia de vasos de mayor calibre y sujeción de tejido grueso.',
       en: 'Hemostasis of larger-caliber vessels and grasping of thick tissue.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Pean.jpg',
+      license: 'Public domain',
+      attribution: 'Baran Ivo',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pean.jpg',
     ),
   ),
 
@@ -881,6 +893,12 @@ const List<Instrument> kInstruments = [
       es: 'El vacío se crea comprimiendo el bulbo antes de cerrar el tapón: conviene vaciarlo antes de que se llene más de la mitad para que mantenga una succión eficaz.',
       en: 'The vacuum is created by compressing the bulb before closing its plug: it should be emptied before it is more than half full so it keeps suctioning effectively.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/e/e8/Jackson-Pratt_Drain.jpg',
+      license: 'Dual-licensed: GNU Free Documentation License 1.2+ / CC BY-SA 3.0',
+      attribution: 'Infiniti125, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Jackson-Pratt_Drain.jpg',
+    ),
   ),
   Instrument(
     id: 'drenaje-kehr',
@@ -1019,6 +1037,12 @@ const List<Instrument> kInstruments = [
       en: 'Use only the minimum amount needed and remove any excess once hemostasis is achieved, since leaving too much in place can promote granuloma formation or act as a nidus for infection; avoid wrapping it constrictively around a vascular anastomosis.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Oxidized_Regenerated_Cellulose_-_Gallbladder_(52027616615).jpg',
+      license: 'CC BY-SA 2.0',
+      attribution: 'Dr. Mark Ong, Atlas of Medical Foreign Bodies (Y Rosen, MD & P Meseguer, MD), Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Oxidized_Regenerated_Cellulose_-_Gallbladder_(52027616615).jpg',
+    ),
   ),
   Instrument(
     id: 'cottonoid-neuroquirurgico',
@@ -1905,6 +1929,12 @@ const List<Instrument> kInstruments = [
       es: 'Se utiliza para visualizar la cavidad abdominal o pélvica en la pantalla durante cualquier procedimiento laparoscópico, transmitiendo la imagen captada por la cámara acoplada a su extremo proximal.',
       en: 'Used to visualize the abdominal or pelvic cavity on screen during any laparoscopic procedure, relaying the image captured through the camera head attached to its proximal end.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/5/59/Karl_Storz_Laparaskopie_Optik.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Ibrahim Husain Meraj, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Karl_Storz_Laparaskopie_Optik.jpg',
+    ),
   ),
   Instrument(
     id: 'insuflador-co2',
@@ -1923,6 +1953,12 @@ const List<Instrument> kInstruments = [
       ca: 'S\'utilitza per crear i mantenir el pneumoperitoneu durant tota la cirurgia laparoscòpica, mantenint una pressió intraabdominal preestablerta i reposant automàticament el gas perdut per fuites.',
       es: 'Se utiliza para crear y mantener el neumoperitoneo durante toda la cirugía laparoscópica, manteniendo una presión intraabdominal preestablecida y reponiendo automáticamente el gas perdido por fugas.',
       en: 'Used to establish and maintain pneumoperitoneum throughout laparoscopic surgery, holding a preset intra-abdominal pressure and automatically replacing gas lost through leaks.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/200417-N-DA693-1420_%2849798499313%29.jpg',
+      license: 'Public domain (U.S. federal government work)',
+      attribution: 'MC3 Jake Greenberg, U.S. Navy, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:200417-N-DA693-1420_(49798499313).jpg',
     ),
   ),
   Instrument(
@@ -2046,6 +2082,12 @@ const List<Instrument> kInstruments = [
       es: 'Cirugía mínimamente invasiva de alta precisión en múltiples especialidades (general, urología, ginecología, torácica).',
       en: 'High-precision minimally invasive surgery across multiple specialties (general, urology, gynecology, thoracic).',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/2023-09_-_Robot_chirurgien_Da_Vinci_Xi_-_Centre_hospitalier_de_Vesoul_-_08.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'A.BourgeoisP, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:2023-09_-_Robot_chirurgien_Da_Vinci_Xi_-_Centre_hospitalier_de_Vesoul_-_08.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-cadiere',
@@ -2135,6 +2177,12 @@ const List<Instrument> kInstruments = [
       ca: 'Cirurgia mínimament invasiva assistida per robot amb incisions més petites.',
       es: 'Cirugía mínimamente invasiva asistida por robot con incisiones más pequeñas.',
       en: 'Robot-assisted minimally invasive surgery with smaller incisions.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Quir%C3%B3fano_Inteligente_de_Xoco.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'EneasMx, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Quir%C3%B3fano_Inteligente_de_Xoco.jpg',
     ),
   ),
 
@@ -2311,6 +2359,12 @@ const List<Instrument> kInstruments = [
       es: 'Osteotomías y corte óseo en cirugía ortopédica y traumatológica.',
       en: 'Osteotomies and bone cutting in orthopedic and trauma surgery.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Stryker_Electrosurgical_Set.jpg',
+      license: 'Public domain (U.S. federal government work)',
+      attribution: 'Chuck Kennedy, National Museum of Health and Medicine, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Stryker_Electrosurgical_Set.jpg',
+    ),
   ),
   Instrument(
     id: 'driver-quirurgico',
@@ -2425,6 +2479,12 @@ const List<Instrument> kInstruments = [
       es: 'Colocación precisa de implantes en cirugía de rodilla, cadera y columna.',
       en: 'Precise implant placement in knee, hip and spine surgery.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Innovation_in_Action-_Naval_Hospital_Rota_First_in_Europe_to_Deliver_Computer-Assisted_Hip_and_Knee_Replacement_Surgery_%289543766%29.jpg',
+      license: 'Public domain (U.S. federal government work)',
+      attribution: 'Lt. Cmdr. Jonathan Phillips, U.S. Navy, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Innovation_in_Action-_Naval_Hospital_Rota_First_in_Europe_to_Deliver_Computer-Assisted_Hip_and_Knee_Replacement_Surgery_(9543766).jpg',
+    ),
   ),
 
   Instrument(
@@ -2474,6 +2534,12 @@ const List<Instrument> kInstruments = [
       ca: 'S\'utilitza per retirar vores òssies, osteòfits o fragments petits en cirurgia ortopèdica, de columna i neuroquirúrgica, per exemple en laminectomies o en la preparació de vores per a empelts.',
       es: 'Se utiliza para retirar bordes óseos, osteofitos o fragmentos pequeños en cirugía ortopédica, de columna y neuroquirúrgica, por ejemplo en laminectomías o en la preparación de bordes para injertos.',
       en: 'Used to remove bone edges, osteophytes or small fragments in orthopedic, spine and neurosurgical procedures, such as laminectomy or preparing bone edges for grafting.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Kerrison_rounger_.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'RobozTech, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Kerrison_rounger_.jpg',
     ),
   ),
   Instrument(
@@ -2754,6 +2820,12 @@ const List<Instrument> kInstruments = [
       es: 'Las mesas de tracción pueden provocar lesión por presión en el periné o lesión nerviosa por estiramiento si no se vigila con cuidado la posición y la fuerza de tracción.',
       en: 'Traction tables can cause pressure injury to the perineum or nerve stretch injury if positioning and traction force are not checked carefully.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/23/US_Navy_090508-N-5234F-068_Dr._K.K._Singh%2C_center%2C_an_orthopedic_surgeon_consultant_at_Mount_St._Johns_Hospital%2C_examines_a_fracture_table_donated_through_Continuing_Promise_2009.jpg',
+      license: 'Public domain (U.S. federal government work)',
+      attribution: 'Chief Mass Communication Specialist Teresa J. Frith, U.S. Navy, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:US_Navy_090508-N-5234F-068_Dr._K.K._Singh,_center,_an_orthopedic_surgeon_consultant_at_Mount_St._Johns_Hospital,_examines_a_fracture_table_donated_through_Continuing_Promise_2009.jpg',
+    ),
   ),
   Instrument(
     id: 'arco-c',
@@ -2777,6 +2849,12 @@ const List<Instrument> kInstruments = [
       ca: 'Com que utilitza radiació ionitzant, l\'equip quirúrgic aplica mesures de temps, distància i protecció (davantals i protectors tiroidals de plom) per minimitzar l\'exposició quan calen diverses exposicions seguides.',
       es: 'Como utiliza radiación ionizante, el equipo quirúrgico aplica medidas de tiempo, distancia y protección (delantales y protectores tiroideos de plomo) para minimizar la exposición cuando hacen falta varias exposiciones seguidas.',
       en: 'Because it uses ionizing radiation, staff follow time, distance and shielding practices (lead aprons, thyroid shields) to minimize exposure when several exposures are needed in a row.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/82/New_Alma_Hospital_Mannarkkad_orthopaedic_OT_laminar_flow_C-arm.jpg',
+      license: 'CC0 1.0 Universal (Public Domain Dedication)',
+      attribution: 'Drnabeelmohdkk1, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:New_Alma_Hospital_Mannarkkad_orthopaedic_OT_laminar_flow_C-arm.jpg',
     ),
   ),
 
@@ -2872,6 +2950,12 @@ const List<Instrument> kInstruments = [
       es: 'Visualización de alta precisión en microcirugía neuro, vascular y de columna.',
       en: 'High-precision visualization in neuro, vascular and spinal microsurgery.',
     ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/US%20Navy%20080607-N-9689V-011%20Cmdr.%20Kenneth%20Kubis%2C%20director%20of%20surgical%20services%20aboard%20the%20Military%20Sealift%20Command%20hospital%20ship%20USNS%20Mercy%20%28T-AH%2019%29%2C%20uses%20an%20operating%20microscope.jpg',
+      license: 'Public domain (U.S. federal government work)',
+      attribution: 'U.S. Navy photo by MC2 Joshua Valcarcel',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:US_Navy_080607-N-9689V-011_Cmdr._Kenneth_Kubis,_director_of_surgical_services_aboard_the_Military_Sealift_Command_hospital_ship_USNS_Mercy_(T-AH_19),_uses_an_operating_microscope.jpg',
+    ),
   ),
   Instrument(
     id: 'clip-aneurisma',
@@ -2920,6 +3004,12 @@ const List<Instrument> kInstruments = [
       ca: 'Cal avançar la fulla amb control i sense tensionar la duramare subjacent, ja que la durotomia és una complicació ben descrita amb aquest instrument.',
       es: 'Conviene avanzar la cuchilla con control y sin tensionar la duramadre subyacente, ya que la durotomía es una complicación bien descrita con este instrumento.',
       en: 'Advance the blade under control and without tenting the underlying dura, since durotomy is a well-described complication of this instrument.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Kerrison%20Rongeur%20of%20Dr.%20John%20Hersel%20Gladney%20-%20DPLA%20-%20880c89e828ed41c889cd4c6feec6c446%20%28page%201%29.jpg',
+      license: 'Public domain (US) - no known copyright restrictions (Missouri Historical Society determination)',
+      attribution: 'Missouri Historical Society, St. Louis, via Digital Public Library of America (DPLA)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Kerrison_Rongeur_of_Dr._John_Hersel_Gladney_-_DPLA_-_880c89e828ed41c889cd4c6feec6c446_(page_1).jpg',
     ),
   ),
   Instrument(
@@ -2997,6 +3087,12 @@ const List<Instrument> kInstruments = [
       es: 'Se utiliza en el clipaje microquirúrgico de aneurismas cerebrales para colocar, reposicionar y, si es necesario, retirar el clip permanente que ocluye el cuello aneurismático.',
       en: 'Used in microsurgical clipping of cerebral aneurysms to place, reposition and, if needed, remove the permanent clip occluding the aneurysm neck.',
     ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Compression%20forceps%20for%20Yasargil%20clips%2C%20Tuttlingen%2C%20Germany%2C%20Wellcome%20L0058096.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'Wellcome Collection / Science Museum, London',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Compression_forceps_for_Yasargil_clips,_Tuttlingen,_Germany,_Wellcome_L0058096.jpg',
+    ),
   ),
   Instrument(
     id: 'cateter-drenaje-ventricular-externo',
@@ -3015,6 +3111,12 @@ const List<Instrument> kInstruments = [
       ca: 'Permet drenar temporalment el líquid cefalorraquidi i monitoritzar la pressió intracranial en hidrocefàlia aguda, hemorràgia intraventricular o traumatisme cranioencefàlic.',
       es: 'Permite drenar temporalmente el líquido cefalorraquídeo y monitorizar la presión intracraneal en hidrocefalia aguda, hemorragia intraventricular o traumatismo craneoencefálico.',
       en: 'Allows temporary drainage of cerebrospinal fluid and monitoring of intracranial pressure in acute hydrocephalus, intraventricular hemorrhage or traumatic brain injury.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/EVD-ICH.jpg',
+      license: 'CC BY-SA 3.0 (also dual-licensed GFDL 1.2+)',
+      attribution: 'Rmosler2100, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:EVD-ICH.jpg',
     ),
   ),
   Instrument(
@@ -3073,6 +3175,12 @@ const List<Instrument> kInstruments = [
       es: 'Permite localizar con precisión milimétrica un punto intracraneal para biopsias cerebrales, implantación de electrodos de estimulación cerebral profunda, electrodos de estereoelectroencefalografía o planificación de radiocirugía.',
       en: 'Allows millimeter-precise localization of an intracranial target for brain biopsies, deep brain stimulation electrode implantation, stereoelectroencephalography electrodes or radiosurgery planning.',
     ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Stereotactic%20Frame%20TM03B%20Micromar.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Renata Serpejante, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Stereotactic_Frame_TM03B_Micromar.jpg',
+    ),
   ),
   Instrument(
     id: 'electrodo-estimulacion-cerebral-profunda',
@@ -3129,6 +3237,12 @@ const List<Instrument> kInstruments = [
       ca: 'S\'utilitza per mapar intraoperatòriament àrees corticals eloqüents (motores, sensitives o del llenguatge) durant craniotomies despertes o sota anestèsia, per maximitzar la resecció tumoral preservant la funció.',
       es: 'Se utiliza para mapear intraoperatoriamente áreas corticales elocuentes (motoras, sensitivas o del lenguaje) durante craneotomías despiertas o bajo anestesia, para maximizar la resección tumoral preservando la función.',
       en: 'Used to intraoperatively map eloquent cortical areas (motor, sensory or language) during awake or anesthetized craniotomy, maximizing tumor resection while preserving function.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cortical%20Stimulator.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Bahcecim, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Cortical_Stimulator.jpg',
     ),
   ),
   Instrument(
@@ -3548,6 +3662,12 @@ const List<Instrument> kInstruments = [
       es: 'Permite monitorizar en tiempo real el gasto cardíaco, la presión pulmonar y otros parámetros hemodinámicos durante cirugía cardíaca de alto riesgo y en pacientes críticos.',
       en: 'It allows real-time monitoring of cardiac output, pulmonary pressures, and other hemodynamic parameters during high-risk cardiac surgery and in critically ill patients.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/e/e8/Pulmonary_arterial_catheter.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Anesth Earth, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pulmonary_arterial_catheter.jpg',
+    ),
   ),
   Instrument(
     id: 'tijera-potts-smith',
@@ -3722,6 +3842,12 @@ const List<Instrument> kInstruments = [
       es: 'Si se encuentra resistencia, hay que detenerse y no forzar nunca el avance: una falsa vía o una perforación uterina suelen producirse precisamente por avanzar la sonda contra resistencia.',
       en: 'If resistance is felt, stop and never force it forward: a false passage or uterine perforation typically results from advancing the sound against resistance.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Uterine_sound_%28single_use%29.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Whispyhistory',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Uterine_sound_(single_use).jpg',
+    ),
   ),
   Instrument(
     id: 'cureta-uterina',
@@ -3745,6 +3871,12 @@ const List<Instrument> kInstruments = [
       ca: 'Alguns formadors ensenyen a aturar el raspat quan es nota una sensació "arenosa" i uniforme a la paret uterina, senyal que s\'ha arribat al miometri i que cal no insistir-hi més.',
       es: 'Algunos formadores enseñan a detener el raspado cuando se nota una sensación "arenosa" y uniforme en la pared uterina, señal de que se ha alcanzado el miometrio y que no conviene insistir más.',
       en: 'Some trainers teach stopping the curettage once a uniform "gritty" friction sensation is felt against the uterine wall, signaling that the myometrium has been reached and further scraping should be avoided.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Uterine_Curette_01.jpg',
+      license: 'CC0 1.0',
+      attribution: 'SnowBink',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Uterine_Curette_01.jpg',
     ),
   ),
   Instrument(
@@ -3770,6 +3902,12 @@ const List<Instrument> kInstruments = [
       es: 'Hay que confirmar siempre la posición exacta de la cabeza fetal y la correcta colocación de las cucharas antes de traccionar; si no se consigue progreso con las primeras tracciones, hay que replantear el plan, por ejemplo hacia una cesárea.',
       en: 'Always confirm the exact fetal head position and correct blade placement before applying traction; if no descent is achieved with the first few pulls, the plan should be reconsidered, for example proceeding to cesarean delivery.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Davis%27s_common_obstetrical_forceps_Wellcome_L0006316.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'Wellcome Collection',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Davis\'s_common_obstetrical_forceps_Wellcome_L0006316.jpg',
+    ),
   ),
   Instrument(
     id: 'ventosa-obstetrica',
@@ -3793,6 +3931,12 @@ const List<Instrument> kInstruments = [
       ca: 'Si la copa es desenganxa ("pop-off") més de dues o tres vegades, la majoria de protocols recomanen abandonar la ventosa en lloc d\'insistir-hi.',
       es: 'Si la copa se desprende ("pop-off") más de dos o tres veces, la mayoría de protocolos recomiendan abandonar la ventosa en lugar de insistir.',
       en: 'If the cup detaches ("pop-off") more than two or three times, most protocols recommend abandoning the vacuum attempt rather than persisting.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Kiwi-vacuumextractor.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'MinkVerbaan',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Kiwi-vacuumextractor.jpg',
     ),
   ),
   Instrument(
@@ -3841,6 +3985,12 @@ const List<Instrument> kInstruments = [
       ca: 'Cal comprovar que la xeringa manté el buit (sense retornar a la posició de repòs) abans d\'introduir la cànula a l\'úter, ja que una pèrdua de pressió negativa és la causa més freqüent d\'una aspiració incompleta.',
       es: 'Hay que comprobar que la jeringa mantiene el vacío (sin volver a la posición de reposo) antes de introducir la cánula en el útero, ya que una pérdida de presión negativa es la causa más frecuente de una aspiración incompleta.',
       en: 'Confirm that the syringe is holding its vacuum (plunger not sliding back) before inserting the cannula into the uterus, since loss of negative pressure is the most common cause of an incomplete aspiration.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/60/Manual_vacuum_aspirator.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'FamPlanMD08',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Manual_vacuum_aspirator.jpg',
     ),
   ),
   Instrument(
@@ -3974,6 +4124,12 @@ const List<Instrument> kInstruments = [
       es: 'Hay que dejar un muñón de cordón de unos 2-3 cm bajo la pinza: demasiado corto dificulta maniobras posteriores (como cateterizar el cordón) y demasiado largo alarga innecesariamente el tiempo de caída.',
       en: 'About 2-3 cm of cord stump should be left under the clamp: too short complicates later maneuvers (such as catheterizing the cord), while too long needlessly delays cord separation.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/27/Navelklem_in_verpakking.JPG',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Barbirossa',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Navelklem_in_verpakking.JPG',
+    ),
   ),
   Instrument(
     id: 'tijera-episiotomia',
@@ -4094,6 +4250,12 @@ const List<Instrument> kInstruments = [
       es: 'Permite explorar visualmente la uretra y la vejiga (hematuria, tumores, litiasis, estenosis) y, a través de su canal de trabajo, realizar biopsias, fulguraciones o colocar catéteres/stents.',
       en: 'Used to visually examine the urethra and bladder (haematuria, tumours, stones, strictures) and, through its working channel, to take biopsies, fulgurate lesions or place catheters/stents.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Cystoscope-med-20050425.jpg',
+      license: 'CC BY-SA 3.0 / GFDL 1.2+',
+      attribution: 'Michael Reeve (MykReeve), Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Cystoscope-med-20050425.jpg',
+    ),
   ),
   Instrument(
     id: 'sonda-foley',
@@ -4112,6 +4274,12 @@ const List<Instrument> kInstruments = [
       ca: 'S\'utilitza per drenar la bufeta de forma contínua (retenció urinària, control de diüresi, incontinència, postoperatori); la versió de tres vies permet també fer rentats vesicals continus.',
       es: 'Se utiliza para drenar la vejiga de forma continua (retención urinaria, control de diuresis, incontinencia, postoperatorio); la versión de tres vías permite también realizar lavados vesicales continuos.',
       en: 'Used for continuous bladder drainage (urinary retention, urine-output monitoring, incontinence, postoperative care); the three-way version also allows continuous bladder irrigation.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Foley_catheter_CH_20_-_02.JPG',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Mireksplay, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Foley_catheter_CH_20_-_02.JPG',
     ),
   ),
   Instrument(
@@ -4136,6 +4304,12 @@ const List<Instrument> kInstruments = [
       ca: 'Cal un sistema de recordatori per retirar-lo o recanviar-lo (normalment en 4-6 setmanes): un stent oblidat es pot incrustar greument.',
       es: 'Es necesario un sistema de recordatorio para retirarlo o recambiarlo (normalmente en 4-6 semanas): un stent olvidado puede incrustarse gravemente.',
       en: 'A reminder/tracking system for removal or exchange (typically at 4-6 weeks) is essential: a forgotten stent can become severely encrusted.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/DJ-Harnleiterschiene.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'ErwinMeier, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:DJ-Harnleiterschiene.jpg',
     ),
   ),
   Instrument(
@@ -4212,6 +4386,12 @@ const List<Instrument> kInstruments = [
       ca: 'Captura i extreu càlculs o fragments de la via urinària durant una ureteroscòpia rígida o flexible, sota visió directa o control fluoroscòpic.',
       es: 'Captura y extrae cálculos o fragmentos de la vía urinaria durante una ureteroscopia rígida o flexible, bajo visión directa o control fluoroscópico.',
       en: 'Captures and extracts urinary stones or fragments during rigid or flexible ureteroscopy, under direct or fluoroscopic guidance.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Dormiak%C3%B6rbchen.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Doctor roach, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Dormiak%C3%B6rbchen.jpg',
     ),
   ),
   Instrument(
@@ -4548,6 +4728,12 @@ const List<Instrument> kInstruments = [
       en: 'The largest diameter the canal allows without trauma should be chosen to maximize the field of view under the microscope.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/11/Aural_Speculum_ENT_Instrument_Medical.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Sarindam7, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Aural_Speculum_ENT_Instrument_Medical.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-hartmann-oido',
@@ -4572,6 +4758,12 @@ const List<Instrument> kInstruments = [
       en: 'The short alligator-style jaws grip small fragments without obstructing the full visual field of the canal.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/1d/Hartman%27s_Aural_Forceps_ENT_Instrument_Medical.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Sarindam7, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Hartman\'s_Aural_Forceps_ENT_Instrument_Medical.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-blakesley-weil',
@@ -4668,6 +4860,12 @@ const List<Instrument> kInstruments = [
       en: 'Fenestrated tubes allow phonation and facilitate weaning, while non-fenestrated tubes are preferred when there is aspiration risk.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Tracheostomy_tube.jpg',
+      license: 'CC BY 3.0 DE',
+      attribution: 'Klaus D. Peter, Wiehl, Germany, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Tracheostomy_tube.jpg',
+    ),
   ),
   Instrument(
     id: 'tubo-timpanostomia',
@@ -4692,6 +4890,12 @@ const List<Instrument> kInstruments = [
       en: 'Most extrude spontaneously within 6-18 months as the eardrum regenerates, without requiring surgical removal.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/78/Tympanostomy_tube.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Krokofant, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Tympanostomy_tube.jpg',
+    ),
   ),
   Instrument(
     id: 'espejo-laringeo',
@@ -4716,6 +4920,12 @@ const List<Instrument> kInstruments = [
       en: 'Although fiberoptic systems have largely replaced it, it remains useful as a quick, inexpensive screening tool.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Laryngeal_Mirror_ENT_Instrument_Medical.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Sarindam7, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Laryngeal_Mirror_ENT_Instrument_Medical.jpg',
+    ),
   ),
   Instrument(
     id: 'mordaza-boyle-davis',
@@ -4740,6 +4950,12 @@ const List<Instrument> kInstruments = [
       en: 'Blade size should be matched to patient age, since excessive or prolonged pressure can cause transient postoperative macroglossia.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Boyle_Davis_Mouth_Gag.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Netha Hussain, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Boyle_Davis_Mouth_Gag.jpg',
+    ),
   ),
   Instrument(
     id: 'miringotomo',
@@ -4976,6 +5192,12 @@ const List<Instrument> kInstruments = [
       en: 'The French size should be chosen based on the largest device that will need to pass through during the planned procedure.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/1d/Introducer_sheaths.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Maryam seyfikar, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Introducer_sheaths.jpg',
+    ),
   ),
   Instrument(
     id: 'guia-metalica-angiografica',
@@ -5000,6 +5222,12 @@ const List<Instrument> kInstruments = [
       en: 'It should always be advanced under fluoroscopic control and never forced against resistance, to avoid vascular perforation or dissection.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/4/40/PTFE_guide_wire.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Maryam seyfikar, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:PTFE_guide_wire.jpg',
+    ),
   ),
   Instrument(
     id: 'cateter-balon-angioplastia',
@@ -5078,6 +5306,12 @@ const List<Instrument> kInstruments = [
       en: 'Precise sizing (diameter and length) from prior CT angiography is critical to achieve adequate proximal and distal sealing.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/FenGraft.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Bakerstmd, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:FenGraft.jpg',
+    ),
   ),
   Instrument(
     id: 'stripper-safena',
@@ -5198,6 +5432,12 @@ const List<Instrument> kInstruments = [
       en: 'The coiled shape re-forms automatically once the straight stylet that temporarily holds it extended during insertion is withdrawn.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Pigtail_catheter_settings.jpg',
+      license: 'CC0 1.0 (public domain)',
+      attribution: 'Mikael HÃ¤ggstrÃ¶m, M.D., Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pigtail_catheter_settings.jpg',
+    ),
   ),
 
   // ==================================================================
@@ -5322,6 +5562,12 @@ const List<Instrument> kInstruments = [
       es: 'Odontosección, ostectomía y modelado óseo en exodoncias complejas y cirugía preprotésica.',
       en: 'Tooth sectioning, ostectomy and bone contouring in complex extractions and pre-prosthetic surgery.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Diamond_burs.jpg',
+      license: 'CC BY-SA 3.0 (also GFDL 1.2+)',
+      attribution: 'Albert, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Diamond_burs.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-rowe-disimpaccion',
@@ -5442,6 +5688,12 @@ const List<Instrument> kInstruments = [
       en: 'It must be carefully adapted to each patient\'s dental curve before wiring to avoid unwanted occlusal forces.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/37/Maxillomandibularfixation.jpg',
+      license: 'CC BY 3.0',
+      attribution: 'Coronation Dental Specialty Group, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Maxillomandibularfixation.jpg',
+    ),
   ),
   Instrument(
     id: 'gancho-oseo-mandibular',
@@ -5680,6 +5932,12 @@ const List<Instrument> kInstruments = [
       es: 'Soporte cardiopulmonar extracorpóreo prolongado en insuficiencia respiratoria o cardíaca neonatal refractaria.',
       en: 'Prolonged extracorporeal cardiopulmonary support in refractory neonatal respiratory or cardiac failure.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/90/U.S._Air_Force_1st_Lt._Elizabeth_Spataro%2C_left%2C_pediatric_intensive_care_nurse%3B_Capt._Gennifer_Bradshaw%2C_foreground_right%2C_neonatal_intensive_care_nurse_and_extracorporeal_membrane_oxygenation_%28ECMO%29_specialist_120809-F-UR000-375.jpg',
+      license: 'Public Domain (U.S. Air Force / Department of Defense work)',
+      attribution: 'U.S. Air Force photo by L.A. Shively, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:U.S._Air_Force_1st_Lt._Elizabeth_Spataro,_left,_pediatric_intensive_care_nurse;_Capt._Gennifer_Bradshaw,_foreground_right,_neonatal_intensive_care_nurse_and_extracorporeal_membrane_oxygenation_(ECMO)_specialist_120809-F-UR000-375.jpg',
+    ),
   ),
   Instrument(
     id: 'separador-piloro-benson',
@@ -5848,6 +6106,12 @@ const List<Instrument> kInstruments = [
       en: 'The assembled clamp should be inspected before each use to ensure the plate sits flat against the bell with no visible gap, since improper sizing is the most common cause of complications.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Circumcision_instrument_on_gray_background_-_Gomco_clamp.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Dan Bollinger, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Circumcision_instrument_on_gray_background_-_Gomco_clamp.jpg',
+    ),
   ),
 
   // ==================================================================
@@ -6234,6 +6498,12 @@ const List<Instrument> kInstruments = [
       es: 'Sección y grapado de parénquima pulmonar y vasos en lobectomías y resecciones pulmonares por VATS o toracotomía.',
       en: 'Transecting and stapling lung parenchyma and vessels in lobectomies and lung resections via VATS or thoracotomy.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/ae/AEON_Powered_Stapling_System.jpg',
+      license: 'CC0 1.0 Universal (Public Domain Dedication)',
+      attribution: 'Lexington Medical, Inc., Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:AEON_Powered_Stapling_System.jpg',
+    ),
   ),
   Instrument(
     id: 'drenaje-toracico-sello-agua',
@@ -6342,6 +6612,12 @@ const List<Instrument> kInstruments = [
       en: 'Used after the rib has been subperiosteally freed with a raspatory, to minimize the risk of injuring the intercostal neurovascular bundle.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Costotome.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Tony Slavotinek, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Costotome.jpg',
+    ),
   ),
   Instrument(
     id: 'raspatorio-costal-doyen',
@@ -6361,6 +6637,12 @@ const List<Instrument> kInstruments = [
       en: 'Used in thoracotomies and rib resections to subperiosteally free the rib before it is divided with rib shears.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Doyen_Rib_Raspatory_of_Dr._James_M._Whittico%2C_Jr._-_DPLA_-_71e24758d579f85e36426ff0cf393ddc_%28page_1%29.jpg',
+      license: 'Public domain (No known copyright restrictions, United States)',
+      attribution: 'Missouri Historical Society via Digital Public Library of America, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Doyen_Rib_Raspatory_of_Dr._James_M._Whittico,_Jr._-_DPLA_-_71e24758d579f85e36426ff0cf393ddc_(page_1).jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-clampaje-bronquial-sarot',
@@ -6399,6 +6681,12 @@ const List<Instrument> kInstruments = [
       en: 'Enables one-lung ventilation anesthesia during thoracic surgery by isolating each lung to facilitate the surgical approach.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/a8/Carlens.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'bigomar2, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Carlens.jpg',
+    ),
   ),
   Instrument(
     id: 'bloqueador-bronquial-arndt',
@@ -6442,6 +6730,12 @@ const List<Instrument> kInstruments = [
       en: 'The characteristic flutter sound confirms the valve is working; its absence may indicate resolution of the pneumothorax or tube obstruction.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Heimlich-ventil-foto.jpg',
+      license: 'Copyrighted free use (Wikimedia Commons free-use license)',
+      attribution: 'Quenno~commonswiki, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Heimlich-ventil-foto.jpg',
+    ),
   ),
   Instrument(
     id: 'cateter-pigtail-pleural',
@@ -6461,6 +6755,12 @@ const List<Instrument> kInstruments = [
       en: 'Used as a less invasive alternative to a conventional chest tube to evacuate a pneumothorax or a simple pleural effusion.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Pigtail_catheter_settings.jpg',
+      license: 'CC0 1.0 Universal (Public Domain Dedication)',
+      attribution: 'Mikael HÃ¤ggstrÃ¶m, M.D., Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pigtail_catheter_settings.jpg',
+    ),
   ),
   Instrument(
     id: 'toracoscopio-rigido',
@@ -6480,6 +6780,12 @@ const List<Instrument> kInstruments = [
       en: 'Provides visualization of the pleural cavity for examination, biopsy, and video-assisted thoracoscopic surgery (VATS).',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Custom_made_operating_thoracoscope_for_endoscopic_thoracic_sympathectomy_JMAS-03-132-g002.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'CinÃ , C.S., CinÃ , M.M. and Clase, C.M. (J Minim Access Surg, 2007), Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Custom_made_operating_thoracoscope_for_endoscopic_thoracic_sympathectomy_JMAS-03-132-g002.jpg',
+    ),
   ),
   Instrument(
     id: 'aguja-toracocentesis',
@@ -6569,6 +6875,12 @@ const List<Instrument> kInstruments = [
       es: 'Destrucción por congelación de lesiones cutáneas benignas (verrugas, queratosis actínicas, queratosis seborreicas).',
       en: 'Freeze destruction of benign skin lesions (warts, actinic keratoses, seborrheic keratoses).',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Cryogun.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Warfieldian, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Cryogun.jpg',
+    ),
   ),
   Instrument(
     id: 'dermatoscopio-digital',
@@ -6587,6 +6899,12 @@ const List<Instrument> kInstruments = [
       es: 'Documentación y seguimiento fotográfico de lesiones pigmentadas para el diagnóstico precoz de melanoma.',
       en: 'Photographic documentation and monitoring of pigmented lesions for early melanoma diagnosis.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/65/IDS-1100_Dermatoscope.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Abessemans94, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:IDS-1100_Dermatoscope.jpg',
+    ),
   ),
   Instrument(
     id: 'laser-dermatologico',
@@ -6604,6 +6922,12 @@ const List<Instrument> kInstruments = [
       ca: 'Tractament de lesions vasculars (angiomes, telangièctasies) i pigmentàries de la pell.',
       es: 'Tratamiento de lesiones vasculares (angiomas, telangiectasias) y pigmentarias de la piel.',
       en: 'Treatment of vascular (angiomas, telangiectasias) and pigmented skin lesions.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/4/4d/Dermatological_laser.JPG',
+      license: 'Public Domain',
+      attribution: 'Dr Peter Crouch, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Dermatological_laser.JPG',
     ),
   ),
   Instrument(
@@ -6653,6 +6977,12 @@ const List<Instrument> kInstruments = [
       en: 'Unlike a surgical electrosurgical unit, it operates at very low power settings, making it suitable for minor office-based procedures under local anesthesia.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/7a/Birtcher_1982_Hyfrecator.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Sbharris, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Birtcher_1982_Hyfrecator.jpg',
+    ),
   ),
   Instrument(
     id: 'cuchilla-biopsia-afeitado',
@@ -6725,6 +7055,12 @@ const List<Instrument> kInstruments = [
       en: 'Punch diameter (typically 0.7-1 mm) should be matched to follicle size to minimize transection and visible scarring.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Hohlnadel-haartransplantation-groessenvergleich.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Ostheimer, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Hohlnadel-haartransplantation-groessenvergleich.jpg',
+    ),
   ),
   Instrument(
     id: 'pluma-implantadora-choi',
@@ -6749,6 +7085,12 @@ const List<Instrument> kInstruments = [
       en: 'Allows precise control of the angle and depth of each graft\'s implantation, improving the cosmetic result of the hairline.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/5/55/Dhi_Method.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'KÃ¶nÃ¼l Yazar, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Dhi_Method.jpg',
+    ),
   ),
   Instrument(
     id: 'pluma-microagujas',
@@ -6951,6 +7293,12 @@ const List<Instrument> kInstruments = [
       en: 'Its blunt tip allows intraocular tissue manipulation without perforating the posterior capsule, unlike a sharp-tipped instrument.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/77/Medical_instrument_Eye_IOL_Dialer_or_Sinsky_hook.jpg',
+      license: 'CC BY-SA 3.0 (also dual-licensed GFDL 1.2+)',
+      attribution: 'Sarindam7, via Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Medical_instrument_Eye_IOL_Dialer_or_Sinsky_hook.jpg',
+    ),
   ),
   Instrument(
     id: 'pinza-colibri',
@@ -6999,6 +7347,12 @@ const List<Instrument> kInstruments = [
       en: 'Its millimetric size requires handling exclusively under the surgical microscope to ensure precision.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/d/d1/Medical_instrument_Eye_Vanna%27s_scissors.jpg',
+      license: 'CC BY-SA 3.0 (also dual-licensed GFDL 1.2+)',
+      attribution: 'Sarindam7, via Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Medical_instrument_Eye_Vanna\'s_scissors.jpg',
+    ),
   ),
   Instrument(
     id: 'inyector-lio',
@@ -7023,6 +7377,12 @@ const List<Instrument> kInstruments = [
       en: 'Injection speed must be carefully controlled so the lens unfolds smoothly and in a controlled manner within the capsular bag.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/IOL-Injector.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Philos2000, via Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:IOL-Injector.jpg',
+    ),
   ),
   Instrument(
     id: 'cuchillete-queratomo',
@@ -7239,6 +7599,12 @@ const List<Instrument> kInstruments = [
       en: 'It should be advanced gently following the natural anatomy of the duct to avoid creating a false passage.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Medical_Instrument_Bowman%27s_lacrimal_probe.jpg',
+      license: 'CC BY-SA 4.0 (also dual-licensed GFDL 1.2+)',
+      attribution: 'Sarindam7, via Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Medical_Instrument_Bowman%27s_lacrimal_probe.jpg',
+    ),
   ),
   Instrument(
     id: 'trepano-corneal',
@@ -7263,6 +7629,12 @@ const List<Instrument> kInstruments = [
       en: 'Diameter precision between the donor and recipient buttons is critical to minimize postoperative graft astigmatism.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Corneal_Trephine_of_Von_Hippel_Wellcome_M0013246.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'Wellcome Collection (Wellcome Library, London)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Corneal_Trephine_of_Von_Hippel_Wellcome_M0013246.jpg',
+    ),
   ),
 
   // ---- ANESTESIOLOGIA I REANIMACIÓ ----
@@ -7471,6 +7843,12 @@ const List<Instrument> kInstruments = [
       es: 'Intubaciones con visión glótica limitada, cuando el tubo solo no puede dirigirse con suficiente precisión.',
       en: 'Intubations with limited glottic view, when the tube alone cannot be aimed precisely enough.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/PocketBougie.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'James Heilman, MD, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:PocketBougie.jpg',
+    ),
   ),
   Instrument(
     id: 'aguja-tuohy',
@@ -7495,6 +7873,12 @@ const List<Instrument> kInstruments = [
       en: 'The lateral-opening bevel allows the catheter to be directed cephalad without the needle tip shearing it.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Tuohy.jpg',
+      license: 'Public domain',
+      attribution: 'Erich Schulz, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Tuohy.jpg',
+    ),
   ),
   Instrument(
     id: 'aguja-espinal',
@@ -7579,6 +7963,12 @@ const List<Instrument> kInstruments = [
       en: 'Awake fiberoptic intubation is considered the gold-standard technique for securing the airway in cases of known difficult airway.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/1c/Bronkoskop.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'HÃ¥kon Olav Leira, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bronkoskop.jpg',
+    ),
   ),
   Instrument(
     id: 'cateter-venoso-central',
@@ -7603,6 +7993,12 @@ const List<Instrument> kInstruments = [
       en: 'Real-time ultrasound-guided placement has significantly reduced mechanical complications compared with landmark-based technique alone.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Central_venous_catheter_set.jpg',
+      license: 'CC0 1.0',
+      attribution: 'Mikael HÃ¤ggstrÃ¶m, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Central_venous_catheter_set.jpg',
+    ),
   ),
   Instrument(
     id: 'cateter-arterial',
@@ -7627,6 +8023,12 @@ const List<Instrument> kInstruments = [
       en: 'Medications should never be administered through it, since accidental intra-arterial injection can cause severe tissue injury.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Arterial_kateter_%28Seldinger%29.jpg',
+      license: 'CC BY 3.0 / GFDL 1.2',
+      attribution: 'MrArifnajafov, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Arterial_kateter_(Seldinger).jpg',
+    ),
   ),
   Instrument(
     id: 'capnografo',
@@ -7651,6 +8053,12 @@ const List<Instrument> kInstruments = [
       en: 'The American Society of Anesthesiologists mandates it as a standard-of-care monitor during general anesthesia and deep sedation.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/9c/Capno.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Behzad39, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Capno.jpg',
+    ),
   ),
   Instrument(
     id: 'pulsioximetro',
@@ -7705,6 +8113,12 @@ const List<Instrument> kInstruments = [
       en: 'A train-of-four ratio (TOFR) of 0.9 or greater indicates full recovery of muscle strength and is considered the safe threshold for extubation.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/5/52/TOF_watch_monitor_acceleromyography.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Paul Anthony Stewart, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:TOF_watch_monitor_acceleromyography.jpg',
+    ),
   ),
   Instrument(
     id: 'manta-calentamiento-aire-forzado',
@@ -7729,5 +8143,11 @@ const List<Instrument> kInstruments = [
       en: 'Clinical guidelines recommend its use for procedures lasting longer than 30 minutes to maintain patient normothermia.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Bair_Hugger_model_875.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'Dmadeo, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bair_Hugger_model_875.jpg',
+    ),
   ),
 ];
