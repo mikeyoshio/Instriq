@@ -47,6 +47,13 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
   void initState() {
     super.initState();
     _loadContributorState();
+    OfflineDownloadService.instance.progress.addListener(_onOfflineDownloadFinished);
+  }
+
+  @override
+  void dispose() {
+    OfflineDownloadService.instance.progress.removeListener(_onOfflineDownloadFinished);
+    super.dispose();
   }
 
   Future<void> _loadContributorState() async {
@@ -106,66 +113,59 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     );
   }
 
-  Future<void> _downloadForOfflineUse() async {
+  /// Engega la descàrrega en segon pla -- no bloqueja la pantalla, es pot
+  /// seguir navegant mentre dura (veure comentari de classe d'
+  /// [OfflineDownloadService]).
+  void _downloadForOfflineUse() {
     final l10n = AppLocalizations.of(context)!;
-    final messenger = ScaffoldMessenger.of(context);
-    var stepLabel = '';
-    var done = 0;
-    var total = 0;
-    StateSetter? dialogSetState;
-
-    unawaited(showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (dialogContext, setState) {
-          dialogSetState = setState;
-          return AlertDialog(
-            title: Text(l10n.offlineDownloadInProgressTitle),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(stepLabel, maxLines: 2, overflow: TextOverflow.ellipsis),
-                const SizedBox(height: InstriqSpacing.sm),
-                LinearProgressIndicator(value: total > 0 ? done / total : null),
-              ],
-            ),
-          );
-        },
-      ),
-    ));
-
-    OfflineDownloadResult? result;
-    Object? error;
-    try {
-      result = await OfflineDownloadService.instance.downloadForOfflineUse(
-        onProgress: (progress) {
-          stepLabel = progress.stepLabel;
-          done = progress.done;
-          total = progress.total;
-          dialogSetState?.call(() {});
-        },
-      );
-    } catch (e) {
-      error = e;
-    }
-
-    if (!mounted) return;
-    Navigator.of(context, rootNavigator: true).pop();
-
-    if (error != null) {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.offlineDownloadError(error.toString()))));
+    if (OfflineDownloadService.instance.isRunning) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.offlineDownloadAlreadyRunning)));
       return;
     }
-    final items = result!.documentsCached +
-        result.traysCached +
-        result.preferenceCardsCached +
-        result.publicItemsCached;
-    messenger.showSnackBar(SnackBar(
-      content: Text(l10n.offlineDownloadSuccess(items, result.imagesCached)),
-      duration: const Duration(seconds: 5),
-    ));
+    OfflineDownloadService.instance.startInBackground();
+  }
+
+  /// Escolta `progress` en comptes de `lastResult`/`lastError` directament
+  /// perquè aquests dos poden rebre el seu valor nou (dins de `_run()`)
+  /// abans que `progress` torni a `null` -- esperar que `progress` sigui
+  /// `null` garanteix que la descàrrega ja ha acabat del tot.
+  void _onOfflineDownloadFinished() {
+    if (!mounted || OfflineDownloadService.instance.isRunning) return;
+    final error = OfflineDownloadService.instance.lastError.value;
+    final result = OfflineDownloadService.instance.lastResult.value;
+    if (error == null && result == null) return;
+
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    if (error != null) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.offlineDownloadError(error.toString()))));
+    } else if (result != null) {
+      final items =
+          result.documentsCached + result.traysCached + result.preferenceCardsCached + result.publicItemsCached;
+      messenger.showSnackBar(SnackBar(
+        content: Text(l10n.offlineDownloadSuccess(items, result.imagesCached)),
+        duration: const Duration(seconds: 5),
+      ));
+    }
+    // Consumit: una altra visita a aquesta pantalla no ha de tornar a
+    // mostrar el mateix avís d'una descàrrega que ja es va notificar.
+    OfflineDownloadService.instance.lastError.value = null;
+    OfflineDownloadService.instance.lastResult.value = null;
+  }
+
+  String _offlineStepLabel(AppLocalizations l10n, OfflineDownloadProgress progress) {
+    switch (progress.step) {
+      case OfflineDownloadStep.catalogPhotos:
+        return l10n.offlineDownloadStepCatalogPhotos;
+      case OfflineDownloadStep.publicLibrary:
+        return l10n.offlineDownloadStepPublicLibrary;
+      case OfflineDownloadStep.publicLibraryPhotos:
+        return l10n.offlineDownloadStepPublicLibraryPhotos;
+      case OfflineDownloadStep.workspace:
+        return l10n.offlineDownloadStepWorkspace(progress.workspaceName ?? '');
+      case OfflineDownloadStep.workspacePhotos:
+        return l10n.offlineDownloadStepWorkspacePhotos(progress.workspaceName ?? '');
+    }
   }
 
   Future<void> _openAccountPrivacy() async {
@@ -252,10 +252,31 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                 onTap: _openHelpHub,
               ),
               const SizedBox(height: InstriqSpacing.sm),
-              InstriqListItem(
-                icon: Icons.download_for_offline_outlined,
-                title: l10n.offlineDownloadTitle,
-                onTap: _downloadForOfflineUse,
+              ValueListenableBuilder<OfflineDownloadProgress?>(
+                valueListenable: OfflineDownloadService.instance.progress,
+                builder: (context, progress, _) {
+                  return InstriqListItem(
+                    icon: Icons.download_for_offline_outlined,
+                    title: l10n.offlineDownloadTitle,
+                    subtitle: progress == null
+                        ? null
+                        : l10n.offlineDownloadProgressSubtitle(
+                            _offlineStepLabel(l10n, progress),
+                            progress.total > 0 ? ((progress.done / progress.total) * 100).round() : 0,
+                          ),
+                    trailing: progress == null
+                        ? null
+                        : SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                              value: progress.total > 0 ? progress.done / progress.total : null,
+                            ),
+                          ),
+                    onTap: _downloadForOfflineUse,
+                  );
+                },
               ),
               if (loggedIn) ...[
                 const SizedBox(height: InstriqSpacing.xl),
