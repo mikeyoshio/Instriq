@@ -21,6 +21,7 @@ import '../services/sterilization_service.dart';
 import '../services/sync_queue_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
+import '../utils/audit_label.dart';
 import 'audit_log_screen.dart';
 import 'group_document_review_queue_screen.dart';
 import 'knowledge_dashboard_screen.dart';
@@ -166,27 +167,6 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
   Future<void> _open(Widget screen) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
     if (mounted) _reload();
-  }
-
-  String _actionLabel(AppLocalizations l10n, AuditEntry entry) {
-    switch (entry.action) {
-      case 'user_signed_in':
-        return l10n.auditActionUserSignedIn;
-      case 'document_version_approved':
-        return l10n.auditActionDocumentVersionApproved;
-      case 'document_version_rejected':
-        return l10n.auditActionDocumentVersionRejected;
-      case 'document_created':
-        return l10n.auditActionDocumentCreated;
-      case 'document_deleted':
-        return l10n.auditActionDocumentDeleted;
-      case 'workspace_member_role_changed':
-        return l10n.auditActionWorkspaceMemberRoleChanged;
-      case 'hospital_ownership_transferred':
-        return l10n.auditActionHospitalOwnershipTransferred;
-      default:
-        return entry.action;
-    }
   }
 
   @override
@@ -371,7 +351,7 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 6),
                           child: Text(
-                            '${entry.actorDisplayName ?? l10n.deletedUserLabel} · ${_actionLabel(l10n, entry)}',
+                            '${entry.actorDisplayName ?? l10n.deletedUserLabel} · ${auditActionLabel(l10n, entry)}',
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
