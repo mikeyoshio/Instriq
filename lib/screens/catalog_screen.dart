@@ -1,18 +1,62 @@
 import 'package:flutter/material.dart';
 
+import '../data/instruments_data.dart';
+import '../data/sutures_data.dart';
 import '../design_system/components/instriq_badge.dart';
+import '../design_system/components/instriq_count_badge.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
-import '../data/instruments_data.dart';
 import '../models/instrument.dart';
+import '../models/suture.dart';
 import '../services/catalog_community_photo_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
 import '../utils/fuzzy_match.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/suture_labels.dart';
 import 'community_photos_review_screen.dart';
 import 'instrument_detail_screen.dart';
+import 'suture_detail_screen.dart';
+
+/// Qué tipo de material de referencia se está explorando -- antes `Suture`
+/// vivía en su propia pantalla/acceso directo separados (`SutureCatalogScreen`),
+/// asimétrico respecto a gasas/paños/EPI, que siempre fueron `Instrument`
+/// normales dentro de este mismo catálogo. Un solo catálogo con un segmento
+/// de "tipo de material" resuelve esa asimetría sin forzar un modelo de
+/// datos compartido entre `Instrument` (categoría/especialidad) y `Suture`
+/// (material/calibre) -- que tienen formas genuinamente distintas.
+enum _CatalogKind { instrumentos, suturas }
+
+/// Predicado de filtro extraído como función pura (no closure sobre estado
+/// privado) para que sea testeable desde `test/catalog_filter_test.dart`.
+bool matchesInstrumentFilters(
+  Instrument instrument,
+  String query,
+  String languageCode, {
+  Set<InstrumentCategory> categories = const {},
+  Set<Specialty> specialties = const {},
+  bool newOnly = false,
+}) {
+  final matchesQuery = fuzzyContains(instrument.name.forLanguageCode(languageCode), query) ||
+      instrument.aliases.any((a) => fuzzyContains(a, query));
+  final matchesCategory = categories.isEmpty || categories.contains(instrument.category);
+  final matchesSpecialty = specialties.isEmpty || specialties.contains(instrument.specialty);
+  final matchesNew = !newOnly || instrument.isNew;
+  return matchesQuery && matchesCategory && matchesSpecialty && matchesNew;
+}
+
+/// Mismo motivo que [matchesInstrumentFilters].
+bool matchesSutureFilters(
+  Suture suture,
+  String query,
+  String languageCode, {
+  Set<SutureMaterial> materials = const {},
+}) {
+  final matchesQuery = fuzzyContains(suture.name.forLanguageCode(languageCode), query);
+  final matchesMaterial = materials.isEmpty || materials.contains(suture.material);
+  return matchesQuery && matchesMaterial;
+}
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -24,14 +68,17 @@ class CatalogScreen extends StatefulWidget {
 class _CatalogScreenState extends State<CatalogScreen> {
   static const String _refType = 'catalog';
 
+  _CatalogKind _kind = _CatalogKind.instrumentos;
   String _query = '';
   final Set<InstrumentCategory> _categoryFilters = {};
   final Set<Specialty> _specialtyFilters = {};
   bool _newOnlyFilter = false;
+  final Set<SutureMaterial> _materialFilters = {};
   Set<String> _approvedCommunityPhotoIds = {};
 
-  int get _activeFilterCount =>
-      _categoryFilters.length + _specialtyFilters.length + (_newOnlyFilter ? 1 : 0);
+  int get _activeFilterCount => _kind == _CatalogKind.instrumentos
+      ? _categoryFilters.length + _specialtyFilters.length + (_newOnlyFilter ? 1 : 0)
+      : _materialFilters.length;
 
   @override
   void initState() {
@@ -69,32 +116,138 @@ class _CatalogScreenState extends State<CatalogScreen> {
     setState(() => _newOnlyFilter = !_newOnlyFilter);
   }
 
+  void _toggleMaterial(SutureMaterial m) {
+    setState(() {
+      if (!_materialFilters.add(m)) _materialFilters.remove(m);
+    });
+  }
+
   void _clearFilters() {
     setState(() {
-      _specialtyFilters.clear();
-      _categoryFilters.clear();
-      _newOnlyFilter = false;
+      if (_kind == _CatalogKind.instrumentos) {
+        _specialtyFilters.clear();
+        _categoryFilters.clear();
+        _newOnlyFilter = false;
+      } else {
+        _materialFilters.clear();
+      }
     });
+  }
+
+  void _showFilterSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (sheetContext, setSheetState) {
+            final l10n = AppLocalizations.of(sheetContext)!;
+            void toggle(VoidCallback mutate) {
+              mutate();
+              setSheetState(() {});
+            }
+
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (_kind == _CatalogKind.instrumentos) ...[
+                        _FilterChipRow(
+                          chips: [
+                            _MultiFilterChip(
+                              label: l10n.catalogNewOnlyFilterLabel,
+                              selected: _newOnlyFilter,
+                              onTap: () => toggle(_toggleNewOnly),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(l10n.specialtyFilterLabel, style: Theme.of(sheetContext).textTheme.labelMedium),
+                        const SizedBox(height: 4),
+                        _FilterChipRow(
+                          chips: [
+                            for (final s in Specialty.values)
+                              _MultiFilterChip(
+                                label: s.label(l10n),
+                                selected: _specialtyFilters.contains(s),
+                                onTap: () => toggle(() => _toggleSpecialty(s)),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(l10n.categoryFilterLabel, style: Theme.of(sheetContext).textTheme.labelMedium),
+                        const SizedBox(height: 4),
+                        _FilterChipRow(
+                          chips: [
+                            for (final c in InstrumentCategory.values)
+                              _MultiFilterChip(
+                                label: c.label(l10n),
+                                selected: _categoryFilters.contains(c),
+                                onTap: () => toggle(() => _toggleCategory(c)),
+                              ),
+                          ],
+                        ),
+                      ] else
+                        _FilterChipRow(
+                          chips: [
+                            for (final m in SutureMaterial.values)
+                              _MultiFilterChip(
+                                label: sutureMaterialValueLabel(l10n, m),
+                                selected: _materialFilters.contains(m),
+                                onTap: () => toggle(() => _toggleMaterial(m)),
+                              ),
+                          ],
+                        ),
+                      const SizedBox(height: 16),
+                      TextButton(
+                        onPressed: _activeFilterCount > 0 ? () => toggle(_clearFilters) : null,
+                        child: Text(l10n.clearFilters),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final languageCode = Localizations.localeOf(context).languageCode;
-    final filtered = kInstruments.where((i) {
-      final matchesQuery = fuzzyContains(i.name.forLanguageCode(languageCode), _query) ||
-          i.aliases.any((a) => fuzzyContains(a, _query));
-      final matchesCategory = _categoryFilters.isEmpty || _categoryFilters.contains(i.category);
-      final matchesSpecialty = _specialtyFilters.isEmpty || _specialtyFilters.contains(i.specialty);
-      final matchesNew = !_newOnlyFilter || i.isNew;
-      return matchesQuery && matchesCategory && matchesSpecialty && matchesNew;
-    }).toList();
+    final isInstruments = _kind == _CatalogKind.instrumentos;
+
+    final filteredInstruments = isInstruments
+        ? kInstruments
+            .where((i) => matchesInstrumentFilters(
+                  i,
+                  _query,
+                  languageCode,
+                  categories: _categoryFilters,
+                  specialties: _specialtyFilters,
+                  newOnly: _newOnlyFilter,
+                ))
+            .toList()
+        : const <Instrument>[];
+
+    final filteredSutures = !isInstruments
+        ? kSutures
+            .where((s) => matchesSutureFilters(s, _query, languageCode, materials: _materialFilters))
+            .toList()
+        : const <Suture>[];
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.catalogTitle),
         actions: [
-          if (ProfileService.instance.isAdmin)
+          if (isInstruments && ProfileService.instance.isAdmin)
             IconButton(
               icon: const Icon(Icons.rate_review_outlined),
               tooltip: l10n.communityPhotoReviewTooltip,
@@ -103,158 +256,170 @@ class _CatalogScreenState extends State<CatalogScreen> {
               ),
             ),
           if (_activeFilterCount > 0)
-            TextButton(
-              onPressed: _clearFilters,
-              child: Text(
-                l10n.clearWithCount(_activeFilterCount),
-                style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: Center(child: InstriqCountBadge(count: _activeFilterCount)),
             ),
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            tooltip: l10n.catalogFiltersTooltip,
+            onPressed: () => _showFilterSheet(context),
+          ),
         ],
       ),
       body: InstriqResponsiveContent(
         child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                hintText: l10n.catalogSearchHint,
-                border: const OutlineInputBorder(),
-              ),
-              onChanged: (v) => setState(() => _query = v),
-            ),
-          ),
-          _FilterChipRow(
-            chips: [
-              _MultiFilterChip(
-                label: l10n.catalogNewOnlyFilterLabel,
-                selected: _newOnlyFilter,
-                onTap: _toggleNewOnly,
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                l10n.specialtyFilterLabel,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-            ),
-          ),
-          _FilterChipRow(
-            chips: [
-              for (final s in Specialty.values)
-                _MultiFilterChip(
-                  label: s.label(l10n),
-                  selected: _specialtyFilters.contains(s),
-                  onTap: () => _toggleSpecialty(s),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  hintText: isInstruments ? l10n.catalogSearchHint : l10n.searchSutureHint,
+                  border: const OutlineInputBorder(),
                 ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(l10n.categoryFilterLabel, style: Theme.of(context).textTheme.labelMedium),
-            ),
-          ),
-          _FilterChipRow(
-            chips: [
-              for (final c in InstrumentCategory.values)
-                _MultiFilterChip(
-                  label: c.label(l10n),
-                  selected: _categoryFilters.contains(c),
-                  onTap: () => _toggleCategory(c),
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                l10n.instrumentsCount(filtered.length),
-                style: Theme.of(context).textTheme.bodySmall,
+                onChanged: (v) => setState(() => _query = v),
               ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Expanded(
-            child: filtered.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(l10n.noResultsFilters),
-                        if (_activeFilterCount > 0) ...[
-                          const SizedBox(height: 8),
-                          TextButton(onPressed: _clearFilters, child: Text(l10n.clearFilters)),
-                        ],
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(12),
-                    itemCount: filtered.length,
-                    itemBuilder: (context, index) {
-                      final instrument = filtered[index];
-                      final learned =
-                          ProgressService.instance.isLearned(instrument.id);
-                      return Card(
-                        child: ListTile(
-                          leading: InstrumentIcon(
-                            iconKey: instrument.icon,
-                            category: instrument.category,
-                            size: 48,
-                          ),
-                          title: Row(
-                            children: [
-                              Flexible(child: Text(instrument.name.forLanguageCode(languageCode))),
-                              if (instrument.isNew) ...[
-                                const SizedBox(width: 6),
-                                InstriqBadge(label: l10n.catalogNewInstrumentBadge, color: InstriqColors.accent),
-                              ],
-                              if (!_hasAnyPhoto(instrument)) ...[
-                                const SizedBox(width: 6),
-                                Tooltip(
-                                  message: l10n.noPhotoBadgeTooltip,
-                                  child: Icon(
-                                    Icons.no_photography_outlined,
-                                    size: 16,
-                                    color: Theme.of(context).colorScheme.outline,
-                                  ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SegmentedButton<_CatalogKind>(
+                segments: [
+                  ButtonSegment(
+                    value: _CatalogKind.instrumentos,
+                    label: Text(l10n.catalogMaterialTypeInstruments),
+                  ),
+                  ButtonSegment(
+                    value: _CatalogKind.suturas,
+                    label: Text(l10n.sutureCatalogTitle),
+                  ),
+                ],
+                selected: {_kind},
+                onSelectionChanged: (s) => setState(() => _kind = s.first),
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (isInstruments) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    l10n.instrumentsCount(filteredInstruments.length),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+            ],
+            Expanded(
+              child: isInstruments
+                  ? (filteredInstruments.isEmpty
+                      ? _EmptyFiltered(
+                          activeFilterCount: _activeFilterCount,
+                          onClear: _clearFilters,
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(12),
+                          itemCount: filteredInstruments.length,
+                          itemBuilder: (context, index) {
+                            final instrument = filteredInstruments[index];
+                            final learned = ProgressService.instance.isLearned(instrument.id);
+                            return Card(
+                              child: ListTile(
+                                leading: InstrumentIcon(
+                                  iconKey: instrument.icon,
+                                  category: instrument.category,
+                                  size: 48,
                                 ),
-                              ],
-                            ],
-                          ),
-                          subtitle: Text('${instrument.specialty.label(l10n)} · ${instrument.category.label(l10n)}'),
-                          trailing: learned
-                              ? const Icon(Icons.check_circle, color: Colors.green)
-                              : const Icon(Icons.chevron_right),
-                          onTap: () async {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    InstrumentDetailScreen(instrument: instrument),
+                                title: Row(
+                                  children: [
+                                    Flexible(child: Text(instrument.name.forLanguageCode(languageCode))),
+                                    if (instrument.isNew) ...[
+                                      const SizedBox(width: 6),
+                                      InstriqBadge(label: l10n.catalogNewInstrumentBadge, color: InstriqColors.accent),
+                                    ],
+                                    if (!_hasAnyPhoto(instrument)) ...[
+                                      const SizedBox(width: 6),
+                                      Tooltip(
+                                        message: l10n.noPhotoBadgeTooltip,
+                                        child: Icon(
+                                          Icons.no_photography_outlined,
+                                          size: 16,
+                                          color: Theme.of(context).colorScheme.outline,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                                subtitle:
+                                    Text('${instrument.specialty.label(l10n)} · ${instrument.category.label(l10n)}'),
+                                trailing: learned
+                                    ? const Icon(Icons.check_circle, color: Colors.green)
+                                    : const Icon(Icons.chevron_right),
+                                onTap: () async {
+                                  await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => InstrumentDetailScreen(instrument: instrument),
+                                    ),
+                                  );
+                                  setState(() {});
+                                  _loadApprovedCommunityPhotoIds();
+                                },
                               ),
                             );
-                            setState(() {});
-                            _loadApprovedCommunityPhotoIds();
                           },
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
+                        ))
+                  : (filteredSutures.isEmpty
+                      ? _EmptyFiltered(
+                          activeFilterCount: _activeFilterCount,
+                          onClear: _clearFilters,
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(12),
+                          itemCount: filteredSutures.length,
+                          itemBuilder: (context, index) {
+                            final suture = filteredSutures[index];
+                            return Card(
+                              child: ListTile(
+                                leading: const Icon(Icons.line_style),
+                                title: Text(suture.name.forLanguageCode(languageCode)),
+                                subtitle: Text('${sutureMaterialValueLabel(l10n, suture.material)} · ${suture.gauge}'),
+                                trailing: const Icon(Icons.chevron_right),
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (_) => SutureDetailScreen(suture: suture)),
+                                ),
+                              ),
+                            );
+                          },
+                        )),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _EmptyFiltered extends StatelessWidget {
+  final int activeFilterCount;
+  final VoidCallback onClear;
+
+  const _EmptyFiltered({required this.activeFilterCount, required this.onClear});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(l10n.noResultsFilters),
+          if (activeFilterCount > 0) ...[
+            const SizedBox(height: 8),
+            TextButton(onPressed: onClear, child: Text(l10n.clearFilters)),
+          ],
+        ],
       ),
     );
   }
@@ -275,20 +440,16 @@ class _FilterChipRow extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth >= InstriqBreakpoints.tablet) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: chips,
-            ),
+          return Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: chips,
           );
         }
         return SizedBox(
           height: 44,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
             children: [
               for (final chip in chips) Padding(padding: const EdgeInsets.only(right: 8), child: chip),
             ],

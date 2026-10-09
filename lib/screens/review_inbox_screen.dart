@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_async_view.dart';
+import '../design_system/components/instriq_count_badge.dart';
 import '../design_system/components/instriq_list_item.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/tokens.dart';
@@ -163,39 +164,8 @@ class _InboxRow extends StatelessWidget {
       icon: icon,
       title: title,
       subtitle: subtitle,
-      trailing: _CountBadge(count: count),
+      trailing: InstriqCountBadge(count: count),
       onTap: onTap,
-    );
-  }
-}
-
-/// Petit indicador numèric -- no hi havia cap patró de badge numèric al
-/// Design System (només `InstriqBadge` d'estat draft/in_review/published),
-/// així que es queda com a widget privat d'aquesta pantalla fins que un
-/// segon ús real en justifiqui la generalització.
-class _CountBadge extends StatelessWidget {
-  final int count;
-
-  const _CountBadge({required this.count});
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final isZero = count == 0;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: isZero ? scheme.surfaceContainerHighest : scheme.primary,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        '$count',
-        style: TextStyle(
-          color: isZero ? scheme.onSurfaceVariant : scheme.onPrimary,
-          fontWeight: FontWeight.bold,
-          fontSize: 13,
-        ),
-      ),
     );
   }
 }
