@@ -30,7 +30,7 @@ void main(List<String> args) {
     buffer.writeln("    id: '${esc(i['id'] as String)}',");
     buffer.writeln('    name: ${tri(i['name'] as Map<String, dynamic>, '    ')}');
     buffer.writeln('    category: InstrumentCategory.${i['category']},');
-    buffer.writeln('    specialty: Specialty.andrologia,');
+    buffer.writeln('    specialty: Specialty.${i['specialty']},');
     buffer.writeln('    aliases: [$aliases],');
     buffer.writeln("    icon: '${esc(i['icon'] as String)}',");
     buffer.writeln('    description: ${tri(i['description'] as Map<String, dynamic>, '    ')}');
