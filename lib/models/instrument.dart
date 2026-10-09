@@ -6,8 +6,10 @@ enum InstrumentCategory {
   sutura,
   separacion,
   succion,
-  especiales,
   equipos,
+  consumibles,
+  implantes,
+  accesos,
 }
 
 /// Antes esto era un `get label` con el texto en castellano fijo -- el
@@ -28,10 +30,14 @@ extension InstrumentCategoryLabel on InstrumentCategory {
         return l10n.catalogCategorySeparacion;
       case InstrumentCategory.succion:
         return l10n.catalogCategorySuccion;
-      case InstrumentCategory.especiales:
-        return l10n.catalogCategoryEspeciales;
       case InstrumentCategory.equipos:
         return l10n.catalogCategoryEquipos;
+      case InstrumentCategory.consumibles:
+        return l10n.catalogCategoryConsumibles;
+      case InstrumentCategory.implantes:
+        return l10n.catalogCategoryImplantes;
+      case InstrumentCategory.accesos:
+        return l10n.catalogCategoryAccesos;
     }
   }
 }

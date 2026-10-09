@@ -34,10 +34,14 @@ Color colorForCategory(InstrumentCategory category) {
       return Colors.orangeAccent;
     case InstrumentCategory.succion:
       return Colors.blueAccent;
-    case InstrumentCategory.especiales:
-      return Colors.green;
     case InstrumentCategory.equipos:
       return Colors.indigo;
+    case InstrumentCategory.consumibles:
+      return Colors.brown;
+    case InstrumentCategory.implantes:
+      return Colors.green;
+    case InstrumentCategory.accesos:
+      return Colors.cyan;
   }
 }
 
