@@ -53,7 +53,17 @@ const specialtyOrder = [
   'anestesiologiaReanimacio',
   'andrologia',
 ];
-const categoryOrder = ['corte', 'diseccion', 'sutura', 'separacion', 'succion', 'especiales', 'equipos'];
+const categoryOrder = [
+  'corte',
+  'diseccion',
+  'sutura',
+  'separacion',
+  'succion',
+  'equipos',
+  'consumibles',
+  'implantes',
+  'accesos',
+];
 
 String unescapeDartString(String s) {
   final buf = StringBuffer();
@@ -155,7 +165,7 @@ Instr _parseInstrument(String block) {
   final id = unescapeDartString(idMatch.group(1)!);
 
   final catMatch = RegExp(r'category:\s*InstrumentCategory\.(\w+)').firstMatch(block);
-  final category = catMatch?.group(1) ?? 'especiales';
+  final category = catMatch?.group(1) ?? 'equipos';
 
   final specMatch = RegExp(r'specialty:\s*Specialty\.(\w+)').firstMatch(block);
   final specialty = specMatch?.group(1) ?? 'general';
