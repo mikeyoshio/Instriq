@@ -26,6 +26,7 @@ class ProfileService {
   bool _isOwner = false;
   String? _ownerId;
   bool _canApproveAnyWorkspace = false;
+  bool _canEditAnyWorkspace = false;
 
   /// Reactivo a propósito: el selector de modo de trabajo de la capçalera
   /// (ver work_mode_header.dart) necesita repintarse a l'instant en cualquier
@@ -60,6 +61,13 @@ class ProfileService {
   /// `approver` es un rol por espacio (`workspace_members`), no un flag global.
   bool get canApproveAnyWorkspace => _canApproveAnyWorkspace;
 
+  /// `true` si el usuari actual és `editor`, `approver` o `administrator` en
+  /// almenys un espai de treball -- la condició real per a "pot crear
+  /// contingut en algun lloc", independentment de si és també `isAdmin`.
+  /// Mateix criteri que [canApproveAnyWorkspace] (derivat del mateix query),
+  /// però per al conjunt més ampli de rols que inclouen `canEdit`.
+  bool get canEditAnyWorkspace => _canEditAnyWorkspace;
+
   Future<void> loadProfile() async {
     final user = AuthService.instance.currentUser;
     if (user == null) {
@@ -70,7 +78,7 @@ class ProfileService {
     // Las dos consultas son independientes entre sí (la segunda solo
     // necesita user.id, ya conocido) -- se lanzan en paralelo en vez de una
     // tras otra para no duplicar la latencia de red en cada carga de perfil.
-    final results = await Future.wait([
+    final results = await Future.wait<dynamic>([
       _client
           .from('profiles')
           .select('organization_id, is_admin, active_work_mode, organizations(name, cif, invite_code, owner_id)')
@@ -78,14 +86,14 @@ class ProfileService {
           .maybeSingle(),
       _client
           .from('workspace_members')
-          .select('id')
+          .select('role')
           .eq('user_id', user.id)
-          .inFilter('role', ['approver', 'administrator'])
-          .limit(1)
-          .maybeSingle(),
+          .inFilter('role', ['editor', 'approver', 'administrator']),
     ]);
-    final row = results[0];
-    final approverRow = results[1];
+    final row = results[0] as Map<String, dynamic>?;
+    final editableRoles = (results[1] as List<dynamic>? ?? const [])
+        .map((r) => (r as Map<String, dynamic>)['role'] as String)
+        .toSet();
     final newOrganizationId = row?['organization_id'] as String?;
     if (newOrganizationId != _organizationId) {
       _clearGroupContentCaches();
@@ -99,7 +107,8 @@ class ProfileService {
     _ownerId = hospitalRow?['owner_id'] as String?;
     _isOwner = _ownerId == user.id;
     activeWorkModeNotifier.value = WorkModeLabel.fromDb(row?['active_work_mode'] as String?);
-    _canApproveAnyWorkspace = approverRow != null;
+    _canEditAnyWorkspace = editableRoles.isNotEmpty;
+    _canApproveAnyWorkspace = editableRoles.contains('approver') || editableRoles.contains('administrator');
     profileRevision.value++;
   }
 
@@ -122,6 +131,7 @@ class ProfileService {
     _isOwner = false;
     _ownerId = null;
     _canApproveAnyWorkspace = false;
+    _canEditAnyWorkspace = false;
     activeWorkModeNotifier.value = null;
     _clearGroupContentCaches();
   }

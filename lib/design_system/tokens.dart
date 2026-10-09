@@ -77,6 +77,13 @@ class InstriqBreakpoints {
   static const tablet = 840.0;
   static const desktop = 1280.0;
   static const maxContentWidth = 720.0;
+
+  /// Umbral propio de `HomeDashboardPanel` para decidir 2 vs. 3 columnes a
+  /// la seva graella de targetes — més ample que [desktop] (que només
+  /// decideix si es mostra el panell), perquè calen 500px addicionals per
+  /// tenir espai real per a una tercera columna sense que cada targeta
+  /// quedi massa estreta.
+  static const dashboardWideGrid = 1500.0;
 }
 
 class InstriqRadius {

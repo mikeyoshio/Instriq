@@ -42,7 +42,7 @@ Niveles de colaborador: Contributor < Reviewer < Editorial Board.
 - [ ] Ficha de especialidad (`specialty_detail_screen.dart`) — invitado/cuenta+espacio.
 - [ ] Ficha de etiqueta (`tag_detail_screen.dart`) — invitado/cuenta.
 - [ ] Ficha de cirujano (`surgeon_detail_screen.dart`) — cuenta+espacio.
-- [x] Catálogo de suturas (`suture_catalog_screen.dart`, `suture_detail_screen.dart`) — invitado.
+- [x] Catálogo de suturas (pestaña "Suturas" de `catalog_screen.dart`, `suture_detail_screen.dart`) — invitado.
 
 ## 3. Bandejas (trays)
 

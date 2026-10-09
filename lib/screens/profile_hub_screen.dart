@@ -216,6 +216,7 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
     final l10n = AppLocalizations.of(context)!;
     final loggedIn = AuthService.instance.currentUser != null;
     final isAdmin = ProfileService.instance.isAdmin;
+    final canSeeKnowledgeDashboard = isAdmin || ProfileService.instance.canApproveAnyWorkspace;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navProfile)),
       body: SafeArea(
@@ -356,30 +357,35 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                   ),
                 ],
               ],
-              if (isAdmin) ...[
+              if (isAdmin || canSeeKnowledgeDashboard) ...[
                 const SizedBox(height: InstriqSpacing.xl),
                 InstriqSectionHeader(l10n.manageGroupTitle),
                 const SizedBox(height: InstriqSpacing.md),
-                InstriqListItem(
-                  icon: Icons.admin_panel_settings,
-                  title: l10n.manageGroupTitle,
-                  subtitle: l10n.manageGroupSubtitle,
-                  onTap: _openManageHospital,
-                ),
-                const SizedBox(height: InstriqSpacing.sm),
-                InstriqListItem(
-                  icon: Icons.insights_outlined,
-                  title: l10n.knowledgeDashboardTitle,
-                  subtitle: l10n.knowledgeDashboardSubtitle,
-                  onTap: _openKnowledgeDashboard,
-                ),
-                const SizedBox(height: InstriqSpacing.sm),
-                InstriqListItem(
-                  icon: Icons.groups_outlined,
-                  title: l10n.manageTeamsTitle,
-                  subtitle: l10n.manageTeamsSubtitle,
-                  onTap: _openManageTeams,
-                ),
+                if (isAdmin) ...[
+                  InstriqListItem(
+                    icon: Icons.admin_panel_settings,
+                    title: l10n.manageGroupTitle,
+                    subtitle: l10n.manageGroupSubtitle,
+                    onTap: _openManageHospital,
+                  ),
+                  const SizedBox(height: InstriqSpacing.sm),
+                ],
+                if (canSeeKnowledgeDashboard) ...[
+                  InstriqListItem(
+                    icon: Icons.insights_outlined,
+                    title: l10n.knowledgeDashboardTitle,
+                    subtitle: l10n.knowledgeDashboardSubtitle,
+                    onTap: _openKnowledgeDashboard,
+                  ),
+                  const SizedBox(height: InstriqSpacing.sm),
+                ],
+                if (isAdmin)
+                  InstriqListItem(
+                    icon: Icons.groups_outlined,
+                    title: l10n.manageTeamsTitle,
+                    subtitle: l10n.manageTeamsSubtitle,
+                    onTap: _openManageTeams,
+                  ),
               ],
               const SizedBox(height: InstriqSpacing.xl),
               const Center(child: _VersionEasterEgg()),

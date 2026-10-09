@@ -7,9 +7,12 @@ import '../services/profile_service.dart';
 import 'audit_log_screen.dart';
 import 'review_inbox_screen.dart';
 
-/// Índice a auditoría y cola de revisión — ambas ya gateadas por admin igual
-/// que antes en `home_screen.dart` (la RLS de servidor lo garantiza además
-/// para auditoría, ver audit_log_screen.dart).
+/// Índice a cola de revisión y auditoría. La pestaña en sí es accesible para
+/// `isAdmin || canApproveAnyWorkspace` (ver `canAccessActivity`), pero el
+/// enlace a auditoría se muestra solo con `isAdmin`: `AuditLogScreen` es
+/// admin/owner-only por RLS de servidor (ver audit_log_screen.dart), así que
+/// un approver que no es admin de organización llegaría a un enlace muerto
+/// si se le mostrara.
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
 
@@ -57,13 +60,15 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       subtitle: l10n.reviewQueueSubtitle,
                       onTap: _openReviewQueue,
                     ),
-                    const SizedBox(height: 8),
-                    InstriqListItem(
-                      icon: Icons.history_outlined,
-                      title: l10n.auditLogTitle,
-                      subtitle: l10n.auditLogSubtitle,
-                      onTap: _openAuditLog,
-                    ),
+                    if (ProfileService.instance.isAdmin) ...[
+                      const SizedBox(height: 8),
+                      InstriqListItem(
+                        icon: Icons.history_outlined,
+                        title: l10n.auditLogTitle,
+                        subtitle: l10n.auditLogSubtitle,
+                        onTap: _openAuditLog,
+                      ),
+                    ],
                   ],
                 ),
               )

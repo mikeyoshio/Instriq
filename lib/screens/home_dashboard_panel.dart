@@ -22,6 +22,7 @@ import '../services/sync_queue_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../utils/audit_label.dart';
+import '../widgets/create_content_sheet.dart';
 import 'audit_log_screen.dart';
 import 'group_document_review_queue_screen.dart';
 import 'knowledge_dashboard_screen.dart';
@@ -177,11 +178,20 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
       child: ListView(
         padding: const EdgeInsets.all(InstriqSpacing.xl),
         children: [
-          InstriqSectionHeader(l10n.homeDashboardTitle),
+          Row(
+            children: [
+              Expanded(child: InstriqSectionHeader(l10n.homeDashboardTitle)),
+              FilledButton.icon(
+                onPressed: () => showCreateContentSheet(context),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.createContentFabTooltip),
+              ),
+            ],
+          ),
           const SizedBox(height: InstriqSpacing.lg),
           LayoutBuilder(
             builder: (context, constraints) {
-              final cols = constraints.maxWidth >= 1500 ? 3 : 2;
+              final cols = constraints.maxWidth >= InstriqBreakpoints.dashboardWideGrid ? 3 : 2;
               const gap = InstriqSpacing.lg;
               final tileWidth = (constraints.maxWidth - gap * (cols - 1)) / cols;
               return Wrap(
@@ -201,7 +211,7 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
   List<Widget> _buildTiles(BuildContext context, AppLocalizations l10n) {
     final tiles = <Widget>[];
 
-    if (ProfileService.instance.isAdmin) {
+    if (ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace) {
       tiles.add(FutureBuilder<_PendingApprovalData>(
         future: _pendingFuture,
         builder: (context, snapshot) {

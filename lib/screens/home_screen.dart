@@ -38,6 +38,7 @@ import '../services/usage_analytics_service.dart';
 import '../services/workspace_service.dart';
 import '../utils/fuzzy_match.dart';
 import '../utils/ref_resolver.dart';
+import '../widgets/create_content_sheet.dart';
 import '../widgets/sterilization_method_label.dart';
 import 'catalog_screen.dart';
 import 'custom_instrument_detail_screen.dart';
@@ -51,7 +52,6 @@ import 'manufacturer_detail_screen.dart';
 import 'progress_screen.dart';
 import 'public_entity_detail_screen.dart';
 import 'surgeon_detail_screen.dart';
-import 'suture_catalog_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_detail_screen.dart';
 import 'trays_screen.dart';
@@ -649,6 +649,15 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: showDashboard ? content : InstriqResponsiveContent(child: content),
       ),
+      floatingActionButton: ProfileService.instance.hasHospital &&
+              (ProfileService.instance.isAdmin || ProfileService.instance.canEditAnyWorkspace) &&
+              !showDashboard
+          ? FloatingActionButton(
+              tooltip: l10n.createContentFabTooltip,
+              onPressed: () => showCreateContentSheet(context),
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 
@@ -844,28 +853,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         const SizedBox(height: InstriqSpacing.sm),
-        // No existe todavía una pantalla dedicada de esterilización — el
-        // contenido de esterilización vive hoy dentro de la ficha de cada
-        // instrumento del catálogo (ver instrument_detail_screen.dart), así
-        // que este acceso apunta ahí en vez de a una pantalla nueva.
-        InstriqListItem(
-          icon: Icons.cleaning_services_outlined,
-          title: l10n.sterilizationSectionTitle,
-          subtitle: l10n.homeSterilizationSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CatalogScreen()));
-          },
-        ),
-        const SizedBox(height: InstriqSpacing.sm),
-        InstriqListItem(
-          icon: Icons.line_style,
-          title: l10n.sutureCatalogTitle,
-          subtitle: l10n.homeSutureCatalogSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SutureCatalogScreen()));
-          },
-        ),
-        const SizedBox(height: InstriqSpacing.sm),
         InstriqListItem(
           icon: Icons.school,
           title: l10n.learnTitle,
@@ -888,11 +875,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget? _buildPendingApprovalSection(BuildContext context, AppLocalizations l10n) {
-    // La cola de aprobación es de todo el grupo, no por espacio: se reutiliza
-    // el mismo criterio de acceso que ya usa ReviewQueueScreen/ActivityScreen
-    // (`ProfileService.isAdmin` hace de "aprobador" hasta que exista un rol
-    // Approver a nivel de hospital, no solo por espacio).
-    if (!ProfileService.instance.isAdmin) return null;
+    // La cola de aprobación es de todo el grupo, no por espacio: mismo
+    // criterio de acceso que ya usa ReviewQueueScreen/ActivityScreen -- un
+    // approver de espacio (no necesariamente admin de organización) también
+    // debe ver esta sección, no solo `isAdmin`.
+    if (!ProfileService.instance.isAdmin && !ProfileService.instance.canApproveAnyWorkspace) return null;
     _pendingApprovalsFuture ??= _fetchPendingApprovals();
     return FutureBuilder<List<_PendingApprovalItem>>(
       future: _pendingApprovalsFuture,
