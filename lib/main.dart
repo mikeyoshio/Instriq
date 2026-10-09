@@ -182,6 +182,10 @@ class _InstriqAppState extends State<InstriqApp> {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: AppLocalizations.supportedLocales,
+                // Flutter's Text widgets aren't mouse-selectable by default;
+                // this wraps the whole routed app so selection/copy works
+                // everywhere without touching every screen individually.
+                builder: (context, child) => SelectionArea(child: child!),
               ),
             );
           },

@@ -193,28 +193,41 @@ class _AuditEntryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final description = _entityDescription(l10n);
     return Card(
-      child: ListTile(
-        leading: Icon(_icon),
-        title: Text(_actionLabel(l10n)),
-        subtitle: Column(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (description != null) ...[
-              const SizedBox(height: 2),
-              Text(description),
-            ],
-            const SizedBox(height: 2),
-            Text(
-              '${_who(l10n)} · ${_when(l10n, entry.createdAt)}'
-              '${entry.workspaceName != null ? ' · ${entry.workspaceName}' : ''}',
-              style: Theme.of(context).textTheme.labelMedium,
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+              child: Icon(_icon, size: 18, color: theme.colorScheme.primary),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_actionLabel(l10n), style: theme.textTheme.titleSmall),
+                  if (description != null) ...[
+                    const SizedBox(height: 2),
+                    Text(description, style: theme.textTheme.bodyMedium),
+                  ],
+                  const SizedBox(height: 4),
+                  Text(
+                    '${_who(l10n)} · ${_when(l10n, entry.createdAt)}'
+                    '${entry.workspaceName != null ? ' · ${entry.workspaceName}' : ''}',
+                    style: theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        isThreeLine: description != null,
       ),
     );
   }
