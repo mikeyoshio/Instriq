@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import '../data/instruments_data.dart';
@@ -11,15 +14,26 @@ import 'public_tray_service.dart';
 import 'tray_service.dart';
 import 'workspace_service.dart';
 
+/// Pas en què va la descàrrega -- la UI el tradueix (mai text fix a dins del
+/// servei, que no té accés a `l10n`); `workspace`/`workspacePhotos` porten el
+/// nom de l'espai a part perquè es pugui interpolar al missatge localitzat.
+enum OfflineDownloadStep { catalogPhotos, publicLibrary, publicLibraryPhotos, workspace, workspacePhotos }
+
 /// Informa a la UI de en quin pas va la descàrrega ([downloadForOfflineUse])
 /// i quants elements porta fets d'aquest pas concret, perquè es pugui
 /// mostrar una barra de progrés real en comptes d'un simple "carregant...".
 class OfflineDownloadProgress {
-  final String stepLabel;
+  final OfflineDownloadStep step;
+  final String? workspaceName;
   final int done;
   final int total;
 
-  const OfflineDownloadProgress({required this.stepLabel, required this.done, required this.total});
+  const OfflineDownloadProgress({
+    required this.step,
+    this.workspaceName,
+    required this.done,
+    required this.total,
+  });
 }
 
 class OfflineDownloadResult {
@@ -42,9 +56,16 @@ class OfflineDownloadResult {
 
 /// Precàrrega deliberada de tot el que calgui per fer servir l'app sense
 /// connexió, en comptes de confiar només en la caché passiva (es desa el que
-/// ja s'ha vist en línia). Pensada per executar-se amb l'app en primer pla i
-/// connexió activa, des d'un botó explícit ("Descarrega per a ús sense
-/// connexió" a Perfil) -- no s'executa mai sola en segon pla.
+/// ja s'ha vist en línia). Es dispara des d'un botó explícit ("Descarrega per
+/// a ús sense connexió" a Perfil) -- no s'executa mai sola en segon pla sense
+/// que l'usuari ho demani.
+///
+/// Corre com a tasca de fons real ([startInBackground]): un cop engegada,
+/// navegar a una altra pestanya no l'atura ni bloqueja la resta de l'app --
+/// [progress]/[lastResult]/[lastError] són `ValueNotifier` a nivell de
+/// servei (mateix patró que `SyncQueueService.failures`/
+/// `ProfileService.profileRevision`), així que qualsevol pantalla que hi
+/// escolti reflecteix l'estat real encara que no sigui la que la va iniciar.
 ///
 /// Abast d'aquesta primera versió (documentat explícitament, no una omissió):
 /// cobreix el catàleg global (text ja empaquetat a l'app + totes les fotos),
@@ -62,6 +83,31 @@ class OfflineDownloadService {
 
   final CacheManager _imageCache = DefaultCacheManager();
 
+  final ValueNotifier<OfflineDownloadProgress?> progress = ValueNotifier(null);
+  final ValueNotifier<OfflineDownloadResult?> lastResult = ValueNotifier(null);
+  final ValueNotifier<Object?> lastError = ValueNotifier(null);
+
+  bool get isRunning => progress.value != null;
+
+  /// Engega la descàrrega sense bloquejar qui la crida. Si ja n'hi ha una en
+  /// curs, no en comença una segona -- qui vulgui saber-ho pot comprovar
+  /// [isRunning] abans (p. ex. per mostrar "ja s'està descarregant").
+  void startInBackground() {
+    if (isRunning) return;
+    lastError.value = null;
+    unawaited(_run());
+  }
+
+  Future<void> _run() async {
+    try {
+      lastResult.value = await downloadForOfflineUse(onProgress: (p) => progress.value = p);
+    } catch (e) {
+      lastError.value = e;
+    } finally {
+      progress.value = null;
+    }
+  }
+
   Future<OfflineDownloadResult> downloadForOfflineUse({
     void Function(OfflineDownloadProgress progress)? onProgress,
   }) async {
@@ -77,20 +123,20 @@ class OfflineDownloadService {
       }
     }
 
-    void report(String stepLabel, int done, int total) {
-      onProgress?.call(OfflineDownloadProgress(stepLabel: stepLabel, done: done, total: total));
+    void report(OfflineDownloadStep step, int done, int total, {String? workspaceName}) {
+      onProgress?.call(OfflineDownloadProgress(step: step, workspaceName: workspaceName, done: done, total: total));
     }
 
     // 1. Fotos del catàleg global -- el text ja va empaquetat a l'app, no cal
     // xarxa per a ell, només per a les imatges de Wikimedia Commons.
     final catalogImageUrls = kInstruments.map((i) => i.image?.url).whereType<String>().toList();
     for (var i = 0; i < catalogImageUrls.length; i++) {
-      report('Catàleg d\'instrumental', i, catalogImageUrls.length);
+      report(OfflineDownloadStep.catalogPhotos, i, catalogImageUrls.length);
       await cacheImage(catalogImageUrls[i]);
     }
 
     // 2. Biblioteca Pública (text, obert a tothom sense sessió).
-    report('Biblioteca Pública', 0, 1);
+    report(OfflineDownloadStep.publicLibrary, 0, 1);
     final techniques = await PublicDocumentService.instance.fetchPublished(DocumentKind.technique);
     final protocols = await PublicDocumentService.instance.fetchPublished(DocumentKind.protocol);
     final publicTrays = await PublicTrayService.instance.fetchPublished();
@@ -100,7 +146,7 @@ class OfflineDownloadService {
     final publicPhotoPaths =
         publicInstruments.map((i) => i.publishedVersion?.photoPath).whereType<String>().toList();
     for (var i = 0; i < publicPhotoPaths.length; i++) {
-      report('Instrumental de la Biblioteca Pública (fotos)', i, publicPhotoPaths.length);
+      report(OfflineDownloadStep.publicLibraryPhotos, i, publicPhotoPaths.length);
       await cacheImage(PublicInstrumentService.instance.photoUrl(publicPhotoPaths[i]));
     }
 
@@ -114,7 +160,7 @@ class OfflineDownloadService {
       final workspaces = WorkspaceService.instance.workspaces;
       for (var w = 0; w < workspaces.length; w++) {
         final workspace = workspaces[w];
-        report('Espai: ${workspace.name}', w, workspaces.length);
+        report(OfflineDownloadStep.workspace, w, workspaces.length, workspaceName: workspace.name);
         await GroupDocumentService.instance.fetchDocuments(DocumentKind.technique, workspace.id);
         await GroupDocumentService.instance.fetchDocuments(DocumentKind.protocol, workspace.id);
         await TrayService.instance.fetchTrays(workspace.id);
@@ -128,7 +174,7 @@ class OfflineDownloadService {
 
         final trayPhotoPaths = trays.expand((t) => t.publishedVersion?.photoPaths ?? const <String>[]).toList();
         for (var i = 0; i < trayPhotoPaths.length; i++) {
-          report('Safates de ${workspace.name} (fotos)', i, trayPhotoPaths.length);
+          report(OfflineDownloadStep.workspacePhotos, i, trayPhotoPaths.length, workspaceName: workspace.name);
           try {
             final url = await TrayService.instance.getPhotoUrl(trayPhotoPaths[i]);
             await cacheImage(url);
