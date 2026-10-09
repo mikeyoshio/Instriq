@@ -54,6 +54,7 @@ enum Specialty {
   dermatologia,
   oftalmologia,
   anestesiologiaReanimacio,
+  andrologia,
 }
 
 /// Mismo criterio que [InstrumentCategoryLabel]: requiere `l10n` en vez de
@@ -95,6 +96,8 @@ extension SpecialtyLabel on Specialty {
         return l10n.catalogSpecialtyOftalmologia;
       case Specialty.anestesiologiaReanimacio:
         return l10n.catalogSpecialtyAnestesiologiaReanimacio;
+      case Specialty.andrologia:
+        return l10n.catalogSpecialtyAndrologia;
     }
   }
 }
