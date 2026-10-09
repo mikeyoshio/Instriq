@@ -4,6 +4,7 @@ import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/audit_entry.dart';
 import '../services/audit_service.dart';
+import '../utils/audit_label.dart';
 
 /// Log de auditoría: quién hizo qué y cuándo sobre acciones sensibles del
 /// grupo (aprobar/rechazar contenido, crear/borrar documentos, cambios de
@@ -100,78 +101,57 @@ class _AuditEntryTile extends StatelessWidget {
   static const _actionIcons = <String, IconData>{
     'document_version_approved': Icons.check_circle_outline,
     'document_version_rejected': Icons.cancel_outlined,
+    'document_version_submitted': Icons.send_outlined,
     'document_created': Icons.note_add_outlined,
     'document_deleted': Icons.delete_outline,
+    'document_duplicated': Icons.copy_outlined,
     'workspace_member_role_changed': Icons.manage_accounts_outlined,
     'hospital_ownership_transferred': Icons.swap_horiz,
+    'hospital_admin_changed': Icons.admin_panel_settings_outlined,
     'user_signed_in': Icons.login,
+    'preference_card_created': Icons.list_alt_outlined,
+    'preference_card_version_submitted': Icons.send_outlined,
+    'preference_card_version_approved': Icons.check_circle_outline,
+    'preference_card_version_rejected': Icons.cancel_outlined,
+    'preference_card_duplicated': Icons.copy_outlined,
+    'custom_instrument_created': Icons.build_outlined,
+    'custom_instrument_deleted': Icons.delete_outline,
+    'custom_instrument_duplicated': Icons.copy_outlined,
+    'custom_instrument_version_submitted': Icons.send_outlined,
+    'custom_instrument_version_approved': Icons.check_circle_outline,
+    'custom_instrument_version_rejected': Icons.cancel_outlined,
+    'tray_created': Icons.inventory_2_outlined,
+    'tray_duplicated': Icons.copy_outlined,
+    'tray_adopted': Icons.download_outlined,
+    'tray_stopped_following_upstream': Icons.link_off,
+    'tray_updated_from_upstream': Icons.sync,
+    'tray_version_submitted': Icons.send_outlined,
+    'tray_version_approved': Icons.check_circle_outline,
+    'tray_version_rejected': Icons.cancel_outlined,
+    'tray_preparation_created': Icons.checklist_outlined,
+    'tray_preparation_qc': Icons.fact_check_outlined,
+    'sterilization_method_created': Icons.local_fire_department_outlined,
+    'sterilization_method_version_submitted': Icons.send_outlined,
+    'sterilization_method_version_approved': Icons.check_circle_outline,
+    'sterilization_method_version_rejected': Icons.cancel_outlined,
+    'sterilization_method_version_restored': Icons.restore,
+    'technical_info_created': Icons.description_outlined,
+    'technical_info_version_submitted': Icons.send_outlined,
+    'technical_info_version_approved': Icons.check_circle_outline,
+    'technical_info_version_rejected': Icons.cancel_outlined,
+    'technical_info_version_restored': Icons.restore,
+    'invitation_sent': Icons.mail_outline,
+    'invitation_revoked': Icons.mail_lock_outlined,
+    'invitation_accepted': Icons.mark_email_read_outlined,
+    'community_photo_approved': Icons.check_circle_outline,
+    'community_photo_rejected': Icons.cancel_outlined,
+    'catalog_content_report_resolved': Icons.flag_outlined,
+    'contributor_application_approved': Icons.check_circle_outline,
+    'contributor_application_rejected': Icons.cancel_outlined,
+    'contributor_level_changed': Icons.military_tech_outlined,
   };
 
-  String _actionLabel(AppLocalizations l10n) {
-    switch (entry.action) {
-      case 'user_signed_in':
-        return l10n.auditActionUserSignedIn;
-      case 'document_version_approved':
-        return l10n.auditActionDocumentVersionApproved;
-      case 'document_version_rejected':
-        return l10n.auditActionDocumentVersionRejected;
-      case 'document_created':
-        return l10n.auditActionDocumentCreated;
-      case 'document_deleted':
-        return l10n.auditActionDocumentDeleted;
-      case 'workspace_member_role_changed':
-        return l10n.auditActionWorkspaceMemberRoleChanged;
-      case 'hospital_ownership_transferred':
-        return l10n.auditActionHospitalOwnershipTransferred;
-      default:
-        return entry.action;
-    }
-  }
-
   IconData get _icon => _actionIcons[entry.action] ?? Icons.history;
-
-  /// Texto descriptivo de sobre qué entidad fue la acción, a partir de
-  /// `metadata`/`entity_type`.
-  String? _entityDescription(AppLocalizations l10n) {
-    final metadata = entry.metadata;
-    switch (entry.entityType) {
-      case 'group_document_version':
-        final title = metadata['title'] as String?;
-        return (title != null && title.isNotEmpty) ? title : l10n.auditDocumentUntitledLabel;
-      case 'group_document':
-        final title = metadata['title'] as String?;
-        final kind = metadata['kind'] as String?;
-        final kindLabel =
-            kind == 'protocol' ? l10n.auditKindProtocolLabel : (kind == 'technique' ? l10n.auditKindTechniqueLabel : null);
-        if (title != null && title.isNotEmpty) return title;
-        return kindLabel;
-      case 'workspace_member':
-        final previousRole = metadata['previous_role'] as String?;
-        final newRole = metadata['new_role'] as String?;
-        if (newRole == null) return l10n.auditAccessRemovedDescription(_roleLabel(l10n, previousRole));
-        if (previousRole == null) return l10n.auditAssignedAsRoleDescription(_roleLabel(l10n, newRole));
-        return l10n.auditRoleChangeDescription(_roleLabel(l10n, previousRole), _roleLabel(l10n, newRole));
-      case 'hospital':
-        return l10n.auditHospitalOwnerDescription;
-      default:
-        return null;
-    }
-  }
-
-  String _roleLabel(AppLocalizations l10n, String? role) {
-    switch (role) {
-      case 'reader':
-        return l10n.workspaceRoleReaderLabel;
-      case 'editor':
-        return l10n.workspaceRoleEditorLabel;
-      case 'approver':
-        return l10n.workspaceRoleApproverLabel;
-      case 'administrator':
-        return l10n.workspaceRoleAdministratorLabel;
-      default:
-        return l10n.auditNoRoleLabel;
-    }
-  }
 
   String _who(AppLocalizations l10n) =>
       entry.actorId == null ? l10n.deletedUserLabel : (entry.actorDisplayName ?? l10n.deletedUserLabel);
@@ -195,7 +175,7 @@ class _AuditEntryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final description = _entityDescription(l10n);
+    final description = auditEntityDescription(l10n, entry);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -212,7 +192,7 @@ class _AuditEntryTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_actionLabel(l10n), style: theme.textTheme.titleSmall),
+                  Text(auditActionLabel(l10n, entry), style: theme.textTheme.titleSmall),
                   if (description != null) ...[
                     const SizedBox(height: 2),
                     Text(description, style: theme.textTheme.bodyMedium),
