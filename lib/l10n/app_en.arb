@@ -136,6 +136,7 @@
   "catalogSpecialtyDermatologia": "Medical-surgical dermatology and venereology",
   "catalogSpecialtyOftalmologia": "Ophthalmology",
   "catalogSpecialtyAnestesiologiaReanimacio": "Anesthesiology and resuscitation",
+  "catalogSpecialtyAndrologia": "Andrology",
   "instrumentsCount": "{count, plural, one {1 instrument} other {{count} instruments}}",
   "@instrumentsCount": {"placeholders": {"count": {"type": "int"}}},
   "noResultsFilters": "No results with these filters",

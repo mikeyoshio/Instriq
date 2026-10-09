@@ -51,6 +51,7 @@ const specialtyOrder = [
   'dermatologia',
   'oftalmologia',
   'anestesiologiaReanimacio',
+  'andrologia',
 ];
 const categoryOrder = ['corte', 'diseccion', 'sutura', 'separacion', 'succion', 'especiales', 'equipos'];
 

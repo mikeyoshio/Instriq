@@ -136,6 +136,7 @@
   "catalogSpecialtyDermatologia": "Dermatología Médico-Quirúrgica y Venereología",
   "catalogSpecialtyOftalmologia": "Oftalmología",
   "catalogSpecialtyAnestesiologiaReanimacio": "Anestesiología y Reanimación",
+  "catalogSpecialtyAndrologia": "Andrología",
   "instrumentsCount": "{count, plural, one {1 instrumento} other {{count} instrumentos}}",
   "@instrumentsCount": {"placeholders": {"count": {"type": "int"}}},
   "noResultsFilters": "Sin resultados con estos filtros",

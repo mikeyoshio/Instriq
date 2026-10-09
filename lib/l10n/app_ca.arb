@@ -136,6 +136,7 @@
   "catalogSpecialtyDermatologia": "Dermatologia Medicoquirúrgica i Venereologia",
   "catalogSpecialtyOftalmologia": "Oftalmologia",
   "catalogSpecialtyAnestesiologiaReanimacio": "Anestesiologia i Reanimació",
+  "catalogSpecialtyAndrologia": "Andrologia",
   "instrumentsCount": "{count, plural, one {1 instrument} other {{count} instruments}}",
   "@instrumentsCount": {"placeholders": {"count": {"type": "int"}}},
   "noResultsFilters": "Sense resultats amb aquests filtres",
