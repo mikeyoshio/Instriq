@@ -102,8 +102,7 @@
   "navActivity": "Activity",
   "navProfile": "Profile",
   "libraryCollectionsHeader": "Workspace collections",
-  "libraryDocumentsTitle": "Documents and protocols",
-  "libraryDocumentsSubtitle": "Surgical techniques and protocols in your workspace",
+  "libraryNoWorkspaceAccess": "You don't have access to any workspace.",
   "activityAdminOnly": "Only admins or workspace approvers can see activity.",
   "profilePreferencesHeader": "Preferences",
 

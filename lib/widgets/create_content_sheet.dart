@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
-import '../models/workspace.dart';
 import '../models/workspace_role.dart';
 import '../screens/custom_instrument_form_screen.dart';
 import '../screens/group_document_form_screen.dart';
 import '../screens/preference_card_form_screen.dart';
 import '../screens/tray_form_screen.dart';
-import '../services/profile_service.dart';
-import '../services/workspace_service.dart';
+import 'workspace_resolver.dart';
 
 enum _CreateContentType { technique, protocol, tray, preferenceCard, customInstrument }
 
@@ -31,8 +29,14 @@ Future<void> showCreateContentSheet(BuildContext context) async {
   );
   if (type == null || !context.mounted) return;
 
-  final workspaceId = await _resolveWorkspace(context);
-  if (workspaceId == null || !context.mounted) return;
+  final resolved = await resolveWorkspace(
+    context,
+    isEligible: (role) => role.canEdit,
+    noWorkspaceMessage: l10n.createContentNoWorkspace,
+    chooseWorkspaceTitle: l10n.createContentChooseWorkspace,
+  );
+  if (resolved == null || !context.mounted) return;
+  final workspaceId = resolved.workspace.id;
 
   final Widget form = switch (type) {
     _CreateContentType.technique =>
@@ -44,43 +48,6 @@ Future<void> showCreateContentSheet(BuildContext context) async {
     _CreateContentType.customInstrument => CustomInstrumentFormScreen(workspaceId: workspaceId),
   };
   await Navigator.of(context).push(MaterialPageRoute(builder: (_) => form));
-}
-
-/// Resuelve en qué espacio crear el contenido nuevo: si es admin de
-/// organización, cualquier espacio (administrator se deriva de
-/// `profiles.is_admin`, aplica a todos sin necesidad de fila propia); si no,
-/// solo aquellos donde `canEdit` (editor/approver/administrator de espacio).
-/// Un único candidato salta directo sin mostrar nada; varios, un selector
-/// mínimo por nombre.
-Future<String?> _resolveWorkspace(BuildContext context) async {
-  await WorkspaceService.instance.fetchWorkspaces();
-  if (!context.mounted) return null;
-  final all = WorkspaceService.instance.workspaces;
-
-  List<Workspace> candidates;
-  if (ProfileService.instance.isAdmin) {
-    candidates = all;
-  } else {
-    final roles = await Future.wait(all.map((w) => WorkspaceService.instance.fetchMyRole(w.id)));
-    candidates = [
-      for (var i = 0; i < all.length; i++)
-        if (roles[i]?.canEdit ?? false) all[i],
-    ];
-  }
-  if (!context.mounted) return null;
-
-  if (candidates.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context)!.createContentNoWorkspace)),
-    );
-    return null;
-  }
-  if (candidates.length == 1) return candidates.first.id;
-
-  return showModalBottomSheet<String>(
-    context: context,
-    builder: (sheetContext) => _WorkspacePicker(workspaces: candidates),
-  );
 }
 
 class _CreateTypePicker extends StatelessWidget {
@@ -118,37 +85,6 @@ class _CreateTypePicker extends StatelessWidget {
             l10n.customInstrumentsTitle,
             _CreateContentType.customInstrument,
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _WorkspacePicker extends StatelessWidget {
-  final List<Workspace> workspaces;
-
-  const _WorkspacePicker({required this.workspaces});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(l10n.createContentChooseWorkspace, style: Theme.of(context).textTheme.titleMedium),
-            ),
-          ),
-          for (final w in workspaces)
-            ListTile(
-              leading: const Icon(Icons.workspaces_outlined),
-              title: Text(w.name),
-              onTap: () => Navigator.of(context).pop(w.id),
-            ),
         ],
       ),
     );
