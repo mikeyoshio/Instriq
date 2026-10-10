@@ -102,8 +102,7 @@
   "navActivity": "Activitat",
   "navProfile": "Perfil",
   "libraryCollectionsHeader": "Col·leccions de l'espai",
-  "libraryDocumentsTitle": "Documents i protocols",
-  "libraryDocumentsSubtitle": "Tècniques quirúrgiques i protocols del teu espai",
+  "libraryNoWorkspaceAccess": "No tens accés a cap espai de treball.",
   "activityAdminOnly": "Només les persones administradores o aprovadores d'un espai veuen l'activitat.",
   "profilePreferencesHeader": "Preferències",
 
