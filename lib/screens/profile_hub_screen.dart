@@ -25,6 +25,7 @@ import 'global_catalog_review_queue_screen.dart';
 import 'help/help_hub_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
+import 'progress_screen.dart';
 import 'review_inbox_screen.dart';
 import 'sync_issues_screen.dart';
 
@@ -245,6 +246,15 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                     onTap: () => ThemeService.instance.toggle(Theme.of(context).brightness),
                   );
                 },
+              ),
+              const SizedBox(height: InstriqSpacing.sm),
+              InstriqListItem(
+                icon: Icons.bar_chart,
+                title: l10n.myProgressTitle,
+                subtitle: l10n.myProgressSubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ProgressScreen()),
+                ),
               ),
               const SizedBox(height: InstriqSpacing.sm),
               InstriqListItem(
