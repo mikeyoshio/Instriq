@@ -42,8 +42,12 @@
   </url>
   <url>
     <loc>https://instriq.org/privacidad.html</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/privacidad.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/privacidad.html?lang=es" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/privacidad.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/privacidad.html" />
   </url>
 </urlset>

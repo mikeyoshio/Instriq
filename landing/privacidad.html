@@ -1,24 +1,28 @@
 <!doctype html>
-<html lang="es">
+<html lang="ca">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Política de privacidad — Instriq</title>
-<meta name="description" content="Qué datos trata Instriq (aplicación y web), con qué finalidad y qué derechos tienes sobre ellos, conforme al RGPD.">
+<title data-i18n="meta.title">Política de privacitat — Instriq</title>
+<meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Quines dades tracta Instriq (aplicació i web), amb quina finalitat i quins drets tens sobre elles, d'acord amb el RGPD.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://instriq.org/privacidad.html">
+<link rel="canonical" href="https://instriq.org/privacidad.html" id="canonicalLink">
+<link rel="alternate" hreflang="ca" href="https://instriq.org/privacidad.html">
+<link rel="alternate" hreflang="es" href="https://instriq.org/privacidad.html?lang=es">
+<link rel="alternate" hreflang="en" href="https://instriq.org/privacidad.html?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://instriq.org/privacidad.html">
 <link rel="icon" type="image/png" href="favicon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://instriq.org/privacidad.html">
 <meta property="og:site_name" content="Instriq">
-<meta property="og:title" content="Política de privacidad — Instriq">
-<meta property="og:description" content="Qué datos trata Instriq (aplicación y web), con qué finalidad y qué derechos tienes sobre ellos, conforme al RGPD.">
+<meta property="og:title" data-i18n-attr="content" data-i18n="meta.title" content="Política de privacitat — Instriq">
+<meta property="og:description" data-i18n-attr="content" data-i18n="meta.description" content="Quines dades tracta Instriq (aplicació i web), amb quina finalitat i quins drets tens sobre elles, d'acord amb el RGPD.">
 <meta property="og:image" content="https://instriq.org/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Política de privacidad — Instriq">
-<meta name="twitter:description" content="Qué datos trata Instriq (aplicación y web), con qué finalidad y qué derechos tienes sobre ellos, conforme al RGPD.">
+<meta name="twitter:title" data-i18n-attr="content" data-i18n="meta.title" content="Política de privacitat — Instriq">
+<meta name="twitter:description" data-i18n-attr="content" data-i18n="meta.description" content="Quines dades tracta Instriq (aplicació i web), amb quina finalitat i quins drets tens sobre elles, d'acord amb el RGPD.">
 <meta name="twitter:image" content="https://instriq.org/og-image.png">
 <style>
   :root { --bg:#f4f8f7; --text:#14202b; --muted:#4a5a68; --border:#dbe4e6; --teal:#0d9488; --note:#f1e3d7; }
@@ -31,8 +35,12 @@
   h1 { font-size: 1.9rem; }
   h2 { font-size: 1.25rem; margin-top: 40px; }
   p, li { color: var(--muted); }
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
   .updated { font-size: 0.85rem; color: var(--muted); margin-bottom: 32px; }
-  .back { display:inline-block; margin-bottom: 24px; font-size: 0.9rem; }
+  .back { display:inline-block; font-size: 0.9rem; }
+  .lang-switch { display: flex; gap: 6px; font-size: 0.78rem; }
+  .lang-switch button { background: none; border: 1px solid var(--border); color: var(--muted); cursor: pointer; padding: 4px 8px; font-size: 0.78rem; border-radius: 6px; }
+  .lang-switch button.active { color: var(--text); font-weight: 700; background: var(--note); }
   .note { background: var(--note); border-radius: 10px; padding: 16px 20px; margin: 16px 0; }
   .note p { color: var(--text); margin: 0; }
   ol li { margin-bottom: 8px; }
@@ -43,85 +51,327 @@
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="/">← Instriq</a>
-  <h1>Política de privacidad</h1>
-  <p class="updated">Última actualización: octubre de 2026</p>
+  <div class="topbar">
+    <a class="back" href="/" data-i18n="nav.back">← Instriq</a>
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button>
+    </div>
+  </div>
+  <h1 data-i18n="h1">Política de privacitat</h1>
+  <p class="updated" data-i18n="updated">Darrera actualització: octubre de 2026</p>
 
-  <p>Esta política explica qué datos trata <strong>Instriq</strong> (aplicación y web, desarrollada por Instriq), con qué finalidad y qué derechos tienes sobre ellos, conforme al Reglamento General de Protección de Datos (RGPD).</p>
+  <p data-i18n="intro">Aquesta política explica quines dades tracta l'<strong>Instriq</strong> (aplicació i web, desenvolupada per Instriq), amb quina finalitat i quins drets tens sobre elles, d'acord amb el Reglament General de Protecció de Dades (RGPD).</p>
 
-  <h2>1. Uso sin cuenta</h2>
-  <p>El catálogo de instrumental, las flashcards, el quiz y tu progreso de aprendizaje no requieren registro. Esta información se guarda únicamente en tu propio dispositivo (almacenamiento local) y no se envía a ningún servidor de Instriq.</p>
+  <h2 data-i18n="s1.h">1. Ús sense compte</h2>
+  <p data-i18n="s1.p">El catàleg d'instrumental, les flashcards, el qüestionari i el teu progrés d'aprenentatge no requereixen registre. Aquesta informació es desa únicament al teu propi dispositiu (emmagatzematge local) i no s'envia a cap servidor d'Instriq.</p>
 
-  <h2>2. Datos que tratamos si creas una cuenta</h2>
-  <p>Si decides crear una cuenta, unirte o crear el espacio de tu hospital, tratamos:</p>
+  <h2 data-i18n="s2.h">2. Dades que tractem si crees un compte</h2>
+  <p data-i18n="s2.intro">Si decideixes crear un compte, unir-te o crear l'espai del teu hospital, tractem:</p>
   <ul>
-    <li><strong>Email y contraseña</strong> — la contraseña se almacena cifrada por nuestro proveedor de autenticación (Supabase), nunca en texto plano.</li>
-    <li><strong>Nombre que introduces</strong> al unirte a un hospital, visible para el resto de miembros de ese mismo hospital.</li>
-    <li><strong>Hospital al que perteneces</strong>, tu rol (Owner, Administrator, Approver, Editor o Reader) y los espacios de trabajo a los que tienes acceso.</li>
-    <li><strong>Contenido que creas o apruebas</strong>: técnicas quirúrgicas, protocolos, tarjetas de preferencia, e instrumental personalizado de tu equipo (incluidas las fotos que subas para este último, bajo tu responsabilidad).</li>
-    <li><strong>Token de notificaciones push</strong> (si aceptas recibirlas): un identificador de tu dispositivo usado únicamente para avisarte cuando algo entra en revisión, se aprueba o se rechaza.</li>
-    <li><strong>Registro de auditoría</strong>: qué acciones sensibles realizas (aprobar/rechazar contenido, cambios de rol, transferencia de propiedad), visible solo para quien administra tu hospital.</li>
-    <li><strong>Progreso de aprendizaje</strong>: qué instrumental del catálogo has marcado como aprendido y tus mejores puntuaciones de quiz, para sincronizar tu progreso entre dispositivos.</li>
+    <li data-i18n="s2.li1"><strong>Email i contrasenya</strong> — la contrasenya es desa xifrada pel nostre proveïdor d'autenticació (Supabase), mai en text pla.</li>
+    <li data-i18n="s2.li2"><strong>Nom que introdueixes</strong> en unir-te a un hospital, visible per a la resta de membres d'aquest mateix hospital.</li>
+    <li data-i18n="s2.li3"><strong>Hospital al qual pertanys</strong>, el teu rol (Owner, Administrator, Approver, Editor o Reader) i els espais de treball als quals tens accés.</li>
+    <li data-i18n="s2.li4"><strong>Contingut que crees o aproves</strong>: tècniques quirúrgiques, protocols, targetes de preferència, i instrumental personalitzat del teu equip (incloses les fotos que pugis per a aquest darrer, sota la teva responsabilitat).</li>
+    <li data-i18n="s2.li5"><strong>Token de notificacions push</strong> (si acceptes rebre-les): un identificador del teu dispositiu usat únicament per avisar-te quan alguna cosa entra en revisió, s'aprova o es rebutja.</li>
+    <li data-i18n="s2.li6"><strong>Registre d'auditoria</strong>: quines accions sensibles realitzes (aprovar/rebutjar contingut, canvis de rol, transferència de propietat), visible només per a qui administra el teu hospital.</li>
+    <li data-i18n="s2.li7"><strong>Progrés d'aprenentatge</strong>: quin instrumental del catàleg has marcat com après i les teves millors puntuacions de qüestionari, per sincronitzar el teu progrés entre dispositius.</li>
   </ul>
-  <p>No tratamos datos de salud de pacientes: Instriq es una herramienta de conocimiento profesional para el personal de quirófano, no un sistema de historia clínica.</p>
-  <p>Si además solicitas unirte como <strong>colaborador de la Biblioteca Pública</strong>, tu solicitud incluye: nombre completo, email, país, organización, rol profesional, años de experiencia, perfil de LinkedIn, certificaciones y publicaciones o docencia, y una carta de motivación — revisados por el Consejo Editorial para decidir tu candidatura. Si eres aceptado, tu perfil de colaborador (nombre público, biografía y, solo si tú lo activas explícitamente, tu organización) puede hacerse visible para cualquier persona, incluso sin cuenta — es un perfil de autor público, no contenido privado de tu hospital; tú decides qué parte mostrar desde tu propio perfil.</p>
+  <p data-i18n="s2.p2">No tractem dades de salut de pacients: Instriq és una eina de coneixement professional per al personal de quiròfan, no un sistema d'història clínica.</p>
+  <p data-i18n="s2.p3">Si a més sol·licites unir-te com a <strong>col·laborador/a de la Biblioteca Pública</strong>, la teva sol·licitud inclou: nom complet, email, país, organització, rol professional, anys d'experiència, perfil de LinkedIn, certificacions i publicacions o docència, i una carta de motivació — revisats pel Consell Editorial per decidir la teva candidatura. Si ets acceptat/da, el teu perfil de col·laborador/a (nom públic, biografia i, només si tu l'actives explícitament, la teva organització) pot fer-se visible per a qualsevol persona, fins i tot sense compte — és un perfil d'autor/a públic, no contingut privat del teu hospital; tu decideixes quina part mostrar des del teu propi perfil.</p>
 
-  <h2>3. Con quién se comparten estos datos</h2>
-  <p>Tus datos se almacenan y procesan mediante los siguientes proveedores, que actúan como encargados del tratamiento (no usan tus datos para sus propios fines):</p>
+  <h2 data-i18n="s3.h">3. Amb qui es comparteixen aquestes dades</h2>
+  <p data-i18n="s3.intro">Les teves dades s'emmagatzemen i processen mitjançant els següents proveïdors, que actuen com a encarregats del tractament (no fan servir les teves dades per a finalitats pròpies):</p>
   <ul>
-    <li><strong>Supabase</strong> — base de datos, autenticación y almacenamiento de archivos.</li>
-    <li><strong>Google Firebase Cloud Messaging</strong> — entrega de notificaciones push, únicamente el token de dispositivo.</li>
-    <li><strong>Resend</strong> — envío de los correos de confirmación de cuenta y recuperación de contraseña.</li>
+    <li data-i18n="s3.li1"><strong>Supabase</strong> — base de dades, autenticació i emmagatzematge d'arxius.</li>
+    <li data-i18n="s3.li2"><strong>Google Firebase Cloud Messaging</strong> — lliurament de notificacions push, únicament el token de dispositiu.</li>
+    <li data-i18n="s3.li3"><strong>Resend</strong> — enviament dels correus de confirmació de compte i recuperació de contrasenya.</li>
   </ul>
-  <p>Dentro de tu hospital, tu contenido es visible solo para los miembros con acceso a ese espacio de trabajo, mediante reglas de acceso a nivel de base de datos (Row Level Security). No vendemos ni cedemos tus datos a terceros con fines comerciales o publicitarios.</p>
+  <p data-i18n="s3.p2">Dins del teu hospital, el teu contingut és visible només per als membres amb accés a aquest espai de treball, mitjançant regles d'accés a nivell de base de dades (Row Level Security). No venem ni cedim les teves dades a tercers amb finalitats comercials o publicitàries.</p>
 
-  <h2>4. Base legal y finalidad</h2>
-  <p>Tratamos estos datos para poder ofrecerte el servicio que solicitas expresamente (compartir conocimiento profesional con tu equipo), en base al consentimiento que prestas al crear la cuenta y al interés legítimo de mantener la seguridad de la plataforma.</p>
+  <h2 data-i18n="s4.h">4. Base legal i finalitat</h2>
+  <p data-i18n="s4.p">Tractem aquestes dades per poder oferir-te el servei que sol·licites expressament (compartir coneixement professional amb el teu equip), basant-nos en el consentiment que dones en crear el compte i en l'interès legítim de mantenir la seguretat de la plataforma.</p>
 
-  <h2 id="eliminar-cuenta">5. Cómo eliminar tu cuenta</h2>
-  <p>Puedes eliminar tu cuenta de Instriq (aplicación y web, desarrollada por Instriq) en cualquier momento, directamente desde la app:</p>
+  <h2 id="eliminar-cuenta" data-i18n="s5.h">5. Com eliminar el teu compte</h2>
+  <p data-i18n="s5.p">Pots eliminar el teu compte d'Instriq (aplicació i web, desenvolupada per Instriq) en qualsevol moment, directament des de l'app:</p>
   <ol>
-    <li>Abre Instriq e inicia sesión.</li>
-    <li>Toca el icono de cuenta (🛡️) en la parte superior de la pantalla de inicio → <strong>"Mi cuenta y privacidad"</strong>.</li>
-    <li>En "Eliminar mi cuenta", escribe tu email para confirmar y pulsa <strong>"Eliminar definitivamente"</strong>.</li>
+    <li data-i18n="s5.li1">Obre Instriq i inicia sessió.</li>
+    <li data-i18n="s5.li2">Toca la icona de compte (🛡️) a la part superior de la pantalla d'inici → <strong>"El meu compte i privacitat"</strong>.</li>
+    <li data-i18n="s5.li3">A "Eliminar el meu compte", escriu el teu email per confirmar i prem <strong>"Eliminar definitivament"</strong>.</li>
   </ol>
   <div class="note">
-    <p>Si eres la única propietaria u propietario de un hospital con más miembros, la app te pedirá que transfieras la propiedad primero desde "Administrar grupo" — es la única condición previa.</p>
+    <p data-i18n="s5.note">Si ets l'única propietària o propietari d'un hospital amb més membres, l'app et demanarà que transfereixis la propietat primer des de "Administrar grup" — és l'única condició prèvia.</p>
   </div>
-  <p>Qué ocurre al confirmar:</p>
+  <p data-i18n="s5.p2">Què passa en confirmar:</p>
   <table>
-    <tr><th>Dato</th><th>Qué pasa</th></tr>
-    <tr><td>Email, contraseña, perfil, token de notificaciones</td><td>Se eliminan de forma permanente e inmediata.</td></tr>
-    <tr><td>Técnicas, protocolos, tarjetas e instrumental que creaste o aprobaste</td><td>Se conservan para tu equipo, mostrados como "Usuario eliminado" — no perdemos el conocimiento compartido del hospital.</td></tr>
-    <tr><td>Progreso de aprendizaje (flashcards/quiz)</td><td>Vive solo en tu dispositivo; se borra al desinstalar la app.</td></tr>
+    <tr><th data-i18n="s5.th1">Dada</th><th data-i18n="s5.th2">Què passa</th></tr>
+    <tr><td data-i18n="s5.tr1.td1">Email, contrasenya, perfil, token de notificacions</td><td data-i18n="s5.tr1.td2">S'eliminen de forma permanent i immediata.</td></tr>
+    <tr><td data-i18n="s5.tr2.td1">Tècniques, protocols, targetes i instrumental que vas crear o aprovar</td><td data-i18n="s5.tr2.td2">Es conserven per al teu equip, mostrats com a "Usuari eliminat" — no perdem el coneixement compartit de l'hospital.</td></tr>
+    <tr><td data-i18n="s5.tr3.td1">Progrés d'aprenentatge (flashcards/qüestionari)</td><td data-i18n="s5.tr3.td2">Viu només al teu dispositiu; s'esborra en desinstal·lar l'app.</td></tr>
   </table>
-  <p>No hay periodo de retención adicional: los datos personales se eliminan en el momento de la confirmación, sin demora.</p>
-  <p>También puedes solicitar la eliminación sin borrar la cuenta (por ejemplo, de una foto de instrumental concreta) contactando en <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
+  <p data-i18n="s5.p3">No hi ha període de retenció addicional: les dades personals s'eliminen en el moment de la confirmació, sense demora.</p>
+  <p data-i18n="s5.p4">També pots sol·licitar l'eliminació sense esborrar el compte (per exemple, d'una foto d'instrumental concreta) contactant a <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
 
-  <h2>6. Exportar tus datos</h2>
-  <p>Desde la misma pantalla de "Mi cuenta y privacidad" puedes generar y copiar una exportación en JSON de tu perfil, roles, el contenido que hayas creado o aprobado (técnicas, protocolos, bandejas, tarjetas de preferencia e instrumental personalizado), tu progreso de aprendizaje y, si aplica, tu solicitud y perfil de colaborador de la Biblioteca Pública.</p>
+  <h2 data-i18n="s6.h">6. Exportar les teves dades</h2>
+  <p data-i18n="s6.p">Des de la mateixa pantalla de "El meu compte i privacitat" pots generar i copiar una exportació en JSON del teu perfil, rols, el contingut que hagis creat o aprovat (tècniques, protocols, safates, targetes de preferència i instrumental personalitzat), el teu progrés d'aprenentatge i, si s'escau, la teva sol·licitud i perfil de col·laborador/a de la Biblioteca Pública.</p>
 
-  <h2>7. Tus derechos</h2>
-  <p>Puedes solicitar en cualquier momento el acceso, rectificación, eliminación o exportación de tus datos, o retirar tu consentimiento, desde la propia app o escribiendo a <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
-  <p>Si consideras que no hemos atendido tu solicitud correctamente, tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener">aepd.es</a>) o ante la autoridad de control de tu país de residencia.</p>
+  <h2 data-i18n="s7.h">7. Els teus drets</h2>
+  <p data-i18n="s7.p">Pots sol·licitar en qualsevol moment l'accés, la rectificació, l'eliminació o l'exportació de les teves dades, o retirar el teu consentiment, des de la mateixa app o escrivint a <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
+  <p data-i18n="s7.p2">Si consideres que no hem atès la teva sol·licitud correctament, tens dret a presentar una reclamació davant l'Agència Espanyola de Protecció de Dades (<a href="https://www.aepd.es" target="_blank" rel="noopener">aepd.es</a>) o davant l'autoritat de control del teu país de residència.</p>
 
-  <h2>8. Usuarios de California (CCPA/CPRA)</h2>
-  <p>Si resides en California, la California Consumer Privacy Act (CCPA), modificada por la CPRA, te reconoce derechos adicionales sobre tu información personal:</p>
+  <h2 data-i18n="s8.h">8. Usuaris de Califòrnia (CCPA/CPRA)</h2>
+  <p data-i18n="s8.intro">Si resideixes a Califòrnia, la California Consumer Privacy Act (CCPA), modificada per la CPRA, et reconeix drets addicionals sobre la teva informació personal:</p>
   <ul>
-    <li><strong>Derecho a saber</strong> qué información personal tratamos sobre ti y con qué finalidad (ver sección 2 de esta política).</li>
-    <li><strong>Derecho a eliminar</strong> tu información personal (ver sección 5).</li>
-    <li><strong>Derecho a corregir</strong> información personal inexacta.</li>
-    <li><strong>Derecho a la portabilidad</strong> de tu información personal (ver sección 6).</li>
-    <li><strong>Derecho a no sufrir discriminación</strong> por ejercer cualquiera de estos derechos: no limitaremos tu acceso al servicio ni te ofreceremos un servicio peor por ello.</li>
+    <li data-i18n="s8.li1"><strong>Dret a saber</strong> quina informació personal tractem sobre tu i amb quina finalitat (vegeu secció 2 d'aquesta política).</li>
+    <li data-i18n="s8.li2"><strong>Dret a eliminar</strong> la teva informació personal (vegeu secció 5).</li>
+    <li data-i18n="s8.li3"><strong>Dret a corregir</strong> informació personal inexacta.</li>
+    <li data-i18n="s8.li4"><strong>Dret a la portabilitat</strong> de la teva informació personal (vegeu secció 6).</li>
+    <li data-i18n="s8.li5"><strong>Dret a no patir discriminació</strong> per exercir qualsevol d'aquests drets: no limitarem el teu accés al servei ni t'oferirem un servei pitjor per això.</li>
   </ul>
-  <p><strong>No vendemos ni compartimos tu información personal</strong> tal como esos términos se definen en la CCPA/CPRA, ni la usamos para publicidad dirigida. Por tanto no aplica un mecanismo de exclusión ("opt-out") de venta o uso compartido, al no existir tal venta o uso compartido.</p>
-  <p>Para ejercer cualquiera de estos derechos, escribe a <a href="mailto:hola@instriq.org">hola@instriq.org</a>; verificaremos tu identidad antes de responder.</p>
+  <p data-i18n="s8.p2"><strong>No venem ni compartim la teva informació personal</strong> tal com aquests termes es defineixen a la CCPA/CPRA, ni la fem servir per a publicitat dirigida. Per tant no aplica cap mecanisme d'exclusió ("opt-out") de venda o ús compartit, en no existir tal venda o ús compartit.</p>
+  <p data-i18n="s8.p3">Per exercir qualsevol d'aquests drets, escriu a <a href="mailto:hola@instriq.org">hola@instriq.org</a>; verificarem la teva identitat abans de respondre.</p>
 
-  <h2>9. Cambios en esta política</h2>
-  <p>Instriq es un proyecto en desarrollo activo. Si esta política cambia de forma relevante, lo indicaremos en esta misma página con la fecha de actualización.</p>
+  <h2 data-i18n="s9.h">9. Canvis en aquesta política</h2>
+  <p data-i18n="s9.p">Instriq és un projecte en desenvolupament actiu. Si aquesta política canvia de forma rellevant, ho indicarem en aquesta mateixa pàgina amb la data d'actualització.</p>
 
-  <h2>10. Contacto</h2>
-  <p>Para cualquier consulta sobre privacidad o para ejercer tus derechos: <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
+  <h2 data-i18n="s10.h">10. Contacte</h2>
+  <p data-i18n="s10.p">Per a qualsevol consulta sobre privacitat o per exercir els teus drets: <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
 </div>
+<script>
+(function () {
+  var CA_DEFAULTS = {
+    'meta.title': "Política de privacitat — Instriq",
+    'meta.description': "Quines dades tracta Instriq (aplicació i web), amb quina finalitat i quins drets tens sobre elles, d'acord amb el RGPD.",
+    'nav.back': '← Instriq',
+    'h1': 'Política de privacitat',
+    'updated': 'Darrera actualització: octubre de 2026',
+    'intro': "Aquesta política explica quines dades tracta l'<strong>Instriq</strong> (aplicació i web, desenvolupada per Instriq), amb quina finalitat i quins drets tens sobre elles, d'acord amb el Reglament General de Protecció de Dades (RGPD).",
+    's1.h': '1. Ús sense compte',
+    's1.p': "El catàleg d'instrumental, les flashcards, el qüestionari i el teu progrés d'aprenentatge no requereixen registre. Aquesta informació es desa únicament al teu propi dispositiu (emmagatzematge local) i no s'envia a cap servidor d'Instriq.",
+    's2.h': '2. Dades que tractem si crees un compte',
+    's2.intro': "Si decideixes crear un compte, unir-te o crear l'espai del teu hospital, tractem:",
+    's2.li1': "<strong>Email i contrasenya</strong> — la contrasenya es desa xifrada pel nostre proveïdor d'autenticació (Supabase), mai en text pla.",
+    's2.li2': "<strong>Nom que introdueixes</strong> en unir-te a un hospital, visible per a la resta de membres d'aquest mateix hospital.",
+    's2.li3': '<strong>Hospital al qual pertanys</strong>, el teu rol (Owner, Administrator, Approver, Editor o Reader) i els espais de treball als quals tens accés.',
+    's2.li4': '<strong>Contingut que crees o aproves</strong>: tècniques quirúrgiques, protocols, targetes de preferència, i instrumental personalitzat del teu equip (incloses les fotos que pugis per a aquest darrer, sota la teva responsabilitat).',
+    's2.li5': "<strong>Token de notificacions push</strong> (si acceptes rebre-les): un identificador del teu dispositiu usat únicament per avisar-te quan alguna cosa entra en revisió, s'aprova o es rebutja.",
+    's2.li6': '<strong>Registre d\'auditoria</strong>: quines accions sensibles realitzes (aprovar/rebutjar contingut, canvis de rol, transferència de propietat), visible només per a qui administra el teu hospital.',
+    's2.li7': '<strong>Progrés d\'aprenentatge</strong>: quin instrumental del catàleg has marcat com après i les teves millors puntuacions de qüestionari, per sincronitzar el teu progrés entre dispositius.',
+    's2.p2': "No tractem dades de salut de pacients: Instriq és una eina de coneixement professional per al personal de quiròfan, no un sistema d'història clínica.",
+    's2.p3': "Si a més sol·licites unir-te com a <strong>col·laborador/a de la Biblioteca Pública</strong>, la teva sol·licitud inclou: nom complet, email, país, organització, rol professional, anys d'experiència, perfil de LinkedIn, certificacions i publicacions o docència, i una carta de motivació — revisats pel Consell Editorial per decidir la teva candidatura. Si ets acceptat/da, el teu perfil de col·laborador/a (nom públic, biografia i, només si tu l'actives explícitament, la teva organització) pot fer-se visible per a qualsevol persona, fins i tot sense compte — és un perfil d'autor/a públic, no contingut privat del teu hospital; tu decideixes quina part mostrar des del teu propi perfil.",
+    's3.h': '3. Amb qui es comparteixen aquestes dades',
+    's3.intro': "Les teves dades s'emmagatzemen i processen mitjançant els següents proveïdors, que actuen com a encarregats del tractament (no fan servir les teves dades per a finalitats pròpies):",
+    's3.li1': "<strong>Supabase</strong> — base de dades, autenticació i emmagatzematge d'arxius.",
+    's3.li2': '<strong>Google Firebase Cloud Messaging</strong> — lliurament de notificacions push, únicament el token de dispositiu.',
+    's3.li3': '<strong>Resend</strong> — enviament dels correus de confirmació de compte i recuperació de contrasenya.',
+    's3.p2': 'Dins del teu hospital, el teu contingut és visible només per als membres amb accés a aquest espai de treball, mitjançant regles d\'accés a nivell de base de dades (Row Level Security). No venem ni cedim les teves dades a tercers amb finalitats comercials o publicitàries.',
+    's4.h': '4. Base legal i finalitat',
+    's4.p': "Tractem aquestes dades per poder oferir-te el servei que sol·licites expressament (compartir coneixement professional amb el teu equip), basant-nos en el consentiment que dones en crear el compte i en l'interès legítim de mantenir la seguretat de la plataforma.",
+    's5.h': '5. Com eliminar el teu compte',
+    's5.p': "Pots eliminar el teu compte d'Instriq (aplicació i web, desenvolupada per Instriq) en qualsevol moment, directament des de l'app:",
+    's5.li1': 'Obre Instriq i inicia sessió.',
+    's5.li2': 'Toca la icona de compte (🛡️) a la part superior de la pantalla d\'inici → <strong>"El meu compte i privacitat"</strong>.',
+    's5.li3': 'A "Eliminar el meu compte", escriu el teu email per confirmar i prem <strong>"Eliminar definitivament"</strong>.',
+    's5.note': 'Si ets l\'única propietària o propietari d\'un hospital amb més membres, l\'app et demanarà que transfereixis la propietat primer des de "Administrar grup" — és l\'única condició prèvia.',
+    's5.p2': 'Què passa en confirmar:',
+    's5.th1': 'Dada',
+    's5.th2': 'Què passa',
+    's5.tr1.td1': 'Email, contrasenya, perfil, token de notificacions',
+    's5.tr1.td2': "S'eliminen de forma permanent i immediata.",
+    's5.tr2.td1': 'Tècniques, protocols, targetes i instrumental que vas crear o aprovar',
+    's5.tr2.td2': 'Es conserven per al teu equip, mostrats com a "Usuari eliminat" — no perdem el coneixement compartit de l\'hospital.',
+    's5.tr3.td1': "Progrés d'aprenentatge (flashcards/qüestionari)",
+    's5.tr3.td2': "Viu només al teu dispositiu; s'esborra en desinstal·lar l'app.",
+    's5.p3': "No hi ha període de retenció addicional: les dades personals s'eliminen en el moment de la confirmació, sense demora.",
+    's5.p4': "També pots sol·licitar l'eliminació sense esborrar el compte (per exemple, d'una foto d'instrumental concreta) contactant a <a href=\"mailto:hola@instriq.org\">hola@instriq.org</a>.",
+    's6.h': '6. Exportar les teves dades',
+    's6.p': 'Des de la mateixa pantalla de "El meu compte i privacitat" pots generar i copiar una exportació en JSON del teu perfil, rols, el contingut que hagis creat o aprovat (tècniques, protocols, safates, targetes de preferència i instrumental personalitzat), el teu progrés d\'aprenentatge i, si s\'escau, la teva sol·licitud i perfil de col·laborador/a de la Biblioteca Pública.',
+    's7.h': '7. Els teus drets',
+    's7.p': 'Pots sol·licitar en qualsevol moment l\'accés, la rectificació, l\'eliminació o l\'exportació de les teves dades, o retirar el teu consentiment, des de la mateixa app o escrivint a <a href="mailto:hola@instriq.org">hola@instriq.org</a>.',
+    's7.p2': 'Si consideres que no hem atès la teva sol·licitud correctament, tens dret a presentar una reclamació davant l\'Agència Espanyola de Protecció de Dades (<a href="https://www.aepd.es" target="_blank" rel="noopener">aepd.es</a>) o davant l\'autoritat de control del teu país de residència.',
+    's8.h': '8. Usuaris de Califòrnia (CCPA/CPRA)',
+    's8.intro': 'Si resideixes a Califòrnia, la California Consumer Privacy Act (CCPA), modificada per la CPRA, et reconeix drets addicionals sobre la teva informació personal:',
+    's8.li1': '<strong>Dret a saber</strong> quina informació personal tractem sobre tu i amb quina finalitat (vegeu secció 2 d\'aquesta política).',
+    's8.li2': '<strong>Dret a eliminar</strong> la teva informació personal (vegeu secció 5).',
+    's8.li3': '<strong>Dret a corregir</strong> informació personal inexacta.',
+    's8.li4': '<strong>Dret a la portabilitat</strong> de la teva informació personal (vegeu secció 6).',
+    's8.li5': "<strong>Dret a no patir discriminació</strong> per exercir qualsevol d'aquests drets: no limitarem el teu accés al servei ni t'oferirem un servei pitjor per això.",
+    's8.p2': '<strong>No venem ni compartim la teva informació personal</strong> tal com aquests termes es defineixen a la CCPA/CPRA, ni la fem servir per a publicitat dirigida. Per tant no aplica cap mecanisme d\'exclusió ("opt-out") de venda o ús compartit, en no existir tal venda o ús compartit.',
+    's8.p3': 'Per exercir qualsevol d\'aquests drets, escriu a <a href="mailto:hola@instriq.org">hola@instriq.org</a>; verificarem la teva identitat abans de respondre.',
+    's9.h': '9. Canvis en aquesta política',
+    's9.p': 'Instriq és un projecte en desenvolupament actiu. Si aquesta política canvia de forma rellevant, ho indicarem en aquesta mateixa pàgina amb la data d\'actualització.',
+    's10.h': '10. Contacte',
+    's10.p': 'Per a qualsevol consulta sobre privacitat o per exercir els teus drets: <a href="mailto:hola@instriq.org">hola@instriq.org</a>.'
+  };
+
+  var DICT = { es: {
+    'meta.title': 'Política de privacidad — Instriq',
+    'meta.description': 'Qué datos trata Instriq (aplicación y web), con qué finalidad y qué derechos tienes sobre ellos, conforme al RGPD.',
+    'nav.back': '← Instriq',
+    'h1': 'Política de privacidad',
+    'updated': 'Última actualización: octubre de 2026',
+    'intro': 'Esta política explica qué datos trata <strong>Instriq</strong> (aplicación y web, desarrollada por Instriq), con qué finalidad y qué derechos tienes sobre ellos, conforme al Reglamento General de Protección de Datos (RGPD).',
+    's1.h': '1. Uso sin cuenta',
+    's1.p': 'El catálogo de instrumental, las flashcards, el quiz y tu progreso de aprendizaje no requieren registro. Esta información se guarda únicamente en tu propio dispositivo (almacenamiento local) y no se envía a ningún servidor de Instriq.',
+    's2.h': '2. Datos que tratamos si creas una cuenta',
+    's2.intro': 'Si decides crear una cuenta, unirte o crear el espacio de tu hospital, tratamos:',
+    's2.li1': '<strong>Email y contraseña</strong> — la contraseña se almacena cifrada por nuestro proveedor de autenticación (Supabase), nunca en texto plano.',
+    's2.li2': '<strong>Nombre que introduces</strong> al unirte a un hospital, visible para el resto de miembros de ese mismo hospital.',
+    's2.li3': '<strong>Hospital al que perteneces</strong>, tu rol (Owner, Administrator, Approver, Editor o Reader) y los espacios de trabajo a los que tienes acceso.',
+    's2.li4': '<strong>Contenido que creas o apruebas</strong>: técnicas quirúrgicas, protocolos, tarjetas de preferencia, e instrumental personalizado de tu equipo (incluidas las fotos que subas para este último, bajo tu responsabilidad).',
+    's2.li5': '<strong>Token de notificaciones push</strong> (si aceptas recibirlas): un identificador de tu dispositivo usado únicamente para avisarte cuando algo entra en revisión, se aprueba o se rechaza.',
+    's2.li6': '<strong>Registro de auditoría</strong>: qué acciones sensibles realizas (aprobar/rechazar contenido, cambios de rol, transferencia de propiedad), visible solo para quien administra tu hospital.',
+    's2.li7': '<strong>Progreso de aprendizaje</strong>: qué instrumental del catálogo has marcado como aprendido y tus mejores puntuaciones de quiz, para sincronizar tu progreso entre dispositivos.',
+    's2.p2': 'No tratamos datos de salud de pacientes: Instriq es una herramienta de conocimiento profesional para el personal de quirófano, no un sistema de historia clínica.',
+    's2.p3': 'Si además solicitas unirte como <strong>colaborador de la Biblioteca Pública</strong>, tu solicitud incluye: nombre completo, email, país, organización, rol profesional, años de experiencia, perfil de LinkedIn, certificaciones y publicaciones o docencia, y una carta de motivación — revisados por el Consejo Editorial para decidir tu candidatura. Si eres aceptado, tu perfil de colaborador (nombre público, biografía y, solo si tú lo activas explícitamente, tu organización) puede hacerse visible para cualquier persona, incluso sin cuenta — es un perfil de autor público, no contenido privado de tu hospital; tú decides qué parte mostrar desde tu propio perfil.',
+    's3.h': '3. Con quién se comparten estos datos',
+    's3.intro': 'Tus datos se almacenan y procesan mediante los siguientes proveedores, que actúan como encargados del tratamiento (no usan tus datos para sus propios fines):',
+    's3.li1': '<strong>Supabase</strong> — base de datos, autenticación y almacenamiento de archivos.',
+    's3.li2': '<strong>Google Firebase Cloud Messaging</strong> — entrega de notificaciones push, únicamente el token de dispositivo.',
+    's3.li3': '<strong>Resend</strong> — envío de los correos de confirmación de cuenta y recuperación de contraseña.',
+    's3.p2': 'Dentro de tu hospital, tu contenido es visible solo para los miembros con acceso a ese espacio de trabajo, mediante reglas de acceso a nivel de base de datos (Row Level Security). No vendemos ni cedemos tus datos a terceros con fines comerciales o publicitarios.',
+    's4.h': '4. Base legal y finalidad',
+    's4.p': 'Tratamos estos datos para poder ofrecerte el servicio que solicitas expresamente (compartir conocimiento profesional con tu equipo), en base al consentimiento que prestas al crear la cuenta y al interés legítimo de mantener la seguridad de la plataforma.',
+    's5.h': '5. Cómo eliminar tu cuenta',
+    's5.p': 'Puedes eliminar tu cuenta de Instriq (aplicación y web, desarrollada por Instriq) en cualquier momento, directamente desde la app:',
+    's5.li1': 'Abre Instriq e inicia sesión.',
+    's5.li2': 'Toca el icono de cuenta (🛡️) en la parte superior de la pantalla de inicio → <strong>"Mi cuenta y privacidad"</strong>.',
+    's5.li3': 'En "Eliminar mi cuenta", escribe tu email para confirmar y pulsa <strong>"Eliminar definitivamente"</strong>.',
+    's5.note': 'Si eres la única propietaria u propietario de un hospital con más miembros, la app te pedirá que transfieras la propiedad primero desde "Administrar grupo" — es la única condición previa.',
+    's5.p2': 'Qué ocurre al confirmar:',
+    's5.th1': 'Dato',
+    's5.th2': 'Qué pasa',
+    's5.tr1.td1': 'Email, contraseña, perfil, token de notificaciones',
+    's5.tr1.td2': 'Se eliminan de forma permanente e inmediata.',
+    's5.tr2.td1': 'Técnicas, protocolos, tarjetas e instrumental que creaste o aprobaste',
+    's5.tr2.td2': 'Se conservan para tu equipo, mostrados como "Usuario eliminado" — no perdemos el conocimiento compartido del hospital.',
+    's5.tr3.td1': 'Progreso de aprendizaje (flashcards/quiz)',
+    's5.tr3.td2': 'Vive solo en tu dispositivo; se borra al desinstalar la app.',
+    's5.p3': 'No hay periodo de retención adicional: los datos personales se eliminan en el momento de la confirmación, sin demora.',
+    's5.p4': 'También puedes solicitar la eliminación sin borrar la cuenta (por ejemplo, de una foto de instrumental concreta) contactando en <a href="mailto:hola@instriq.org">hola@instriq.org</a>.',
+    's6.h': '6. Exportar tus datos',
+    's6.p': 'Desde la misma pantalla de "Mi cuenta y privacidad" puedes generar y copiar una exportación en JSON de tu perfil, roles, el contenido que hayas creado o aprobado (técnicas, protocolos, bandejas, tarjetas de preferencia e instrumental personalizado), tu progreso de aprendizaje y, si aplica, tu solicitud y perfil de colaborador de la Biblioteca Pública.',
+    's7.h': '7. Tus derechos',
+    's7.p': 'Puedes solicitar en cualquier momento el acceso, rectificación, eliminación o exportación de tus datos, o retirar tu consentimiento, desde la propia app o escribiendo a <a href="mailto:hola@instriq.org">hola@instriq.org</a>.',
+    's7.p2': 'Si consideras que no hemos atendido tu solicitud correctamente, tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener">aepd.es</a>) o ante la autoridad de control de tu país de residencia.',
+    's8.h': '8. Usuarios de California (CCPA/CPRA)',
+    's8.intro': 'Si resides en California, la California Consumer Privacy Act (CCPA), modificada por la CPRA, te reconoce derechos adicionales sobre tu información personal:',
+    's8.li1': '<strong>Derecho a saber</strong> qué información personal tratamos sobre ti y con qué finalidad (ver sección 2 de esta política).',
+    's8.li2': '<strong>Derecho a eliminar</strong> tu información personal (ver sección 5).',
+    's8.li3': '<strong>Derecho a corregir</strong> información personal inexacta.',
+    's8.li4': '<strong>Derecho a la portabilidad</strong> de tu información personal (ver sección 6).',
+    's8.li5': '<strong>Derecho a no sufrir discriminación</strong> por ejercer cualquiera de estos derechos: no limitaremos tu acceso al servicio ni te ofreceremos un servicio peor por ello.',
+    's8.p2': '<strong>No vendemos ni compartimos tu información personal</strong> tal como esos términos se definen en la CCPA/CPRA, ni la usamos para publicidad dirigida. Por tanto no aplica un mecanismo de exclusión ("opt-out") de venta o uso compartido, al no existir tal venta o uso compartido.',
+    's8.p3': 'Para ejercer cualquiera de estos derechos, escribe a <a href="mailto:hola@instriq.org">hola@instriq.org</a>; verificaremos tu identidad antes de responder.',
+    's9.h': '9. Cambios en esta política',
+    's9.p': 'Instriq es un proyecto en desarrollo activo. Si esta política cambia de forma relevante, lo indicaremos en esta misma página con la fecha de actualización.',
+    's10.h': '10. Contacto',
+    's10.p': 'Para cualquier consulta sobre privacidad o para ejercer tus derechos: <a href="mailto:hola@instriq.org">hola@instriq.org</a>.'
+  }, en: {
+    'meta.title': 'Privacy Policy — Instriq',
+    'meta.description': 'What data Instriq (app and web) processes, for what purpose, and what rights you have over it, under the GDPR.',
+    'nav.back': '← Instriq',
+    'h1': 'Privacy Policy',
+    'updated': 'Last updated: October 2026',
+    'intro': 'This policy explains what data <strong>Instriq</strong> (app and web, developed by Instriq) processes, for what purpose, and what rights you have over it, under the General Data Protection Regulation (GDPR).',
+    's1.h': '1. Use without an account',
+    's1.p': "The instrument catalog, flashcards, quiz and your learning progress don't require registration. This information is stored only on your own device (local storage) and is never sent to any Instriq server.",
+    's2.h': '2. Data we process if you create an account',
+    's2.intro': "If you decide to create an account, join, or create your hospital's workspace, we process:",
+    's2.li1': '<strong>Email and password</strong> — the password is stored encrypted by our authentication provider (Supabase), never in plain text.',
+    's2.li2': '<strong>The name you enter</strong> when joining a hospital, visible to the other members of that same hospital.',
+    's2.li3': '<strong>The hospital you belong to</strong>, your role (Owner, Administrator, Approver, Editor or Reader) and the workspaces you have access to.',
+    's2.li4': "<strong>Content you create or approve</strong>: surgical techniques, protocols, preference cards, and your team's custom instruments (including any photos you upload for the latter, at your own responsibility).",
+    's2.li5': '<strong>Push notification token</strong> (if you accept receiving them): a device identifier used only to notify you when something enters review, is approved, or is rejected.',
+    's2.li6': '<strong>Audit log</strong>: which sensitive actions you take (approving/rejecting content, role changes, ownership transfer), visible only to whoever administers your hospital.',
+    's2.li7': "<strong>Learning progress</strong>: which catalog instruments you've marked as learned and your best quiz scores, to sync your progress across devices.",
+    's2.p2': 'We do not process patient health data: Instriq is a professional knowledge tool for OR staff, not a clinical record system.',
+    's2.p3': "If you additionally apply to join as a <strong>Public Library contributor</strong>, your application includes: full name, email, country, organization, professional role, years of experience, LinkedIn profile, certifications and publications or teaching, and a motivation letter — reviewed by the Editorial Board to decide on your application. If accepted, your contributor profile (public name, bio and, only if you explicitly turn it on, your organization) may become visible to anyone, even without an account — it's a public author profile, not private content of your hospital; you decide what to show from your own profile.",
+    's3.h': '3. Who we share this data with',
+    's3.intro': 'Your data is stored and processed through the following providers, acting as data processors (they do not use your data for their own purposes):',
+    's3.li1': '<strong>Supabase</strong> — database, authentication and file storage.',
+    's3.li2': '<strong>Google Firebase Cloud Messaging</strong> — push notification delivery, only the device token.',
+    's3.li3': '<strong>Resend</strong> — sending account confirmation and password recovery emails.',
+    's3.p2': 'Within your hospital, your content is visible only to members with access to that workspace, through database-level access rules (Row Level Security). We do not sell or transfer your data to third parties for commercial or advertising purposes.',
+    's4.h': '4. Legal basis and purpose',
+    's4.p': 'We process this data to provide the service you expressly request (sharing professional knowledge with your team), based on the consent you give when creating the account and on the legitimate interest of keeping the platform secure.',
+    's5.h': '5. How to delete your account',
+    's5.p': 'You can delete your Instriq account (app and web, developed by Instriq) at any time, directly from the app:',
+    's5.li1': 'Open Instriq and sign in.',
+    's5.li2': 'Tap the account icon (🛡️) at the top of the Home screen → <strong>"My account and privacy"</strong>.',
+    's5.li3': 'Under "Delete my account", type your email to confirm and tap <strong>"Delete permanently"</strong>.',
+    's5.note': 'If you\'re the sole owner of a hospital with more members, the app will ask you to transfer ownership first from "Manage group" — it\'s the only precondition.',
+    's5.p2': 'What happens when you confirm:',
+    's5.th1': 'Data',
+    's5.th2': 'What happens',
+    's5.tr1.td1': 'Email, password, profile, notification token',
+    's5.tr1.td2': 'Permanently and immediately deleted.',
+    's5.tr2.td1': 'Techniques, protocols, cards and instruments you created or approved',
+    's5.tr2.td2': 'Kept for your team, shown as "Deleted user" — we don\'t lose the hospital\'s shared knowledge.',
+    's5.tr3.td1': 'Learning progress (flashcards/quiz)',
+    's5.tr3.td2': 'Lives only on your device; deleted when you uninstall the app.',
+    's5.p3': 'There is no additional retention period: personal data is deleted at the moment of confirmation, without delay.',
+    's5.p4': 'You can also request deletion without deleting the account (for example, of a specific instrument photo) by contacting <a href="mailto:hola@instriq.org">hola@instriq.org</a>.',
+    's6.h': '6. Exporting your data',
+    's6.p': 'From the same "My account and privacy" screen you can generate and copy a JSON export of your profile, roles, the content you\'ve created or approved (techniques, protocols, trays, preference cards and custom instruments), your learning progress and, if applicable, your Public Library contributor application and profile.',
+    's7.h': '7. Your rights',
+    's7.p': 'You can request access, rectification, deletion or export of your data, or withdraw your consent, at any time, from the app itself or by writing to <a href="mailto:hola@instriq.org">hola@instriq.org</a>.',
+    's7.p2': 'If you believe we haven\'t handled your request correctly, you have the right to lodge a complaint with the Spanish Data Protection Agency (<a href="https://www.aepd.es" target="_blank" rel="noopener">aepd.es</a>) or with the supervisory authority of your country of residence.',
+    's8.h': '8. California users (CCPA/CPRA)',
+    's8.intro': 'If you reside in California, the California Consumer Privacy Act (CCPA), as amended by the CPRA, grants you additional rights over your personal information:',
+    's8.li1': '<strong>Right to know</strong> what personal information we process about you and for what purpose (see section 2 of this policy).',
+    's8.li2': '<strong>Right to delete</strong> your personal information (see section 5).',
+    's8.li3': '<strong>Right to correct</strong> inaccurate personal information.',
+    's8.li4': '<strong>Right to data portability</strong> (see section 6).',
+    's8.li5': '<strong>Right to non-discrimination</strong> for exercising any of these rights: we will not restrict your access to the service or offer you a worse service for doing so.',
+    's8.p2': '<strong>We do not sell or share your personal information</strong> as those terms are defined under the CCPA/CPRA, nor do we use it for targeted advertising. Therefore no opt-out mechanism for sale or sharing applies, since no such sale or sharing exists.',
+    's8.p3': 'To exercise any of these rights, write to <a href="mailto:hola@instriq.org">hola@instriq.org</a>; we will verify your identity before responding.',
+    's9.h': '9. Changes to this policy',
+    's9.p': "Instriq is a project under active development. If this policy changes in a meaningful way, we'll indicate it on this same page with the update date.",
+    's10.h': '10. Contact',
+    's10.p': 'For any privacy question or to exercise your rights: <a href="mailto:hola@instriq.org">hola@instriq.org</a>.'
+  } };
+
+  function applyLang(lang, opts) {
+    opts = opts || {};
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      var attr = el.getAttribute('data-i18n-attr');
+      var value = lang === 'ca' ? CA_DEFAULTS[key] : (DICT[lang] && DICT[lang][key]) || CA_DEFAULTS[key];
+      if (attr) { el.setAttribute(attr, value); } else { el.innerHTML = value; }
+    });
+    document.title = lang === 'ca' ? CA_DEFAULTS['meta.title'] : (DICT[lang] && DICT[lang]['meta.title']) || CA_DEFAULTS['meta.title'];
+    document.querySelectorAll('#langSwitch button').forEach(function (b) {
+      var isActive = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/privacidad.html' : 'https://instriq.org/privacidad.html?lang=' + lang;
+    var canonicalEl = document.getElementById('canonicalLink');
+    if (canonicalEl) canonicalEl.setAttribute('href', canonicalUrl);
+    try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
+    if (opts.updateUrl) {
+      var url = new URL(window.location.href);
+      if (lang === 'ca') { url.searchParams.delete('lang'); } else { url.searchParams.set('lang', lang); }
+      window.history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
+    }
+  }
+
+  document.querySelectorAll('#langSwitch button').forEach(function (b) {
+    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), { updateUrl: true }); });
+  });
+
+  var validLangs = ['ca', 'es', 'en'];
+  var urlLang = null;
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var fromUrl = params.get('lang');
+    if (fromUrl && validLangs.indexOf(fromUrl) !== -1) urlLang = fromUrl;
+  } catch (e) {}
+  var saved = null;
+  try { saved = localStorage.getItem('instriq_lang'); } catch (e) {}
+  applyLang(urlLang || saved || 'ca');
+})();
+</script>
 </body>
 </html>
