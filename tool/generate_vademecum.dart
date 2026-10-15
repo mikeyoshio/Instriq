@@ -948,6 +948,62 @@ String _renderSitemap(List<String> paths) {
 }
 
 // ---------------------------------------------------------------------------
+// Keep the catalog instrument count from drifting out of sync wherever it's
+// quoted in prose outside the generated Vademecum pages (those are already
+// regenerated above, so they're never stale). It used to be a plain literal
+// in landing/index.html and the 3 READMEs, and kept getting left behind a
+// few catalog rounds at a time -- replaced here by number, leaving every
+// other word of the surrounding sentence untouched.
+// ---------------------------------------------------------------------------
+
+Future<void> _syncInstrumentCount(Directory repoRoot, int count) async {
+  Future<void> patch(String relativePath, List<({RegExp pattern, String Function(Match) replace})> rules) async {
+    final file = File('${repoRoot.path}/$relativePath');
+    if (!file.existsSync()) {
+      stdout.writeln('  SKIP (not found): $relativePath');
+      return;
+    }
+    var text = await file.readAsString(encoding: utf8);
+    var changed = 0;
+    for (final rule in rules) {
+      text = text.replaceAllMapped(rule.pattern, (m) {
+        changed++;
+        return rule.replace(m);
+      });
+    }
+    if (changed > 0) {
+      await file.writeAsString(text, encoding: utf8);
+      stdout.writeln('  updated $relativePath ($changed occurrence${changed == 1 ? '' : 's'})');
+    } else {
+      stdout.writeln('  WARN: no known count pattern matched in $relativePath -- check it by hand');
+    }
+  }
+
+  ({RegExp pattern, String Function(Match) replace}) countBefore(String afterWord) => (
+    pattern: RegExp('[0-9]+(?=\\s+$afterWord)'),
+    replace: (m) => '$count',
+  );
+  // Anchored to the specific "Instruments" stat cell (by its hero.stat1
+  // i18n key), not just any data-count -- the hero row has 3 other
+  // unrelated counters (specialties, platforms, active teams) that must
+  // not be touched.
+  final dataCount = (
+    pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat1")'),
+    replace: (m) => 'data-count="$count"',
+  );
+
+  await patch('landing/index.html', [
+    dataCount,
+    countBefore('instruments organitzats per'),
+    countBefore('instrumentos organizados por'),
+    countBefore('instruments organized by'),
+  ]);
+  await patch('README.md', [countBefore('instruments organitzats per')]);
+  await patch('README.es.md', [countBefore('instrumentos organizados en')]);
+  await patch('README.en.md', [countBefore('instruments organized into')]);
+}
+
+// ---------------------------------------------------------------------------
 // main
 // ---------------------------------------------------------------------------
 
@@ -1053,5 +1109,9 @@ Future<void> main() async {
   stdout.writeln('');
   stdout.writeln('Done. $pageCount pages written, ${sitemapPaths.length} URLs in sitemap-vademecum.xml.');
   stdout.writeln('Instrument lookup sanity: ${byId.length} unique ids.');
+
+  stdout.writeln('Syncing instrument count into index.html and README files...');
+  await _syncInstrumentCount(repoRoot, byId.length);
+
   exit(0);
 }
