@@ -992,9 +992,17 @@ Future<void> _syncInstrumentCount(Directory repoRoot, int count) async {
     pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat1")'),
     replace: (m) => 'data-count="$count"',
   );
+  // Specialty count excludes the 'general' catch-all bucket (universal
+  // consumables, not a real specialty) -- same convention as the hero
+  // stat's historical value.
+  final specialtyDataCount = (
+    pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat2")'),
+    replace: (m) => 'data-count="${specialtyOrder.length - 1}"',
+  );
 
   await patch('landing/index.html', [
     dataCount,
+    specialtyDataCount,
     countBefore('instruments organitzats per'),
     countBefore('instrumentos organizados por'),
     countBefore('instruments organized by'),
