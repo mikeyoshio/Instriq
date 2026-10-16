@@ -5472,10 +5472,10 @@ const List<Instrument> kInstruments = [
       en: 'The speculum should be sized to the patient\'s canal diameter to obtain a complete view of the eardrum without causing discomfort.',
     ),
     image: InstrumentImage(
-      url: 'https://upload.wikimedia.org/wikipedia/commons/8/85/Otoscope.jpg',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Otoscope_001.jpg',
       license: 'CC BY-SA 3.0',
-      attribution: 'Wikimedia Commons contributor',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Otoscope.jpg',
+      attribution: 'Grook Da Oger, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Otoscope_001.jpg',
     ),
     isNew: true,
   ),
@@ -6289,10 +6289,10 @@ const List<Instrument> kInstruments = [
       en: 'The choice between a balloon-expandable or self-expanding stent depends on the anatomical location and the expected external mechanical forces on the vessel.',
     ),
     image: InstrumentImage(
-      url: 'https://upload.wikimedia.org/wikipedia/commons/8/84/Endovascular_stent.jpg',
-      license: 'Public Domain',
-      attribution: 'National Institutes of Health',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Endovascular_stent.jpg',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Stent1_%28fcm%29.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Frank C. Müller, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Stent1_(fcm).jpg',
     ),
     isNew: true,
   ),
@@ -9741,6 +9741,12 @@ const List<Instrument> kInstruments = [
       en: 'It is removed once it has served its purpose, due to the risk of endothelial decompensation, cataract, and secondary glaucoma.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/5/59/%D0%A8%D0%B0%D1%80%D0%B8%D0%BA_%D1%81%D0%B8%D0%BB%D0%B8%D0%BA%D0%BE%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE_%D0%BC%D0%B0%D1%81%D0%BB%D0%B0_%D0%BF%D0%B5%D1%80%D0%B5%D0%B4_%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%BD%D0%B5%D0%BA%D0%B0%D0%BC%D0%B5%D1%80%D0%BD%D1%8B%D0%BC_%D0%B8%D1%81%D0%BA%D1%83%D1%81%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%BC_%D1%85%D1%80%D1%83%D1%81%D1%82%D0%B0%D0%BB%D0%B8%D0%BA%D0%BE%D0%BC%28%D0%98%D0%9E%D0%9B%29_%D0%B3%D0%BB%D0%B0%D0%B7%D0%B0.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'Veselkovamaria, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:%D0%A8%D0%B0%D1%80%D0%B8%D0%BA_%D1%81%D0%B8%D0%BB%D0%B8%D0%BA%D0%BE%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE_%D0%BC%D0%B0%D1%81%D0%BB%D0%B0_%D0%BF%D0%B5%D1%80%D0%B5%D0%B4_%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%BD%D0%B5%D0%BA%D0%B0%D0%BC%D0%B5%D1%80%D0%BD%D1%8B%D0%BC_%D0%B8%D1%81%D0%BA%D1%83%D1%81%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%BC_%D1%85%D1%80%D1%83%D1%81%D1%82%D0%B0%D0%BB%D0%B8%D0%BA%D0%BE%D0%BC(%D0%98%D0%9E%D0%9B)_%D0%B3%D0%BB%D0%B0%D0%B7%D0%B0.jpg',
+    ),
   ),
   Instrument(
     id: 'sonda-endolaser',
@@ -10562,6 +10568,12 @@ const List<Instrument> kInstruments = [
       en: 'The use of continuous perineural catheters improves at-home pain control and reduces opioid side effects.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/b7/Plexus_catheter.jpg',
+      license: 'CC BY 3.0 (también GFDL 1.2+)',
+      attribution: 'MrArifnajafov, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Plexus_catheter.jpg',
+    ),
   ),
   Instrument(
     id: 'monitor-bis',
@@ -10611,6 +10623,12 @@ const List<Instrument> kInstruments = [
       en: 'Prevention of inadvertent perioperative hypothermia, especially in long surgeries or those with large fluid volumes.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/FluidWarmer.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Doc James, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:FluidWarmer.jpg',
+    ),
   ),
   Instrument(
     id: 'monitor-gasto-cardiaco-contorno-pulso',
@@ -12026,6 +12044,12 @@ const List<Instrument> kInstruments = [
       en: 'Should not be used in contaminated or infected wounds, as the mesh can cause fistula or extrusion; it should also not directly contact bowel.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Two_component_mesh_for_Rutkow_repair.JPG',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Anpol42, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Two_component_mesh_for_Rutkow_repair.JPG',
+    ),
   ),
   Instrument(
     id: 'bougie-calibracion-gastrica',
@@ -12050,6 +12074,12 @@ const List<Instrument> kInstruments = [
       en: 'A network meta-analysis (15 studies, 2,848 patients) found most centers use <40 Fr (often 36 Fr) to limit long-term weight regain, while ≥40 Fr is associated with fewer leaks without harming 3-year weight loss.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Esophageal_Bougie_Dilator.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Snowden5589, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Esophageal_Bougie_Dilator.jpg',
+    ),
   ),
   Instrument(
     id: 'sonda-orogastrica-ewald',
@@ -12098,6 +12128,12 @@ const List<Instrument> kInstruments = [
       en: 'A series of 252 gastric bypasses found intraoperative endoscopy reliable for reducing gastrojejunal leak rates; the Spanish Association of Surgeons has run basic intraoperative endoscopy training for bariatric surgeons since 2020.',
     ),
     isNew: true,
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Gastroscope.jpg',
+      license: 'CC BY-SA 3.0 (también GFDL 1.2+)',
+      attribution: 'Gilo1969, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Gastroscope.jpg',
+    ),
   ),
   Instrument(
     id: 'refuerzo-bioabsorbible-grapado',
