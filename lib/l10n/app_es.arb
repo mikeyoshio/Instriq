@@ -144,6 +144,7 @@
   "catalogSpecialtyOftalmologia": "Oftalmología",
   "catalogSpecialtyAnestesiologiaReanimacio": "Anestesiología y Reanimación",
   "catalogSpecialtyAndrologia": "Andrología",
+  "catalogSpecialtyCirugiaGeneral": "Cirugía General y del Aparato Digestivo",
   "instrumentsCount": "{count, plural, one {1 instrumento} other {{count} instrumentos}}",
   "@instrumentsCount": {"placeholders": {"count": {"type": "int"}}},
   "noResultsFilters": "Sin resultados con estos filtros",

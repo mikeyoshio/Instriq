@@ -52,6 +52,7 @@ const specialtyOrder = [
   'oftalmologia',
   'anestesiologiaReanimacio',
   'andrologia',
+  'cirugiaGeneral',
 ];
 const categoryOrder = [
   'corte',
