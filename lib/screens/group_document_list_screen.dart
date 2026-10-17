@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
@@ -36,6 +38,10 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
   String _query = '';
   bool _fromCache = false;
 
+  // Mismo criterio que CatalogPickerSheet: evita repetir el escaneo difuso
+  // en cada tecla dentro de build().
+  Timer? _liveSearchDebounce;
+
   String get _titlePlural {
     final l10n = AppLocalizations.of(context)!;
     return widget.kind == DocumentKind.technique ? l10n.techniquesTitle : l10n.protocolsTitle;
@@ -45,6 +51,12 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _liveSearchDebounce?.cancel();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -138,7 +150,13 @@ class _GroupDocumentListScreenState extends State<GroupDocumentListScreen> {
                 hintText: l10n.searchHint(_titlePlural).toLowerCase(),
                 border: const OutlineInputBorder(),
               ),
-              onChanged: (v) => setState(() => _query = v),
+              onChanged: (v) {
+                _liveSearchDebounce?.cancel();
+                _liveSearchDebounce = Timer(const Duration(milliseconds: 150), () {
+                  if (!mounted) return;
+                  setState(() => _query = v);
+                });
+              },
             ),
           ),
           Expanded(

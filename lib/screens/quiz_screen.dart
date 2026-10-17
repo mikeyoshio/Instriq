@@ -158,12 +158,19 @@ class _QuizScreenState extends State<QuizScreen> {
               ...question.options.map((option) {
                 final isSelected = _selected == option;
                 final isCorrect = option.id == question.answer.id;
+                // El color sol no basta -- un usuari daltònic (vermell-verd,
+                // la forma més comuna) no distingiria l'opció correcta de la
+                // incorrecta: s'afegeix una icona (✓/✗) com a senyal
+                // redundant, mai només el color.
                 Color? color;
+                IconData? icon;
                 if (_selected != null) {
                   if (isCorrect) {
                     color = Colors.green;
+                    icon = Icons.check_circle;
                   } else if (isSelected) {
                     color = Colors.red;
+                    icon = Icons.cancel;
                   }
                 }
                 return Padding(
@@ -174,9 +181,20 @@ class _QuizScreenState extends State<QuizScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () => _select(option),
-                    child: Text(
-                      option.name.forLanguageCode(Localizations.localeOf(context).languageCode),
-                      textAlign: TextAlign.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (icon != null) ...[
+                          Icon(icon, color: color, size: 20),
+                          const SizedBox(width: 8),
+                        ],
+                        Flexible(
+                          child: Text(
+                            option.name.forLanguageCode(Localizations.localeOf(context).languageCode),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );

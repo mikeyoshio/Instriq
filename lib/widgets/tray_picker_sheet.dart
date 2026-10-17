@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
@@ -23,10 +25,20 @@ class _TrayPickerSheetState extends State<TrayPickerSheet> {
   String _query = '';
   bool _loading = true;
 
+  // Mismo criterio que CatalogPickerSheet: evita repetir el escaneo difuso
+  // en cada tecla dentro de build().
+  Timer? _liveSearchDebounce;
+
   @override
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _liveSearchDebounce?.cancel();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -64,7 +76,13 @@ class _TrayPickerSheetState extends State<TrayPickerSheet> {
                   hintText: l10n.searchTrayHint,
                   border: const OutlineInputBorder(),
                 ),
-                onChanged: (v) => setState(() => _query = v),
+                onChanged: (v) {
+                  _liveSearchDebounce?.cancel();
+                  _liveSearchDebounce = Timer(const Duration(milliseconds: 150), () {
+                    if (!mounted) return;
+                    setState(() => _query = v);
+                  });
+                },
               ),
               const SizedBox(height: 12),
               Expanded(

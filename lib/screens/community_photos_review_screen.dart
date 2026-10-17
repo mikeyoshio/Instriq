@@ -147,12 +147,17 @@ class _CommunityPhotosReviewScreenState extends State<CommunityPhotosReviewScree
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child: CachedNetworkImage(
-                                      imageUrl: CatalogCommunityPhotoService.instance.getPublicUrl(photo.photoPath),
-                                      height: 160,
-                                      fit: BoxFit.contain,
-                                      errorWidget: (context, url, error) =>
-                                          const SizedBox(height: 160, child: Icon(Icons.broken_image_outlined)),
+                                    child: Semantics(
+                                      image: true,
+                                      label: '${photo.instrumentRefType} ${photo.instrumentRefId}',
+                                      child: CachedNetworkImage(
+                                        imageUrl: CatalogCommunityPhotoService.instance.getPublicUrl(photo.photoPath),
+                                        height: 160,
+                                        fit: BoxFit.contain,
+                                        memCacheHeight: (160 * MediaQuery.of(context).devicePixelRatio).round(),
+                                        errorWidget: (context, url, error) =>
+                                            const SizedBox(height: 160, child: Icon(Icons.broken_image_outlined)),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 8),

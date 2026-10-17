@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
@@ -75,6 +77,17 @@ class _CatalogScreenState extends State<CatalogScreen> {
   bool _newOnlyFilter = false;
   final Set<SutureMaterial> _materialFilters = {};
   Set<String> _approvedCommunityPhotoIds = {};
+
+  // Mismo criterio que home_screen.dart: sin este debounce, cada tecla
+  // repite un escaneo difuso síncrono de los 521 instrumentos del catálogo
+  // dentro de build().
+  Timer? _liveSearchDebounce;
+
+  @override
+  void dispose() {
+    _liveSearchDebounce?.cancel();
+    super.dispose();
+  }
 
   int get _activeFilterCount => _kind == _CatalogKind.instrumentos
       ? _categoryFilters.length + _specialtyFilters.length + (_newOnlyFilter ? 1 : 0)
@@ -278,7 +291,13 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   hintText: isInstruments ? l10n.catalogSearchHint : l10n.searchSutureHint,
                   border: const OutlineInputBorder(),
                 ),
-                onChanged: (v) => setState(() => _query = v),
+                onChanged: (v) {
+                  _liveSearchDebounce?.cancel();
+                  _liveSearchDebounce = Timer(const Duration(milliseconds: 150), () {
+                    if (!mounted) return;
+                    setState(() => _query = v);
+                  });
+                },
               ),
             ),
             Padding(

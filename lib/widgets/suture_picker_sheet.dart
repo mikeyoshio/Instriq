@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/sutures_data.dart';
@@ -18,6 +20,16 @@ class SuturePickerSheet extends StatefulWidget {
 
 class _SuturePickerSheetState extends State<SuturePickerSheet> {
   String _query = '';
+
+  // Mismo criterio que CatalogPickerSheet: evita repetir el escaneo difuso
+  // en cada tecla dentro de build().
+  Timer? _liveSearchDebounce;
+
+  @override
+  void dispose() {
+    _liveSearchDebounce?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,13 @@ class _SuturePickerSheetState extends State<SuturePickerSheet> {
                   hintText: l10n.searchSutureHint,
                   border: const OutlineInputBorder(),
                 ),
-                onChanged: (v) => setState(() => _query = v),
+                onChanged: (v) {
+                  _liveSearchDebounce?.cancel();
+                  _liveSearchDebounce = Timer(const Duration(milliseconds: 150), () {
+                    if (!mounted) return;
+                    setState(() => _query = v);
+                  });
+                },
               ),
               const SizedBox(height: 12),
               Expanded(

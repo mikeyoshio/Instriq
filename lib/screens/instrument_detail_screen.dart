@@ -634,10 +634,19 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
+              child: Semantics(
+                image: true,
+                label: instrument.name.forLanguageCode(Localizations.localeOf(context).languageCode),
+                child: CachedNetworkImage(
                 imageUrl: instrument.image!.url,
                 height: 200,
                 fit: BoxFit.contain,
+                // Limita la resolución de decodificación al tamaño real en
+                // pantalla (x el ratio de píxeles del dispositivo): sin esto,
+                // Flutter decodifica el bitmap remoto a su resolución
+                // completa en memoria solo para encogerlo visualmente a 200
+                // de alto -- coste real de CPU/memoria en según qué fotos.
+                memCacheHeight: (200 * MediaQuery.of(context).devicePixelRatio).round(),
                 placeholder: (context, url) => SizedBox(
                   height: 200,
                   child: Center(
@@ -646,6 +655,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                 ),
                 errorWidget: (context, url, error) =>
                     InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
+                ),
               ),
             ),
           ),
@@ -690,12 +700,16 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                imageUrl: CatalogCommunityPhotoService.instance.getPublicUrl(approved.photoPath),
-                height: 200,
-                fit: BoxFit.contain,
-                errorWidget: (context, url, error) =>
-                    InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
+              child: Semantics(
+                image: true,
+                label: instrument.name.forLanguageCode(Localizations.localeOf(context).languageCode),
+                child: CachedNetworkImage(
+                  imageUrl: CatalogCommunityPhotoService.instance.getPublicUrl(approved.photoPath),
+                  height: 200,
+                  fit: BoxFit.contain,
+                  errorWidget: (context, url, error) =>
+                      InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 120),
+                ),
               ),
             ),
           ),

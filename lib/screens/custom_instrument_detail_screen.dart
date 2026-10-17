@@ -1024,15 +1024,23 @@ class _VariantTile extends StatelessWidget {
                             child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
                           )
                         : (photoUrl != null
-                            ? CachedNetworkImage(
-                                imageUrl: photoUrl!,
-                                width: 72,
-                                height: 72,
-                                fit: BoxFit.cover,
-                                errorWidget: (_, __, ___) => const SizedBox(
+                            ? Semantics(
+                                image: true,
+                                label: variant.name,
+                                child: CachedNetworkImage(
+                                  imageUrl: photoUrl!,
                                   width: 72,
                                   height: 72,
-                                  child: Icon(Icons.broken_image_outlined),
+                                  fit: BoxFit.cover,
+                                  // Evita decodificar la foto remota a resolución
+                                  // completa solo para mostrar una miniatura de 72px.
+                                  memCacheWidth: (72 * MediaQuery.of(context).devicePixelRatio).round(),
+                                  memCacheHeight: (72 * MediaQuery.of(context).devicePixelRatio).round(),
+                                  errorWidget: (_, __, ___) => const SizedBox(
+                                    width: 72,
+                                    height: 72,
+                                    child: Icon(Icons.broken_image_outlined),
+                                  ),
                                 ),
                               )
                             : const SizedBox(

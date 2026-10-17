@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
@@ -26,10 +28,20 @@ class _CustomInstrumentsScreenState extends State<CustomInstrumentsScreen> {
   String? _error;
   String _query = '';
 
+  // Mismo criterio que CatalogPickerSheet: evita repetir el escaneo difuso
+  // en cada tecla dentro de build().
+  Timer? _liveSearchDebounce;
+
   @override
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _liveSearchDebounce?.cancel();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -105,7 +117,13 @@ class _CustomInstrumentsScreenState extends State<CustomInstrumentsScreen> {
                 hintText: l10n.customInstrumentNameLabel,
                 border: const OutlineInputBorder(),
               ),
-              onChanged: (v) => setState(() => _query = v),
+              onChanged: (v) {
+                _liveSearchDebounce?.cancel();
+                _liveSearchDebounce = Timer(const Duration(milliseconds: 150), () {
+                  if (!mounted) return;
+                  setState(() => _query = v);
+                });
+              },
             ),
           ),
           Expanded(

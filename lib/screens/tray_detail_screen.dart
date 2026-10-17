@@ -549,7 +549,20 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                           if (url == null) return const SizedBox(width: 120, height: 120);
                           return ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(imageUrl: url, width: 120, height: 120, fit: BoxFit.cover),
+                            child: Semantics(
+                              image: true,
+                              label: '${l10n.trayPhotosLabel} ${index + 1}',
+                              child: CachedNetworkImage(
+                                imageUrl: url,
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.cover,
+                                // Evita decodificar la foto remota a resolución
+                                // completa solo para mostrar una miniatura de 120px.
+                                memCacheWidth: (120 * MediaQuery.of(context).devicePixelRatio).round(),
+                                memCacheHeight: (120 * MediaQuery.of(context).devicePixelRatio).round(),
+                              ),
+                            ),
                           );
                         },
                       ),

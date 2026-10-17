@@ -49,18 +49,26 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
               Text(l10n.reviewSessionBoxLabel(box), style: Theme.of(context).textTheme.bodySmall),
               const SizedBox(height: 16),
               Expanded(
-                child: GestureDetector(
-                  onTap: () => setState(() => _showBack = !_showBack),
+                // Semantics + InkWell en vez de un GestureDetector pelado:
+                // así el volteo de la targeta és accessible per teclat (Tab +
+                // Intro/Espai) i té un label parlat per a lector de pantalla,
+                // no només el text germà de sota.
+                child: Semantics(
+                  button: true,
+                  label: _showBack ? l10n.tapToSeeName : l10n.tapCardToSeeDetail,
                   child: Card(
                     elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Center(
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 250),
-                          child: _showBack
-                              ? _ReviewCardBack(key: const ValueKey('back'), instrument: instrument)
-                              : _ReviewCardFront(key: const ValueKey('front'), instrument: instrument),
+                    child: InkWell(
+                      onTap: () => setState(() => _showBack = !_showBack),
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Center(
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 250),
+                            child: _showBack
+                                ? _ReviewCardBack(key: const ValueKey('back'), instrument: instrument)
+                                : _ReviewCardFront(key: const ValueKey('front'), instrument: instrument),
+                          ),
                         ),
                       ),
                     ),

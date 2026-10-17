@@ -142,9 +142,13 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
                         Text(l10n.actualQtyLabel, style: const TextStyle(color: _textPrimary, fontSize: 15)),
                         Row(
                           children: [
-                            _StepperButton(icon: Icons.remove, onTap: () => setSheetState(() {
-                              if (qty > 0) qty--;
-                            })),
+                            _StepperButton(
+                              icon: Icons.remove,
+                              semanticLabel: l10n.orModeDecreaseQty,
+                              onTap: () => setSheetState(() {
+                                if (qty > 0) qty--;
+                              }),
+                            ),
                             SizedBox(
                               width: 40,
                               child: Center(
@@ -159,7 +163,11 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
                                 ),
                               ),
                             ),
-                            _StepperButton(icon: Icons.add, onTap: () => setSheetState(() => qty++)),
+                            _StepperButton(
+                              icon: Icons.add,
+                              semanticLabel: l10n.orModeIncreaseQty,
+                              onTap: () => setSheetState(() => qty++),
+                            ),
                           ],
                         ),
                       ],
@@ -448,20 +456,34 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
                   ),
                 ),
                 const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () => _openExceptionSheet(draft),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: exception ? const Color(0xFF4A3416) : _track,
+                // Semantics + Material/InkWell en vez de un GestureDetector
+                // pelado (mismo criterio que _HoldToExitControl, más abajo en
+                // este archivo, tras detectar en dispositiu real que
+                // TalkBack/VoiceOver no anunciaven res aquí): accessible per
+                // lector de pantalla, i padding ampliat per superar els ~44px
+                // mínims de zona tàctil.
+                Semantics(
+                  button: true,
+                  label: l10n.orModeReportIssueTooltip,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
                       borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      badgeText,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: exception ? _warnAccent : const Color(0xFFCBD5D0),
+                      onTap: () => _openExceptionSheet(draft),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+                        decoration: BoxDecoration(
+                          color: exception ? const Color(0xFF4A3416) : _track,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          badgeText,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: exception ? _warnAccent : const Color(0xFFCBD5D0),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -478,20 +500,27 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
 class _StepperButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
+  final String semanticLabel;
 
-  const _StepperButton({required this.icon, required this.onTap});
+  const _StepperButton({required this.icon, required this.onTap, required this.semanticLabel});
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: _track,
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 18, color: _textPrimary),
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: Material(
+        color: _track,
+        shape: const CircleBorder(),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onTap,
+          // 13px -> ~44px de diàmetre total amb la icona de 18px, per sobre
+          // del mínim de zona tàctil recomanat.
+          child: Padding(
+            padding: const EdgeInsets.all(13),
+            child: Icon(icon, size: 18, color: _textPrimary),
+          ),
         ),
       ),
     );

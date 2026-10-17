@@ -177,10 +177,14 @@ class PublicEntityDetailScreen extends StatelessWidget {
         Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-              imageUrl: PublicInstrumentService.instance.photoUrl(version.photoPath!),
-              height: 220,
-              fit: BoxFit.contain,
+            child: Semantics(
+              image: true,
+              label: version.name,
+              child: CachedNetworkImage(
+                imageUrl: PublicInstrumentService.instance.photoUrl(version.photoPath!),
+                height: 220,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ),

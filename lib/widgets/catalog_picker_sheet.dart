@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
@@ -18,6 +20,16 @@ class CatalogPickerSheet extends StatefulWidget {
 
 class _CatalogPickerSheetState extends State<CatalogPickerSheet> {
   String _query = '';
+
+  // Sin debounce, cada tecla repite un escaneo difuso síncrono de los 521
+  // instrumentos del catálogo dentro de build().
+  Timer? _liveSearchDebounce;
+
+  @override
+  void dispose() {
+    _liveSearchDebounce?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,13 @@ class _CatalogPickerSheetState extends State<CatalogPickerSheet> {
                   hintText: l10n.searchInstrumentHint,
                   border: const OutlineInputBorder(),
                 ),
-                onChanged: (v) => setState(() => _query = v),
+                onChanged: (v) {
+                  _liveSearchDebounce?.cancel();
+                  _liveSearchDebounce = Timer(const Duration(milliseconds: 150), () {
+                    if (!mounted) return;
+                    setState(() => _query = v);
+                  });
+                },
               ),
               const SizedBox(height: 12),
               Expanded(

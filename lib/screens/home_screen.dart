@@ -656,126 +656,117 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    return ListView(
-      padding: const EdgeInsets.all(InstriqSpacing.lg),
-      children: [
-        if (results.instruments.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.homeSectionInstruments),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final instrument in results.instruments) ...[
-            InstriqListItem(
+    // ListView.builder en vez de ListView(children: [...]): con una query
+    // amplia (p. ex. una sola lletra) els resultats sumats de les 9
+    // categories poden ser desenes d'ítems -- construir-los tots de cop en
+    // comptes de perezosament en fer scroll era un cost evitable.
+    final rows = <Widget Function()>[];
+    void addSection(String title, Iterable<Widget Function()> items) {
+      if (items.isEmpty) return;
+      rows.add(() => InstriqSectionHeader(title));
+      rows.add(() => const SizedBox(height: InstriqSpacing.sm));
+      for (final build in items) {
+        rows.add(build);
+        rows.add(() => const SizedBox(height: InstriqSpacing.sm));
+      }
+      rows.add(() => const SizedBox(height: InstriqSpacing.md));
+    }
+
+    addSection(
+      l10n.homeSectionInstruments,
+      results.instruments.map(
+        (instrument) => () => InstriqListItem(
               icon: Icons.build_outlined,
               title: instrument.name.forLanguageCode(languageCode),
               onTap: () => _openInstrument(instrument),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-          const SizedBox(height: InstriqSpacing.md),
-        ],
-        if (results.techniques.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.homeSectionTechniques),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final doc in results.techniques) ...[
-            InstriqListItem(
+      ),
+    );
+    addSection(
+      l10n.homeSectionTechniques,
+      results.techniques.map(
+        (doc) => () => InstriqListItem(
               icon: Icons.menu_book_outlined,
               title: doc.publishedVersion?.title ?? l10n.unpublished,
               onTap: () => _openGroupDocument(doc),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-          const SizedBox(height: InstriqSpacing.md),
-        ],
-        if (results.protocols.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.homeSectionProtocols),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final doc in results.protocols) ...[
-            InstriqListItem(
+      ),
+    );
+    addSection(
+      l10n.homeSectionProtocols,
+      results.protocols.map(
+        (doc) => () => InstriqListItem(
               icon: Icons.fact_check_outlined,
               title: doc.publishedVersion?.title ?? l10n.unpublished,
               onTap: () => _openGroupDocument(doc),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-          const SizedBox(height: InstriqSpacing.md),
-        ],
-        if (results.trays.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.homeSectionTrays),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final tray in results.trays) ...[
-            InstriqListItem(
+      ),
+    );
+    addSection(
+      l10n.homeSectionTrays,
+      results.trays.map(
+        (tray) => () => InstriqListItem(
               icon: Icons.inventory_2_outlined,
               title: tray.publishedVersion?.name ?? l10n.unpublished,
               onTap: () => _openTray(tray),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-          const SizedBox(height: InstriqSpacing.md),
-        ],
-        if (results.customInstruments.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.homeSectionCustomInstruments),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final instrument in results.customInstruments) ...[
-            InstriqListItem(
+      ),
+    );
+    addSection(
+      l10n.homeSectionCustomInstruments,
+      results.customInstruments.map(
+        (instrument) => () => InstriqListItem(
               icon: Icons.precision_manufacturing_outlined,
               title: instrument.name,
               onTap: () => _openCustomInstrument(instrument),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-          const SizedBox(height: InstriqSpacing.md),
-        ],
-        if (results.publicInstruments.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.publicLibraryTitle),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final instrument in results.publicInstruments) ...[
-            InstriqListItem(
+      ),
+    );
+    addSection(
+      l10n.publicLibraryTitle,
+      results.publicInstruments.map(
+        (instrument) => () => InstriqListItem(
               icon: Icons.precision_manufacturing_outlined,
               title: instrument.publishedVersion?.name ?? l10n.unpublished,
               onTap: () => _openPublicInstrument(instrument),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-          const SizedBox(height: InstriqSpacing.md),
-        ],
-        if (results.manufacturers.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.homeSectionManufacturers),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final manufacturer in results.manufacturers) ...[
-            InstriqListItem(
+      ),
+    );
+    addSection(
+      l10n.homeSectionManufacturers,
+      results.manufacturers.map(
+        (manufacturer) => () => InstriqListItem(
               icon: Icons.precision_manufacturing_outlined,
               title: manufacturer.name,
               onTap: () => _openManufacturer(manufacturer),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-          const SizedBox(height: InstriqSpacing.md),
-        ],
-        if (results.surgeons.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.homeSectionSurgeons),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final surgeon in results.surgeons) ...[
-            InstriqListItem(
+      ),
+    );
+    addSection(
+      l10n.homeSectionSurgeons,
+      results.surgeons.map(
+        (surgeon) => () => InstriqListItem(
               icon: Icons.person_outline,
               title: surgeon.name,
               onTap: () => _openSurgeon(surgeon),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-          const SizedBox(height: InstriqSpacing.md),
-        ],
-        if (results.tags.isNotEmpty) ...[
-          InstriqSectionHeader(l10n.homeSectionTags),
-          const SizedBox(height: InstriqSpacing.sm),
-          for (final tag in results.tags) ...[
-            InstriqListItem(
+      ),
+    );
+    addSection(
+      l10n.homeSectionTags,
+      results.tags.map(
+        (tag) => () => InstriqListItem(
               icon: Icons.label_outline,
               title: tag.name,
               onTap: () => _openTag(tag),
             ),
-            const SizedBox(height: InstriqSpacing.sm),
-          ],
-        ],
-      ],
+      ),
+    );
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(InstriqSpacing.lg),
+      itemCount: rows.length,
+      itemBuilder: (context, index) => rows[index](),
     );
   }
 

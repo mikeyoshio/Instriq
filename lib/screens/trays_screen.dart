@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
@@ -30,10 +32,20 @@ class _TraysScreenState extends State<TraysScreen> {
   String _query = '';
   bool _fromCache = false;
 
+  // Mismo criterio que CatalogPickerSheet: evita repetir el escaneo difuso
+  // en cada tecla dentro de build().
+  Timer? _liveSearchDebounce;
+
   @override
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _liveSearchDebounce?.cancel();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -126,7 +138,13 @@ class _TraysScreenState extends State<TraysScreen> {
                 hintText: l10n.searchHint(l10n.traysTitle).toLowerCase(),
                 border: const OutlineInputBorder(),
               ),
-              onChanged: (v) => setState(() => _query = v),
+              onChanged: (v) {
+                _liveSearchDebounce?.cancel();
+                _liveSearchDebounce = Timer(const Duration(milliseconds: 150), () {
+                  if (!mounted) return;
+                  setState(() => _query = v);
+                });
+              },
             ),
           ),
           Expanded(

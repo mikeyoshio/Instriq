@@ -143,13 +143,22 @@ class InstriqAutosaveIndicator extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: status == InstriqAutosaveStatus.dirty ? 8 : 15, color: color),
-            const SizedBox(width: 6),
-            Text(label, style: theme.textTheme.bodySmall?.copyWith(color: color)),
-          ],
+        // liveRegion: true solo reanuncia quan el label canvia realment
+        // (p. ex. de "guardant" a "guardat"), no a cada rebuild amb el
+        // mateix estat -- sense això, un usuari de lector de pantalla no
+        // s'assabentava que l'autoguardat havia acabat o fallat si no
+        // navegava manualment fins a l'AppBar.
+        child: Semantics(
+          liveRegion: true,
+          label: label,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: status == InstriqAutosaveStatus.dirty ? 8 : 15, color: color),
+              const SizedBox(width: 6),
+              Text(label, style: theme.textTheme.bodySmall?.copyWith(color: color)),
+            ],
+          ),
         ),
       ),
     );
