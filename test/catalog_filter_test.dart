@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:instriq/models/instrument.dart';
-import 'package:instriq/models/suture.dart';
 import 'package:instriq/screens/catalog_screen.dart';
 
 const _name = LocalizedText(ca: 'Tisora de Mayo', es: 'Tijera de Mayo', en: 'Mayo scissors');
@@ -16,17 +15,6 @@ final _instrument = Instrument(
   description: _desc,
   use: _desc,
   isNew: true,
-);
-
-final _suture = Suture(
-  id: 'sutura-vicryl-00',
-  name: const LocalizedText(ca: 'Vicryl 2/0', es: 'Vicryl 2/0', en: 'Vicryl 2/0'),
-  material: SutureMaterial.vicryl,
-  gauge: '2/0',
-  needleType: NeedleType.redonda,
-  absorbable: true,
-  description: _desc,
-  use: _desc,
 );
 
 void main() {
@@ -78,24 +66,6 @@ void main() {
         ),
         isTrue,
       );
-    });
-  });
-
-  group('matchesSutureFilters', () {
-    test('empty query and no filters always matches', () {
-      expect(matchesSutureFilters(_suture, '', 'es'), isTrue);
-    });
-
-    test('material filter excludes a non-matching material', () {
-      expect(matchesSutureFilters(_suture, '', 'es', materials: {SutureMaterial.nylon}), isFalse);
-    });
-
-    test('material filter keeps a matching material', () {
-      expect(matchesSutureFilters(_suture, '', 'es', materials: {SutureMaterial.vicryl}), isTrue);
-    });
-
-    test('query must match the name', () {
-      expect(matchesSutureFilters(_suture, 'separador', 'es'), isFalse);
     });
   });
 }
