@@ -812,6 +812,9 @@
 
   "manageTeamsTitle": "Teams",
   "manageTeamsSubtitle": "Assign workspace roles to whole teams at once",
+  "socialMediaSectionHeader": "Social media",
+  "socialTwitterTitle": "X (Twitter)",
+  "socialInstagramTitle": "Instagram",
   "teamsSectionHeader": "Teams",
   "newTeamLabel": "New team",
   "teamNameLabel": "Team name",

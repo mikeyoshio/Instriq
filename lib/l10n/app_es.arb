@@ -812,6 +812,9 @@
 
   "manageTeamsTitle": "Equipos",
   "manageTeamsSubtitle": "Asigna roles de espacio a equipos enteros de una vez",
+  "socialMediaSectionHeader": "Redes sociales",
+  "socialTwitterTitle": "X (Twitter)",
+  "socialInstagramTitle": "Instagram",
   "teamsSectionHeader": "Equipos",
   "newTeamLabel": "Nuevo equipo",
   "teamNameLabel": "Nombre del equipo",
