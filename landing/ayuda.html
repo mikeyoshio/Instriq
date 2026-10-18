@@ -7,15 +7,15 @@
 <meta name="theme-color" content="#16191a" media="(prefers-color-scheme: dark)">
 <title data-i18n="meta.title">Centre d'ajuda — Instriq</title>
 <meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Guies pas a pas, amb captures reals, per treure profit d'Instriq: catàleg, biblioteca pública i primers passos.">
-<link rel="canonical" href="https://instriq.org/ayuda.html" id="canonicalLink">
-<link rel="alternate" hreflang="ca" href="https://instriq.org/ayuda.html">
-<link rel="alternate" hreflang="es" href="https://instriq.org/ayuda.html?lang=es">
-<link rel="alternate" hreflang="en" href="https://instriq.org/ayuda.html?lang=en">
-<link rel="alternate" hreflang="x-default" href="https://instriq.org/ayuda.html">
+<link rel="canonical" href="https://instriq.org/ayuda" id="canonicalLink">
+<link rel="alternate" hreflang="ca" href="https://instriq.org/ayuda">
+<link rel="alternate" hreflang="es" href="https://instriq.org/ayuda?lang=es">
+<link rel="alternate" hreflang="en" href="https://instriq.org/ayuda?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://instriq.org/ayuda">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://instriq.org/ayuda.html">
+<meta property="og:url" content="https://instriq.org/ayuda">
 <meta property="og:site_name" content="Instriq">
 <meta property="og:title" data-i18n-attr="content" data-i18n="meta.title" content="Centre d'ajuda — Instriq">
 <meta property="og:description" data-i18n-attr="content" data-i18n="meta.description" content="Guies pas a pas, amb captures reals, per treure profit d'Instriq: catàleg, biblioteca pública i primers passos.">
@@ -628,7 +628,7 @@
       b.classList.toggle('active', isActive);
       b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
-    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/ayuda.html' : 'https://instriq.org/ayuda.html?lang=' + lang;
+    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/ayuda' : 'https://instriq.org/ayuda?lang=' + lang;
     var canonicalEl = document.getElementById('canonicalLink');
     if (canonicalEl) canonicalEl.setAttribute('href', canonicalUrl);
     try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
