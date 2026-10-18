@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../design_system/components/instriq_list_item.dart';
 import '../design_system/components/instriq_responsive_content.dart';
@@ -397,6 +398,30 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                     onTap: _openManageTeams,
                   ),
               ],
+              const SizedBox(height: InstriqSpacing.xl),
+              InstriqSectionHeader(l10n.socialMediaSectionHeader),
+              const SizedBox(height: InstriqSpacing.md),
+              InstriqListItem(
+                icon: Icons.alternate_email,
+                title: l10n.socialTwitterTitle,
+                subtitle: '@instriq_org',
+                trailing: const Icon(Icons.open_in_new),
+                onTap: () => launchUrl(
+                  Uri.parse('https://x.com/instriq_org'),
+                  mode: LaunchMode.externalApplication,
+                ),
+              ),
+              const SizedBox(height: InstriqSpacing.sm),
+              InstriqListItem(
+                icon: Icons.camera_alt_outlined,
+                title: l10n.socialInstagramTitle,
+                subtitle: '@instriq_org',
+                trailing: const Icon(Icons.open_in_new),
+                onTap: () => launchUrl(
+                  Uri.parse('https://www.instagram.com/instriq_org/'),
+                  mode: LaunchMode.externalApplication,
+                ),
+              ),
               const SizedBox(height: InstriqSpacing.xl),
               const Center(child: _VersionEasterEgg()),
             ],
