@@ -6,6 +6,8 @@ Plataforma professional de coneixement col·laboratiu per al bloc quirúrgic (Fl
 
 L'ús bàsic (catàleg, flashcards, quiz, progrés) **no requereix compte**. Només cal iniciar sessió si vols unir-te o crear l'espai compartit del teu grup.
 
+**[Obre l'app](https://app.instriq.org)** · **[Web i Vademècum públic](https://instriq.org)** · [Novetats](https://instriq.org/novedades) · [Suggeriments](https://instriq.org/sugerencias)
+
 ## Captures
 
 | Entrada al grup | Catàleg | Detall | Flashcards |
