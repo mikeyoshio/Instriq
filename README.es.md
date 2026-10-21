@@ -6,6 +6,8 @@ Plataforma profesional de conocimiento colaborativo para el bloque quirúrgico (
 
 El uso básico (catálogo, flashcards, quiz, progreso) **no requiere cuenta**. Solo hace falta iniciar sesión si quieres unirte o crear el espacio compartido de tu grupo.
 
+**[Abre la app](https://app.instriq.org)** · **[Web y Vademécum público](https://instriq.org)** · [Novedades](https://instriq.org/novedades) · [Sugerencias](https://instriq.org/sugerencias)
+
 ## Capturas
 
 | Entrada al grupo | Catálogo | Detalle | Flashcards |

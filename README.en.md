@@ -6,6 +6,8 @@ Professional platform for collaborative knowledge in the operating room (Flutter
 
 Basic use (catalog, flashcards, quiz, progress) **does not require an account**. You only need to sign in if you want to join or create your group's shared workspace.
 
+**[Open the app](https://app.instriq.org)** · **[Website and public Vademecum](https://instriq.org)** · [Updates](https://instriq.org/novedades) · [Suggestions](https://instriq.org/sugerencias)
+
 ## Screenshots
 
 | Group entry | Catalog | Detail | Flashcards |
