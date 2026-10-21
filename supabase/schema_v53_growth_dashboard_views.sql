@@ -14,22 +14,28 @@
 
 create or replace view v_user_signups_weekly as
 select
-  date_trunc('week', created_at)::date as week_start,
-  count(*)::int as new_users,
-  sum(count(*)) over (order by date_trunc('week', created_at))::int as cumulative_users
-from profiles
-group by 1
-order by 1;
+  week_start,
+  new_users,
+  sum(new_users) over (order by week_start)::int as cumulative_users
+from (
+  select date_trunc('week', created_at)::date as week_start, count(*)::int as new_users
+  from profiles
+  group by 1
+) t
+order by week_start;
 
 create or replace view v_organization_growth_weekly as
 select
-  date_trunc('week', created_at)::date as week_start,
-  count(*)::int as new_organizations,
-  sum(count(*)) over (order by date_trunc('week', created_at))::int as cumulative_organizations
-from organizations
-where name !~* '(demo|test|qa|prova|prueba)'
-group by 1
-order by 1;
+  week_start,
+  new_organizations,
+  sum(new_organizations) over (order by week_start)::int as cumulative_organizations
+from (
+  select date_trunc('week', created_at)::date as week_start, count(*)::int as new_organizations
+  from organizations
+  where name !~* '(demo|test|qa|prova|prueba)'
+  group by 1
+) t
+order by week_start;
 
 create or replace view v_active_users_daily as
 select
