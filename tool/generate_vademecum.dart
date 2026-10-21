@@ -88,6 +88,20 @@ String htmlEscape(String s) {
 
 String attrEscape(String s) => htmlEscape(s).replaceAll('"', '&quot;');
 
+/// Retalla per a `<meta name="description">`/`og:description`: Google trunca
+/// (o reescriu) els snippets per sobre d'uns ~155-160 caràcters, de manera
+/// que un text més llarg no es perd, simplement deixa de ser el que s'hi va
+/// escriure a mà. Mai talla al mig d'una paraula; afegeix "..." nomes quan
+/// de debo talla. El cos de la pagina i el JSON-LD fan servir sempre el text
+/// complet -- aixo nomes afecta la metadada.
+String metaDescription(String s, {int maxLength = 155}) {
+  if (s.length <= maxLength) return s;
+  final cut = s.substring(0, maxLength);
+  final lastSpace = cut.lastIndexOf(' ');
+  final trimmed = lastSpace > 0 ? cut.substring(0, lastSpace) : cut;
+  return '$trimmed...';
+}
+
 /// camelCase enum name -> kebab-case slug (anestesiologiaReanimacio -> anestesiologia-reanimacio)
 String kebab(String enumName) {
   final buf = StringBuffer();
@@ -764,7 +778,7 @@ String _renderInstrumentPage({
   return _pageShell(
     lang: lang,
     title: '$name · ${t('siteTitle', lang)}',
-    description: desc,
+    description: metaDescription(desc),
     canonicalPath: '/vademecum/$lang/${instr.id}/',
     hreflangPaths: hreflangPaths,
     crumbsHtml: crumbs,
@@ -913,6 +927,13 @@ const _methodologyBody = <String, String>{
 String _renderMethodologyPage(String lang) {
   final hreflangPaths = {for (final l in languages) l: '/vademecum/$l/metodologia/'};
   final crumbs = '<a href="$_htmlLangBase/vademecum/$lang/">${htmlEscape(t('siteTitle', lang))}</a> &rsaquo; ${htmlEscape(t('methodologyTitle', lang))}';
+  final jsonLd = jsonEncode({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    'inLanguage': lang,
+    'name': t('methodologyTitle', lang),
+    'url': '$_htmlLangBase/vademecum/$lang/metodologia/',
+  });
   return _pageShell(
     lang: lang,
     title: '${t('methodologyTitle', lang)} · ${t('siteTitle', lang)}',
@@ -921,6 +942,7 @@ String _renderMethodologyPage(String lang) {
     hreflangPaths: hreflangPaths,
     crumbsHtml: crumbs,
     bodyHtml: _methodologyBody[lang]!,
+    jsonLd: jsonLd,
   );
 }
 
@@ -1050,6 +1072,34 @@ Future<void> main() async {
   for (final i in instruments) {
     bySpecialty.putIfAbsent(i.specialty, () => []).add(i);
   }
+
+  // Esborra pagines orfes d'instruments ja eliminats del catalog (p. ex. les
+  // 8 sutures genèriques retirades al commit 812a26e): sense aquest pas, el
+  // seu directori queda viu per sempre a landing/vademecum/{lang}/<id>/,
+  // fora del sitemap i sense cap enllaç intern, pero encara publicat i
+  // indexable -- contingut obsolet que cap ronda de generacio posterior
+  // arreglava sola.
+  stdout.writeln('Pruning stale pages...');
+  final validSlugs = <String>{
+    for (final i in instruments) i.id,
+    for (final spec in specialtyOrder) kebab(spec),
+    'metodologia',
+  };
+  var prunedCount = 0;
+  for (final lang in languages) {
+    final langDir = Directory('${vademecumDir.path}/$lang');
+    if (!langDir.existsSync()) continue;
+    for (final entry in langDir.listSync()) {
+      if (entry is! Directory) continue;
+      final slug = entry.uri.pathSegments.where((s) => s.isNotEmpty).last;
+      if (!validSlugs.contains(slug)) {
+        entry.deleteSync(recursive: true);
+        prunedCount++;
+        stdout.writeln('  removed stale: $lang/$slug/');
+      }
+    }
+  }
+  if (prunedCount > 0) stdout.writeln('Pruned $prunedCount stale page(s).');
 
   final sitemapPaths = <String>[];
   var pageCount = 0;
