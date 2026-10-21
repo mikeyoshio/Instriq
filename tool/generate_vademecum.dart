@@ -588,6 +588,7 @@ $hreflangTags<link rel="icon" type="image/png" href="$_htmlLangBase/favicon.png"
 <meta property="og:title" content="${attrEscape(title)}">
 <meta property="og:description" content="${attrEscape(description)}">
 ${jsonLd != null ? '<script type="application/ld+json">\n$jsonLd\n</script>\n' : ''}<link rel="stylesheet" href="$_htmlLangBase/vademecum/assets/vademecum.css">
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c09082e3f96f44b59922839da897dcab"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
 <header class="site">
