@@ -14328,4 +14328,86 @@ const List<Instrument> kInstruments = [
     ),
     isNew: true,
   ),
+  // ---- RONDA: promechi.com ----
+  Instrument(
+    id: 'pinza-clips-michel',
+    name: LocalizedText(ca: 'Pinça de clips de Michel', es: 'Pinza de clips de Michel', en: 'Michel clip forceps'),
+    category: InstrumentCategory.sutura,
+    aliases: ['Michel clip applying and removing forceps', 'pinza de grapas de Michel', 'Michel clip remover'],
+    icon: 'needle',
+    description: LocalizedText(
+      ca: 'Pinça de branques no bloquejables amb mandíbules dentades estretes, dissenyada per aplicar i retirar els clips de Michel, unes grapes metàl·liques planes en forma de U que tanquen la pell.',
+      es: 'Pinza de ramas no bloqueables con mandíbulas dentadas estrechas, diseñada para aplicar y retirar los clips de Michel, unas grapas metálicas planas en forma de U que cierran la piel.',
+      en: 'Non-locking plier-type forceps with narrow, toothed jaws, designed to apply and remove Michel clips, flat U-shaped metal skin staples used to close a wound.',
+    ),
+    use: LocalizedText(
+      ca: 'Tancament i retirada de ferides cutànies superficials amb clips de Michel, una alternativa més antiga i reutilitzable a les grapadores de pell d\'un sol ús; la mateixa pinça serveix per col·locar-los i, dies o setmanes després, per aixecar-los i extreure\'ls.',
+      es: 'Cierre y retirada de heridas cutáneas superficiales con clips de Michel, una alternativa más antigua y reutilizable a las grapadoras de piel de un solo uso; la misma pinza sirve para colocarlos y, días o semanas después, para levantarlos y extraerlos.',
+      en: 'Closing and removing superficial skin wounds with Michel clips, an older, reusable alternative to single-use skin staplers; the same forceps apply the clips and, days or weeks later, lift and extract them.',
+    ),
+    tip: LocalizedText(
+      ca: 'Els clips de Michel són un sistema diferent i reutilitzable del de les grapadores de pell d\'un sol ús: el clip és una peça metàl·lica plana independent, i retirar-lo requereix aquest extractor específic, no un llevagrapes genèric.',
+      es: 'Los clips de Michel son un sistema distinto y reutilizable del de las grapadoras de piel de un solo uso: el clip es una pieza metálica plana independiente, y su retirada requiere este extractor específico, no un quitagrapas genérico.',
+      en: 'Michel clips are a distinct, reusable system from disposable spring-loaded skin staplers: the clip is a separate flat metal piece, and removing it needs this dedicated extractor, not a generic staple remover.',
+    ),
+    isNew: true,
+  ),
+  Instrument(
+    id: 'corta-anillos',
+    name: LocalizedText(ca: 'Tallador d\'anells d\'urgència', es: 'Corta-anillos de urgencia', en: 'Emergency ring cutter'),
+    category: InstrumentCategory.corte,
+    aliases: ['Ring cutter', 'Esslinger ring cutter', 'tijera corta-anillos', 'sierra corta-anillos'],
+    icon: 'cut',
+    description: LocalizedText(
+      ca: 'Instrument tipus tenalla amb una roda o fulla dentada petita i una guia plana que es passa per sota de l\'anell per protegir el dit, de manera que la roda només talla el metall de l\'anell.',
+      es: 'Instrumento tipo tenaza con una rueda o cuchilla dentada pequeña y una guía plana que se desliza bajo el anillo para proteger el dedo, de modo que la rueda solo corta el metal del anillo.',
+      en: 'A plier-type instrument with a small notched wheel or blade and a flat guide that slides under the ring to shield the finger, so the wheel cuts only the ring\'s metal.',
+    ),
+    use: LocalizedText(
+      ca: 'Retirada urgent d\'un anell encastat en un dit edematós o lesionat (traumatisme, picada, embaràs, reacció al·lèrgica) quan no es pot lliscar; un cop seccionat, l\'anell s\'obre amb la mateixa eina o amb una pinça i es retira sense lesionar el dit.',
+      es: 'Retirada urgente de un anillo encastrado en un dedo edematoso o lesionado (traumatismo, picadura, embarazo, reacción alérgica) cuando no puede deslizarse; una vez seccionado, el anillo se abre con la misma herramienta o con una pinza y se retira sin lesionar el dedo.',
+      en: 'Urgent removal of a ring trapped on a swollen or injured finger (trauma, insect sting, pregnancy, allergic reaction) when it cannot be slid off; once cut through, the ring is pried open with the same tool or pliers and removed without injuring the finger.',
+    ),
+    tip: LocalizedText(
+      ca: 'Funciona bé amb or o plata, però talla malament metalls durs com el titani, el tungstè o l\'acer inoxidable gruixut; els anells de ceràmica o tungstè sovint cal trencar-los amb unes alicates de pressió en lloc de serrar-los.',
+      es: 'Funciona bien con oro o plata, pero corta mal metales duros como el titanio, el tungsteno o el acero inoxidable grueso; los anillos de cerámica o tungsteno suelen requerir romperlos con unos alicates de presión en lugar de serrarlos.',
+      en: 'Works well on gold or silver but cuts poorly through hard metals like titanium, tungsten or thick stainless steel; tungsten or ceramic rings usually need to be cracked with locking pliers instead of sawed through.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Finger_ring_cutter.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Sinikka Halme (Simiha), Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Finger_ring_cutter.jpg',
+    ),
+    isNew: true,
+  ),
+  Instrument(
+    id: 'tijera-vendajes-lister',
+    name: LocalizedText(ca: 'Tisora de vendatges de Lister', es: 'Tijera de vendajes de Lister', en: 'Lister bandage scissors'),
+    category: InstrumentCategory.corte,
+    aliases: ['Lister scissors', 'Lister dressing scissors', 'tijera de Lister'],
+    icon: 'cut',
+    description: LocalizedText(
+      ca: 'Tisora robusta amb un angle entre les fulles i el mànec, i la fulla inferior allargada i de punta roma, que es llisca per sota d\'un embenat o apòsit sense contactar amb la pell.',
+      es: 'Tijera robusta con un ángulo entre las hojas y el mango, y la hoja inferior alargada y de punta roma, que se desliza por debajo de un vendaje o apósito sin contactar con la piel.',
+      en: 'A sturdy scissors with an angled blade and an elongated, blunt-tipped lower blade that slides underneath a bandage or dressing without touching the skin.',
+    ),
+    use: LocalizedText(
+      ca: 'Retirada d\'embenats, benes i apòsits a planta, urgències i consultes externes: la punta roma s\'introdueix de pla sota el vendatge i l\'angle de la fulla manté el mànec allunyat de la zona, permetent tallar al llarg sense risc de ferir el pacient.',
+      es: 'Retirada de vendajes, vendas y apósitos en planta, urgencias y consultas externas: la punta roma se introduce de plano bajo el vendaje y el ángulo de la hoja mantiene el mango alejado de la zona, permitiendo cortar a lo largo sin riesgo de herir al paciente.',
+      en: 'Removing bandages, wraps and dressings on the ward, in the emergency department and in outpatient clinics: the blunt tip slides flat under the bandage, and the blade\'s angle keeps the handle clear of the area, allowing a long cut with no risk of cutting the patient.',
+    ),
+    tip: LocalizedText(
+      ca: 'No s\'ha de confondre amb la tisora de Littauer ni amb la serra oscil·lant de guixos ja catalogades: la de Lister talla benes i apòsits tous, no fils de sutura ni guix rígid o fibra de vidre.',
+      es: 'No debe confundirse con la tijera de Littauer ni con la sierra oscilante de yesos ya catalogadas: la de Lister corta vendas y apósitos blandos, no hilos de sutura ni yeso rígido o fibra de vidrio.',
+      en: 'Not to be confused with the already-catalogued Littauer scissors or the oscillating cast saw: the Lister cuts soft bandages and dressings, not suture thread or rigid plaster/fiberglass casts.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bandage_Scissors.JPG',
+      license: 'CC0 1.0',
+      attribution: 'Saltanat ebli, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bandage_Scissors.JPG',
+    ),
+    isNew: true,
+  ),
 ];
