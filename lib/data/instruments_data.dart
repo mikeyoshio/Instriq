@@ -6488,7 +6488,7 @@ const List<Instrument> kInstruments = [
     name: LocalizedText(ca: 'Distractor ossi mandibular', es: 'Distractor óseo mandibular', en: 'Mandibular bone distractor'),
     category: InstrumentCategory.implantes,
     specialty: Specialty.maxilofacial,
-    aliases: ['Mandibular distractor (KLS Martin)'],
+    aliases: ['Mandibular distractor'],
     icon: 'tool',
     description: LocalizedText(
       ca: 'Dispositiu mecànic fixat a l\'os a banda i banda d\'una osteotomia, amb un cargol d\'activació gradual diària.',
@@ -12814,7 +12814,7 @@ const List<Instrument> kInstruments = [
     isNew: true,
   ),
 
-  // ---- RONDA DE REVISIÓ: EXTRACCIÓ nopa-instruments.eu / dhmaterialmedico.com ----
+  // ---- RONDA DE REVISIÓ: EXTRACCIÓ de webs de proveïdor ----
   Instrument(
     id: 'disectores-rhoton',
     name: LocalizedText(ca: 'Joc de dissectors de Rhoton', es: 'Set de disectores de Rhoton', en: 'Rhoton Dissector Set'),
@@ -13158,7 +13158,7 @@ const List<Instrument> kInstruments = [
     isNew: true,
   ),
 
-  // ---- RONDA 2: dhmaterialmedico.com (subpàgines d'especialitats pendents) ----
+  // ---- RONDA 2: mateixa web de proveïdor (subpàgines d'especialitats pendents) ----
   Instrument(
     id: 'sierra-oscilante-yesos',
     name: LocalizedText(ca: 'Serra oscil·lant per a guixos', es: 'Sierra oscilante para yesos', en: 'Oscillating cast saw'),
@@ -13488,7 +13488,7 @@ const List<Instrument> kInstruments = [
     ),
     isNew: true,
   ),
-  // ---- RONDA: Completesa contra webs de proveïdors (Praxisdienst, iberomed, etc.) ----
+  // ---- RONDA: Completesa contra webs de proveïdors ----
   Instrument(
     id: 'pinza-wertheim',
     name: LocalizedText(ca: 'Pinça de Wertheim (parametri)', es: 'Pinza de Wertheim (parametrio)', en: 'Wertheim parametrium clamp'),
@@ -13937,7 +13937,7 @@ const List<Instrument> kInstruments = [
     ),
     isNew: true,
   ),
-  // ---- RONDA: KLS Martin (fabricant real, no revenedor) ----
+  // ---- RONDA: fabricant real, no revenedor ----
   Instrument(
     id: 'disector-yasargil',
     name: LocalizedText(ca: 'Dissector microquirúrgic de Yasargil', es: 'Disector microquirúrgico de Yasargil', en: 'Yasargil micro-dissector'),
@@ -13956,9 +13956,9 @@ const List<Instrument> kInstruments = [
       en: 'Blunt microsurgical dissection of arachnoid planes, separating tumor tissue from healthy brain parenchyma and cranial nerves, and manipulating small vascular structures under the microscope; the bayonet shape keeps the surgeon\'s hand and wrist out of the microscope\'s optical axis.',
     ),
     tip: LocalizedText(
-      ca: 'Es comercialitza amb múltiples puntes (roma, semiaguda, en ganxo) sota el mateix nom "Yasargil" per diversos fabricants (Aesculap, Symmetry, KLS Martin); no s\'ha de confondre amb la pinça bipolar de Yasargil (ja catalogada), que aplica corrent elèctric i no només diseca.',
-      es: 'Se comercializa con múltiples puntas (roma, semiaguda, en gancho) bajo el mismo nombre "Yasargil" por varios fabricantes (Aesculap, Symmetry, KLS Martin); no debe confundirse con la pinza bipolar de Yasargil (ya catalogada), que aplica corriente eléctrica y no solo diseca.',
-      en: 'Sold with multiple tip shapes (blunt, semi-sharp, hook-like) under the same "Yasargil" name by several manufacturers (Aesculap, Symmetry, KLS Martin); not to be confused with the already-catalogued Yasargil bipolar forceps, which delivers electrical current rather than just dissecting.',
+      ca: 'Es comercialitza amb múltiples puntes (roma, semiaguda, en ganxo) sota el mateix nom "Yasargil" per diversos fabricants; no s\'ha de confondre amb la pinça bipolar de Yasargil (ja catalogada), que aplica corrent elèctric i no només diseca.',
+      es: 'Se comercializa con múltiples puntas (roma, semiaguda, en gancho) bajo el mismo nombre "Yasargil" por varios fabricantes; no debe confundirse con la pinza bipolar de Yasargil (ya catalogada), que aplica corriente eléctrica y no solo diseca.',
+      en: 'Sold with multiple tip shapes (blunt, semi-sharp, hook-like) under the same "Yasargil" name by several manufacturers; not to be confused with the already-catalogued Yasargil bipolar forceps, which delivers electrical current rather than just dissecting.',
     ),
     isNew: true,
   ),
@@ -14328,7 +14328,7 @@ const List<Instrument> kInstruments = [
     ),
     isNew: true,
   ),
-  // ---- RONDA: promechi.com ----
+  // ---- RONDA: webs de proveïdor noves ----
   Instrument(
     id: 'pinza-clips-michel',
     name: LocalizedText(ca: 'Pinça de clips de Michel', es: 'Pinza de clips de Michel', en: 'Michel clip forceps'),
