@@ -5,6 +5,7 @@ import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../services/profile_service.dart';
 import 'audit_log_screen.dart';
+import 'incident_capa_queue_screen.dart';
 import 'review_inbox_screen.dart';
 
 /// Índice a cola de revisión y auditoría. La pestaña en sí es accesible para
@@ -24,6 +25,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Future<void> _openReviewQueue() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const ReviewInboxScreen()),
+    );
+    setState(() {});
+  }
+
+  Future<void> _openIncidentCapaQueue() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const IncidentCapaQueueScreen()),
     );
     setState(() {});
   }
@@ -59,6 +67,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       title: l10n.reviewQueueTitle,
                       subtitle: l10n.reviewQueueSubtitle,
                       onTap: _openReviewQueue,
+                    ),
+                    const SizedBox(height: 8),
+                    InstriqListItem(
+                      icon: Icons.report_problem_outlined,
+                      title: l10n.incidentCapaQueueTitle,
+                      subtitle: l10n.incidentCapaQueueTileSubtitle,
+                      onTap: _openIncidentCapaQueue,
                     ),
                     if (ProfileService.instance.isAdmin) ...[
                       const SizedBox(height: 8),

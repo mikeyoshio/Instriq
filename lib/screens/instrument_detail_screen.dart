@@ -41,6 +41,7 @@ import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/clinical_data_form_sheet.dart';
+import '../widgets/instrument_incident_dialogs.dart';
 import '../widgets/instrument_incident_label.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
@@ -343,76 +344,16 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     await _loadClinicalData();
   }
 
-  Future<void> _openReportIncidentDialog() async {
-    final l10n = AppLocalizations.of(context)!;
-    final descriptionController = TextEditingController();
-    IncidentSeverity severity = IncidentSeverity.low;
-    final reported = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          title: Text(l10n.reportIncidentDialogTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: descriptionController,
-                autofocus: true,
-                maxLines: 3,
-                onChanged: (_) => setDialogState(() {}),
-                decoration: InputDecoration(
-                  labelText: l10n.incidentDescriptionLabel,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(l10n.incidentSeverityLabel, style: Theme.of(ctx).textTheme.labelMedium),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: IncidentSeverity.values
-                    .map((s) => ChoiceChip(
-                          label: Text(incidentSeverityValueLabel(l10n, s)),
-                          selected: severity == s,
-                          onSelected: (_) => setDialogState(() => severity = s),
-                        ))
-                    .toList(),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
-            FilledButton(
-              onPressed: descriptionController.text.trim().isEmpty
-                  ? null
-                  : () => Navigator.pop(ctx, true),
-              child: Text(l10n.reportIncidentAction),
-            ),
-          ],
-        ),
-      ),
-    );
-    if (reported != true || !mounted) return;
-    final description = descriptionController.text.trim();
-    if (description.isEmpty) return;
-    try {
-      await InstrumentIncidentService.instance.report(
+  Future<void> _openReportIncidentDialog() => showReportIncidentDialog(
+        context,
         refType: _refType,
         refId: widget.instrument.id,
-        severity: severity,
-        description: description,
+        onDone: () {
+          if (!mounted) return;
+          setState(() => _loadingIncidents = true);
+          _loadIncidents();
+        },
       );
-      if (mounted) {
-        setState(() => _loadingIncidents = true);
-        await _loadIncidents();
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
-      }
-    }
-  }
 
   /// Reportar un error de contenido (descripción/foto/uso incorrectos) en la
   /// ficha del catálogo global -- a diferencia de una incidencia (arriba),
@@ -467,42 +408,25 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     }
   }
 
-  Future<void> _openResolveIncidentDialog(InstrumentIncident incident) async {
-    final l10n = AppLocalizations.of(context)!;
-    final notesController = TextEditingController();
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.resolveIncidentDialogTitle),
-        content: TextField(
-          controller: notesController,
-          autofocus: true,
-          maxLines: 3,
-          decoration: InputDecoration(
-            labelText: l10n.resolutionNotesLabel,
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.resolveIncidentAction)),
-        ],
-      ),
-    );
-    if (confirmed != true || !mounted) return;
-    try {
-      final notes = notesController.text.trim();
-      await InstrumentIncidentService.instance.resolve(incident.id!, resolutionNotes: notes.isEmpty ? null : notes);
-      if (mounted) {
-        setState(() => _loadingIncidents = true);
-        await _loadIncidents();
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError(e.toString()))));
-      }
-    }
-  }
+  Future<void> _openResolveIncidentDialog(InstrumentIncident incident) => showResolveIncidentDialog(
+        context,
+        incident,
+        onDone: () {
+          if (!mounted) return;
+          setState(() => _loadingIncidents = true);
+          _loadIncidents();
+        },
+      );
+
+  Future<void> _openVerifyIncidentDialog(InstrumentIncident incident) => showVerifyIncidentDialog(
+        context,
+        incident,
+        onDone: () {
+          if (!mounted) return;
+          setState(() => _loadingIncidents = true);
+          _loadIncidents();
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -1140,8 +1064,11 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
       IncidentSeverity.medium => Colors.orange,
       IncidentSeverity.high => Colors.red,
     };
-    final statusColor =
-        incident.status == IncidentStatus.open ? Theme.of(context).colorScheme.error : Colors.green;
+    final statusColor = switch (incident.status) {
+      IncidentStatus.open => Theme.of(context).colorScheme.error,
+      IncidentStatus.resolved => Colors.orange,
+      IncidentStatus.verified => Colors.green,
+    };
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: Padding(
@@ -1161,10 +1088,28 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
             ),
             const SizedBox(height: 6),
             Text(incident.description, style: Theme.of(context).textTheme.bodyMedium),
+            if (incident.rootCause != null && incident.rootCause!.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text('${l10n.rootCauseLabel}: ${incident.rootCause}', style: Theme.of(context).textTheme.bodySmall),
+            ],
+            if (incident.correctiveAction != null && incident.correctiveAction!.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                '${l10n.correctiveActionLabel}: ${incident.correctiveAction}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
             if (incident.resolutionNotes != null && incident.resolutionNotes!.isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(
                 '${l10n.resolutionNotesLabel}: ${incident.resolutionNotes}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+            if (incident.verificationNotes != null && incident.verificationNotes!.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                '${l10n.verificationNotesLabel}: ${incident.verificationNotes}',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -1175,6 +1120,16 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                 child: TextButton(
                   onPressed: () => _openResolveIncidentDialog(incident),
                   child: Text(l10n.resolveIncidentAction),
+                ),
+              ),
+            ],
+            if (canResolve && incident.status == IncidentStatus.resolved) ...[
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => _openVerifyIncidentDialog(incident),
+                  child: Text(l10n.verifyIncidentAction),
                 ),
               ),
             ],

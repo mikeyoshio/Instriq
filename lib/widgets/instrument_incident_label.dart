@@ -22,5 +22,7 @@ String incidentStatusValueLabel(AppLocalizations l10n, IncidentStatus status) {
       return l10n.incidentStatusValueOpen;
     case IncidentStatus.resolved:
       return l10n.incidentStatusValueResolved;
+    case IncidentStatus.verified:
+      return l10n.incidentStatusValueVerified;
   }
 }

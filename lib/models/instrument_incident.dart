@@ -42,8 +42,11 @@ extension IncidentSeverityLabel on IncidentSeverity {
 
 /// Estado de una incidencia (`instrument_incidents.status`). Sin versionado:
 /// es un registro operativo, no contenido que haya que aprobar antes de
-/// existir (ver schema_v32_cssd_workspace.sql §3).
-enum IncidentStatus { open, resolved }
+/// existir (ver schema_v32_cssd_workspace.sql §3). Flujo CAPA de 3 pasos
+/// (ISO 9001 10.2, ver schema_v55_instrument_incidents_capa.sql): abierta ->
+/// resuelta (causa raíz + acción correctiva) -> verificada (efectividad
+/// confirmada por alguien distinto de quien resolvió).
+enum IncidentStatus { open, resolved, verified }
 
 extension IncidentStatusLabel on IncidentStatus {
   String get label {
@@ -52,6 +55,8 @@ extension IncidentStatusLabel on IncidentStatus {
         return 'Abierta';
       case IncidentStatus.resolved:
         return 'Resuelta';
+      case IncidentStatus.verified:
+        return 'Verificada';
     }
   }
 
@@ -61,6 +66,8 @@ extension IncidentStatusLabel on IncidentStatus {
         return 'open';
       case IncidentStatus.resolved:
         return 'resolved';
+      case IncidentStatus.verified:
+        return 'verified';
     }
   }
 
@@ -70,6 +77,8 @@ extension IncidentStatusLabel on IncidentStatus {
         return IncidentStatus.open;
       case 'resolved':
         return IncidentStatus.resolved;
+      case 'verified':
+        return IncidentStatus.verified;
       default:
         throw ArgumentError('Estado de incidencia desconocido: $value');
     }
@@ -80,7 +89,10 @@ extension IncidentStatusLabel on IncidentStatus {
 /// diferencia de [SterilizationMethodEntry]/[InstrumentTechnicalInfo], una
 /// incidencia siempre pertenece a una organización — no existe "incidencia
 /// de catálogo global"). [workspaceId] nulo significa incidencia a nivel de
-/// organización, no de un espacio concreto.
+/// organización, no de un espacio concreto. Todas las escrituras van vía RPC
+/// (`report_instrument_incident`/`resolve_instrument_incident`/
+/// `verify_instrument_incident`), nunca insert/update directo — ver
+/// [InstrumentIncidentService].
 class InstrumentIncident {
   final String? id;
   final String instrumentRefType;
@@ -91,9 +103,15 @@ class InstrumentIncident {
   final IncidentStatus status;
   final String description;
   final String? resolutionNotes;
+  final String? rootCause;
+  final String? correctiveAction;
   final String? reportedBy;
   final String? resolvedBy;
   final DateTime? resolvedAt;
+  final String? verifiedBy;
+  final DateTime? verifiedAt;
+  final String? verificationNotes;
+  final String? trayPreparationSessionId;
   final DateTime? createdAt;
 
   const InstrumentIncident({
@@ -106,50 +124,17 @@ class InstrumentIncident {
     this.status = IncidentStatus.open,
     required this.description,
     this.resolutionNotes,
+    this.rootCause,
+    this.correctiveAction,
     this.reportedBy,
     this.resolvedBy,
     this.resolvedAt,
+    this.verifiedBy,
+    this.verifiedAt,
+    this.verificationNotes,
+    this.trayPreparationSessionId,
     this.createdAt,
   });
-
-  Map<String, dynamic> toRow() => {
-        'instrument_ref_type': instrumentRefType,
-        'instrument_ref_id': instrumentRefId,
-        'organization_id': organizationId,
-        'workspace_id': workspaceId,
-        'severity': severity.dbValue,
-        'status': status.dbValue,
-        'description': description,
-        'resolution_notes': resolutionNotes,
-        'reported_by': reportedBy,
-        'resolved_by': resolvedBy,
-        'resolved_at': resolvedAt?.toIso8601String(),
-      };
-
-  InstrumentIncident copyWith({
-    IncidentSeverity? severity,
-    IncidentStatus? status,
-    String? description,
-    String? resolutionNotes,
-    String? resolvedBy,
-    DateTime? resolvedAt,
-  }) {
-    return InstrumentIncident(
-      id: id,
-      instrumentRefType: instrumentRefType,
-      instrumentRefId: instrumentRefId,
-      organizationId: organizationId,
-      workspaceId: workspaceId,
-      severity: severity ?? this.severity,
-      status: status ?? this.status,
-      description: description ?? this.description,
-      resolutionNotes: resolutionNotes ?? this.resolutionNotes,
-      reportedBy: reportedBy,
-      resolvedBy: resolvedBy ?? this.resolvedBy,
-      resolvedAt: resolvedAt ?? this.resolvedAt,
-      createdAt: createdAt,
-    );
-  }
 
   factory InstrumentIncident.fromRow(Map<String, dynamic> row) {
     return InstrumentIncident(
@@ -162,9 +147,15 @@ class InstrumentIncident {
       status: IncidentStatusLabel.fromDb(row['status'] as String),
       description: row['description'] as String? ?? '',
       resolutionNotes: row['resolution_notes'] as String?,
+      rootCause: row['root_cause'] as String?,
+      correctiveAction: row['corrective_action'] as String?,
       reportedBy: row['reported_by'] as String?,
       resolvedBy: row['resolved_by'] as String?,
       resolvedAt: row['resolved_at'] != null ? DateTime.tryParse(row['resolved_at'] as String) : null,
+      verifiedBy: row['verified_by'] as String?,
+      verifiedAt: row['verified_at'] != null ? DateTime.tryParse(row['verified_at'] as String) : null,
+      verificationNotes: row['verification_notes'] as String?,
+      trayPreparationSessionId: row['tray_preparation_session_id'] as String?,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
     );
   }

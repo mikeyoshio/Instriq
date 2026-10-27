@@ -5,6 +5,7 @@ import '../models/tray.dart';
 import '../models/tray_preparation_session.dart';
 import '../models/workspace_role.dart';
 import '../services/tray_preparation_service.dart';
+import '../widgets/instrument_incident_dialogs.dart';
 
 /// Historial de sesiones de preparación real de una safata: quién la montó,
 /// qué encontró item a item, y el control de calidad/validación de otra
@@ -96,7 +97,65 @@ class _TrayPreparationSessionsScreenState extends State<TrayPreparationSessionsS
       passed: passed,
       notes: notesController.text.trim().isEmpty ? null : notesController.text.trim(),
     );
-    _load();
+    await _load();
+    if (!passed && mounted) _offerReportIncident(session);
+  }
+
+  /// Tras un QC fallido, se OFRECE reportar una incidencia CAPA (ISO 9001
+  /// 10.2) enlazada a esta sesión -- no se crea automáticamente, no todo QC
+  /// fallido merece una no conformidad formal. Si hay un único ítem marcado
+  /// como ausente, se preselecciona directamente; con varios, un selector
+  /// mínimo antes de abrir el mismo diálogo de siempre.
+  void _offerReportIncident(TrayPreparationSession session) {
+    final l10n = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.qcFailedSnackBarMessage),
+        action: SnackBarAction(
+          label: l10n.reportIncidentFromSessionAction,
+          onPressed: () => _pickItemAndReportIncident(session),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickItemAndReportIncident(TrayPreparationSession session) async {
+    final missing = session.itemResults.where((r) => !r.present).toList();
+    if (missing.isEmpty) return;
+    TrayPreparationItemResult? chosen = missing.first;
+    if (missing.length > 1) {
+      chosen = await showDialog<TrayPreparationItemResult>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(AppLocalizations.of(ctx)!.pickIncidentItemDialogTitle),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                for (final item in missing)
+                  ListTile(
+                    title: Text(item.instrumentRefId),
+                    onTap: () => Navigator.pop(ctx, item),
+                  ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: Text(AppLocalizations.of(ctx)!.cancel)),
+          ],
+        ),
+      );
+    }
+    if (chosen == null || !mounted) return;
+    await showReportIncidentDialog(
+      context,
+      refType: chosen.instrumentRefType.dbValue,
+      refId: chosen.instrumentRefId,
+      workspaceId: widget.tray.workspaceId,
+      trayPreparationSessionId: session.id,
+      onDone: () {},
+    );
   }
 
   @override

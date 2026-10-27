@@ -112,6 +112,12 @@ String auditActionLabel(AppLocalizations l10n, AuditEntry entry) {
       return l10n.auditActionContributorApplicationRejected;
     case 'contributor_level_changed':
       return l10n.auditActionContributorLevelChanged;
+    case 'instrument_incident_reported':
+      return l10n.auditActionInstrumentIncidentReported;
+    case 'instrument_incident_resolved':
+      return l10n.auditActionInstrumentIncidentResolved;
+    case 'instrument_incident_verified':
+      return l10n.auditActionInstrumentIncidentVerified;
     default:
       return entry.action;
   }

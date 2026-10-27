@@ -6,6 +6,7 @@ import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/audit_entry.dart';
 import '../models/hospital_content_stats.dart';
+import '../models/instrument_incident.dart';
 import '../models/usage_stats.dart';
 import '../models/work_mode.dart';
 import '../services/analytics_service.dart';
@@ -13,6 +14,7 @@ import '../services/audit_service.dart';
 import '../services/contributor_service.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/group_document_service.dart';
+import '../services/instrument_incident_service.dart';
 import '../services/preference_card_service.dart';
 import '../services/profile_service.dart';
 import '../services/public_document_service.dart';
@@ -26,6 +28,7 @@ import '../utils/audit_label.dart';
 import '../widgets/create_content_sheet.dart';
 import 'audit_log_screen.dart';
 import 'group_document_review_queue_screen.dart';
+import 'incident_capa_queue_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
 import 'review_inbox_screen.dart';
@@ -84,6 +87,7 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
   Future<HospitalContentStats?>? _statsFuture;
   Future<UsageStats?>? _usageFuture;
   Future<List<AuditEntry>>? _auditFuture;
+  Future<List<InstrumentIncident>>? _openIncidentsFuture;
 
   // Mismo criterio de acceso que ReviewInboxScreen (no hay un único permiso
   // que cubra las 3 colas, ver el comentario de clase de esa pantalla).
@@ -107,6 +111,7 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
           ? Future.value(null)
           : UsageAnalyticsService.instance.fetchStats(organizationId);
       _auditFuture = AuditService.instance.fetchAuditLog(organizationId: organizationId, limit: 4);
+      _openIncidentsFuture = InstrumentIncidentService.instance.fetchForOrganization();
     });
   }
 
@@ -272,6 +277,26 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
         );
       },
     ));
+
+    if (ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace) {
+      tiles.add(FutureBuilder<List<InstrumentIncident>>(
+        future: _openIncidentsFuture,
+        builder: (context, snapshot) {
+          final openCount = snapshot.data?.where((i) => i.status == IncidentStatus.open).length;
+          return _DashboardTile(
+            icon: Icons.report_problem_outlined,
+            title: l10n.incidentCapaQueueTitle,
+            stat: openCount != null ? '$openCount' : null,
+            statIsWarning: (openCount ?? 0) > 0,
+            loading: snapshot.connectionState != ConnectionState.done,
+            errorText: snapshot.hasError ? l10n.entityUsageLoadError(snapshot.error.toString()) : null,
+            onTap: () => _open(const IncidentCapaQueueScreen()),
+            linkLabel: l10n.homeViewAllLabel,
+            child: Text(l10n.incidentCapaQueueTileSubtitle, style: Theme.of(context).textTheme.bodySmall),
+          );
+        },
+      ));
+    }
 
     tiles.add(FutureBuilder<_ReviewInboxData>(
       future: _inboxFuture,
