@@ -262,6 +262,8 @@
   "homeFavoritesEmptyState": "Todavía no has marcado nada como favorito.",
   "homeRecentActivityEmptyState": "Todavía no has visto nada por aquí.",
   "homePendingApprovalTitle": "Pendientes de aprobación",
+  "homeTraysToPrepareTitle": "Bandejas por preparar",
+  "homeTrayNeverPrepared": "Nunca preparada",
   "homeViewAllLabel": "Ver todo",
   "homeDashboardTitle": "Panel de gestión",
   "homeDashboardCoverageTileTitle": "Cobertura de conocimiento",
@@ -826,6 +828,13 @@
   "noTeamsYet": "Todavía no hay equipos. Crea el primero con el botón +.",
   "teamsLoadError": "No se pudieron cargar los equipos: {error}",
   "@teamsLoadError": {"placeholders": {"error": {"type": "String"}}},
+  "homeTeamProgressTitle": "Progreso de mi equipo",
+  "teamProgressScreenTitle": "Progreso del equipo",
+  "teamProgressPickTeamLabel": "Equipo",
+  "teamProgressLearnedLabel": "Aprendidos",
+  "teamProgressDueLabel": "Repasos pendientes",
+  "teamProgressQuizLabel": "Mejor quiz",
+  "teamProgressEmptyTeamState": "Este equipo todavía no tiene miembros.",
 
   "preferenceCardTitle": "Tarjeta de preferencia",
 

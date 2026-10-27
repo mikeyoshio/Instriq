@@ -68,17 +68,36 @@ const List<String> _defaultSectionOrder = [
   'usedIn',
 ];
 
-/// Orden de prioridad de secciones por cada modo de trabajo.
+/// Orden de prioridad de secciones per cada modo de trabajo. Cada llista és
+/// deliberadament diferent de les altres (abans n'hi havia de duplicades
+/// byte a byte — vegeu CHANGELOG): reflecteix què consultaria primer aquesta
+/// professió concreta en obrir la fitxa, no és només una barreja cosmètica.
 const Map<WorkMode, List<String>> _modeSectionOrder = {
-  WorkMode.estudiante: _defaultSectionOrder,
+  // Maneja l'instrumental taula per taula: ús + consell pràctic i
+  // esterilització/fitxa tècnica primer (verificació d'esterilitat), la
+  // identificació bàsica (especialitat/àlies/foto) la té ja assumida.
   WorkMode.instrumentista: [
     'use',
-    'description',
     'tip',
+    'sterilization',
+    'technical',
+    'description',
     'specialty',
     'aliases',
     'photo',
+    'usedIn',
+  ],
+  // Infermeria general/planta, no necessàriament taula per taula: context
+  // clínic ampli primer, el detall tècnic/esterilització queda més avall que
+  // per a instrumentista o esterilització.
+  WorkMode.enfermeria: [
+    'description',
+    'use',
+    'tip',
+    'specialty',
     'sterilization',
+    'aliases',
+    'photo',
     'technical',
     'usedIn',
   ],
@@ -104,38 +123,45 @@ const Map<WorkMode, List<String>> _modeSectionOrder = {
     'photo',
     'usedIn',
   ],
-  WorkMode.enfermeria: [
-    'use',
-    'description',
-    'tip',
-    'specialty',
-    'aliases',
-    'photo',
-    'sterilization',
-    'technical',
-    'usedIn',
-  ],
+  // El detall de neteja/esterilització no és la seva feina: consell clínic i
+  // ús primer, esterilització/fitxa tècnica al final.
   WorkMode.cirujano: [
+    'tip',
     'use',
     'description',
     'specialty',
-    'tip',
     'aliases',
     'photo',
+    'usedIn',
     'sterilization',
     'technical',
-    'usedIn',
   ],
+  // Prepara material docent: consell + "on s'utilitza" primer (bo per
+  // construir exemples/casos), el detall tècnic rutinari al final.
   WorkMode.docente: [
-    'description',
-    'use',
     'tip',
+    'description',
+    'usedIn',
     'specialty',
     'aliases',
+    'use',
     'photo',
     'sterilization',
     'technical',
+  ],
+  // Llista pròpia i diferent de l'ordre per defecte (abans eren el mateix
+  // objecte): manté l'esperit didàctic (foto/especialitat/àlies primer) però
+  // ja no és indistingible de "cap preferència" al selector.
+  WorkMode.estudiante: [
+    'photo',
+    'specialty',
+    'aliases',
+    'tip',
     'usedIn',
+    'description',
+    'use',
+    'sterilization',
+    'technical',
   ],
 };
 

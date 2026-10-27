@@ -111,4 +111,17 @@ class TeamService {
       'p_team_id': teamId,
     });
   }
+
+  /// Progreso de aprendizaje de cada miembro de [teamId] (modo Docente) --
+  /// vía RPC, no una lectura directa: `learning_progress` es de lectura
+  /// propia únicamente por RLS, así que el chequeo de "soy admin o approver
+  /// de algún espacio" vive dentro de la propia función
+  /// `team_learning_progress` (ver schema_v54_team_learning_progress.sql),
+  /// no en este servicio ni en la pantalla que lo llama.
+  Future<List<TeamMemberProgress>> fetchTeamMemberProgress(String teamId) async {
+    final rows = await _client.rpc('team_learning_progress', params: {'p_team_id': teamId});
+    return (rows as List<dynamic>)
+        .map((r) => TeamMemberProgress.fromRow(r as Map<String, dynamic>))
+        .toList();
+  }
 }

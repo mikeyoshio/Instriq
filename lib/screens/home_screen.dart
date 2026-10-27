@@ -33,6 +33,7 @@ import '../services/specialty_service.dart';
 import '../services/sterilization_service.dart';
 import '../services/surgeon_service.dart';
 import '../services/tag_service.dart';
+import '../services/tray_preparation_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../services/workspace_service.dart';
@@ -49,10 +50,12 @@ import 'home_dashboard_panel.dart';
 import 'instrument_detail_screen.dart';
 import 'learn_screen.dart';
 import 'manufacturer_detail_screen.dart';
+import 'preference_cards_screen.dart';
 import 'progress_screen.dart';
 import 'public_entity_detail_screen.dart';
 import 'surgeon_detail_screen.dart';
 import 'tag_detail_screen.dart';
+import 'team_progress_screen.dart';
 import 'tray_detail_screen.dart';
 import 'trays_screen.dart';
 import 'workspace_list_screen.dart';
@@ -61,7 +64,7 @@ import 'workspace_list_screen.dart';
 /// modo de trabajo — mismo espíritu que `_modeSectionOrder` en
 /// lib/models/work_mode.dart, pero para las secciones del Home en vez de las
 /// de una ficha de instrumento.
-enum HomeSectionKey { quickAccess, pendingApproval, recent, favorites }
+enum HomeSectionKey { quickAccess, pendingApproval, traysToPrepare, teamProgress, recent, favorites }
 
 const List<HomeSectionKey> _defaultHomeSectionOrder = [
   HomeSectionKey.quickAccess,
@@ -69,14 +72,21 @@ const List<HomeSectionKey> _defaultHomeSectionOrder = [
   HomeSectionKey.favorites,
 ];
 
-/// Solo "supervisión" antepone la cola de aprobación: es el único modo cuyo
-/// trabajo diario gira en torno a revisar cambios ajenos. El resto de modos
-/// se quedan con el orden por defecto — no hay una razón clara para
-/// reordenar quickAccess/recent/favorites entre ellos, y forzar una
-/// diferencia artificial sería peor que no diferenciarlos.
+/// "Supervisión" antepone la cola de aprobación e "instrumentista" las
+/// bandejas por preparar: son los dos únicos modos cuyo trabajo diario gira
+/// en torno a una lista de pendientes muy concreta. El resto de modos se
+/// quedan con el orden por defecto — no hay una razón clara para reordenar
+/// quickAccess/recent/favorites entre ellos, y forzar una diferencia
+/// artificial sería peor que no diferenciarlos.
 List<HomeSectionKey> _sectionOrderForMode(WorkMode? mode) {
   if (mode == WorkMode.supervision) {
     return [HomeSectionKey.pendingApproval, ..._defaultHomeSectionOrder];
+  }
+  if (mode == WorkMode.instrumentista) {
+    return [HomeSectionKey.traysToPrepare, ..._defaultHomeSectionOrder];
+  }
+  if (mode == WorkMode.docente) {
+    return [HomeSectionKey.teamProgress, ..._defaultHomeSectionOrder];
   }
   return _defaultHomeSectionOrder;
 }
@@ -174,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Tag> _tags = [];
   Map<String, String> _specialtyLabelById = {};
   Map<String, List<SterilizationMethod>> _catalogSterilizationMethods = {};
+  Map<String, DateTime> _lastPreparedAtByTray = {};
 
   bool _loadingRecentFavorites = true;
   List<_RecentOrFavoriteItem> _recent = [];
@@ -194,11 +205,19 @@ class _HomeScreenState extends State<HomeScreen> {
     // este listener se quedaba mostrando el grupo y el contenido de la sesión
     // anterior hasta reiniciar la app.
     ProfileService.instance.profileRevision.addListener(_onProfileChanged);
+    // `setActiveWorkMode` no toca `profileRevision` (es solo una preferencia
+    // de visualización, no justifica recargar todo el contenido de grupo) --
+    // sin este listener propio, las secciones condicionadas por modo
+    // (bandejas por preparar, cola de aprobación...) no se reordenaban al
+    // cambiar de modo desde WorkModeHeader hasta que algo más disparaba un
+    // rebuild por otro motivo.
+    ProfileService.instance.activeWorkModeNotifier.addListener(_onWorkModeChanged);
   }
 
   @override
   void dispose() {
     ProfileService.instance.profileRevision.removeListener(_onProfileChanged);
+    ProfileService.instance.activeWorkModeNotifier.removeListener(_onWorkModeChanged);
     _searchAnalyticsDebounce?.cancel();
     _liveSearchDebounce?.cancel();
     _searchController.dispose();
@@ -210,6 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadGroupContent();
     _loadRecentAndFavorites();
   }
+
+  void _onWorkModeChanged() => setState(() {});
 
   Future<void> _loadGroupContent() async {
     // Metadato de catálogo global (fabricantes, etiquetas, especialidades,
@@ -298,6 +319,22 @@ class _HomeScreenState extends State<HomeScreen> {
         // Metadato accesorio de búsqueda: no bloquea el resto de Inicio si falla.
       }
 
+      // Para el modo Instrumentista (sección "Bandejas por preparar"): una
+      // sola consulta por lotes de cuándo se preparó cada bandeja publicada,
+      // no N+1. Las bandejas sin versión publicada nunca pueden tener una
+      // sesión de preparación (create_tray_preparation_session lo rechaza),
+      // así que se excluyen de la consulta.
+      var lastPreparedAtByTray = <String, DateTime>{};
+      try {
+        final publishedTrayIds =
+            trays.where((t) => t.publishedVersionId != null).map((t) => t.id).toList();
+        lastPreparedAtByTray =
+            await TrayPreparationService.instance.fetchLastPreparedAtByTray(publishedTrayIds);
+      } catch (_) {
+        // Metadato accesorio de la sección de Instrumentista: no bloquea el
+        // resto de Inicio si falla.
+      }
+
       if (!mounted) return;
       setState(() {
         _workspaces = workspaces;
@@ -305,6 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _protocols = protocols;
         _trays = trays;
         _customInstruments = customInstruments;
+        _lastPreparedAtByTray = lastPreparedAtByTray;
         _loadingGroupContent = false;
       });
     } catch (_) {
@@ -393,6 +431,33 @@ class _HomeScreenState extends State<HomeScreen> {
         buildDirect: (workspace, myRole) => TraysScreen(workspace: workspace, myRole: myRole),
       );
 
+  Future<void> _openPreferenceCards() => _openWorkspaceCollection(
+        buildDirect: (workspace, myRole) => PreferenceCardsScreen(workspace: workspace, myRole: myRole),
+      );
+
+  Future<void> _openProtocols() => _openWorkspaceCollection(
+        buildDirect: (workspace, myRole) =>
+            GroupDocumentListScreen(kind: DocumentKind.protocol, workspace: workspace, myRole: myRole),
+      );
+
+  /// Bandejas publicadas ordenadas para el modo Instrumentista: primero las
+  /// que nunca se han preparado, luego de más antigua a más reciente
+  /// preparación — una heurística de prioridad razonable, no una caducidad
+  /// real (el esquema actual no modela una fecha de caducidad de
+  /// esterilización por bandeja, solo lo que sí se ha preparado).
+  List<Tray> _traysNeedingPrep() {
+    final published = _trays.where((t) => t.publishedVersionId != null).toList();
+    published.sort((a, b) {
+      final aAt = _lastPreparedAtByTray[a.id];
+      final bAt = _lastPreparedAtByTray[b.id];
+      if (aAt == null && bAt == null) return 0;
+      if (aAt == null) return -1;
+      if (bAt == null) return 1;
+      return aAt.compareTo(bAt);
+    });
+    return published;
+  }
+
   Future<void> _openInstrument(Instrument instrument) async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => InstrumentDetailScreen(instrument: instrument)),
@@ -422,6 +487,12 @@ class _HomeScreenState extends State<HomeScreen> {
       MaterialPageRoute(
         builder: (_) => CustomInstrumentDetailScreen(instrument: instrument, myRole: myRole),
       ),
+    );
+  }
+
+  Future<void> _openTeamProgress() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const TeamProgressScreen()),
     );
   }
 
@@ -771,12 +842,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDefaultBody(BuildContext context, AppLocalizations l10n) {
-    final order = _sectionOrderForMode(ProfileService.instance.activeWorkModeNotifier.value);
+    final mode = ProfileService.instance.activeWorkModeNotifier.value;
+    final order = _sectionOrderForMode(mode);
     final sections = <Widget>[];
     for (final key in order) {
       final section = switch (key) {
-        HomeSectionKey.quickAccess => _buildQuickAccessSection(context, l10n),
+        HomeSectionKey.quickAccess => _buildQuickAccessSection(context, l10n, mode),
         HomeSectionKey.pendingApproval => _buildPendingApprovalSection(context, l10n),
+        HomeSectionKey.traysToPrepare => _buildTrayPrepSection(context, l10n),
+        HomeSectionKey.teamProgress => _buildTeamProgressSection(context, l10n),
         HomeSectionKey.recent => _buildRecentSection(context, l10n),
         HomeSectionKey.favorites => _buildFavoritesSection(context, l10n),
       };
@@ -791,8 +865,46 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildQuickAccessSection(BuildContext context, AppLocalizations l10n) {
+  Widget _buildQuickAccessSection(BuildContext context, AppLocalizations l10n, WorkMode? mode) {
     final hasHospital = ProfileService.instance.hasHospital;
+    final techniquesAndTrays = [
+      InstriqListItem(
+        icon: Icons.menu_book_outlined,
+        title: l10n.techniquesTitle,
+        // Mientras se cargan los espacios, se asume que hay más de uno
+        // (fallback seguro): _openTechniques abre el listado de espacios
+        // en vez del único espacio si _workspaces todavía está vacío.
+        subtitle: _loadingGroupContent ? null : l10n.techniquesSubtitle,
+        onTap: _openTechniques,
+      ),
+      InstriqListItem(
+        icon: Icons.inventory_2_outlined,
+        title: l10n.traysTitle,
+        subtitle: l10n.traysSubtitle,
+        onTap: _openTrays,
+      ),
+    ];
+    // Fichas de preferencia y protocolos no tenían ningún acceso rápido desde
+    // Inicio hasta ahora, para ningún modo — se añaden para todos, pero en
+    // modo Cirujano van primero (antes que técnicas/bandejas): es lo que más
+    // consulta un cirujano al abrir la app.
+    final preferenceCardsAndProtocols = [
+      InstriqListItem(
+        icon: Icons.assignment_outlined,
+        title: l10n.preferenceCardsTitle,
+        subtitle: l10n.preferenceCardsSubtitle,
+        onTap: _openPreferenceCards,
+      ),
+      InstriqListItem(
+        icon: Icons.fact_check_outlined,
+        title: l10n.protocolsTitle,
+        subtitle: l10n.protocolsSubtitle,
+        onTap: _openProtocols,
+      ),
+    ];
+    final groupItems = mode == WorkMode.cirujano
+        ? [...preferenceCardsAndProtocols, ...techniquesAndTrays]
+        : [...techniquesAndTrays, ...preferenceCardsAndProtocols];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -806,25 +918,11 @@ class _HomeScreenState extends State<HomeScreen> {
             await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CatalogScreen()));
           },
         ),
-        if (hasHospital) ...[
-          const SizedBox(height: InstriqSpacing.sm),
-          InstriqListItem(
-            icon: Icons.menu_book_outlined,
-            title: l10n.techniquesTitle,
-            // Mientras se cargan los espacios, se asume que hay más de uno
-            // (fallback seguro): _openTechniques abre el listado de espacios
-            // en vez del único espacio si _workspaces todavía está vacío.
-            subtitle: _loadingGroupContent ? null : l10n.techniquesSubtitle,
-            onTap: _openTechniques,
-          ),
-          const SizedBox(height: InstriqSpacing.sm),
-          InstriqListItem(
-            icon: Icons.inventory_2_outlined,
-            title: l10n.traysTitle,
-            subtitle: l10n.traysSubtitle,
-            onTap: _openTrays,
-          ),
-        ],
+        if (hasHospital)
+          for (final item in groupItems) ...[
+            const SizedBox(height: InstriqSpacing.sm),
+            item,
+          ],
         const SizedBox(height: InstriqSpacing.sm),
         InstriqListItem(
           icon: Icons.school,
@@ -887,6 +985,61 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         );
       },
+    );
+  }
+
+  /// Solo para el modo Instrumentista -- no depende de ningún rol de espacio
+  /// (cualquier miembro, incluso lector, puede ya crear una sesión de
+  /// preparación hoy), así que no hace falta más gate que el propio modo.
+  Widget? _buildTrayPrepSection(BuildContext context, AppLocalizations l10n) {
+    if (_loadingGroupContent) return null;
+    final trays = _traysNeedingPrep();
+    if (trays.isEmpty) return null;
+    final preview = trays.take(5).toList();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(child: InstriqSectionHeader(l10n.homeTraysToPrepareTitle)),
+            TextButton(onPressed: _openTrays, child: Text(l10n.homeViewAllLabel)),
+          ],
+        ),
+        const SizedBox(height: InstriqSpacing.md),
+        for (final tray in preview) ...[
+          InstriqListItem(
+            icon: Icons.inventory_2_outlined,
+            title: tray.publishedVersion?.name ?? l10n.unpublished,
+            subtitle: _lastPreparedAtByTray[tray.id] != null
+                ? _timeAgo(l10n, _lastPreparedAtByTray[tray.id]!)
+                : l10n.homeTrayNeverPrepared,
+            onTap: () => _openTray(tray),
+          ),
+          const SizedBox(height: InstriqSpacing.sm),
+        ],
+      ],
+    );
+  }
+
+  /// Solo para modo Docente, y solo si ya se tiene autoridad real de
+  /// supervisión en algún espacio (mismo gate que la cola de aprobación /
+  /// HomeDashboardPanel) -- este gate de UI es solo conveniencia, el límite
+  /// de seguridad real vive en la propia función `team_learning_progress`.
+  /// Es un simple enlace de navegación, no una vista previa con datos: el
+  /// trabajo de elegir equipo y ver el progreso vive en TeamProgressScreen.
+  Widget? _buildTeamProgressSection(BuildContext context, AppLocalizations l10n) {
+    if (!ProfileService.instance.isAdmin && !ProfileService.instance.canApproveAnyWorkspace) return null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InstriqSectionHeader(l10n.homeTeamProgressTitle),
+        const SizedBox(height: InstriqSpacing.md),
+        InstriqListItem(
+          icon: Icons.groups_outlined,
+          title: l10n.homeTeamProgressTitle,
+          onTap: _openTeamProgress,
+        ),
+      ],
     );
   }
 

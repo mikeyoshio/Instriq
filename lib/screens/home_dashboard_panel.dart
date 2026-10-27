@@ -7,6 +7,7 @@ import '../l10n/app_localizations.dart';
 import '../models/audit_entry.dart';
 import '../models/hospital_content_stats.dart';
 import '../models/usage_stats.dart';
+import '../models/work_mode.dart';
 import '../services/analytics_service.dart';
 import '../services/audit_service.dart';
 import '../services/contributor_service.dart';
@@ -30,6 +31,7 @@ import 'manage_teams_screen.dart';
 import 'review_inbox_screen.dart';
 import 'sterilization_review_queue_support.dart';
 import 'sync_issues_screen.dart';
+import 'team_progress_screen.dart';
 
 /// Contenido de la rama "Inici" en pantallas de clase PC (ver
 /// `InstriqBreakpoints.desktop` en home_screen.dart): sustituye la lista de
@@ -248,6 +250,28 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
         },
       ));
     }
+
+    // Solo modo Docente, y solo con autoridad real de supervisión en algún
+    // espacio (mismo gate que la tile de pendientes de aprobar de arriba).
+    // Este panel no escucha el modo de trabajo en ningún otro sitio, así que
+    // se envuelve esta tile en su propio ValueListenableBuilder en vez de
+    // hacer reactivo todo el archivo -- el resto de tiles no depende del modo.
+    tiles.add(ValueListenableBuilder<WorkMode?>(
+      valueListenable: ProfileService.instance.activeWorkModeNotifier,
+      builder: (context, mode, _) {
+        if (mode != WorkMode.docente) return const SizedBox.shrink();
+        if (!ProfileService.instance.isAdmin && !ProfileService.instance.canApproveAnyWorkspace) {
+          return const SizedBox.shrink();
+        }
+        return _DashboardTile(
+          icon: Icons.groups_outlined,
+          title: l10n.homeTeamProgressTitle,
+          onTap: () => _open(const TeamProgressScreen()),
+          linkLabel: l10n.homeViewAllLabel,
+          child: Text(l10n.teamProgressPickTeamLabel, style: Theme.of(context).textTheme.bodySmall),
+        );
+      },
+    ));
 
     tiles.add(FutureBuilder<_ReviewInboxData>(
       future: _inboxFuture,

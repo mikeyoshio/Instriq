@@ -33,3 +33,37 @@ class TeamMember {
 
   const TeamMember({required this.userId, this.displayName});
 }
+
+/// Progreso de aprendizaje de una persona de un equipo, visto por quien
+/// supervisa (modo Docente) — ver [TeamService.fetchTeamMemberProgress] y la
+/// función `team_learning_progress` (schema_v54_team_learning_progress.sql).
+/// Mismas magnitudes que [ProgressService] expone para el propio usuario
+/// (aprendidos, repasos pendientes, mejores puntuaciones de quiz), pero aquí
+/// para otra persona -- de ahí que venga de un RPC con su propio chequeo de
+/// permisos, no de una lectura RLS directa como el resto de `learning_progress`.
+class TeamMemberProgress {
+  final String userId;
+  final String? displayName;
+  final int learnedCount;
+  final int dueCount;
+  final Map<String, int> quizBestScores;
+
+  const TeamMemberProgress({
+    required this.userId,
+    this.displayName,
+    required this.learnedCount,
+    required this.dueCount,
+    required this.quizBestScores,
+  });
+
+  factory TeamMemberProgress.fromRow(Map<String, dynamic> row) {
+    final rawScores = (row['quiz_best_scores'] as Map<String, dynamic>?) ?? const {};
+    return TeamMemberProgress(
+      userId: row['user_id'] as String,
+      displayName: row['display_name'] as String?,
+      learnedCount: (row['learned_count'] as num?)?.toInt() ?? 0,
+      dueCount: (row['due_count'] as num?)?.toInt() ?? 0,
+      quizBestScores: {for (final entry in rawScores.entries) entry.key: (entry.value as num).toInt()},
+    );
+  }
+}

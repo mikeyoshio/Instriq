@@ -61,4 +61,25 @@ class TrayPreparationService {
       'p_notes': notes,
     });
   }
+
+  /// Última vegada que es va preparar cadascuna de [trayIds] (absent = mai
+  /// preparada), en una sola consulta per lots -- usat pel mode Instrumentista
+  /// per prioritzar "safates per preparar" a Inici.
+  Future<Map<String, DateTime>> fetchLastPreparedAtByTray(List<String> trayIds) async {
+    if (trayIds.isEmpty) return {};
+    final rows = await _client
+        .from('tray_preparation_sessions')
+        .select('tray_id, prepared_at')
+        .inFilter('tray_id', trayIds)
+        .order('prepared_at', ascending: false);
+    final result = <String, DateTime>{};
+    for (final r in (rows as List<dynamic>)) {
+      final row = r as Map<String, dynamic>;
+      final trayId = row['tray_id'] as String;
+      if (result.containsKey(trayId)) continue; // ja tenim la més recent (ordenat desc)
+      final preparedAt = DateTime.tryParse(row['prepared_at'] as String? ?? '');
+      if (preparedAt != null) result[trayId] = preparedAt;
+    }
+    return result;
+  }
 }
