@@ -121,3 +121,7 @@ Registre cronològic de tot el que s'ha lliurat a Instriq. Per al que queda pend
   - Diàlegs de reportar/resoldre/verificar extrets a un fitxer compartit (`instrument_incident_dialogs.dart`), abans duplicats gairebé verbatim a les fitxes de catàleg i d'instrumental personalitzat.
   - Test nou `instrument_incident_test.dart` (parseig del model amb tots els camps CAPA nous, anada i tornada de l'enum de 3 estats).
 - **Pàgina pública "Novetats" posada al dia** (de l'entrada #66 a la #69, als 3 idiomes): catàleg ampliat a 601 instruments, Mode de Treball funcional (instrumentista/cirurgià/docent), i una nova entrada explícita sobre el camí cap a ISO 9001 arran del flux CAPA — en llenguatge d'usuari, sense el detall tècnic d'aquest fitxer, mateix criteri de consolidació que ja seguien les entrades anteriors. Sintaxi del script verificada amb `node --check`.
+
+## 1.1.0 — 2026-10-27
+
+Primera pujada de versió des de l'1.0.0 inicial (2026-09-30): el desenvolupament actiu continuat des de llavors (catàleg gairebé duplicat, fins a 601 instruments; Mode de Treball passant de cosmètic a funcional; el flux CAPA d'incidències) ja justifica marcar un nou punt de versió. Les entrades anteriors a aquesta línia es mantenen tal com estaven, sota l'encapçalament de l'1.0.0 — no es reorganitzen retroactivament, mateix criteri pragmàtic que la resta d'aquest fitxer. Les entrades noves a partir d'ara van aquí.

@@ -115,7 +115,7 @@ flutter run -d chrome        # browser
 
 ## Status / roadmap
 
-**v1.0.0** (2026-09-30). The project continues under active development. Everything in the "Features" section above is already deployed and running in production.
+**v1.1.0** (2026-10-27). The project continues under active development. Everything in the "Features" section above is already deployed and running in production.
 
 - **Full history of everything that's been shipped** (chronological order, with the context/bug/decision behind each entry): **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **Pending** (product EPICs, technical debt and the architectural review behind each one): **[docs/BACKLOG.md](docs/BACKLOG.md)**.

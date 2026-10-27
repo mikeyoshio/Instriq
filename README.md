@@ -115,7 +115,7 @@ flutter run -d chrome        # navegador
 
 ## Estat / roadmap
 
-**v1.0.0** (2026-09-30). El projecte continua en desenvolupament actiu. Tot el que hi ha a la secció "Funcionalitats" de dalt ja està desplegat i funcionant en producció.
+**v1.1.0** (2026-10-27). El projecte continua en desenvolupament actiu. Tot el que hi ha a la secció "Funcionalitats" de dalt ja està desplegat i funcionant en producció.
 
 - **Historial complet de tot el que s'ha lliurat** (ordre cronològic, amb el context/bug/decisió de cada entrada): **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **Pendent** (EPICs de producte, deute tècnic i revisió arquitectònica prèvia a cadascun): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
