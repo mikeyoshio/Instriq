@@ -695,6 +695,14 @@
   "@syncIssuesCountLabel": {"placeholders": {"count": {"type": "int"}}},
 
   "saveAction": "Guardar",
+  "contentTrustDialogTitle": "Fuente y validación clínica",
+  "sourceReferenceLabel": "Fuente de información (cita, documento, enlace...)",
+  "clinicalReviewLabel": "Validación clínica",
+  "clinicallyReviewedOn": "Revisado clínicamente el {date}",
+  "@clinicallyReviewedOn": {"placeholders": {"date": {"type": "String"}}},
+  "notYetClinicallyReviewedLabel": "Todavía sin revisión clínica",
+  "clinicalReviewNotesLabel": "Notas de la revisión (opcional)",
+  "markClinicallyReviewedAction": "Marcar como revisado clínicamente",
   "traysTitle": "Bandejas de instrumental",
   "traysSubtitle": "Sets de instrumental con checklist, versionado y aprobación",
   "trayLoadError": "No se pudieron cargar las bandejas: {error}",
@@ -1065,6 +1073,7 @@
   "auditActionInstrumentIncidentReported": "Ha reportado una incidencia",
   "auditActionInstrumentIncidentResolved": "Ha resuelto una incidencia",
   "auditActionInstrumentIncidentVerified": "Ha verificado una incidencia",
+  "auditActionContentClinicallyReviewed": "Ha revisado clínicamente un contenido",
 
   "reportContentErrorAction": "Reportar un error",
   "reportContentErrorDialogTitle": "Reportar un error de contenido",

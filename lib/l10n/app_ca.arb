@@ -695,6 +695,14 @@
   "@syncIssuesCountLabel": {"placeholders": {"count": {"type": "int"}}},
 
   "saveAction": "Desa",
+  "contentTrustDialogTitle": "Font i validació clínica",
+  "sourceReferenceLabel": "Font d'informació (citació, document, enllaç...)",
+  "clinicalReviewLabel": "Validació clínica",
+  "clinicallyReviewedOn": "Revisat clínicament el {date}",
+  "@clinicallyReviewedOn": {"placeholders": {"date": {"type": "String"}}},
+  "notYetClinicallyReviewedLabel": "Encara sense revisió clínica",
+  "clinicalReviewNotesLabel": "Notes de la revisió (opcional)",
+  "markClinicallyReviewedAction": "Marca com a revisat clínicament",
   "traysTitle": "Safates d'instrumental",
   "traysSubtitle": "Sets d'instrumental amb checklist, versionat i aprovació",
   "trayLoadError": "No s'han pogut carregar les safates: {error}",
@@ -1065,6 +1073,7 @@
   "auditActionInstrumentIncidentReported": "Ha reportat una incidència",
   "auditActionInstrumentIncidentResolved": "Ha resolt una incidència",
   "auditActionInstrumentIncidentVerified": "Ha verificat una incidència",
+  "auditActionContentClinicallyReviewed": "Ha revisat clínicament un contingut",
 
   "reportContentErrorAction": "Reportar un error",
   "reportContentErrorDialogTitle": "Reportar un error de contingut",

@@ -144,3 +144,12 @@ Primera pujada de versió des de l'1.0.0 inicial (2026-09-30): el desenvolupamen
   - Pendent, fora d'abast d'aquest tram: qüestionaris configurables, i la resta del bloc de confiança (font per camp, data de revisió, validació clínica, notificació activa de seguiment, llista agregada de contingut del grup).
 
 `flutter analyze`/`flutter test` nets.
+
+- **Tercer tram**: la resta del bloc de confiança/traçabilitat de contingut, l'únic dels 4 forats on el document auditat insistia a evitar ambigüitat ("publicat" no és el mateix que "revisat per un professional").
+  - `supabase/schema_v58_content_trust_metadata.sql`: `source_reference` (text lliure, llindar d'editor) + `clinically_reviewed_by/at/notes` (llindar d'approver/administrator, el mateix ja confiat per aprovar el contingut) a les versions dels 4 tipus de contingut privat. Reutilitza la funció `_private_content_comment_workspace_id` afegida a schema_v57 (ja no és exclusiva de comentaris pese al nom) en comptes de repetir el join 2 vegades més.
+  - Deliberadament NO és una fila nova ni un RPC per tipus: 2 RPC polimòrfics (`set_content_source_reference`/`mark_content_clinically_reviewed`), re-cridables (una versió nova neix amb aquests camps nets, no cal resetejar-los a mà).
+  - Codi Dart: els 4 models de versió guanyen els 4 camps (`fromRow` només — no formen part del flux normal d'esborrany/`toRow`/`copyWith`, s'escriuen només via els 2 RPC nous). `ContentTrustService` (genèric, `ref_type`/`ref_id`) + diàleg compartit `content_trust_dialog.dart`, enganxat a les mateixes 4 fitxes de detall que ja tenien el botó de comentaris.
+  - `auditActionContentClinicallyReviewed` nou a `audit_label.dart`.
+  - Pendent, fora d'abast: qüestionaris configurables, notificació activa de seguiment i llista agregada de contingut del grup.
+
+`flutter analyze`/`flutter test` nets.

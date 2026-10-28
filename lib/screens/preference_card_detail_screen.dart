@@ -14,6 +14,7 @@ import '../services/pdf_export.dart';
 import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/content_trust_dialog.dart';
 import '../widgets/offline_banner.dart';
 import 'content_comments_screen.dart';
 import 'preference_card_form_screen.dart';
@@ -86,6 +87,29 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
     if (published == null) return;
     final l10n = AppLocalizations.of(context)!;
     await exportPreferenceCardPdf(published: published, surgeonName: _surgeon?.name ?? '', l10n: l10n);
+  }
+
+  Future<void> _refreshCard() async {
+    final updated = await PreferenceCardService.instance.fetchCard(_card.id);
+    if (mounted) setState(() => _card = updated);
+  }
+
+  Future<void> _openContentTrust() async {
+    final published = _card.publishedVersion;
+    if (published == null) return;
+    final canEdit = widget.myRole?.canEdit ?? false;
+    final canApprove = widget.myRole?.canApprove ?? false;
+    await showContentTrustDialog(
+      context,
+      refType: 'preference_card_version',
+      refId: published.id,
+      currentSourceReference: published.sourceReference,
+      clinicallyReviewedAt: published.clinicallyReviewedAt,
+      clinicalReviewNotes: published.clinicalReviewNotes,
+      canEditSource: canEdit,
+      canMarkReviewed: canApprove,
+      onDone: _refreshCard,
+    );
   }
 
   Future<void> _openComments() async {
@@ -200,6 +224,12 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
               icon: const Icon(Icons.comment_outlined),
               tooltip: l10n.contentCommentsMenuTitle,
               onPressed: _openComments,
+            ),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.verified_outlined),
+              tooltip: l10n.contentTrustDialogTitle,
+              onPressed: _openContentTrust,
             ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canEdit && published != null)

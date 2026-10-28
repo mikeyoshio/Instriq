@@ -159,6 +159,10 @@ class CustomInstrumentVersion {
   final String? comment;
   final String? basedOnVersionId;
   final DateTime? createdAt;
+  final String? sourceReference;
+  final String? clinicallyReviewedBy;
+  final DateTime? clinicallyReviewedAt;
+  final String? clinicalReviewNotes;
 
   const CustomInstrumentVersion({
     required this.id,
@@ -179,6 +183,10 @@ class CustomInstrumentVersion {
     this.comment,
     this.basedOnVersionId,
     this.createdAt,
+    this.sourceReference,
+    this.clinicallyReviewedBy,
+    this.clinicallyReviewedAt,
+    this.clinicalReviewNotes,
   });
 
   Map<String, dynamic> toRow() => {
@@ -255,6 +263,11 @@ class CustomInstrumentVersion {
       comment: row['comment'] as String?,
       basedOnVersionId: row['based_on_version_id'] as String?,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
+      sourceReference: row['source_reference'] as String?,
+      clinicallyReviewedBy: row['clinically_reviewed_by'] as String?,
+      clinicallyReviewedAt:
+          row['clinically_reviewed_at'] != null ? DateTime.tryParse(row['clinically_reviewed_at'] as String) : null,
+      clinicalReviewNotes: row['clinical_review_notes'] as String?,
     );
   }
 }

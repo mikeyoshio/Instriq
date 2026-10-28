@@ -35,6 +35,7 @@ import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/content_trust_dialog.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
 import '../widgets/suture_labels.dart';
@@ -403,6 +404,30 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     );
   }
 
+  Future<void> _refreshDocument() async {
+    await GroupDocumentService.instance.fetchDocuments(_document.kind, _document.workspaceId);
+    final updated = GroupDocumentService.instance.documentById(_document.id);
+    if (mounted) setState(() => _document = updated ?? _document);
+  }
+
+  Future<void> _openContentTrust() async {
+    final published = _document.publishedVersion;
+    if (published == null) return;
+    final canEdit = widget.myRole?.canEdit ?? false;
+    final canApprove = widget.myRole?.canApprove ?? false;
+    await showContentTrustDialog(
+      context,
+      refType: 'group_document_version',
+      refId: published.id,
+      currentSourceReference: published.sourceReference,
+      clinicallyReviewedAt: published.clinicallyReviewedAt,
+      clinicalReviewNotes: published.clinicalReviewNotes,
+      canEditSource: canEdit,
+      canMarkReviewed: canApprove,
+      onDone: _refreshDocument,
+    );
+  }
+
   Future<void> _openComments() async {
     final published = _document.publishedVersion;
     if (published == null) return;
@@ -467,6 +492,12 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               icon: const Icon(Icons.comment_outlined),
               tooltip: l10n.contentCommentsMenuTitle,
               onPressed: _openComments,
+            ),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.verified_outlined),
+              tooltip: l10n.contentTrustDialogTitle,
+              onPressed: _openContentTrust,
             ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canEdit && published != null)

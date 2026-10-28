@@ -218,6 +218,10 @@ class TrayVersion {
   final String? comment;
   final String? basedOnVersionId;
   final DateTime? createdAt;
+  final String? sourceReference;
+  final String? clinicallyReviewedBy;
+  final DateTime? clinicallyReviewedAt;
+  final String? clinicalReviewNotes;
 
   /// true si esta versión solo existe localmente todavía — ver
   /// [GroupDocumentVersion.pendingSync] (mismo patrón, generalizado a
@@ -242,6 +246,10 @@ class TrayVersion {
     this.comment,
     this.basedOnVersionId,
     this.createdAt,
+    this.sourceReference,
+    this.clinicallyReviewedBy,
+    this.clinicallyReviewedAt,
+    this.clinicalReviewNotes,
     this.pendingSync = false,
   });
 
@@ -315,6 +323,11 @@ class TrayVersion {
       comment: row['comment'] as String?,
       basedOnVersionId: row['based_on_version_id'] as String?,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
+      sourceReference: row['source_reference'] as String?,
+      clinicallyReviewedBy: row['clinically_reviewed_by'] as String?,
+      clinicallyReviewedAt:
+          row['clinically_reviewed_at'] != null ? DateTime.tryParse(row['clinically_reviewed_at'] as String) : null,
+      clinicalReviewNotes: row['clinical_review_notes'] as String?,
       pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }

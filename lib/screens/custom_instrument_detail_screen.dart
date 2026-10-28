@@ -35,6 +35,7 @@ import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/clinical_data_form_sheet.dart';
+import '../widgets/content_trust_dialog.dart';
 import '../widgets/instrument_incident_dialogs.dart';
 import '../widgets/instrument_incident_label.dart';
 import '../widgets/offline_banner.dart';
@@ -462,6 +463,29 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
     if (mounted) setState(() => _loadingPhotos = false);
   }
 
+  Future<void> _refreshInstrument() async {
+    final refreshed = await CustomInstrumentService.instance.fetchById(_instrument.id);
+    if (mounted) setState(() => _instrument = refreshed);
+  }
+
+  Future<void> _openContentTrust() async {
+    final publishedVersion = _instrument.publishedVersion;
+    if (publishedVersion == null) return;
+    final canEdit = widget.myRole?.canEdit ?? false;
+    final canApprove = widget.myRole?.canApprove ?? false;
+    await showContentTrustDialog(
+      context,
+      refType: 'custom_instrument_version',
+      refId: publishedVersion.id,
+      currentSourceReference: publishedVersion.sourceReference,
+      clinicallyReviewedAt: publishedVersion.clinicallyReviewedAt,
+      clinicalReviewNotes: publishedVersion.clinicalReviewNotes,
+      canEditSource: canEdit,
+      canMarkReviewed: canApprove,
+      onDone: _refreshInstrument,
+    );
+  }
+
   Future<void> _openComments() async {
     final publishedVersionId = _instrument.publishedVersionId;
     if (publishedVersionId == null) return;
@@ -517,6 +541,12 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
               icon: const Icon(Icons.comment_outlined),
               tooltip: l10n.contentCommentsMenuTitle,
               onPressed: _openComments,
+            ),
+          if (_instrument.publishedVersionId != null)
+            IconButton(
+              icon: const Icon(Icons.verified_outlined),
+              tooltip: l10n.contentTrustDialogTitle,
+              onPressed: _openContentTrust,
             ),
           if (canEdit)
             IconButton(

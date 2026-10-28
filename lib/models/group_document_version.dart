@@ -141,6 +141,10 @@ class GroupDocumentVersion {
   final String? approvedBy;
   final DateTime? approvedAt;
   final DateTime? createdAt;
+  final String? sourceReference;
+  final String? clinicallyReviewedBy;
+  final DateTime? clinicallyReviewedAt;
+  final String? clinicalReviewNotes;
 
   /// true si esta versión solo existe localmente todavía: se creó/editó sin
   /// conexión y está esperando en [SyncQueueService] a subirse. No se envía
@@ -170,6 +174,10 @@ class GroupDocumentVersion {
     this.approvedBy,
     this.approvedAt,
     this.createdAt,
+    this.sourceReference,
+    this.clinicallyReviewedBy,
+    this.clinicallyReviewedAt,
+    this.clinicalReviewNotes,
     this.pendingSync = false,
   });
 
@@ -265,6 +273,11 @@ class GroupDocumentVersion {
       approvedBy: row['approved_by'] as String?,
       approvedAt: row['approved_at'] != null ? DateTime.tryParse(row['approved_at'] as String) : null,
       createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
+      sourceReference: row['source_reference'] as String?,
+      clinicallyReviewedBy: row['clinically_reviewed_by'] as String?,
+      clinicallyReviewedAt:
+          row['clinically_reviewed_at'] != null ? DateTime.tryParse(row['clinically_reviewed_at'] as String) : null,
+      clinicalReviewNotes: row['clinical_review_notes'] as String?,
       pendingSync: row['pending_sync'] as bool? ?? false,
     );
   }

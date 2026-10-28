@@ -695,6 +695,14 @@
   "@syncIssuesCountLabel": {"placeholders": {"count": {"type": "int"}}},
 
   "saveAction": "Save",
+  "contentTrustDialogTitle": "Source & clinical review",
+  "sourceReferenceLabel": "Source of this information (citation, document, link...)",
+  "clinicalReviewLabel": "Clinical review",
+  "clinicallyReviewedOn": "Clinically reviewed on {date}",
+  "@clinicallyReviewedOn": {"placeholders": {"date": {"type": "String"}}},
+  "notYetClinicallyReviewedLabel": "Not clinically reviewed yet",
+  "clinicalReviewNotesLabel": "Review notes (optional)",
+  "markClinicallyReviewedAction": "Mark as clinically reviewed",
   "traysTitle": "Instrument trays",
   "traysSubtitle": "Instrument sets with checklist, versioning and approval",
   "trayLoadError": "Couldn't load trays: {error}",
@@ -1065,6 +1073,7 @@
   "auditActionInstrumentIncidentReported": "Reported an incident",
   "auditActionInstrumentIncidentResolved": "Resolved an incident",
   "auditActionInstrumentIncidentVerified": "Verified an incident",
+  "auditActionContentClinicallyReviewed": "Clinically reviewed a content item",
 
   "reportContentErrorAction": "Report an error",
   "reportContentErrorDialogTitle": "Report a content error",

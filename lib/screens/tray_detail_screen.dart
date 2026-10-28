@@ -24,6 +24,7 @@ import '../services/pdf_export.dart';
 import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
+import '../widgets/content_trust_dialog.dart';
 import '../widgets/offline_banner.dart';
 import 'content_comments_screen.dart';
 import 'group_document_detail_screen.dart';
@@ -258,6 +259,24 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
     );
   }
 
+  Future<void> _openContentTrust() async {
+    final published = _tray.publishedVersion;
+    if (published == null) return;
+    final canEdit = widget.myRole?.canEdit ?? false;
+    final canApprove = widget.myRole?.canApprove ?? false;
+    await showContentTrustDialog(
+      context,
+      refType: 'tray_version',
+      refId: published.id,
+      currentSourceReference: published.sourceReference,
+      clinicallyReviewedAt: published.clinicallyReviewedAt,
+      clinicalReviewNotes: published.clinicalReviewNotes,
+      canEditSource: canEdit,
+      canMarkReviewed: canApprove,
+      onDone: _load,
+    );
+  }
+
   Future<void> _prepare() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => TrayPreparationOrModeScreen(tray: _tray)),
@@ -473,6 +492,12 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
               icon: const Icon(Icons.comment_outlined),
               tooltip: l10n.contentCommentsMenuTitle,
               onPressed: _openComments,
+            ),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.verified_outlined),
+              tooltip: l10n.contentTrustDialogTitle,
+              onPressed: _openContentTrust,
             ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canApprove)

@@ -118,6 +118,8 @@ String auditActionLabel(AppLocalizations l10n, AuditEntry entry) {
       return l10n.auditActionInstrumentIncidentResolved;
     case 'instrument_incident_verified':
       return l10n.auditActionInstrumentIncidentVerified;
+    case 'content_clinically_reviewed':
+      return l10n.auditActionContentClinicallyReviewed;
     default:
       return entry.action;
   }
