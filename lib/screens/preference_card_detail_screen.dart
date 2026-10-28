@@ -15,6 +15,7 @@ import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
 import '../widgets/category_icon.dart';
 import '../widgets/offline_banner.dart';
+import 'content_comments_screen.dart';
 import 'preference_card_form_screen.dart';
 import 'preference_card_version_history_screen.dart';
 import 'surgeon_detail_screen.dart';
@@ -85,6 +86,22 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
     if (published == null) return;
     final l10n = AppLocalizations.of(context)!;
     await exportPreferenceCardPdf(published: published, surgeonName: _surgeon?.name ?? '', l10n: l10n);
+  }
+
+  Future<void> _openComments() async {
+    final published = _card.publishedVersion;
+    if (published == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ContentCommentsScreen(
+          refType: 'preference_card_version',
+          refId: published.id,
+          title: l10n.contentCommentsMenuTitle,
+          canResolve: widget.myRole?.canApprove ?? false,
+        ),
+      ),
+    );
   }
 
   Future<void> _edit() async {
@@ -177,6 +194,12 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
               icon: const Icon(Icons.picture_as_pdf_outlined),
               tooltip: l10n.exportPdfAction,
               onPressed: _exportPdf,
+            ),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.comment_outlined),
+              tooltip: l10n.contentCommentsMenuTitle,
+              onPressed: _openComments,
             ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canEdit && published != null)

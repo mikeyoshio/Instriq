@@ -1031,6 +1031,9 @@
   "editorialCommentsEmptyState": "Todavía no hay comentarios",
   "editorialCommentHint": "Escribe un comentario",
   "editorialCommentSendAction": "Comentar",
+  "resolveCommentAction": "Resolver",
+  "reopenCommentAction": "Reabrir",
+  "contentCommentsMenuTitle": "Comentarios de revisión",
 
   "incidentsSectionTitle": "Incidencias",
   "incidentsEmptyState": "Todavía no se ha reportado ninguna incidencia.",
@@ -1073,6 +1076,14 @@
   "resolveContentReportDialogTitle": "Marcar reporte como resuelto",
 
   "helpCenterTitle": "Centro de ayuda",
+  "sendFeedbackMenuTitle": "Enviar sugerencia o reportar un error",
+  "sendFeedbackDialogTitle": "Enviar feedback",
+  "feedbackCategoryBug": "Error",
+  "feedbackCategorySuggestion": "Sugerencia",
+  "feedbackCategoryOther": "Otro",
+  "feedbackMessageLabel": "Cuéntanos qué ha pasado o qué te gustaría ver",
+  "sendFeedbackAction": "Enviar",
+  "feedbackSentConfirmation": "¡Gracias! Hemos recibido tu feedback.",
   "offlineDownloadTitle": "Descargar para uso sin conexión",
   "offlineDownloadInProgressTitle": "Descargando...",
   "offlineDownloadSuccess": "Listo: {items} elementos y {images} fotos guardadas para uso sin conexión.",
@@ -1154,6 +1165,7 @@
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
 
   "exportPdfAction": "Exportar a PDF",
+  "practiceTrayIdentificationAction": "Practicar identificación de la bandeja",
   "pdfGeneratedOn": "Generado desde Instriq el {date}",
   "@pdfGeneratedOn": {"placeholders": {"date": {"type": "String"}}},
   "pdfPositionColumn": "Posición",

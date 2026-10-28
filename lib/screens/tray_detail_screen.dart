@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../data/instruments_data.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/components/instriq_stale_content_banner.dart';
 import '../l10n/app_localizations.dart';
@@ -24,7 +25,9 @@ import '../services/tag_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../widgets/offline_banner.dart';
+import 'content_comments_screen.dart';
 import 'group_document_detail_screen.dart';
+import 'quiz_screen.dart';
 import 'specialty_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_form_screen.dart';
@@ -217,6 +220,41 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
       specialtyLabel: _specialty?.label,
       l10n: l10n,
       languageCode: Localizations.localeOf(context).languageCode,
+    );
+  }
+
+  /// "Aprendizaje por bandejas" (propuesta de producto auditada esta
+  /// sesión): identificar el conjunto de una bandeja, no un instrumento
+  /// suelto. Reutiliza [QuizScreen] con el pool limitado a los ítems de
+  /// catálogo de esta bandeja -- el instrumental personalizado del equipo
+  /// queda fuera (modelo de datos distinto, sin el mismo conjunto de campos
+  /// que [Instrument]).
+  Future<void> _practiceIdentification() async {
+    final published = _tray.publishedVersion;
+    if (published == null) return;
+    final catalogIds = published.items
+        .where((i) => i.instrumentRefType == InstrumentRefType.catalog)
+        .map((i) => i.instrumentRefId)
+        .toSet();
+    final pool = kInstruments.where((i) => catalogIds.contains(i.id)).toList();
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => QuizScreen(pool: pool)),
+    );
+  }
+
+  Future<void> _openComments() async {
+    final published = _tray.publishedVersion;
+    if (published == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ContentCommentsScreen(
+          refType: 'tray_version',
+          refId: published.id,
+          title: l10n.contentCommentsMenuTitle,
+          canResolve: widget.myRole?.canApprove ?? false,
+        ),
+      ),
     );
   }
 
@@ -423,6 +461,18 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
               icon: const Icon(Icons.picture_as_pdf_outlined),
               tooltip: l10n.exportPdfAction,
               onPressed: _exportPdf,
+            ),
+          if (published != null && published.items.any((i) => i.instrumentRefType == InstrumentRefType.catalog))
+            IconButton(
+              icon: const Icon(Icons.quiz_outlined),
+              tooltip: l10n.practiceTrayIdentificationAction,
+              onPressed: _practiceIdentification,
+            ),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.comment_outlined),
+              tooltip: l10n.contentCommentsMenuTitle,
+              onPressed: _openComments,
             ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canApprove)

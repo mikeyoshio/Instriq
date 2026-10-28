@@ -39,6 +39,7 @@ import '../widgets/instrument_incident_dialogs.dart';
 import '../widgets/instrument_incident_label.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
+import 'content_comments_screen.dart';
 import 'custom_instrument_form_screen.dart';
 import 'custom_instrument_version_history_screen.dart';
 import 'group_document_detail_screen.dart';
@@ -461,6 +462,22 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
     if (mounted) setState(() => _loadingPhotos = false);
   }
 
+  Future<void> _openComments() async {
+    final publishedVersionId = _instrument.publishedVersionId;
+    if (publishedVersionId == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ContentCommentsScreen(
+          refType: 'custom_instrument_version',
+          refId: publishedVersionId,
+          title: l10n.contentCommentsMenuTitle,
+          canResolve: widget.myRole?.canApprove ?? false,
+        ),
+      ),
+    );
+  }
+
   Future<void> _delete() async {
     final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
@@ -495,6 +512,12 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
               onPressed: _toggleFavorite,
             ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
+          if (_instrument.publishedVersionId != null)
+            IconButton(
+              icon: const Icon(Icons.comment_outlined),
+              tooltip: l10n.contentCommentsMenuTitle,
+              onPressed: _openComments,
+            ),
           if (canEdit)
             IconButton(
               icon: const Icon(Icons.edit_outlined),

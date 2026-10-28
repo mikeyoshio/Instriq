@@ -38,6 +38,7 @@ import '../widgets/category_icon.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
 import '../widgets/suture_labels.dart';
+import 'content_comments_screen.dart';
 import 'group_document_form_screen.dart';
 import 'group_document_version_history_screen.dart';
 import 'instrument_detail_screen.dart';
@@ -402,6 +403,22 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     );
   }
 
+  Future<void> _openComments() async {
+    final published = _document.publishedVersion;
+    if (published == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ContentCommentsScreen(
+          refType: 'group_document_version',
+          refId: published.id,
+          title: l10n.contentCommentsMenuTitle,
+          canResolve: widget.myRole?.canApprove ?? false,
+        ),
+      ),
+    );
+  }
+
   Future<void> _delete() async {
     final l10n = AppLocalizations.of(context)!;
     final title = _document.publishedVersion?.title ?? '';
@@ -444,6 +461,12 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
               icon: const Icon(Icons.picture_as_pdf_outlined),
               tooltip: l10n.exportPdfAction,
               onPressed: _exportPdf,
+            ),
+          if (published != null)
+            IconButton(
+              icon: const Icon(Icons.comment_outlined),
+              tooltip: l10n.contentCommentsMenuTitle,
+              onPressed: _openComments,
             ),
           if (canEdit) IconButton(icon: const Icon(Icons.edit), tooltip: l10n.editTooltip, onPressed: _edit),
           if (canEdit && published != null)

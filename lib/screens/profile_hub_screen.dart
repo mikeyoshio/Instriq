@@ -18,6 +18,7 @@ import '../services/profile_service.dart';
 import '../services/sync_queue_service.dart';
 import '../services/theme_service.dart';
 import '../widgets/language_picker.dart';
+import '../widgets/send_feedback_dialog.dart';
 import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'contributor_application_form_screen.dart';
@@ -262,6 +263,12 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                 icon: Icons.help_outline,
                 title: l10n.helpCenterTitle,
                 onTap: _openHelpHub,
+              ),
+              const SizedBox(height: InstriqSpacing.sm),
+              InstriqListItem(
+                icon: Icons.feedback_outlined,
+                title: l10n.sendFeedbackMenuTitle,
+                onTap: () => showSendFeedbackDialog(context),
               ),
               const SizedBox(height: InstriqSpacing.sm),
               ValueListenableBuilder<OfflineDownloadProgress?>(

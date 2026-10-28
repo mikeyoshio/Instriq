@@ -1031,6 +1031,9 @@
   "editorialCommentsEmptyState": "Encara no hi ha comentaris",
   "editorialCommentHint": "Escriu un comentari",
   "editorialCommentSendAction": "Comenta",
+  "resolveCommentAction": "Resol",
+  "reopenCommentAction": "Reobre",
+  "contentCommentsMenuTitle": "Comentaris de revisió",
 
   "incidentsSectionTitle": "Incidències",
   "incidentsEmptyState": "Encara no s'ha reportat cap incidència.",
@@ -1073,6 +1076,14 @@
   "resolveContentReportDialogTitle": "Marcar informe com a resolt",
 
   "helpCenterTitle": "Centre d'ajuda",
+  "sendFeedbackMenuTitle": "Enviar suggeriment o reportar un error",
+  "sendFeedbackDialogTitle": "Enviar feedback",
+  "feedbackCategoryBug": "Error",
+  "feedbackCategorySuggestion": "Suggeriment",
+  "feedbackCategoryOther": "Altre",
+  "feedbackMessageLabel": "Explica'ns què ha passat o què t'agradaria veure",
+  "sendFeedbackAction": "Enviar",
+  "feedbackSentConfirmation": "Gràcies! Hem rebut el teu feedback.",
   "offlineDownloadTitle": "Descarrega per a ús sense connexió",
   "offlineDownloadInProgressTitle": "Descarregant...",
   "offlineDownloadSuccess": "Llest: {items} elements i {images} fotos desades per a ús sense connexió.",
@@ -1154,6 +1165,7 @@
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
 
   "exportPdfAction": "Exportar a PDF",
+  "practiceTrayIdentificationAction": "Practicar identificació de la safata",
   "pdfGeneratedOn": "Generat des d'Instriq el {date}",
   "@pdfGeneratedOn": {"placeholders": {"date": {"type": "String"}}},
   "pdfPositionColumn": "Posició",

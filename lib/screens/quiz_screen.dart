@@ -17,7 +17,17 @@ class _Question {
 }
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
+  /// Ámbito del quiz: `null` es el catálogo global de siempre. Pasar la
+  /// composición de una bandeja (solo instrumentos de catálogo -- el
+  /// instrumental personalizado del equipo no tiene aquí el mismo conjunto
+  /// de campos, ver docs/BACKLOG.md) permite "aprendizaje por bandejas"
+  /// (identificar el conjunto) reutilizando toda esta pantalla en vez de
+  /// duplicarla. Los distractores siguen saliendo del catálogo global
+  /// completo tanto si hay ámbito como si no (una bandeja de 3-4 ítems no
+  /// da para generar 4 opciones ella sola).
+  final List<Instrument>? pool;
+
+  const QuizScreen({super.key, this.pool});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -32,6 +42,8 @@ class _QuizScreenState extends State<QuizScreen> {
   Instrument? _selected;
   bool _finished = false;
 
+  bool get _isScoped => widget.pool != null;
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +52,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
   List<_Question> _buildQuestions() {
     final rnd = Random();
-    final pool = List<Instrument>.from(kInstruments)..shuffle(rnd);
+    final source = widget.pool ?? kInstruments;
+    final pool = List<Instrument>.from(source)..shuffle(rnd);
     final selected = pool.take(_questionCount).toList();
 
     return selected.map((instrument) {
@@ -71,7 +84,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _next() {
     if (_current == _questions.length - 1) {
-      ProgressService.instance.saveQuizResult(null, _score, _questions.length);
+      if (!_isScoped) ProgressService.instance.saveQuizResult(null, _score, _questions.length);
       setState(() => _finished = true);
       return;
     }
@@ -94,8 +107,11 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    if (_questions.isEmpty) {
+      return Scaffold(body: Center(child: Text(l10n.noCards)));
+    }
     if (_finished) {
-      final best = ProgressService.instance.quizBestScore(null);
+      final best = _isScoped ? null : ProgressService.instance.quizBestScore(null);
       return Scaffold(
         appBar: AppBar(title: Text(l10n.resultTitle)),
         body: Center(
@@ -111,7 +127,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 8),
-                Text(l10n.bestScoreLabel(best, _questions.length)),
+                if (best != null) Text(l10n.bestScoreLabel(best, _questions.length)),
                 const SizedBox(height: 24),
                 FilledButton.icon(
                   onPressed: _restart,

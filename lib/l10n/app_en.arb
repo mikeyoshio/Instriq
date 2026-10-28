@@ -1031,6 +1031,9 @@
   "editorialCommentsEmptyState": "No comments yet",
   "editorialCommentHint": "Write a comment",
   "editorialCommentSendAction": "Comment",
+  "resolveCommentAction": "Resolve",
+  "reopenCommentAction": "Reopen",
+  "contentCommentsMenuTitle": "Review comments",
 
   "incidentsSectionTitle": "Incidents",
   "incidentsEmptyState": "No incidents reported yet.",
@@ -1073,6 +1076,14 @@
   "resolveContentReportDialogTitle": "Mark report as resolved",
 
   "helpCenterTitle": "Help center",
+  "sendFeedbackMenuTitle": "Send feedback or report a bug",
+  "sendFeedbackDialogTitle": "Send feedback",
+  "feedbackCategoryBug": "Bug",
+  "feedbackCategorySuggestion": "Suggestion",
+  "feedbackCategoryOther": "Other",
+  "feedbackMessageLabel": "Tell us what happened or what you'd like to see",
+  "sendFeedbackAction": "Send",
+  "feedbackSentConfirmation": "Thanks! We've received your feedback.",
   "offlineDownloadTitle": "Download for offline use",
   "offlineDownloadInProgressTitle": "Downloading...",
   "offlineDownloadSuccess": "Done: {items} items and {images} photos saved for offline use.",
@@ -1154,6 +1165,7 @@
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
 
   "exportPdfAction": "Export to PDF",
+  "practiceTrayIdentificationAction": "Practice tray identification",
   "pdfGeneratedOn": "Generated from Instriq on {date}",
   "@pdfGeneratedOn": {"placeholders": {"date": {"type": "String"}}},
   "pdfPositionColumn": "Position",
