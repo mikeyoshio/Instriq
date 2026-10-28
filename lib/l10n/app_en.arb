@@ -245,6 +245,7 @@
   "workModeOnboardingQuestion": "What's your usual work mode?",
   "workModeNoPreference": "No preference",
   "favoriteToggleTooltip": "Mark as favorite",
+  "followToggleTooltip": "Follow (notify me when it's updated)",
   "homeSearchHint": "Search instruments, techniques, protocols, trays…",
   "homeSectionInstruments": "Instruments",
   "homeSectionTechniques": "Techniques",
@@ -1204,6 +1205,11 @@
 
   "staleContentWarning": "This content hasn't been reviewed in {months} months. Check that it's still accurate.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
+
+  "helpArticleContentFollowTitle": "Follow content and get notified",
+  "helpArticleContentFollowIntro": "If you want to know as soon as a change is published to a specific technique, tray, preference card or custom instrument (not just when you check it yourself), you can follow it.",
+  "helpArticleContentFollowStep1": "Open the published item and tap the bell icon in the top bar to follow it; tap it again to unfollow.",
+  "helpArticleContentFollowStep2": "You'll get a push notification when a new version is published. You need notifications allowed for the app (or for the site, on the web version).",
 
   "exportPdfAction": "Export to PDF",
   "practiceTrayIdentificationAction": "Practice tray identification",

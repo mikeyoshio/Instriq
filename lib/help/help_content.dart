@@ -131,6 +131,16 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           ],
         ),
         HelpArticle(
+          id: 'content_follow',
+          icon: Icons.notifications_active_outlined,
+          title: l10n.helpArticleContentFollowTitle,
+          intro: l10n.helpArticleContentFollowIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleContentFollowStep1),
+            HelpStep(text: l10n.helpArticleContentFollowStep2),
+          ],
+        ),
+        HelpArticle(
           id: 'incident_capa',
           icon: Icons.report_problem_outlined,
           title: l10n.helpArticleIncidentCapaTitle,

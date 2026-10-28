@@ -135,14 +135,22 @@ Deno.serve(async (req: Request) => {
     });
 
     const plan = await resolveNotificationPlan(admin, record);
-    if (!plan || plan.recipientUserIds.length === 0) {
+    const followPlan = await resolveFollowerPlan(admin, record);
+
+    const recipientIds = new Set<string>(plan?.recipientUserIds ?? []);
+    for (const id of followPlan?.recipientUserIds ?? []) recipientIds.add(id);
+
+    const title = plan?.title ?? followPlan?.title;
+    const body = plan?.body ?? followPlan?.body;
+
+    if (!title || !body || recipientIds.size === 0) {
       return jsonResponse({ ok: true, skipped: true, reason: "sin destinatarios" });
     }
 
     const { data: tokenRows, error: tokenError } = await admin
       .from("device_tokens")
       .select("id, fcm_token, user_id")
-      .in("user_id", plan.recipientUserIds);
+      .in("user_id", Array.from(recipientIds));
 
     if (tokenError) {
       return jsonResponse({ ok: false, error: `error leyendo device_tokens: ${tokenError.message}` }, 200);
@@ -170,7 +178,7 @@ Deno.serve(async (req: Request) => {
     const deadTokenIds: string[] = [];
 
     for (const row of tokenRows) {
-      const result = await sendFcmMessage(accessToken, row.fcm_token, plan.title, plan.body, data);
+      const result = await sendFcmMessage(accessToken, row.fcm_token, title, body, data);
       if (result.ok) {
         sent += 1;
       } else {
@@ -188,7 +196,7 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({
       ok: true,
       action: record.action,
-      recipients: plan.recipientUserIds.length,
+      recipients: recipientIds.size,
       tokens_total: tokenRows.length,
       sent,
       failed,
@@ -275,6 +283,52 @@ async function resolveNotificationPlan(
   }
 
   return null;
+}
+
+// Notificacion activa de seguimiento (schema_v59_content_follows.sql):
+// resuelve, para una accion "aprobado" de cualquiera de los 4 tipos de
+// contenido privado, quien sigue la ENTIDAD estable (no la version
+// concreta) y le avisa. Deliberadamente una consulta aparte del select ya
+// hecho en resolveNotificationPlan (que solo cubre 2 de las 4 tablas, para
+// el autor) en vez de fusionar ambas funciones -- misma tabla consultada 2
+// veces, pero mantiene cada funcion con una responsabilidad clara en una
+// Edge Function de bajo trafico donde no importa esa consulta extra.
+async function resolveFollowerPlan(
+  admin: SupabaseClient,
+  record: AuditLogRecord,
+): Promise<NotificationPlan | null> {
+  const config = FOLLOW_TABLE_BY_ACTION[record.action];
+  if (!config || !record.entity_id) return null;
+
+  const { data: versionRow } = await admin
+    .from(config.table)
+    .select(config.parentColumn)
+    .eq("id", record.entity_id)
+    .maybeSingle();
+
+  const parentId = versionRow?.[config.parentColumn] as string | undefined;
+  if (!parentId) return null;
+
+  const { data: followRows } = await admin
+    .from("content_follows")
+    .select("user_id")
+    .eq("ref_type", config.followRefType)
+    .eq("ref_id", parentId);
+
+  const recipientUserIds = (followRows ?? [])
+    .map((row) => row.user_id as string)
+    .filter((uid) => uid !== record.actor_id);
+
+  if (recipientUserIds.length === 0) return null;
+
+  const metadataTitle =
+    typeof record.metadata?.title === "string" ? (record.metadata!.title as string) : undefined;
+
+  return {
+    title: "Contenido que sigues se ha actualizado",
+    body: metadataTitle ?? "Hay una version nueva publicada.",
+    recipientUserIds,
+  };
 }
 
 async function getFcmAccessToken(serviceAccount: ServiceAccount): Promise<string> {

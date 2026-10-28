@@ -245,6 +245,7 @@
   "workModeOnboardingQuestion": "¿Cuál es tu modo de trabajo habitual?",
   "workModeNoPreference": "Sin preferencia",
   "favoriteToggleTooltip": "Marcar como favorito",
+  "followToggleTooltip": "Seguir (avisar cuando se publique un cambio)",
   "homeSearchHint": "Buscar instrumental, técnicas, protocolos, bandejas…",
   "homeSectionInstruments": "Instrumental",
   "homeSectionTechniques": "Técnicas",
@@ -1204,6 +1205,11 @@
 
   "staleContentWarning": "Este contenido no se ha revisado desde hace {months} meses. Comprueba que siga siendo correcto.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
+
+  "helpArticleContentFollowTitle": "Seguir contenido y recibir notificaciones",
+  "helpArticleContentFollowIntro": "Si quieres saber en cuanto se publique un cambio en una técnica, bandeja, tarjeta de preferencia o instrumental concreto (no solo cuando lo consultas tú), puedes seguirlo.",
+  "helpArticleContentFollowStep1": "Abre la ficha publicada y toca el icono de campana en la barra superior para seguirla; vuelve a tocarlo para dejar de seguirla.",
+  "helpArticleContentFollowStep2": "Recibirás una notificación push cuando se publique una versión nueva. Necesitas tener las notificaciones permitidas para la app (o para el sitio, en la versión web).",
 
   "exportPdfAction": "Exportar a PDF",
   "practiceTrayIdentificationAction": "Practicar identificación de la bandeja",

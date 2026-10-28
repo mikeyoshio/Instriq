@@ -20,6 +20,7 @@ import '../models/tag.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
+import '../services/content_follow_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/group_document_video_service.dart';
@@ -66,6 +67,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
   GroupDocumentVersion? _ownPendingDraft;
   bool _loadingHistory = true;
   bool _isFavorite = false;
+  bool _isFollowing = false;
   SpecialtyEntity? _specialty;
   List<Tag> _tags = [];
   Map<String, List<SterilizationMethodEntry>> _instrumentMethods = {};
@@ -89,6 +91,7 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
       RecentActivityService.instance.recordView(_refType, _document.id);
       UsageAnalyticsService.instance.recordView(_refType, _document.id);
       _loadFavoriteState();
+      _loadFollowState();
     }
   }
 
@@ -204,6 +207,18 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
     await FavoritesService.instance.toggleFavorite(_refType, _document.id);
     if (!mounted) return;
     setState(() => _isFavorite = !_isFavorite);
+  }
+
+  Future<void> _loadFollowState() async {
+    final isFollowing = await ContentFollowService.instance.isFollowing(_refType, _document.id);
+    if (!mounted) return;
+    setState(() => _isFollowing = isFollowing);
+  }
+
+  Future<void> _toggleFollow() async {
+    await ContentFollowService.instance.toggleFollow(_refType, _document.id);
+    if (!mounted) return;
+    setState(() => _isFollowing = !_isFollowing);
   }
 
   Future<void> _loadOwnDraft() async {
@@ -474,12 +489,18 @@ class _GroupDocumentDetailScreenState extends State<GroupDocumentDetailScreen> {
       appBar: AppBar(
         title: Text(published?.title ?? l10n.unpublished),
         actions: [
-          if (AuthService.instance.currentUser != null)
+          if (AuthService.instance.currentUser != null) ...[
             IconButton(
               icon: Icon(_isFavorite ? Icons.star : Icons.star_border),
               tooltip: l10n.favoriteToggleTooltip,
               onPressed: _toggleFavorite,
             ),
+            IconButton(
+              icon: Icon(_isFollowing ? Icons.notifications_active : Icons.notifications_none),
+              tooltip: l10n.followToggleTooltip,
+              onPressed: _toggleFollow,
+            ),
+          ],
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (published != null)
             IconButton(

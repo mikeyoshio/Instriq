@@ -19,6 +19,7 @@ import '../models/tray.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
 import '../services/custom_instrument_service.dart';
+import '../services/content_follow_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/instrument_incident_service.dart';
@@ -71,6 +72,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
   final Map<String, String> _photoUrls = {};
   bool _loadingPhotos = true;
   bool _isFavorite = false;
+  bool _isFollowing = false;
   SpecialtyEntity? _specialty;
   List<Tag> _tags = [];
   List<GroupDocument> _usedInDocuments = [];
@@ -116,6 +118,7 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
       RecentActivityService.instance.recordView(_refType, _instrument.id);
       UsageAnalyticsService.instance.recordView(_refType, _instrument.id);
       _loadFavoriteState();
+      _loadFollowState();
     }
   }
 
@@ -450,6 +453,18 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
     setState(() => _isFavorite = !_isFavorite);
   }
 
+  Future<void> _loadFollowState() async {
+    final isFollowing = await ContentFollowService.instance.isFollowing(_refType, _instrument.id);
+    if (!mounted) return;
+    setState(() => _isFollowing = isFollowing);
+  }
+
+  Future<void> _toggleFollow() async {
+    await ContentFollowService.instance.toggleFollow(_refType, _instrument.id);
+    if (!mounted) return;
+    setState(() => _isFollowing = !_isFollowing);
+  }
+
   Future<void> _loadPhotos() async {
     for (final variant in _instrument.variants) {
       final path = variant.photoPath;
@@ -529,12 +544,18 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
       appBar: AppBar(
         title: Text(_instrument.name.isEmpty ? l10n.unpublished : _instrument.name),
         actions: [
-          if (AuthService.instance.currentUser != null)
+          if (AuthService.instance.currentUser != null) ...[
             IconButton(
               icon: Icon(_isFavorite ? Icons.star : Icons.star_border),
               tooltip: l10n.favoriteToggleTooltip,
               onPressed: _toggleFavorite,
             ),
+            IconButton(
+              icon: Icon(_isFollowing ? Icons.notifications_active : Icons.notifications_none),
+              tooltip: l10n.followToggleTooltip,
+              onPressed: _toggleFollow,
+            ),
+          ],
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (_instrument.publishedVersionId != null)
             IconButton(

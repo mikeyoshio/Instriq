@@ -10,6 +10,7 @@ import '../models/preference_card.dart';
 import '../models/surgeon.dart';
 import '../models/workspace_role.dart';
 import '../services/auth_service.dart';
+import '../services/content_follow_service.dart';
 import '../services/pdf_export.dart';
 import '../services/preference_card_service.dart';
 import '../services/surgeon_service.dart';
@@ -34,16 +35,32 @@ class PreferenceCardDetailScreen extends StatefulWidget {
 }
 
 class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen> {
+  static const String _refType = 'preference_card';
+
   late PreferenceCard _card;
   PreferenceCardVersion? _ownPendingDraft;
   Surgeon? _surgeon;
   bool _loading = true;
+  bool _isFollowing = false;
 
   @override
   void initState() {
     super.initState();
     _card = widget.card;
     _load();
+    if (AuthService.instance.currentUser != null) _loadFollowState();
+  }
+
+  Future<void> _loadFollowState() async {
+    final isFollowing = await ContentFollowService.instance.isFollowing(_refType, _card.id);
+    if (!mounted) return;
+    setState(() => _isFollowing = isFollowing);
+  }
+
+  Future<void> _toggleFollow() async {
+    await ContentFollowService.instance.toggleFollow(_refType, _card.id);
+    if (!mounted) return;
+    setState(() => _isFollowing = !_isFollowing);
   }
 
   Future<void> _load() async {
@@ -212,6 +229,12 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
       appBar: AppBar(
         title: Text(published?.procedureName ?? l10n.unpublished),
         actions: [
+          if (AuthService.instance.currentUser != null)
+            IconButton(
+              icon: Icon(_isFollowing ? Icons.notifications_active : Icons.notifications_none),
+              tooltip: l10n.followToggleTooltip,
+              onPressed: _toggleFollow,
+            ),
           IconButton(icon: const Icon(Icons.history), onPressed: _openHistory, tooltip: l10n.historyTooltip),
           if (published != null)
             IconButton(

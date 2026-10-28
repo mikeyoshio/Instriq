@@ -245,6 +245,7 @@
   "workModeOnboardingQuestion": "Quin és el teu mode de treball habitual?",
   "workModeNoPreference": "Sense preferència",
   "favoriteToggleTooltip": "Marcar com a favorit",
+  "followToggleTooltip": "Seguir (avisar quan es publiqui un canvi)",
   "homeSearchHint": "Cerca instrumental, tècniques, protocols, safates…",
   "homeSectionInstruments": "Instrumental",
   "homeSectionTechniques": "Tècniques",
@@ -1204,6 +1205,11 @@
 
   "staleContentWarning": "Aquest contingut no s'ha revisat des de fa {months} mesos. Comprova que encara sigui correcte.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
+
+  "helpArticleContentFollowTitle": "Seguir contingut i rebre notificacions",
+  "helpArticleContentFollowIntro": "Si vols saber tan bon punt es publiqui un canvi en una tècnica, safata, targeta de preferència o instrumental concret (no només quan el consultes tu), el pots seguir.",
+  "helpArticleContentFollowStep1": "Obre la fitxa publicada i toca la icona de campana a la barra superior per seguir-la; torna-la a tocar per deixar de seguir-la.",
+  "helpArticleContentFollowStep2": "Rebràs una notificació push quan es publiqui una versió nova. Cal tenir les notificacions permeses per a l'app (o per al lloc, a la versió web).",
 
   "exportPdfAction": "Exportar a PDF",
   "practiceTrayIdentificationAction": "Practicar identificació de la safata",
