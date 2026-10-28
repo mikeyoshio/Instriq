@@ -170,3 +170,13 @@ Primera pujada de versió des de l'1.0.0 inicial (2026-09-30): el desenvolupamen
   - **Pendent desplegar** (no es pot fer des d'aquí): `supabase functions deploy send-push` — el canvi de TypeScript no es desplega sol amb el push de git, a diferència de les migracions SQL.
 
 `flutter analyze`/`flutter test` nets.
+
+- **Últim forat de l'auditoria: qüestionaris configurables per supervisor/docent** (`supabase/schema_v60_team_quizzes.sql`, taula `team_quizzes` sense versionat ni RPC — config lleugera, lectura oberta a tota l'organització com `teams` ja és, escriptura restringida al mateix llindar de `team_learning_progress`). Reutilització màxima en lloc de construir de zero:
+  - `QuizScreen` (ampliada aquesta mateixa sessió per a "practicar safata") ja acceptava un `pool` d'instruments -- un qüestionari d'equip és el mateix pool, guardat.
+  - `ProgressService.saveQuizResult`/`quizBestScore` ja no exigeixen `InstrumentCategory` (cap crida real ho feia servir mai, sempre `null`) -- ara accepten qualsevol clau de text. Una puntuació guardada com `team_quiz:<id>` ja apareix sola al `quiz_best_scores` que `team_learning_progress` exposa al supervisor, sense tocar aquella funció.
+  - `CatalogPickerSheet` (ja existent per a instrumental relacionat de tècniques) reutilitzat tal qual per triar els instruments del qüestionari.
+  - Pantalles noves: `team_quiz_management_screen.dart`/`create_team_quiz_screen.dart` (crear/esborrar, enganxades des de `team_progress_screen.dart`) i `team_quizzes_screen.dart` (fer-los, nova targeta a `learn_screen.dart`). Article d'ajuda nou "Qüestionaris d'equip".
+
+Amb això es tanquen les 6 propostes confirmades com a reals pel document de producte auditat aquesta sessió.
+
+`flutter analyze`/`flutter test` nets.

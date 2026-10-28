@@ -211,6 +211,16 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
             HelpStep(text: l10n.helpArticleTrayIdentificationStep2),
           ],
         ),
+        HelpArticle(
+          id: 'team_quizzes',
+          icon: Icons.groups_outlined,
+          title: l10n.helpArticleTeamQuizzesTitle,
+          intro: l10n.helpArticleTeamQuizzesIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleTeamQuizzesStep1),
+            HelpStep(text: l10n.helpArticleTeamQuizzesStep2),
+          ],
+        ),
       ],
     ),
   ];

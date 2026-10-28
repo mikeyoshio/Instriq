@@ -67,3 +67,40 @@ class TeamMemberProgress {
     );
   }
 }
+
+/// Cuestionario configurado por un supervisor/docente para su equipo (ver
+/// supabase/schema_v60_team_quizzes.sql) -- pool fijo de instrumentos de
+/// catálogo en vez de las 10 preguntas aleatorias de siempre. [scopeKey] es
+/// la clave bajo la que [ProgressService.saveQuizResult]/[quizBestScore]
+/// guardan la mejor puntuación: con ese mismo prefijo, `team_learning_progress`
+/// ya la expone al supervisor sin ningún cambio en esa función.
+class TeamQuiz {
+  final String id;
+  final String teamId;
+  final String title;
+  final List<String> instrumentIds;
+  final String? createdBy;
+  final DateTime? createdAt;
+
+  const TeamQuiz({
+    required this.id,
+    required this.teamId,
+    required this.title,
+    required this.instrumentIds,
+    this.createdBy,
+    this.createdAt,
+  });
+
+  String get scopeKey => 'team_quiz:$id';
+
+  factory TeamQuiz.fromRow(Map<String, dynamic> row) {
+    return TeamQuiz(
+      id: row['id'] as String,
+      teamId: row['team_id'] as String,
+      title: row['title'] as String? ?? '',
+      instrumentIds: (row['instrument_ids'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
+      createdBy: row['created_by'] as String?,
+      createdAt: row['created_at'] != null ? DateTime.tryParse(row['created_at'] as String) : null,
+    );
+  }
+}

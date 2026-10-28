@@ -4,6 +4,7 @@ import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import 'flashcards_screen.dart';
 import 'quiz_screen.dart';
+import 'team_quizzes_screen.dart';
 
 class LearnScreen extends StatelessWidget {
   const LearnScreen({super.key});
@@ -40,6 +41,15 @@ class LearnScreen extends StatelessWidget {
                 subtitle: l10n.quizSubtitle,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const QuizScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _LearnCard(
+                icon: Icons.groups_outlined,
+                title: l10n.teamQuizzesMenuTitle,
+                subtitle: l10n.teamQuizzesMenuSubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const TeamQuizzesScreen()),
                 ),
               ),
             ],

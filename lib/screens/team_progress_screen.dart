@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../models/team.dart';
 import '../services/progress_service.dart';
 import '../services/team_service.dart';
+import 'team_quiz_management_screen.dart';
 
 /// Progreso de aprendizaje del equipo de residentes/alumnos de quien
 /// supervisa (modo Docente) -- ver [TeamService.fetchTeamMemberProgress] /
@@ -67,7 +68,19 @@ class _TeamProgressScreenState extends State<TeamProgressScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.teamProgressScreenTitle)),
+      appBar: AppBar(
+        title: Text(l10n.teamProgressScreenTitle),
+        actions: [
+          if (_selectedTeam != null)
+            IconButton(
+              icon: const Icon(Icons.quiz_outlined),
+              tooltip: l10n.teamQuizzesTitle(_selectedTeam!.name),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => TeamQuizManagementScreen(team: _selectedTeam!)),
+              ),
+            ),
+        ],
+      ),
       body: _loadingTeams
           ? const Center(child: CircularProgressIndicator())
           : _teams.isEmpty

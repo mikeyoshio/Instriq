@@ -184,8 +184,15 @@ class ProgressService {
     return kInstruments.where((i) => i.category == category).length;
   }
 
-  Future<void> saveQuizResult(InstrumentCategory? category, int score, int total) async {
-    final key = category?.name ?? 'general';
+  /// [scopeKey] agrupa la mejor puntuación -- `null` es el cuestionario
+  /// general de catálogo (histórico, antes era `category?.name`). Un
+  /// cuestionario de equipo (ver TeamQuizService/schema_v60_team_quizzes.sql)
+  /// pasa `'team_quiz:<id>'`: ninguna otra parte del código necesita saber
+  /// qué significa la clave, solo que es única por ámbito -- por eso ya no
+  /// está tipado a [InstrumentCategory], que nunca fue más que una forma de
+  /// generar esa clave.
+  Future<void> saveQuizResult(String? scopeKey, int score, int total) async {
+    final key = scopeKey ?? 'general';
     if (_authenticated) {
       final best = _serverQuizScores[key] ?? 0;
       if (score <= best) return;
@@ -207,8 +214,8 @@ class ProgressService {
     }
   }
 
-  int quizBestScore(InstrumentCategory? category) {
-    final key = category?.name ?? 'general';
+  int quizBestScore(String? scopeKey) {
+    final key = scopeKey ?? 'general';
     if (_authenticated) return _serverQuizScores[key] ?? 0;
     return _prefs?.getInt('$_quizScorePrefix$key') ?? 0;
   }

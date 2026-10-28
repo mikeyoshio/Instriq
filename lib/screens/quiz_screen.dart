@@ -27,7 +27,16 @@ class QuizScreen extends StatefulWidget {
   /// da para generar 4 opciones ella sola).
   final List<Instrument>? pool;
 
-  const QuizScreen({super.key, this.pool});
+  /// Clave bajo la que se guarda/lee la mejor puntuación (ver
+  /// [ProgressService.saveQuizResult]/[quizBestScore]) -- por ejemplo
+  /// `TeamQuiz.scopeKey`, para que el panel de progreso del docente la vea
+  /// (`team_learning_progress` ya expone todo `profiles.quiz_best_scores`).
+  /// `null` con [pool] informado (p.ej. practicar una bandeja) es la única
+  /// combinación que NO guarda puntuación -- es un ejercicio de repaso
+  /// puntual, no algo que deba aparecer en ningún progreso.
+  final String? scopeKey;
+
+  const QuizScreen({super.key, this.pool, this.scopeKey});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -42,7 +51,7 @@ class _QuizScreenState extends State<QuizScreen> {
   Instrument? _selected;
   bool _finished = false;
 
-  bool get _isScoped => widget.pool != null;
+  bool get _savesScore => widget.pool == null || widget.scopeKey != null;
 
   @override
   void initState() {
@@ -84,7 +93,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _next() {
     if (_current == _questions.length - 1) {
-      if (!_isScoped) ProgressService.instance.saveQuizResult(null, _score, _questions.length);
+      if (_savesScore) ProgressService.instance.saveQuizResult(widget.scopeKey, _score, _questions.length);
       setState(() => _finished = true);
       return;
     }
@@ -111,7 +120,7 @@ class _QuizScreenState extends State<QuizScreen> {
       return Scaffold(body: Center(child: Text(l10n.noCards)));
     }
     if (_finished) {
-      final best = _isScoped ? null : ProgressService.instance.quizBestScore(null);
+      final best = _savesScore ? ProgressService.instance.quizBestScore(widget.scopeKey) : null;
       return Scaffold(
         appBar: AppBar(title: Text(l10n.resultTitle)),
         body: Center(
