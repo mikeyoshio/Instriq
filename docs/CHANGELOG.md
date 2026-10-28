@@ -161,3 +161,7 @@ Primera pujada de versió des de l'1.0.0 inicial (2026-09-30): el desenvolupamen
 - **Quart tram de l'auditoria: recompte de contingut per espai** ("reunir el que usa l'equip en un sol lloc"). `WorkspaceDetailScreen` ja tenia 5 targetes de navegació (tècniques, protocols, targetes de preferència, instrumental personalitzat, safates) — no calia una pantalla nova ni relacions artificials, només afegir-hi quants elements té cada col·lecció. Recompte carregat en paral·lel a `initState` reutilitzant els mètodes de cache ja existents de cada servei (`documentsOfKind`/`cardsOfWorkspace`/`traysOfWorkspace`/`instruments.where(...)`), sense cap crida nova a Supabase més enllà de les que cada servei ja fa. Si falla (sense connexió), les targetes es queden sense número, mai trenquen la navegació.
 
 `flutter analyze`/`flutter test` nets.
+
+- **Infraestructura de push web (prerequisit del cinquè tram)**: Firebase Cloud Messaging ja estava integrat però no funcionava realment a la variant web — faltava `web/firebase-messaging-sw.js` (el service worker que el navegador exigeix per rebre push en segon pla) i la VAPID key no es passava a `getToken()`, així que fallava en silenci. Clau generada per l'usuari a Firebase Console (Cloud Messaging → certificats push web) i afegida a `push_notification_service.dart` (pública, no és un secret). A Safari/iOS el push web només és fiable si l'app s'ha "Afegit a la pantalla d'inici" — limitació de la plataforma, no d'aquest projecte.
+
+`flutter analyze`/`flutter test` nets.

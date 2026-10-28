@@ -17,6 +17,14 @@ class PushNotificationService {
   final SupabaseClient _client = Supabase.instance.client;
   String? _registeredToken;
 
+  /// Clave pública (no secreta) del par de claves "Web Push certificates" del
+  /// proyecto Firebase (`instriq-53015`) -- exigida por `getToken()` solo en
+  /// web; en móvil se ignora. Sin ella, `getToken()` en web falla en
+  /// silencio (capturado más abajo), que es justo lo que pasaba antes de
+  /// generarla: el registro de token nunca llegaba a completarse ahí.
+  static const _webVapidKey =
+      'BOckAyC-Suk7khAFyuDBFfyKo3Uc_IEMz8uHpXcIG3_9mjey_Y93RCMRj04VZCGx2JJC3bRcP4T3uYbufFtHz1A';
+
   /// Pide permiso y registra el token actual. Se llama una vez que hay
   /// sesión iniciada (sin usuario no hay a quién asociar el token). No
   /// lanza si algo falla -- las notificaciones son un extra, nunca deben
@@ -33,7 +41,7 @@ class PushNotificationService {
       );
       if (settings.authorizationStatus == AuthorizationStatus.denied) return;
 
-      final token = await messaging.getToken();
+      final token = await messaging.getToken(vapidKey: kIsWeb ? _webVapidKey : null);
       if (token != null) await _registerToken(token);
 
       messaging.onTokenRefresh.listen(_registerToken);

@@ -75,7 +75,39 @@ interface NotificationPlan {
 const SUBMITTED_ACTIONS = new Set(["document_version_submitted", "custom_instrument_version_submitted"]);
 const APPROVED_ACTIONS = new Set(["document_version_approved", "custom_instrument_version_approved"]);
 const REJECTED_ACTIONS = new Set(["document_version_rejected", "custom_instrument_version_rejected"]);
-const RELEVANT_ACTIONS = new Set([...SUBMITTED_ACTIONS, ...APPROVED_ACTIONS, ...REJECTED_ACTIONS]);
+
+// Notificacion activa de seguimiento (schema_v59_content_follows.sql): push
+// opt-in a quien sigue un contenido, cuando se publica una version nueva
+// (= accion "aprobado"). A proposito SEPARADO de APPROVED_ACTIONS de arriba
+// -- incluir aqui tray/preference_card NO reabre la decision de ADR-004 SS7
+// ("sin push de autor para esas 3"): esa decision era sobre notificar al
+// autor por defecto en cada transaccion, esto es opt-in y solo a quien
+// decidio seguir ese contenido en concreto.
+const FOLLOW_TABLE_BY_ACTION: Record<string, { table: string; parentColumn: string; followRefType: string }> = {
+  document_version_approved: {
+    table: "group_document_versions",
+    parentColumn: "document_id",
+    followRefType: "group_document",
+  },
+  tray_version_approved: { table: "tray_versions", parentColumn: "tray_id", followRefType: "tray" },
+  preference_card_version_approved: {
+    table: "preference_card_versions",
+    parentColumn: "card_id",
+    followRefType: "preference_card",
+  },
+  custom_instrument_version_approved: {
+    table: "custom_instrument_versions",
+    parentColumn: "custom_instrument_id",
+    followRefType: "custom",
+  },
+};
+
+const RELEVANT_ACTIONS = new Set([
+  ...SUBMITTED_ACTIONS,
+  ...APPROVED_ACTIONS,
+  ...REJECTED_ACTIONS,
+  ...Object.keys(FOLLOW_TABLE_BY_ACTION),
+]);
 
 Deno.serve(async (req: Request) => {
   try {
