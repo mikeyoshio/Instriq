@@ -49,6 +49,7 @@ Future<void> exportTrayChecklistPdf({
   await _layoutAndPrint(
     title: published.name,
     specialtyLabel: specialtyLabel,
+    versionNumber: published.versionNumber,
     l10n: l10n,
     body: table,
     observations: published.observations,
@@ -114,6 +115,7 @@ Future<void> exportGroupDocumentPdf({
   await _layoutAndPrint(
     title: published.title,
     specialtyLabel: specialtyLabel,
+    versionNumber: published.versionNumber,
     l10n: l10n,
     body: body,
     observations: null,
@@ -158,6 +160,7 @@ Future<void> exportPreferenceCardPdf({
   await _layoutAndPrint(
     title: title,
     specialtyLabel: null,
+    versionNumber: published.versionNumber,
     l10n: l10n,
     body: table,
     observations: published.generalNotes,
@@ -167,6 +170,7 @@ Future<void> exportPreferenceCardPdf({
 Future<void> _layoutAndPrint({
   required String title,
   required String? specialtyLabel,
+  required int versionNumber,
   required AppLocalizations l10n,
   required pw.Widget body,
   required String? observations,
@@ -185,7 +189,7 @@ Future<void> _layoutAndPrint({
         ],
         pw.SizedBox(height: 2),
         pw.Text(
-          l10n.pdfGeneratedOn(_formatDate(generatedOn)),
+          '${l10n.pdfGeneratedOn(_formatDate(generatedOn))} · ${l10n.pdfVersionLabel(versionNumber)}',
           style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600),
         ),
         pw.SizedBox(height: 16),

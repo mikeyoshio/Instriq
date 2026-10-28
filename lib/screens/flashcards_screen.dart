@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
@@ -16,13 +17,13 @@ class FlashcardsScreen extends StatefulWidget {
 }
 
 class _FlashcardsScreenState extends State<FlashcardsScreen> {
-  InstrumentCategory? _filter;
+  Specialty? _filter;
   int _index = 0;
   bool _showBack = false;
 
   List<Instrument> get _cards => _filter == null
       ? kInstruments
-      : kInstruments.where((i) => i.category == _filter).toList();
+      : kInstruments.where((i) => i.specialty == _filter).toList();
 
   void _next() {
     setState(() {
@@ -52,17 +53,17 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
       appBar: AppBar(
         title: Text(l10n.flashcardsTitle),
         actions: [
-          PopupMenuButton<InstrumentCategory?>(
+          PopupMenuButton<Specialty?>(
             icon: const Icon(Icons.filter_list),
-            onSelected: (c) => setState(() {
-              _filter = c;
+            onSelected: (s) => setState(() {
+              _filter = s;
               _index = 0;
               _showBack = false;
             }),
             itemBuilder: (context) => [
-              PopupMenuItem(value: null, child: Text(l10n.allCategoriesLabel)),
-              ...InstrumentCategory.values.map(
-                (c) => PopupMenuItem(value: c, child: Text(c.label(l10n))),
+              PopupMenuItem(value: null, child: Text(l10n.allSpecialtiesLabel)),
+              ...Specialty.values.map(
+                (s) => PopupMenuItem(value: s, child: Text(s.label(l10n))),
               ),
             ],
           ),
@@ -156,7 +157,26 @@ class _CardFront extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 100),
+        // Foto real cuando el catálogo la tiene (identificación visual de
+        // verdad, no solo el icono de categoría) -- mismo widget/fallback que
+        // la ficha de instrumento (instrument_detail_screen.dart), sin la
+        // atribución (aquí el objetivo es adivinar, no consultar la fuente).
+        if (instrument.image != null)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: CachedNetworkImage(
+              imageUrl: instrument.image!.url,
+              height: 100,
+              fit: BoxFit.contain,
+              memCacheHeight: (100 * MediaQuery.of(context).devicePixelRatio).round(),
+              placeholder: (context, url) =>
+                  InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 100),
+              errorWidget: (context, url, error) =>
+                  InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 100),
+            ),
+          )
+        else
+          InstrumentIcon(iconKey: instrument.icon, category: instrument.category, size: 100),
         const SizedBox(height: 20),
         Text(
           instrument.name.forLanguageCode(languageCode),
@@ -189,6 +209,11 @@ class _CardBack extends StatelessWidget {
           const SizedBox(height: 12),
           Text(l10n.useLabel, style: Theme.of(context).textTheme.labelLarge),
           Text(instrument.use.forLanguageCode(languageCode)),
+          if (instrument.aliases.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(l10n.alsoKnownAs, style: Theme.of(context).textTheme.labelLarge),
+            Text(instrument.aliases.join(', ')),
+          ],
         ],
       ),
     );

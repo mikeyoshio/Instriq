@@ -624,6 +624,7 @@
 
   "noCards": "No cards",
   "allCategoriesLabel": "All",
+  "allSpecialtiesLabel": "All",
   "cardCounter": "{current} / {total}",
   "@cardCounter": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
   "tapToSeeName": "Tap to see the name",
@@ -632,6 +633,9 @@
   "next": "Next",
   "learned": "Learned",
   "markAsLearned": "Mark as learned",
+  "learningStatusPending": "Pending",
+  "learningStatusLearning": "Learning",
+  "learningStatusMastered": "Mastered",
   "useLabel": "Use",
 
   "overallProgressLabel": "Overall progress",
@@ -1156,5 +1160,7 @@
   "pdfInstrumentColumn": "Instrument",
   "pdfQuantityColumn": "Quantity",
   "pdfObservationsLabel": "Observations",
-  "pdfConsumablesLabel": "Consumables"
+  "pdfConsumablesLabel": "Consumables",
+  "pdfVersionLabel": "Version {number}",
+  "@pdfVersionLabel": {"placeholders": {"number": {"type": "int"}}}
 }

@@ -1084,22 +1084,60 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  String _groupLabelForRefType(AppLocalizations l10n, String refType) {
+    switch (refType) {
+      case 'catalog':
+        return l10n.catalogTitle;
+      case 'custom':
+        return l10n.customInstrumentsTitle;
+      case 'tray':
+        return l10n.traysTitle;
+      case 'group_document':
+      default:
+        return l10n.techniquesTitle;
+    }
+  }
+
   Widget? _buildFavoritesSection(BuildContext context, AppLocalizations l10n) {
     if (AuthService.instance.currentUser == null) return null;
     if (_loadingRecentFavorites) return null;
     if (_favorites.isEmpty) return null;
+
+    // Agrupados por tipo de contenido (no una lista plana): con favoritos de
+    // instrumentos, técnicas y bandejas mezclados, encontrar uno concreto se
+    // hacía lento de escanear. El orden de grupo sigue el mismo criterio que
+    // _iconForRefType (catálogo, personalizado, bandejas, técnicas/resto).
+    final byType = <String, List<_RecentOrFavoriteItem>>{};
+    for (final item in _favorites) {
+      byType.putIfAbsent(item.ref.refType, () => []).add(item);
+    }
+    const typeOrder = ['catalog', 'custom', 'tray', 'group_document'];
+    final orderedTypes = [
+      ...typeOrder.where(byType.containsKey),
+      ...byType.keys.where((t) => !typeOrder.contains(t)),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         InstriqSectionHeader(l10n.homeFavoritesTitle),
         const SizedBox(height: InstriqSpacing.md),
-        for (final item in _favorites) ...[
-          InstriqListItem(
-            icon: _iconForRefType(item.ref.refType),
-            title: item.ref.title,
-            onTap: () => navigateToResolvedRef(context, item.ref),
+        for (final refType in orderedTypes) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: InstriqSpacing.sm),
+            child: Text(
+              _groupLabelForRefType(l10n, refType),
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
           ),
-          const SizedBox(height: InstriqSpacing.sm),
+          for (final item in byType[refType]!) ...[
+            InstriqListItem(
+              icon: _iconForRefType(item.ref.refType),
+              title: item.ref.title,
+              onTap: () => navigateToResolvedRef(context, item.ref),
+            ),
+            const SizedBox(height: InstriqSpacing.sm),
+          ],
         ],
       ],
     );

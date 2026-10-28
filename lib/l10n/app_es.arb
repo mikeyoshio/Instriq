@@ -624,6 +624,7 @@
 
   "noCards": "Sin tarjetas",
   "allCategoriesLabel": "Todas",
+  "allSpecialtiesLabel": "Todas",
   "cardCounter": "{current} / {total}",
   "@cardCounter": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
   "tapToSeeName": "Toca para ver el nombre",
@@ -632,6 +633,9 @@
   "next": "Siguiente",
   "learned": "Aprendido",
   "markAsLearned": "Marcar como aprendido",
+  "learningStatusPending": "Pendiente",
+  "learningStatusLearning": "En aprendizaje",
+  "learningStatusMastered": "Dominado",
   "useLabel": "Uso",
 
   "overallProgressLabel": "Progreso general",
@@ -1156,5 +1160,7 @@
   "pdfInstrumentColumn": "Instrumento",
   "pdfQuantityColumn": "Cantidad",
   "pdfObservationsLabel": "Observaciones",
-  "pdfConsumablesLabel": "Material fungible"
+  "pdfConsumablesLabel": "Material fungible",
+  "pdfVersionLabel": "Versión {number}",
+  "@pdfVersionLabel": {"placeholders": {"number": {"type": "int"}}}
 }

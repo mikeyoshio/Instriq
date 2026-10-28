@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
@@ -142,11 +143,34 @@ class _QuizScreenState extends State<QuizScreen> {
               LinearProgressIndicator(value: (_current) / _questions.length),
               const SizedBox(height: 24),
               Center(
-                child: InstrumentIcon(
-                  iconKey: question.answer.icon,
-                  category: question.answer.category,
-                  size: 100,
-                ),
+                // Foto real cuando el catálogo la tiene, mismo criterio que
+                // flashcards_screen.dart (identificación visual de verdad,
+                // sin atribución -- aquí el objetivo es adivinar).
+                child: question.answer.image != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          imageUrl: question.answer.image!.url,
+                          height: 100,
+                          fit: BoxFit.contain,
+                          memCacheHeight: (100 * MediaQuery.of(context).devicePixelRatio).round(),
+                          placeholder: (context, url) => InstrumentIcon(
+                            iconKey: question.answer.icon,
+                            category: question.answer.category,
+                            size: 100,
+                          ),
+                          errorWidget: (context, url, error) => InstrumentIcon(
+                            iconKey: question.answer.icon,
+                            category: question.answer.category,
+                            size: 100,
+                          ),
+                        ),
+                      )
+                    : InstrumentIcon(
+                        iconKey: question.answer.icon,
+                        category: question.answer.category,
+                        size: 100,
+                      ),
               ),
               const SizedBox(height: 12),
               Text(

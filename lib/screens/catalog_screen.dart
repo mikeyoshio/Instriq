@@ -262,7 +262,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                       itemCount: filteredInstruments.length,
                       itemBuilder: (context, index) {
                         final instrument = filteredInstruments[index];
-                        final learned = ProgressService.instance.isLearned(instrument.id);
+                        final learningStatus = ProgressService.instance.learningStatusFor(instrument.id);
                         return Card(
                           child: ListTile(
                             leading: InstrumentIcon(
@@ -292,9 +292,17 @@ class _CatalogScreenState extends State<CatalogScreen> {
                             ),
                             subtitle:
                                 Text('${instrument.specialty.label(l10n)} · ${instrument.category.label(l10n)}'),
-                            trailing: learned
-                                ? const Icon(Icons.check_circle, color: Colors.green)
-                                : const Icon(Icons.chevron_right),
+                            trailing: switch (learningStatus) {
+                              LearningStatus.mastered => Tooltip(
+                                  message: l10n.learningStatusMastered,
+                                  child: const Icon(Icons.check_circle, color: Colors.green),
+                                ),
+                              LearningStatus.learning => Tooltip(
+                                  message: l10n.learningStatusLearning,
+                                  child: Icon(Icons.hourglass_bottom, color: Theme.of(context).colorScheme.tertiary),
+                                ),
+                              LearningStatus.pending => const Icon(Icons.chevron_right),
+                            },
                             onTap: () async {
                               await Navigator.of(context).push(
                                 MaterialPageRoute(

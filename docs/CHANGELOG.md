@@ -125,3 +125,14 @@ Registre cronològic de tot el que s'ha lliurat a Instriq. Per al que queda pend
 ## 1.1.0 — 2026-10-27
 
 Primera pujada de versió des de l'1.0.0 inicial (2026-09-30): el desenvolupament actiu continuat des de llavors (catàleg gairebé duplicat, fins a 601 instruments; Mode de Treball passant de cosmètic a funcional; el flux CAPA d'incidències) ja justifica marcar un nou punt de versió. Les entrades anteriors a aquesta línia es mantenen tal com estaven, sota l'encapçalament de l'1.0.0 — no es reorganitzen retroactivament, mateix criteri pragmàtic que la resta d'aquest fitxer. Les entrades noves a partir d'ara van aquí.
+
+- **Auditoria d'un document extern de propostes de producte** (4 fork en paral·lel contra el codi real, no assumit): la majoria de les propostes ja existien (cerca tolerant a errates, cerca unificada, mètriques d'ús, PDF, responsive, offline selectiu), però es van confirmar forats reals — buidats aquesta ronda:
+  - Mode d'estudi (flashcards/quiz) filtra ara per especialitat clínica en comptes de categoria d'instrument, i mostra els sinònims (`aliases`) al revers de la targeta.
+  - Identificació visual amb foto real: flashcards i quiz ja mostraven només la icona de categoria tot i que el catàleg ja té fotos amb llicència lliure per a una part dels instruments (`Instrument.image`, des de l'1.0.0) — ara s'usen quan n'hi ha, amb el mateix patró de `CachedNetworkImage`+fallback que la fitxa de detall.
+  - Seguiment d'aprenentatge de 3 estats (pendent/en aprenentatge/dominat), derivat de la caixa Leitner i del marcatge manual ja existents (`ProgressService.learningStatusFor`, sense columna nova) — visible al catàleg en comptes del check binari d'abans.
+  - Favorits agrupats per tipus de contingut (catàleg/personalitzat/bandeges/tècniques) a Inici, en comptes de llista plana.
+  - PDF exportat (bandeja/tècnica/targeta) mostra ara també el número de versió publicada, no només la data de generació.
+  - **`tool/audit_catalog_quality.dart`** (nou): detecta noms gairebé duplicats, sinònims en conflicte entre instruments diferents, traduccions buides i fichas sense foto. Primera execució real sobre els 601 instruments: 2 possibles duplicats de nom, 4 sinònims mal atribuïts a un altre instrument (p. ex. "Hegar dilators" com a àlies d'un dilatador que no té relació amb els dilatadors de Hegar), 410/601 sense foto.
+  - Pendents, fora d'abast d'aquest tram: qüestionaris configurables per supervisor/docent, aprenentatge per safata sencera, mecanisme de feedback des de l'app, i el bloc de confiança/governança de contingut (font per camp, data de revisió explícita, validació clínica diferenciada de l'aprovació editorial, revisió col·laborativa estesa a contingut privat, notificació activa de seguiment) — veure `docs/BACKLOG.md`.
+
+`flutter analyze`/`flutter test` nets.

@@ -624,6 +624,7 @@
 
   "noCards": "Sense targetes",
   "allCategoriesLabel": "Totes",
+  "allSpecialtiesLabel": "Totes",
   "cardCounter": "{current} / {total}",
   "@cardCounter": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
   "tapToSeeName": "Toca per veure el nom",
@@ -632,6 +633,9 @@
   "next": "Següent",
   "learned": "Après",
   "markAsLearned": "Marca com a après",
+  "learningStatusPending": "Pendent",
+  "learningStatusLearning": "En aprenentatge",
+  "learningStatusMastered": "Dominat",
   "useLabel": "Ús",
 
   "overallProgressLabel": "Progrés general",
@@ -1156,5 +1160,7 @@
   "pdfInstrumentColumn": "Instrument",
   "pdfQuantityColumn": "Quantitat",
   "pdfObservationsLabel": "Observacions",
-  "pdfConsumablesLabel": "Material fungible"
+  "pdfConsumablesLabel": "Material fungible",
+  "pdfVersionLabel": "Versió {number}",
+  "@pdfVersionLabel": {"placeholders": {"number": {"type": "int"}}}
 }

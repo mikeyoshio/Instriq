@@ -15,6 +15,12 @@ const List<int> kLeitnerIntervalsDays = [1, 3, 7, 14, 30];
 int nextLeitnerBox(int currentBox, bool correct) =>
     correct ? (currentBox + 1).clamp(1, kLeitnerIntervalsDays.length) : 1;
 
+/// Estado de aprendizaje de 3 valores pedido para la ficha de catálogo,
+/// derivado de los datos ya existentes (ninguna columna nueva): "dominado"
+/// cubre tanto el marcado manual (`learned`) como haber llegado a la última
+/// caja Leitner, para no exigir las dos cosas a la vez.
+enum LearningStatus { pending, learning, mastered }
+
 class _LearningEntry {
   bool learned;
   int box;
@@ -211,6 +217,14 @@ class ProgressService {
   /// ha repasado) — EPIC 8 · Contextual Learning. Solo con sesión: la
   /// repetición espaciada exige estado de servidor (ver contexto del plan).
   int boxFor(String id) => _serverEntries[id]?.box ?? 1;
+
+  LearningStatus learningStatusFor(String id) {
+    if (isLearned(id)) return LearningStatus.mastered;
+    final box = boxFor(id);
+    if (box >= kLeitnerIntervalsDays.length) return LearningStatus.mastered;
+    if (box > 1) return LearningStatus.learning;
+    return LearningStatus.pending;
+  }
 
   DateTime? nextReviewAt(String id) => _serverEntries[id]?.nextReviewAt;
 
