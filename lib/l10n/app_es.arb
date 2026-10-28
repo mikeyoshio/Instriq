@@ -1170,6 +1170,38 @@
   "helpArticleMyProgressIntro": "Un resumen de cuánto instrumental has aprendido, por categoría, y tu mejor puntuación en el cuestionario.",
   "helpArticleMyProgressStep1": "Desde el inicio, toca «Mi progreso». El progreso se guarda en este dispositivo y, con cuenta, también en el servidor.",
 
+  "helpArticleTrayIdentificationTitle": "Practicar identificación de bandejas",
+  "helpArticleTrayIdentificationIntro": "Pon a prueba si reconoces el instrumental de una bandeja completa, no solo instrumento a instrumento.",
+  "helpArticleTrayIdentificationStep1": "Abre una bandeja publicada y toca el icono de cuestionario en la barra superior (solo aparece si la bandeja tiene instrumental de catálogo).",
+  "helpArticleTrayIdentificationStep2": "Responde identificando cada instrumento del conjunto. Al final verás tu puntuación de esa sesión; no se guarda como mejor marca, es solo para practicar.",
+
+  "helpArticleSendFeedbackTitle": "Enviar sugerencias o reportar un error",
+  "helpArticleSendFeedbackIntro": "Puedes avisarnos de un problema o proponer una mejora directamente desde la app, sin salir de ella y sin necesidad de tener cuenta.",
+  "helpArticleSendFeedbackStep1": "Entra en Perfil y toca «Enviar sugerencia o reportar un error».",
+  "helpArticleSendFeedbackStep2": "Elige la categoría (error, sugerencia u otro) y escribe tu mensaje. Funciona también en modo invitado.",
+
+  "helpArticleContentCommentsTitle": "Comentar y proponer cambios en el contenido del equipo",
+  "helpArticleContentCommentsIntro": "Si ves algo que crees que debería corregirse en una técnica, bandeja, tarjeta de preferencia o instrumental de tu equipo, puedes proponerlo sin editarlo tú mismo.",
+  "helpArticleContentCommentsStep1": "Abre la ficha publicada y toca el icono de comentario en la barra superior.",
+  "helpArticleContentCommentsStep2": "Escribe tu propuesta. El responsable del espacio (approver o administrator), o tú mismo, puede marcarla como resuelta cuando se haya atendido.",
+
+  "helpArticleContentTrustTitle": "Fuente de información y validación clínica",
+  "helpArticleContentTrustIntro": "Deja constancia de dónde sale un dato y de si un responsable del espacio lo ha revisado clínicamente. Que algo esté publicado no significa automáticamente que un profesional lo haya comprobado.",
+  "helpArticleContentTrustStep1": "Abre la ficha publicada y toca el icono de verificación en la barra superior.",
+  "helpArticleContentTrustStep2": "Añade la fuente de la información (una cita, un documento o un enlace) si la conoces.",
+  "helpArticleContentTrustStep3": "Si eres approver o administrator del espacio, puedes marcar el contenido como revisado clínicamente, con una nota opcional.",
+
+  "helpArticleWorkModesTitle": "Modos de trabajo (instrumentista, cirujano, docente...)",
+  "helpArticleWorkModesIntro": "El modo de trabajo adapta la ficha de instrumento y el inicio a tu rol del día, reordenando lo que más usas primero. No cambia tus permisos, solo la organización de la pantalla.",
+  "helpArticleWorkModesStep1": "Toca el selector de modo en la parte superior del inicio y elige el que mejor describa tu rol ahora mismo.",
+  "helpArticleWorkModesStep2": "Instrumentista: accesos directos a bandejas y preparación en quirófano. Cirujano: tarjetas de preferencia y técnicas primero. Docente: seguimiento del progreso de tu equipo. Puedes cambiar de modo en cualquier momento.",
+
+  "helpArticleIncidentCapaTitle": "Reportar y resolver una incidencia de instrumental",
+  "helpArticleIncidentCapaIntro": "Si un instrumento falla o no está en condiciones, puedes dejar constancia y seguir su resolución hasta que se verifique, con causa raíz y acción correctiva (no es solo un aviso puntual).",
+  "helpArticleIncidentCapaStep1": "Desde la ficha del instrumento (o tras un control de calidad fallido al preparar una bandeja), toca «Reportar incidencia» e indica la gravedad y la descripción.",
+  "helpArticleIncidentCapaStep2": "Un approver o administrator del espacio la resuelve indicando causa raíz y acción correctiva.",
+  "helpArticleIncidentCapaStep3": "Una persona distinta de quien la resolvió debe verificarla para cerrarla del todo. Todas las incidencias abiertas de la organización se ven juntas en el panel de escritorio o en Actividad.",
+
   "staleContentWarning": "Este contenido no se ha revisado desde hace {months} meses. Comprueba que siga siendo correcto.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
 

@@ -153,3 +153,7 @@ Primera pujada de versió des de l'1.0.0 inicial (2026-09-30): el desenvolupamen
   - Pendent, fora d'abast: qüestionaris configurables, notificació activa de seguiment i llista agregada de contingut del grup.
 
 `flutter analyze`/`flutter test` nets.
+
+- **Documentació d'usuari de tot el que s'ha construït aquesta sessió**: l'usuari va demanar explícitament que les funcionalitats noves tinguessin SOP/tutorial a l'app, no només codi. En lloc de muntar un sistema nou, s'ha ampliat el centre d'ajuda ja existent (`HelpHubScreen`/`help_content.dart`, articles "com fer X" per categoria) amb 6 articles: Modes de treball, Practicar identificació de safates, Comentar i proposar canvis en contingut de l'equip, Font d'informació i validació clínica, Reportar i resoldre una incidència (CAPA), i Enviar suggeriments/reportar un error. Encaixats dins les categories existents (Catàleg/Aprenentatge/Organització/Compte), no categories noves — evita duplicar capçaleres de secció. Sense captures de pantalla noves (el sistema ja admet passos sense imatge): fer-les exigiria entrar a l'app amb un compte autenticat real, pendent si es vol.
+
+`flutter analyze`/`flutter test` nets.

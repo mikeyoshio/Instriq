@@ -1170,6 +1170,38 @@
   "helpArticleMyProgressIntro": "Un resum de quant instrumental has après, per categoria, i la teva millor puntuació al qüestionari.",
   "helpArticleMyProgressStep1": "Des de l'inici, toca «El meu progrés». El progrés es guarda en aquest dispositiu i, amb compte, també al servidor.",
 
+  "helpArticleTrayIdentificationTitle": "Practicar identificació de safates",
+  "helpArticleTrayIdentificationIntro": "Posa a prova si reconeixes l'instrumental d'una safata sencera, no només instrument a instrument.",
+  "helpArticleTrayIdentificationStep1": "Obre una safata publicada i toca la icona de qüestionari a la barra superior (només apareix si la safata té instrumental de catàleg).",
+  "helpArticleTrayIdentificationStep2": "Respon identificant cada instrument del conjunt. Al final veuràs la teva puntuació d'aquesta sessió; no es guarda com a millor marca, és només per practicar.",
+
+  "helpArticleSendFeedbackTitle": "Enviar suggeriments o reportar un error",
+  "helpArticleSendFeedbackIntro": "Pots avisar-nos d'un problema o proposar una millora directament des de l'app, sense sortir-ne i sense necessitat de tenir compte.",
+  "helpArticleSendFeedbackStep1": "Entra a Perfil i toca «Enviar suggeriment o reportar un error».",
+  "helpArticleSendFeedbackStep2": "Tria la categoria (error, suggeriment o altre) i escriu el teu missatge. Funciona també en mode convidat.",
+
+  "helpArticleContentCommentsTitle": "Comentar i proposar canvis al contingut de l'equip",
+  "helpArticleContentCommentsIntro": "Si veus alguna cosa que creus que s'hauria de corregir en una tècnica, safata, targeta de preferència o instrumental del teu equip, pots proposar-ho sense editar-ho tu mateix.",
+  "helpArticleContentCommentsStep1": "Obre la fitxa publicada i toca la icona de comentari a la barra superior.",
+  "helpArticleContentCommentsStep2": "Escriu la teva proposta. El responsable de l'espai (approver o administrator), o tu mateix, pot marcar-la com a resolta quan s'hagi atès.",
+
+  "helpArticleContentTrustTitle": "Font d'informació i validació clínica",
+  "helpArticleContentTrustIntro": "Deixa constància d'on surt una dada i de si un responsable de l'espai l'ha revisat clínicament. Que alguna cosa estigui publicada no vol dir automàticament que un professional l'hagi comprovat.",
+  "helpArticleContentTrustStep1": "Obre la fitxa publicada i toca la icona de verificació a la barra superior.",
+  "helpArticleContentTrustStep2": "Afegeix la font de la informació (una citació, un document o un enllaç) si la coneixes.",
+  "helpArticleContentTrustStep3": "Si ets approver o administrator de l'espai, pots marcar el contingut com a revisat clínicament, amb una nota opcional.",
+
+  "helpArticleWorkModesTitle": "Modes de treball (instrumentista, cirurgià, docent...)",
+  "helpArticleWorkModesIntro": "El mode de treball adapta la fitxa d'instrument i l'inici al teu rol del dia, reordenant el que més fas servir primer. No canvia els teus permisos, només l'organització de la pantalla.",
+  "helpArticleWorkModesStep1": "Toca el selector de mode a la part superior de l'inici i tria el que millor descrigui el teu rol ara mateix.",
+  "helpArticleWorkModesStep2": "Instrumentista: accessos directes a safates i preparació a quiròfan. Cirurgià: targetes de preferència i tècniques primer. Docent: seguiment del progrés del teu equip. Pots canviar de mode en qualsevol moment.",
+
+  "helpArticleIncidentCapaTitle": "Reportar i resoldre una incidència d'instrumental",
+  "helpArticleIncidentCapaIntro": "Si un instrument falla o no està en condicions, pots deixar-ne constància i seguir-ne la resolució fins que es verifiqui, amb causa arrel i acció correctiva (no és només un avís puntual).",
+  "helpArticleIncidentCapaStep1": "Des de la fitxa de l'instrument (o després d'un control de qualitat fallit en preparar una safata), toca «Reportar incidència» i indica la gravetat i la descripció.",
+  "helpArticleIncidentCapaStep2": "Un approver o administrator de l'espai la resol indicant causa arrel i acció correctiva.",
+  "helpArticleIncidentCapaStep3": "Una persona diferent de qui l'ha resolta l'ha de verificar per tancar-la del tot. Totes les incidències obertes de l'organització es veuen juntes al panell d'escriptori o a Activitat.",
+
   "staleContentWarning": "Aquest contingut no s'ha revisat des de fa {months} mesos. Comprova que encara sigui correcte.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
 

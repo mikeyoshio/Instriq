@@ -1170,6 +1170,38 @@
   "helpArticleMyProgressIntro": "A summary of how much instrument knowledge you've learned, by category, and your best quiz score.",
   "helpArticleMyProgressStep1": "From Home, tap \"My progress\". Progress is saved on this device and, with an account, also on the server.",
 
+  "helpArticleTrayIdentificationTitle": "Practice tray identification",
+  "helpArticleTrayIdentificationIntro": "Test whether you can recognize the instruments in a whole tray, not just one at a time.",
+  "helpArticleTrayIdentificationStep1": "Open a published tray and tap the quiz icon in the top bar (only shown if the tray has catalog instruments).",
+  "helpArticleTrayIdentificationStep2": "Identify each instrument in the set. At the end you'll see your score for that session; it isn't saved as a best score, it's just for practice.",
+
+  "helpArticleSendFeedbackTitle": "Send feedback or report a bug",
+  "helpArticleSendFeedbackIntro": "You can let us know about a problem or suggest an improvement directly from the app, without leaving it and without needing an account.",
+  "helpArticleSendFeedbackStep1": "Go to Profile and tap \"Send feedback or report a bug\".",
+  "helpArticleSendFeedbackStep2": "Choose a category (bug, suggestion or other) and write your message. This also works in guest mode.",
+
+  "helpArticleContentCommentsTitle": "Comment and propose changes to your team's content",
+  "helpArticleContentCommentsIntro": "If you see something that should be corrected in a technique, tray, preference card or custom instrument from your team, you can propose it without editing it yourself.",
+  "helpArticleContentCommentsStep1": "Open the published item and tap the comment icon in the top bar.",
+  "helpArticleContentCommentsStep2": "Write your proposal. The workspace's approver or administrator, or you yourself, can mark it as resolved once it's been addressed.",
+
+  "helpArticleContentTrustTitle": "Source of information and clinical review",
+  "helpArticleContentTrustIntro": "Record where a piece of information comes from, and whether a workspace lead has clinically reviewed it. Being published doesn't automatically mean a professional has checked it.",
+  "helpArticleContentTrustStep1": "Open the published item and tap the verification icon in the top bar.",
+  "helpArticleContentTrustStep2": "Add the source of the information (a citation, document or link) if you know it.",
+  "helpArticleContentTrustStep3": "If you're an approver or administrator of the workspace, you can mark the content as clinically reviewed, with an optional note.",
+
+  "helpArticleWorkModesTitle": "Work modes (instrumentist, surgeon, teacher...)",
+  "helpArticleWorkModesIntro": "Work mode adapts the instrument page and the home screen to your role for the day, putting what you use most first. It doesn't change your permissions, only how the screen is organized.",
+  "helpArticleWorkModesStep1": "Tap the mode selector at the top of Home and choose the one that best describes your role right now.",
+  "helpArticleWorkModesStep2": "Instrumentist: shortcuts to trays and OR preparation. Surgeon: preference cards and techniques first. Teacher: tracking your team's progress. You can switch modes at any time.",
+
+  "helpArticleIncidentCapaTitle": "Report and resolve an instrument incident",
+  "helpArticleIncidentCapaIntro": "If an instrument fails or isn't in good condition, you can log it and track its resolution until it's verified, with root cause and corrective action (not just a one-off note).",
+  "helpArticleIncidentCapaStep1": "From the instrument's page (or after a failed quality check while preparing a tray), tap \"Report incident\" and give its severity and description.",
+  "helpArticleIncidentCapaStep2": "A workspace approver or administrator resolves it, giving the root cause and corrective action.",
+  "helpArticleIncidentCapaStep3": "Someone other than whoever resolved it must verify it to close it fully. All of the organization's open incidents show together in the desktop panel or in Activity.",
+
   "staleContentWarning": "This content hasn't been reviewed in {months} months. Check that it's still accurate.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
 

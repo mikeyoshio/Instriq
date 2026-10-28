@@ -69,6 +69,16 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
             HelpStep(text: l10n.helpArticleSuturesStep2, image: '$_imagesPath/suture_detail.png'),
           ],
         ),
+        HelpArticle(
+          id: 'work_modes',
+          icon: Icons.switch_account_outlined,
+          title: l10n.helpArticleWorkModesTitle,
+          intro: l10n.helpArticleWorkModesIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleWorkModesStep1),
+            HelpStep(text: l10n.helpArticleWorkModesStep2),
+          ],
+        ),
       ],
     ),
     HelpCategory(
@@ -99,6 +109,38 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
             HelpStep(text: l10n.helpArticleWorkspacesStep2, image: '$_imagesPath/workspace_detail.png'),
           ],
         ),
+        HelpArticle(
+          id: 'content_comments',
+          icon: Icons.comment_outlined,
+          title: l10n.helpArticleContentCommentsTitle,
+          intro: l10n.helpArticleContentCommentsIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleContentCommentsStep1),
+            HelpStep(text: l10n.helpArticleContentCommentsStep2),
+          ],
+        ),
+        HelpArticle(
+          id: 'content_trust',
+          icon: Icons.verified_outlined,
+          title: l10n.helpArticleContentTrustTitle,
+          intro: l10n.helpArticleContentTrustIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleContentTrustStep1),
+            HelpStep(text: l10n.helpArticleContentTrustStep2),
+            HelpStep(text: l10n.helpArticleContentTrustStep3),
+          ],
+        ),
+        HelpArticle(
+          id: 'incident_capa',
+          icon: Icons.report_problem_outlined,
+          title: l10n.helpArticleIncidentCapaTitle,
+          intro: l10n.helpArticleIncidentCapaIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleIncidentCapaStep1),
+            HelpStep(text: l10n.helpArticleIncidentCapaStep2),
+            HelpStep(text: l10n.helpArticleIncidentCapaStep3),
+          ],
+        ),
       ],
     ),
     HelpCategory(
@@ -112,6 +154,16 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           steps: [
             HelpStep(text: l10n.helpArticleAccountStep1, image: '$_imagesPath/profile_authenticated.png'),
             HelpStep(text: l10n.helpArticleAccountStep2),
+          ],
+        ),
+        HelpArticle(
+          id: 'send_feedback',
+          icon: Icons.feedback_outlined,
+          title: l10n.helpArticleSendFeedbackTitle,
+          intro: l10n.helpArticleSendFeedbackIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleSendFeedbackStep1),
+            HelpStep(text: l10n.helpArticleSendFeedbackStep2),
           ],
         ),
       ],
@@ -137,6 +189,16 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           intro: l10n.helpArticleMyProgressIntro,
           steps: [
             HelpStep(text: l10n.helpArticleMyProgressStep1, image: '$_imagesPath/my_progress.png'),
+          ],
+        ),
+        HelpArticle(
+          id: 'tray_identification_practice',
+          icon: Icons.quiz_outlined,
+          title: l10n.helpArticleTrayIdentificationTitle,
+          intro: l10n.helpArticleTrayIdentificationIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleTrayIdentificationStep1),
+            HelpStep(text: l10n.helpArticleTrayIdentificationStep2),
           ],
         ),
       ],
