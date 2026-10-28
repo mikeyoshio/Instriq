@@ -180,3 +180,5 @@ Primera pujada de versió des de l'1.0.0 inicial (2026-09-30): el desenvolupamen
 Amb això es tanquen les 6 propostes confirmades com a reals pel document de producte auditat aquesta sessió.
 
 `flutter analyze`/`flutter test` nets.
+
+- **Nova pàgina `instriq.org/edu`**: landing dedicada a formació (estudiants d'infermeria, residents, centres de formació), amb intenció de cerca diferent de la portada a propòsit (per evitar canibalitzar-se als resultats) — repetició espaiada, identificació visual amb fotos reals, pràctica de safata sencera, qüestionaris d'equip configurables i seguiment de progrés per a qui forma. Subdirectori, no subdomini (hereta l'autoritat del domini). JSON-LD `Course` + `FAQPage`, als 3 idiomes amb el mateix mecanisme `data-i18n`/`DICT` ja usat a `novedades.html`. Afegida a `sitemap.xml` i enllaçada des del peu de `index.html` (no és una pàgina òrfena).
