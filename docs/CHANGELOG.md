@@ -182,3 +182,7 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
 `flutter analyze`/`flutter test` nets.
 
 - **Nova pàgina `instriq.org/edu`**: landing dedicada a formació (estudiants d'infermeria, residents, centres de formació), amb intenció de cerca diferent de la portada a propòsit (per evitar canibalitzar-se als resultats) — repetició espaiada, identificació visual amb fotos reals, pràctica de safata sencera, qüestionaris d'equip configurables i seguiment de progrés per a qui forma. Subdirectori, no subdomini (hereta l'autoritat del domini). JSON-LD `Course` + `FAQPage`, als 3 idiomes amb el mateix mecanisme `data-i18n`/`DICT` ja usat a `novedades.html`. Afegida a `sitemap.xml` i enllaçada des del peu de `index.html` (no és una pàgina òrfena).
+
+- **`/edu` fet visible des de la portada + bug real trobat per l'usuari**: l'enllaç de peu de pàgina no n'hi havia prou. Afegit a la navegació principal ("Formació") i un enllaç dins la targeta "Aprèn" de la secció "Avui" amb còpia ampliada (repetició espaiada, identificació amb fotos reals, qüestionaris d'equip). De pas, l'usuari va detectar que el teaser estàtic de "Novetats" de `index.html` (`novedades.lastBadge`/`lastText`) s'havia quedat a l'entrada #54 mentre `novedades.html` ja anava per la #69 -- ningú l'havia actualitzat en 15 rondes. Corregit a l'entrada real més recent (#69, Camí cap a ISO 9001) als 3 idiomes, i afegit un comentari HTML perquè no torni a passar desapercebut.
+
+`node --check` sobre el JS inline extret, net.
