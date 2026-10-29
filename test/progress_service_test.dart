@@ -36,4 +36,33 @@ void main() {
       }
     });
   });
+
+  /// learningStatusFromState decide el icono de 3 estados del catálogo
+  /// (pendiente/en aprendizaje/dominado) -- un cambio accidental en el orden
+  /// de las comprobaciones mostraría "pendiente" sobre algo ya aprendido, o
+  /// viceversa (hallazgo de auditoría de madurez 2026-10-29: era la única
+  /// lógica nueva de la semana sin ningún test).
+  group('learningStatusFromState', () {
+    test('learned=true is always mastered, regardless of box', () {
+      expect(learningStatusFromState(learned: true, box: 1), LearningStatus.mastered);
+      expect(learningStatusFromState(learned: true, box: kLeitnerIntervalsDays.length), LearningStatus.mastered);
+    });
+
+    test('reaching the last Leitner box is mastered even without the manual flag', () {
+      expect(
+        learningStatusFromState(learned: false, box: kLeitnerIntervalsDays.length),
+        LearningStatus.mastered,
+      );
+    });
+
+    test('box 1 without the manual flag is pending (never reviewed)', () {
+      expect(learningStatusFromState(learned: false, box: 1), LearningStatus.pending);
+    });
+
+    test('any box strictly between 1 and the last one is learning', () {
+      for (var box = 2; box < kLeitnerIntervalsDays.length; box++) {
+        expect(learningStatusFromState(learned: false, box: box), LearningStatus.learning);
+      }
+    });
+  });
 }

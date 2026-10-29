@@ -15,6 +15,18 @@ const List<int> kLeitnerIntervalsDays = [1, 3, 7, 14, 30];
 int nextLeitnerBox(int currentBox, bool correct) =>
     correct ? (currentBox + 1).clamp(1, kLeitnerIntervalsDays.length) : 1;
 
+/// Estado de 3 valores para la ficha de catálogo (pendiente/en aprendizaje/
+/// dominado), extraído de [ProgressService.learningStatusFor] por el mismo
+/// motivo que [nextLeitnerBox]: lógica pura testeable sin depender de sesión
+/// ni red. "Dominado" cubre tanto el marcado manual (`learned`) como haber
+/// llegado a la última caja Leitner, para no exigir las dos cosas a la vez.
+LearningStatus learningStatusFromState({required bool learned, required int box}) {
+  if (learned) return LearningStatus.mastered;
+  if (box >= kLeitnerIntervalsDays.length) return LearningStatus.mastered;
+  if (box > 1) return LearningStatus.learning;
+  return LearningStatus.pending;
+}
+
 /// Estado de aprendizaje de 3 valores pedido para la ficha de catálogo,
 /// derivado de los datos ya existentes (ninguna columna nueva): "dominado"
 /// cubre tanto el marcado manual (`learned`) como haber llegado a la última
@@ -225,13 +237,7 @@ class ProgressService {
   /// repetición espaciada exige estado de servidor (ver contexto del plan).
   int boxFor(String id) => _serverEntries[id]?.box ?? 1;
 
-  LearningStatus learningStatusFor(String id) {
-    if (isLearned(id)) return LearningStatus.mastered;
-    final box = boxFor(id);
-    if (box >= kLeitnerIntervalsDays.length) return LearningStatus.mastered;
-    if (box > 1) return LearningStatus.learning;
-    return LearningStatus.pending;
-  }
+  LearningStatus learningStatusFor(String id) => learningStatusFromState(learned: isLearned(id), box: boxFor(id));
 
   DateTime? nextReviewAt(String id) => _serverEntries[id]?.nextReviewAt;
 

@@ -188,3 +188,7 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
 `node --check` sobre el JS inline extret, net.
 
 - **Auditoria de maduresa en 5 dimensions + els 4 fixos P0** (detall complet a `docs/BACKLOG.md`, secció "Auditoria de maduresa"): `supabase/schema_v61_gdpr_and_feedback_hardening.sql` amplia `export_my_account_data()` amb 9 blocs que faltaven (segona vegada que aquesta funció es queda curta) i acota `app_feedback.message` a 2000 caràcters. UTM afegit als 10 enllaços "Obre l'app" del landing per distingir ubicació i pàgina d'origen. Pendents de l'usuari: verificació de Search Console/Bing, i analítica del costat de `app.instriq.org` per a comptar clics reals.
+
+- **2 dels 4 punts de codi de P1**: `schema_v62_clinical_review_requires_published.sql` exigeix `status = 'published'` abans de marcar un contingut com a revisat clínicament (abans es podia marcar un esborrany o una versió arxivada). `ProgressService.learningStatusFor` extreta a la funció pura `learningStatusFromState` (mateix criteri que `nextLeitnerBox`) i coberta amb 4 tests nous -- era l'única lògica nova de la setmana sense cap test. Els altres 2 punts de P1 (verificació en viu, Consell Editorial) queden pendents de l'usuari, no són de codi.
+
+`flutter analyze`/`flutter test` nets.
