@@ -1,5 +1,37 @@
 # Instriq Product Backlog
 
+## Auditoria de maduresa (2026-10-29)
+
+Auditoria en 5 dimensions (producte, qualitat tècnica, seguretat/privacitat, accessibilitat, adopció) feta a petició de l'usuari, explícitament demanada com "problemes demostrables, no una altra llista genèrica de funcionalitats" — 5 fork en paral·lel, cadascun amb evidència real (recompte verificat o cita d'arxiu:línia), sense forçar troballes febles. Backlog unificat per impacte/esforç real, no per dimensió.
+
+**P0 — barat, alt valor, corregeix alguna cosa ja demostrada trencada. Fet (2026-10-29, `schema_v61_gdpr_and_feedback_hardening.sql` + landing):**
+* [Seguretat/legal] `export_my_account_data()` tornava a estar incompleta (segona vegada documentada, primera a schema_v52) — faltaven `favorites`, `recent_views`, `device_tokens`, l'autoria de `instrument_incidents` (reported/resolved/verified_by), i les taules noves de la sessió anterior (`content_follows`, `team_quizzes.created_by`, `app_feedback`, `editorial_comments.author_id` pels ref_type privats). **Corregit**, amb un comentari-checklist explícit a la pròpia funció perquè no torni a passar una tercera vegada.
+* [Seguretat] `app_feedback.message` sense límit de longitud, a diferència de `feature_suggestions.description` (mateix tipus d'endpoint anònim, ja mitigat). **Corregit**, mateix límit (2000 car.).
+* [Adopció] Cap verificació de Google Search Console / Bing Webmaster Tools. **Pendent de l'usuari**: cal donar d'alta la propietat i passar-me el fitxer/meta tag de verificació — no es pot fabricar sense accedir al seu compte.
+* [Adopció] Cap senyal de conversió als CTA "Obre l'app" (el beacon de Cloudflare Web Analytics només mesura vistes de pàgina). **Parcialment corregit**: UTM (`utm_source`/`utm_medium`/`utm_campaign`) afegit a els 10 enllaços "Obre l'app" de `index.html`/`edu.html`/`novedades.html`, distingint ubicació (nav/hero/colabora/final/footer) i pàgina d'origen. Compte real de clics reals exigeix encara analítica del costat de `app.instriq.org` (Cloudflare Zaraz, Vercel Analytics o similar) — decisió i accés que correspon a l'usuari, no es pot fer només des del repo de landing.
+
+**P1 — risc real, esforç moderat (pendent):**
+* [Producte] 9 funcionalitats desplegades sense verificar mai de principi a fi amb compte real (`docs/BACKLOG.md`, patró "pendent, com sempre: provar en viu"): duplicar safata, lectura offline cachejada d'esterilització, candidatura de col·laborador, cicle complet d'adopció de safata pública, wizard de grup+starter pack.
+* [Producte] Biblioteca Pública sense contingut real ni Consell Editorial nomenat — infraestructura tècnica completa, buida a la pràctica. Decisió operativa de l'usuari, no de codi.
+* [Seguretat/integritat] `mark_content_clinically_reviewed`/`set_content_source_reference` (schema_v58) no comproven l'estat de la versió abans d'escriure — un approver podria marcar com a revisat clínicament un esborrany o una versió arxivada.
+* [Qualitat tècnica] Zero tests sobre tot el construït la setmana del 26-29 d'octubre, incloent el flux CAPA complet (reportar/resoldre/verificar + segregació de funcions) — el més sensible de cara a ISO 9001.
+
+**P2 — deute que compensa tallar abans que creixi més (pendent):**
+* [Qualitat tècnica] Patró de 4 branques duplicades per tipus de contingut a `schema_v57`/`v58` + `send-push/index.ts` — afegir un 5è tipus exigeix tocar 7 llocs a mà.
+* [Qualitat tècnica] `flutter_local_notifications` i `go_router` 4 versions majors enrere, tots dos en fluxos actius.
+* [Qualitat tècnica] 59 migracions SQL seqüencials sense bootstrap mantingut (`supabase/schema.sql` abandonat des de fa 6+ setmanes).
+* [Producte] La portada (`landing/index.html`, targetes "Funcionalitats") no esmenta res del construït aquesta sessió (CAPA, qüestionaris d'equip, seguiment, modes de treball funcionals) — mateix patró de desincronització que el teaser de Novetats ja corregit.
+* [Adopció] 22 de 38 passos d'ajuda sense captura de pantalla, els 6 articles nous al complet.
+
+**P3 — real però de menor urgència (pendent):**
+* [Accessibilitat] Cap lint ni test d'accessibilitat automatitzat; `Semantics` explícit només al 9,6% de les pantalles (8/83).
+* [Qualitat tècnica] 3 pantalles de 700-1250 línies sense detector de codi mort — ja hi han aparegut 2 bugs reals d'aquest tipus aquesta sessió, revisats només a mà.
+* [Producte] `SurgeonService` segueix sense ser offline-aware quan gairebé tota la resta ja ho és.
+
+**Sense troballa (confirmat, no cal tocar):** el bucket `custom-instrument-photos` és privat de debò (RLS de Storage real, no sols conveni de nom); cap de les 5 funcions `security definer` noves (v56-v60) repeteix el bug de branca nul·la ja trobat i corregit a `instrument_incidents`; els botons de sol icona nous porten `tooltip` al 100%; cap indicador d'estat depèn només del color; el contrast del landing passa WCAG AA en tots dos temes.
+
+---
+
 ## Design System (auditoria UX + implementació)
 
 Document de referència: auditoria completa de les 61 pantalles + Design System proposat, aprovat per l'usuari. Full de ruta en 3 nivells (consolidació → navegació → bugs de dades, aquests últims abordats juntament amb els altres dos, no per separat).
