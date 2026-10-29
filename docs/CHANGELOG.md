@@ -194,3 +194,7 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
 `flutter analyze`/`flutter test` nets.
 
 - **2 punts més de P2**: portada del landing amb 2 targetes noves ("Modes de treball", "Incidències i camí cap a ISO 9001") a la secció de Funcionalitats, que no esmentava res del construït aquesta sessió. Decisió conscient de NO refactoritzar el patró de 4 branques duplicades per tipus de contingut (`schema_v57`/`v58`/`v62` + `send-push`) -- no hi ha cap 5è tipus a la vista i tocar funcions `security definer` ja verificades per estalviar una feina hipotètica és més risc que benefici; checklist de 7 punts documentat a `docs/BACKLOG.md` per quan arribi de debò.
+
+- **Últim punt de P2: `go_router` i `flutter_local_notifications`, 4 versions majors al dia** (`go_router` 14.8.1→18.1.1, `flutter_local_notifications` 18.0.1→22.3.3, `timezone` 0.9.4→0.11.2, `environment: sdk` a `^3.10.0`). `reminder_service.dart` migrat als paràmetres amb nom de `initialize()`/`zonedSchedule()`/`cancel()`, i eliminat `uiLocalNotificationDateInterpretation` (retirat a la 19.0.0). Verificat en viu de debò, no només estàtic: `flutter build web` + servit en local + Playwright clicant les 4 pestanyes de navegació en mode convidat, amb captures de pantalla -- totes renderitzen correctament (catàleg amb els 601 instruments, Biblioteca, Perfil amb tot el construït aquesta sessió i la v1.1.0 visible).
+
+`flutter analyze`/`flutter test` nets.

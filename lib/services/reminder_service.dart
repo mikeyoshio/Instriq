@@ -34,7 +34,7 @@ class ReminderService {
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings();
     await _plugin.initialize(
-      const InitializationSettings(android: androidSettings, iOS: iosSettings),
+      settings: const InitializationSettings(android: androidSettings, iOS: iosSettings),
     );
     _initialized = true;
   }
@@ -63,11 +63,11 @@ class ReminderService {
       }
       final (title, body) = _localizedText();
       await _plugin.zonedSchedule(
-        _notificationId,
-        title,
-        body,
-        _nextInstanceOfHour(_hour),
-        const NotificationDetails(
+        id: _notificationId,
+        title: title,
+        body: body,
+        scheduledDate: _nextInstanceOfHour(_hour),
+        notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
             'learning_reminders',
             'Recordatoris de repàs',
@@ -76,7 +76,6 @@ class ReminderService {
           iOS: DarwinNotificationDetails(),
         ),
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
         matchDateTimeComponents: DateTimeComponents.time,
       );
     } catch (_) {
@@ -89,7 +88,7 @@ class ReminderService {
     if (kIsWeb) return;
     try {
       await _ensureInitialized();
-      await _plugin.cancel(_notificationId);
+      await _plugin.cancel(id: _notificationId);
     } catch (_) {
       // Ver comentario de refresh().
     }
