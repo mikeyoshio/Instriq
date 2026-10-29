@@ -173,7 +173,7 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           intro: l10n.helpArticleSendFeedbackIntro,
           steps: [
             HelpStep(text: l10n.helpArticleSendFeedbackStep1),
-            HelpStep(text: l10n.helpArticleSendFeedbackStep2),
+            HelpStep(text: l10n.helpArticleSendFeedbackStep2, image: '$_imagesPath/send_feedback.png'),
           ],
         ),
       ],

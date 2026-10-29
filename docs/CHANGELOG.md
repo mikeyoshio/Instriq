@@ -198,3 +198,7 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
 - **Últim punt de P2: `go_router` i `flutter_local_notifications`, 4 versions majors al dia** (`go_router` 14.8.1→18.1.1, `flutter_local_notifications` 18.0.1→22.3.3, `timezone` 0.9.4→0.11.2, `environment: sdk` a `^3.10.0`). `reminder_service.dart` migrat als paràmetres amb nom de `initialize()`/`zonedSchedule()`/`cancel()`, i eliminat `uiLocalNotificationDateInterpretation` (retirat a la 19.0.0). Verificat en viu de debò, no només estàtic: `flutter build web` + servit en local + Playwright clicant les 4 pestanyes de navegació en mode convidat, amb captures de pantalla -- totes renderitzen correctament (catàleg amb els 601 instruments, Biblioteca, Perfil amb tot el construït aquesta sessió i la v1.1.0 visible).
 
 `flutter analyze`/`flutter test` nets.
+
+- **Captura real per a l'article "Enviar suggeriments/reportar un error"**: reaprofitant el mateix muntatge de Playwright del punt anterior (sense aixecar res de nou), captura del diàleg real de feedback en mode convidat -- l'única de les 6 captures pendents dels articles nous d'aquesta sessió que no exigeix compte autenticat. Els altres 5 articles nous (identificació per safata, comentaris, confiança de contingut, incidències CAPA, qüestionaris d'equip) necessiten dades reals d'espai/equip i queden pendents a `docs/BACKLOG.md`.
+
+`flutter analyze`/`flutter test` nets.
