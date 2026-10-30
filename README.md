@@ -120,9 +120,9 @@ flutter run -d chrome        # navegador
 - **Historial complet de tot el que s'ha lliurat** (ordre cronològic, amb el context/bug/decisió de cada entrada): **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **Pendent** (EPICs de producte, deute tècnic i revisió arquitectònica prèvia a cadascun): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
 
-## Patrocina
+## Convida'm a un cafè
 
-Instriq és gratuït i sense inversors, mantingut fora d'hores. Si et resulta útil, pots patrocinar el projecte a [GitHub Sponsors](https://github.com/sponsors/mikeyoshio) — qualsevol aportació ajuda a cobrir el cost del servidor i el temps dedicat.
+Instriq és gratuït i sense inversors, mantingut fora d'hores. Si et resulta útil, pots convidar-me a un cafè a [Buy Me a Coffee](https://www.buymeacoffee.com/instriq?utm_source=github&utm_medium=donate&utm_campaign=readme) — qualsevol aportació ajuda a cobrir el cost del servidor i el temps dedicat.
 
 ## Contacte
 

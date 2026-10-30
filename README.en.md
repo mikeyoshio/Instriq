@@ -120,9 +120,9 @@ flutter run -d chrome        # browser
 - **Full history of everything that's been shipped** (chronological order, with the context/bug/decision behind each entry): **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **Pending** (product EPICs, technical debt and the architectural review behind each one): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
 
-## Sponsor
+## Buy me a coffee
 
-Instriq is free and has no investors, maintained outside working hours. If you find it useful, you can sponsor the project on [GitHub Sponsors](https://github.com/sponsors/mikeyoshio) — any contribution helps cover the server costs and the time invested.
+Instriq is free and has no investors, maintained outside working hours. If you find it useful, you can buy me a coffee on [Buy Me a Coffee](https://www.buymeacoffee.com/instriq?utm_source=github&utm_medium=donate&utm_campaign=readme) — any contribution helps cover the server costs and the time invested.
 
 ## Contact
 
