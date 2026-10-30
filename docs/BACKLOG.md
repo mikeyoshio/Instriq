@@ -8,7 +8,7 @@ Auditoria en 5 dimensions (producte, qualitat tècnica, seguretat/privacitat, ac
 * [Seguretat/legal] `export_my_account_data()` tornava a estar incompleta (segona vegada documentada, primera a schema_v52) — faltaven `favorites`, `recent_views`, `device_tokens`, l'autoria de `instrument_incidents` (reported/resolved/verified_by), i les taules noves de la sessió anterior (`content_follows`, `team_quizzes.created_by`, `app_feedback`, `editorial_comments.author_id` pels ref_type privats). **Corregit**, amb un comentari-checklist explícit a la pròpia funció perquè no torni a passar una tercera vegada.
 * [Seguretat] `app_feedback.message` sense límit de longitud, a diferència de `feature_suggestions.description` (mateix tipus d'endpoint anònim, ja mitigat). **Corregit**, mateix límit (2000 car.).
 * [Adopció] Cap verificació de Google Search Console / Bing Webmaster Tools. **Pendent de l'usuari**: cal donar d'alta la propietat i passar-me el fitxer/meta tag de verificació — no es pot fabricar sense accedir al seu compte.
-* [Adopció] Cap senyal de conversió als CTA "Obre l'app" (el beacon de Cloudflare Web Analytics només mesura vistes de pàgina). **Parcialment corregit**: UTM (`utm_source`/`utm_medium`/`utm_campaign`) afegit a els 10 enllaços "Obre l'app" de `index.html`/`edu.html`/`novedades.html`, distingint ubicació (nav/hero/colabora/final/footer) i pàgina d'origen. Compte real de clics reals exigeix encara analítica del costat de `app.instriq.org` (Cloudflare Zaraz, Vercel Analytics o similar) — decisió i accés que correspon a l'usuari, no es pot fer només des del repo de landing.
+* [Adopció] Cap senyal de conversió als CTA "Obre l'app" (el beacon de Cloudflare Web Analytics només mesura vistes de pàgina). **Fet (2026-10-30)**: UTM (`utm_source`/`utm_medium`/`utm_campaign`) afegit a els 10 enllaços "Obre l'app" de `index.html`/`edu.html`/`novedades.html` (2026-10-29), i ara `app.instriq.org` registra de debò l'obertura amb aquests paràmetres (`schema_v63_usage_events_guest_and_utm.sql`, event `app_open` a `usage_events`, llegit un sol cop a l'arrencada web des de `main.dart`). Consultable per SQL directe (`select * from usage_events where event_type = 'app_open'`), no hi ha panell d'admin de plataforma a l'app per a això.
 
 **P1 — risc real, esforç moderat:**
 * [Producte] **Pendent, necessita l'usuari**: 9 funcionalitats desplegades sense verificar mai de principi a fi amb compte real (`docs/BACKLOG.md`, patró "pendent, com sempre: provar en viu"): duplicar safata, lectura offline cachejada d'esterilització, candidatura de col·laborador, cicle complet d'adopció de safata pública, wizard de grup+starter pack.
@@ -29,6 +29,18 @@ Auditoria en 5 dimensions (producte, qualitat tècnica, seguretat/privacitat, ac
 * [Producte] `SurgeonService` segueix sense ser offline-aware quan gairebé tota la resta ja ho és.
 
 **Sense troballa (confirmat, no cal tocar):** el bucket `custom-instrument-photos` és privat de debò (RLS de Storage real, no sols conveni de nom); cap de les 5 funcions `security definer` noves (v56-v60) repeteix el bug de branca nul·la ja trobat i corregit a `instrument_incidents`; els botons de sol icona nous porten `tooltip` al 100%; cap indicador d'estat depèn només del color; el contrast del landing passa WCAG AA en tots dos temes.
+
+---
+
+## Analítica d'ús ampliada (2026-10-30)
+
+L'usuari va demanar "mètriques de tot". Ja existia `usage_events`/`organization_usage_stats` (schema_v23, sessió anterior) amb vistes/cerques/cerques sense resultat — però deliberadament restringit a usuaris autenticats dins d'una organització, descartant en silenci tot el trànsit de convidat ("invitado o sin grupo: no hay a que organizacion atribuir el evento"). Com que probablement la majoria de navegació pel catàleg és sense compte, això deixava fora precisament el que més interessava.
+
+* **Fet**: `schema_v63_usage_events_guest_and_utm.sql` — `organization_id` ara nullable (es registra igual per a convidats), i nou event `app_open` + columnes `utm_source`/`utm_medium`/`utm_campaign` per mesurar conversió real landing→app (`main.dart` ho llegeix de `Uri.base` un sol cop a l'arrencada web). `organization_usage_stats` (el panell per organització) no canvia de comportament.
+* **Decisió explícita de l'usuari**: sí a trackejar convidats (canvi conscient al criteri de privacitat anterior, documentat al propi SQL), sí a construir la conversió UTM ara.
+* **Consum**: només per SQL directe contra el projecte real (decisió de l'usuari, "consulta puntual" en comptes de pantalla nova) — no hi ha cap panell d'admin de plataforma a l'app per a dades multi-organització. Consultes de referència a `docs/CHANGELOG.md`.
+* **Limitació coneguda**: `ref_id` dels items de tipus `catalog` és l'id intern del catàleg estàtic (`lib/data/instruments_data.dart`), no resoluble a nom per SQL — caldria un export puntual id→nom si es vol un informe llegible, no construït encara (YAGNI fins que es demani).
+* **Fora d'abast d'aquesta ronda**: ús de funcionalitats (qüestionaris d'equip, preparació de safata, aprenentatge) — ja consultable amb SQL directe contra les seves pròpies taules (`learning_progress`, `tray_preparation_sessions`, `team_quizzes`), sense necessitat de cap canvi de codi.
 
 ---
 

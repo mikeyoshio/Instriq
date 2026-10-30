@@ -202,3 +202,17 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
 - **Captura real per a l'article "Enviar suggeriments/reportar un error"**: reaprofitant el mateix muntatge de Playwright del punt anterior (sense aixecar res de nou), captura del diàleg real de feedback en mode convidat -- l'única de les 6 captures pendents dels articles nous d'aquesta sessió que no exigeix compte autenticat. Els altres 5 articles nous (identificació per safata, comentaris, confiança de contingut, incidències CAPA, qüestionaris d'equip) necessiten dades reals d'espai/equip i queden pendents a `docs/BACKLOG.md`.
 
 `flutter analyze`/`flutter test` nets.
+
+- **Analítica d'ús ampliada a convidats + conversió UTM real** (detall complet a `docs/BACKLOG.md`, secció "Analítica d'ús ampliada"): l'usuari va demanar "mètriques de tot" i ja existia `usage_events`/`organization_usage_stats` (schema_v23) però descartava en silenci tot el trànsit sense organització -- precisament la majoria del trànsit real d'una app gratuïta. `schema_v63_usage_events_guest_and_utm.sql` ho registra ara igual (`organization_id` nullable), i afegeix l'event `app_open` + `utm_source`/`utm_medium`/`utm_campaign` perquè `app.instriq.org` registri de debò quan algú arriba des d'un enllaç "Obre l'app" del landing (`main.dart` ho llegeix un sol cop de `Uri.base` en arrencar, només web). Consum per SQL directe contra el projecte real (decisió explícita de l'usuari), consultes de referència:
+  ```sql
+  -- Contingut més vist (tots els tipus, totes les organitzacions)
+  select ref_type, ref_id, count(*) as vistes, count(distinct user_id) as usuaris_unics
+  from usage_events where event_type = 'view' group by ref_type, ref_id order by vistes desc limit 50;
+
+  -- Conversió per campanya UTM
+  select utm_source, utm_medium, utm_campaign, count(*) as obertures
+  from usage_events where event_type = 'app_open' group by 1, 2, 3 order by obertures desc;
+  ```
+  Limitació coneguda: `ref_id` de tipus `catalog` és l'id intern de `lib/data/instruments_data.dart`, no resoluble a nom per SQL sense un export puntual (no construït, YAGNI fins que calgui).
+
+`flutter analyze`/`flutter test` nets.

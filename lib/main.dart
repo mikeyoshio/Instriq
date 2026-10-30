@@ -26,6 +26,7 @@ import 'services/reminder_service.dart';
 import 'services/supabase_config.dart';
 import 'services/sync_queue_service.dart';
 import 'services/theme_service.dart';
+import 'services/usage_analytics_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +61,7 @@ class _InstriqAppState extends State<InstriqApp> {
   @override
   void initState() {
     super.initState();
+    if (kIsWeb) _logAppOpenFromUtm();
     AuthService.instance.authStateChanges.listen((state) {
       if (state.event == AuthChangeEvent.passwordRecovery) {
         _navigatorKey.currentState?.push(
@@ -96,6 +98,19 @@ class _InstriqAppState extends State<InstriqApp> {
       await _checkOnboarding();
       if (!kIsWeb) _checkForUpdate();
     });
+  }
+
+  /// Conversión landing -> app: lee los utm_* de la URL (si los hay, p. ej.
+  /// al llegar desde un enlace "Abre la app" de instriq.org) una sola vez al
+  /// arrancar, antes de que el router toque la ruta. Solo web: en el resto de
+  /// plataformas no hay URL de la que leer nada.
+  void _logAppOpenFromUtm() {
+    final params = Uri.base.queryParameters;
+    UsageAnalyticsService.instance.recordAppOpen(
+      utmSource: params['utm_source'],
+      utmMedium: params['utm_medium'],
+      utmCampaign: params['utm_campaign'],
+    );
   }
 
   /// Bienvenida de 3 pasos mostrada UNA SOLA VEZ (ver OnboardingScreen) -- no
