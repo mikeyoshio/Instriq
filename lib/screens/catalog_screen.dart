@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
@@ -49,7 +50,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   final Set<InstrumentCategory> _categoryFilters = {};
   final Set<Specialty> _specialtyFilters = {};
   bool _newOnlyFilter = false;
-  Set<String> _approvedCommunityPhotoIds = {};
+  Map<String, String> _approvedCommunityPhotoPaths = {};
 
   // Mismo criterio que home_screen.dart: sin este debounce, cada tecla
   // repite un escaneo difuso síncrono de los 521+ instrumentos del catálogo
@@ -72,17 +73,29 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   Future<void> _loadApprovedCommunityPhotoIds() async {
     try {
-      final ids = await CatalogCommunityPhotoService.instance.fetchApprovedInstrumentIds(_refType);
+      final paths = await CatalogCommunityPhotoService.instance.fetchApprovedPhotoPaths(_refType);
       if (!mounted) return;
-      setState(() => _approvedCommunityPhotoIds = ids);
+      setState(() => _approvedCommunityPhotoPaths = paths);
     } catch (_) {
-      // Sin conexión o sin sesión: el badge de "sin foto" simplemente no
-      // tiene en cuenta las fotos de la comunidad, no bloquea el catálogo.
+      // Sin conexión o sin sesión: el badge de "sin foto" y la miniatura
+      // simplemente no tienen en cuenta las fotos de la comunidad, no
+      // bloquea el catálogo.
     }
   }
 
   bool _hasAnyPhoto(Instrument instrument) =>
-      instrument.image != null || _approvedCommunityPhotoIds.contains(instrument.id);
+      instrument.image != null || _approvedCommunityPhotoPaths.containsKey(instrument.id);
+
+  /// Foto a mostrar en miniatura: la verificada del catálogo si existe,
+  /// si no la de comunidad aprobada — mismo orden de prioridad que
+  /// `_hasAnyPhoto` y que `instrument_detail_screen.dart`.
+  String? _thumbnailUrlFor(Instrument instrument) {
+    final official = instrument.image?.url;
+    if (official != null) return official;
+    final communityPath = _approvedCommunityPhotoPaths[instrument.id];
+    if (communityPath == null) return null;
+    return CatalogCommunityPhotoService.instance.getPublicUrl(communityPath);
+  }
 
   void _toggleSpecialty(Specialty s) {
     setState(() {
@@ -263,13 +276,35 @@ class _CatalogScreenState extends State<CatalogScreen> {
                       itemBuilder: (context, index) {
                         final instrument = filteredInstruments[index];
                         final learningStatus = ProgressService.instance.learningStatusFor(instrument.id);
+                        final thumbnailUrl = _thumbnailUrlFor(instrument);
                         return Card(
                           child: ListTile(
-                            leading: InstrumentIcon(
-                              iconKey: instrument.icon,
-                              category: instrument.category,
-                              size: 48,
-                            ),
+                            leading: thumbnailUrl != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: CachedNetworkImage(
+                                      imageUrl: thumbnailUrl,
+                                      width: 48,
+                                      height: 48,
+                                      fit: BoxFit.cover,
+                                      memCacheWidth: (48 * MediaQuery.of(context).devicePixelRatio).round(),
+                                      placeholder: (context, url) => InstrumentIcon(
+                                        iconKey: instrument.icon,
+                                        category: instrument.category,
+                                        size: 48,
+                                      ),
+                                      errorWidget: (context, url, error) => InstrumentIcon(
+                                        iconKey: instrument.icon,
+                                        category: instrument.category,
+                                        size: 48,
+                                      ),
+                                    ),
+                                  )
+                                : InstrumentIcon(
+                                    iconKey: instrument.icon,
+                                    category: instrument.category,
+                                    size: 48,
+                                  ),
                             title: Row(
                               children: [
                                 Flexible(child: Text(instrument.name.forLanguageCode(languageCode))),

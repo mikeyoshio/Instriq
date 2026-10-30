@@ -18,16 +18,24 @@ class CatalogCommunityPhotoService {
 
   static const _bucket = 'catalog-community-photos';
 
-  /// Ids de instrumentos de catálogo con al menos una foto aprobada — una
-  /// única consulta para pintar el badge "sin foto" en CatalogScreen sin
-  /// hacer una petición por instrumento.
-  Future<Set<String>> fetchApprovedInstrumentIds(String refType) async {
+  /// Ruta de la foto aprobada por instrumento de catálogo — una única
+  /// consulta para pintar el badge "sin foto" y la miniatura en
+  /// CatalogScreen sin hacer una petición por instrumento. Si un instrumento
+  /// tiene más de una foto aprobada (envíos sucesivos), se queda con la más
+  /// reciente (mismo criterio que [fetchApprovedPhoto]).
+  Future<Map<String, String>> fetchApprovedPhotoPaths(String refType) async {
     final rows = await _client
         .from('catalog_community_photos')
-        .select('instrument_ref_id')
+        .select('instrument_ref_id, photo_path')
         .eq('instrument_ref_type', refType)
-        .eq('status', 'approved');
-    return (rows as List<dynamic>).map((r) => (r as Map<String, dynamic>)['instrument_ref_id'] as String).toSet();
+        .eq('status', 'approved')
+        .order('reviewed_at');
+    final result = <String, String>{};
+    for (final r in rows as List<dynamic>) {
+      final row = r as Map<String, dynamic>;
+      result[row['instrument_ref_id'] as String] = row['photo_path'] as String;
+    }
+    return result;
   }
 
   /// La foto aprobada más reciente para un instrumento concreto (puede haber
