@@ -220,3 +220,7 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
 - **4 captures més del centre d'ajuda, totes en mode convidat** (reaprofitant el mateix muntatge de Playwright, aquest cop reconstruït perquè `flutter build web` havia quedat desactualitzat des de la pujada de `go_router`): filtre d'especialitat seleccionat a `catalog_search` (el full de filtres havia canviat de disseny des de la captura anterior -- ara va darrere d'una icona, no en línia) i la secció d'esterilització + fitxa tècnica (buida encara, "Sense fitxa tècnica registrada") a `instrument_detail`. Els altres 2 passos (`account` pas 2, `send_feedback` pas 1) no van necessitar cap captura nova: les imatges que ja existien ja mostraven exactament el que calia, només els faltava l'enllaç al pas. Queden 17 de 38 passos, tots darrere d'autenticació amb dades reals d'organització -- detall a `docs/BACKLOG.md`.
 
 `flutter analyze`/`flutter test` nets.
+
+- **Primera foto real del lot pilot d'instrumental** (detall complet a `docs/BACKLOG.md`, secció "Fotos reals d'instrumental"): `portaagujas-laparoscopico` guanya foto (CC BY-SA 4.0, verificada manualment forma/mecanisme contra la descripció de Commons). La resta de la primera ronda (19 instruments) es descarta conscientment -- Wikimedia Commons amb prou feines té instrumental amb nom propi ben etiquetat, 1 de 20 va donar confiança real. Segona ronda en curs ampliant a Wellcome Collection/NLM/Openverse.
+
+`flutter analyze`/`flutter test` nets.

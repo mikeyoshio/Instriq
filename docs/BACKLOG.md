@@ -32,6 +32,18 @@ Auditoria en 5 dimensions (producte, qualitat tècnica, seguretat/privacitat, ac
 
 ---
 
+## Fotos reals d'instrumental — lot pilot (2026-10-30, en curs)
+
+L'usuari va preguntar si es podien afegir més fotos on falten al catàleg. Auditoria real (`tool/audit_catalog_quality.dart` ja ho havia detectat a la v1.1.0, aquí es desglossa per categoria): **410 de 601 instruments (68%) no tenen foto real**, només la icona genèrica de categoria — sobretot `equips` (95/154), `dissecció` (58/83) i `implants` (53/76). Com que és instrumental quirúrgic, una foto equivocada és un error real (confon a qui l'usa per identificar material), així que l'usuari va triar explícitament "Lot pilot + revisió" en comptes d'anar en massa sense comprovar cada foto.
+
+* **Troballa clau**: Wikimedia Commons té molt poca cobertura d'instrumental amb nom propi ben etiquetat — retractors epònims (Richardson, Gelpi, Hohmann) retornen persones homònimes, no l'instrument. Primera ronda (només Commons, 20 instruments genèrics triats a propòsit, evitant sistemes robòtics/de marca): **1 de 20 confirmat amb confiança real**.
+* **Fet**: `portaagujas-laparoscopico` — foto afegida i verificada (forma, mànec de pistola amb cremallera, punta de portaagulles coincident), CC BY-SA 4.0, David.Mirth/Wikimedia Commons.
+* **Descartat conscientment**: `pinza-maryland` (l'únic altre candidat de Commons) — la punta de la foto és més una pinça fina serrada que la forma corba característica de Maryland, i el títol a Commons només deia "dissector" genèric sense confirmar-ho. Risc d'etiquetar malament més alt que el benefici.
+* **En curs**: segona ronda ampliant la font més enllà de Commons (Wellcome Collection, NLM Images from the History of Medicine, Openverse) per als 19 instruments restants del lot pilot, decisió explícita de l'usuari ("Ampliar la font de cerca") després de veure la taxa d'encert baixa.
+* **Patró establert per a qualsevol foto nova**: `InstrumentImage(url, license, attribution, sourceUrl)`, només llicència reutilizable (CC0/CC BY/CC BY-SA, mai NC ni sense llicència clara), verificada manualment (llegint la pàgina d'origen, no confiant només en el nom del fitxer) abans d'incrustar-la — mateix criteri que les 191 ja existents des de l'1.0.0.
+
+---
+
 ## Analítica d'ús ampliada (2026-10-30)
 
 L'usuari va demanar "mètriques de tot". Ja existia `usage_events`/`organization_usage_stats` (schema_v23, sessió anterior) amb vistes/cerques/cerques sense resultat — però deliberadament restringit a usuaris autenticats dins d'una organització, descartant en silenci tot el trànsit de convidat ("invitado o sin grupo: no hay a que organizacion atribuir el evento"). Com que probablement la majoria de navegació pel catàleg és sense compte, això deixava fora precisament el que més interessava.

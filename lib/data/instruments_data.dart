@@ -1821,6 +1821,12 @@ const List<Instrument> kInstruments = [
       es: 'Se utiliza para la sutura y el nudo intracorpóreo en cirugía laparoscópica (por ejemplo, cierre de cúpula vaginal, funduplicatura o sutura intestinal), a menudo con dos portaagujas trabajando juntos para realizar el nudo.',
       en: 'Used for intracorporeal suturing and knot-tying in laparoscopic surgery (such as vaginal cuff closure, fundoplication or bowel suturing), often with two needle holders working together to tie the knot.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Laparo_jehelec.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'David.Mirth, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Laparo_jehelec.jpg',
+    ),
   ),
   Instrument(
     id: 'separador-abanico-laparoscopico',
