@@ -216,3 +216,7 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
   Limitació coneguda: `ref_id` de tipus `catalog` és l'id intern de `lib/data/instruments_data.dart`, no resoluble a nom per SQL sense un export puntual (no construït, YAGNI fins que calgui).
 
 `flutter analyze`/`flutter test` nets.
+
+- **4 captures més del centre d'ajuda, totes en mode convidat** (reaprofitant el mateix muntatge de Playwright, aquest cop reconstruït perquè `flutter build web` havia quedat desactualitzat des de la pujada de `go_router`): filtre d'especialitat seleccionat a `catalog_search` (el full de filtres havia canviat de disseny des de la captura anterior -- ara va darrere d'una icona, no en línia) i la secció d'esterilització + fitxa tècnica (buida encara, "Sense fitxa tècnica registrada") a `instrument_detail`. Els altres 2 passos (`account` pas 2, `send_feedback` pas 1) no van necessitar cap captura nova: les imatges que ja existien ja mostraven exactament el que calia, només els faltava l'enllaç al pas. Queden 17 de 38 passos, tots darrere d'autenticació amb dades reals d'organització -- detall a `docs/BACKLOG.md`.
+
+`flutter analyze`/`flutter test` nets.

@@ -46,7 +46,7 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           intro: l10n.helpArticleCatalogSearchIntro,
           steps: [
             HelpStep(text: l10n.helpArticleCatalogSearchStep1, image: '$_imagesPath/catalog_filters.png'),
-            HelpStep(text: l10n.helpArticleCatalogSearchStep2),
+            HelpStep(text: l10n.helpArticleCatalogSearchStep2, image: '$_imagesPath/catalog_specialty_filter.png'),
           ],
         ),
         HelpArticle(
@@ -56,7 +56,7 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           intro: l10n.helpArticleInstrumentDetailIntro,
           steps: [
             HelpStep(text: l10n.helpArticleInstrumentDetailStep1, image: '$_imagesPath/instrument_detail.png'),
-            HelpStep(text: l10n.helpArticleInstrumentDetailStep2),
+            HelpStep(text: l10n.helpArticleInstrumentDetailStep2, image: '$_imagesPath/instrument_sterilization.png'),
           ],
         ),
         HelpArticle(
@@ -163,7 +163,7 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           intro: l10n.helpArticleAccountIntro,
           steps: [
             HelpStep(text: l10n.helpArticleAccountStep1, image: '$_imagesPath/profile_authenticated.png'),
-            HelpStep(text: l10n.helpArticleAccountStep2),
+            HelpStep(text: l10n.helpArticleAccountStep2, image: '$_imagesPath/profile_authenticated.png'),
           ],
         ),
         HelpArticle(
@@ -172,7 +172,7 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
           title: l10n.helpArticleSendFeedbackTitle,
           intro: l10n.helpArticleSendFeedbackIntro,
           steps: [
-            HelpStep(text: l10n.helpArticleSendFeedbackStep1),
+            HelpStep(text: l10n.helpArticleSendFeedbackStep1, image: '$_imagesPath/send_feedback_entry.png'),
             HelpStep(text: l10n.helpArticleSendFeedbackStep2, image: '$_imagesPath/send_feedback.png'),
           ],
         ),
