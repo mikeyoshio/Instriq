@@ -54,6 +54,7 @@ import 'preference_cards_screen.dart';
 import 'progress_screen.dart';
 import 'public_entity_detail_screen.dart';
 import 'surgeon_detail_screen.dart';
+import 'surgical_agenda_screen.dart';
 import 'tag_detail_screen.dart';
 import 'team_progress_screen.dart';
 import 'tray_detail_screen.dart';
@@ -438,6 +439,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _openProtocols() => _openWorkspaceCollection(
         buildDirect: (workspace, myRole) =>
             GroupDocumentListScreen(kind: DocumentKind.protocol, workspace: workspace, myRole: myRole),
+      );
+
+  Future<void> _openSurgicalAgenda() => _openWorkspaceCollection(
+        buildDirect: (workspace, myRole) => SurgicalAgendaScreen(workspace: workspace, myRole: myRole),
       );
 
   /// Bandejas publicadas ordenadas para el modo Instrumentista: primero las
@@ -902,9 +907,15 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: _openProtocols,
       ),
     ];
+    final surgicalAgendaItem = InstriqListItem(
+      icon: Icons.event_available_outlined,
+      title: l10n.surgicalAgendaTitle,
+      subtitle: l10n.surgicalAgendaSubtitle,
+      onTap: _openSurgicalAgenda,
+    );
     final groupItems = mode == WorkMode.cirujano
-        ? [...preferenceCardsAndProtocols, ...techniquesAndTrays]
-        : [...techniquesAndTrays, ...preferenceCardsAndProtocols];
+        ? [...preferenceCardsAndProtocols, ...techniquesAndTrays, surgicalAgendaItem]
+        : [...techniquesAndTrays, ...preferenceCardsAndProtocols, surgicalAgendaItem];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

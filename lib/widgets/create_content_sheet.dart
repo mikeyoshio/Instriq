@@ -6,10 +6,11 @@ import '../models/workspace_role.dart';
 import '../screens/custom_instrument_form_screen.dart';
 import '../screens/group_document_form_screen.dart';
 import '../screens/preference_card_form_screen.dart';
+import '../screens/surgical_slot_form_screen.dart';
 import '../screens/tray_form_screen.dart';
 import 'workspace_resolver.dart';
 
-enum _CreateContentType { technique, protocol, tray, preferenceCard, customInstrument }
+enum _CreateContentType { technique, protocol, tray, preferenceCard, customInstrument, surgicalSlot }
 
 /// Punto de entrada único para crear contenido (técnica/protocolo/bandeja/
 /// ficha de preferencia/instrumental personalizado), llamado tanto desde el
@@ -46,6 +47,7 @@ Future<void> showCreateContentSheet(BuildContext context) async {
     _CreateContentType.tray => TrayFormScreen(workspaceId: workspaceId),
     _CreateContentType.preferenceCard => PreferenceCardFormScreen(workspaceId: workspaceId),
     _CreateContentType.customInstrument => CustomInstrumentFormScreen(workspaceId: workspaceId),
+    _CreateContentType.surgicalSlot => SurgicalSlotFormScreen(workspaceId: workspaceId, myRole: resolved.role),
   };
   await Navigator.of(context).push(MaterialPageRoute(builder: (_) => form));
 }
@@ -85,6 +87,7 @@ class _CreateTypePicker extends StatelessWidget {
             l10n.customInstrumentsTitle,
             _CreateContentType.customInstrument,
           ),
+          tile(Icons.event_available_outlined, l10n.surgicalAgendaTitle, _CreateContentType.surgicalSlot),
         ],
       ),
     );

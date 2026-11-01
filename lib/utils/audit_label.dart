@@ -120,6 +120,14 @@ String auditActionLabel(AppLocalizations l10n, AuditEntry entry) {
       return l10n.auditActionInstrumentIncidentVerified;
     case 'content_clinically_reviewed':
       return l10n.auditActionContentClinicallyReviewed;
+    case 'surgical_slot_created':
+      return l10n.auditActionSurgicalSlotCreated;
+    case 'surgical_slot_updated':
+      return l10n.auditActionSurgicalSlotUpdated;
+    case 'surgical_slot_cancelled':
+      return l10n.auditActionSurgicalSlotCancelled;
+    case 'surgical_agenda_ics_token_regenerated':
+      return l10n.auditActionSurgicalAgendaIcsTokenRegenerated;
     default:
       return entry.action;
   }
