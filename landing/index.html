@@ -305,6 +305,10 @@
   .github-stars { display: flex; width: fit-content; align-items: center; gap: 7px; margin-top: 14px; color: var(--ink-muted); font-family: var(--display); font-size: 0.85rem; text-decoration: none; transition: color 0.15s ease; }
   .github-stars:hover { color: var(--accent); }
   .github-stars svg { flex-shrink: 0; }
+  .network-alert { background: var(--accent-soft); border-bottom: 1px solid var(--rule); }
+  .network-alert .wrap { padding: 12px 32px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 0.88rem; }
+  .network-alert p { margin: 0; color: var(--ink); }
+  .network-alert a { font-weight: 700; }
 </style>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c09082e3f96f44b59922839da897dcab"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
@@ -333,6 +337,12 @@
     </nav>
   </div>
 </header>
+
+<div class="network-alert">
+  <div class="wrap">
+    <p data-i18n="networkAlert.text">⚠️ Alguns operadors d'Internet espanyols (Movistar, Vodafone, Orange, DIGI) bloquegen aquesta pàgina per error, com a dany col·lateral dels bloqueigs judicials contra el pirateig esportiu — Instriq no té res a veure amb LaLiga ni amb continguts pirates, només compartim per atzar l'adreça IP d'un altre lloc afectat (allotgem a Cloudflare, igual que milions de webs). <a href="https://app.instriq.org?utm_source=landing&utm_medium=alert&utm_campaign=network_block">L'app no està afectada, obre-la aquí</a> — o prova amb una VPN o canviant el DNS de la teva xarxa a 1.1.1.1.</p>
+  </div>
+</div>
 
 <main id="main" tabindex="-1">
 
@@ -962,6 +972,7 @@ draw();
       "meta.description": "Catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidos entre profesionales de quirófano. Open source.",
       "a11y.skip": "Saltar al contenido",
       "nav.consultar": "Consultar", "nav.aprender": "Aprender", "nav.documentar": "Documentar", "nav.compartir": "Compartir", "nav.edu": "Formación", "nav.colabora": "Colabora", "nav.cta": "Abrir la app",
+      "networkAlert.text": "⚠️ Algunos operadores de Internet españoles (Movistar, Vodafone, Orange, DIGI) bloquean esta página por error, como daño colateral de los bloqueos judiciales contra la piratería deportiva — Instriq no tiene nada que ver con LaLiga ni con contenidos piratas, solo compartimos por azar la dirección IP de otro sitio afectado (alojamos en Cloudflare, igual que millones de webs). <a href=\"https://app.instriq.org?utm_source=landing&utm_medium=alert&utm_campaign=network_block\">La app no está afectada, ábrela aquí</a> — o prueba con una VPN o cambiando el DNS de tu red a 1.1.1.1.",
       "hero.eyebrow": "Open source · Bloque quirúrgico",
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
@@ -1077,6 +1088,7 @@ draw();
       "meta.description": "Instrument catalog, techniques, protocols and preference cards shared among operating room professionals. Open source.",
       "a11y.skip": "Skip to content",
       "nav.consultar": "Explore", "nav.aprender": "Learn", "nav.documentar": "Document", "nav.compartir": "Share", "nav.edu": "Education", "nav.colabora": "Contribute", "nav.cta": "Open the app",
+      "networkAlert.text": "⚠️ Some Spanish internet providers (Movistar, Vodafone, Orange, DIGI) are blocking this page by mistake, as collateral damage from court-ordered blocks against sports piracy — Instriq has nothing to do with LaLiga or pirated content, we just happen to share an IP address with another affected site (we're hosted on Cloudflare, like millions of other websites). <a href=\"https://app.instriq.org?utm_source=landing&utm_medium=alert&utm_campaign=network_block\">The app isn't affected, open it here</a> — or try a VPN or switching your network's DNS to 1.1.1.1.",
       "hero.eyebrow": "Open source · Surgical block",
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
