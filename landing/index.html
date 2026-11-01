@@ -319,12 +319,12 @@
   <div class="wrap nav">
     <a href="#" class="brand"><img src="favicon.png" alt=""> Instriq</a>
     <nav class="nav-links">
-      <a class="plain" href="#mision" data-i18n="nav.mision">Missió</a>
-      <a class="plain" href="#funciones" data-i18n="nav.funciones">Funcionalitats</a>
-      <a class="plain" href="#organiza" data-i18n="nav.organiza">Organització</a>
+      <a class="plain" href="#consultar" data-i18n="nav.consultar">Consultar</a>
+      <a class="plain" href="#aprender" data-i18n="nav.aprender">Aprendre</a>
+      <a class="plain" href="#documentar" data-i18n="nav.documentar">Documentar</a>
+      <a class="plain" href="#compartir" data-i18n="nav.compartir">Compartir</a>
       <a class="plain" href="edu.html" data-i18n="nav.edu">Formació</a>
       <a class="plain nav-collab" href="#colabora" data-i18n="nav.colabora">Col·labora</a>
-      <a class="plain" href="#transparencia" data-i18n="nav.transparencia">Transparència</a>
       <a class="plain" href="https://github.com/mikeyoshio/Instriq">GitHub</a>
       <div class="lang-switch" id="langSwitch">
         <button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button>
@@ -372,7 +372,7 @@
       <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
       <div class="data-row">
         <div class="data-cell"><div class="num" data-count="601">0</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
-        <div class="data-cell"><div class="num" data-count="18">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
+        <div class="data-cell"><div class="num" data-count="19">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
         <div class="data-cell"><div class="num" data-count="3">0</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
         <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
       </div>
@@ -634,37 +634,88 @@ draw();
   </div>
 </section>
 
-<section id="funciones" class="section band reveal">
+<section id="consultar" class="section band reveal">
   <div class="wrap center">
-    <span class="eyebrow" data-i18n="funciones.eyebrow">Funcionalitats</span>
+    <span class="eyebrow" data-i18n="consultar.eyebrow">Consultar</span>
+    <h2 data-i18n="consultar.h1">Explora el coneixement quirúrgic.</h2>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="consultar.lede">El Vademècum públic d'Instriq reuneix 601 instruments en 19 especialitats, 17 sutures i l'equipament d'anestèsia — amb noms, sinònims, fabricants, mètodes d'esterilització i fitxa tècnica. Es consulta sense compte ni registre.</p>
+    <div class="showcase" style="max-width: 320px;">
+      <figure>
+        <img src="screenshots/catalogo.png" alt="Catàleg d'instrumental filtrat per especialitat" width="260" height="578" loading="lazy">
+        <figcaption data-i18n="consultar.fig">Catàleg amb fotos reals, filtrable per especialitat.</figcaption>
+      </figure>
+    </div>
+    <div class="cards cols-3" style="text-align: left;">
+      <div class="card"><h3 data-i18n="consultar.c1t">601 instruments</h3><p data-i18n="consultar.c1p">19 especialitats i categoria funcional, amb noms comercials i fabricant.</p></div>
+      <div class="card"><h3 data-i18n="consultar.c2t">Sutures i anestèsia</h3><p data-i18n="consultar.c2p">Catàleg propi de 17 sutures i de l'equipament d'anestèsia reutilitzable.</p></div>
+      <div class="card"><h3 data-i18n="consultar.c3t">Esterilització i fitxa tècnica</h3><p data-i18n="consultar.c3p">Mètodes d'esterilització amb els seus paràmetres, fabricant, IFU, manteniment i vida útil.</p></div>
+    </div>
+    <a href="/vademecum/ca/" class="btn btn-primary" style="margin-top: 36px;" data-i18n="consultar.cta">Explorar el Vademècum →</a>
+  </div>
+</section>
+
+<section id="aprender" class="section reveal">
+  <div class="wrap center">
+    <span class="eyebrow" data-i18n="aprender.eyebrow">Aprendre</span>
+    <h2 data-i18n="aprender.h1">Aprendre també forma part del coneixement quirúrgic.</h2>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="aprender.lede">Flashcards i qüestionaris sobre tot el catàleg, amb repetició espaiada (Leitner) perquè el que ja domines no et faci perdre temps. Identificació visual amb fotos reals i, per a qui ja treballa en equip, pràctica d'identificació de safates senceres.</p>
+    <div class="cards cols-3" style="text-align: left;">
+      <div class="card"><h3 data-i18n="aprender.c1t">Flashcards i qüestionaris</h3><p data-i18n="aprender.c1p">Sobre tot el catàleg, amb repetició espaiada i identificació amb fotos reals. Funciona en mode convidat.</p></div>
+      <div class="card"><h3 data-i18n="aprender.c2t">Pràctica de safates</h3><p data-i18n="aprender.c2p">Identificació d'una safata sencera, no només d'un instrument solt — per a qui ja forma part d'un equip.</p></div>
+      <div class="card"><h3 data-i18n="aprender.c3t">Eines per a docents</h3><p data-i18n="aprender.c3p">Qüestionaris configurables per supervisor o docent, amb seguiment del progrés del seu equip o alumnat.</p></div>
+    </div>
+    <a href="edu.html" class="btn btn-primary" style="margin-top: 36px;" data-i18n="aprender.cta">Descobrir les eines d'aprenentatge →</a>
+  </div>
+</section>
+
+<section id="documentar" class="section band reveal">
+  <div class="wrap center">
+    <span class="eyebrow" data-i18n="documentar.eyebrow">Documentar</span>
+    <h2 data-i18n="documentar.h1">Documenta com es treballa de debò al teu quiròfan.</h2>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="documentar.lede">Res se sobreescriu: cada canvi crea un esborrany, qui aprova el revisa i el compara abans de publicar-lo, i l'historial complet queda disponible per restaurar-lo. Exporta qualsevol fitxa a PDF amb la data i la versió exactes.</p>
+    <div class="showcase" style="max-width: 320px;">
+      <figure>
+        <img src="screenshots/grupo.png" alt="Espai de treball d'un grup, amb tècniques, safates i targetes de preferència" width="260" height="578" loading="lazy">
+        <figcaption data-i18n="documentar.fig">Tècniques, safates i targetes de preferència, dins del mateix espai.</figcaption>
+      </figure>
+    </div>
+    <div class="cards cols-4" style="text-align: left;">
+      <div class="card"><h3 data-i18n="documentar.c1t">Tècniques i protocols</h3><p data-i18n="documentar.c1p">Passos categoritzables a l'estil checklist de l'OMS, amb versionat i flux d'aprovació.</p></div>
+      <div class="card"><h3 data-i18n="documentar.c2t">Safates d'instrumental</h3><p data-i18n="documentar.c2p">Checklist de quantitats i fotos, amb sessions reals de preparació i control de qualitat.</p></div>
+      <div class="card"><h3 data-i18n="documentar.c3t">Targetes de preferència</h3><p data-i18n="documentar.c3p">Instrumental específic per cirurgià i procediment, compartit i validat dins del teu grup.</p></div>
+      <div class="card"><h3 data-i18n="documentar.c4t">Instrumental personalitzat</h3><p data-i18n="documentar.c4p">Dona d'alta el material propi del teu equip, amb variants i fotos, privat i mai compartit fora del vostre espai.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="compartir" class="section spotlight reveal">
+  <div class="wrap measure center">
+    <span class="eyebrow" data-i18n="compartir.eyebrow">Compartir</span>
+    <h2 data-i18n="compartir.h1">Coneixement obert, construït i revisat de forma responsable.</h2>
+    <p class="lede" data-i18n="compartir.lede">La Biblioteca Pública reuneix tècniques, protocols, safates i instrumental aportats per la comunitat, amb revisió editorial per nivells de col·laboració, fils de comentaris i propostes de correcció, i traduccions proposades per qui vulgui ajudar. Pots seguir les actualitzacions del contingut que t'interessa i adoptar-lo al teu propi espai de treball com a punt de partida.</p>
+    <div class="notice" style="text-align: left; max-width: var(--measure); margin: 24px auto 0;">
+      <span class="tag" data-i18n="compartir.noteTag">Important</span>
+      <p data-i18n="compartir.note">L'aprovació editorial no equival a validació clínica. El contingut públic és una referència de coneixement i un punt de partida — no substitueix la documentació oficial ni els protocols de la teva institució.</p>
+    </div>
+    <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=compartir" class="btn btn-primary" style="margin-top: 24px;" data-i18n="compartir.cta">Explorar la Biblioteca Pública →</a>
+  </div>
+</section>
+
+<section id="funciones" class="section reveal">
+  <div class="wrap center">
+    <span class="eyebrow" data-i18n="funciones.eyebrow">I a més</span>
     <h2 data-i18n="funciones.h1">Tot el que necessita un bloc quirúrgic, en un sol lloc.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="funciones.lede">Des del catàleg bàsic fins a la gestió completa del coneixement del teu grup. L'aprenentatge bàsic funciona com a convidat — només cal compte si el teu grup vol compartir el seu propi coneixement.</p>
-    <div class="showcase">
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="funciones.lede">Al voltant de consultar, aprendre, documentar i compartir, Instriq també cobreix el dia a dia operatiu d'un grup.</p>
+    <div class="showcase" style="max-width: 320px;">
       <figure>
         <img src="screenshots/home.png" alt="Pantalla d'inici amb cercador global" width="260" height="578" loading="lazy">
         <figcaption data-i18n="hoy.fig0">Inici centrat en un cercador global.</figcaption>
       </figure>
-      <figure>
-        <img src="screenshots/catalogo.png" alt="Catàleg d'instrumental filtrat per especialitat" width="260" height="578" loading="lazy">
-        <figcaption data-i18n="hoy.fig1">Catàleg amb fotos reals per especialitat.</figcaption>
-      </figure>
-      <figure>
-        <img src="screenshots/grupo.png" alt="Espai de treball d'un grup, amb tècniques, safates i targetes de preferència" width="260" height="578" loading="lazy">
-        <figcaption data-i18n="hoy.fig2">Organitza el teu equip en espais de treball.</figcaption>
-      </figure>
     </div>
     <div class="cards cols-3" style="text-align: left;">
-      <div class="card"><h3 data-i18n="hoy.c1t">Catàleg</h3><p data-i18n="hoy.c1p">601 instruments organitzats per 19 especialitats i per categoria funcional, amb noms comercials i fabricant.</p></div>
-      <div class="card"><h3 data-i18n="hoy.c2t">Aprèn</h3><p data-i18n="hoy.c2p">Flashcards i qüestionaris amb repetició espaiada, identificació amb fotos reals i qüestionaris d'equip per a qui forma residents o estudiants. <a href="edu.html">Més per a formació →</a></p></div>
-      <div class="card"><h3 data-i18n="hoy.c3t">Targetes de preferència</h3><p data-i18n="hoy.c3p">Instrumental específic per cirurgià i procediment, compartit i validat dins del teu grup.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c1t">Tècniques i protocols</h3><p data-i18n="funciones.c1p">Documenta pas a pas com treballa el teu equip. Cada canvi passa per esborrany, revisió i publicació — res se sobreescriu, tot l'historial és consultable i restaurable.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c2t">Safates d'instrumental</h3><p data-i18n="funciones.c2p">Sets amb checklist de quantitats i fotos, versionades i aprovades, per verificar caixes completes després del rentat i l'esterilització.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c3t">Esterilització i fitxa tècnica</h3><p data-i18n="funciones.c3p">Mètodes d'esterilització amb els seus paràmetres, més fabricant, IFU, manteniment i vida útil per a cada instrument.</p></div>
       <div class="card"><h3 data-i18n="funciones.c4t">Espais de treball i rols</h3><p data-i18n="funciones.c4p">Organitza el grup per especialitat o servei. Rols granulars (lector, editor, aprovador, administrador) per espai, amb auditoria de cada canvi sensible.</p></div>
       <div class="card"><h3 data-i18n="funciones.c5t">Mode sense connexió</h3><p data-i18n="funciones.c5p">Consulta i edita sense xarxa a tot arreu on t'ho permetin els teus permisos; els canvis es pugen sols en recuperar la connexió.</p></div>
       <div class="card"><h3 data-i18n="funciones.c6t">Cerca intel·ligent</h3><p data-i18n="funciones.c6p">Un únic cercador per instrumental, tècniques, protocols, fabricants, cirurgians i etiquetes — amb activitat recent i favorits.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c7t">Instrumental personalitzat</h3><p data-i18n="funciones.c7p">Dona d'alta el material propi del teu equip, amb variants i fotos, privat i mai compartit fora del vostre espai.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c8t">Biblioteca Pública</h3><p data-i18n="funciones.c8p">Contingut obert a tota la comunitat, revisat i aprovat per un consell editorial — mai una autoritat clínica, sempre una referència de partida.</p></div>
       <div class="card"><h3 data-i18n="funciones.c9t">Auditoria i privacitat</h3><p data-i18n="funciones.c9p">Registre de qui ha fet què i quan en accions sensibles. Exporta o elimina les teves dades personals quan vulguis (GDPR).</p></div>
       <div class="card"><h3 data-i18n="funciones.c10t">Modes de treball</h3><p data-i18n="funciones.c10p">Instrumentista, cirurgià, docent i més: la fitxa d'instrument i l'inici s'adapten al teu rol del dia, sense tocar els teus permisos reals.</p></div>
       <div class="card"><h3 data-i18n="funciones.c11t">Incidències i camí cap a ISO 9001</h3><p data-i18n="funciones.c11p">Reporta una incidència d'instrumental amb causa arrel i acció correctiva, verificada per una persona diferent de qui la resol — amb registre d'auditoria.</p></div>
@@ -910,7 +961,7 @@ draw();
       "meta.title": "Instriq — Conocimiento de quirófano abierto y compartido",
       "meta.description": "Catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidos entre profesionales de quirófano. Open source.",
       "a11y.skip": "Saltar al contenido",
-      "nav.mision": "Misión", "nav.funciones": "Funcionalidades", "nav.organiza": "Organización", "nav.edu": "Formación", "nav.colabora": "Colabora", "nav.transparencia": "Transparencia", "nav.cta": "Abrir la app",
+      "nav.consultar": "Consultar", "nav.aprender": "Aprender", "nav.documentar": "Documentar", "nav.compartir": "Compartir", "nav.edu": "Formación", "nav.colabora": "Colabora", "nav.cta": "Abrir la app",
       "hero.eyebrow": "Open source · Bloque quirúrgico",
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
@@ -943,19 +994,36 @@ draw();
       "hoy.eyebrow": "Disponible hoy", "hoy.h1": "Sin cuenta, sin fricción.",
       "hoy.lede": "El aprendizaje básico funciona como invitado. Solo hace falta cuenta si tu grupo quiere compartir su propio conocimiento.",
       "hoy.fig0": "Inicio centrado en un buscador global.", "hoy.fig1": "Catálogo con fotos reales por especialidad.", "hoy.fig2": "Organiza tu equipo en espacios de trabajo.",
-      "hoy.c1t": "Catálogo", "hoy.c1p": "601 instrumentos organizados por 19 especialidades y por categoría funcional, con nombres comerciales y fabricante.",
-      "hoy.c2t": "Aprende", "hoy.c2p": "Flashcards y cuestionarios con repetición espaciada, identificación con fotos reales y cuestionarios de equipo para quien forma a residentes o estudiantes. <a href=\"edu.html\">Más para formación →</a>",
-      "hoy.c3t": "Tarjetas de preferencia", "hoy.c3p": "Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu grupo.",
-      "funciones.eyebrow": "Funcionalidades", "funciones.h1": "Todo lo que necesita un bloque quirúrgico, en un solo lugar.",
-      "funciones.lede": "Desde el catálogo básico hasta la gestión completa del conocimiento de tu grupo. El aprendizaje básico funciona como invitado — solo hace falta cuenta si tu grupo quiere compartir su propio conocimiento.",
-      "funciones.c1t": "Técnicas y protocolos", "funciones.c1p": "Documenta paso a paso cómo trabaja tu equipo. Cada cambio pasa por borrador, revisión y publicación — nada se sobrescribe, todo el historial es consultable y restaurable.",
-      "funciones.c2t": "Bandejas de instrumental", "funciones.c2p": "Sets con checklist de cantidades y fotos, versionadas y aprobadas, para verificar cajas completas tras el lavado y la esterilización.",
-      "funciones.c3t": "Esterilización y ficha técnica", "funciones.c3p": "Métodos de esterilización con sus parámetros, más fabricante, IFU, mantenimiento y vida útil para cada instrumento.",
+      "consultar.eyebrow": "Consultar", "consultar.h1": "Explora el conocimiento quirúrgico.",
+      "consultar.lede": "El Vademécum público de Instriq reúne 601 instrumentos en 19 especialidades, 17 suturas y el equipamiento de anestesia — con nombres, sinónimos, fabricantes, métodos de esterilización y ficha técnica. Se consulta sin cuenta ni registro.",
+      "consultar.fig": "Catálogo con fotos reales, filtrable por especialidad.",
+      "consultar.c1t": "601 instrumentos", "consultar.c1p": "19 especialidades y categoría funcional, con nombres comerciales y fabricante.",
+      "consultar.c2t": "Suturas y anestesia", "consultar.c2p": "Catálogo propio de 17 suturas y del equipamiento de anestesia reutilizable.",
+      "consultar.c3t": "Esterilización y ficha técnica", "consultar.c3p": "Métodos de esterilización con sus parámetros, fabricante, IFU, mantenimiento y vida útil.",
+      "consultar.cta": "Explorar el Vademécum →",
+      "aprender.eyebrow": "Aprender", "aprender.h1": "Aprender también forma parte del conocimiento quirúrgico.",
+      "aprender.lede": "Flashcards y cuestionarios sobre todo el catálogo, con repetición espaciada (Leitner) para que lo que ya dominas no te haga perder tiempo. Identificación visual con fotos reales y, para quien ya trabaja en equipo, práctica de identificación de bandejas completas.",
+      "aprender.c1t": "Flashcards y cuestionarios", "aprender.c1p": "Sobre todo el catálogo, con repetición espaciada e identificación con fotos reales. Funciona en modo invitado.",
+      "aprender.c2t": "Práctica de bandejas", "aprender.c2p": "Identificación de una bandeja completa, no solo de un instrumento suelto — para quien ya forma parte de un equipo.",
+      "aprender.c3t": "Herramientas para docentes", "aprender.c3p": "Cuestionarios configurables por supervisor o docente, con seguimiento del progreso de su equipo o alumnado.",
+      "aprender.cta": "Descubrir las herramientas de aprendizaje →",
+      "documentar.eyebrow": "Documentar", "documentar.h1": "Documenta cómo se trabaja de verdad en tu quirófano.",
+      "documentar.lede": "Nada se sobrescribe: cada cambio crea un borrador, quien aprueba lo revisa y compara antes de publicarlo, y el historial completo queda disponible para restaurarlo. Exporta cualquier ficha a PDF con la fecha y la versión exactas.",
+      "documentar.fig": "Técnicas, bandejas y tarjetas de preferencia, dentro del mismo espacio.",
+      "documentar.c1t": "Técnicas y protocolos", "documentar.c1p": "Pasos categorizables al estilo checklist de la OMS, con versionado y flujo de aprobación.",
+      "documentar.c2t": "Bandejas de instrumental", "documentar.c2p": "Checklist de cantidades y fotos, con sesiones reales de preparación y control de calidad.",
+      "documentar.c3t": "Tarjetas de preferencia", "documentar.c3p": "Instrumental específico por cirujano y procedimiento, compartido y validado dentro de tu grupo.",
+      "documentar.c4t": "Instrumental personalizado", "documentar.c4p": "Da de alta el material propio de tu equipo, con variantes y fotos, privado y nunca compartido fuera de vuestro espacio.",
+      "compartir.eyebrow": "Compartir", "compartir.h1": "Conocimiento abierto, construido y revisado de forma responsable.",
+      "compartir.lede": "La Biblioteca Pública reúne técnicas, protocolos, bandejas e instrumental aportados por la comunidad, con revisión editorial por niveles de colaboración, hilos de comentarios y propuestas de corrección, y traducciones propuestas por quien quiera ayudar. Puedes seguir las actualizaciones del contenido que te interesa y adoptarlo en tu propio espacio de trabajo como punto de partida.",
+      "compartir.noteTag": "Importante",
+      "compartir.note": "La aprobación editorial no equivale a validación clínica. El contenido público es una referencia de conocimiento y un punto de partida — no sustituye la documentación oficial ni los protocolos de tu institución.",
+      "compartir.cta": "Explorar la Biblioteca Pública →",
+      "funciones.eyebrow": "Y además", "funciones.h1": "Todo lo que necesita un bloque quirúrgico, en un solo lugar.",
+      "funciones.lede": "Alrededor de consultar, aprender, documentar y compartir, Instriq también cubre el día a día operativo de un grupo.",
       "funciones.c4t": "Espacios de trabajo y roles", "funciones.c4p": "Organiza el grupo por especialidad o servicio. Roles granulares (lector, editor, aprobador, administrador) por espacio, con auditoría de cada cambio sensible.",
       "funciones.c5t": "Modo sin conexión", "funciones.c5p": "Consulta y edita sin red allá donde te lo permitan tus permisos; los cambios se suben solos al recuperar la conexión.",
       "funciones.c6t": "Búsqueda inteligente", "funciones.c6p": "Un único buscador para instrumental, técnicas, protocolos, fabricantes, cirujanos y etiquetas — con actividad reciente y favoritos.",
-      "funciones.c7t": "Instrumental personalizado", "funciones.c7p": "Da de alta el material propio de tu equipo, con variantes y fotos, privado y nunca compartido fuera de vuestro espacio.",
-      "funciones.c8t": "Biblioteca Pública", "funciones.c8p": "Contenido abierto a toda la comunidad, revisado y aprobado por un consejo editorial — nunca una autoridad clínica, siempre una referencia de partida.",
       "funciones.c9t": "Auditoría y privacidad", "funciones.c9p": "Registro de quién ha hecho qué y cuándo en acciones sensibles. Exporta o elimina tus datos personales cuando quieras (GDPR).",
       "funciones.c10t": "Modos de trabajo", "funciones.c10p": "Instrumentista, cirujano, docente y más: la ficha de instrumento y el inicio se adaptan a tu rol del día, sin tocar tus permisos reales.",
       "funciones.c11t": "Incidencias y camino hacia ISO 9001", "funciones.c11p": "Reporta una incidencia de instrumental con causa raíz y acción correctiva, verificada por una persona distinta de quien la resuelve — con registro de auditoría.",
@@ -1008,7 +1076,7 @@ draw();
       "meta.title": "Instriq — Open, shared operating room knowledge",
       "meta.description": "Instrument catalog, techniques, protocols and preference cards shared among operating room professionals. Open source.",
       "a11y.skip": "Skip to content",
-      "nav.mision": "Mission", "nav.funciones": "Features", "nav.organiza": "Structure", "nav.edu": "Education", "nav.colabora": "Contribute", "nav.transparencia": "Transparency", "nav.cta": "Open the app",
+      "nav.consultar": "Explore", "nav.aprender": "Learn", "nav.documentar": "Document", "nav.compartir": "Share", "nav.edu": "Education", "nav.colabora": "Contribute", "nav.cta": "Open the app",
       "hero.eyebrow": "Open source · Surgical block",
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
@@ -1041,19 +1109,36 @@ draw();
       "hoy.eyebrow": "Available today", "hoy.h1": "No account, no friction.",
       "hoy.lede": "Basic learning works as a guest. An account is only needed if your group wants to share its own knowledge.",
       "hoy.fig0": "A home screen centered on global search.", "hoy.fig1": "Catalog with real photos by specialty.", "hoy.fig2": "Organize your team into workspaces.",
-      "hoy.c1t": "Catalog", "hoy.c1p": "601 instruments organized by 19 specialties and by functional category, with trade names and manufacturer.",
-      "hoy.c2t": "Learn", "hoy.c2p": "Flashcards and quizzes with spaced repetition, visual identification with real photos, and team quizzes for whoever trains residents or students. <a href=\"edu.html\">More for education →</a>",
-      "hoy.c3t": "Preference cards", "hoy.c3p": "Instruments specific to surgeon and procedure, shared and validated within your group.",
-      "funciones.eyebrow": "Features", "funciones.h1": "Everything a surgical block needs, in one place.",
-      "funciones.lede": "From the basic catalog to your group's full knowledge management. Basic learning works as a guest — an account is only needed if your group wants to share its own knowledge.",
-      "funciones.c1t": "Techniques and protocols", "funciones.c1p": "Document step by step how your team works. Every change goes through draft, review and publish — nothing is overwritten, full history stays viewable and restorable.",
-      "funciones.c2t": "Instrument trays", "funciones.c2p": "Sets with a quantity checklist and photos, versioned and approved, to verify complete trays after washing and sterilization.",
-      "funciones.c3t": "Sterilization and technical info", "funciones.c3p": "Sterilization methods with their own parameters, plus manufacturer, IFU, maintenance and useful life for each instrument.",
+      "consultar.eyebrow": "Explore", "consultar.h1": "Explore surgical knowledge.",
+      "consultar.lede": "Instriq's public Vademecum brings together 601 instruments across 19 specialties, 17 sutures and anesthesia equipment — with names, synonyms, manufacturers, sterilization methods and technical sheets. No account or sign-up required.",
+      "consultar.fig": "Catalog with real photos, filterable by specialty.",
+      "consultar.c1t": "601 instruments", "consultar.c1p": "19 specialties and functional category, with trade names and manufacturer.",
+      "consultar.c2t": "Sutures and anesthesia", "consultar.c2p": "A dedicated catalog of 17 sutures and reusable anesthesia equipment.",
+      "consultar.c3t": "Sterilization and technical info", "consultar.c3p": "Sterilization methods with their parameters, manufacturer, IFU, maintenance and useful life.",
+      "consultar.cta": "Explore the Vademecum →",
+      "aprender.eyebrow": "Learn", "aprender.h1": "Learning is part of surgical knowledge too.",
+      "aprender.lede": "Flashcards and quizzes covering the whole catalog, with spaced repetition (Leitner) so what you already know doesn't waste your time. Visual identification with real photos and, for teams, full-tray identification practice.",
+      "aprender.c1t": "Flashcards and quizzes", "aprender.c1p": "Covering the whole catalog, with spaced repetition and real-photo identification. Works in guest mode.",
+      "aprender.c2t": "Tray practice", "aprender.c2p": "Identify a whole tray, not just a single loose instrument — for anyone already part of a team.",
+      "aprender.c3t": "Tools for educators", "aprender.c3p": "Configurable quizzes for supervisors or educators, with progress tracking for their team or students.",
+      "aprender.cta": "Discover the learning tools →",
+      "documentar.eyebrow": "Document", "documentar.h1": "Document how your operating room actually works.",
+      "documentar.lede": "Nothing gets overwritten: every change creates a draft, whoever approves it reviews and compares it before publishing, and the full history stays available to restore. Export any record to PDF with the exact date and version.",
+      "documentar.fig": "Techniques, trays and preference cards, inside the same workspace.",
+      "documentar.c1t": "Techniques and protocols", "documentar.c1p": "WHO-checklist-style categorizable steps, with versioning and an approval flow.",
+      "documentar.c2t": "Instrument trays", "documentar.c2p": "Quantity checklist and photos, with real preparation sessions and quality control.",
+      "documentar.c3t": "Preference cards", "documentar.c3p": "Instruments specific to surgeon and procedure, shared and validated within your group.",
+      "documentar.c4t": "Team-specific instruments", "documentar.c4p": "Add your team's own instruments, with variants and photos, private and never shared outside your space.",
+      "compartir.eyebrow": "Share", "compartir.h1": "Open knowledge, built and reviewed responsibly.",
+      "compartir.lede": "The Public Library brings together community-contributed techniques, protocols, trays and instruments, with tiered editorial review, comment threads and correction proposals, and translations proposed by anyone who wants to help. You can follow updates to content you care about and adopt it into your own workspace as a starting point.",
+      "compartir.noteTag": "Important",
+      "compartir.note": "Editorial approval does not equal clinical validation. Public content is a knowledge reference and a starting point — it does not replace official documentation or your institution's own protocols.",
+      "compartir.cta": "Explore the Public Library →",
+      "funciones.eyebrow": "And also", "funciones.h1": "Everything a surgical block needs, in one place.",
+      "funciones.lede": "Around exploring, learning, documenting and sharing, Instriq also covers a group's day-to-day operations.",
       "funciones.c4t": "Workspaces and roles", "funciones.c4p": "Organize the group by specialty or service. Granular roles (reader, editor, approver, administrator) per workspace, with an audit trail for every sensitive change.",
       "funciones.c5t": "Offline mode", "funciones.c5p": "View and edit without network wherever your permissions allow; changes sync on their own once connection returns.",
       "funciones.c6t": "Smart search", "funciones.c6p": "One search bar for instruments, techniques, protocols, manufacturers, surgeons and tags — with recent activity and favorites.",
-      "funciones.c7t": "Team-specific instruments", "funciones.c7p": "Add your team's own instruments, with variants and photos, private and never shared outside your space.",
-      "funciones.c8t": "Public Library", "funciones.c8p": "Content open to the whole community, reviewed and approved by an editorial board — never a clinical authority, always a starting reference.",
       "funciones.c9t": "Audit trail and privacy", "funciones.c9p": "A record of who did what and when for sensitive actions. Export or delete your personal data whenever you want (GDPR).",
       "funciones.c10t": "Work modes", "funciones.c10p": "Scrub nurse, surgeon, teacher and more: the instrument page and home screen adapt to your role for the day, without touching your real permissions.",
       "funciones.c11t": "Incidents and the road to ISO 9001", "funciones.c11p": "Report an instrument incident with root cause and corrective action, verified by someone other than whoever resolved it — with an audit trail.",
