@@ -192,9 +192,6 @@
   .card p { margin-bottom: 0; }
   .card .mark { width: 34px; height: 34px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; justify-content: center; }
   .card .mark svg { width: 17px; height: 17px; }
-  .founder-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
-  .founder-role { color: var(--accent); font-weight: 600; font-size: 0.92rem; margin-bottom: 8px; }
-  .founder-link { display: inline-block; margin-top: 12px; font-weight: 600; font-size: 0.9rem; }
   .values-row { display: flex; flex-wrap: wrap; gap: 28px 36px; margin-top: 36px; text-align: left; justify-content: center; }
   .value-item { display: flex; gap: 12px; align-items: flex-start; max-width: 260px; }
   .value-item svg { flex-shrink: 0; width: 20px; height: 20px; color: var(--accent); margin-top: 2px; }
@@ -808,29 +805,7 @@ draw();
   <div class="wrap center">
     <span class="eyebrow" data-i18n="colabora.eyebrow">Col·labora</span>
     <h2 data-i18n="colabora.h1">Instriq creix amb qui l'utilitza.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="colabora.lede">Impulsat per un petit equip, creix amb professionals sanitaris i desenvolupadors que hi col·laboren de manera voluntària.</p>
-
-    <p style="font-weight:600;color:var(--ink-muted);margin:40px 0 -8px;" data-i18n="fundadores.label">Equip fundador</p>
-    <div class="cards cols-2" style="text-align: left; margin-top: 40px; max-width: 620px; margin-left: auto; margin-right: auto;">
-      <div class="card">
-        <div class="founder-avatar" aria-hidden="true">MM</div>
-        <h3>Mike Yoshi'o Minguell Pont</h3>
-        <p class="founder-role" data-i18n="fundadores.mikeRole">Cofundador — Enginyer de sistemes i ciberseguretat</p>
-        <p data-i18n="fundadores.mikeBio">Lidera equips d'infraestructura i seguretat TI, actualment a INBRAIN Neuroelectronics (sector MedTech). Impulsa Instriq fora de l'horari laboral.</p>
-        <a href="https://www.linkedin.com/in/mikeyoshiomp/" target="_blank" rel="noopener" class="founder-link">LinkedIn ↗</a>
-      </div>
-      <div class="card">
-        <div class="founder-avatar" aria-hidden="true">AM</div>
-        <h3>Anna Medina Gisbert</h3>
-        <p class="founder-role" data-i18n="fundadores.annaRole">Cofundadora — Infermera d'anestèsia i quirúrgica</p>
-        <p data-i18n="fundadores.annaBio">Més de 12 anys instrumentant cirurgies de diverses especialitats i donant suport en anestèsia, actualment a l'Hospital Universitari Sagrat Cor. Aporta la mirada clínica real d'Instriq.</p>
-        <a href="https://www.linkedin.com/in/anna-medina-gisbert-b89a328a/" target="_blank" rel="noopener" class="founder-link">LinkedIn ↗</a>
-      </div>
-    </div>
-    <div class="notice" style="text-align: left; max-width: var(--measure); margin: 24px auto 0;">
-      <span class="tag" data-i18n="fundadores.proxTag">Properament</span>
-      <p data-i18n="fundadores.prox">Afegirem aquí les persones que col·laborin a la Biblioteca Pública i vulguin aparèixer.</p>
-    </div>
+    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="colabora.lede">Impulsat per un petit equip, creix amb professionals sanitaris i desenvolupadors que hi col·laboren de manera voluntària. <a href="artifexs.html" data-i18n="colabora.teamLink">Coneix els artífexs →</a></p>
 
     <div class="cards cols-4" style="text-align: left; margin-top: 40px;">
       <div class="card">
@@ -911,6 +886,7 @@ draw();
         <a href="#mision" data-i18n="footer.l1">Missió i visió</a>
         <a href="#colabora" data-i18n="footer.l2">Com col·laborar</a>
         <a href="#transparencia" data-i18n="footer.l3">Llicències</a>
+        <a href="artifexs.html" data-i18n="footer.l8">Artífexs</a>
         <a href="novedades.html" data-i18n="footer.l7">Novetats</a>
         <a href="sugerencias.html" data-i18n="footer.l6">Suggeriments</a>
       </div>
@@ -1085,13 +1061,7 @@ draw();
       "colabora.c2t": "💻 Eres desarrolladora/or", "colabora.c2p": "El código es público: Flutter + Supabase. Empieza por el README del repositorio.", "colabora.c2cta": "Ir al repositorio →", "colabora.c2star": "Dale una estrella al repositorio",
       "colabora.c3t": "❤️ ¿Quieres hacer una donación?", "colabora.c3p": "Instriq es gratuito y sin inversores. Una donación ayuda a cubrir el coste del proyecto.", "colabora.c3cta": "Invítame a un café →",
       "colabora.c4t": "💡 ¿Quieres proponer una mejora?", "colabora.c4p": "Cuéntanos qué echas en falta o vota las propuestas de otras personas.", "colabora.c4cta": "Ver sugerencias →",
-      "fundadores.label": "Equipo fundador",
-      "fundadores.mikeRole": "Cofundador — Ingeniero de sistemas y ciberseguridad",
-      "fundadores.mikeBio": "Lidera equipos de infraestructura y seguridad TI, actualmente en INBRAIN Neuroelectronics (sector MedTech). Impulsa Instriq fuera del horario laboral.",
-      "fundadores.annaRole": "Cofundadora — Enfermera de anestesia y quirúrgica",
-      "fundadores.annaBio": "Más de 12 años instrumentando cirugías de distintas especialidades y dando soporte en anestesia, actualmente en el Hospital Universitari Sagrat Cor. Aporta la mirada clínica real de Instriq.",
-      "fundadores.proxTag": "Próximamente",
-      "fundadores.prox": "Añadiremos aquí a las personas que colaboren en la Biblioteca Pública y quieran aparecer.",
+      "colabora.teamLink": "Conoce a los artífices →",
       "organiza.eyebrow": "Estructura", "organiza.h1": "Organiza tu grupo antes de empezar.",
       "organiza.lede": "En Instriq, un <strong>grupo</strong> (tu hospital, bloque quirúrgico o equipo) contiene uno o varios <strong>espacios de trabajo</strong> — normalmente uno por especialidad o servicio. Dentro de cada espacio viven las técnicas y protocolos, las tarjetas de preferencia, el instrumental propio del equipo y las bandejas.",
       "organiza.hospital": "🏥 Hospital Vallnord<span class=\"org-sub\">el grupo</span>",
@@ -1111,7 +1081,7 @@ draw();
       "donaciones.eyebrow": "Donaciones",
       "donaciones.p1": "Ya puedes hacer una donación a través de <a href=\"https://www.buymeacoffee.com/instriq?utm_source=landing&utm_medium=donate&utm_campaign=donacions\">Buy Me a Coffee</a> (sección Colabora, más arriba) para ayudar a cubrir infraestructura y el tiempo dedicado al proyecto.",
       "donaciones.proxTag": "Objetivo", "donaciones.prox": "Todavía no hay un registro público de cómo se reparten los fondos. Lo publicaremos cuando haya volumen suficiente para que tenga sentido.",
-      "footer.app": "Abrir la app", "footer.edu": "Para formación", "footer.help": "Centro de ayuda", "footer.status": "Estado del servicio", "footer.h1": "Proyecto", "footer.l1": "Misión y visión", "footer.l2": "Cómo colaborar", "footer.l3": "Licencias", "footer.l7": "Novedades", "footer.l6": "Sugerencias",
+      "footer.app": "Abrir la app", "footer.edu": "Para formación", "footer.help": "Centro de ayuda", "footer.status": "Estado del servicio", "footer.h1": "Proyecto", "footer.l1": "Misión y visión", "footer.l2": "Cómo colaborar", "footer.l3": "Licencias", "footer.l8": "Artífices", "footer.l7": "Novedades", "footer.l6": "Sugerencias",
       "footer.h2": "Legal", "footer.l4": "Política de privacidad", "footer.l5": "Licencia (AGPL-3.0)",
       "footer.h3": "Contacto",
       "footer.fine": "Instriq® — proyecto open source por y para el bloque quirúrgico. Código bajo AGPL-3.0."
@@ -1208,13 +1178,7 @@ draw();
       "colabora.c2t": "💻 You're a developer", "colabora.c2p": "The code is public: Flutter + Supabase. Start with the repo's README.", "colabora.c2cta": "Go to the repository →", "colabora.c2star": "Star the repository",
       "colabora.c3t": "❤️ Want to make a donation?", "colabora.c3p": "Instriq is free and has no investors. A donation helps cover the project's costs.", "colabora.c3cta": "Buy me a coffee →",
       "colabora.c4t": "💡 Want to suggest an improvement?", "colabora.c4p": "Tell us what's missing or vote on suggestions from other people.", "colabora.c4cta": "See suggestions →",
-      "fundadores.label": "Founding team",
-      "fundadores.mikeRole": "Co-founder — Systems & cybersecurity engineer",
-      "fundadores.mikeBio": "Leads IT infrastructure and security teams, currently at INBRAIN Neuroelectronics (MedTech). Builds Instriq outside working hours.",
-      "fundadores.annaRole": "Co-founder — Anesthesia & surgical nurse",
-      "fundadores.annaBio": "Over 12 years instrumenting surgeries across specialties and supporting anesthesia care, currently at Hospital Universitari Sagrat Cor. Brings Instriq's real clinical perspective.",
-      "fundadores.proxTag": "Coming soon",
-      "fundadores.prox": "We'll add here the people who contribute to the Public Library and want to be listed.",
+      "colabora.teamLink": "Meet the makers →",
       "organiza.eyebrow": "Structure", "organiza.h1": "Organize your group before you start.",
       "organiza.lede": "In Instriq, a <strong>group</strong> (your hospital, surgical block or team) contains one or several <strong>workspaces</strong> — usually one per specialty or service. Inside each workspace live the techniques and protocols, preference cards, team-owned instruments and trays.",
       "organiza.hospital": "🏥 Hospital Vallnord<span class=\"org-sub\">the group</span>",
@@ -1234,7 +1198,7 @@ draw();
       "donaciones.eyebrow": "Donations",
       "donaciones.p1": "You can already donate through <a href=\"https://www.buymeacoffee.com/instriq?utm_source=landing&utm_medium=donate&utm_campaign=donacions\">Buy Me a Coffee</a> (Collaborate section, above) to help cover infrastructure and the time put into the project.",
       "donaciones.proxTag": "Goal", "donaciones.prox": "There's no public record yet of how funds are distributed. We'll publish one once there's enough volume for it to be meaningful.",
-      "footer.app": "Open the app", "footer.edu": "For education", "footer.help": "Help center", "footer.status": "Service status", "footer.h1": "Project", "footer.l1": "Mission and vision", "footer.l2": "How to contribute", "footer.l3": "Licenses", "footer.l7": "Updates", "footer.l6": "Suggestions",
+      "footer.app": "Open the app", "footer.edu": "For education", "footer.help": "Help center", "footer.status": "Service status", "footer.h1": "Project", "footer.l1": "Mission and vision", "footer.l2": "How to contribute", "footer.l3": "Licenses", "footer.l8": "Makers", "footer.l7": "Updates", "footer.l6": "Suggestions",
       "footer.h2": "Legal", "footer.l4": "Privacy policy", "footer.l5": "License (AGPL-3.0)",
       "footer.h3": "Contact",
       "footer.fine": "Instriq® — an open source project by and for the surgical team. Code under AGPL-3.0."
