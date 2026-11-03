@@ -43,6 +43,7 @@ import '../widgets/create_content_sheet.dart';
 import '../widgets/sterilization_method_label.dart';
 import 'catalog_screen.dart';
 import 'custom_instrument_detail_screen.dart';
+import 'drug_catalog_screen.dart';
 import 'group_document_detail_screen.dart';
 import 'group_document_list_screen.dart';
 import 'group_document_review_queue_screen.dart';
@@ -927,6 +928,15 @@ class _HomeScreenState extends State<HomeScreen> {
           subtitle: l10n.catalogSubtitle,
           onTap: () async {
             await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CatalogScreen()));
+          },
+        ),
+        const SizedBox(height: InstriqSpacing.sm),
+        InstriqListItem(
+          icon: Icons.medication_outlined,
+          title: l10n.drugsCatalogTitle,
+          subtitle: l10n.drugsCatalogSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DrugCatalogScreen()));
           },
         ),
         if (hasHospital)
