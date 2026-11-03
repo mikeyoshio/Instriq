@@ -1,18 +1,18 @@
 import '../models/drug.dart';
-import '../models/instrument.dart' show LocalizedText;
+import '../models/instrument.dart' show InstrumentImage, LocalizedText;
 
 const List<Drug> kDrugs = [
   // Inductores anestésicos
   Drug(
     id: 'propofol',
     name: LocalizedText(ca: 'Propofol', es: 'Propofol', en: 'Propofol'),
-    aliases: ['Diprivan'],
+    aliases: ['Diprivan', 'Propofol Lipuro'],
     drugClass: DrugClass.inductor,
     routes: ['IV'],
     description: LocalizedText(
-      ca: 'Agent hipnòtic intravenós d\'inici d\'acció ràpid i durada curta, amb un cert efecte antiemètic.',
-      es: 'Agente hipnótico intravenoso de inicio de acción rápido y duración corta, con cierto efecto antiemético.',
-      en: 'Intravenous hypnotic agent with a rapid onset and short duration, with some antiemetic effect.',
+      ca: 'Agent hipnòtic intravenós d\'inici d\'acció ràpid i durada curta, amb un cert efecte antiemètic; actua principalment potenciant la neurotransmissió gabaèrgica als receptors GABA-A.',
+      es: 'Agente hipnótico intravenoso de inicio de acción rápido y duración corta, con cierto efecto antiemético; actúa principalmente potenciando la neurotransmisión gabaérgica en los receptores GABA-A.',
+      en: 'Intravenous hypnotic agent with a rapid onset and short duration, with some antiemetic effect; it works mainly by enhancing GABAergic neurotransmission at GABA-A receptors.',
     ),
     use: LocalizedText(
       ca: 'S\'utilitza per a la inducció i el manteniment de l\'anestèsia general, i també per a la sedació.',
@@ -24,17 +24,23 @@ const List<Drug> kDrugs = [
       es: 'Causa dolor frecuente en el punto de inyección.',
       en: 'Frequently causes pain at the injection site.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Propofol.jpg',
+      license: 'Public domain',
+      attribution: 'Erich Schulz, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Propofol.jpg',
+    ),
   ),
   Drug(
     id: 'etomidato',
     name: LocalizedText(ca: 'Etomidat', es: 'Etomidato', en: 'Etomidate'),
-    aliases: ['Hypnomidate'],
+    aliases: ['Hypnomidate', 'Etomidato-Lipuro'],
     drugClass: DrugClass.inductor,
     routes: ['IV'],
     description: LocalizedText(
-      ca: 'Agent hipnòtic intravenós d\'inducció, amb bona estabilitat hemodinàmica.',
-      es: 'Agente hipnótico intravenoso de inducción, con buena estabilidad hemodinámica.',
-      en: 'Intravenous induction hypnotic agent with good hemodynamic stability.',
+      ca: 'Agent hipnòtic intravenós d\'inducció, amb bona estabilitat hemodinàmica; és un derivat imidazòlic, estructuralment diferent d\'altres hipnòtics com els barbitúrics o el propofol.',
+      es: 'Agente hipnótico intravenoso de inducción, con buena estabilidad hemodinámica; es un derivado imidazólico, estructuralmente distinto de otros hipnóticos como los barbitúricos o el propofol.',
+      en: 'Intravenous induction hypnotic agent with good hemodynamic stability; it is an imidazole derivative, structurally distinct from other hypnotics such as barbiturates or propofol.',
     ),
     use: LocalizedText(
       ca: 'S\'utilitza sovint per a la inducció anestèsica en pacients amb inestabilitat cardiovascular.',
@@ -46,17 +52,23 @@ const List<Drug> kDrugs = [
       es: 'Su uso repetido o prolongado se asocia a supresión de la producción de cortisol suprarrenal.',
       en: 'Repeated or prolonged use is associated with suppression of adrenal cortisol production.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/c/c6/Etomidate_1_%28cropped%29.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Mark Oniffrey, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Etomidate_1_(cropped).jpg',
+    ),
   ),
   Drug(
     id: 'ketamina',
     name: LocalizedText(ca: 'Ketamina', es: 'Ketamina', en: 'Ketamine'),
-    aliases: ['Ketolar'],
+    aliases: ['Ketolar', 'Ketalar'],
     drugClass: DrugClass.inductor,
     routes: ['IV', 'IM'],
     description: LocalizedText(
-      ca: 'Anestèsic dissociatiu amb propietats analgèsiques, que preserva millor els reflexos de la via aèria i l\'estabilitat hemodinàmica que altres agents inductors.',
-      es: 'Anestésico disociativo con propiedades analgésicas, que preserva mejor los reflejos de la vía aérea y la estabilidad hemodinámica que otros agentes inductores.',
-      en: 'Dissociative anesthetic with analgesic properties, which preserves airway reflexes and hemodynamic stability better than other induction agents.',
+      ca: 'Anestèsic dissociatiu amb propietats analgèsiques, que preserva millor els reflexos de la via aèria i l\'estabilitat hemodinàmica que altres agents inductors; actua com a antagonista dels receptors NMDA, a diferència de la majoria d\'agents inductors, que actuen sobre receptors GABA-A.',
+      es: 'Anestésico disociativo con propiedades analgésicas, que preserva mejor los reflejos de la vía aérea y la estabilidad hemodinámica que otros agentes inductores; actúa como antagonista de los receptores NMDA, a diferencia de la mayoría de agentes inductores, que actúan sobre receptores GABA-A.',
+      en: 'Dissociative anesthetic with analgesic properties, which preserves airway reflexes and hemodynamic stability better than other induction agents; it acts as an NMDA receptor antagonist, unlike most induction agents, which act on GABA-A receptors.',
     ),
     use: LocalizedText(
       ca: 'Resulta útil en situacions de trauma o xoc.',
@@ -78,9 +90,9 @@ const List<Drug> kDrugs = [
     drugClass: DrugClass.relajanteNeuromuscular,
     routes: ['IV'],
     description: LocalizedText(
-      ca: 'Bloquejant neuromuscular no despolaritzant de durada intermèdia.',
-      es: 'Bloqueante neuromuscular no despolarizante de duración intermedia.',
-      en: 'Non-depolarizing neuromuscular blocking agent of intermediate duration.',
+      ca: 'Bloquejant neuromuscular no despolaritzant de durada intermèdia; pertany a la família dels bloquejants neuromusculars aminoesteroïdals, a diferència de compostos benzilisoquinolínics com el cisatracuri.',
+      es: 'Bloqueante neuromuscular no despolarizante de duración intermedia; pertenece a la familia de los bloqueantes neuromusculares aminoesteroideos, a diferencia de compuestos bencilisoquinolínicos como el cisatracurio.',
+      en: 'Non-depolarizing neuromuscular blocking agent of intermediate duration; it belongs to the aminosteroid family of neuromuscular blockers, unlike benzylisoquinolinium compounds such as cisatracurium.',
     ),
     use: LocalizedText(
       ca: 'A dosis més altes té un inici d\'acció ràpid, per la qual cosa s\'utilitza en la inducció de seqüència ràpida.',
@@ -109,17 +121,28 @@ const List<Drug> kDrugs = [
       es: 'Resulta útil en pacientes con insuficiencia renal o hepática.',
       en: 'Useful in patients with renal or hepatic impairment.',
     ),
+    tip: LocalizedText(
+      ca: 'És l\'isòmer cis-cis de l\'atracuri, amb més potència i un alliberament d\'histamina mínim en comparació amb aquest.',
+      es: 'Es el isómero cis-cis del atracurio, con mayor potencia y una liberación de histamina mínima en comparación con este.',
+      en: 'It is the cis-cis isomer of atracurium, with greater potency and minimal histamine release compared to it.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Ampoule_Cisatracurium.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'CYP3A42D6, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ampoule_Cisatracurium.jpg',
+    ),
   ),
   Drug(
     id: 'succinilcolina',
     name: LocalizedText(ca: 'Succinilcolina', es: 'Succinilcolina', en: 'Succinylcholine'),
-    aliases: ['Anectine', 'Succinilcolina'],
+    aliases: ['Anectine', 'Zennux'],
     drugClass: DrugClass.relajanteNeuromuscular,
     routes: ['IV'],
     description: LocalizedText(
-      ca: 'Únic bloquejant neuromuscular despolaritzant d\'ús habitual, amb un inici d\'acció molt ràpid i una durada molt curta.',
-      es: 'Único bloqueante neuromuscular despolarizante de uso habitual, con un inicio de acción muy rápido y una duración muy corta.',
-      en: 'The only depolarizing neuromuscular blocker in common use, with a very rapid onset and very short duration.',
+      ca: 'Únic bloquejant neuromuscular despolaritzant d\'ús habitual, amb un inici d\'acció molt ràpid i una durada molt curta; actua com a agonista dels receptors nicotínics d\'acetilcolina, produint una despolarització mantinguda de la placa motora, a diferència dels bloquejants no despolaritzants.',
+      es: 'Único bloqueante neuromuscular despolarizante de uso habitual, con un inicio de acción muy rápido y una duración muy corta; actúa como agonista de los receptores nicotínicos de acetilcolina, produciendo una despolarización mantenida de la placa motora, a diferencia de los bloqueantes no despolarizantes.',
+      en: 'The only depolarizing neuromuscular blocker in common use, with a very rapid onset and very short duration; it acts as a nicotinic acetylcholine receptor agonist, producing a sustained depolarization of the motor end plate, unlike non-depolarizing blockers.',
     ),
     use: LocalizedText(
       ca: 'S\'utilitza en la inducció de seqüència ràpida quan es preveu una via aèria difícil d\'assegurar amb rapidesa.',
@@ -130,6 +153,12 @@ const List<Drug> kDrugs = [
       ca: 'S\'associa a risc d\'hiperpotassèmia i és un desencadenant conegut d\'hipertèrmia maligna.',
       es: 'Se asocia a riesgo de hiperpotasemia y es un desencadenante conocido de hipertermia maligna.',
       en: 'Associated with a risk of hyperkalemia and is a known trigger of malignant hyperthermia.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Succinylcholine_1%28cropped%29.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Mark Oniffrey, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Succinylcholine_1(cropped).jpg',
     ),
   ),
 
@@ -176,6 +205,7 @@ const List<Drug> kDrugs = [
   Drug(
     id: 'morfina',
     name: LocalizedText(ca: 'Morfina', es: 'Morfina', en: 'Morphine'),
+    aliases: ['Morfina B. Braun'],
     drugClass: DrugClass.opioide,
     routes: ['IV', 'IM', 'subcutaneous'],
     description: LocalizedText(
@@ -188,30 +218,42 @@ const List<Drug> kDrugs = [
       es: 'Se usa sobre todo para la analgesia postoperatoria.',
       en: 'Used mainly for postoperative analgesia.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/d/d2/Morphin_1%25_vial_on_white_background.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'Wesalius, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Morphin_1%25_vial_on_white_background.jpg',
+    ),
   ),
 
   // Anestésicos locales
   Drug(
     id: 'lidocaina',
     name: LocalizedText(ca: 'Lidocaïna', es: 'Lidocaína', en: 'Lidocaine'),
-    aliases: ['Xylocaína'],
+    aliases: ['Xylocaína', 'Xilonibsa'],
     drugClass: DrugClass.anestesicoLocal,
     routes: ['local infiltration', 'epidural', 'topical', 'IV'],
     description: LocalizedText(
-      ca: 'Anestèsic local de tipus amida, d\'inici ràpid i durada intermèdia.',
-      es: 'Anestésico local de tipo amida, de inicio rápido y duración intermedia.',
-      en: 'Amide-type local anesthetic, with rapid onset and intermediate duration.',
+      ca: 'Anestèsic local de tipus amida, d\'inici ràpid i durada intermèdia; com la resta d\'anestèsics locals, actua bloquejant els canals de sodi dependents de voltatge de la membrana nerviosa, cosa que impedeix la propagació de l\'impuls elèctric.',
+      es: 'Anestésico local de tipo amida, de inicio rápido y duración intermedia; como el resto de anestésicos locales, actúa bloqueando los canales de sodio dependientes de voltaje de la membrana nerviosa, lo que impide la propagación del impulso eléctrico.',
+      en: 'Amide-type local anesthetic, with rapid onset and intermediate duration; like other local anesthetics, it works by blocking voltage-gated sodium channels in the nerve membrane, preventing propagation of the electrical impulse.',
     ),
     use: LocalizedText(
       ca: 'S\'utilitza per a anestèsia local i regional; també s\'empra com a antiarítmic en altres contextos.',
       es: 'Se usa para anestesia local y regional; también se emplea como antiarrítmico en otros contextos.',
       en: 'Used for local and regional anesthesia; also used as an antiarrhythmic in other contexts.',
     ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lidocaine_ampoule.png',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Whispyhistory, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Lidocaine_ampoule.png',
+    ),
   ),
   Drug(
     id: 'bupivacaina',
     name: LocalizedText(ca: 'Bupivacaïna', es: 'Bupivacaína', en: 'Bupivacaine'),
-    aliases: ['Marcaine'],
+    aliases: ['Marcaine', 'Inibsacain'],
     drugClass: DrugClass.anestesicoLocal,
     routes: ['local infiltration', 'epidural', 'nerve block'],
     description: LocalizedText(
@@ -229,6 +271,12 @@ const List<Drug> kDrugs = [
       es: 'Tiene mayor riesgo de toxicidad cardíaca que otros anestésicos locales si se administra por error en el torrente sanguíneo.',
       en: 'Carries a higher risk of cardiac toxicity than other local anesthetics if accidentally administered into the bloodstream.',
     ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bupivacaine_vial.jpg',
+      license: 'CC0 1.0',
+      attribution: 'Whispyhistory, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bupivacaine_vial.jpg',
+    ),
   ),
   Drug(
     id: 'ropivacaina',
@@ -245,6 +293,17 @@ const List<Drug> kDrugs = [
       ca: 'Molt utilitzat en analgèsia regional postoperatòria.',
       es: 'Muy usado en analgesia regional postoperatoria.',
       en: 'Widely used for postoperative regional analgesia.',
+    ),
+    tip: LocalizedText(
+      ca: 'Es va desenvolupar com l\'enantiòmer S (levogir) pur de la molècula, cosa que contribueix a la seva menor toxicitat cardíaca i neurològica respecte a barreges racèmiques com la bupivacaïna.',
+      es: 'Se desarrolló como el enantiómero S (levógiro) puro de la molécula, lo que contribuye a su menor toxicidad cardíaca y neurológica frente a mezclas racémicas como la bupivacaína.',
+      en: 'It was developed as the pure S-(levorotatory) enantiomer of the molecule, which contributes to its lower cardiac and neurologic toxicity compared to racemic mixtures such as bupivacaine.',
+    ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ropivacaine_poly.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Anesth Earth, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ropivacaine_poly.jpg',
     ),
   ),
 
@@ -274,6 +333,7 @@ const List<Drug> kDrugs = [
   Drug(
     id: 'neostigmina',
     name: LocalizedText(ca: 'Neostigmina', es: 'Neostigmina', en: 'Neostigmine'),
+    aliases: ['Prostigmine'],
     drugClass: DrugClass.agenteReversion,
     routes: ['IV'],
     description: LocalizedText(
@@ -295,7 +355,7 @@ const List<Drug> kDrugs = [
   Drug(
     id: 'naloxona',
     name: LocalizedText(ca: 'Naloxona', es: 'Naloxona', en: 'Naloxone'),
-    aliases: ['Narcan'],
+    aliases: ['Narcan', 'Nyxoid'],
     drugClass: DrugClass.agenteReversion,
     routes: ['IV', 'IM', 'intranasal'],
     description: LocalizedText(
@@ -312,6 +372,12 @@ const List<Drug> kDrugs = [
       ca: 'La seva durada d\'acció és més curta que la de molts opioides, per la qual cosa hi ha risc que l\'efecte de l\'opioide reaparegui un cop passa l\'efecte de la naloxona.',
       es: 'Su duración de acción es más corta que la de muchos opioides, por lo que existe riesgo de que el efecto del opioide reaparezca una vez pasa el efecto de la naloxona.',
       en: 'Its duration of action is shorter than that of many opioids, so the opioid\'s effect can reappear once naloxone\'s effect wears off.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Naloxone_%281%29.JPG',
+      license: 'CC BY 3.0',
+      attribution: 'Intropin, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Naloxone_(1).JPG',
     ),
   ),
 
@@ -347,6 +413,11 @@ const List<Drug> kDrugs = [
       es: 'Se usa para tratar la hipotensión, especialmente cuando interesa evitar un aumento reflejo de la frecuencia cardíaca, o cuando se tolera bien una frecuencia cardíaca más baja.',
       en: 'Used to treat hypotension, particularly when avoiding a reflex increase in heart rate matters, or when a lower heart rate is well tolerated.',
     ),
+    tip: LocalizedText(
+      ca: 'També s\'utilitza per via tòpica com a descongestionant nasal i midriàtic oftalmològic, en presentacions diferents de la intravenosa.',
+      es: 'También se emplea por vía tópica como descongestionante nasal y midriático oftalmológico, en presentaciones distintas de la intravenosa.',
+      en: 'It is also used topically as a nasal decongestant and ophthalmic mydriatic, in presentations different from the intravenous one.',
+    ),
   ),
   Drug(
     id: 'noradrenalina',
@@ -369,6 +440,12 @@ const List<Drug> kDrugs = [
       es: 'Se administra habitualmente en infusión continua con monitorización hemodinámica estrecha.',
       en: 'Usually given as a continuous infusion with close hemodynamic monitoring.',
     ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Norepi.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'James Heilman, MD, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Norepi.jpg',
+    ),
   ),
 
   // Antieméticos
@@ -388,10 +465,22 @@ const List<Drug> kDrugs = [
       es: 'Es de primera línea para la prevención y el tratamiento de las náuseas y vómitos postoperatorios.',
       en: 'First-line agent for the prevention and treatment of postoperative nausea and vomiting.',
     ),
+    tip: LocalizedText(
+      ca: 'Pertany al grup d\'antiemètics coneguts com a "setrons".',
+      es: 'Pertenece al grupo de antieméticos conocidos como "setrones".',
+      en: 'It belongs to the group of antiemetics known as "setrons".',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Ampolla1213.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'Daniel.GONZALEZ27, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ampolla1213.jpg',
+    ),
   ),
   Drug(
     id: 'droperidol',
     name: LocalizedText(ca: 'Droperidol', es: 'Droperidol', en: 'Droperidol'),
+    aliases: ['Xomolix'],
     drugClass: DrugClass.antiemetico,
     routes: ['IV'],
     description: LocalizedText(
@@ -433,6 +522,12 @@ const List<Drug> kDrugs = [
       es: 'Su efecto puede revertirse con flumazenilo.',
       en: 'Its effect can be reversed with flumazenil.',
     ),
+    image: InstrumentImage(
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Midazolam.JPG',
+      license: 'CC BY 3.0',
+      attribution: 'James Heilman, MD, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Midazolam.JPG',
+    ),
   ),
   Drug(
     id: 'dexmedetomidina',
@@ -449,6 +544,11 @@ const List<Drug> kDrugs = [
       ca: 'S\'utilitza en la sedació per a procediments, a cures intensives i com a coadjuvant de l\'anestèsia.',
       es: 'Se usa en la sedación para procedimientos, en cuidados intensivos y como coadyuvante de la anestesia.',
       en: 'Used for procedural sedation, in intensive care, and as an anesthesia adjuvant.',
+    ),
+    tip: LocalizedText(
+      ca: 'És l\'enantiòmer actiu (S) de la medetomidina, un fàrmac d\'ús veterinari.',
+      es: 'Es el enantiómero activo (S) de la medetomidina, un fármaco de uso veterinario.',
+      en: 'It is the active (S) enantiomer of medetomidine, a drug used in veterinary medicine.',
     ),
   ),
 ];
