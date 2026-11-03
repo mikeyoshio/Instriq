@@ -2269,6 +2269,48 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/tornillo-oseo/" />
   </url>
   <url>
+    <loc>https://instriq.org/vademecum/ca/tornillo-bloqueado/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/tornillo-bloqueado/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/tornillo-bloqueado/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/tornillo-bloqueado/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/tornillo-bloqueado/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/tornillo-bloqueado/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/tornillo-bloqueado/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/tornillo-canulado/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/tornillo-canulado/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/tornillo-canulado/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/tornillo-canulado/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/tornillo-canulado/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/tornillo-canulado/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/tornillo-canulado/" />
+  </url>
+  <url>
     <loc>https://instriq.org/vademecum/ca/calibrador-profundidad/</loc>
     <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/calibrador-profundidad/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/calibrador-profundidad/" />

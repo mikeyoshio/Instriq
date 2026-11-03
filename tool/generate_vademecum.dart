@@ -467,6 +467,21 @@ const chrome = <String, Tri>{
     es: 'Parte del proyecto de código abierto Instriq.',
     en: 'Part of the open-source Instriq project.',
   ),
+  'pharmaNoticeTitle': (
+    ca: '💊 Farmacologia d\'anestèsia',
+    es: '💊 Farmacología de anestesia',
+    en: '💊 Anesthesia pharmacology',
+  ),
+  'pharmaNoticeBody': (
+    ca: 'Disponible a l\'app Instriq: fàrmacs d\'anestèsia per classe, vies d\'administració i ús clínic -- mai dosis.',
+    es: 'Disponible en la app Instriq: fármacos de anestesia por clase, vías de administración y uso clínico -- nunca dosis.',
+    en: 'Available in the Instriq app: anesthesia drugs by class, administration routes and clinical use -- never doses.',
+  ),
+  'pharmaNoticeCta': (
+    ca: 'Obre el catàleg a l\'app →',
+    es: 'Abre el catálogo en la app →',
+    en: 'Open the catalog in the app →',
+  ),
 };
 
 String t(String key, String lang) {
@@ -548,6 +563,10 @@ footer.site { border-top: 1px solid var(--rule); padding: 24px 0; font-size: 0.8
 footer.site a { color: var(--ink-muted); }
 .disclaimer { font-size: 0.8rem; color: var(--ink-muted); font-style: italic; }
 .source-line { font-size: 0.86rem; }
+.notice { background: var(--accent-soft); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; margin: 24px 0; }
+.notice b { display: block; color: var(--accent); margin-bottom: 4px; }
+.notice p { margin-bottom: 8px; }
+.notice a { font-weight: 600; text-decoration: none; }
 ''';
 
 // ---------------------------------------------------------------------------
@@ -788,6 +807,22 @@ String _renderInstrumentPage({
 }
 
 // ---------------------------------------------------------------------------
+// Cross-link to the app's pharmacology catalog (not part of the public
+// Vademecum itself -- see docs/CHANGELOG.md: a public, Google-indexed page
+// per drug would attract dose-seeking search traffic for content that
+// deliberately never includes doses, a risk an in-app screen doesn't carry).
+// ---------------------------------------------------------------------------
+
+String _pharmaNoticeHtml(String lang) {
+  return '''
+<div class="notice">
+  <b>${htmlEscape(t('pharmaNoticeTitle', lang))}</b>
+  <p>${htmlEscape(t('pharmaNoticeBody', lang))}</p>
+  <a href="https://app.instriq.org?utm_source=vademecum&utm_medium=notice&utm_campaign=farmacologia">${htmlEscape(t('pharmaNoticeCta', lang))}</a>
+</div>''';
+}
+
+// ---------------------------------------------------------------------------
 // Specialty index page
 // ---------------------------------------------------------------------------
 
@@ -807,9 +842,10 @@ String _renderSpecialtyPage({
     items.write('<li><a href="$_htmlLangBase/vademecum/$lang/${i.id}/">${htmlEscape(triFor(i.name, lang))}</a></li>');
   }
 
+  final pharmaBlock = specialty == 'anestesiologiaReanimacio' ? '\n${_pharmaNoticeHtml(lang)}' : '';
   final body = '''
 <h1>${htmlEscape(label)}</h1>
-<p>${htmlEscape(t('specialtyIntro', lang))} (${instruments.length} ${htmlEscape(t('instrumentsCount', lang))})</p>
+<p>${htmlEscape(t('specialtyIntro', lang))} (${instruments.length} ${htmlEscape(t('instrumentsCount', lang))})</p>$pharmaBlock
 <ul class="list-plain">$items</ul>
 ''';
 
@@ -873,6 +909,7 @@ String _renderHomePage({
 <p><a href="$_htmlLangBase/vademecum/$lang/metodologia/">${htmlEscape(t('methodologyLinkText', lang))}</a></p>
 <h2>${htmlEscape(t('allSpecialties', lang))} ($totalCount ${htmlEscape(t('instrumentsCount', lang))})</h2>
 <div class="spec-grid">$cards</div>
+${_pharmaNoticeHtml(lang)}
 ''';
 
   final jsonLd = jsonEncode({
@@ -1015,12 +1052,15 @@ Future<void> _syncInstrumentCount(Directory repoRoot, int count) async {
     pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat1")'),
     replace: (m) => 'data-count="$count"',
   );
-  // Specialty count excludes the 'general' catch-all bucket (universal
-  // consumables, not a real specialty) -- same convention as the hero
-  // stat's historical value.
+  // Counts every entry in specialtyOrder, including 'general' -- the
+  // enum has 19 real values (Specialty.general and Specialty.cirugiaGeneral
+  // are both legitimate, near-duplicate-named specialties, not a
+  // catch-all to exclude). Fixed to 19 during the landing redesign
+  // (2026-10, docs/CHANGELOG.md); this used to subtract 1 for 'general'
+  // and silently regenerated the wrong value (18) until this fix.
   final specialtyDataCount = (
     pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat2")'),
-    replace: (m) => 'data-count="${specialtyOrder.length - 1}"',
+    replace: (m) => 'data-count="${specialtyOrder.length}"',
   );
 
   await patch('landing/index.html', [

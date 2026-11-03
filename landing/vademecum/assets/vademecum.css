@@ -58,3 +58,7 @@ footer.site { border-top: 1px solid var(--rule); padding: 24px 0; font-size: 0.8
 footer.site a { color: var(--ink-muted); }
 .disclaimer { font-size: 0.8rem; color: var(--ink-muted); font-style: italic; }
 .source-line { font-size: 0.86rem; }
+.notice { background: var(--accent-soft); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; margin: 24px 0; }
+.notice b { display: block; color: var(--accent); margin-bottom: 4px; }
+.notice p { margin-bottom: 8px; }
+.notice a { font-weight: 600; text-decoration: none; }
