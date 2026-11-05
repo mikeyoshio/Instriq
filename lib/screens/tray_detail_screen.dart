@@ -614,21 +614,16 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
                     const SizedBox(height: 20),
                   ],
                   if (published.items.isNotEmpty) ...[
-                    Text(l10n.trayItemsLabel, style: Theme.of(context).textTheme.titleMedium),
-                    const SizedBox(height: 8),
-                    ...published.items.map((item) => Card(
-                          child: ListTile(
-                            leading: Icon(
-                              item.instrumentRefType == InstrumentRefType.catalog
-                                  ? Icons.build_outlined
-                                  : Icons.precision_manufacturing_outlined,
-                            ),
-                            title: Text(item.resolveName(_customInstruments,
-                                languageCode: Localizations.localeOf(context).languageCode)),
-                            subtitle: item.position != null ? Text(item.position!) : null,
-                            trailing: Text(l10n.expectedQtyValue(item.expectedQty)),
-                          ),
-                        )),
+                    _buildItemsSection(
+                      l10n,
+                      title: l10n.trayReusableItemsLabel,
+                      items: published.items.where((i) => !i.isFungible()).toList(),
+                    ),
+                    _buildItemsSection(
+                      l10n,
+                      title: l10n.trayFungibleItemsLabel,
+                      items: published.items.where((i) => i.isFungible()).toList(),
+                    ),
                     const SizedBox(height: 20),
                   ],
                   if (published.photoPaths.isNotEmpty) ...[
@@ -692,5 +687,50 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
             ),
             ),
     );
+  }
+
+  /// Sección de ítems de bandeja agrupada (instrumental reutilizable /
+  /// material fungible) -- distinción real pedida tras una revisión con una
+  /// infermera de quiròfan (2026-11): el fungible mai va a la caixa
+  /// metàl·lica de reesterilització. Vacía (sin ítems de ese grupo) no
+  /// renderiza nada.
+  Widget _buildItemsSection(AppLocalizations l10n, {required String title, required List<TrayItem> items}) {
+    if (items.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          ...items.map((item) => Card(
+                child: ListTile(
+                  leading: Icon(_refTypeIcon(item.instrumentRefType)),
+                  title: Text(item.resolveName(_customInstruments,
+                      languageCode: Localizations.localeOf(context).languageCode)),
+                  subtitle: item.position != null ? Text(item.position!) : null,
+                  trailing: Text(l10n.expectedQtyValue(item.expectedQty)),
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+/// Mismo set de iconos que `TrayItemPickerSheet`/`TrayFormScreen`, una
+/// pestaña = un icono.
+IconData _refTypeIcon(InstrumentRefType type) {
+  switch (type) {
+    case InstrumentRefType.catalog:
+      return Icons.build_outlined;
+    case InstrumentRefType.custom:
+      return Icons.precision_manufacturing_outlined;
+    case InstrumentRefType.suture:
+      return Icons.linear_scale_outlined;
+    case InstrumentRefType.drug:
+      return Icons.medication_outlined;
+    case InstrumentRefType.woundClosure:
+      return Icons.healing_outlined;
   }
 }

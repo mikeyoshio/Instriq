@@ -596,7 +596,11 @@ const List<Instrument> kInstruments = [
   Instrument(
     id: 'electrobisturi',
     name: LocalizedText(ca: 'Llapis d\'electrobisturí', es: 'Lápiz de electrobisturí', en: 'Electrocautery pencil'),
-    category: InstrumentCategory.equipos,
+    // Corregit (2026-11, revisió real amb una infermera de quiròfan): és el
+    // llapis/mànec d'un sol ús, mai va a la caixa metàl·lica de
+    // reesterilització -- el generador/unitat electroquirúrgica en si sí és
+    // equip reutilitzable, però no és el que es referencia aquí.
+    category: InstrumentCategory.consumibles,
     aliases: ['Electrocautery pencil', 'Bovie'],
     icon: 'bolt',
     description: LocalizedText(
@@ -1014,6 +1018,131 @@ const List<Instrument> kInstruments = [
       en: 'Never leave it loose in a wound or cavity unmounted in a clamp; due to its small size it is a recognized retained-foreign-body risk and is therefore always included in the formal sponge count.',
     ),
     isNew: true,
+  ),
+  // Afegits (2026-11) arran d'una revisió real de les safates de la
+  // Biblioteca Pública amb una infermera de quiròfan: material fungible que
+  // faltava per poder separar de debò "caixa metàl·lica" de "bossa" en una
+  // safata.
+  Instrument(
+    id: 'hoja-bisturi',
+    name: LocalizedText(ca: 'Fulla de bisturí (solta)', es: 'Hoja de bisturí (suelta)', en: 'Scalpel blade (loose)'),
+    category: InstrumentCategory.consumibles,
+    aliases: ['Scalpel blade'],
+    icon: 'cut',
+    description: LocalizedText(
+      ca: 'Fulla metàl·lica d\'un sol ús, independent del mànec reutilitzable (ver "Bisturí (mànec + fulla)"). El mànec núm. 3 munta fulles del 10 al 15; el mànec núm. 4, del 18 al 24.',
+      es: 'Hoja metálica de un solo uso, independiente del mango reutilizable (ver "Bisturí (mango + hoja)"). El mango nº 3 monta hojas del 10 al 15; el mango nº 4, del 18 al 24.',
+      en: 'Single-use metal blade, separate from the reusable handle (see "Scalpel (handle + blade)"). Handle no. 3 fits blades 10 to 15; handle no. 4, blades 18 to 24.',
+    ),
+    use: LocalizedText(
+      ca: 'Material fungible de la bossa, no de la caixa metàl·lica -- el mànec sí que es reesterilitza.',
+      es: 'Material fungible de la bolsa, no de la caja metálica -- el mango sí se reesteriliza.',
+      en: 'Disposable item from the pack, not the metal tray -- the handle is the part that gets reprocessed.',
+    ),
+  ),
+  Instrument(
+    id: 'jeringa-desechable',
+    name: LocalizedText(ca: 'Xeringa d\'un sol ús', es: 'Jeringa de un solo uso', en: 'Disposable syringe'),
+    category: InstrumentCategory.consumibles,
+    aliases: [],
+    icon: 'tool',
+    description: LocalizedText(
+      ca: 'Xeringa estèril d\'un sol ús, en diverses capacitats (2, 5, 10, 20 ml...).',
+      es: 'Jeringa estéril de un solo uso, en varias capacidades (2, 5, 10, 20 ml...).',
+      en: 'Sterile single-use syringe, available in several capacities (2, 5, 10, 20 ml...).',
+    ),
+    use: LocalizedText(
+      ca: 'Càrrega i administració de sèrum, anestèsic local o contrast; irrigació de la ferida o d\'una cavitat.',
+      es: 'Carga y administración de suero, anestésico local o contraste; irrigación de la herida o de una cavidad.',
+      en: 'Drawing up and administering saline, local anesthetic or contrast; irrigating a wound or cavity.',
+    ),
+  ),
+  Instrument(
+    id: 'aguja-carga',
+    name: LocalizedText(ca: 'Agulla de càrrega (filtre)', es: 'Aguja de carga (filtro)', en: 'Filter/loading needle'),
+    category: InstrumentCategory.consumibles,
+    aliases: ['Filter needle'],
+    icon: 'tool',
+    description: LocalizedText(
+      ca: 'Agulla amb filtre incorporat, pensada per carregar medicació líquida des d\'una ampolla de vidre.',
+      es: 'Aguja con filtro incorporado, pensada para cargar medicación líquida desde una ampolla de vidrio.',
+      en: 'Needle with a built-in filter, designed for drawing up liquid medication from a glass ampoule.',
+    ),
+    use: LocalizedText(
+      ca: 'Es canvia per una agulla d\'administració abans d\'injectar, per evitar partícules de vidre.',
+      es: 'Se cambia por una aguja de administración antes de inyectar, para evitar partículas de vidrio.',
+      en: 'Swapped for an administration needle before injecting, to avoid glass particles.',
+    ),
+  ),
+  Instrument(
+    id: 'aguja-intramuscular',
+    name: LocalizedText(ca: 'Agulla intramuscular', es: 'Aguja intramuscular', en: 'Intramuscular needle'),
+    category: InstrumentCategory.consumibles,
+    aliases: [],
+    icon: 'tool',
+    description: LocalizedText(
+      ca: 'Agulla hipodèrmica d\'un sol ús per a administració intramuscular o infiltració.',
+      es: 'Aguja hipodérmica de un solo uso para administración intramuscular o infiltración.',
+      en: 'Single-use hypodermic needle for intramuscular administration or infiltration.',
+    ),
+    use: LocalizedText(
+      ca: 'Infiltració d\'anestèsic local a la ferida o administració intramuscular d\'un fàrmac.',
+      es: 'Infiltración de anestésico local en la herida o administración intramuscular de un fármaco.',
+      en: 'Local anesthetic infiltration into the wound or intramuscular administration of a drug.',
+    ),
+  ),
+  Instrument(
+    id: 'bata-quirurgica',
+    name: LocalizedText(ca: 'Bata quirúrgica estèril', es: 'Bata quirúrgica estéril', en: 'Sterile surgical gown'),
+    category: InstrumentCategory.consumibles,
+    aliases: ['Surgical gown'],
+    icon: 'tool',
+    description: LocalizedText(
+      ca: 'Bata estèril d\'un sol ús, en diverses talles (S, M, L, XL).',
+      es: 'Bata estéril de un solo uso, en varias tallas (S, M, L, XL).',
+      en: 'Single-use sterile gown, available in several sizes (S, M, L, XL).',
+    ),
+    use: LocalizedText(
+      ca: 'Es porta l\'equip estèril (cirurgià, ajudants, instrumentista) durant la intervenció.',
+      es: 'La porta el equipo estéril (cirujano, ayudantes, instrumentista) durante la intervención.',
+      en: 'Worn by the sterile team (surgeon, assistants, scrub nurse) during the procedure.',
+    ),
+  ),
+  Instrument(
+    id: 'aposito-adhesivo-herida',
+    name: LocalizedText(
+        ca: 'Apòsit adhesiu per a ferida', es: 'Apósito adhesivo para herida', en: 'Adhesive wound dressing'),
+    category: InstrumentCategory.consumibles,
+    aliases: ['Mefix'],
+    icon: 'tool',
+    description: LocalizedText(
+      ca: 'Apòsit adhesiu estèril per cobrir la ferida un cop tancada.',
+      es: 'Apósito adhesivo estéril para cubrir la herida ya cerrada.',
+      en: 'Sterile adhesive dressing used to cover the wound once closed.',
+    ),
+    use: LocalizedText(
+      ca: 'Cobertura final de la ferida quirúrgica al tancar la pell.',
+      es: 'Cobertura final de la herida quirúrgica al cerrar la piel.',
+      en: 'Final covering of the surgical wound once the skin is closed.',
+    ),
+  ),
+  Instrument(
+    id: 'rascador-bisturi',
+    name: LocalizedText(
+        ca: 'Rascador/netejador de fulla de bisturí', es: 'Rascador/limpiador de hoja de bisturí', en: 'Scalpel blade scraper/cleaner'),
+    category: InstrumentCategory.consumibles,
+    aliases: [],
+    icon: 'tool',
+    description: LocalizedText(
+      ca: 'Petita peça abrasiva d\'un sol ús per netejar restes de teixit o coàgul de la fulla del bisturí durant la intervenció.',
+      es: 'Pequeña pieza abrasiva de un solo uso para limpiar restos de tejido o coágulo de la hoja del bisturí durante la intervención.',
+      en: 'Small single-use abrasive pad used to clean tissue or clot residue off the scalpel blade during the procedure.',
+    ),
+    use: LocalizedText(
+      ca: 'Es passa la fulla pel rascador quan deixa de tallar net per acumulació de restes.',
+      es: 'Se pasa la hoja por el rascador cuando deja de cortar limpio por acumulación de restos.',
+      en: 'The blade is wiped against the scraper when it stops cutting cleanly due to residue buildup.',
+    ),
   ),
   Instrument(
     id: 'gasa-celulosa-oxidada-regenerada',

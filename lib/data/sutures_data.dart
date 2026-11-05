@@ -269,6 +269,48 @@ const List<Suture> kSutures = [
     ),
     specialty: Specialty.cardiovascular,
   ),
+  // Afegits (2026-11) arran d'una revisió real amb una infermera de
+  // quiròfan: faltaven calibres gruixuts de polipropilè per a fàscia/malla
+  // (els existents, 5-0/6-0, són per a vascular), amb "Optilene" (marca de
+  // B. Braun del mateix material) com a alias real d'ús habitual.
+  Suture(
+    id: 'prolene-0',
+    name: LocalizedText(ca: 'Prolene 0', es: 'Prolene 0', en: 'Prolene 0'),
+    material: SutureMaterial.prolene,
+    gauge: '0',
+    needleType: NeedleType.tapercut,
+    absorbable: false,
+    description: LocalizedText(
+      ca: 'Mateix material que el Prolene 5-0/6-0 (monofilament no absorbible de polipropilè), en calibre gruixut. Comercialitzat també com a Optilene (B. Braun).',
+      es: 'Mismo material que el Prolene 5-0/6-0 (monofilamento no absorbible de polipropileno), en calibre grueso. Comercializado también como Optilene (B. Braun).',
+      en: 'Same material as Prolene 5-0/6-0 (non-absorbable polypropylene monofilament), in a heavy gauge. Also marketed as Optilene (B. Braun).',
+    ),
+    use: LocalizedText(
+      ca: 'Tancament de l\'aponeurosi en paret abdominal, on es busca permanència a llarg termini.',
+      es: 'Cierre de la aponeurosis de la pared abdominal, donde se busca permanencia a largo plazo.',
+      en: 'Closure of the abdominal wall aponeurosis, where long-term permanence is desired.',
+    ),
+    specialty: Specialty.cirugiaGeneral,
+  ),
+  Suture(
+    id: 'prolene-2-0',
+    name: LocalizedText(ca: 'Prolene 2-0', es: 'Prolene 2-0', en: 'Prolene 2-0'),
+    material: SutureMaterial.prolene,
+    gauge: '2-0',
+    needleType: NeedleType.tapercut,
+    absorbable: false,
+    description: LocalizedText(
+      ca: 'Mateix material que el Prolene 0, en calibre una mica més fi. Comercialitzat també com a Optilene (B. Braun).',
+      es: 'Mismo material que el Prolene 0, en calibre algo más fino. Comercializado también como Optilene (B. Braun).',
+      en: 'Same material as Prolene 0, in a slightly finer gauge. Also marketed as Optilene (B. Braun).',
+    ),
+    use: LocalizedText(
+      ca: 'Fixació de malla herniària quan no es busca un calibre tan gruixut com el 0.',
+      es: 'Fijación de malla herniaria cuando no se busca un calibre tan grueso como el 0.',
+      en: 'Hernia mesh fixation when a gauge as heavy as 0 is not needed.',
+    ),
+    specialty: Specialty.cirugiaGeneral,
+  ),
   Suture(
     id: 'dexon-3-0',
     name: LocalizedText(ca: 'Dexon 3-0', es: 'Dexon 3-0', en: 'Dexon 3-0'),

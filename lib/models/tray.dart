@@ -1,18 +1,64 @@
+import '../data/drugs_data.dart';
 import '../data/instruments_data.dart';
+import '../data/sutures_data.dart';
+import '../data/wound_closure_data.dart';
 import '../models/custom_instrument.dart';
 import 'group_document_version.dart' show GroupDocumentVersionStatus, GroupDocumentVersionStatusLabel;
+import 'instrument.dart' show InstrumentCategory;
 
 /// Origen de un [TrayItem]: mismo patrón polimórfico ya documentado en
 /// supabase/schema_v15_clinical_knowledge_model.sql (instrument_ref_type/
 /// instrument_ref_id), sin FK real porque el catálogo curado vive en Dart
-/// (`lib/data/instruments_data.dart`), no en una tabla.
-enum InstrumentRefType { catalog, custom }
+/// (`lib/data/instruments_data.dart`), no en una tabla. `items` es una
+/// columna `jsonb` (schema_v15/v29) sin check constraint sobre su contenido
+/// -- ampliar estos 3 valores nuevos (suture/drug/woundClosure) no exige
+/// ninguna migración SQL, solo el cambio en Dart.
+///
+/// Ampliat arran d'una revisió real amb una infermera de quiròfan
+/// (2026-11): les bandeixes mesclaven instrumental reutilitzable (caixa
+/// metàl·lica, es reesterilitza) amb material fungible -- suturas, fàrmacs
+/// (anestèsic local) i material de tancament que abans només es podien
+/// esmentar com a text lliure, mai com a referència real i enllaçable.
+enum InstrumentRefType { catalog, custom, suture, drug, woundClosure }
 
 extension InstrumentRefTypeLabel on InstrumentRefType {
-  String get dbValue => name;
+  String get dbValue {
+    switch (this) {
+      case InstrumentRefType.catalog:
+        return 'catalog';
+      case InstrumentRefType.custom:
+        return 'custom';
+      case InstrumentRefType.suture:
+        return 'suture';
+      case InstrumentRefType.drug:
+        return 'drug';
+      case InstrumentRefType.woundClosure:
+        return 'wound_closure';
+    }
+  }
+
+  /// true si aquest tipus de referència és sempre material fungible d'un
+  /// sol ús (mai va a la caixa metàl·lica de reesterilització) -- a
+  /// diferència de `catalog`/`custom`, que cal resoldre contra la seva
+  /// pròpia categoria per saber-ho (ver [TrayItem.isFungible]).
+  bool get isAlwaysFungible =>
+      this == InstrumentRefType.suture || this == InstrumentRefType.drug || this == InstrumentRefType.woundClosure;
 
   static InstrumentRefType fromDb(String value) {
-    return InstrumentRefType.values.firstWhere((t) => t.dbValue == value);
+    switch (value) {
+      case 'catalog':
+        return InstrumentRefType.catalog;
+      case 'custom':
+        return InstrumentRefType.custom;
+      case 'suture':
+        return InstrumentRefType.suture;
+      case 'drug':
+        return InstrumentRefType.drug;
+      case 'wound_closure':
+        return InstrumentRefType.woundClosure;
+      default:
+        throw ArgumentError('Tipo de referencia de bandeja desconocido: $value');
+    }
   }
 }
 
@@ -59,22 +105,58 @@ class TrayItem {
     );
   }
 
-  /// Nombre a mostrar, resuelto contra el catálogo global (`kInstruments`) o
-  /// el instrumental personalizado del workspace ya cargado (mismo patrón de
-  /// resolución que se usa para `related_instrument_ids` en técnicas/
-  /// protocolos). Si no se encuentra (p.ej. instrumento personalizado
-  /// borrado), devuelve el id crudo para no perder la referencia.
+  /// Nombre a mostrar, resuelto contra el catálogo correspondiente
+  /// (instrumental global/personalizado, suturas, fármacos o material de
+  /// cierre) ya cargado en memoria (mismo patrón de resolución que se usa
+  /// para `related_instrument_ids` en técnicas/protocolos). Si no se
+  /// encuentra (p.ej. instrumento personalizado borrado), devuelve el id
+  /// crudo para no perder la referencia.
   String resolveName(List<CustomInstrument> customInstruments, {required String languageCode}) {
+    switch (instrumentRefType) {
+      case InstrumentRefType.catalog:
+        for (final i in kInstruments) {
+          if (i.id == instrumentRefId) return i.name.forLanguageCode(languageCode);
+        }
+        return instrumentRefId;
+      case InstrumentRefType.custom:
+        for (final c in customInstruments) {
+          if (c.id == instrumentRefId) return c.name;
+        }
+        return instrumentRefId;
+      case InstrumentRefType.suture:
+        for (final s in kSutures) {
+          if (s.id == instrumentRefId) return s.name.forLanguageCode(languageCode);
+        }
+        return instrumentRefId;
+      case InstrumentRefType.drug:
+        for (final d in kDrugs) {
+          if (d.id == instrumentRefId) return d.name.forLanguageCode(languageCode);
+        }
+        return instrumentRefId;
+      case InstrumentRefType.woundClosure:
+        for (final w in kWoundClosureMaterials) {
+          if (w.id == instrumentRefId) return w.name.forLanguageCode(languageCode);
+        }
+        return instrumentRefId;
+    }
+  }
+
+  /// true si este ítem es material fungible de un solo uso (va en la bolsa,
+  /// no en la caja metálica de reesterilización) -- suturas/fármacos/
+  /// material de cierre siempre lo son; un ítem del catálogo global lo es
+  /// solo si su categoría es [InstrumentCategory.consumibles]. El
+  /// instrumental personalizado de un equipo no tiene esta distinción
+  /// estructurada todavía (campo `category` libre, no la categoría
+  /// funcional del catálogo global) -- se asume reutilizable por defecto,
+  /// límite conocido documentado en docs/CHANGELOG.md.
+  bool isFungible() {
+    if (instrumentRefType.isAlwaysFungible) return true;
     if (instrumentRefType == InstrumentRefType.catalog) {
       for (final i in kInstruments) {
-        if (i.id == instrumentRefId) return i.name.forLanguageCode(languageCode);
+        if (i.id == instrumentRefId) return i.category == InstrumentCategory.consumibles;
       }
-      return instrumentRefId;
     }
-    for (final c in customInstruments) {
-      if (c.id == instrumentRefId) return c.name;
-    }
-    return instrumentRefId;
+    return false;
   }
 }
 

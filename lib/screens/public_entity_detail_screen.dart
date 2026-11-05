@@ -8,6 +8,7 @@ import '../models/instrument.dart' show InstrumentCategoryLabel;
 import '../models/public_document.dart';
 import '../models/public_instrument.dart';
 import '../models/public_tray.dart';
+import '../models/tray.dart' show TrayItem, InstrumentRefType;
 import '../services/auth_service.dart';
 import '../services/contributor_service.dart';
 import '../services/profile_service.dart';
@@ -146,22 +147,34 @@ class PublicEntityDetailScreen extends StatelessWidget {
     ];
   }
 
+  /// Agrupado instrumental/fungible (misma distinción que `TrayDetailScreen`,
+  /// pedida tras una revisión real con una infermera de quiròfan, 2026-11):
+  /// el material fungible mai va a la caixa metàl·lica de reesterilització.
+  List<Widget> _trayItemGroup(BuildContext context, AppLocalizations l10n, String title, List<TrayItem> items) {
+    if (items.isEmpty) return const [];
+    return [
+      Text(title, style: Theme.of(context).textTheme.titleMedium),
+      const SizedBox(height: 8),
+      for (final item in items)
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(_publicTrayRefTypeIcon(item.instrumentRefType)),
+          title: Text(item.resolveName(const [], languageCode: Localizations.localeOf(context).languageCode)),
+          subtitle: item.position != null ? Text(item.position!) : null,
+        ),
+      const SizedBox(height: 12),
+    ];
+  }
+
   List<Widget> _trayContent(BuildContext context, AppLocalizations l10n, PublicTrayVersion version) {
     return [
       if (version.description != null && version.description!.isNotEmpty) ...[
         Text(version.description!, style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
       ],
-      Text(l10n.trayItemsLabel, style: Theme.of(context).textTheme.titleMedium),
-      const SizedBox(height: 8),
       if (version.items.isEmpty) Text(l10n.trayNoItemsYet),
-      for (final item in version.items)
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: const Icon(Icons.build_outlined),
-          title: Text(item.resolveName(const [], languageCode: Localizations.localeOf(context).languageCode)),
-          subtitle: item.position != null ? Text(item.position!) : null,
-        ),
+      ..._trayItemGroup(context, l10n, l10n.trayReusableItemsLabel, version.items.where((i) => !i.isFungible()).toList()),
+      ..._trayItemGroup(context, l10n, l10n.trayFungibleItemsLabel, version.items.where((i) => i.isFungible()).toList()),
       if (version.observations != null && version.observations!.isNotEmpty) ...[
         const SizedBox(height: 20),
         Text(l10n.sterilizationObservationsLabel, style: Theme.of(context).textTheme.titleMedium),
@@ -448,5 +461,22 @@ class _AdoptTrayButtonState extends State<_AdoptTrayButton> {
         label: Text(l10n.adoptTrayAction),
       ),
     );
+  }
+}
+
+/// Mismo set de iconos que `TrayItemPickerSheet`/`TrayFormScreen`/
+/// `TrayDetailScreen`, una pestaña = un icono.
+IconData _publicTrayRefTypeIcon(InstrumentRefType type) {
+  switch (type) {
+    case InstrumentRefType.catalog:
+      return Icons.build_outlined;
+    case InstrumentRefType.custom:
+      return Icons.precision_manufacturing_outlined;
+    case InstrumentRefType.suture:
+      return Icons.linear_scale_outlined;
+    case InstrumentRefType.drug:
+      return Icons.medication_outlined;
+    case InstrumentRefType.woundClosure:
+      return Icons.healing_outlined;
   }
 }

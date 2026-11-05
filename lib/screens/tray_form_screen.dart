@@ -378,11 +378,7 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
               final index = entry.key;
               final item = entry.value;
               return ListTile(
-                leading: Icon(
-                  item.instrumentRefType == InstrumentRefType.catalog
-                      ? Icons.build_outlined
-                      : Icons.precision_manufacturing_outlined,
-                ),
+                leading: Icon(_refTypeIcon(item.instrumentRefType)),
                 title: Text(item.resolveName(_customInstruments,
                     languageCode: Localizations.localeOf(context).languageCode)),
                 subtitle: Text(
@@ -478,6 +474,22 @@ class _TrayFormScreenState extends State<TrayFormScreen> {
         ),
       ),
     );
+  }
+}
+
+/// Mismo set de iconos que `TrayItemPickerSheet`, una pestaña = un icono.
+IconData _refTypeIcon(InstrumentRefType type) {
+  switch (type) {
+    case InstrumentRefType.catalog:
+      return Icons.build_outlined;
+    case InstrumentRefType.custom:
+      return Icons.precision_manufacturing_outlined;
+    case InstrumentRefType.suture:
+      return Icons.linear_scale_outlined;
+    case InstrumentRefType.drug:
+      return Icons.medication_outlined;
+    case InstrumentRefType.woundClosure:
+      return Icons.healing_outlined;
   }
 }
 
