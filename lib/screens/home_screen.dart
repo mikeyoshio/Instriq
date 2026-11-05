@@ -54,12 +54,14 @@ import 'manufacturer_detail_screen.dart';
 import 'preference_cards_screen.dart';
 import 'progress_screen.dart';
 import 'public_entity_detail_screen.dart';
+import 'sterilization_reference_catalog_screen.dart';
 import 'surgeon_detail_screen.dart';
 import 'surgical_agenda_screen.dart';
 import 'tag_detail_screen.dart';
 import 'team_progress_screen.dart';
 import 'tray_detail_screen.dart';
 import 'trays_screen.dart';
+import 'wound_closure_catalog_screen.dart';
 import 'workspace_list_screen.dart';
 
 /// Orden de secciones de la pantalla de Inicio (sin búsqueda activa) según el
@@ -940,6 +942,25 @@ class _HomeScreenState extends State<HomeScreen> {
           subtitle: l10n.drugsCatalogSubtitle,
           onTap: () async {
             await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DrugCatalogScreen()));
+          },
+        ),
+        const SizedBox(height: InstriqSpacing.sm),
+        InstriqListItem(
+          icon: Icons.healing_outlined,
+          title: l10n.woundClosureCatalogTitle,
+          subtitle: l10n.woundClosureCatalogSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WoundClosureCatalogScreen()));
+          },
+        ),
+        const SizedBox(height: InstriqSpacing.sm),
+        InstriqListItem(
+          icon: Icons.cleaning_services_outlined,
+          title: l10n.sterilizationReferenceCatalogTitle,
+          subtitle: l10n.sterilizationReferenceCatalogSubtitle,
+          onTap: () async {
+            await Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const SterilizationReferenceCatalogScreen()));
           },
         ),
         if (hasHospital)
