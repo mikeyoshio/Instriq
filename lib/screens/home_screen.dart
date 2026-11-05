@@ -50,6 +50,7 @@ import 'group_document_review_queue_screen.dart';
 import 'home_dashboard_panel.dart';
 import 'instrument_detail_screen.dart';
 import 'learn_screen.dart';
+import 'learning_path_screen.dart';
 import 'manufacturer_detail_screen.dart';
 import 'preference_cards_screen.dart';
 import 'progress_screen.dart';
@@ -927,6 +928,15 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         InstriqSectionHeader(l10n.homeQuickAccessTitle),
         const SizedBox(height: InstriqSpacing.md),
+        InstriqListItem(
+          icon: Icons.route_outlined,
+          title: l10n.learningPathTitle,
+          subtitle: l10n.learningPathSubtitle,
+          onTap: () async {
+            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LearningPathScreen()));
+          },
+        ),
+        const SizedBox(height: InstriqSpacing.sm),
         InstriqListItem(
           icon: Icons.menu_book,
           title: l10n.catalogTitle,
