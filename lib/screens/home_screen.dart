@@ -561,14 +561,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Solo cuando hay a qué organización atribuir el evento (mismo criterio de
-  /// guest-gating que favoritos/recientes en esta pantalla) — evita la
-  /// llamada de red para invitados aunque el RPC ya sea un no-op para ellos.
+  /// Se registra también para invitados y para cuentas sin organización --
+  /// la búsqueda del catálogo es justo tan guest-accesible como el propio
+  /// catálogo (ver schema_v63, que hizo organization_id nullable para esto).
+  /// El guard anterior ("solo con cuenta y organización") daba por sentado
+  /// que el RPC seguía siendo un no-op para invitados, lo cual dejó de ser
+  /// cierto desde schema_v63 y descartaba en silencio casi todo el tráfico
+  /// real de búsqueda.
   void _scheduleSearchAnalytics(String value) {
     _searchAnalyticsDebounce?.cancel();
     final trimmed = value.trim();
     if (trimmed.isEmpty) return;
-    if (AuthService.instance.currentUser == null || !ProfileService.instance.hasHospital) return;
     _searchAnalyticsDebounce = Timer(const Duration(milliseconds: 500), () {
       if (!mounted) return;
       final languageCode = Localizations.localeOf(context).languageCode;

@@ -103,11 +103,16 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     } else {
       _loadingCommunityPhoto = false;
     }
+    // A diferencia de favoritos/recientes (solo tienen sentido con cuenta,
+    // y RecentActivityService ya se autoprotege si no la hay), la analítica
+    // de uso sí debe registrarse también para invitados -- es precisamente
+    // el tráfico mayoritario del catálogo (ver schema_v63, que hizo
+    // organization_id nullable justo para esto). Se queda fuera del guard.
+    UsageAnalyticsService.instance.recordView(_refType, widget.instrument.id);
     if (AuthService.instance.currentUser != null) {
       // Fire-and-forget: no debe bloquear ni fallar visiblemente si el
       // usuario es invitado o la RLS lo deniega (ver FavoritesService).
       RecentActivityService.instance.recordView(_refType, widget.instrument.id);
-      UsageAnalyticsService.instance.recordView(_refType, widget.instrument.id);
       _loadFavoriteState();
     }
   }

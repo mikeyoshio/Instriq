@@ -2,19 +2,36 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/drug.dart';
+import '../services/usage_analytics_service.dart';
 import '../widgets/drug_labels.dart';
 
 /// Fitxa d'un fàrmac del catàleg de farmacologia d'anestèsia. El disclaimer
 /// clínic és sempre visible (no un tooltip amagat): aquest catàleg és
 /// referència educativa, mai substitueix la fitxa tècnica oficial, les
 /// guies de la institució ni el criteri clínic, i mai inclou dosis.
-class DrugDetailScreen extends StatelessWidget {
+class DrugDetailScreen extends StatefulWidget {
   final Drug drug;
 
   const DrugDetailScreen({super.key, required this.drug});
 
   @override
+  State<DrugDetailScreen> createState() => _DrugDetailScreenState();
+}
+
+class _DrugDetailScreenState extends State<DrugDetailScreen> {
+  static const String _refType = 'drug';
+
+  @override
+  void initState() {
+    super.initState();
+    // Igual que el catàleg d'instruments: es registra també per a convidats,
+    // és contingut accessible sense compte.
+    UsageAnalyticsService.instance.recordView(_refType, widget.drug.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final drug = widget.drug;
     final l10n = AppLocalizations.of(context)!;
     final languageCode = Localizations.localeOf(context).languageCode;
     return Scaffold(
