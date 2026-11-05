@@ -278,6 +278,42 @@ const List<Instrument> kInstruments = [
     ),
   ),
   Instrument(
+    id: 'pinza-adson-dientes',
+    name: LocalizedText(
+        ca: 'Pinça d\'Adson amb dents', es: 'Pinza de Adson con dientes', en: 'Adson forceps, toothed'),
+    category: InstrumentCategory.diseccion,
+    aliases: ['Adson forceps', 'Adson-Brown forceps'],
+    icon: 'pinch',
+    description: LocalizedText(
+      ca: 'Pinça de disecció curta (uns 12 cm), amb molla a la nansa i dents fines (1x2) a la punta.',
+      es: 'Pinza de disección corta (unos 12 cm), con muelle en el mango y dientes finos (1x2) en la punta.',
+      en: 'Short (about 12 cm) dissecting forceps, spring-handled, with fine teeth (1x2) at the tip.',
+    ),
+    use: LocalizedText(
+      ca: 'Subjecció precisa de pell i teixits superficials durant la sutura o la disecció.',
+      es: 'Sujeción precisa de piel y tejidos superficiales durante la sutura o la disección.',
+      en: 'Precise grip on skin and superficial tissue during suturing or dissection.',
+    ),
+  ),
+  Instrument(
+    id: 'pinza-adson-sin-dientes',
+    name: LocalizedText(
+        ca: 'Pinça d\'Adson sense dents', es: 'Pinza de Adson sin dientes', en: 'Adson forceps, toothless'),
+    category: InstrumentCategory.diseccion,
+    aliases: ['Adson forceps'],
+    icon: 'pinch',
+    description: LocalizedText(
+      ca: 'Mateixa pinça curta amb molla que la versió amb dents, però amb estries en lloc de dents a la punta.',
+      es: 'Misma pinza corta con muelle que la versión con dientes, pero con estrías en lugar de dientes en la punta.',
+      en: 'Same short spring-handled forceps as the toothed version, but with serrations instead of teeth at the tip.',
+    ),
+    use: LocalizedText(
+      ca: 'Subjecció de teixits més delicats (vasos, nervis, peritoneu) on les dents serien massa traumàtiques.',
+      es: 'Sujeción de tejidos más delicados (vasos, nervios, peritoneo) donde los dientes serían demasiado traumáticos.',
+      en: 'Grasping more delicate tissue (vessels, nerves, peritoneum) where teeth would be too traumatic.',
+    ),
+  ),
+  Instrument(
     id: 'pinza-foerster',
     name: LocalizedText(ca: 'Pinça d\'anelles (Foerster)', es: 'Pinza de anillos (Foerster)', en: 'Ring forceps (Foerster)'),
     category: InstrumentCategory.diseccion,
@@ -456,6 +492,41 @@ const List<Instrument> kInstruments = [
       license: 'CC BY 3.0',
       attribution: 'MacPiek, Wikimedia Commons',
       sourceUrl: 'https://commons.wikimedia.org/wiki/File:Weitlaner_Retraktor.jpg',
+    ),
+  ),
+  Instrument(
+    id: 'separador-roux',
+    name: LocalizedText(ca: 'Separador de Roux', es: 'Separador de Roux', en: 'Roux retractor'),
+    category: InstrumentCategory.separacion,
+    aliases: ['Roux retractor'],
+    icon: 'expand',
+    description: LocalizedText(
+      ca: 'Separador manual amb una fulla corba ampla a cada extrem, de mides diferents.',
+      es: 'Separador manual con una hoja curva ancha en cada extremo, de tamaños distintos.',
+      en: 'Handheld retractor with a wide curved blade at each end, in two different sizes.',
+    ),
+    use: LocalizedText(
+      ca: 'Retracció de paret abdominal o de teixit tou en laparotomies i cirurgia general.',
+      es: 'Retracción de pared abdominal o de tejido blando en laparotomías y cirugía general.',
+      en: 'Retracting the abdominal wall or soft tissue in laparotomies and general surgery.',
+    ),
+  ),
+  Instrument(
+    id: 'separador-gancho',
+    name: LocalizedText(
+        ca: 'Separador de ganxo de doble punta', es: 'Separador de gancho de doble punta', en: 'Double-prong skin hook'),
+    category: InstrumentCategory.separacion,
+    aliases: ['Skin hook', 'Rake retractor'],
+    icon: 'expand',
+    description: LocalizedText(
+      ca: 'Separador manual senzill amb una o dues puntes romes en forma de ganxo.',
+      es: 'Separador manual sencillo con una o dos puntas romas en forma de gancho.',
+      en: 'Simple handheld retractor with one or two blunt hook-shaped prongs.',
+    ),
+    use: LocalizedText(
+      ca: 'Tracció puntual de la vora de la pell o d\'una aponeurosi quan no cal un separador autoestàtic.',
+      es: 'Tracción puntual del borde de la piel o de una aponeurosis cuando no hace falta un separador autoestático.',
+      en: 'Point traction on a skin edge or aponeurosis when a self-retaining retractor is not needed.',
     ),
   ),
   Instrument(
@@ -1142,6 +1213,24 @@ const List<Instrument> kInstruments = [
       ca: 'Es passa la fulla pel rascador quan deixa de tallar net per acumulació de restes.',
       es: 'Se pasa la hoja por el rascador cuando deja de cortar limpio por acumulación de restos.',
       en: 'The blade is wiped against the scraper when it stops cutting cleanly due to residue buildup.',
+    ),
+  ),
+  Instrument(
+    id: 'grapadora-cutanea',
+    name: LocalizedText(
+        ca: 'Grapadora cutània d\'un sol ús', es: 'Grapadora cutánea de un solo uso', en: 'Disposable skin stapler'),
+    category: InstrumentCategory.consumibles,
+    aliases: ['Skin stapler', 'Proximate'],
+    icon: 'tool',
+    description: LocalizedText(
+      ca: 'Dispositiu d\'un sol ús precarregat amb grapes metàl·liques (normalment 25-35), per al tancament cutani.',
+      es: 'Dispositivo de un solo uso precargado con grapas metálicas (normalmente 25-35), para el cierre cutáneo.',
+      en: 'Single-use device preloaded with metal staples (typically 25-35), for skin closure.',
+    ),
+    use: LocalizedText(
+      ca: 'Tancament ràpid de la pell com a alternativa a la sutura; les grapes es retiren amb un extractor als dies posteriors.',
+      es: 'Cierre rápido de la piel como alternativa a la sutura; las grapas se retiran con un extractor en los días posteriores.',
+      en: 'Fast skin closure as an alternative to suturing; staples are removed with an extractor in the following days.',
     ),
   ),
   Instrument(
