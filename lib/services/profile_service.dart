@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../models/group_sibling_organization.dart';
 import '../models/hospital.dart';
 import '../models/work_mode.dart';
 import '../utils/invite_code.dart';
@@ -27,6 +28,9 @@ class ProfileService {
   String? _ownerId;
   bool _canApproveAnyWorkspace = false;
   bool _canEditAnyWorkspace = false;
+  String? _groupId;
+  String? _groupName;
+  String? _groupCode;
 
   /// Reactivo a propósito: el selector de modo de trabajo de la capçalera
   /// (ver work_mode_header.dart) necesita repintarse a l'instant en cualquier
@@ -53,6 +57,10 @@ class ProfileService {
   bool get isOwner => _isOwner;
   String? get ownerId => _ownerId;
   bool get hasHospital => _organizationId != null;
+  String? get groupId => _groupId;
+  String? get groupName => _groupName;
+  String? get groupCode => _groupCode;
+  bool get hasGroup => _groupId != null;
 
   /// `true` si el usuario actual es `approver` (o `administrator`, aunque ese
   /// valor nunca se guarda como fila) en al menos un espacio de trabajo, sin
@@ -81,7 +89,8 @@ class ProfileService {
     final results = await Future.wait<dynamic>([
       _client
           .from('profiles')
-          .select('organization_id, is_admin, active_work_mode, organizations(name, cif, invite_code, owner_id)')
+          .select(
+              'organization_id, is_admin, active_work_mode, organizations(name, cif, invite_code, owner_id, group_id, hospital_groups(name, group_code))')
           .eq('id', user.id)
           .maybeSingle(),
       _client
@@ -106,6 +115,10 @@ class ProfileService {
     _inviteCode = hospitalRow?['invite_code'] as String?;
     _ownerId = hospitalRow?['owner_id'] as String?;
     _isOwner = _ownerId == user.id;
+    _groupId = hospitalRow?['group_id'] as String?;
+    final groupRow = hospitalRow?['hospital_groups'] as Map<String, dynamic>?;
+    _groupName = groupRow?['name'] as String?;
+    _groupCode = groupRow?['group_code'] as String?;
     activeWorkModeNotifier.value = WorkModeLabel.fromDb(row?['active_work_mode'] as String?);
     _canEditAnyWorkspace = editableRoles.isNotEmpty;
     _canApproveAnyWorkspace = editableRoles.contains('approver') || editableRoles.contains('administrator');
@@ -132,6 +145,9 @@ class ProfileService {
     _ownerId = null;
     _canApproveAnyWorkspace = false;
     _canEditAnyWorkspace = false;
+    _groupId = null;
+    _groupName = null;
+    _groupCode = null;
     activeWorkModeNotifier.value = null;
     _clearGroupContentCaches();
   }
@@ -216,10 +232,17 @@ class ProfileService {
   /// antes el `insert`+`upsert` se hacían directamente desde el cliente,
   /// confiando en que la policy de `profiles` no permitiera fijar columnas
   /// arbitrarias -- no era así (auditoría de seguridad 2026-08).
+  /// [newChainName]/[existingChainCode] són mútuament excloents i opcionals:
+  /// cap dels dos (per defecte) crea una organització independent, igual que
+  /// sempre; [newChainName] la converteix en la primera seu d'una cadena
+  /// nova (es genera un `groupCode` per a convidar-hi més seus);
+  /// [existingChainCode] l'uneix a una cadena ja existent amb aquest codi.
   Future<Hospital> registerHospital({
     required String name,
     String? displayName,
     String orgType = 'hospital',
+    String? newChainName,
+    String? existingChainCode,
   }) async {
     final user = AuthService.instance.currentUser;
     if (user == null) throw StateError('No hay sesión activa.');
@@ -228,6 +251,8 @@ class ProfileService {
       'p_name': name.trim(),
       if (displayName != null && displayName.isNotEmpty) 'p_display_name': displayName,
       'p_org_type': orgType,
+      if (newChainName != null && newChainName.isNotEmpty) 'p_new_group_name': newChainName,
+      if (existingChainCode != null && existingChainCode.isNotEmpty) 'p_group_code': existingChainCode,
     }) as List<dynamic>;
 
     final hospital = Hospital.fromRow(rows.first as Map<String, dynamic>);
@@ -239,8 +264,21 @@ class ProfileService {
     _ownerId = hospital.ownerId;
     _isAdmin = true;
     _isOwner = true;
+    _groupId = hospital.groupId;
+    _groupCode = hospital.groupCode;
+    _groupName = newChainName?.trim();
     profileRevision.value++;
     return hospital;
+  }
+
+  /// Organitzacions germanes (mateixa cadena, veure [hasGroup]) -- només
+  /// columnes segures (mai `inviteCode`/`cif`/`ownerId`), via
+  /// `list_group_sibling_organizations` (RPC, no policy directa sobre
+  /// `organizations` -- veure schema_v65_hospital_groups.sql).
+  Future<List<GroupSiblingOrganization>> fetchGroupSiblingOrganizations() async {
+    if (_groupId == null) return [];
+    final rows = await _client.rpc('list_group_sibling_organizations') as List<dynamic>;
+    return rows.map((r) => GroupSiblingOrganization.fromRow(r as Map<String, dynamic>)).toList();
   }
 
   /// Genera un nuevo código de invitación para el hospital actual (solo admin).

@@ -88,6 +88,20 @@ class GroupDocumentService {
     return null;
   }
 
+  /// Tècniques/protocols PUBLICATS d'un espai d'una organització germana de
+  /// la mateixa cadena (ver schema_v65_hospital_groups.sql) -- consulta
+  /// directa, sense estat ni memòria cau offline (mateix criteri que
+  /// `TrayService.fetchGroupSiblingTrays`: mai contaminar el cau local amb
+  /// contingut clínic d'una altra organització).
+  Future<List<GroupDocument>> fetchGroupSiblingDocuments(DocumentKind kind, String workspaceId) async {
+    final rows = await _client
+        .from('group_documents')
+        .select(_publishedJoin)
+        .eq('kind', kind.dbValue)
+        .eq('workspace_id', workspaceId);
+    return (rows as List<dynamic>).map((r) => GroupDocument.fromRow(r as Map<String, dynamic>)).toList();
+  }
+
   Future<GroupDocument> fetchDocument(String id) async {
     if (ConnectivityService.instance.isOnline.value) {
       try {

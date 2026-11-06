@@ -47,6 +47,7 @@ import 'drug_catalog_screen.dart';
 import 'group_document_detail_screen.dart';
 import 'group_document_list_screen.dart';
 import 'group_document_review_queue_screen.dart';
+import 'group_network_screen.dart';
 import 'home_dashboard_panel.dart';
 import 'instrument_detail_screen.dart';
 import 'learn_screen.dart';
@@ -923,6 +924,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final groupItems = mode == WorkMode.cirujano
         ? [...preferenceCardsAndProtocols, ...techniquesAndTrays, surgicalAgendaItem]
         : [...techniquesAndTrays, ...preferenceCardsAndProtocols, surgicalAgendaItem];
+    if (ProfileService.instance.hasGroup) {
+      groupItems.add(InstriqListItem(
+        icon: Icons.hub_outlined,
+        title: l10n.groupNetworkTitle,
+        subtitle: l10n.groupNetworkSubtitle,
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GroupNetworkScreen()));
+        },
+      ));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

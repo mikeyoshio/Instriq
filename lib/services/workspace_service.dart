@@ -35,6 +35,14 @@ class WorkspaceService {
         (rows as List<dynamic>).map((r) => Workspace.fromRow(r as Map<String, dynamic>)).toList();
   }
 
+  /// Espais d'una organització germana de la mateixa cadena (ver
+  /// schema_v65_hospital_groups.sql) -- consulta directa, sense estat ni
+  /// memòria cau, mateix criteri que `TrayService.fetchGroupSiblingTrays`.
+  Future<List<Workspace>> fetchGroupSiblingWorkspaces(String organizationId) async {
+    final rows = await _client.from('workspaces').select().eq('organization_id', organizationId).order('name');
+    return (rows as List<dynamic>).map((r) => Workspace.fromRow(r as Map<String, dynamic>)).toList();
+  }
+
   Future<Workspace> createWorkspace(String name, {String? description, String? specialtyId}) async {
     final organizationId = ProfileService.instance.organizationId;
     if (organizationId == null) {

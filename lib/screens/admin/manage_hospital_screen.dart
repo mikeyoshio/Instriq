@@ -1,9 +1,12 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../design_system/components/instriq_responsive_content.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/group_sibling_organization.dart';
 import '../../models/hospital.dart';
 import '../../models/invitation.dart';
+import '../../models/org_type.dart';
 import '../../models/workspace.dart';
 import '../../models/workspace_role.dart';
 import '../../services/auth_service.dart';
@@ -25,6 +28,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
   List<HospitalMember> _members = [];
   List<Invitation> _invitations = [];
   List<Workspace> _workspaces = [];
+  List<GroupSiblingOrganization> _siblingOrganizations = [];
   String? _error;
 
   @override
@@ -45,6 +49,9 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
       _workspaces = WorkspaceService.instance.workspaces;
       if (organizationId != null) {
         _invitations = await InvitationService.instance.fetchForOrganization(organizationId);
+      }
+      if (ProfileService.instance.hasGroup) {
+        _siblingOrganizations = await ProfileService.instance.fetchGroupSiblingOrganizations();
       }
     } catch (e) {
       if (mounted) _error = AppLocalizations.of(context)!.manageMembersLoadError(e.toString());
@@ -336,6 +343,55 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                       ),
                     ),
                   ),
+                  if (profile.hasGroup) ...[
+                    const SizedBox(height: 24),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(l10n.chainCardTitle(profile.groupName ?? ''),
+                                style: Theme.of(context).textTheme.labelLarge),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                SelectableText(
+                                  profile.groupCode ?? '—',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold, letterSpacing: 3),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.copy, size: 18),
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(text: profile.groupCode ?? ''));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(content: Text(l10n.copiedToClipboard)));
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(l10n.chainCardCodeHint, style: Theme.of(context).textTheme.bodySmall),
+                            const SizedBox(height: 16),
+                            Text(l10n.chainCardSiblingsTitle, style: Theme.of(context).textTheme.labelLarge),
+                            const SizedBox(height: 8),
+                            if (_siblingOrganizations.isEmpty)
+                              Text(l10n.chainCardSiblingsEmpty, style: Theme.of(context).textTheme.bodySmall)
+                            else
+                              ..._siblingOrganizations.map((sibling) => ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    leading: const Icon(Icons.local_hospital_outlined),
+                                    title: Text(sibling.name),
+                                    subtitle: Text(OrgType.fromDb(sibling.orgType).label(l10n)),
+                                  )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 24),
                   Row(
                     children: [

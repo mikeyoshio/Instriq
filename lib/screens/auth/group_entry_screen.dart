@@ -5,9 +5,17 @@ import '../../l10n/app_localizations.dart';
 import '../../models/org_type.dart';
 import '../../services/auth_service.dart';
 import '../../services/profile_service.dart';
+import '../../widgets/chain_hierarchy_preview_dialog.dart';
+import '../../widgets/send_feedback_dialog.dart';
 import 'sign_in_screen.dart';
 
 enum _Mode { choose, join, create }
+
+/// "Cadena" (NO "grup" -- aquesta pantalla ja fa servir "grup" per a
+/// l'organització mateixa, p. ex. `l10n.createMyGroup`): si una organització
+/// forma part d'una xarxa de diverses seus (tipus Quirón), o és una seu
+/// única per ara. Veure schema_v65_hospital_groups.sql.
+enum _ChainScope { solo, newChain, joinChain }
 
 /// Pantalla única que sustituye a WelcomeScreen + SignUpScreen +
 /// JoinHospitalScreen + RegisterHospitalScreen: resuelve de entrada la
@@ -36,10 +44,13 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
   final _groupNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _chainNameController = TextEditingController();
+  final _chainCodeController = TextEditingController();
 
   bool _loading = false;
   String? _error;
   OrgType _orgType = OrgType.hospital;
+  _ChainScope _chainScope = _ChainScope.solo;
 
   @override
   void dispose() {
@@ -48,6 +59,8 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
     _groupNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _chainNameController.dispose();
+    _chainCodeController.dispose();
     super.dispose();
   }
 
@@ -111,6 +124,16 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
       setState(() => _error = l10n.groupNameRequired);
       return;
     }
+    final chainName = _chainNameController.text.trim();
+    final chainCode = _chainCodeController.text.trim();
+    if (_chainScope == _ChainScope.newChain && chainName.isEmpty) {
+      setState(() => _error = l10n.chainNameRequired);
+      return;
+    }
+    if (_chainScope == _ChainScope.joinChain && chainCode.isEmpty) {
+      setState(() => _error = l10n.chainCodeRequired);
+      return;
+    }
     setState(() {
       _loading = true;
       _error = null;
@@ -131,9 +154,11 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
         name: name,
         displayName: _nameController.text.trim(),
         orgType: _orgType.dbValue,
+        newChainName: _chainScope == _ChainScope.newChain ? chainName : null,
+        existingChainCode: _chainScope == _ChainScope.joinChain ? chainCode : null,
       );
       if (!mounted) return;
-      await _showCreatedDialog(hospital.inviteCode);
+      await _showCreatedDialog(hospital.inviteCode, chainCode: hospital.groupCode);
       if (mounted) widget.onCompleted();
     } catch (e) {
       setState(() => _error = e is StateError ? e.message : l10n.registerError(e.toString()));
@@ -142,41 +167,49 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
     }
   }
 
-  Future<void> _showCreatedDialog(String code) {
+  Future<void> _showCreatedDialog(String code, {String? chainCode}) {
     final l10n = AppLocalizations.of(context)!;
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.groupCreatedTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.groupCreatedBody),
-            const SizedBox(height: 16),
-            Center(
-              child: SelectableText(
-                code,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.groupCreatedBody),
+              const SizedBox(height: 16),
+              _CodeBlock(
+                code: code,
                 style: Theme.of(dialogContext)
                     .textTheme
                     .headlineMedium
                     ?.copyWith(fontWeight: FontWeight.bold, letterSpacing: 4),
+                copiedLabel: l10n.copiedToClipboard,
               ),
-            ),
-            const SizedBox(height: 12),
-            Text(l10n.ownerHint),
-          ],
+              const SizedBox(height: 12),
+              Text(l10n.ownerHint),
+              if (chainCode != null) ...[
+                const Divider(height: 32),
+                Text(l10n.chainCreatedCodeTitle, style: Theme.of(dialogContext).textTheme.labelLarge),
+                const SizedBox(height: 8),
+                _CodeBlock(
+                  code: chainCode,
+                  style: Theme.of(dialogContext)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.bold, letterSpacing: 4),
+                  copiedLabel: l10n.copiedToClipboard,
+                ),
+                const SizedBox(height: 8),
+                Text(l10n.chainCreatedCodeBody, style: Theme.of(dialogContext).textTheme.bodySmall),
+              ],
+            ],
+          ),
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: code));
-              ScaffoldMessenger.of(dialogContext)
-                  .showSnackBar(SnackBar(content: Text(l10n.copiedToClipboard)));
-            },
-            child: Text(l10n.copy),
-          ),
           FilledButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(l10n.continueLabel),
@@ -327,6 +360,77 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
           }).toList(),
         ),
         const SizedBox(height: 20),
+        Row(
+          children: [
+            Expanded(
+              child: Text(l10n.chainScopeQuestion, style: Theme.of(context).textTheme.labelLarge),
+            ),
+            TextButton(
+              onPressed: () => showChainHierarchyPreviewDialog(context, isChain: _chainScope != _ChainScope.solo),
+              child: Text(l10n.chainHierarchyPreviewLink),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ChoiceChip(
+              label: Text(l10n.chainScopeSolo),
+              selected: _chainScope == _ChainScope.solo,
+              onSelected: (_) => setState(() => _chainScope = _ChainScope.solo),
+            ),
+            ChoiceChip(
+              label: Text(l10n.chainScopeNew),
+              selected: _chainScope == _ChainScope.newChain,
+              onSelected: (_) => setState(() => _chainScope = _ChainScope.newChain),
+            ),
+            ChoiceChip(
+              label: Text(l10n.chainScopeJoin),
+              selected: _chainScope == _ChainScope.joinChain,
+              onSelected: (_) => setState(() => _chainScope = _ChainScope.joinChain),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          switch (_chainScope) {
+            _ChainScope.solo => l10n.chainScopeSoloHelp,
+            _ChainScope.newChain => l10n.chainScopeNewHelp,
+            _ChainScope.joinChain => l10n.chainScopeJoinHelp,
+          },
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        if (_chainScope == _ChainScope.solo) ...[
+          const SizedBox(height: 4),
+          TextButton(
+            onPressed: () => showSendFeedbackDialog(context),
+            child: Text(l10n.contactUsForChainUpgrade),
+          ),
+        ],
+        if (_chainScope == _ChainScope.newChain) ...[
+          const SizedBox(height: 12),
+          TextField(
+            controller: _chainNameController,
+            decoration: InputDecoration(
+              labelText: l10n.chainNameFieldLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+        ],
+        if (_chainScope == _ChainScope.joinChain) ...[
+          const SizedBox(height: 12),
+          TextField(
+            controller: _chainCodeController,
+            textCapitalization: TextCapitalization.characters,
+            decoration: InputDecoration(
+              labelText: l10n.chainCodeFieldLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+        ],
+        const SizedBox(height: 20),
         TextField(
           controller: _nameController,
           decoration: InputDecoration(
@@ -375,5 +479,30 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
             InputDecoration(labelText: l10n.passwordMinChars, border: const OutlineInputBorder()),
       ),
     ];
+  }
+}
+
+class _CodeBlock extends StatelessWidget {
+  final String code;
+  final TextStyle? style;
+  final String copiedLabel;
+
+  const _CodeBlock({required this.code, required this.style, required this.copiedLabel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SelectableText(code, style: style),
+        IconButton(
+          icon: const Icon(Icons.copy, size: 18),
+          onPressed: () {
+            Clipboard.setData(ClipboardData(text: code));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(copiedLabel)));
+          },
+        ),
+      ],
+    );
   }
 }

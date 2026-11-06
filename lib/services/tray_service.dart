@@ -258,6 +258,30 @@ class TrayService {
     return TrayVersion.fromRow(versionRow as Map<String, dynamic>);
   }
 
+  /// Bandejas PUBLICADAS de un espacio de una organización hermana de la
+  /// misma cadena (ver schema_v65_hospital_groups.sql) -- consulta directa,
+  /// sin estado ni caché offline: a diferencia de [fetchTrays], esto nunca
+  /// debe terminar en [OfflineCacheService] (contaminaría el caché local del
+  /// dispositivo con contenido clínico de OTRA organización).
+  Future<List<Tray>> fetchGroupSiblingTrays(String workspaceId) async {
+    final rows = await _client.from('trays').select(_publishedJoin).eq('workspace_id', workspaceId);
+    return (rows as List<dynamic>).map((r) => Tray.fromRow(r as Map<String, dynamic>)).toList();
+  }
+
+  /// Importa una bandeja PUBLICADA de una organización hermana de la misma
+  /// cadena como borrador propio (ver schema_v65_hospital_groups.sql,
+  /// `adopt_group_tray`). A diferencia de [adoptPublicTray], es una copia
+  /// puntual sin seguimiento de origen -- nunca se marca `synced` ni queda
+  /// ligada a `upstream_public_tray_id` (esas columnas son solo para
+  /// contenido de la Biblioteca Pública).
+  Future<TrayVersion> adoptGroupTray({required String sourceTrayId, required String targetWorkspaceId}) async {
+    final versionRow = await _client.rpc('adopt_group_tray', params: {
+      'p_source_tray_id': sourceTrayId,
+      'p_target_workspace_id': targetWorkspaceId,
+    });
+    return TrayVersion.fromRow(versionRow as Map<String, dynamic>);
+  }
+
   /// "Dejar de seguir": deja de avisar de actualizaciones del origen público,
   /// sin perder de dónde vino la bandeja (ver comentario en
   /// schema_v42_tray_adoption.sql). Acción irreversible desde el cliente.
