@@ -177,10 +177,13 @@ Cap proposta toca rendiment (§1.7 del pla principal): 3.1-3.4 són canvis de co
 
 ---
 
-## 7. Preguntes obertes per al propietari
+## 7. Decisions i preguntes
 
-1. **Contrast de vora (§1.4, §3.5)**: enfosquir `borderLight`/`borderDark` per arribar a 3:1 reals — qui ho decideix, aquest document o l'agent de disseny visual? Recomanació: coordinar-ho, no decidir-ho aquí en solitari perquè toca el llenguatge visual comú.
-2. **Paleta fixa de Mode Quiròfan** (`_bg`, `_cardBg`, etc., ja detectada com a pendent al CHANGENOTE anterior): és deliberada (baixa lluminositat sempre, independentment del tema triat) o s'hauria de respectar el tema clar/fosc de l'usuari també aquí? Afecta directament algú amb sensibilitat lluminosa específica.
+1. **Paleta fixa de Mode Quiròfan → decisió del propietari: és deliberada.** El fons fosc sempre evita enlluernar sota el llum del camp quirúrgic, independentment de la preferència general de tema — decisió clínica, no estètica. No es toca.
+
+Preguntes encara obertes (no bloquegen les fases de §5):
+
+2. **Contrast de vora (§1.4, §3.5)**: enfosquir `borderLight`/`borderDark` per arribar a 3:1 reals — qui ho decideix, aquest document o l'agent de disseny visual? Recomanació: coordinar-ho, no decidir-ho aquí en solitari perquè toca el llenguatge visual comú.
 3. **Estendre el patró "guants" a l'agenda quirúrgica i la cua d'incidències**: el brief demanava comprovar-ho explícitament sense assumir-ho — la resposta trobada és que cap de les dues ho necessita *per defecte Material* (ja tenen accessibilitat bàsica raonable), però si el propietari considera que també s'usen "amb el camp obert" (p.ex. consultar l'agenda entremig d'una intervenció), podria valer la pena el mateix tractament. Decisió de producte, no de codi.
 4. **Formularis sense `TextFormField`** (ja marcat pendent al CHANGENOTE anterior, fora d'abast d'aquell tram): segueix pendent i no s'ha tornat a tocar aquí — confirmar si entra a l'abast de la v1.2 o es queda per a una altra sessió.
 

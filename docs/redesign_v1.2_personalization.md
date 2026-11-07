@@ -209,10 +209,13 @@ Cap fase introdueix dependències noves ni esquema nou (excepte si el propietari
 
 ---
 
-## 8. Preguntes obertes per al propietari
+## 8. Decisions preses pel propietari (2026-11-07)
 
-1. **Prompt de mode de treball (§5.1): obligatori o descartable?** Es proposa que es pugui saltar (com ja fa `WorkModePicker` amb l'opció "Sense preferència"), però cal decidir si es torna a oferir mai més passiu (p. ex. un recordatori únic més endavant) o si saltar-lo és definitiu fins que l'usuari el trobi sol a Perfil.
-2. **Nudge cap a `LearningPathScreen` (§5.2): targeta discreta o empenta forta (auto-navegar un cop)?** Es recomana la targeta per defecte (menys intrusiva), però es flaga l'alternativa si el propietari prioritza que ningú es perdi la ruta.
+1. **Prompt de mode de treball (§5.1) → descartable per sempre.** Si l'usuari el salta, no es torna a mostrar mai més — sempre el pot trobar a Perfil. Més simple, menys intrusiu.
+2. **Nudge cap a `LearningPathScreen` (§5.2) → targeta discreta**, no navegació forçada. Visible dins el bloc "Aprendre", es descarta sola en entrar-hi o descartar-la.
+
+Preguntes encara obertes (no bloquegen cap de les fases de §7):
+
 3. **"Xarxa de grup" per a `supervision` dins de Documentar (§3.1, final)**: val la pena una regla d'ordre específica per 1 sol ítem i 1 sol mode, o es deixa sempre al final del bloc per a tothom (més simple)?
 4. **§4.3 (progrés d'equip de la Ruta d'aprenentatge visible a un admin)**: és una necessitat real avui, o es queda fora d'abast com està ara (local, per dispositiu)? Si és que sí, cal una ronda de disseny de schema pròpia, no incrustar-ho aquí.
 5. **Pàgina 3 d'`OnboardingScreen` (§5.3)**: botó real cap a `HospitalConnectFlow`, o simplement suavitzar el text? Afecta directament si aquesta pantalla passa a dependre de xarxa/sessió (avui no en depèn gens).

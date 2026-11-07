@@ -137,6 +137,6 @@ Cap proposta d'aquest document afegeix una dependència a `pubspec.yaml`, introd
 
 ---
 
-## 6. Preguntes obertes per al propietari
+## 6. Decisió del propietari
 
-Cap decisió d'aquest document depèn del propietari de manera bloquejant — totes són conseqüència directa de l'abast ja aprovat (§8 del pla principal) aplicat amb els tokens que ja existeixen. L'única nota a validar, no a decidir: **§3.2 proposa promoure un patró repetit 15 vegades a un component petit nou** (`InstriqEmptyState`); és l'única proposta d'aquest document que afegeix una classe nova al design system (totes les altres reutilitzen el que ja hi ha). Si el propietari prefereix no afegir cap component nou en aquesta ronda, §3.2 es pot ajornar sencera sense afectar cap altra proposta d'aquest document.
+**§3.2 (`InstriqEmptyState`) → aprovat.** Únic component nou d'aquest document; la resta de propostes reutilitzen el que ja existeix al design system.
