@@ -216,14 +216,16 @@ Cap fase introdueix una dependència nova a `pubspec.yaml`.
 
 ---
 
-## 8. Decisions obertes del propietari (abans d'implementar cap fase)
+## 8. Decisions preses pel propietari (2026-11-07 — ja no estan obertes)
 
-1. **Catàleg a Dreceres i a "Cercar" alhora: es manté redundant o es tria un sol camí?** (§3.3) Mantenir-lo a tots dos costats és més fàcil de descobrir per a algú nou; treure'l de Dreceres fa la llista més curta però confia que l'usuari associï "Cercar" amb el catàleg.
-2. **"El meu progrés" a Dreceres i a Perfil alhora: es manté o es tria un sol camí?** (§3.3)
-3. **Tècniques/Protocols/Bandeixes/Fitxes de preferència: es queden com a drecera directa a Inici, o Inici només enllaça a "Les meves col·leccions" de Biblioteca?** (§3.3) Afecta directament quants ítems queda el bloc "Documentar" de Dreceres (de 5 a potencialment 1).
-4. **"Xarxa de grup" (només visible amb `hasGroup`): secció pròpia d'1 ítem, dins de "Documentar", o fora de Dreceres (només des de Biblioteca/Perfil)?** (§3.2)
-5. **Abast de la Fase 3 (cerca unificada a "Cercar")**: és un canvi de comportament visible (la pestanya "Cercar" deixa de ser "el catàleg" i passa a ser "cerca de tot") — necessita el vistiplau explícit del propietari abans d'escometre's, no és purament cosmètic com les Fases 1-2.
-6. **Ordre de blocs per mode de treball**: avui només "Cirurgià" reordena Dreceres (preferència/protocols primer). Amb blocs en comptes de llista plana, té sentit estendre aquesta personalització a més modes (p.ex. Instrumentista amb "Documentar" primer), o es manté igual que avui (només Cirurgià) per no complicar el component?
+1. **Catàleg a Dreceres i a "Cercar" alhora → es manté als dos llocs.** Més fàcil de descobrir per a algú nou; no tothom associa "Cercar" amb el catàleg.
+2. **"El meu progrés" a Dreceres i a Perfil alhora → es treu de Dreceres.** Es queda només a Perfil → Preferències; és contingut "sobre el compte", no una consulta diària.
+3. **Tècniques/Protocols/Bandeixes/Fitxes de preferència → es mantenen com a drecera directa a Inici.** És el contingut més usat del dia a dia per a qui ja té hospital connectat; forçar un pas extra via Biblioteca alentiria el cas més freqüent. El bloc "Documentar" es queda amb els 5 ítems.
+4. **"Xarxa de grup" → dins del bloc "Documentar"**, no una secció pròpia (no la justifica un sol ítem) ni fora de Dreceres.
+5. **Fase 3 (cerca unificada a "Cercar") → aprovada, entra dins l'abast de la 1.2.** És el canvi més visible del pla (la pestanya deixa de ser "el catàleg" i passa a ser cerca real entre tot).
+6. **Personalització per mode de treball → s'estén a tots els modes**, no només Cirurgià. Instrumentista veu "Documentar" (bandeixes) primer, Docent veu "Aprendre"/progrés de l'equip primer, etc. — mateix criteri que ja prioritza seccions a altres parts d'Inici.
+
+Amb això, les 3 fases de §6 passen de "proposta" a "abast confirmat" -- la feina pendent real és aprofundir el COM (disseny visual/interacció, personalització real més enllà de l'ordre de blocs, accessibilitat), no el QUÈ. Veure §10.
 
 ---
 
