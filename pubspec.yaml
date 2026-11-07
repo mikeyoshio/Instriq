@@ -95,15 +95,21 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   msix: ^3.18.0
 
-# Empaquetat MSIX per a Windows (Microsoft Store / sideload). Sense
-# `publisher`/certificat real (calen d'un compte de Microsoft Partner
-# Center que encara no existeix), `msix` genera un certificat
-# autosignat nomes per a proves locals -- vàlid per confirmar que tot
-# el pipeline de signat/empaquetat funciona, NO per publicar a la Store.
+# Empaquetat MSIX per a Windows (Microsoft Store). identity_name es el valor
+# real reservat a Partner Center (no es pot inventar -- el Store rebutja el
+# paquet si no coincideix exactament). `publisher` NO es fixa aqui: el
+# paquet `msix` el deriva sempre del Subject del certificat de signatura
+# real (windows/instriq_signing.pfx, autosignat, gitignored -- mai a git),
+# ignorant qualsevol valor de `publisher` si fa servir el certificat de
+# proves per defecte. Microsoft torna a firmar el paquet ells mateixos
+# durant la certificacio, no cal comprar un certificat real nomes per pujar-lo.
 msix_config:
   display_name: Instriq
   publisher_display_name: Instriq
-  identity_name: com.instriq.app
+  identity_name: Instriq.instriq
+  certificate_path: windows/instriq_signing.pfx
+  # certificate_password: NO es fixa aqui (seria un secret comitejat a git) --
+  # es passa per linia d'ordres (`--certificate-password`) nomes en empaquetar.
   msix_version: 1.1.0.0
   logo_path: assets/icon/icon.png
   capabilities: internetClient

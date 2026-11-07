@@ -4,6 +4,10 @@
 *.pyc
 *.swp
 
+# Clau privada de signatura MSIX (autosignada, nomes per pujar a la Store --
+# Microsoft la torna a firmar ells mateixos en la certificacio). Mai a git.
+windows/*.pfx
+
 # Localization: generated from lib/l10n/*.arb via `flutter gen-l10n`
 # (runs automatically on pub get/build since l10n.yaml has generate: true).
 lib/l10n/app_localizations.dart
