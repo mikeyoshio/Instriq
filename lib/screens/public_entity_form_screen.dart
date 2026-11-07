@@ -91,6 +91,7 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
   String? _specialtyId;
   List<SpecialtyEntity> _specialties = [];
   String? _photoPath;
+  String? _photoUrl;
   XFile? _pickedPhoto;
   Uint8List? _pickedPhotoBytes;
   bool _saving = false;
@@ -118,6 +119,7 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
       _specialtyId = draft.specialtyId;
       _photoPath = draft.photoPath;
       _loadSpecialties();
+      _loadPhotoUrl();
     } else {
       final draft = widget.documentDraft!;
       _titleController = TextEditingController(text: draft.title ?? '');
@@ -134,6 +136,19 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
       // Selector auxiliar: si falla, el formulari sigue usable sense ell.
     } finally {
       if (mounted) setState(() => _loadingSpecialties = false);
+    }
+  }
+
+  /// El bucket es privado (schema_v66): hace falta una URL firmada, no se
+  /// puede construir de forma síncrona al pintar el formulario.
+  Future<void> _loadPhotoUrl() async {
+    final path = _photoPath;
+    if (path == null) return;
+    try {
+      final url = await PublicInstrumentService.instance.photoUrl(path);
+      if (mounted) setState(() => _photoUrl = url);
+    } catch (_) {
+      // Sin conexión: se muestra sin previsualización, no bloquea el formulario.
     }
   }
 
@@ -266,6 +281,7 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
         if (_pickedPhoto != null) {
           final userId = AuthService.instance.currentUser!.id;
           _photoPath = await PublicInstrumentService.instance.uploadPhoto(userId: userId, file: _pickedPhoto!);
+          _photoUrl = await PublicInstrumentService.instance.photoUrl(_photoPath!);
           _pickedPhoto = null;
           _pickedPhotoBytes = null;
         }
@@ -312,7 +328,7 @@ class _PublicEntityFormScreenState extends State<PublicEntityFormScreen> {
   }
 
   Widget _buildPhotoPicker(AppLocalizations l10n) {
-    final existingUrl = _photoPath != null ? PublicInstrumentService.instance.photoUrl(_photoPath!) : null;
+    final existingUrl = _photoUrl;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

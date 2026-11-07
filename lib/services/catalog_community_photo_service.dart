@@ -5,11 +5,15 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/catalog_community_photo.dart';
 
 /// Fotos aportadas por la comunidad para instrumentos del catálogo global sin
-/// foto verificada. Ver supabase/schema_v16_community_photos.sql: la tabla
-/// modera antes de publicar, pero el bucket de Storage es PÚBLICO (a
-/// diferencia de custom-instrument-photos/tray-photos) porque el catálogo se
-/// muestra también sin sesión — por eso aquí se usa [getPublicUrl] y no
-/// createSignedUrl.
+/// foto verificada. Ver supabase/schema_v16_community_photos.sql +
+/// schema_v66_photo_moderation_hardening.sql: la tabla modera antes de
+/// publicar, y desde schema_v66 el bucket de Storage también es PRIVADO
+/// (antes era público desde el instante de subir el archivo, antes incluso
+/// de revisarlo) — por eso aquí se usa [getPhotoUrl] (createSignedUrl), que
+/// solo funciona si la RLS de storage.objects deja leer esa fila concreta
+/// (aprobada, propia, o admin). Un invitado sin sesión puede seguir
+/// obteniendo la URL firmada de una foto ya aprobada: la policy no exige
+/// auth.uid(), solo status = 'approved'.
 class CatalogCommunityPhotoService {
   CatalogCommunityPhotoService._();
   static final CatalogCommunityPhotoService instance = CatalogCommunityPhotoService._();
@@ -119,7 +123,11 @@ class CatalogCommunityPhotoService {
 
   /// Aprueba o rechaza una foto pendiente (solo admins, vía RPC security
   /// definer). Al aprobar, si no se indica [creditName], el servidor usa el
-  /// display_name del perfil de quien la subió.
+  /// display_name del perfil de quien la subió. Al rechazar -- estado
+  /// terminal, sin flujo de revisión como en public_instrument_versions --
+  /// el archivo también se borra de Storage de verdad, no solo la fila:
+  /// antes de schema_v66 un "rechazo" solo cambiaba una columna y el archivo
+  /// se quedaba accesible para siempre en el bucket público.
   Future<CatalogCommunityPhoto> reviewPhoto({
     required String photoId,
     required bool approve,
@@ -132,11 +140,37 @@ class CatalogCommunityPhotoService {
       'p_credit_name': creditName,
       'p_rejection_reason': rejectionReason,
     });
-    return CatalogCommunityPhoto.fromRow(row as Map<String, dynamic>);
+    final reviewed = CatalogCommunityPhoto.fromRow(row as Map<String, dynamic>);
+    if (!approve) {
+      try {
+        await _client.storage.from(_bucket).remove([reviewed.photoPath]);
+      } catch (_) {
+        // El estado ya quedó en 'rejected' aunque falle el borrado del
+        // archivo (p.ej. sin conexión); no bloquea la moderación en sí.
+      }
+    }
+    return reviewed;
   }
 
-  String getPublicUrl(String photoPath) {
-    return _client.storage.from(_bucket).getPublicUrl(photoPath);
+  /// URL firmada de vida corta (el bucket es privado, ver comentario de
+  /// clase) -- se resuelve cada vez que se necesita mostrar, no se guarda.
+  Future<String> getPhotoUrl(String photoPath) {
+    return _client.storage.from(_bucket).createSignedUrl(photoPath, 3600);
+  }
+
+  /// Igual que [getPhotoUrl] pero para varias fotos a la vez en una sola
+  /// petición -- usado por `CatalogScreen` para resolver todas las
+  /// miniaturas de comunidad visibles de golpe, en vez de una firma por
+  /// instrumento. Rutas que fallan (p.ej. borradas) simplemente no aparecen
+  /// en el mapa resultante.
+  Future<Map<String, String>> getPhotoUrls(List<String> photoPaths) async {
+    if (photoPaths.isEmpty) return {};
+    final results = await _client.storage.from(_bucket).createSignedUrlsResult(photoPaths, 3600);
+    final urls = <String, String>{};
+    for (final r in results) {
+      if (r is SignedUrlSuccess) urls[r.path] = r.signedUrl;
+    }
+    return urls;
   }
 
   String _extensionOf(String path) {

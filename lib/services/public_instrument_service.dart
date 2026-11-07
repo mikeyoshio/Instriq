@@ -125,9 +125,8 @@ class PublicInstrumentService extends PublicVersionedContentService<PublicInstru
     return result as String;
   }
 
-  /// Bucket públic (a diferència de `custom-instrument-photos`, que és
-  /// privat): la ruta és `{user_id}/{fitxer}`, no cal `workspace_id` perquè
-  /// la Biblioteca Pública és ortogonal al model d'organitzacions.
+  /// La ruta és `{user_id}/{fitxer}`, no cal `workspace_id` perquè la
+  /// Biblioteca Pública és ortogonal al model d'organitzacions.
   Future<String> uploadPhoto({required String userId, required XFile file}) async {
     final ext = _extensionOf(file.name);
     final fileName = '${DateTime.now().microsecondsSinceEpoch}.$ext';
@@ -137,10 +136,27 @@ class PublicInstrumentService extends PublicVersionedContentService<PublicInstru
     return path;
   }
 
-  /// Bucket públic: URL directa i permanent, sense signar (a diferència de
-  /// `CustomInstrumentService.photoUrl`, que necessita `createSignedUrl`
-  /// perquè el seu bucket és privat).
-  String photoUrl(String photoPath) => client.storage.from(_bucket).getPublicUrl(photoPath);
+  /// Bucket privat des de schema_v66_photo_moderation_hardening.sql (abans
+  /// era públic des de l'instant de pujar l'arxiu, abans fins i tot de cap
+  /// revisió) -- URL firmada de vida curta, nomes es resol si la RLS deixa
+  /// llegir aquesta fila (status = 'published', autor propi, o revisor). Un
+  /// convidat sense sessió pot seguir obtenir la URL d'una foto ja
+  /// publicada: la policy no exigeix auth.uid() per a status = 'published'.
+  Future<String> photoUrl(String photoPath) => client.storage.from(_bucket).createSignedUrl(photoPath, 3600);
+
+  /// Igual que [photoUrl] pero para varias fotos a la vez en una sola
+  /// petición -- usado por `PublicLibraryScreen` para resolver todas las
+  /// miniaturas de la lista de golpe. Rutas que fallan simplemente no
+  /// aparecen en el mapa resultante.
+  Future<Map<String, String>> photoUrls(List<String> photoPaths) async {
+    if (photoPaths.isEmpty) return {};
+    final results = await client.storage.from(_bucket).createSignedUrlsResult(photoPaths, 3600);
+    final urls = <String, String>{};
+    for (final r in results) {
+      if (r is SignedUrlSuccess) urls[r.path] = r.signedUrl;
+    }
+    return urls;
+  }
 
   String _extensionOf(String path) {
     final dot = path.lastIndexOf('.');

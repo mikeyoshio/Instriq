@@ -86,6 +86,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
 
   bool _loadingCommunityPhoto = true;
   CatalogCommunityPhoto? _approvedCommunityPhoto;
+  String? _approvedCommunityPhotoUrl;
   CatalogCommunityPhoto? _ownPendingPhoto;
 
   bool _loadingIncidents = true;
@@ -135,9 +136,14 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           await CatalogCommunityPhotoService.instance.fetchApprovedPhoto(_refType, widget.instrument.id);
       final ownPending =
           await CatalogCommunityPhotoService.instance.fetchOwnPendingPhoto(_refType, widget.instrument.id);
+      // El bucket es privat (schema_v66): cal una URL firmada, no es pot
+      // construir de forma síncrona a build() com abans.
+      final approvedUrl =
+          approved != null ? await CatalogCommunityPhotoService.instance.getPhotoUrl(approved.photoPath) : null;
       if (!mounted) return;
       setState(() {
         _approvedCommunityPhoto = approved;
+        _approvedCommunityPhotoUrl = approvedUrl;
         _ownPendingPhoto = ownPending;
         _loadingCommunityPhoto = false;
       });
@@ -618,7 +624,8 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     }
 
     final approved = _approvedCommunityPhoto;
-    if (approved != null) {
+    final approvedUrl = _approvedCommunityPhotoUrl;
+    if (approved != null && approvedUrl != null) {
       final creditName =
           (approved.creditName == null || approved.creditName!.trim().isEmpty)
               ? l10n.communityPhotoDefaultCredit
@@ -633,7 +640,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
                 image: true,
                 label: instrument.name.forLanguageCode(Localizations.localeOf(context).languageCode),
                 child: CachedNetworkImage(
-                  imageUrl: CatalogCommunityPhotoService.instance.getPublicUrl(approved.photoPath),
+                  imageUrl: approvedUrl,
                   height: 200,
                   fit: BoxFit.contain,
                   errorWidget: (context, url, error) =>

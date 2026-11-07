@@ -51,6 +51,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   final Set<Specialty> _specialtyFilters = {};
   bool _newOnlyFilter = false;
   Map<String, String> _approvedCommunityPhotoPaths = {};
+  Map<String, String> _approvedCommunityPhotoUrls = {};
 
   // Mismo criterio que home_screen.dart: sin este debounce, cada tecla
   // repite un escaneo difuso síncrono de los 521+ instrumentos del catálogo
@@ -74,8 +75,15 @@ class _CatalogScreenState extends State<CatalogScreen> {
   Future<void> _loadApprovedCommunityPhotoIds() async {
     try {
       final paths = await CatalogCommunityPhotoService.instance.fetchApprovedPhotoPaths(_refType);
+      // El bucket es privado (schema_v66): hay que resolver una URL firmada
+      // por cada ruta -- se hace de golpe para todas (una sola petición),
+      // no una firma por instrumento cada vez que se construye una fila.
+      final urls = await CatalogCommunityPhotoService.instance.getPhotoUrls(paths.values.toList());
       if (!mounted) return;
-      setState(() => _approvedCommunityPhotoPaths = paths);
+      setState(() {
+        _approvedCommunityPhotoPaths = paths;
+        _approvedCommunityPhotoUrls = urls;
+      });
     } catch (_) {
       // Sin conexión o sin sesión: el badge de "sin foto" y la miniatura
       // simplemente no tienen en cuenta las fotos de la comunidad, no
@@ -94,7 +102,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
     if (official != null) return official;
     final communityPath = _approvedCommunityPhotoPaths[instrument.id];
     if (communityPath == null) return null;
-    return CatalogCommunityPhotoService.instance.getPublicUrl(communityPath);
+    return _approvedCommunityPhotoUrls[communityPath];
   }
 
   void _toggleSpecialty(Specialty s) {

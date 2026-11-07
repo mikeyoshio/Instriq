@@ -147,7 +147,12 @@ class OfflineDownloadService {
         publicInstruments.map((i) => i.publishedVersion?.photoPath).whereType<String>().toList();
     for (var i = 0; i < publicPhotoPaths.length; i++) {
       report(OfflineDownloadStep.publicLibraryPhotos, i, publicPhotoPaths.length);
-      await cacheImage(PublicInstrumentService.instance.photoUrl(publicPhotoPaths[i]));
+      try {
+        final url = await PublicInstrumentService.instance.photoUrl(publicPhotoPaths[i]);
+        await cacheImage(url);
+      } catch (_) {
+        imagesFailed++;
+      }
     }
 
     var documentsCached = techniques.length + protocols.length;

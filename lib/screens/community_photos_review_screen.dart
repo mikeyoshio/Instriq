@@ -23,6 +23,7 @@ class _CommunityPhotosReviewScreenState extends State<CommunityPhotosReviewScree
   String? _loadError;
   List<CatalogCommunityPhoto> _photos = [];
   Map<String, String?> _submitterNames = {};
+  Map<String, String> _photoUrls = {};
 
   @override
   void initState() {
@@ -54,10 +55,14 @@ class _CommunityPhotosReviewScreenState extends State<CommunityPhotosReviewScree
           // nombre, no bloquea la moderación.
         }
       }
+      // El bucket es privado (schema_v66): el admin revisor sí puede firmar
+      // una URL para fotos pendientes (RLS lo permite para quien revisa).
+      final urls = await CatalogCommunityPhotoService.instance.getPhotoUrls(photos.map((p) => p.photoPath).toList());
       if (!mounted) return;
       setState(() {
         _photos = photos;
         _submitterNames = names;
+        _photoUrls = urls;
         _loading = false;
       });
     } catch (e) {
@@ -151,7 +156,7 @@ class _CommunityPhotosReviewScreenState extends State<CommunityPhotosReviewScree
                                       image: true,
                                       label: '${photo.instrumentRefType} ${photo.instrumentRefId}',
                                       child: CachedNetworkImage(
-                                        imageUrl: CatalogCommunityPhotoService.instance.getPublicUrl(photo.photoPath),
+                                        imageUrl: _photoUrls[photo.photoPath] ?? '',
                                         height: 160,
                                         fit: BoxFit.contain,
                                         memCacheHeight: (160 * MediaQuery.of(context).devicePixelRatio).round(),

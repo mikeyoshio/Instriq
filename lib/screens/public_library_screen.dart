@@ -484,6 +484,7 @@ class _PublicInstrumentListState extends State<_PublicInstrumentList> {
   String? _error;
   bool _fromCache = false;
   List<PublicInstrument> _instruments = [];
+  Map<String, String> _photoUrls = {};
 
   @override
   void initState() {
@@ -499,6 +500,10 @@ class _PublicInstrumentListState extends State<_PublicInstrumentList> {
     try {
       _instruments = await PublicInstrumentService.instance.fetchPublished();
       _fromCache = PublicInstrumentService.instance.lastFetchFromCache;
+      // El bucket es privado (schema_v66): se resuelven todas las URLs
+      // firmadas de golpe, no una por fila al construirla.
+      final paths = _instruments.map((i) => i.publishedVersion?.photoPath).whereType<String>().toList();
+      _photoUrls = await PublicInstrumentService.instance.photoUrls(paths);
     } catch (e) {
       if (mounted) _error = AppLocalizations.of(context)!.publicLibraryLoadError(e.toString());
     }
@@ -533,13 +538,12 @@ class _PublicInstrumentListState extends State<_PublicInstrumentList> {
                                 final instrument = _instruments[index];
                                 final version = instrument.publishedVersion;
                                 final photoPath = version?.photoPath;
+                                final photoUrl = photoPath != null ? _photoUrls[photoPath] : null;
                                 return Card(
                                   child: ListTile(
-                                    leading: photoPath != null
+                                    leading: photoUrl != null
                                         ? CircleAvatar(
-                                            backgroundImage: CachedNetworkImageProvider(
-                                              PublicInstrumentService.instance.photoUrl(photoPath),
-                                            ),
+                                            backgroundImage: CachedNetworkImageProvider(photoUrl),
                                           )
                                         : const CircleAvatar(child: Icon(Icons.precision_manufacturing_outlined)),
                                     title: Text(version?.name ?? l10n.auditDocumentUntitledLabel),

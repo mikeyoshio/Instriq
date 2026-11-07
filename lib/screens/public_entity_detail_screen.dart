@@ -193,10 +193,21 @@ class PublicEntityDetailScreen extends StatelessWidget {
             child: Semantics(
               image: true,
               label: version.name,
-              child: CachedNetworkImage(
-                imageUrl: PublicInstrumentService.instance.photoUrl(version.photoPath!),
-                height: 220,
-                fit: BoxFit.contain,
+              // El bucket es privado (schema_v66): la URL se firma al vuelo,
+              // de ahí el FutureBuilder en vez de pasarla directa -- esta
+              // pantalla es un StatelessWidget, no vale la pena convertirla
+              // entera a Stateful solo por esta única foto.
+              child: FutureBuilder<String>(
+                future: PublicInstrumentService.instance.photoUrl(version.photoPath!),
+                builder: (context, snapshot) {
+                  final url = snapshot.data;
+                  if (url == null) return const SizedBox(height: 220);
+                  return CachedNetworkImage(
+                    imageUrl: url,
+                    height: 220,
+                    fit: BoxFit.contain,
+                  );
+                },
               ),
             ),
           ),
