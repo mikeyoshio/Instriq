@@ -1,12 +1,14 @@
 import 'instrument.dart' show InstrumentImage, LocalizedText;
 
-/// Referència educativa de farmacologia d'anestèsia: mai inclou dosis, mai
-/// calculadora, mai taula d'interaccions — el camp [Drug.tip] és com a molt
-/// una única consideració d'alt nivell. Catàleg compilat separat
-/// d'`Instrument`/`Suture` (mateix criteri: duplicar abans que abstraure
-/// prematurament) perquè té propietats pròpies (classe farmacològica, vies
-/// d'administració) que no encaixen als camps d'`Instrument`. No editable
-/// des de l'app, només canvia amb un commit.
+/// Referència educativa de farmacologia: mai inclou dosis, mai calculadora,
+/// mai taula d'interaccions — el camp [Drug.tip] és com a molt una única
+/// consideració d'alt nivell. Catàleg compilat separat d'`Instrument`/`Suture`
+/// (mateix criteri: duplicar abans que abstraure prematurament) perquè té
+/// propietats pròpies (classe farmacològica, vies d'administració) que no
+/// encaixen als camps d'`Instrument`. No editable des de l'app, només canvia
+/// amb un commit. Va començar sent només farmacologia d'anestèsia (22
+/// fàrmacs); s'ha ampliat a formulari general de planta, sempre amb la
+/// mateixa prohibició de dosis.
 enum DrugClass {
   inductor,
   relajanteNeuromuscular,
@@ -16,6 +18,22 @@ enum DrugClass {
   vasopresor,
   antiemetico,
   sedante,
+  analgesicoAntiinflamatorio,
+  antihistaminico,
+  antibiotico,
+  antiparasitario,
+  digestivo,
+  broncodilatadorRespiratorio,
+  vitaminaSuplemento,
+  corticoide,
+  electrolitoFluido,
+  antihipertensivoCardiovascular,
+  anticolinergico,
+  diuretico,
+  antipsicotico,
+  anticonvulsivo,
+  anticoagulanteHemostatico,
+  antidiabetico,
 }
 
 /// `.label` es texto fijo en castellano, solo para depuración o contextos
@@ -41,6 +59,38 @@ extension DrugClassLabel on DrugClass {
         return 'Antiemètic';
       case DrugClass.sedante:
         return 'Sedant';
+      case DrugClass.analgesicoAntiinflamatorio:
+        return 'Analgèsic / antiinflamatori';
+      case DrugClass.antihistaminico:
+        return 'Antihistamínic';
+      case DrugClass.antibiotico:
+        return 'Antibiòtic';
+      case DrugClass.antiparasitario:
+        return 'Antiparasitari';
+      case DrugClass.digestivo:
+        return 'Digestiu';
+      case DrugClass.broncodilatadorRespiratorio:
+        return 'Respiratori';
+      case DrugClass.vitaminaSuplemento:
+        return 'Vitamina / suplement';
+      case DrugClass.corticoide:
+        return 'Corticoide';
+      case DrugClass.electrolitoFluido:
+        return 'Electròlit / fluid IV';
+      case DrugClass.antihipertensivoCardiovascular:
+        return 'Cardiovascular';
+      case DrugClass.anticolinergico:
+        return 'Anticolinèrgic';
+      case DrugClass.diuretico:
+        return 'Diürètic';
+      case DrugClass.antipsicotico:
+        return 'Antipsicòtic';
+      case DrugClass.anticonvulsivo:
+        return 'Anticonvulsivant';
+      case DrugClass.anticoagulanteHemostatico:
+        return 'Anticoagulant / hemostàtic';
+      case DrugClass.antidiabetico:
+        return 'Antidiabètic';
     }
   }
 }

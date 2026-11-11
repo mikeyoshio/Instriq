@@ -468,14 +468,14 @@ const chrome = <String, Tri>{
     en: 'Part of the open-source Instriq project.',
   ),
   'pharmaNoticeTitle': (
-    ca: '💊 Farmacologia d\'anestèsia',
-    es: '💊 Farmacología de anestesia',
-    en: '💊 Anesthesia pharmacology',
+    ca: '💊 Formulari farmacològic',
+    es: '💊 Formulario farmacológico',
+    en: '💊 Drug formulary',
   ),
   'pharmaNoticeBody': (
-    ca: 'Disponible a l\'app Instriq: fàrmacs d\'anestèsia per classe, vies d\'administració i ús clínic -- mai dosis.',
-    es: 'Disponible en la app Instriq: fármacos de anestesia por clase, vías de administración y uso clínico -- nunca dosis.',
-    en: 'Available in the Instriq app: anesthesia drugs by class, administration routes and clinical use -- never doses.',
+    ca: 'Disponible a l\'app Instriq: fàrmacs per classe, vies d\'administració i ús clínic -- mai dosis.',
+    es: 'Disponible en la app Instriq: fármacos por clase, vías de administración y uso clínico -- nunca dosis.',
+    en: 'Available in the Instriq app: drugs by class, administration routes and clinical use -- never doses.',
   ),
   'pharmaNoticeCta': (
     ca: 'Obre el catàleg a l\'app →',
@@ -1017,7 +1017,13 @@ String _renderSitemap(List<String> paths) {
 // other word of the surrounding sentence untouched.
 // ---------------------------------------------------------------------------
 
-Future<void> _syncInstrumentCount(Directory repoRoot, int count) async {
+Future<void> _syncInstrumentCount(
+  Directory repoRoot, {
+  required int total,
+  required int instrumentalCount,
+  required int equipmentCount,
+  required int drugCount,
+}) async {
   Future<void> patch(String relativePath, List<({RegExp pattern, String Function(Match) replace})> rules) async {
     final file = File('${repoRoot.path}/$relativePath');
     if (!file.existsSync()) {
@@ -1040,17 +1046,19 @@ Future<void> _syncInstrumentCount(Directory repoRoot, int count) async {
     }
   }
 
+  // README prose ("N instruments organized by M specialties") always means
+  // the whole catalog (instrumental + equipment together), unlike the hero
+  // row below which breaks that same total down into 2 separate stats.
   ({RegExp pattern, String Function(Match) replace}) countBefore(String afterWord) => (
     pattern: RegExp('[0-9]+(?=\\s+$afterWord)'),
-    replace: (m) => '$count',
+    replace: (m) => '$total',
   );
-  // Anchored to the specific "Instruments" stat cell (by its hero.stat1
-  // i18n key), not just any data-count -- the hero row has 3 other
-  // unrelated counters (specialties, platforms, active teams) that must
-  // not be touched.
-  final dataCount = (
+  // Anchored to each stat cell by its own hero.statN i18n key, not just any
+  // data-count -- hero.stat4 (active teams) is a separate live counter
+  // fetched at runtime, never touched here.
+  final instrumentalDataCount = (
     pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat1")'),
-    replace: (m) => 'data-count="$count"',
+    replace: (m) => 'data-count="$instrumentalCount"',
   );
   // Counts every entry in specialtyOrder, including 'general' -- the
   // enum has 19 real values (Specialty.general and Specialty.cirugiaGeneral
@@ -1062,10 +1070,26 @@ Future<void> _syncInstrumentCount(Directory repoRoot, int count) async {
     pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat2")'),
     replace: (m) => 'data-count="${specialtyOrder.length}"',
   );
+  // hero.stat3 used to be a hardcoded "platforms" count (never synced here);
+  // repurposed (2026-11) to the InstrumentCategory.equipos subset of
+  // kInstruments -- equipment/devices, as opposed to hand instrumental in
+  // hero.stat1.
+  final equipmentDataCount = (
+    pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat3")'),
+    replace: (m) => 'data-count="$equipmentCount"',
+  );
+  // hero.stat5 (new, 2026-11): size of the separate kDrugs formulary
+  // catalog (lib/data/drugs_data.dart), not part of kInstruments at all.
+  final drugDataCount = (
+    pattern: RegExp('data-count="[0-9]+"(?=>0</div><div class="label" data-i18n="hero\\.stat5")'),
+    replace: (m) => 'data-count="$drugCount"',
+  );
 
   await patch('landing/index.html', [
-    dataCount,
+    instrumentalDataCount,
     specialtyDataCount,
+    equipmentDataCount,
+    drugDataCount,
     countBefore('instruments organitzats per'),
     countBefore('instrumentos organizados por'),
     countBefore('instruments organized by'),
@@ -1073,6 +1097,16 @@ Future<void> _syncInstrumentCount(Directory repoRoot, int count) async {
   await patch('README.md', [countBefore('instruments organitzats per')]);
   await patch('README.es.md', [countBefore('instrumentos organizados en')]);
   await patch('README.en.md', [countBefore('instruments organized into')]);
+}
+
+/// Lightweight count-only parse of the sibling `Drug` catalog -- it isn't
+/// part of `kInstruments`/`Instr` at all (separate model, separate file),
+/// and the Vademecum doesn't generate drug pages, so a full parser would be
+/// unused code; just count top-level `Drug(` entries.
+int _countDrugs(Directory repoRoot) {
+  final file = File('${repoRoot.path}/lib/data/drugs_data.dart');
+  final source = file.readAsStringSync();
+  return RegExp(r'^\s{2}Drug\(', multiLine: true).allMatches(source).length;
 }
 
 // ---------------------------------------------------------------------------
@@ -1211,7 +1245,14 @@ Future<void> main() async {
   stdout.writeln('Instrument lookup sanity: ${byId.length} unique ids.');
 
   stdout.writeln('Syncing instrument count into index.html and README files...');
-  await _syncInstrumentCount(repoRoot, byId.length);
+  final equipmentCount = byId.values.where((i) => i.category == 'equipos').length;
+  await _syncInstrumentCount(
+    repoRoot,
+    total: byId.length,
+    instrumentalCount: byId.length - equipmentCount,
+    equipmentCount: equipmentCount,
+    drugCount: _countDrugs(repoRoot),
+  );
 
   exit(0);
 }

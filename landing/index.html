@@ -133,6 +133,13 @@
   .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
   .btn-ghost { background: transparent; border-color: var(--rule); color: var(--ink); }
   .btn-ghost:hover { border-color: var(--ink); }
+  .ms-store-badge { display: inline-flex; align-items: center; gap: 12px; padding: 9px 18px; background: #0067b8; color: #fff; border: 1px solid #0067b8; border-radius: 8px; text-decoration: none; transition: background 0.15s ease, transform 0.15s ease; }
+  .ms-store-badge:hover { background: #005aa0; transform: translateY(-1px); }
+  .ms-store-badge-logo { width: 20px; height: 20px; flex-shrink: 0; }
+  .ms-store-badge-logo rect { fill: #fff; }
+  .ms-store-badge-text { display: flex; flex-direction: column; line-height: 1.2; }
+  .ms-store-badge-eyebrow { font-size: 0.68rem; font-weight: 400; color: #fff; opacity: 0.92; }
+  .ms-store-badge-title { font-size: 1.02rem; font-weight: 700; font-family: var(--body); color: #fff; }
   .section { padding: 100px 0; }
   .section.band { background: var(--paper-alt); }
   .section.spotlight { background: var(--accent-soft); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
@@ -358,7 +365,18 @@
       <p class="hero-scope" data-i18n="hero.scope">Coneixement d'equip — instrumental, tècniques i protocols. <strong>No emmagatzema dades de pacients ni substitueix la història clínica.</strong></p>
       <div class="hero-actions">
         <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=hero" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
-        <a href="https://apps.microsoft.com/store/detail/9N1SJ4N98FG3?cid=DevShareMCLPCS" class="btn btn-ghost" data-i18n="hero.cta4">Descarrega'l a Microsoft Store</a>
+        <a href="https://apps.microsoft.com/store/detail/9N1SJ4N98FG3?cid=DevShareMCLPCS" class="ms-store-badge" data-i18n-attr="aria-label" data-i18n="hero.cta4" aria-label="Descarrega'l a Microsoft Store">
+          <svg class="ms-store-badge-logo" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="1" y="1" width="10" height="10"/>
+            <rect x="13" y="1" width="10" height="10"/>
+            <rect x="1" y="13" width="10" height="10"/>
+            <rect x="13" y="13" width="10" height="10"/>
+          </svg>
+          <span class="ms-store-badge-text">
+            <span class="ms-store-badge-eyebrow" data-i18n="hero.storeEyebrow">Descarrega-la a</span>
+            <span class="ms-store-badge-title">Microsoft Store</span>
+          </span>
+        </a>
         <a href="/vademecum/ca/" class="btn btn-ghost" data-i18n="hero.cta3">Explora el Vademècum</a>
         <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
       </div>
@@ -382,9 +400,10 @@
       </div>
       <p class="hero-note" data-i18n="hero.note">Sense llicències. Sense quota de SaaS. Sense sorpreses a la factura — obert, sempre.</p>
       <div class="data-row">
-        <div class="data-cell"><div class="num" data-count="603">0</div><div class="label" data-i18n="hero.stat1">Instruments</div></div>
+        <div class="data-cell"><div class="num" data-count="492">0</div><div class="label" data-i18n="hero.stat1">Instrumental</div></div>
         <div class="data-cell"><div class="num" data-count="19">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
-        <div class="data-cell"><div class="num" data-count="3">0</div><div class="label" data-i18n="hero.stat3">Plataformes</div></div>
+        <div class="data-cell"><div class="num" data-count="208">0</div><div class="label" data-i18n="hero.stat3">Equipament</div></div>
+        <div class="data-cell"><div class="num" data-count="102">0</div><div class="label" data-i18n="hero.stat5">Fàrmacs</div></div>
         <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
       </div>
     </div>
@@ -981,10 +1000,10 @@ draw();
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
       "hero.scope": "Conocimiento de equipo — instrumental, técnicas y protocolos. <strong>No almacena datos de pacientes ni sustituye la historia clínica.</strong>",
-      "hero.cta1": "Abrir la app →", "hero.cta4": "Descárgala en Microsoft Store", "hero.cta3": "Explora el Vademécum", "hero.cta2": "Ver el código en GitHub",
+      "hero.cta1": "Abrir la app →", "hero.cta4": "Descárgala en Microsoft Store", "hero.storeEyebrow": "Descárgala en", "hero.cta3": "Explora el Vademécum", "hero.cta2": "Ver el código en GitHub",
       "hero.trust1": "Sin datos de pacientes", "hero.trust2": "Auditoría y roles", "hero.trust3": "Sin conexión", "hero.trust4": "Código abierto · AGPL-3.0",
       "hero.note": "Sin licencias. Sin cuota de SaaS. Sin sorpresas en la factura — abierto, siempre.",
-      "hero.stat1": "Instrumentos", "hero.stat2": "Especialidades", "hero.stat3": "Plataformas", "hero.stat4": "Equipos activos",
+      "hero.stat1": "Instrumental", "hero.stat2": "Especialidades", "hero.stat3": "Equipamiento", "hero.stat4": "Equipos activos", "hero.stat5": "Fármacos",
       "deck.c1tag": "Protocolo · Cirugía general", "deck.c1title": "Colecistectomía laparoscópica", "deck.c1sub": "v3 · publicado hace 4 días",
       "deck.c1s1": "Posicionamiento y campo estéril", "deck.c1s2": "Creación del neumoperitoneo", "deck.c1s3": "Disección del triángulo de Calot", "deck.c1s4": "Clipado y sección del conducto cístico",
       "deck.c1chip": "Aprobado por el equipo",
@@ -1098,10 +1117,10 @@ draw();
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
       "hero.scope": "Team knowledge — instruments, techniques and protocols. <strong>Stores no patient data and does not replace the clinical record.</strong>",
-      "hero.cta1": "Open the app →", "hero.cta4": "Get it on Microsoft Store", "hero.cta3": "Explore the Vademecum", "hero.cta2": "View the code on GitHub",
+      "hero.cta1": "Open the app →", "hero.cta4": "Get it on Microsoft Store", "hero.storeEyebrow": "Get it on", "hero.cta3": "Explore the Vademecum", "hero.cta2": "View the code on GitHub",
       "hero.trust1": "No patient data", "hero.trust2": "Audit trail & roles", "hero.trust3": "Offline", "hero.trust4": "Open source · AGPL-3.0",
       "hero.note": "No licenses. No SaaS fee. No surprises on the bill — open, always.",
-      "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Platforms", "hero.stat4": "Active teams",
+      "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Equipment", "hero.stat4": "Active teams", "hero.stat5": "Medications",
       "deck.c1tag": "Protocol · General surgery", "deck.c1title": "Laparoscopic cholecystectomy", "deck.c1sub": "v3 · published 4 days ago",
       "deck.c1s1": "Positioning and sterile field", "deck.c1s2": "Creating the pneumoperitoneum", "deck.c1s3": "Dissecting Calot's triangle", "deck.c1s4": "Clipping and dividing the cystic duct",
       "deck.c1chip": "Approved by the team",
