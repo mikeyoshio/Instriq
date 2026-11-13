@@ -121,9 +121,9 @@ flutter run -d chrome        # navegador
 - **Historial completo de todo lo que se ha entregado** (orden cronológico, con el contexto/bug/decisión de cada entrada): **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **Pendiente** (EPICs de producto, deuda técnica y revisión arquitectónica previa a cada uno): **[docs/BACKLOG.md](docs/BACKLOG.md)**.
 
-## Invítame a un café
+## Hazte mecenas
 
-Instriq es gratuito y sin inversores, mantenido fuera de horas. Si te resulta útil, puedes invitarme a un café en [Buy Me a Coffee](https://www.buymeacoffee.com/instriq?utm_source=github&utm_medium=donate&utm_campaign=readme) — cualquier aportación ayuda a cubrir el coste del servidor y el tiempo dedicado.
+Instriq es gratuito y sin inversores, mantenido fuera de horas. Si te resulta útil, puedes hacerte mecenas en [Patreon](https://patreon.com/Instriq?utm_source=github&utm_medium=donate&utm_campaign=readme) — cualquier aportación ayuda a cubrir el coste del servidor y el tiempo dedicado.
 
 ## Contacto
 
