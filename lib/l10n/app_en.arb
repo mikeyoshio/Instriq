@@ -17,6 +17,7 @@
   "onboardingPage2Body": "Explore the catalog, learn with flashcards and track your progress. None of this needs an account.",
   "onboardingPage3Title": "Join your team whenever you're ready",
   "onboardingPage3Body": "If your team already uses Instriq, join with their code to access their techniques, protocols and preference cards.",
+  "onboardingJoinTeam": "Join with a code",
 
   "newVersionAvailableTitle": "New version available",
   "newVersionDefaultMessage": "A newer version of Instriq is available.",

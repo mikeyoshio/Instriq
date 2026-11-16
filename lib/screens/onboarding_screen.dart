@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/language_picker.dart';
+import 'auth/hospital_connect_flow.dart';
 
 class _OnboardingPage {
   final IconData icon;
@@ -62,6 +63,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _finish() {
     if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+  }
+
+  /// La pàgina 3 promet "uneix-t'hi amb el seu codi": aquí es compleix.
+  /// pushReplacement tanca la ruta de l'onboarding igual que [_finish] (així
+  /// `_checkOnboarding` a main.dart el marca com a vist) i HospitalConnectFlow
+  /// es tanca sol en connectar, tornant a l'Inici.
+  void _joinTeam() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const HospitalConnectFlow()),
+    );
   }
 
   void _next() {
@@ -181,6 +192,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: FilledButton(
                         onPressed: _next,
                         child: Text(isLast ? l10n.onboardingStart : l10n.onboardingNext),
+                      ),
+                    ),
+                    const SizedBox(height: InstriqSpacing.sm),
+                    Visibility(
+                      visible: isLast,
+                      maintainSize: true,
+                      maintainAnimation: true,
+                      maintainState: true,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: _joinTeam,
+                          child: Text(l10n.onboardingJoinTeam),
+                        ),
                       ),
                     ),
                   ],
