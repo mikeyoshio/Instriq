@@ -83,20 +83,25 @@ class InstriqTheme {
         indicatorColor: scheme.primary.withValues(alpha: 0.16),
         labelType: NavigationRailLabelType.all,
       ),
+      // minimumSize: el per defecte de Material 3 és 40px d'alçada, per sota
+      // del mínim de zona tàctil (48dp Android / 44pt iOS) -- a tota l'app.
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           elevation: 0,
+          minimumSize: const Size(64, 48),
           shape: RoundedRectangleBorder(borderRadius: InstriqRadius.smRadius),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: scheme.outline),
+          minimumSize: const Size(64, 48),
           shape: RoundedRectangleBorder(borderRadius: InstriqRadius.smRadius),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          minimumSize: const Size(64, 48),
           shape: RoundedRectangleBorder(borderRadius: InstriqRadius.smRadius),
         ),
       ),

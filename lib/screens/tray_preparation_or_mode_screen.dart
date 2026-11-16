@@ -331,7 +331,9 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
   Widget _buildHeader(AppLocalizations l10n, int done, int total) {
     final fraction = total == 0 ? 0.0 : done / total;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
+      // top 2 (abans 16): el control de sortida ja aporta 14px de padding
+      // propi per ampliar la seva zona tàctil.
+      padding: const EdgeInsets.fromLTRB(20, 2, 20, 18),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -471,6 +473,8 @@ class _TrayPreparationOrModeScreenState extends State<TrayPreparationOrModeScree
                       borderRadius: BorderRadius.circular(10),
                       onTap: () => _openExceptionSheet(draft),
                       child: Container(
+                        constraints: const BoxConstraints(minWidth: 48),
+                        alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
                         decoration: BoxDecoration(
                           color: exception ? const Color(0xFF4A3416) : _track,
@@ -572,44 +576,51 @@ class _HoldToExitControlState extends State<_HoldToExitControl> with SingleTicke
       onLongPress: widget.onConfirmExit,
       excludeSemantics: true,
       child: GestureDetector(
+        // opaque + padding: amplia la zona tàctil de ~20px a ~48px sense
+        // canviar l'aspecte; sense opaque el padding transparent no rebria
+        // el toc.
+        behavior: HitTestBehavior.opaque,
         onLongPressStart: (_) => _controller.forward(from: 0),
         onLongPressEnd: (_) => _controller.reverse(),
         onLongPressCancel: () => _controller.reverse(),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (_, __) => SizedBox(
-                width: 20,
-                height: 20,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.fromBorderSide(BorderSide(color: Color(0xFF2A3530), width: 2.5)),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 14, 8, 14),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (_, __) => SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.fromBorderSide(BorderSide(color: Color(0xFF2A3530), width: 2.5)),
+                        ),
                       ),
-                    ),
-                    if (_controller.value > 0)
-                      CircularProgressIndicator(
-                        value: _controller.value,
-                        strokeWidth: 2.5,
-                        strokeCap: StrokeCap.round,
-                        backgroundColor: Colors.transparent,
-                        valueColor: const AlwaysStoppedAnimation(_accent),
-                      ),
-                  ],
+                      if (_controller.value > 0)
+                        CircularProgressIndicator(
+                          value: _controller.value,
+                          strokeWidth: 2.5,
+                          strokeCap: StrokeCap.round,
+                          backgroundColor: Colors.transparent,
+                          valueColor: const AlwaysStoppedAnimation(_accent),
+                        ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 7),
-            Text(
-              widget.label.toUpperCase(),
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.4, color: _textMuted),
-            ),
-          ],
+              const SizedBox(width: 7),
+              Text(
+                widget.label.toUpperCase(),
+                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.4, color: _textMuted),
+              ),
+            ],
+          ),
         ),
       ),
     );

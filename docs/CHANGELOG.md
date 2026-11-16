@@ -388,3 +388,11 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
   - **2 no són productes de marca única sinó categories genèriques** (confirmat per la recerca -- cap font les tracta com un sol producte amb nom fix): "cocodril"/"alligator" és un nom descriptiu del patró de dents (igual que "dent de rata"), i "extractora" apareix només en patents/tècniques, mai en un catàleg amb un nom fix -- totes dues catalogades explícitament com a tipus genèric, no com a marca.
   - **Pozzi**: en comptes de duplicar la fitxa existent (tenacle cervical per a DIU/legrat), se li ha afegit una frase d'ús a la versió de mànec llarg per via transabdominal en histerectomia/miomectomia laparoscòpiques -- és la mateixa família d'instrument, no una de nova.
   - `flutter analyze`/`flutter test` nets.
+
+- **v1.2, accessibilitat Fase A -- zona tàctil** (`docs/redesign_v1.2_accessibility.md` §3.1-3.3, primer bloc executat del redisseny v1.2):
+  - `minimumSize: Size(64, 48)` als 3 temes de botó (`lib/design_system/instriq_theme.dart`): el per defecte de Material 3 era 40px d'alçada, per sota del mínim de zona tàctil (48dp/44pt) a tota l'app. Un sol lloc, tots els botons alhora.
+  - Mode Quiròfan, control de sortida (`_HoldToExitControl`): zona tàctil de ~20px a ~48px, a la pantalla pensada per a guants. Calia `HitTestBehavior.opaque` -- el document no ho preveia, i sense això el padding transparent no rep el toc. El padding superior de la capçalera baixa de 16 a 2 per compensar; el contingut de sota el control baixa ~14px.
+  - Badge "reportar incidència": `minWidth: 48` perquè quantitats d'un dígit ("×1") no quedin estretes.
+  - Revisió visual (build web, Playwright, mòbil 390px i escriptori, abans/després): onboarding, Inici, Biblioteca, Perfil sense desbordaments. **No revisat**: files denses de botons darrere de login (editors, diàlegs) -- no accessibles en mode convidat.
+  - Trobat de passada, preexistent (apareix igual al build sense aquests canvis): error de consola `RenderBox was not laid out` en carregar la web. Pendent d'investigar a part.
+  - `flutter analyze`/`flutter test` nets.
