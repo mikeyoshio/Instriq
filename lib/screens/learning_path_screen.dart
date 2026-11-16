@@ -23,6 +23,8 @@ import 'workspace_list_screen.dart';
 /// equipo necesita verla de nadie más).
 enum _StepId { catalog, flashcards, quiz, publicLibrary, joinTeam, trays }
 
+const _prefsKey = 'learning_path_completed_steps';
+
 /// Ruta de aprendizaje guiada (inspirada en Periop 101/"The Stitch" de
 /// AORN): no es contenido nuevo, solo secuencia pantallas que ya existen en
 /// un orden con sentido para quien empieza de cero en Instriq, con un
@@ -35,13 +37,22 @@ enum _StepId { catalog, flashcards, quiz, publicLibrary, joinTeam, trays }
 class LearningPathScreen extends StatefulWidget {
   const LearningPathScreen({super.key});
 
+  /// (fets, visibles) per al subtítol de l'Inici. Mateixa regla que [build]:
+  /// "Uneix-te a un equip" i "Bandeixes del teu equip" són excloents segons
+  /// [ProfileService.hasHospital], així que el total visible és sempre 5.
+  static Future<(int, int)> progress() async {
+    final prefs = await SharedPreferences.getInstance();
+    final completed = (prefs.getStringList(_prefsKey) ?? const <String>[]).toSet();
+    final hidden = ProfileService.instance.hasHospital ? _StepId.joinTeam : _StepId.trays;
+    final visible = _StepId.values.where((s) => s != hidden);
+    return (visible.where((s) => completed.contains(s.name)).length, visible.length);
+  }
+
   @override
   State<LearningPathScreen> createState() => _LearningPathScreenState();
 }
 
 class _LearningPathScreenState extends State<LearningPathScreen> {
-  static const _prefsKey = 'learning_path_completed_steps';
-
   SharedPreferences? _prefs;
   Set<String> _completed = {};
 

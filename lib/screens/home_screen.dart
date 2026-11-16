@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/instruments_data.dart';
 import '../design_system/components/instriq_list_item.dart';
@@ -27,6 +28,7 @@ import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
 import '../services/manufacturer_service.dart';
 import '../services/profile_service.dart';
+import '../services/progress_service.dart';
 import '../services/public_instrument_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
@@ -41,6 +43,7 @@ import '../utils/fuzzy_match.dart';
 import '../utils/ref_resolver.dart';
 import '../widgets/create_content_sheet.dart';
 import '../widgets/sterilization_method_label.dart';
+import '../widgets/work_mode_picker.dart';
 import 'catalog_screen.dart';
 import 'custom_instrument_detail_screen.dart';
 import 'drug_catalog_screen.dart';
@@ -96,6 +99,30 @@ List<HomeSectionKey> _sectionOrderForMode(WorkMode? mode) {
   }
   return _defaultHomeSectionOrder;
 }
+
+/// Els 3 trams de Dreceres (consultar / documentar / aprendre). El mode
+/// decideix quin va primer (docs/redesign_v1.2_personalization.md §3.1):
+/// qui treballa amb el contingut del seu grup el veu primer, qui està
+/// aprenent veu primer el material d'aprenentatge.
+enum _QuickAccessBlock { consult, document, learn }
+
+List<_QuickAccessBlock> _quickAccessOrderForMode(WorkMode? mode) {
+  switch (mode) {
+    case WorkMode.instrumentista:
+    case WorkMode.cirujano:
+    case WorkMode.supervision:
+      return const [_QuickAccessBlock.document, _QuickAccessBlock.consult, _QuickAccessBlock.learn];
+    case WorkMode.docente:
+    case WorkMode.estudiante:
+      return const [_QuickAccessBlock.learn, _QuickAccessBlock.consult, _QuickAccessBlock.document];
+    case WorkMode.esterilizacion:
+    case WorkMode.enfermeria:
+    case null:
+      return const [_QuickAccessBlock.consult, _QuickAccessBlock.document, _QuickAccessBlock.learn];
+  }
+}
+
+const _workModePromptKey = 'has_prompted_work_mode';
 
 class _RecentOrFavoriteItem {
   final ResolvedRef ref;
@@ -201,11 +228,17 @@ class _HomeScreenState extends State<HomeScreen> {
   // dispararía una consulta nueva a la cola de aprobación.
   Future<List<_PendingApprovalItem>>? _pendingApprovalsFuture;
 
+  (int, int)? _learningPathProgress;
+  bool _workModePromptPending = false;
+  bool _workModePromptShowing = false;
+
   @override
   void initState() {
     super.initState();
     _loadGroupContent();
     _loadRecentAndFavorites();
+    _loadLearningPathProgress();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _maybePromptWorkMode());
     // Inici vive en su propia rama del shell (ver app_shell.dart): cerrar
     // sesión desde Perfil no reconstruye este widget por sí solo, así que sin
     // este listener se quedaba mostrando el grupo y el contenido de la sesión
@@ -234,9 +267,85 @@ class _HomeScreenState extends State<HomeScreen> {
     _pendingApprovalsFuture = null;
     _loadGroupContent();
     _loadRecentAndFavorites();
+    _loadLearningPathProgress();
+    _maybePromptWorkMode();
   }
 
   void _onWorkModeChanged() => setState(() {});
+
+  Future<void> _loadLearningPathProgress() async {
+    final progress = await LearningPathScreen.progress();
+    if (mounted) setState(() => _learningPathProgress = progress);
+  }
+
+  /// docs/redesign_v1.2_personalization.md §5.1: sense això ningú descobreix
+  /// el selector de mode i tota la personalització per mode és morta. Un sol
+  /// cop, el primer cop que hi ha hospital sense mode triat; es marca com a
+  /// vist encara que se salti (descartable per sempre, decisió del
+  /// propietari). Només si Inici és la ruta visible del seu navigator: si
+  /// HospitalConnectFlow encara és a sobre, un sheet empès ara quedaria per
+  /// sobre del flux i el seu pop() automàtic tancaria el sheet en lloc d'ell
+  /// -- en aquest cas queda pendent i es reintenta al pròxim build.
+  Future<void> _maybePromptWorkMode() async {
+    final profile = ProfileService.instance;
+    if (_workModePromptShowing || !profile.hasHospital || profile.activeWorkModeNotifier.value != null) return;
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(_workModePromptKey) == true || !mounted) return;
+    if (ModalRoute.of(context)?.isCurrent != true) {
+      _workModePromptPending = true;
+      return;
+    }
+    _workModePromptPending = false;
+    _workModePromptShowing = true;
+    await prefs.setBool(_workModePromptKey, true);
+    if (!mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        final l10n = AppLocalizations.of(sheetContext)!;
+        final theme = Theme.of(sheetContext);
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(InstriqSpacing.lg, 0, InstriqSpacing.lg, InstriqSpacing.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.workModeOnboardingQuestion, style: theme.textTheme.titleLarge),
+                const SizedBox(height: InstriqSpacing.sm),
+                Text(l10n.workModeSectionSubtitle),
+                const SizedBox(height: InstriqSpacing.lg),
+                WorkModePicker(
+                  selected: null,
+                  onChanged: (mode) {
+                    Navigator.of(sheetContext).pop();
+                    // Preferència de visualització: si falla (sense xarxa), es
+                    // pot triar després a Perfil -- no bloqueja res.
+                    if (mode != null) unawaited(profile.setActiveWorkMode(mode).catchError((_) {}));
+                  },
+                ),
+                const SizedBox(height: InstriqSpacing.lg),
+                Text(
+                  l10n.workModePromptChangeLater,
+                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => Navigator.of(sheetContext).pop(),
+                    child: Text(l10n.notNow),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    _workModePromptShowing = false;
+  }
 
   Future<void> _loadGroupContent() async {
     // Metadato de catálogo global (fabricantes, etiquetas, especialidades,
@@ -659,6 +768,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    if (_workModePromptPending) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _maybePromptWorkMode());
+    }
     // Panel de escritorio (ver home_dashboard_panel.dart): solo sustituye el
     // cuerpo por defecto (sin búsqueda activa) en ventanas de clase PC, y
     // solo para quien ya tiene acceso a los datos que agrega (mismo gate que
@@ -934,6 +1046,65 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ));
     }
+    final consultItems = [
+      InstriqListItem(
+        icon: Icons.menu_book,
+        title: l10n.catalogTitle,
+        subtitle: l10n.catalogSubtitle,
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CatalogScreen()));
+        },
+      ),
+      InstriqListItem(
+        icon: Icons.medication_outlined,
+        title: l10n.drugsCatalogTitle,
+        subtitle: l10n.drugsCatalogSubtitle,
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DrugCatalogScreen()));
+        },
+      ),
+      InstriqListItem(
+        icon: Icons.healing_outlined,
+        title: l10n.woundClosureCatalogTitle,
+        subtitle: l10n.woundClosureCatalogSubtitle,
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WoundClosureCatalogScreen()));
+        },
+      ),
+      InstriqListItem(
+        icon: Icons.cleaning_services_outlined,
+        title: l10n.sterilizationReferenceCatalogTitle,
+        subtitle: l10n.sterilizationReferenceCatalogSubtitle,
+        onTap: () async {
+          await Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const SterilizationReferenceCatalogScreen()));
+        },
+      ),
+    ];
+    final progress = ProgressService.instance;
+    final learnItems = [
+      InstriqListItem(
+        icon: Icons.school,
+        title: l10n.learnTitle,
+        subtitle: l10n.learnSubtitle,
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LearnScreen()));
+          if (mounted) setState(() {});
+        },
+      ),
+      InstriqListItem(
+        icon: Icons.bar_chart,
+        title: l10n.myProgressTitle,
+        subtitle: progress.learnedCount > 0
+            ? l10n.myProgressLearnedCount(progress.learnedCount, progress.totalCount)
+            : l10n.myProgressSubtitle,
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ProgressScreen()));
+          if (mounted) setState(() {});
+        },
+      ),
+    ];
+    final pathProgress = _learningPathProgress;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -942,71 +1113,23 @@ class _HomeScreenState extends State<HomeScreen> {
         InstriqListItem(
           icon: Icons.route_outlined,
           title: l10n.learningPathTitle,
-          subtitle: l10n.learningPathSubtitle,
+          subtitle: pathProgress != null && pathProgress.$1 > 0
+              ? l10n.learningPathProgress(pathProgress.$1, pathProgress.$2)
+              : l10n.learningPathSubtitle,
           onTap: () async {
             await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LearningPathScreen()));
+            _loadLearningPathProgress();
           },
         ),
-        const SizedBox(height: InstriqSpacing.sm),
-        InstriqListItem(
-          icon: Icons.menu_book,
-          title: l10n.catalogTitle,
-          subtitle: l10n.catalogSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CatalogScreen()));
-          },
-        ),
-        const SizedBox(height: InstriqSpacing.sm),
-        InstriqListItem(
-          icon: Icons.medication_outlined,
-          title: l10n.drugsCatalogTitle,
-          subtitle: l10n.drugsCatalogSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DrugCatalogScreen()));
-          },
-        ),
-        const SizedBox(height: InstriqSpacing.sm),
-        InstriqListItem(
-          icon: Icons.healing_outlined,
-          title: l10n.woundClosureCatalogTitle,
-          subtitle: l10n.woundClosureCatalogSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WoundClosureCatalogScreen()));
-          },
-        ),
-        const SizedBox(height: InstriqSpacing.sm),
-        InstriqListItem(
-          icon: Icons.cleaning_services_outlined,
-          title: l10n.sterilizationReferenceCatalogTitle,
-          subtitle: l10n.sterilizationReferenceCatalogSubtitle,
-          onTap: () async {
-            await Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => const SterilizationReferenceCatalogScreen()));
-          },
-        ),
-        if (hasHospital)
-          for (final item in groupItems) ...[
+        for (final block in _quickAccessOrderForMode(mode))
+          for (final item in switch (block) {
+            _QuickAccessBlock.consult => consultItems,
+            _QuickAccessBlock.document => hasHospital ? groupItems : const <Widget>[],
+            _QuickAccessBlock.learn => learnItems,
+          }) ...[
             const SizedBox(height: InstriqSpacing.sm),
             item,
           ],
-        const SizedBox(height: InstriqSpacing.sm),
-        InstriqListItem(
-          icon: Icons.school,
-          title: l10n.learnTitle,
-          subtitle: l10n.learnSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LearnScreen()));
-          },
-        ),
-        const SizedBox(height: InstriqSpacing.sm),
-        InstriqListItem(
-          icon: Icons.bar_chart,
-          title: l10n.myProgressTitle,
-          subtitle: l10n.myProgressSubtitle,
-          onTap: () async {
-            await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ProgressScreen()));
-          },
-        ),
       ],
     );
   }

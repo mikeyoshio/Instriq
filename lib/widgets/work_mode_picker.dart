@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/work_mode.dart';
 
-/// Selector de modo de trabajo (selección única), reutilizado en el
-/// registro/alta de grupo y en "Mi modo de trabajo" (ver
+/// Selector de modo de trabajo (selección única), reutilizado en el aviso
+/// único de Inici al primer cop amb hospital (home_screen.dart,
+/// `_maybePromptWorkMode`) y en "Mi modo de trabajo" (ver
 /// lib/screens/account_privacy_screen.dart). Puramente una preferencia de
 /// visualización (ver [sectionPriorityOrder]), no bloquea ningún flujo si se
 /// deja sin seleccionar.
