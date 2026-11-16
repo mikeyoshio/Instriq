@@ -98,6 +98,7 @@ class SyncQueueService {
   static final SyncQueueService instance = SyncQueueService._();
 
   static const _key = 'pending_sync_queue';
+  static const _resolvedKey = 'pending_sync_resolved_ids';
 
   final List<PendingSyncOperation> _queue = [];
   final ValueNotifier<List<SyncFailure>> failures = ValueNotifier([]);
@@ -105,9 +106,12 @@ class SyncQueueService {
 
   /// Entidades creadas offline (id local -> id real) descubierto en cuanto la
   /// operación de creación consigue ejecutarse de verdad, para poder
-  /// reescribir operaciones posteriores de la misma sesión de cola que
-  /// todavía se refieran al id local (p.ej. enviar a revisión el borrador que
-  /// se acaba de crear).
+  /// reescribir operaciones posteriores que todavía se refieran al id local
+  /// (p.ej. enviar a revisión el borrador que se acaba de crear). Se persiste
+  /// junto a la cola: si solo viviera en memoria y la app muriera entre el
+  /// `create` y sus `saveDraft` dependientes, estos llegarían al servidor con
+  /// un id `local_*` y se descartarían como error de negocio.
+  // ponytail: crece sin podar (~80 bytes/entrada); podar si algún día pesa.
   final Map<String, String> _resolvedVersionIds = {};
 
   bool _processing = false;
@@ -126,6 +130,10 @@ class SyncQueueService {
       final list = jsonDecode(raw) as List<dynamic>;
       _queue.addAll(list.map((e) => PendingSyncOperation.fromJson((e as Map).cast<String, dynamic>())));
     }
+    final rawResolved = _prefs?.getString(_resolvedKey);
+    if (rawResolved != null) {
+      _resolvedVersionIds.addAll((jsonDecode(rawResolved) as Map).cast<String, String>());
+    }
     pendingCount.value = _queue.length;
     ConnectivityService.instance.isOnline.addListener(() {
       if (ConnectivityService.instance.isOnline.value) processQueue();
@@ -134,6 +142,7 @@ class SyncQueueService {
   }
 
   Future<void> _persist() async {
+    await _prefs?.setString(_resolvedKey, jsonEncode(_resolvedVersionIds));
     await _prefs?.setString(_key, jsonEncode(_queue.map((o) => o.toJson()).toList()));
     pendingCount.value = _queue.length;
   }
