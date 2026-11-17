@@ -86,10 +86,11 @@ class _TeamScreenState extends State<TeamScreen> {
       appBar: AppBar(title: Text(l10n.navTeam), actions: const [ProfileButton()]),
       body: SafeArea(
         child: InstriqResponsiveContent(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(InstriqSpacing.xl),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          // ListView (no SingleChildScrollView): dins el Center de
+          // InstriqResponsiveContent, un contingut curt quedava centrat en
+          // vertical amb un buit gran a dalt.
+          child: ListView(
+              padding: const EdgeInsets.all(InstriqSpacing.xl),
               children: [
                 // Biblioteca Pública (EPIC 9): sempre visible, també sense
                 // grup -- contingut de comunitat, ortogonal a les
@@ -142,7 +143,6 @@ class _TeamScreenState extends State<TeamScreen> {
                   item(Icons.groups_outlined, l10n.connectGroupTitle, l10n.connectGroupSubtitle,
                       () => _push(const HospitalConnectFlow())),
               ],
-            ),
           ),
         ),
       ),

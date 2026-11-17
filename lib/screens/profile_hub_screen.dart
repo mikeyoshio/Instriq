@@ -21,13 +21,13 @@ import '../widgets/language_picker.dart';
 import '../widgets/send_feedback_dialog.dart';
 import 'account_privacy_screen.dart';
 import 'admin/manage_hospital_screen.dart';
+import 'audit_log_screen.dart';
 import 'contributor_application_form_screen.dart';
 import 'contributor_profile_screen.dart';
 import 'global_catalog_review_queue_screen.dart';
 import 'help/help_hub_screen.dart';
 import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
-import 'progress_screen.dart';
 import 'review_inbox_screen.dart';
 import 'sync_issues_screen.dart';
 
@@ -251,15 +251,6 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
               ),
               const SizedBox(height: InstriqSpacing.sm),
               InstriqListItem(
-                icon: Icons.bar_chart,
-                title: l10n.myProgressTitle,
-                subtitle: l10n.myProgressSubtitle,
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const ProgressScreen()),
-                ),
-              ),
-              const SizedBox(height: InstriqSpacing.sm),
-              InstriqListItem(
                 icon: Icons.help_outline,
                 title: l10n.helpCenterTitle,
                 onTap: _openHelpHub,
@@ -397,13 +388,25 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                   ),
                   const SizedBox(height: InstriqSpacing.sm),
                 ],
-                if (isAdmin)
+                if (isAdmin) ...[
                   InstriqListItem(
                     icon: Icons.groups_outlined,
                     title: l10n.manageTeamsTitle,
                     subtitle: l10n.manageTeamsSubtitle,
                     onTap: _openManageTeams,
                   ),
+                  const SizedBox(height: InstriqSpacing.sm),
+                  // Registre d'auditoria (abans a la pestanya Activitat):
+                  // admin/owner-only per RLS de servidor.
+                  InstriqListItem(
+                    icon: Icons.history_outlined,
+                    title: l10n.auditLogTitle,
+                    subtitle: l10n.auditLogSubtitle,
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => AuditLogScreen(organizationId: ProfileService.instance.organizationId),
+                    )),
+                  ),
+                ],
               ],
               const SizedBox(height: InstriqSpacing.xl),
               InstriqSectionHeader(l10n.socialMediaSectionHeader),

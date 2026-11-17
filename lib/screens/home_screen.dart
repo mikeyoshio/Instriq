@@ -646,7 +646,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget? _buildPendingApprovalSection(BuildContext context, AppLocalizations l10n) {
     // La cola de aprobación es de todo el grupo, no por espacio: mismo
-    // criterio de acceso que ya usa ReviewQueueScreen/ActivityScreen -- un
+    // criterio de acceso que ya usa ReviewQueueScreen -- un
     // approver de espacio (no necesariamente admin de organización) también
     // debe ver esta sección, no solo `isAdmin`.
     if (!ProfileService.instance.isAdmin && !ProfileService.instance.canApproveAnyWorkspace) return null;
