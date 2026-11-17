@@ -406,3 +406,10 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
   - **No fet, a propòsit**: la targeta-nudge cap a la Ruta (§5.2). Amb la Ruta ja com a primer ítem de Dreceres i ara amb progrés visible, una targeta extra la duplicaria; té sentit quan l'agrupació en blocs del pla principal (Fase 1) la mogui dins d'"Aprendre".
   - Comentari de `WorkModePicker` corregit (deia usar-se a l'alta de grup; era fals).
   - **No verificat visualment amb compte real**: l'avís i el reordenament només apareixen amb hospital connectat (no accessible en mode convidat). `flutter analyze`/`flutter test` nets.
+
+- **2.0-alfa "Cas", pas 1-2: el procediment com a entitat** (`schema_v68_procedures.sql`, pla aprovat 2026-11-17). Un procediment (p. ex. "Colecistectomia laparoscòpica") és un índex lleuger per espai de treball que agrupa safates, tècniques/protocols i targetes de preferència que ja existeixen i ja passen la seva revisió (EPIC 2: no fusionar, enllaçar). Decisions del propietari: per espai de treball, i edició directa per editor+ sense versionat, amb auditoria.
+  - Esquema: `procedures` + `procedure_items` (RLS només lectura; escriptura via `upsert_procedure`/`set_procedure_items`/`archive_procedure`, que validen rol i que cada element sigui del mateix espai). `surgical_slots.procedure_id`; `create/update_surgical_slot` l'accepten i, de pas, corregeixen el bypass per NULL del guard de rol.
+  - Pantalles: `ProceduresScreen` (llista), `ProcedureFormScreen` (nom, descripció, selecció de contingut publicat de l'espai, arxivar), `ProcedureDetailScreen` (safates amb accés directe a "Prepara", tècniques/protocols, preferències per cirurgià). El pintat del contingut viu a `widgets/procedure_content_view.dart` perquè la pàgina de cas (pas 3) el reutilitzi tal qual.
+  - Accés: primer ítem del tram "documentar" a Inici i primera col·lecció a la fitxa de l'espai.
+  - Noms de producte del propietari per a fases següents: la secció "Avui" es dirà **Radar**, i la cerca unificada **Omnihub**.
+  - **No verificat visualment**: exigeix compte amb hospital (no accessible en mode convidat). `flutter analyze`/`flutter test` nets (70 tests, 9 nous).

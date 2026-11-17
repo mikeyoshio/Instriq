@@ -14,6 +14,7 @@ import 'custom_instruments_screen.dart';
 import 'group_document_list_screen.dart';
 import 'manage_workspace_members_screen.dart';
 import 'preference_cards_screen.dart';
+import 'procedures_screen.dart';
 import 'trays_screen.dart';
 
 /// Colecciones disponibles dentro de un espacio: técnicas, protocolos,
@@ -124,6 +125,17 @@ class _WorkspaceDetailScreenState extends State<WorkspaceDetailScreen> {
                       child: Text(l10n.workspaceNoAccess),
                     )
                   else ...[
+                    _CollectionCard(
+                      icon: Icons.medical_services_outlined,
+                      title: l10n.proceduresTitle,
+                      subtitle: l10n.proceduresSubtitle,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ProceduresScreen(workspace: widget.workspace, myRole: _myRole),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     _CollectionCard(
                       icon: Icons.menu_book_outlined,
                       title: l10n.techniquesTitle,

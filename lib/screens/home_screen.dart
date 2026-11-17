@@ -57,6 +57,7 @@ import 'learn_screen.dart';
 import 'learning_path_screen.dart';
 import 'manufacturer_detail_screen.dart';
 import 'preference_cards_screen.dart';
+import 'procedures_screen.dart';
 import 'progress_screen.dart';
 import 'public_entity_detail_screen.dart';
 import 'sterilization_reference_catalog_screen.dart';
@@ -555,6 +556,10 @@ class _HomeScreenState extends State<HomeScreen> {
             GroupDocumentListScreen(kind: DocumentKind.protocol, workspace: workspace, myRole: myRole),
       );
 
+  Future<void> _openProcedures() => _openWorkspaceCollection(
+        buildDirect: (workspace, myRole) => ProceduresScreen(workspace: workspace, myRole: myRole),
+      );
+
   Future<void> _openSurgicalAgenda() => _openWorkspaceCollection(
         buildDirect: (workspace, myRole) => SurgicalAgendaScreen(workspace: workspace, myRole: myRole),
       );
@@ -1033,9 +1038,17 @@ class _HomeScreenState extends State<HomeScreen> {
       subtitle: l10n.surgicalAgendaSubtitle,
       onTap: _openSurgicalAgenda,
     );
+    // 2.0-alfa: el procediment agrupa safata + tècnica + preferències, així
+    // que va primer per a tots els modes -- és la porta d'entrada a la resta.
+    final proceduresItem = InstriqListItem(
+      icon: Icons.medical_services_outlined,
+      title: l10n.proceduresTitle,
+      subtitle: l10n.proceduresSubtitle,
+      onTap: _openProcedures,
+    );
     final groupItems = mode == WorkMode.cirujano
-        ? [...preferenceCardsAndProtocols, ...techniquesAndTrays, surgicalAgendaItem]
-        : [...techniquesAndTrays, ...preferenceCardsAndProtocols, surgicalAgendaItem];
+        ? [proceduresItem, ...preferenceCardsAndProtocols, ...techniquesAndTrays, surgicalAgendaItem]
+        : [proceduresItem, ...techniquesAndTrays, ...preferenceCardsAndProtocols, surgicalAgendaItem];
     if (ProfileService.instance.hasGroup) {
       groupItems.add(InstriqListItem(
         icon: Icons.hub_outlined,
