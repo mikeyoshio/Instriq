@@ -301,6 +301,9 @@
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
   .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
   .skip-link:focus { left: 0; }
+  .hero-access { margin: 14px 0 0; font-size: 0.95rem; color: var(--ink); }
+  .hero-access a { font-weight: 700; white-space: nowrap; }
+  .start-note { margin-top: 28px; font-size: 0.95rem; }
   .hero-note { font-family: var(--display); font-size: 0.82rem; letter-spacing: 0.01em; color: var(--ink-muted); margin-top: 18px; }
   .hero-scope { font-size: 0.96rem; line-height: 1.55; color: var(--ink-muted); max-width: 500px; margin: 0 0 22px; }
   .hero-scope strong { color: var(--ink); font-weight: 600; }
@@ -312,10 +315,6 @@
   .github-stars { display: flex; width: fit-content; align-items: center; gap: 7px; margin-top: 14px; color: var(--ink-muted); font-family: var(--display); font-size: 0.85rem; text-decoration: none; transition: color 0.15s ease; }
   .github-stars:hover { color: var(--accent); }
   .github-stars svg { flex-shrink: 0; }
-  .network-alert { background: var(--accent-soft); border-bottom: 1px solid var(--rule); }
-  .network-alert .wrap { padding: 12px 32px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 0.88rem; }
-  .network-alert p { margin: 0; color: var(--ink); }
-  .network-alert a { font-weight: 700; }
 </style>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c09082e3f96f44b59922839da897dcab"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
@@ -345,12 +344,6 @@
   </div>
 </header>
 
-<div class="network-alert">
-  <div class="wrap">
-    <p data-i18n="networkAlert.text">⚠️ Alguns operadors d'Internet espanyols (Movistar, Vodafone, Orange, DIGI) bloquegen aquesta pàgina per error, com a dany col·lateral dels bloqueigs judicials contra el pirateig esportiu — Instriq no té res a veure amb LaLiga ni amb continguts pirates, només compartim per atzar l'adreça IP d'un altre lloc afectat (allotgem a Cloudflare, igual que milions de webs). <a href="https://app.instriq.org?utm_source=landing&utm_medium=alert&utm_campaign=network_block">L'app no està afectada, obre-la aquí</a> — o prova amb una VPN o canviant el DNS de la teva xarxa a 1.1.1.1.</p>
-  </div>
-</div>
-
 <main id="main" tabindex="-1">
 
 <section class="hero">
@@ -358,7 +351,7 @@
     <div class="hero-copy">
       <div class="hero-top-row">
         <span class="eyebrow" data-i18n="hero.eyebrow">Open source · Bloc quirúrgic</span>
-        <a href="#novedades" class="version-badge">v1.1.0</a>
+        <a href="#novedades" class="version-badge">v1.2.0</a>
       </div>
       <h1 data-i18n="hero.h1">El coneixement de quiròfan,<br>obert i compartit.</h1>
       <p class="lede" data-i18n="hero.lede">Instriq reuneix instrumental, protocols i l'experiència real del bloc quirúrgic en un sol lloc — perquè aprendre a moure's al quiròfan no depengui d'una carpeta de paper desactualitzada.</p>
@@ -378,8 +371,8 @@
           </span>
         </a>
         <a href="/vademecum/ca/" class="btn btn-ghost" data-i18n="hero.cta3">Explora el Vademècum</a>
-        <a href="https://github.com/mikeyoshio/Instriq" class="btn btn-ghost" data-i18n="hero.cta2">Veure el codi a GitHub</a>
       </div>
+      <p class="hero-access" data-i18n="hero.access">Funciona al navegador del mòbil, la tauleta o l'ordinador: sense instal·lar res i sense crear compte. <a href="#comencar">Com començar →</a></p>
       <div class="hero-signals">
         <a href="privacidad.html" class="signal-chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6Z"/></svg>
@@ -563,6 +556,19 @@ draw();
 </script>
     
     </div>
+  </div>
+</section>
+
+<section id="comencar" class="section band reveal">
+  <div class="wrap measure center">
+    <span class="eyebrow" data-i18n="start.eyebrow">Com començar</span>
+    <h2 data-i18n="start.h1">Tres passos, sense instal·lar res.</h2>
+    <div class="cards plain cols-3" style="text-align: left;">
+      <div class="card"><h3 data-i18n="start.s1t">1. Obre Instriq</h3><p data-i18n="start.s1p">Entra a <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=start">app.instriq.org</a> des del navegador de qualsevol dispositiu. A Windows també la pots instal·lar des de la <a href="https://apps.microsoft.com/store/detail/9N1SJ4N98FG3?cid=DevShareMCLPCS">Microsoft Store</a>. Al mòbil, tria «Afegeix a la pantalla d'inici» i la tindràs com una app més.</p></div>
+      <div class="card"><h3 data-i18n="start.s2t">2. Explora sense compte</h3><p data-i18n="start.s2p">El catàleg d'instrumental, els fàrmacs, la ruta d'aprenentatge i la Biblioteca Pública estan oberts a tothom, sense registrar-te.</p></div>
+      <div class="card"><h3 data-i18n="start.s3t">3. Connecta el teu equip</h3><p data-i18n="start.s3p">Per veure i documentar el contingut del teu hospital o equip, crea un compte i uneix-te al grup amb el codi que et donin, o crea'n un de nou des de la pestanya «El meu equip».</p></div>
+    </div>
+    <p class="start-note" data-i18n="start.note">Encara no som a l'App Store ni a Google Play: a l'iPhone i a Android, fes servir el navegador. La beta d'Android arribarà aviat.</p>
   </div>
 </section>
 
@@ -995,13 +1001,22 @@ draw();
       "meta.description": "Catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidos entre profesionales de quirófano. Open source.",
       "a11y.skip": "Saltar al contenido",
       "nav.consultar": "Consultar", "nav.aprender": "Aprender", "nav.documentar": "Documentar", "nav.compartir": "Compartir", "nav.edu": "Formación", "nav.colabora": "Colabora", "nav.cta": "Abrir la app",
-      "networkAlert.text": "⚠️ Algunos operadores de Internet españoles (Movistar, Vodafone, Orange, DIGI) bloquean esta página por error, como daño colateral de los bloqueos judiciales contra la piratería deportiva — Instriq no tiene nada que ver con LaLiga ni con contenidos piratas, solo compartimos por azar la dirección IP de otro sitio afectado (alojamos en Cloudflare, igual que millones de webs). <a href=\"https://app.instriq.org?utm_source=landing&utm_medium=alert&utm_campaign=network_block\">La app no está afectada, ábrela aquí</a> — o prueba con una VPN o cambiando el DNS de tu red a 1.1.1.1.",
       "hero.eyebrow": "Open source · Bloque quirúrgico",
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
       "hero.scope": "Conocimiento de equipo — instrumental, técnicas y protocolos. <strong>No almacena datos de pacientes ni sustituye la historia clínica.</strong>",
       "hero.cta1": "Abrir la app →", "hero.cta4": "Descárgala en Microsoft Store", "hero.storeEyebrow": "Descárgala en", "hero.cta3": "Explora el Vademécum", "hero.cta2": "Ver el código en GitHub",
       "hero.trust1": "Sin datos de pacientes", "hero.trust2": "Auditoría y roles", "hero.trust3": "Sin conexión", "hero.trust4": "Código abierto · AGPL-3.0",
+      "hero.access": "Funciona en el navegador del móvil, la tablet o el ordenador: sin instalar nada y sin crear cuenta. <a href=\"#comencar\">Cómo empezar →</a>",
+      "start.eyebrow": "Cómo empezar",
+      "start.h1": "Tres pasos, sin instalar nada.",
+      "start.s1t": "1. Abre Instriq",
+      "start.s1p": "Entra en <a href=\"https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=start\">app.instriq.org</a> desde el navegador de cualquier dispositivo. En Windows también puedes instalarla desde la <a href=\"https://apps.microsoft.com/store/detail/9N1SJ4N98FG3?cid=DevShareMCLPCS\">Microsoft Store</a>. En el móvil, elige «Añadir a pantalla de inicio» y la tendrás como una app más.",
+      "start.s2t": "2. Explora sin cuenta",
+      "start.s2p": "El catálogo de instrumental, los fármacos, la ruta de aprendizaje y la Biblioteca Pública están abiertos a todos, sin registrarte.",
+      "start.s3t": "3. Conecta a tu equipo",
+      "start.s3p": "Para ver y documentar el contenido de tu hospital o equipo, crea una cuenta y únete al grupo con el código que te den, o crea uno nuevo desde la pestaña «Mi equipo».",
+      "start.note": "Todavía no estamos en App Store ni en Google Play: en iPhone y Android, usa el navegador. La beta de Android llegará pronto.",
       "hero.note": "Sin licencias. Sin cuota de SaaS. Sin sorpresas en la factura — abierto, siempre.",
       "hero.stat1": "Instrumental", "hero.stat2": "Especialidades", "hero.stat3": "Equipamiento", "hero.stat4": "Equipos activos", "hero.stat5": "Fármacos",
       "deck.c1tag": "Protocolo · Cirugía general", "deck.c1title": "Colecistectomía laparoscópica", "deck.c1sub": "v3 · publicado hace 4 días",
@@ -1112,13 +1127,22 @@ draw();
       "meta.description": "Instrument catalog, techniques, protocols and preference cards shared among operating room professionals. Open source.",
       "a11y.skip": "Skip to content",
       "nav.consultar": "Explore", "nav.aprender": "Learn", "nav.documentar": "Document", "nav.compartir": "Share", "nav.edu": "Education", "nav.colabora": "Contribute", "nav.cta": "Open the app",
-      "networkAlert.text": "⚠️ Some Spanish internet providers (Movistar, Vodafone, Orange, DIGI) are blocking this page by mistake, as collateral damage from court-ordered blocks against sports piracy — Instriq has nothing to do with LaLiga or pirated content, we just happen to share an IP address with another affected site (we're hosted on Cloudflare, like millions of other websites). <a href=\"https://app.instriq.org?utm_source=landing&utm_medium=alert&utm_campaign=network_block\">The app isn't affected, open it here</a> — or try a VPN or switching your network's DNS to 1.1.1.1.",
       "hero.eyebrow": "Open source · Surgical block",
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
       "hero.scope": "Team knowledge — instruments, techniques and protocols. <strong>Stores no patient data and does not replace the clinical record.</strong>",
       "hero.cta1": "Open the app →", "hero.cta4": "Get it on Microsoft Store", "hero.storeEyebrow": "Get it on", "hero.cta3": "Explore the Vademecum", "hero.cta2": "View the code on GitHub",
       "hero.trust1": "No patient data", "hero.trust2": "Audit trail & roles", "hero.trust3": "Offline", "hero.trust4": "Open source · AGPL-3.0",
+      "hero.access": "Works in the browser on your phone, tablet or computer: nothing to install, no account needed. <a href=\"#comencar\">How to start →</a>",
+      "start.eyebrow": "How to start",
+      "start.h1": "Three steps, nothing to install.",
+      "start.s1t": "1. Open Instriq",
+      "start.s1p": "Go to <a href=\"https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=start\">app.instriq.org</a> in the browser on any device. On Windows you can also install it from the <a href=\"https://apps.microsoft.com/store/detail/9N1SJ4N98FG3?cid=DevShareMCLPCS\">Microsoft Store</a>. On your phone, choose “Add to Home Screen” and it works like any other app.",
+      "start.s2t": "2. Explore without an account",
+      "start.s2p": "The instrument catalog, drugs, the learning path and the Public Library are open to everyone, no sign-up needed.",
+      "start.s3t": "3. Connect your team",
+      "start.s3p": "To see and document your hospital or team’s content, create an account and join your group with the code you were given, or create a new one from the “My team” tab.",
+      "start.note": "We are not on the App Store or Google Play yet: on iPhone and Android, use the browser. The Android beta is coming soon.",
       "hero.note": "No licenses. No SaaS fee. No surprises on the bill — open, always.",
       "hero.stat1": "Instruments", "hero.stat2": "Specialties", "hero.stat3": "Equipment", "hero.stat4": "Active teams", "hero.stat5": "Medications",
       "deck.c1tag": "Protocol · General surgery", "deck.c1title": "Laparoscopic cholecystectomy", "deck.c1sub": "v3 · published 4 days ago",
