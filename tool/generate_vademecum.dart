@@ -1093,6 +1093,14 @@ Future<void> _syncInstrumentCount(
     countBefore('instruments organitzats per'),
     countBefore('instrumentos organizados por'),
     countBefore('instruments organized by'),
+    // Secció "Consultar" (lede + targeta), en els 3 idiomes -- es va quedar
+    // a 601 durant dues ampliacions perquè cap regla no la cobria.
+    countBefore('instruments en'),
+    countBefore('instrumentos en'),
+    countBefore('instruments across'),
+    countBefore('instruments</h3>'),
+    countBefore('instrumentos",'),
+    countBefore('instruments",'),
   ]);
   await patch('README.md', [countBefore('instruments organitzats per')]);
   await patch('README.es.md', [countBefore('instrumentos organizados en')]);

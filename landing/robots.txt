@@ -1,4 +1,9 @@
+# Content Signals (https://contentsignals.org): search=yes permet indexar i
+# enllacar; ai-input=yes permet que agents d'IA usin el contingut per
+# respondre (citant-lo); ai-train=no: no es pot usar per entrenar models
+# (el contingut es CC BY-SA 4.0 i l'entrenament no conserva l'atribucio).
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 
 Sitemap: https://instriq.org/sitemap.xml
