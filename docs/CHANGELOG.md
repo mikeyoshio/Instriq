@@ -413,3 +413,10 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
   - Accés: primer ítem del tram "documentar" a Inici i primera col·lecció a la fitxa de l'espai.
   - Noms de producte del propietari per a fases següents: la secció "Avui" es dirà **Radar**, i la cerca unificada **Omnihub**.
   - **No verificat visualment**: exigeix compte amb hospital (no accessible en mode convidat). `flutter analyze`/`flutter test` nets (70 tests, 9 nous).
+
+- **2.0-alfa "Cas", pas 3-4: pàgina de cas i Radar**.
+  - **Pàgina de cas** (`SurgicalCaseScreen`): tocar una cita de l'agenda ja no obre el formulari d'edició sinó el cas sencer -- data/hora, cirurgià, quiròfan, notes de l'equip i tot el contingut per preparar-lo (safata amb "Prepara", tècnica/protocol, preferències). El que porta la pròpia cita va primer i el procediment enllaçat completa la resta (`caseItemIds`, provat). L'edició queda com a acció de la barra superior. El formulari de cita té selector de procediment (omple el text lliure si és buit). `SurgicalSlotService.fetchById` nou.
+  - **Radar** (nom del propietari per a "Avui"): secció nova a dalt de tot d'Inici, per a tots els modes, amb les cites d'avui de tots els espais de la meva organització (filtre explícit per organització, defensa en profunditat). Cada fila obre el cas. Si avui no hi ha casos, no apareix. Sense estat d'error propi (si falla la xarxa simplement no surt; l'agenda de cada espai sí el mostra) -- anotat com a `ponytail:`.
+  - "Farmacologia d'anestèsia" → "Farmacologia" (ca/es/en): des de l'ampliació a 102 fàrmacs el catàleg ja no és només d'anestèsia.
+  - Verificat al build web en mode convidat (mòbil i escriptori): Inici, Biblioteca i Perfil bé, Radar ocult sense hospital. **No verificat amb compte real**: Radar, cas i selector de procediment exigeixen hospital.
+  - `flutter analyze`/`flutter test` nets.

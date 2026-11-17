@@ -17,6 +17,7 @@ import '../models/instrument_sterilization.dart';
 import '../models/manufacturer.dart';
 import '../models/public_instrument.dart';
 import '../models/surgeon.dart';
+import '../models/surgical_slot.dart';
 import '../models/tag.dart';
 import '../models/tray.dart';
 import '../models/work_mode.dart';
@@ -34,6 +35,7 @@ import '../services/recent_activity_service.dart';
 import '../services/specialty_service.dart';
 import '../services/sterilization_service.dart';
 import '../services/surgeon_service.dart';
+import '../services/surgical_slot_service.dart';
 import '../services/tag_service.dart';
 import '../services/tray_preparation_service.dart';
 import '../services/tray_service.dart';
@@ -63,6 +65,7 @@ import 'public_entity_detail_screen.dart';
 import 'sterilization_reference_catalog_screen.dart';
 import 'surgeon_detail_screen.dart';
 import 'surgical_agenda_screen.dart';
+import 'surgical_case_screen.dart';
 import 'tag_detail_screen.dart';
 import 'team_progress_screen.dart';
 import 'tray_detail_screen.dart';
@@ -74,7 +77,7 @@ import 'workspace_list_screen.dart';
 /// modo de trabajo — mismo espíritu que `_modeSectionOrder` en
 /// lib/models/work_mode.dart, pero para las secciones del Home en vez de las
 /// de una ficha de instrumento.
-enum HomeSectionKey { quickAccess, pendingApproval, traysToPrepare, teamProgress, recent, favorites }
+enum HomeSectionKey { radar, quickAccess, pendingApproval, traysToPrepare, teamProgress, recent, favorites }
 
 const List<HomeSectionKey> _defaultHomeSectionOrder = [
   HomeSectionKey.quickAccess,
@@ -230,6 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<_PendingApprovalItem>>? _pendingApprovalsFuture;
 
   (int, int)? _learningPathProgress;
+  List<SurgicalSlot> _radarSlots = const [];
   bool _workModePromptPending = false;
   bool _workModePromptShowing = false;
 
@@ -239,6 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadGroupContent();
     _loadRecentAndFavorites();
     _loadLearningPathProgress();
+    _loadRadar();
     WidgetsBinding.instance.addPostFrameCallback((_) => _maybePromptWorkMode());
     // Inici vive en su propia rama del shell (ver app_shell.dart): cerrar
     // sesión desde Perfil no reconstruye este widget por sí solo, así que sin
@@ -269,7 +274,62 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadGroupContent();
     _loadRecentAndFavorites();
     _loadLearningPathProgress();
+    _loadRadar();
     _maybePromptWorkMode();
+  }
+
+  /// Radar: cites d'avui de la meva organització (tots els espais visibles).
+  // ponytail: si falla la xarxa la secció no surt (sense estat d'error propi);
+  // l'agenda de cada espai sí mostra l'error.
+  Future<void> _loadRadar() async {
+    final orgId = ProfileService.instance.organizationId;
+    if (!ProfileService.instance.hasHospital || orgId == null) {
+      if (mounted && _radarSlots.isNotEmpty) setState(() => _radarSlots = const []);
+      return;
+    }
+    try {
+      final results = await Future.wait([
+        SurgicalSlotService.instance.fetchForDay(DateTime.now(), organizationId: orgId),
+        SurgeonService.instance.fetchForOrganization(),
+      ]);
+      if (mounted) setState(() => _radarSlots = results[0] as List<SurgicalSlot>);
+    } catch (_) {}
+  }
+
+  Future<void> _openCase(SurgicalSlot slot) async {
+    final myRole = await WorkspaceService.instance.fetchMyRole(slot.workspaceId);
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => SurgicalCaseScreen(slot: slot, myRole: myRole)),
+    );
+    _loadRadar();
+  }
+
+  Widget? _buildRadarSection(BuildContext context, AppLocalizations l10n) {
+    if (_radarSlots.isEmpty) return null;
+    String hm(DateTime d) => '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InstriqSectionHeader('${l10n.radarTitle} · ${l10n.radarSubtitle(_radarSlots.length)}'),
+        const SizedBox(height: InstriqSpacing.md),
+        for (final slot in _radarSlots) ...[
+          InstriqListItem(
+            icon: Icons.radar,
+            title: slot.procedureName?.isNotEmpty == true
+                ? slot.procedureName!
+                : (SurgeonService.instance.byId(slot.surgeonId)?.name ?? l10n.surgicalCaseTitle),
+            subtitle: [
+              '${hm(slot.startsAt.toLocal())}–${hm(slot.endsAt.toLocal())}',
+              if (slot.procedureName?.isNotEmpty == true) SurgeonService.instance.byId(slot.surgeonId)?.name,
+              if (slot.location?.isNotEmpty == true) slot.location,
+            ].whereType<String>().join(' · '),
+            onTap: () => _openCase(slot),
+          ),
+          const SizedBox(height: InstriqSpacing.sm),
+        ],
+      ],
+    );
   }
 
   void _onWorkModeChanged() => setState(() {});
@@ -973,10 +1033,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildDefaultBody(BuildContext context, AppLocalizations l10n) {
     final mode = ProfileService.instance.activeWorkModeNotifier.value;
-    final order = _sectionOrderForMode(mode);
+    // Radar (casos d'avui) sempre primer per a tots els modes: si avui hi ha
+    // cirurgies, és el més urgent; si no n'hi ha, la secció no apareix.
+    final order = [HomeSectionKey.radar, ..._sectionOrderForMode(mode)];
     final sections = <Widget>[];
     for (final key in order) {
       final section = switch (key) {
+        HomeSectionKey.radar => _buildRadarSection(context, l10n),
         HomeSectionKey.quickAccess => _buildQuickAccessSection(context, l10n, mode),
         HomeSectionKey.pendingApproval => _buildPendingApprovalSection(context, l10n),
         HomeSectionKey.traysToPrepare => _buildTrayPrepSection(context, l10n),
