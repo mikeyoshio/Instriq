@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import '../l10n/app_localizations.dart';
 import '../screens/activity_screen.dart';
 import '../screens/auth/accept_invitation_screen.dart';
-import '../screens/catalog_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/library_screen.dart';
+import '../screens/omnihub_screen.dart';
 import '../screens/profile_hub_screen.dart';
 import 'app_shell.dart';
 
@@ -48,7 +48,8 @@ GoRouter buildRouter(GlobalKey<NavigatorState> rootNavigatorKey) {
           StatefulShellBranch(
             navigatorKey: _searchBranchKey,
             routes: [
-              GoRoute(path: '/buscar', builder: (context, state) => const CatalogScreen()),
+              // Omnihub: cerca unificada. El catàleg amb filtres hi és a un toc.
+              GoRoute(path: '/buscar', builder: (context, state) => const OmnihubScreen()),
             ],
           ),
           StatefulShellBranch(

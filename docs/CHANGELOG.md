@@ -420,3 +420,10 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
   - "Farmacologia d'anestèsia" → "Farmacologia" (ca/es/en): des de l'ampliació a 102 fàrmacs el catàleg ja no és només d'anestèsia.
   - Verificat al build web en mode convidat (mòbil i escriptori): Inici, Biblioteca i Perfil bé, Radar ocult sense hospital. **No verificat amb compte real**: Radar, cas i selector de procediment exigeixen hospital.
   - `flutter analyze`/`flutter test` nets.
+
+- **2.0-beta: Omnihub, la cerca unificada** (nom del propietari; `docs/redesign_v1.2_plan.md` Fase 3, aprovada). La cerca potent (10 tipus d'entitat) vivia amagada dins el camp d'Inici mentre la pestanya "Cercar" obria només el catàleg d'instruments.
+  - Nou `lib/screens/omnihub_screen.dart`: `OmnihubIndex` (càrrega + els comparadors, moguts tal qual des d'Inici) i `OmnihubScreen`. La pestanya "Cercar" (`/buscar`) passa a ser Omnihub. **Procediments** són un tipus de resultat nou, i surten primers.
+  - El catàleg amb els filtres per categoria/especialitat no es perd (decisió del pla): és a un toc des de l'estat buit d'Omnihub, i continua a Dreceres.
+  - Inici: el camp de cerca queda com a entrada a Omnihub (mateix aspecte, obre la pestanya) -- una sola cerca, cap duplicat. Inici perd ~460 línies (estat, debounce, analítica, comparadors i pintat de resultats) i deixa de carregar metadades que només servien a la cerca: arrenca amb menys peticions.
+  - Es manté intacte: debounce de 150 ms del filtrat en viu i de 500 ms de l'analítica, registre també per a convidats (schema_v63).
+  - Verificat al build web en mode convidat: Inici → toc al camp → Omnihub amb el cursor posat; "kocher" retorna resultats; cap error de pàgina. `flutter analyze`/`flutter test` nets.
