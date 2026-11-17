@@ -37,14 +37,17 @@ import '../utils/fuzzy_match.dart';
 import '../widgets/sterilization_method_label.dart';
 import 'catalog_screen.dart';
 import 'custom_instrument_detail_screen.dart';
+import 'drug_catalog_screen.dart';
 import 'group_document_detail_screen.dart';
 import 'instrument_detail_screen.dart';
 import 'manufacturer_detail_screen.dart';
 import 'procedure_detail_screen.dart';
 import 'public_entity_detail_screen.dart';
+import 'sterilization_reference_catalog_screen.dart';
 import 'surgeon_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_detail_screen.dart';
+import 'wound_closure_catalog_screen.dart';
 
 /// Resultat d'una cerca a Omnihub, agrupat per tipus d'entitat -- un únic
 /// càlcul que alimenta tant el pintat com l'analítica d'ús (EPIC 5).
@@ -374,12 +377,19 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
       children: [
         Text(l10n.omnihubIntro, style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: InstriqSpacing.lg),
-        InstriqListItem(
-          icon: Icons.menu_book,
-          title: l10n.catalogTitle,
-          subtitle: l10n.omnihubBrowseCatalog,
-          onTap: () => _push(const CatalogScreen()),
-        ),
+        // Els 4 catàlegs de referència viuen aquí (2.0-beta): abans eren a
+        // les Dreceres d'Inici.
+        for (final (icon, title, subtitle, screen) in [
+          (Icons.menu_book, l10n.catalogTitle, l10n.omnihubBrowseCatalog, const CatalogScreen() as Widget),
+          (Icons.medication_outlined, l10n.drugsCatalogTitle, l10n.drugsCatalogSubtitle, const DrugCatalogScreen()),
+          (Icons.healing_outlined, l10n.woundClosureCatalogTitle, l10n.woundClosureCatalogSubtitle,
+              const WoundClosureCatalogScreen()),
+          (Icons.cleaning_services_outlined, l10n.sterilizationReferenceCatalogTitle,
+              l10n.sterilizationReferenceCatalogSubtitle, const SterilizationReferenceCatalogScreen()),
+        ]) ...[
+          InstriqListItem(icon: icon, title: title, subtitle: subtitle, onTap: () => _push(screen)),
+          const SizedBox(height: InstriqSpacing.sm),
+        ],
       ],
     );
   }

@@ -10,7 +10,7 @@ import '../design_system/components/instriq_section_header.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/favorite_entry.dart';
-import '../models/group_document.dart';
+import '../models/instrument_incident.dart';
 import '../models/surgical_slot.dart';
 import '../models/tray.dart';
 import '../models/work_mode.dart';
@@ -20,8 +20,8 @@ import '../navigation/profile_button.dart';
 import '../services/auth_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
+import '../services/instrument_incident_service.dart';
 import '../services/profile_service.dart';
-import '../services/progress_service.dart';
 import '../services/recent_activity_service.dart';
 import '../services/surgeon_service.dart';
 import '../services/surgical_slot_service.dart';
@@ -30,35 +30,31 @@ import '../services/tray_service.dart';
 import '../services/workspace_service.dart';
 import '../utils/ref_resolver.dart';
 import '../widgets/create_content_sheet.dart';
+import '../widgets/instrument_incident_label.dart';
 import '../widgets/work_mode_picker.dart';
-import 'catalog_screen.dart';
-import 'drug_catalog_screen.dart';
-import 'group_document_list_screen.dart';
-import 'group_document_review_queue_screen.dart';
-import 'group_network_screen.dart';
+import 'auth/hospital_connect_flow.dart';
 import 'home_dashboard_panel.dart';
-import 'learn_screen.dart';
+import 'incident_capa_queue_screen.dart';
 import 'learning_path_screen.dart';
-import 'preference_cards_screen.dart';
-import 'procedures_screen.dart';
-import 'progress_screen.dart';
-import 'sterilization_reference_catalog_screen.dart';
-import 'surgical_agenda_screen.dart';
+import 'review_inbox_screen.dart';
 import 'surgical_case_screen.dart';
 import 'team_progress_screen.dart';
 import 'tray_detail_screen.dart';
 import 'trays_screen.dart';
-import 'wound_closure_catalog_screen.dart';
 import 'workspace_list_screen.dart';
 
 /// Orden de secciones de la pantalla de Inicio (sin búsqueda activa) según el
 /// modo de trabajo — mismo espíritu que `_modeSectionOrder` en
 /// lib/models/work_mode.dart, pero para las secciones del Home en vez de las
 /// de una ficha de instrumento.
-enum HomeSectionKey { radar, quickAccess, pendingApproval, traysToPrepare, teamProgress, recent, favorites }
+enum HomeSectionKey { radar, startHere, pendingApproval, openIncidents, traysToPrepare, teamProgress, recent, favorites }
 
+// 2.0-beta: sense Dreceres (el seu contingut viu a Cercar, El meu equip i
+// Aprèn). Revisió pendent i incidències obertes surten només si n'hi ha.
 const List<HomeSectionKey> _defaultHomeSectionOrder = [
-  HomeSectionKey.quickAccess,
+  HomeSectionKey.startHere,
+  HomeSectionKey.pendingApproval,
+  HomeSectionKey.openIncidents,
   HomeSectionKey.recent,
   HomeSectionKey.favorites,
 ];
@@ -70,9 +66,6 @@ const List<HomeSectionKey> _defaultHomeSectionOrder = [
 /// quickAccess/recent/favorites entre ellos, y forzar una diferencia
 /// artificial sería peor que no diferenciarlos.
 List<HomeSectionKey> _sectionOrderForMode(WorkMode? mode) {
-  if (mode == WorkMode.supervision) {
-    return [HomeSectionKey.pendingApproval, ..._defaultHomeSectionOrder];
-  }
   if (mode == WorkMode.instrumentista) {
     return [HomeSectionKey.traysToPrepare, ..._defaultHomeSectionOrder];
   }
@@ -80,28 +73,6 @@ List<HomeSectionKey> _sectionOrderForMode(WorkMode? mode) {
     return [HomeSectionKey.teamProgress, ..._defaultHomeSectionOrder];
   }
   return _defaultHomeSectionOrder;
-}
-
-/// Els 3 trams de Dreceres (consultar / documentar / aprendre). El mode
-/// decideix quin va primer (docs/redesign_v1.2_personalization.md §3.1):
-/// qui treballa amb el contingut del seu grup el veu primer, qui està
-/// aprenent veu primer el material d'aprenentatge.
-enum _QuickAccessBlock { consult, document, learn }
-
-List<_QuickAccessBlock> _quickAccessOrderForMode(WorkMode? mode) {
-  switch (mode) {
-    case WorkMode.instrumentista:
-    case WorkMode.cirujano:
-    case WorkMode.supervision:
-      return const [_QuickAccessBlock.document, _QuickAccessBlock.consult, _QuickAccessBlock.learn];
-    case WorkMode.docente:
-    case WorkMode.estudiante:
-      return const [_QuickAccessBlock.learn, _QuickAccessBlock.consult, _QuickAccessBlock.document];
-    case WorkMode.esterilizacion:
-    case WorkMode.enfermeria:
-    case null:
-      return const [_QuickAccessBlock.consult, _QuickAccessBlock.document, _QuickAccessBlock.learn];
-  }
 }
 
 const _workModePromptKey = 'has_prompted_work_mode';
@@ -147,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // de la pantalla (p.ej. al escribir en la búsqueda y volver a vaciarla)
   // dispararía una consulta nueva a la cola de aprobación.
   Future<List<_PendingApprovalItem>>? _pendingApprovalsFuture;
+  Future<List<InstrumentIncident>>? _openIncidentsFuture;
 
   (int, int)? _learningPathProgress;
   List<SurgicalSlot> _radarSlots = const [];
@@ -184,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onProfileChanged() {
     _pendingApprovalsFuture = null;
+    _openIncidentsFuture = null;
     _loadGroupContent();
     _loadRecentAndFavorites();
     _loadLearningPathProgress();
@@ -416,6 +389,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _refreshAfterReturn() async {
     _pendingApprovalsFuture = null;
+    _openIncidentsFuture = null;
     await Future.wait([_loadGroupContent(), _loadRecentAndFavorites()]);
     if (mounted) setState(() {});
   }
@@ -443,30 +417,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _refreshAfterReturn();
   }
 
-  Future<void> _openTechniques() => _openWorkspaceCollection(
-        buildDirect: (workspace, myRole) =>
-            GroupDocumentListScreen(kind: DocumentKind.technique, workspace: workspace, myRole: myRole),
-      );
-
   Future<void> _openTrays() => _openWorkspaceCollection(
         buildDirect: (workspace, myRole) => TraysScreen(workspace: workspace, myRole: myRole),
-      );
-
-  Future<void> _openPreferenceCards() => _openWorkspaceCollection(
-        buildDirect: (workspace, myRole) => PreferenceCardsScreen(workspace: workspace, myRole: myRole),
-      );
-
-  Future<void> _openProtocols() => _openWorkspaceCollection(
-        buildDirect: (workspace, myRole) =>
-            GroupDocumentListScreen(kind: DocumentKind.protocol, workspace: workspace, myRole: myRole),
-      );
-
-  Future<void> _openProcedures() => _openWorkspaceCollection(
-        buildDirect: (workspace, myRole) => ProceduresScreen(workspace: workspace, myRole: myRole),
-      );
-
-  Future<void> _openSurgicalAgenda() => _openWorkspaceCollection(
-        buildDirect: (workspace, myRole) => SurgicalAgendaScreen(workspace: workspace, myRole: myRole),
       );
 
   /// Bandejas publicadas ordenadas para el modo Instrumentista: primero las
@@ -503,7 +455,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _openReviewQueue() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ReviewQueueScreen()),
+      MaterialPageRoute(builder: (_) => const ReviewInboxScreen()),
+    );
+    _refreshAfterReturn();
+  }
+
+  Future<void> _openIncidentQueue() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const IncidentCapaQueueScreen()),
     );
     _refreshAfterReturn();
   }
@@ -590,8 +549,9 @@ class _HomeScreenState extends State<HomeScreen> {
     for (final key in order) {
       final section = switch (key) {
         HomeSectionKey.radar => _buildRadarSection(context, l10n),
-        HomeSectionKey.quickAccess => _buildQuickAccessSection(context, l10n, mode),
+        HomeSectionKey.startHere => _buildStartHereSection(context, l10n),
         HomeSectionKey.pendingApproval => _buildPendingApprovalSection(context, l10n),
+        HomeSectionKey.openIncidents => _buildOpenIncidentsSection(context, l10n),
         HomeSectionKey.traysToPrepare => _buildTrayPrepSection(context, l10n),
         HomeSectionKey.teamProgress => _buildTeamProgressSection(context, l10n),
         HomeSectionKey.recent => _buildRecentSection(context, l10n),
@@ -608,133 +568,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildQuickAccessSection(BuildContext context, AppLocalizations l10n, WorkMode? mode) {
-    final hasHospital = ProfileService.instance.hasHospital;
-    final techniquesAndTrays = [
-      InstriqListItem(
-        icon: Icons.menu_book_outlined,
-        title: l10n.techniquesTitle,
-        // Mientras se cargan los espacios, se asume que hay más de uno
-        // (fallback seguro): _openTechniques abre el listado de espacios
-        // en vez del único espacio si _workspaces todavía está vacío.
-        subtitle: _loadingGroupContent ? null : l10n.techniquesSubtitle,
-        onTap: _openTechniques,
-      ),
-      InstriqListItem(
-        icon: Icons.inventory_2_outlined,
-        title: l10n.traysTitle,
-        subtitle: l10n.traysSubtitle,
-        onTap: _openTrays,
-      ),
-    ];
-    // Fichas de preferencia y protocolos no tenían ningún acceso rápido desde
-    // Inicio hasta ahora, para ningún modo — se añaden para todos, pero en
-    // modo Cirujano van primero (antes que técnicas/bandejas): es lo que más
-    // consulta un cirujano al abrir la app.
-    final preferenceCardsAndProtocols = [
-      InstriqListItem(
-        icon: Icons.assignment_outlined,
-        title: l10n.preferenceCardsTitle,
-        subtitle: l10n.preferenceCardsSubtitle,
-        onTap: _openPreferenceCards,
-      ),
-      InstriqListItem(
-        icon: Icons.fact_check_outlined,
-        title: l10n.protocolsTitle,
-        subtitle: l10n.protocolsSubtitle,
-        onTap: _openProtocols,
-      ),
-    ];
-    final surgicalAgendaItem = InstriqListItem(
-      icon: Icons.event_available_outlined,
-      title: l10n.surgicalAgendaTitle,
-      subtitle: l10n.surgicalAgendaSubtitle,
-      onTap: _openSurgicalAgenda,
-    );
-    // 2.0-alfa: el procediment agrupa safata + tècnica + preferències, així
-    // que va primer per a tots els modes -- és la porta d'entrada a la resta.
-    final proceduresItem = InstriqListItem(
-      icon: Icons.medical_services_outlined,
-      title: l10n.proceduresTitle,
-      subtitle: l10n.proceduresSubtitle,
-      onTap: _openProcedures,
-    );
-    final groupItems = mode == WorkMode.cirujano
-        ? [proceduresItem, ...preferenceCardsAndProtocols, ...techniquesAndTrays, surgicalAgendaItem]
-        : [proceduresItem, ...techniquesAndTrays, ...preferenceCardsAndProtocols, surgicalAgendaItem];
-    if (ProfileService.instance.hasGroup) {
-      groupItems.add(InstriqListItem(
-        icon: Icons.hub_outlined,
-        title: l10n.groupNetworkTitle,
-        subtitle: l10n.groupNetworkSubtitle,
-        onTap: () async {
-          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GroupNetworkScreen()));
-        },
-      ));
-    }
-    final consultItems = [
-      InstriqListItem(
-        icon: Icons.menu_book,
-        title: l10n.catalogTitle,
-        subtitle: l10n.catalogSubtitle,
-        onTap: () async {
-          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CatalogScreen()));
-        },
-      ),
-      InstriqListItem(
-        icon: Icons.medication_outlined,
-        title: l10n.drugsCatalogTitle,
-        subtitle: l10n.drugsCatalogSubtitle,
-        onTap: () async {
-          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DrugCatalogScreen()));
-        },
-      ),
-      InstriqListItem(
-        icon: Icons.healing_outlined,
-        title: l10n.woundClosureCatalogTitle,
-        subtitle: l10n.woundClosureCatalogSubtitle,
-        onTap: () async {
-          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WoundClosureCatalogScreen()));
-        },
-      ),
-      InstriqListItem(
-        icon: Icons.cleaning_services_outlined,
-        title: l10n.sterilizationReferenceCatalogTitle,
-        subtitle: l10n.sterilizationReferenceCatalogSubtitle,
-        onTap: () async {
-          await Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => const SterilizationReferenceCatalogScreen()));
-        },
-      ),
-    ];
-    final progress = ProgressService.instance;
-    final learnItems = [
-      InstriqListItem(
-        icon: Icons.school,
-        title: l10n.learnTitle,
-        subtitle: l10n.learnSubtitle,
-        onTap: () async {
-          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LearnScreen()));
-          if (mounted) setState(() {});
-        },
-      ),
-      InstriqListItem(
-        icon: Icons.bar_chart,
-        title: l10n.myProgressTitle,
-        subtitle: progress.learnedCount > 0
-            ? l10n.myProgressLearnedCount(progress.learnedCount, progress.totalCount)
-            : l10n.myProgressSubtitle,
-        onTap: () async {
-          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ProgressScreen()));
-          if (mounted) setState(() {});
-        },
-      ),
-    ];
+  /// Per a qui encara no té grup (Avui quedaria buit): tres primers passos.
+  Widget? _buildStartHereSection(BuildContext context, AppLocalizations l10n) {
+    if (ProfileService.instance.hasHospital) return null;
     final pathProgress = _learningPathProgress;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        InstriqSectionHeader(l10n.homeQuickAccessTitle),
+        InstriqSectionHeader(l10n.homeStartHereTitle),
         const SizedBox(height: InstriqSpacing.md),
         InstriqListItem(
           icon: Icons.route_outlined,
@@ -747,16 +588,59 @@ class _HomeScreenState extends State<HomeScreen> {
             _loadLearningPathProgress();
           },
         ),
-        for (final block in _quickAccessOrderForMode(mode))
-          for (final item in switch (block) {
-            _QuickAccessBlock.consult => consultItems,
-            _QuickAccessBlock.document => hasHospital ? groupItems : const <Widget>[],
-            _QuickAccessBlock.learn => learnItems,
-          }) ...[
-            const SizedBox(height: InstriqSpacing.sm),
-            item,
-          ],
+        const SizedBox(height: InstriqSpacing.sm),
+        InstriqListItem(
+          icon: Icons.groups_outlined,
+          title: l10n.connectGroupTitle,
+          subtitle: l10n.connectGroupSubtitle,
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const HospitalConnectFlow())),
+        ),
+        const SizedBox(height: InstriqSpacing.sm),
+        InstriqListItem(
+          icon: Icons.menu_book,
+          title: l10n.catalogTitle,
+          subtitle: l10n.catalogSubtitle,
+          onTap: () => context.go('/buscar'),
+        ),
       ],
+    );
+  }
+
+  /// Incidències obertes de l'organització (abans a Activitat): només si
+  /// n'hi ha, i només per a admin/approver -- els qui poden resoldre-les.
+  Widget? _buildOpenIncidentsSection(BuildContext context, AppLocalizations l10n) {
+    if (!ProfileService.instance.hasHospital) return null;
+    if (!ProfileService.instance.isAdmin && !ProfileService.instance.canApproveAnyWorkspace) return null;
+    _openIncidentsFuture ??= InstrumentIncidentService.instance
+        .fetchForOrganization()
+        .then((list) => list.where((i) => i.status == IncidentStatus.open).toList())
+        .catchError((_) => <InstrumentIncident>[]);
+    return FutureBuilder<List<InstrumentIncident>>(
+      future: _openIncidentsFuture,
+      builder: (context, snapshot) {
+        final items = snapshot.data ?? const <InstrumentIncident>[];
+        if (items.isEmpty) return const SizedBox.shrink();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(child: InstriqSectionHeader(l10n.incidentCapaQueueTitle)),
+                TextButton(onPressed: _openIncidentQueue, child: Text(l10n.homeViewAllLabel)),
+              ],
+            ),
+            for (final incident in items.take(3)) ...[
+              InstriqListItem(
+                icon: Icons.report_problem_outlined,
+                title: incident.description,
+                subtitle: incidentSeverityValueLabel(l10n, incident.severity),
+                onTap: _openIncidentQueue,
+              ),
+              const SizedBox(height: InstriqSpacing.sm),
+            ],
+          ],
+        );
+      },
     );
   }
 

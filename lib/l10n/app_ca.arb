@@ -262,6 +262,7 @@
   "homeNoResultsForQuery": "No s'han trobat resultats per a \"{query}\".",
   "@homeNoResultsForQuery": {"placeholders": {"query": {"type": "String"}}},
   "homeQuickAccessTitle": "Dreceres",
+  "homeStartHereTitle": "Comença aquí",
   "homeRecentActivityTitle": "Activitat recent",
   "homeFavoritesTitle": "Favorits",
   "homeFavoritesEmptyState": "Encara no has marcat res com a favorit.",

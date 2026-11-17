@@ -262,6 +262,7 @@
   "homeNoResultsForQuery": "No se encontraron resultados para \"{query}\".",
   "@homeNoResultsForQuery": {"placeholders": {"query": {"type": "String"}}},
   "homeQuickAccessTitle": "Accesos rápidos",
+  "homeStartHereTitle": "Empieza aquí",
   "homeRecentActivityTitle": "Actividad reciente",
   "homeFavoritesTitle": "Favoritos",
   "homeFavoritesEmptyState": "Todavía no has marcado nada como favorito.",
