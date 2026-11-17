@@ -369,10 +369,14 @@ class _ClinicalDataFormSheetState extends State<ClinicalDataFormSheet> {
       // mantenimiento, etc.) se abortaría entero antes de llegar a
       // saveTechnicalInfoDraft, que es la llamada que sí sabe encolarse.
       try {
+        // L'IFU pertany al mateix àmbit que la fitxa: privada de
+        // l'organització si la fitxa ho és. Abans sempre es creava global, i
+        // des de schema_v69 crear contingut global exigeix ser revisor.
         final doc = await ReferenceDocumentService.instance.createOrGet(
           ifuTitle,
           ifuUrl,
           docType: 'ifu',
+          organizationId: widget.organizationId,
           manufacturerId: manufacturerId,
         );
         ifuDocumentId = doc.id;
