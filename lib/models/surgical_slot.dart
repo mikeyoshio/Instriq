@@ -26,6 +26,10 @@ class SurgicalSlot {
   final String? documentId;
   final String? trayId;
   final String? procedureName;
+
+  /// Procediment de l'espai (schema_v68). [procedureName] es manté com a
+  /// text lliure per a les cites antigues o sense procediment enllaçat.
+  final String? procedureId;
   final String? location;
   final DateTime startsAt;
   final DateTime endsAt;
@@ -46,6 +50,7 @@ class SurgicalSlot {
     this.documentId,
     this.trayId,
     this.procedureName,
+    this.procedureId,
     this.location,
     required this.startsAt,
     required this.endsAt,
@@ -68,6 +73,7 @@ class SurgicalSlot {
       documentId: row['document_id'] as String?,
       trayId: row['tray_id'] as String?,
       procedureName: row['procedure_name'] as String?,
+      procedureId: row['procedure_id'] as String?,
       location: row['location'] as String?,
       startsAt: DateTime.parse(row['starts_at'] as String),
       endsAt: DateTime.parse(row['ends_at'] as String),

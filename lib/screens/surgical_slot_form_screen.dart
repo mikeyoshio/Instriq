@@ -164,6 +164,9 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
           procedureName: _emptyToNull(_procedureController.text),
           location: _emptyToNull(_locationController.text),
           notes: _emptyToNull(_notesController.text),
+          // L'RPC substitueix tots els camps: sense això, editar una cita
+          // esborraria el procediment enllaçat.
+          procedureId: widget.existingSlot!.procedureId,
         );
       } else {
         await SurgicalSlotService.instance.createSlot(

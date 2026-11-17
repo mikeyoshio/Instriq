@@ -24,6 +24,24 @@ class SurgicalSlotService {
     return (rows as List<dynamic>).map((r) => SurgicalSlot.fromRow(r as Map<String, dynamic>)).toList();
   }
 
+  /// Cites del dia local de [day] a tots els espais visibles de la meva
+  /// organització, ordenades per hora. El filtre explícit per organització
+  /// és defensa en profunditat: no depèn que la RLS de `surgical_slots` estigui
+  /// ben acotada (no ho va estar fins a schema_v69).
+  Future<List<SurgicalSlot>> fetchForDay(DateTime day, {required String organizationId}) async {
+    final start = DateTime(day.year, day.month, day.day);
+    final end = start.add(const Duration(days: 1));
+    final rows = await _client
+        .from('surgical_slots')
+        .select()
+        .eq('organization_id', organizationId)
+        .eq('status', SurgicalSlotStatus.scheduled.dbValue)
+        .gte('starts_at', start.toUtc().toIso8601String())
+        .lt('starts_at', end.toUtc().toIso8601String())
+        .order('starts_at');
+    return (rows as List<dynamic>).map((r) => SurgicalSlot.fromRow(r as Map<String, dynamic>)).toList();
+  }
+
   Future<SurgicalSlot> createSlot({
     required String workspaceId,
     required String surgeonId,
@@ -35,6 +53,7 @@ class SurgicalSlotService {
     String? procedureName,
     String? location,
     String? notes,
+    String? procedureId,
   }) async {
     final row = await _client.rpc('create_surgical_slot', params: {
       'p_workspace_id': workspaceId,
@@ -47,6 +66,7 @@ class SurgicalSlotService {
       'p_procedure_name': procedureName,
       'p_location': location,
       'p_notes': notes,
+      'p_procedure_id': procedureId,
     });
     return SurgicalSlot.fromRow(row as Map<String, dynamic>);
   }
@@ -62,6 +82,7 @@ class SurgicalSlotService {
     String? procedureName,
     String? location,
     String? notes,
+    String? procedureId,
   }) async {
     final row = await _client.rpc('update_surgical_slot', params: {
       'p_slot_id': slotId,
@@ -74,6 +95,7 @@ class SurgicalSlotService {
       'p_procedure_name': procedureName,
       'p_location': location,
       'p_notes': notes,
+      'p_procedure_id': procedureId,
     });
     return SurgicalSlot.fromRow(row as Map<String, dynamic>);
   }
