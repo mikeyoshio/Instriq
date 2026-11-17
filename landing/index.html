@@ -126,7 +126,7 @@
   .lang-switch { display: flex; gap: 6px; font-family: var(--display); font-size: 0.78rem; }
   .lang-switch button { background: none; border: none; color: var(--ink-muted); cursor: pointer; padding: 4px 6px; font-family: var(--display); font-size: 0.78rem; border-radius: 4px; }
   .lang-switch button.active { color: var(--ink); font-weight: 700; background: var(--paper-alt); }
-  @media (max-width: 980px) { .nav-links a.plain { display: none; } .nav-links { gap: 12px; } }
+  @media (max-width: 1100px) { .nav-links a.plain { display: none; } .nav-links { gap: 12px; } }
   .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; font-weight: 600; font-size: 0.95rem; font-family: var(--body); text-decoration: none; border-radius: 10px; cursor: pointer; border: 1px solid var(--ink); transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease; }
   .btn:hover { transform: translateY(-1px); }
   .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
@@ -248,6 +248,7 @@
   .shot-card {
     background: var(--surface); border: 1px solid var(--rule); border-radius: 20px;
     box-shadow: var(--shadow-lift); padding: 22px; text-align: center;
+    margin: 0; box-sizing: border-box; /* figure trae margin 40px por defecto: desbordaba a 390px */
   }
   .shot-card.is-desktop { flex: 3 1 480px; max-width: 640px; }
   .shot-card.is-mobile { flex: 1 1 220px; max-width: 260px; }
@@ -334,6 +335,7 @@
       <a class="plain" href="#documentar" data-i18n="nav.documentar">Documentar</a>
       <a class="plain" href="#compartir" data-i18n="nav.compartir">Compartir</a>
       <a class="plain" href="edu.html" data-i18n="nav.edu">Formació</a>
+      <a class="plain" href="organizaciones.html" data-i18n="nav.orgs">Organitzacions</a>
       <a class="plain nav-collab" href="#colabora" data-i18n="nav.colabora">Col·labora</a>
       <a class="plain" href="https://github.com/mikeyoshio/Instriq">GitHub</a>
       <div class="lang-switch" id="langSwitch">
@@ -744,17 +746,20 @@ draw();
     <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="funciones.lede">Al voltant de consultar, aprendre, documentar i compartir, Instriq també cobreix el dia a dia operatiu d'un grup.</p>
     <div class="showcase" style="max-width: 300px; grid-template-columns: 1fr;">
       <figure>
-        <img src="screenshots/home.png" alt="Pantalla d'inici amb cercador global" width="260" height="578" loading="lazy">
-        <figcaption data-i18n="hoy.fig0">Inici centrat en un cercador global.</figcaption>
+        <img src="screenshots/omnihub.png" alt="Omnihub, la cerca unificada d'Instriq" width="260" height="578" loading="lazy">
+        <figcaption data-i18n="hoy.fig0">Omnihub: una sola cerca per a tot Instriq.</figcaption>
       </figure>
     </div>
     <div class="cards cols-3" style="text-align: left;">
+      <div class="card"><h3 data-i18n="funciones.c12t">Procediments i casos</h3><p data-i18n="funciones.c12p">Cada procediment reuneix la safata, la tècnica o el protocol i les preferències del cirurgià. Des de l'agenda quirúrgica, cada cas s'obre amb tot el que cal per preparar-lo.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c13t">Radar</h3><p data-i18n="funciones.c13p">A la pestanya Avui, els casos quirúrgics del dia de tota l'organització d'un cop d'ull, amb accés directe a cada cas.</p></div>
       <div class="card"><h3 data-i18n="funciones.c4t">Espais de treball i rols</h3><p data-i18n="funciones.c4p">Organitza el grup per especialitat o servei. Rols granulars (lector, editor, aprovador, administrador) per espai, amb auditoria de cada canvi sensible.</p></div>
       <div class="card"><h3 data-i18n="funciones.c5t">Mode sense connexió</h3><p data-i18n="funciones.c5p">Consulta i edita sense xarxa a tot arreu on t'ho permetin els teus permisos; els canvis es pugen sols en recuperar la connexió.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c6t">Cerca intel·ligent</h3><p data-i18n="funciones.c6p">Un únic cercador per instrumental, tècniques, protocols, fabricants, cirurgians i etiquetes — amb activitat recent i favorits.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c6t">Omnihub</h3><p data-i18n="funciones.c6p">Una sola cerca per a procediments, instrumental, safates, tècniques, protocols, cirurgians i fabricants, amb els catàlegs de referència a un toc.</p></div>
       <div class="card"><h3 data-i18n="funciones.c9t">Auditoria i privacitat</h3><p data-i18n="funciones.c9p">Registre de qui ha fet què i quan en accions sensibles. Exporta o elimina les teves dades personals quan vulguis (GDPR).</p></div>
-      <div class="card"><h3 data-i18n="funciones.c10t">Modes de treball</h3><p data-i18n="funciones.c10p">Instrumentista, cirurgià, docent i més: la fitxa d'instrument i l'inici s'adapten al teu rol del dia, sense tocar els teus permisos reals.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c10t">Modes de treball</h3><p data-i18n="funciones.c10p">Instrumentista, cirurgià, docent i més: la fitxa d'instrument i la pestanya Avui s'adapten al teu rol del dia, sense tocar els teus permisos reals.</p></div>
       <div class="card"><h3 data-i18n="funciones.c11t">Incidències i camí cap a ISO 9001</h3><p data-i18n="funciones.c11p">Reporta una incidència d'instrumental amb causa arrel i acció correctiva, verificada per una persona diferent de qui la resol — amb registre d'auditoria.</p></div>
+      <div class="card"><h3 data-i18n="funciones.c14t">Xarxa de seus</h3><p data-i18n="funciones.c14p">Si el teu hospital forma part d'una xarxa, consulta (només lectura) les safates, tècniques i protocols publicats a les altres seus.</p></div>
     </div>
   </div>
 </section>
@@ -783,8 +788,8 @@ draw();
          desactualitzat (#54 quan la real ja anava per #69), sense cap procés
          que ho sincronitzi sol. -->
     <div class="novedades-teaser" id="novedadesTeaser">
-      <span class="timeline-badge" data-i18n="novedades.lastBadge">#84</span>
-      <p data-i18n="novedades.lastText"><strong>El canal de donacions canvia a Patreon</strong> — subscripció mensual i recompenses; Buy Me a Coffee es retira com a canal de donacions.</p>
+      <span class="timeline-badge" data-i18n="novedades.lastBadge">#90</span>
+      <p data-i18n="novedades.lastText"><strong>Nova navegació en 4 pestanyes</strong> — Avui, Cercar, El meu equip i Aprèn, amb Radar, Omnihub i els procediments al centre.</p>
       <a href="novedades.html" class="btn btn-ghost" data-i18n="novedades.cta">Veure totes les novetats →</a>
     </div>
   </div>
@@ -812,6 +817,7 @@ draw();
       </div>
       <p class="org-caption" data-i18n="organiza.caption">Contingut dins de l'espai "Traumatologia"</p>
     </div>
+    <a href="organizaciones.html" class="btn btn-primary" style="margin-top: 28px;" data-i18n="organiza.cta">Guia per a organitzacions →</a>
     <div class="org-criterion">
       <p data-i18n="organiza.criterion">Organitza els espais per <strong>especialitat o servei</strong>, no per cada tècnica individual. ✓ "Traumatologia", "Quiròfan 3". ✗ Un espai per cada protocol.</p>
     </div>
@@ -904,6 +910,7 @@ draw();
         <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=footer" data-i18n="footer.app">Obre l'app</a>
         <a href="https://apps.microsoft.com/store/detail/9N1SJ4N98FG3?cid=DevShareMCLPCS" data-i18n="footer.store">Microsoft Store</a>
         <a href="edu.html" data-i18n="footer.edu">Per a formació</a>
+        <a href="organizaciones.html" data-i18n="footer.orgs">Per a organitzacions</a>
         <a href="ayuda.html" data-i18n="footer.help">Centre d'ajuda</a>
         <a href="https://status.instriq.org" data-i18n="footer.status">Estat del servei</a>
         <a href="https://github.com/mikeyoshio/Instriq">GitHub</a>
@@ -1000,7 +1007,7 @@ draw();
       "meta.title": "Instriq — Conocimiento de quirófano abierto y compartido",
       "meta.description": "Catálogo de instrumental, técnicas, protocolos y tarjetas de preferencia compartidos entre profesionales de quirófano. Open source.",
       "a11y.skip": "Saltar al contenido",
-      "nav.consultar": "Consultar", "nav.aprender": "Aprender", "nav.documentar": "Documentar", "nav.compartir": "Compartir", "nav.edu": "Formación", "nav.colabora": "Colabora", "nav.cta": "Abrir la app",
+      "nav.consultar": "Consultar", "nav.aprender": "Aprender", "nav.documentar": "Documentar", "nav.compartir": "Compartir", "nav.edu": "Formación", "nav.orgs": "Organizaciones", "organiza.cta": "Guía para organizaciones →", "nav.colabora": "Colabora", "nav.cta": "Abrir la app",
       "hero.eyebrow": "Open source · Bloque quirúrgico",
       "hero.h1": "El conocimiento de quirófano,<br>abierto y compartido.",
       "hero.lede": "Instriq reúne instrumental, protocolos y la experiencia real del bloque quirúrgico en un solo lugar — para que aprender a moverse en quirófano no dependa de una carpeta de papel desactualizada.",
@@ -1042,7 +1049,7 @@ draw();
       "valores.c4t": "Estándares abiertos", "valores.c4p": "Datos y formato abiertos, preparados para interoperar con otros sistemas si el proyecto lo requiere.",
       "hoy.eyebrow": "Disponible hoy", "hoy.h1": "Sin cuenta, sin fricción.",
       "hoy.lede": "El aprendizaje básico funciona como invitado. Solo hace falta cuenta si tu grupo quiere compartir su propio conocimiento.",
-      "hoy.fig0": "Inicio centrado en un buscador global.", "hoy.fig1": "Catálogo con fotos reales por especialidad.", "hoy.fig2": "Organiza tu equipo en espacios de trabajo.",
+      "hoy.fig0": "Omnihub: una sola búsqueda para todo Instriq.", "hoy.fig1": "Catálogo con fotos reales por especialidad.", "hoy.fig2": "Organiza tu equipo en espacios de trabajo.",
       "consultar.eyebrow": "Consultar", "consultar.h1": "Explora el conocimiento quirúrgico.",
       "consultar.lede": "El Vademécum público de Instriq reúne el instrumental y el equipamiento del bloque quirúrgico, ordenado por especialidades — con nombres, sinónimos, fabricantes, métodos de esterilización y ficha técnica. Se consulta sin cuenta ni registro.",
       "consultar.fig": "Catálogo con fotos reales, filtrable por especialidad.",
@@ -1072,9 +1079,15 @@ draw();
       "funciones.lede": "Alrededor de consultar, aprender, documentar y compartir, Instriq también cubre el día a día operativo de un grupo.",
       "funciones.c4t": "Espacios de trabajo y roles", "funciones.c4p": "Organiza el grupo por especialidad o servicio. Roles granulares (lector, editor, aprobador, administrador) por espacio, con auditoría de cada cambio sensible.",
       "funciones.c5t": "Modo sin conexión", "funciones.c5p": "Consulta y edita sin red allá donde te lo permitan tus permisos; los cambios se suben solos al recuperar la conexión.",
-      "funciones.c6t": "Búsqueda inteligente", "funciones.c6p": "Un único buscador para instrumental, técnicas, protocolos, fabricantes, cirujanos y etiquetas — con actividad reciente y favoritos.",
+      "funciones.c6t": "Omnihub", "funciones.c6p": "Una sola búsqueda para procedimientos, instrumental, bandejas, técnicas, protocolos, cirujanos y fabricantes, con los catálogos de referencia a un toque.",
       "funciones.c9t": "Auditoría y privacidad", "funciones.c9p": "Registro de quién ha hecho qué y cuándo en acciones sensibles. Exporta o elimina tus datos personales cuando quieras (GDPR).",
-      "funciones.c10t": "Modos de trabajo", "funciones.c10p": "Instrumentista, cirujano, docente y más: la ficha de instrumento y el inicio se adaptan a tu rol del día, sin tocar tus permisos reales.",
+      "funciones.c10t": "Modos de trabajo", "funciones.c10p": "Instrumentista, cirujano, docente y más: la ficha de instrumento y la pestaña Hoy se adaptan a tu rol del día, sin tocar tus permisos reales.",
+      "funciones.c12t": "Procedimientos y casos",
+      "funciones.c12p": "Cada procedimiento reúne la bandeja, la técnica o el protocolo y las preferencias del cirujano. Desde la agenda quirúrgica, cada caso se abre con todo lo necesario para prepararlo.",
+      "funciones.c13t": "Radar",
+      "funciones.c13p": "En la pestaña Hoy, los casos quirúrgicos del día de toda la organización de un vistazo, con acceso directo a cada caso.",
+      "funciones.c14t": "Red de sedes",
+      "funciones.c14p": "Si tu hospital forma parte de una red, consulta (solo lectura) las bandejas, técnicas y protocolos publicados en las otras sedes.",
       "funciones.c11t": "Incidencias y camino hacia ISO 9001", "funciones.c11p": "Reporta una incidencia de instrumental con causa raíz y acción correctiva, verificada por una persona distinta de quien la resuelve — con registro de auditoría.",
       "pantalles.eyebrow": "Se adapta a dónde lo usas", "pantalles.h1": "El mismo Instriq, distinto según quién lo abre.",
       "pantalles.lede": "Dentro del quirófano, una checklist a pantalla completa pensada para tocarla con guantes — y en el despacho, un panel completo para quien coordina el grupo entero: <strong>pendientes de aprobación, cola de revisión e incidencias, de un vistazo</strong>.",
@@ -1089,7 +1102,7 @@ draw();
       "quien.c6t": "Red de varios centros", "quien.c6p": "Cada hospital con su propio grupo y sus datos privados, con la Biblioteca Pública como punto de encuentro común.",
       "novedades.eyebrow": "Novedades", "novedades.h1": "Construido en abierto, en público.",
       "novedades.lede": "Desde el primer día hasta hoy, sin esconder nada — incluido lo que todavía está previsto.",
-      "novedades.lastBadge": "#84", "novedades.lastText": "<strong>El canal de donaciones cambia a Patreon</strong> — suscripción mensual y recompensas; Buy Me a Coffee se retira como canal de donaciones.",
+      "novedades.lastBadge": "#90", "novedades.lastText": "<strong>Nueva navegación en 4 pestañas</strong> — Hoy, Buscar, Mi equipo y Aprender, con Radar, Omnihub y los procedimientos en el centro.",
       "novedades.cta": "Ver todas las novedades →",
       "colabora.eyebrow": "Colabora", "colabora.h1": "Instriq crece con quien lo usa.",
       "colabora.lede": "Impulsado por un pequeño equipo, crece con profesionales sanitarios y desarrolladores que colaboran de forma voluntaria.",
@@ -1117,7 +1130,7 @@ draw();
       "donaciones.eyebrow": "Donaciones",
       "donaciones.p1": "Ya puedes colaborar con una suscripción mensual y recompensas en <a href=\"https://patreon.com/Instriq?utm_source=landing&utm_medium=donate&utm_campaign=donacions\">Patreon</a> (sección Colabora, más arriba) para ayudar a cubrir infraestructura y el tiempo dedicado al proyecto.",
       "donaciones.proxTag": "Objetivo", "donaciones.prox": "Todavía no hay un registro público de cómo se reparten los fondos. Lo publicaremos cuando haya volumen suficiente para que tenga sentido.",
-      "footer.app": "Abrir la app", "footer.store": "Microsoft Store", "footer.edu": "Para formación", "footer.help": "Centro de ayuda", "footer.status": "Estado del servicio", "footer.h1": "Proyecto", "footer.l1": "Misión y visión", "footer.l2": "Cómo colaborar", "footer.l3": "Licencias", "footer.l8": "Artífices", "footer.l7": "Novedades", "footer.l6": "Sugerencias",
+      "footer.app": "Abrir la app", "footer.store": "Microsoft Store", "footer.edu": "Para formación", "footer.orgs": "Para organizaciones", "footer.help": "Centro de ayuda", "footer.status": "Estado del servicio", "footer.h1": "Proyecto", "footer.l1": "Misión y visión", "footer.l2": "Cómo colaborar", "footer.l3": "Licencias", "footer.l8": "Artífices", "footer.l7": "Novedades", "footer.l6": "Sugerencias",
       "footer.h2": "Legal", "footer.l4": "Política de privacidad", "footer.l5": "Licencia (AGPL-3.0)",
       "footer.h3": "Contacto",
       "footer.fine": "Instriq® — proyecto open source por y para el bloque quirúrgico. Código bajo AGPL-3.0."
@@ -1126,7 +1139,7 @@ draw();
       "meta.title": "Instriq — Open, shared operating room knowledge",
       "meta.description": "Instrument catalog, techniques, protocols and preference cards shared among operating room professionals. Open source.",
       "a11y.skip": "Skip to content",
-      "nav.consultar": "Explore", "nav.aprender": "Learn", "nav.documentar": "Document", "nav.compartir": "Share", "nav.edu": "Education", "nav.colabora": "Contribute", "nav.cta": "Open the app",
+      "nav.consultar": "Explore", "nav.aprender": "Learn", "nav.documentar": "Document", "nav.compartir": "Share", "nav.edu": "Education", "nav.orgs": "Organizations", "organiza.cta": "Guide for organizations →", "nav.colabora": "Contribute", "nav.cta": "Open the app",
       "hero.eyebrow": "Open source · Surgical block",
       "hero.h1": "Operating room knowledge,<br>open and shared.",
       "hero.lede": "Instriq brings together instruments, protocols and the real experience of the surgical team in one place — so learning your way around the OR doesn't depend on an outdated paper binder.",
@@ -1168,7 +1181,7 @@ draw();
       "valores.c4t": "Open standards", "valores.c4p": "Open data and format, ready to interoperate with other systems if the project requires it.",
       "hoy.eyebrow": "Available today", "hoy.h1": "No account, no friction.",
       "hoy.lede": "Basic learning works as a guest. An account is only needed if your group wants to share its own knowledge.",
-      "hoy.fig0": "A home screen centered on global search.", "hoy.fig1": "Catalog with real photos by specialty.", "hoy.fig2": "Organize your team into workspaces.",
+      "hoy.fig0": "Omnihub: one search for all of Instriq.", "hoy.fig1": "Catalog with real photos by specialty.", "hoy.fig2": "Organize your team into workspaces.",
       "consultar.eyebrow": "Explore", "consultar.h1": "Explore surgical knowledge.",
       "consultar.lede": "Instriq's public Vademecum brings together the instruments and equipment of the surgical block, organized by specialty — with names, synonyms, manufacturers, sterilization methods and technical sheets. No account or sign-up required.",
       "consultar.fig": "Catalog with real photos, filterable by specialty.",
@@ -1198,9 +1211,15 @@ draw();
       "funciones.lede": "Around exploring, learning, documenting and sharing, Instriq also covers a group's day-to-day operations.",
       "funciones.c4t": "Workspaces and roles", "funciones.c4p": "Organize the group by specialty or service. Granular roles (reader, editor, approver, administrator) per workspace, with an audit trail for every sensitive change.",
       "funciones.c5t": "Offline mode", "funciones.c5p": "View and edit without network wherever your permissions allow; changes sync on their own once connection returns.",
-      "funciones.c6t": "Smart search", "funciones.c6p": "One search bar for instruments, techniques, protocols, manufacturers, surgeons and tags — with recent activity and favorites.",
+      "funciones.c6t": "Omnihub", "funciones.c6p": "One search across procedures, instruments, trays, techniques, protocols, surgeons and manufacturers, with the reference catalogs one tap away.",
       "funciones.c9t": "Audit trail and privacy", "funciones.c9p": "A record of who did what and when for sensitive actions. Export or delete your personal data whenever you want (GDPR).",
-      "funciones.c10t": "Work modes", "funciones.c10p": "Scrub nurse, surgeon, teacher and more: the instrument page and home screen adapt to your role for the day, without touching your real permissions.",
+      "funciones.c10t": "Work modes", "funciones.c10p": "Scrub nurse, surgeon, teacher and more: the instrument page and the Today tab adapt to your role for the day, without touching your real permissions.",
+      "funciones.c12t": "Procedures and cases",
+      "funciones.c12p": "Each procedure brings together the tray, the technique or protocol and the surgeon's preferences. From the surgical schedule, every case opens with everything needed to prepare it.",
+      "funciones.c13t": "Radar",
+      "funciones.c13p": "On the Today tab, the whole organization's surgical cases for the day at a glance, with direct access to each case.",
+      "funciones.c14t": "Network of sites",
+      "funciones.c14p": "If your hospital is part of a network, view (read-only) the trays, techniques and protocols published at the other sites.",
       "funciones.c11t": "Incidents and the road to ISO 9001", "funciones.c11p": "Report an instrument incident with root cause and corrective action, verified by someone other than whoever resolved it — with an audit trail.",
       "pantalles.eyebrow": "Adapts to where you use it", "pantalles.h1": "The same Instriq, different depending on who opens it.",
       "pantalles.lede": "Inside the operating room, a full-screen checklist meant to be used with gloves on — and in the office, a full panel for whoever coordinates the whole group: <strong>pending approvals, the review queue and sync issues, at a glance</strong>.",
@@ -1215,7 +1234,7 @@ draw();
       "quien.c6t": "Network of several centers", "quien.c6p": "Each hospital with its own group and its own private data, with the Public Library as a shared meeting point.",
       "novedades.eyebrow": "Latest", "novedades.h1": "Built in the open, in public.",
       "novedades.lede": "From day one until today, nothing hidden — including what's still planned.",
-      "novedades.lastBadge": "#84", "novedades.lastText": "<strong>Donation channel moves to Patreon</strong> — monthly membership and rewards; Buy Me a Coffee is retired as a donation channel.",
+      "novedades.lastBadge": "#90", "novedades.lastText": "<strong>New 4-tab navigation</strong> — Today, Search, My team and Learn, with Radar, Omnihub and procedures at the center.",
       "novedades.cta": "View all updates →",
       "colabora.eyebrow": "Contribute", "colabora.h1": "Instriq grows with the people who use it.",
       "colabora.lede": "Driven by a small team, it grows with healthcare professionals and developers who contribute voluntarily.",
@@ -1243,7 +1262,7 @@ draw();
       "donaciones.eyebrow": "Donations",
       "donaciones.p1": "You can already contribute with a monthly membership and rewards on <a href=\"https://patreon.com/Instriq?utm_source=landing&utm_medium=donate&utm_campaign=donacions\">Patreon</a> (Collaborate section, above) to help cover infrastructure and the time put into the project.",
       "donaciones.proxTag": "Goal", "donaciones.prox": "There's no public record yet of how funds are distributed. We'll publish one once there's enough volume for it to be meaningful.",
-      "footer.app": "Open the app", "footer.store": "Microsoft Store", "footer.edu": "For education", "footer.help": "Help center", "footer.status": "Service status", "footer.h1": "Project", "footer.l1": "Mission and vision", "footer.l2": "How to contribute", "footer.l3": "Licenses", "footer.l8": "Makers", "footer.l7": "Updates", "footer.l6": "Suggestions",
+      "footer.app": "Open the app", "footer.store": "Microsoft Store", "footer.edu": "For education", "footer.orgs": "For organizations", "footer.help": "Help center", "footer.status": "Service status", "footer.h1": "Project", "footer.l1": "Mission and vision", "footer.l2": "How to contribute", "footer.l3": "Licenses", "footer.l8": "Makers", "footer.l7": "Updates", "footer.l6": "Suggestions",
       "footer.h2": "Legal", "footer.l4": "Privacy policy", "footer.l5": "License (AGPL-3.0)",
       "footer.h3": "Contact",
       "footer.fine": "Instriq® — an open source project by and for the surgical team. Code under AGPL-3.0."

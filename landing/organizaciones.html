@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16191a" media="(prefers-color-scheme: dark)">
+<title data-i18n="meta.title">Instriq per a organitzacions — com muntar el teu grup</title>
+<meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Guia per a coordinadors de bloc quirúrgic, supervisores i centres de formació: com crear el grup a Instriq, exemples de configuració i bones pràctiques. Gratuït i de codi obert.">
+<link rel="canonical" href="https://instriq.org/organizaciones" id="canonicalLink">
+<link rel="alternate" hreflang="ca" href="https://instriq.org/organizaciones">
+<link rel="alternate" hreflang="es" href="https://instriq.org/organizaciones?lang=es">
+<link rel="alternate" hreflang="en" href="https://instriq.org/organizaciones?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://instriq.org/organizaciones">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://instriq.org/organizaciones">
+<meta property="og:site_name" content="Instriq">
+<meta property="og:title" data-i18n-attr="content" data-i18n="meta.title" content="Instriq per a organitzacions — com muntar el teu grup">
+<meta property="og:description" data-i18n-attr="content" data-i18n="meta.description" content="Guia per a coordinadors de bloc quirúrgic, supervisores i centres de formació: com crear el grup a Instriq, exemples de configuració i bones pràctiques. Gratuït i de codi obert.">
+<meta property="og:image" content="https://instriq.org/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" data-i18n-attr="content" data-i18n="meta.title" content="Instriq per a organitzacions — com muntar el teu grup">
+<meta name="twitter:description" data-i18n-attr="content" data-i18n="meta.description" content="Guia per a coordinadors de bloc quirúrgic, supervisores i centres de formació: com crear el grup a Instriq, exemples de configuració i bones pràctiques. Gratuït i de codi obert.">
+<meta name="twitter:image" content="https://instriq.org/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Quant costa fer servir Instriq en una organització?", "acceptedAnswer": { "@type": "Answer", "text": "Res. Totes les funcionalitats són gratuïtes per a qualsevol grup, sense llicències ni quotes per usuari. El codi és obert (AGPL-3.0)." } },
+    { "@type": "Question", "name": "Instriq guarda dades de pacients?", "acceptedAnswer": { "@type": "Answer", "text": "No. Instriq és coneixement d'equip: instrumental, safates, tècniques i protocols. No s'hi han d'introduir dades de pacients i no substitueix la història clínica." } },
+    { "@type": "Question", "name": "L'aprovació d'un protocol a Instriq equival a una validació clínica?", "acceptedAnswer": { "@type": "Answer", "text": "No. L'aprovació és la revisió interna del vostre equip. No substitueix els protocols oficials ni els circuits de validació de la vostra institució." } }
+  ]
+}
+</script>
+<style>
+  :root {
+    --paper: #f6f4f0; --paper-alt: #edeae2; --surface: #ffffff;
+    --ink: #201c17; --ink-muted: #6e6459; --rule: #e2ddd3;
+    --accent: #a34e1c; --accent-soft: #f1e3d7;
+    --max-w: 1120px; --measure: 720px;
+    --display: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, "Liberation Mono", monospace;
+    --body: "Iowan Old Style", "Palatino Linotype", "URW Palladio L", Georgia, "Times New Roman", serif;
+    --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12);
+    --shadow-lift: 0 24px 60px -20px rgba(32, 28, 23, 0.22);
+    --grain-blend: multiply;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; }
+  }
+  :root[data-theme="dark"] { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 72px; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 19px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  img { max-width: 100%; display: block; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 480px) { .wrap { padding: 0 16px; } }
+  .measure { max-width: var(--measure); }
+  header.site { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em; }
+  .brand img { width: 26px; height: 26px; border-radius: 7px; }
+  .nav-links { display: flex; gap: 20px; align-items: center; }
+  .nav-links a.plain { color: var(--ink-muted); text-decoration: none; font-size: 0.95rem; white-space: nowrap; transition: color 0.15s ease; }
+  .nav-links a.plain:hover { color: var(--accent); }
+  .lang-switch { display: flex; gap: 6px; font-family: var(--display); font-size: 0.78rem; }
+  .lang-switch button { background: none; border: none; color: var(--ink-muted); cursor: pointer; padding: 4px 6px; font-family: var(--display); font-size: 0.78rem; border-radius: 4px; }
+  .lang-switch button.active { color: var(--ink); font-weight: 700; background: var(--paper-alt); }
+  @media (max-width: 760px) { .nav-links a.plain { display: none; } .nav-links { gap: 12px; } }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; font-weight: 600; font-size: 0.95rem; font-family: var(--body); text-decoration: none; border-radius: 10px; cursor: pointer; border: 1px solid var(--ink); transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-ghost { background: none; color: var(--ink); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 480px) { .nav .btn { padding: 10px 14px; } }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .section { padding: 64px 0; }
+  .section-alt { background: var(--paper-alt); }
+  @media (max-width: 720px) { .section { padding: 44px 0; } }
+  .eyebrow { display: inline-block; font-family: var(--display); font-size: 0.8rem; font-weight: 600; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: 1.15; margin: 0 0 20px; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 16px; }
+  p { color: var(--ink-muted); margin: 0 0 18px; }
+  .lede { font-size: 1.15rem; line-height: 1.65; max-width: var(--measure); }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 32px; }
+  .feature-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 24px; box-shadow: var(--shadow-soft); }
+  .feature-card .icon { font-family: var(--display); font-size: 0.78rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .feature-card h3 { font-size: 1.08rem; margin: 0 0 8px; }
+  .feature-card p { margin: 0; font-size: 0.95rem; }
+  /* Pas a pas: una seqüència real, per això numerada. */
+  .steps { list-style: none; counter-reset: step; padding: 0; margin: 32px 0 0; max-width: var(--measure); }
+  .steps li { counter-increment: step; position: relative; padding: 0 0 22px 52px; }
+  .steps li::before { content: counter(step); position: absolute; left: 0; top: 2px; width: 34px; height: 34px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-family: var(--display); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+  .steps h3 { font-size: 1.02rem; margin: 0 0 4px; }
+  .steps p { margin: 0; font-size: 0.96rem; }
+  /* Estructura d'exemple: arbre de grup → espais → rols. */
+  .tree { margin: 16px 0 0; padding: 14px 16px; background: var(--paper-alt); border-radius: 10px; font-family: var(--display); font-size: 0.8rem; line-height: 1.6; color: var(--ink); overflow-x: auto; }
+  .tree div { white-space: nowrap; }
+  .tree .ws { padding-left: 14px; }
+  .tree .role { padding-left: 28px; color: var(--ink-muted); }
+  .practice { border-bottom: 1px solid var(--rule); padding: 18px 0; max-width: var(--measure); }
+  .practice h3 { font-size: 1.02rem; margin: 0 0 6px; }
+  .practice p { margin: 0; font-size: 0.96rem; }
+  .faq-item { border-bottom: 1px solid var(--rule); padding: 20px 0; max-width: var(--measure); }
+  .faq-item:first-child { padding-top: 0; }
+  .faq-item h3 { font-size: 1.05rem; margin: 0 0 8px; color: var(--ink); }
+  .faq-item p { margin: 0; }
+  footer.site { padding: 56px 0 36px; border-top: 1px solid var(--rule); }
+  footer.site .cols { display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; }
+  footer.site .col h4 { font-family: var(--display); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); margin: 0 0 12px; font-weight: 700; }
+  footer.site .col a { display: block; color: var(--ink-muted); text-decoration: none; font-size: 0.96rem; margin-bottom: 8px; transition: color 0.15s ease; }
+  footer.site .col a:hover { color: var(--accent); }
+  .fine { font-size: 0.85rem; color: var(--ink-muted); margin-top: 40px; }
+  .grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.045; mix-blend-mode: var(--grain-blend, multiply); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 30; width: 0%; }
+  .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
+  .skip-link:focus { left: 0; }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+</style>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c09082e3f96f44b59922839da897dcab"}'></script><!-- End Cloudflare Web Analytics -->
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<a href="#main" class="skip-link" data-i18n="a11y.skip">Saltar al contingut</a>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="index.html" class="brand"><img src="favicon.png" alt=""> Instriq</a>
+    <nav class="nav-links">
+      <a class="plain" href="index.html" data-i18n="nav.back">← Torna a l'inici</a>
+      <a class="plain" href="edu.html" data-i18n="nav.edu">Formació</a>
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button>
+      </div>
+      <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=orgs" class="btn btn-primary" data-i18n="nav.cta">Obre l'app</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="hero.eyebrow">Per a organitzacions</span>
+    <h1 data-i18n="hero.h1">Munta el teu bloc quirúrgic a Instriq.</h1>
+    <p class="lede" data-i18n="hero.lede">Un <strong>grup</strong> és el vostre hospital, bloc quirúrgic, servei o centre de formació. Dins hi organitzeu espais de treball, hi convideu l'equip i hi documenteu com treballeu de debò: procediments, safates, tècniques, protocols i preferències de cada cirurgià.</p>
+    <p class="lede" data-i18n="hero.free">Tot és gratuït per a qualsevol organització: sense llicències, sense quota per usuari i amb el codi obert.</p>
+    <div class="hero-actions">
+      <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=orgs" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app</a>
+      <a href="#com-crear" class="btn btn-ghost" data-i18n="hero.cta2">Com crear el grup</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="com-crear">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="steps.eyebrow">Pas a pas</span>
+    <h2 data-i18n="steps.h2">Com crear el teu grup</h2>
+    <ol class="steps">
+      <li><h3 data-i18n="steps.s1t">Obre l'app i ves a «El meu equip»</h3><p data-i18n="steps.s1p">Entra a app.instriq.org des de qualsevol navegador, o instal·la-la a Windows des de la Microsoft Store. A la pestanya «El meu equip», toca «Connecta amb el teu grup».</p></li>
+      <li><h3 data-i18n="steps.s2t">Crea el grup (o uneix-t'hi)</h3><p data-i18n="steps.s2p">En el mateix formulari crees el compte i tries: crear un grup nou (hospital, clínica, universitat, centre de simulació, fabricant o equip privat) o unir-te a un d'existent amb el seu codi d'invitació. Qui crea el grup en queda com a propietari.</p></li>
+      <li><h3 data-i18n="steps.s3t">Crea els espais de treball</h3><p data-i18n="steps.s3p">Un espai per especialitat o servei: «Traumatologia», «Cirurgia general», «Formació». Cada espai té el seu propi contingut i els seus propis rols.</p></li>
+      <li><h3 data-i18n="steps.s4t">Convida l'equip</h3><p data-i18n="steps.s4p">Comparteix el codi d'invitació del grup o un enllaç d'invitació. Cada persona entra amb el seu propi compte.</p></li>
+      <li><h3 data-i18n="steps.s5t">Assigna els rols</h3><p data-i18n="steps.s5p">A nivell de grup hi ha <strong>propietari</strong> i <strong>administrador</strong>. A cada espai, <strong>aprovador</strong> (revisa i publica), <strong>editor</strong> (crea i proposa canvis) i <strong>lector</strong> (consulta). Pots assignar un rol a un equip sencer d'un sol cop, per exemple a tots els residents.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="exemples">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="ex.eyebrow">Exemples de configuració</span>
+    <h2 data-i18n="ex.h2">Quatre maneres habituals d'organitzar-se</h2>
+    <p class="lede" data-i18n="ex.lede">Comença petit: sempre pots afegir espais i persones més endavant sense canviar d'eina.</p>
+    <div class="card-grid">
+      <div class="feature-card reveal">
+        <div class="icon" data-i18n="ex.e1.k">Equip petit</div>
+        <h3 data-i18n="ex.e1.h">Consultori o equip de 3–10 persones</h3>
+        <p data-i18n="ex.e1.p">Un sol espai de treball i dues persones que aproven, perquè ningú no es revisi la seva pròpia feina.</p>
+        <div class="tree">
+          <div data-i18n="ex.e1.t1">Clínica Riera (grup)</div>
+          <div class="ws" data-i18n="ex.e1.t2">└ Quiròfan</div>
+          <div class="role" data-i18n="ex.e1.t3">aprovadors: 2 infermeres</div>
+          <div class="role" data-i18n="ex.e1.t4">editors i lectors: la resta</div>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="icon" data-i18n="ex.e2.k">Bloc quirúrgic</div>
+        <h3 data-i18n="ex.e2.h">Un servei, un espai per especialitat</h3>
+        <p data-i18n="ex.e2.p">Cada especialitat té les seves safates, tècniques i preferències. La supervisió aprova a tots els espais.</p>
+        <div class="tree">
+          <div data-i18n="ex.e2.t1">Bloc quirúrgic (grup)</div>
+          <div class="ws" data-i18n="ex.e2.t2">├ Cirurgia general</div>
+          <div class="ws" data-i18n="ex.e2.t3">├ Traumatologia</div>
+          <div class="ws" data-i18n="ex.e2.t4">└ Urologia</div>
+          <div class="role" data-i18n="ex.e2.t5">aprovadors: supervisió + referent de cada especialitat</div>
+          <div class="role" data-i18n="ex.e2.t6">editors: instrumentistes · lectors: la resta</div>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="icon" data-i18n="ex.e3.k">Hospital o xarxa</div>
+        <h3 data-i18n="ex.e3.h">Diverses especialitats o diverses seus</h3>
+        <p data-i18n="ex.e3.p">Tants espais com calgui. Si l'hospital forma part d'una xarxa amb diverses seus, des de «Xarxa de la cadena» es pot consultar (només lectura) el que han publicat les altres seus.</p>
+        <div class="tree">
+          <div data-i18n="ex.e3.t1">Hospital (grup) ↔ altres seus de la xarxa</div>
+          <div class="ws" data-i18n="ex.e3.t2">├ Quiròfans centrals: 6 espais</div>
+          <div class="ws" data-i18n="ex.e3.t3">├ CMA (cirurgia sense ingrés)</div>
+          <div class="ws" data-i18n="ex.e3.t4">└ Esterilització</div>
+          <div class="role" data-i18n="ex.e3.t5">administradors: coordinació del bloc</div>
+          <div class="role" data-i18n="ex.e3.t6">rols per equips: «Instrumentistes torn de matí»…</div>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="icon" data-i18n="ex.e4.k">Formació</div>
+        <h3 data-i18n="ex.e4.h">Centre de formació o universitat</h3>
+        <p data-i18n="ex.e4.p">Un espai de pràctiques on el professorat aprova i l'alumnat consulta. Qüestionaris d'equip a mida i seguiment del progrés de cada alumne.</p>
+        <div class="tree">
+          <div data-i18n="ex.e4.t1">Escola d'Infermeria (grup)</div>
+          <div class="ws" data-i18n="ex.e4.t2">└ Pràctiques de quiròfan</div>
+          <div class="role" data-i18n="ex.e4.t3">aprovadors: professorat</div>
+          <div class="role" data-i18n="ex.e4.t4">lectors: alumnat (assignat per equips)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="que-documentar">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="doc.eyebrow">Què hi documenteu</span>
+    <h2 data-i18n="doc.h2">El dia a dia del bloc, en un sol lloc</h2>
+    <div class="card-grid">
+      <div class="feature-card reveal"><div class="icon" data-i18n="doc.d1.k">Procediments</div><h3 data-i18n="doc.d1.h">Tot el que cal per a una intervenció</h3><p data-i18n="doc.d1.p">Un procediment agrupa la safata, la tècnica o el protocol i les targetes de preferència de cada cirurgià, perquè ningú no hagi de buscar-ho per separat.</p></div>
+      <div class="feature-card reveal"><div class="icon" data-i18n="doc.d2.k">Agenda i Radar</div><h3 data-i18n="doc.d2.h">Els casos del dia, preparats</h3><p data-i18n="doc.d2.p">L'agenda quirúrgica enllaça cada cita amb el seu procediment. Cada cas obre tot el que cal per preparar-lo, i la pestanya «Avui» mostra al Radar les intervencions del dia.</p></div>
+      <div class="feature-card reveal"><div class="icon" data-i18n="doc.d3.k">Safates</div><h3 data-i18n="doc.d3.h">Checklist, preparació i control de qualitat</h3><p data-i18n="doc.d3.p">Instrumental i quantitats amb fotos, sessions reals de preparació i un control de qualitat abans de donar la safata per bona.</p></div>
+      <div class="feature-card reveal"><div class="icon" data-i18n="doc.d4.k">Tècniques i protocols</div><h3 data-i18n="doc.d4.h">Passos a l'estil checklist de l'OMS</h3><p data-i18n="doc.d4.p">Amb versions i flux d'aprovació: cada canvi és un esborrany que algú revisa abans de publicar-lo, i l'historial sempre es pot recuperar.</p></div>
+      <div class="feature-card reveal"><div class="icon" data-i18n="doc.d5.k">Incidències</div><h3 data-i18n="doc.d5.h">De la incidència a l'acció correctiva</h3><p data-i18n="doc.d5.p">Reporta una incidència d'instrumental, documenta la causa arrel i l'acció correctiva, i fes que la verifiqui una persona diferent de qui l'ha resolt.</p></div>
+      <div class="feature-card reveal"><div class="icon" data-i18n="doc.d6.k">Biblioteca Pública</div><h3 data-i18n="doc.d6.h">No comencis de zero</h3><p data-i18n="doc.d6.p">Adopta safates, tècniques i protocols de la comunitat com a punt de partida i adapta'ls al vostre espai. Seguiran el vostre propi flux d'aprovació.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="bones-practiques">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="bp.eyebrow">Bones pràctiques</span>
+    <h2 data-i18n="bp.h2">Bones pràctiques per començar bé</h2>
+    <div class="practice reveal"><h3 data-i18n="bp.p1t">Espais per especialitat o servei, no per tècnica</h3><p data-i18n="bp.p1p">«Traumatologia» o «Quiròfan 3», sí. Un espai per a cada protocol, no: acabaries amb desenes d'espais buits i rols repetits.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p2t">Com a mínim dues persones aprovadores per espai</h3><p data-i18n="bp.p2p">Així ningú no aprova el seu propi canvi i les revisions no s'aturen quan algú és de vacances.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p3t">Comença pels 3–5 procediments més freqüents</h3><p data-i18n="bp.p3p">Val més tenir ben documentats els procediments de cada dia que no pas cinquanta a mitges. Amplieu-ho quan l'equip ja hi estigui acostumat.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p4t">Noms coherents</h3><p data-i18n="bp.p4p">Feu servir el mateix nom per al procediment, la safata i la tècnica («Colecistectomia laparoscòpica»), perquè es trobin a la primera amb el cercador.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p5t">Una targeta de preferència per cirurgià i procediment</h3><p data-i18n="bp.p5p">No barregeu diversos cirurgians en una sola targeta: quan algú canviï la seva preferència, només es tocarà la seva.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p6t">No us salteu la revisió</h3><p data-i18n="bp.p6p">El flux d'esborrany i aprovació és el que dona confiança al contingut. Feu servir la comparació de versions abans d'aprovar.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p7t">Coneixement d'equip, mai dades de pacients</h3><p data-i18n="bp.p7p">Instriq és per a instrumental, safates i maneres de treballar. No hi introduïu dades de pacients. I no substitueix els protocols oficials de la vostra institució.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p8t">Reviseu les incidències cada setmana</h3><p data-i18n="bp.p8p">Les incidències obertes surten a «Avui» per a qui les pot resoldre. Un repàs setmanal evita que s'acumulin.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p9t">Feu servir el registre d'auditoria</h3><p data-i18n="bp.p9p">Els administradors el troben a Perfil › Administrar grup: qui ha aprovat, qui ha canviat un rol i quan.</p></div>
+    <div class="practice reveal"><h3 data-i18n="bp.p10t">Prepareu les zones sense cobertura</h3><p data-i18n="bp.p10p">A Perfil, «Descarrega per a ús sense connexió» deixa el catàleg i el contingut dels vostres espais al dispositiu. Els canvis es pugen sols en recuperar la xarxa.</p></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="faq">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="faq.eyebrow">Preguntes freqüents</span>
+    <h2 data-i18n="faq.h2">Abans de començar</h2>
+    <div class="measure">
+      <div class="faq-item reveal"><h3 data-i18n="faq.q1.q">Quant costa?</h3><p data-i18n="faq.q1.a">Res. Totes les funcionalitats són gratuïtes per a qualsevol grup, sense llicències ni quotes per usuari. El codi és obert (AGPL-3.0).</p></div>
+      <div class="faq-item reveal"><h3 data-i18n="faq.q2.q">I les dades?</h3><p data-i18n="faq.q2.a">Instriq no guarda dades de pacients. Cada persona pot exportar o eliminar les seves dades personals quan vulgui (RGPD), i el contingut privat del vostre grup només el veu el vostre grup.</p></div>
+      <div class="faq-item reveal"><h3 data-i18n="faq.q3.q">Què passa si algú marxa de l'equip?</h3><p data-i18n="faq.q3.a">Un administrador li treu l'accés. Si elimina el seu compte, el contingut que havia creat o aprovat es conserva anonimitzat per a l'equip.</p></div>
+      <div class="faq-item reveal"><h3 data-i18n="faq.q4.q">Aprovar un protocol a Instriq és una validació clínica?</h3><p data-i18n="faq.q4.a">No. És la revisió interna del vostre equip. No substitueix els protocols oficials ni els circuits de validació de la vostra institució.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="text-align:center">
+    <h2 data-i18n="cta.h2">Crea el vostre grup avui</h2>
+    <p class="lede" style="margin-left:auto;margin-right:auto" data-i18n="cta.p">Cinc minuts per tenir el grup i el primer espai. Dubtes? Escriu-nos a <a href="mailto:hola@instriq.org">hola@instriq.org</a>.</p>
+    <div class="hero-actions" style="justify-content:center">
+      <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=orgs" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="cols">
+      <div class="col">
+        <h4>Instriq</h4>
+        <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=orgs" data-i18n="footer.app">Obre l'app</a>
+        <a href="edu.html" data-i18n="nav.edu">Formació</a>
+        <a href="https://github.com/mikeyoshio/Instriq">GitHub</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h1">Projecte</h4>
+        <a href="index.html#mision" data-i18n="footer.l1">Missió i visió</a>
+        <a href="novedades.html" data-i18n="footer.l2">Novetats</a>
+        <a href="sugerencias.html" data-i18n="footer.l6">Suggeriments</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h2">Legal</h4>
+        <a href="privacidad.html" data-i18n="footer.l4">Política de privacitat</a>
+        <a href="https://github.com/mikeyoshio/Instriq/blob/main/LICENSE" data-i18n="footer.l5">Llicència (AGPL-3.0)</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h3">Contacte</h4>
+        <a href="mailto:hola@instriq.org">hola@instriq.org</a>
+        <a href="https://www.instagram.com/instriq_org/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com/instriq_org" target="_blank" rel="noopener">X (Twitter)</a>
+      </div>
+    </div>
+    <p class="fine" data-i18n="footer.fine">Instriq® — projecte open source per i per al bloc quirúrgic. Codi sota AGPL-3.0.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Català: els textos de l'HTML són la font (es llegeixen en carregar, com a index.html).
+  var DICT = { es: {
+    'meta.title': 'Instriq para organizaciones — cómo montar tu grupo',
+    'meta.description': 'Guía para coordinadores de bloque quirúrgico, supervisoras y centros de formación: cómo crear el grupo en Instriq, ejemplos de configuración y buenas prácticas. Gratis y de código abierto.',
+    'a11y.skip': 'Saltar al contenido',
+    'nav.back': '← Volver al inicio',
+    'nav.edu': 'Formación',
+    'nav.cta': 'Abre la app',
+    'hero.eyebrow': 'Para organizaciones',
+    'hero.h1': 'Monta tu bloque quirúrgico en Instriq.',
+    'hero.lede': 'Un <strong>grupo</strong> es vuestro hospital, bloque quirúrgico, servicio o centro de formación. Dentro organizáis espacios de trabajo, invitáis al equipo y documentáis cómo trabajáis de verdad: procedimientos, bandejas, técnicas, protocolos y preferencias de cada cirujano.',
+    'hero.free': 'Todo es gratis para cualquier organización: sin licencias, sin cuota por usuario y con el código abierto.',
+    'hero.cta1': 'Abre la app',
+    'hero.cta2': 'Cómo crear el grupo',
+    'steps.eyebrow': 'Paso a paso',
+    'steps.h2': 'Cómo crear tu grupo',
+    'steps.s1t': 'Abre la app y ve a «Mi equipo»',
+    'steps.s1p': 'Entra en app.instriq.org desde cualquier navegador, o instálala en Windows desde la Microsoft Store. En la pestaña «Mi equipo», toca «Conecta con tu grupo».',
+    'steps.s2t': 'Crea el grupo (o únete)',
+    'steps.s2p': 'En el mismo formulario creas la cuenta y eliges: crear un grupo nuevo (hospital, clínica, universidad, centro de simulación, fabricante o equipo privado) o unirte a uno existente con su código de invitación. Quien crea el grupo queda como propietario.',
+    'steps.s3t': 'Crea los espacios de trabajo',
+    'steps.s3p': 'Un espacio por especialidad o servicio: «Traumatología», «Cirugía general», «Formación». Cada espacio tiene su propio contenido y sus propios roles.',
+    'steps.s4t': 'Invita al equipo',
+    'steps.s4p': 'Comparte el código de invitación del grupo o un enlace de invitación. Cada persona entra con su propia cuenta.',
+    'steps.s5t': 'Asigna los roles',
+    'steps.s5p': 'A nivel de grupo hay <strong>propietario</strong> y <strong>administrador</strong>. En cada espacio, <strong>aprobador</strong> (revisa y publica), <strong>editor</strong> (crea y propone cambios) y <strong>lector</strong> (consulta). Puedes asignar un rol a un equipo entero de una vez, por ejemplo a todos los residentes.',
+    'ex.eyebrow': 'Ejemplos de configuración',
+    'ex.h2': 'Cuatro formas habituales de organizarse',
+    'ex.lede': 'Empieza pequeño: siempre puedes añadir espacios y personas más adelante sin cambiar de herramienta.',
+    'ex.e1.k': 'Equipo pequeño',
+    'ex.e1.h': 'Consulta o equipo de 3–10 personas',
+    'ex.e1.p': 'Un solo espacio de trabajo y dos personas que aprueban, para que nadie revise su propio trabajo.',
+    'ex.e1.t1': 'Clínica Riera (grupo)', 'ex.e1.t2': '└ Quirófano', 'ex.e1.t3': 'aprobadores: 2 enfermeras', 'ex.e1.t4': 'editores y lectores: el resto',
+    'ex.e2.k': 'Bloque quirúrgico',
+    'ex.e2.h': 'Un servicio, un espacio por especialidad',
+    'ex.e2.p': 'Cada especialidad tiene sus bandejas, técnicas y preferencias. La supervisión aprueba en todos los espacios.',
+    'ex.e2.t1': 'Bloque quirúrgico (grupo)', 'ex.e2.t2': '├ Cirugía general', 'ex.e2.t3': '├ Traumatología', 'ex.e2.t4': '└ Urología', 'ex.e2.t5': 'aprobadores: supervisión + referente de cada especialidad', 'ex.e2.t6': 'editores: instrumentistas · lectores: el resto',
+    'ex.e3.k': 'Hospital o red',
+    'ex.e3.h': 'Varias especialidades o varias sedes',
+    'ex.e3.p': 'Tantos espacios como haga falta. Si el hospital forma parte de una red con varias sedes, desde «Red de la cadena» se puede consultar (solo lectura) lo que han publicado las otras sedes.',
+    'ex.e3.t1': 'Hospital (grupo) ↔ otras sedes de la red', 'ex.e3.t2': '├ Quirófanos centrales: 6 espacios', 'ex.e3.t3': '├ CMA (cirugía sin ingreso)', 'ex.e3.t4': '└ Esterilización', 'ex.e3.t5': 'administradores: coordinación del bloque', 'ex.e3.t6': 'roles por equipos: «Instrumentistas turno de mañana»…',
+    'ex.e4.k': 'Formación',
+    'ex.e4.h': 'Centro de formación o universidad',
+    'ex.e4.p': 'Un espacio de prácticas donde el profesorado aprueba y el alumnado consulta. Cuestionarios de equipo a medida y seguimiento del progreso de cada alumno.',
+    'ex.e4.t1': 'Escuela de Enfermería (grupo)', 'ex.e4.t2': '└ Prácticas de quirófano', 'ex.e4.t3': 'aprobadores: profesorado', 'ex.e4.t4': 'lectores: alumnado (asignado por equipos)',
+    'doc.eyebrow': 'Qué documentáis',
+    'doc.h2': 'El día a día del bloque, en un solo lugar',
+    'doc.d1.k': 'Procedimientos', 'doc.d1.h': 'Todo lo necesario para una intervención', 'doc.d1.p': 'Un procedimiento agrupa la bandeja, la técnica o el protocolo y las tarjetas de preferencia de cada cirujano, para que nadie tenga que buscarlo por separado.',
+    'doc.d2.k': 'Agenda y Radar', 'doc.d2.h': 'Los casos del día, preparados', 'doc.d2.p': 'La agenda quirúrgica enlaza cada cita con su procedimiento. Cada caso abre todo lo necesario para prepararlo, y la pestaña «Hoy» muestra en el Radar las intervenciones del día.',
+    'doc.d3.k': 'Bandejas', 'doc.d3.h': 'Checklist, preparación y control de calidad', 'doc.d3.p': 'Instrumental y cantidades con fotos, sesiones reales de preparación y un control de calidad antes de dar la bandeja por buena.',
+    'doc.d4.k': 'Técnicas y protocolos', 'doc.d4.h': 'Pasos al estilo checklist de la OMS', 'doc.d4.p': 'Con versiones y flujo de aprobación: cada cambio es un borrador que alguien revisa antes de publicarlo, y el historial siempre se puede recuperar.',
+    'doc.d5.k': 'Incidencias', 'doc.d5.h': 'De la incidencia a la acción correctiva', 'doc.d5.p': 'Reporta una incidencia de instrumental, documenta la causa raíz y la acción correctiva, y haz que la verifique una persona distinta de quien la ha resuelto.',
+    'doc.d6.k': 'Biblioteca Pública', 'doc.d6.h': 'No empieces de cero', 'doc.d6.p': 'Adopta bandejas, técnicas y protocolos de la comunidad como punto de partida y adáptalos a vuestro espacio. Seguirán vuestro propio flujo de aprobación.',
+    'bp.eyebrow': 'Buenas prácticas',
+    'bp.h2': 'Buenas prácticas para empezar bien',
+    'bp.p1t': 'Espacios por especialidad o servicio, no por técnica', 'bp.p1p': '«Traumatología» o «Quirófano 3», sí. Un espacio para cada protocolo, no: acabarías con decenas de espacios vacíos y roles repetidos.',
+    'bp.p2t': 'Al menos dos personas aprobadoras por espacio', 'bp.p2p': 'Así nadie aprueba su propio cambio y las revisiones no se paran cuando alguien está de vacaciones.',
+    'bp.p3t': 'Empieza por los 3–5 procedimientos más frecuentes', 'bp.p3p': 'Mejor tener bien documentados los procedimientos de cada día que cincuenta a medias. Ampliadlo cuando el equipo ya esté acostumbrado.',
+    'bp.p4t': 'Nombres coherentes', 'bp.p4p': 'Usad el mismo nombre para el procedimiento, la bandeja y la técnica («Colecistectomía laparoscópica»), para que se encuentren a la primera con el buscador.',
+    'bp.p5t': 'Una tarjeta de preferencia por cirujano y procedimiento', 'bp.p5p': 'No mezcléis varios cirujanos en una sola tarjeta: cuando alguien cambie su preferencia, solo se tocará la suya.',
+    'bp.p6t': 'No os saltéis la revisión', 'bp.p6p': 'El flujo de borrador y aprobación es lo que da confianza al contenido. Usad la comparación de versiones antes de aprobar.',
+    'bp.p7t': 'Conocimiento de equipo, nunca datos de pacientes', 'bp.p7p': 'Instriq es para instrumental, bandejas y formas de trabajar. No introduzcáis datos de pacientes. Y no sustituye los protocolos oficiales de vuestra institución.',
+    'bp.p8t': 'Revisad las incidencias cada semana', 'bp.p8p': 'Las incidencias abiertas salen en «Hoy» para quien puede resolverlas. Un repaso semanal evita que se acumulen.',
+    'bp.p9t': 'Usad el registro de auditoría', 'bp.p9p': 'Los administradores lo encuentran en Perfil › Administrar grupo: quién ha aprobado, quién ha cambiado un rol y cuándo.',
+    'bp.p10t': 'Preparad las zonas sin cobertura', 'bp.p10p': 'En Perfil, «Descargar para uso sin conexión» deja el catálogo y el contenido de vuestros espacios en el dispositivo. Los cambios se suben solos al recuperar la red.',
+    'faq.eyebrow': 'Preguntas frecuentes',
+    'faq.h2': 'Antes de empezar',
+    'faq.q1.q': '¿Cuánto cuesta?', 'faq.q1.a': 'Nada. Todas las funcionalidades son gratuitas para cualquier grupo, sin licencias ni cuotas por usuario. El código es abierto (AGPL-3.0).',
+    'faq.q2.q': '¿Y los datos?', 'faq.q2.a': 'Instriq no guarda datos de pacientes. Cada persona puede exportar o eliminar sus datos personales cuando quiera (RGPD), y el contenido privado de vuestro grupo solo lo ve vuestro grupo.',
+    'faq.q3.q': '¿Qué pasa si alguien deja el equipo?', 'faq.q3.a': 'Un administrador le retira el acceso. Si elimina su cuenta, el contenido que había creado o aprobado se conserva anonimizado para el equipo.',
+    'faq.q4.q': '¿Aprobar un protocolo en Instriq es una validación clínica?', 'faq.q4.a': 'No. Es la revisión interna de vuestro equipo. No sustituye los protocolos oficiales ni los circuitos de validación de vuestra institución.',
+    'cta.h2': 'Cread vuestro grupo hoy',
+    'cta.p': 'Cinco minutos para tener el grupo y el primer espacio. ¿Dudas? Escríbenos a <a href="mailto:hola@instriq.org">hola@instriq.org</a>.',
+    'footer.app': 'Abre la app', 'footer.h1': 'Proyecto', 'footer.l1': 'Misión y visión', 'footer.l2': 'Novedades', 'footer.l6': 'Sugerencias',
+    'footer.h2': 'Legal', 'footer.l4': 'Política de privacidad', 'footer.l5': 'Licencia (AGPL-3.0)', 'footer.h3': 'Contacto',
+    'footer.fine': 'Instriq® — proyecto open source por y para el quirófano. Código bajo AGPL-3.0.'
+  }, en: {
+    'meta.title': 'Instriq for organizations — how to set up your group',
+    'meta.description': 'A guide for surgical block coordinators, nurse supervisors and training centers: how to create your group in Instriq, example setups and good practices. Free and open source.',
+    'a11y.skip': 'Skip to content',
+    'nav.back': '← Back to home',
+    'nav.edu': 'Education',
+    'nav.cta': 'Open the app',
+    'hero.eyebrow': 'For organizations',
+    'hero.h1': 'Set up your surgical block in Instriq.',
+    'hero.lede': 'A <strong>group</strong> is your hospital, surgical block, department or training center. Inside it you organize workspaces, invite your team and document how you really work: procedures, trays, techniques, protocols and each surgeon’s preferences.',
+    'hero.free': 'Everything is free for any organization: no licenses, no per-user fee, and the code is open source.',
+    'hero.cta1': 'Open the app',
+    'hero.cta2': 'How to create your group',
+    'steps.eyebrow': 'Step by step',
+    'steps.h2': 'How to create your group',
+    'steps.s1t': 'Open the app and go to “My team”',
+    'steps.s1p': 'Go to app.instriq.org in any browser, or install it on Windows from the Microsoft Store. In the “My team” tab, tap “Connect with your group”.',
+    'steps.s2t': 'Create the group (or join one)',
+    'steps.s2p': 'In the same form you create your account and choose: create a new group (hospital, clinic, university, simulation center, manufacturer or private team) or join an existing one with its invite code. Whoever creates the group becomes its owner.',
+    'steps.s3t': 'Create your workspaces',
+    'steps.s3p': 'One workspace per specialty or department: “Orthopedics”, “General surgery”, “Training”. Each workspace has its own content and its own roles.',
+    'steps.s4t': 'Invite your team',
+    'steps.s4p': 'Share the group’s invite code or an invite link. Each person signs in with their own account.',
+    'steps.s5t': 'Assign roles',
+    'steps.s5p': 'At group level there are <strong>owner</strong> and <strong>administrator</strong>. In each workspace, <strong>approver</strong> (reviews and publishes), <strong>editor</strong> (creates and proposes changes) and <strong>reader</strong> (views). You can assign a role to a whole team at once, for example all residents.',
+    'ex.eyebrow': 'Example setups',
+    'ex.h2': 'Four common ways to organize',
+    'ex.lede': 'Start small: you can always add workspaces and people later without changing tools.',
+    'ex.e1.k': 'Small team',
+    'ex.e1.h': 'A clinic or a team of 3–10 people',
+    'ex.e1.p': 'A single workspace and two approvers, so nobody reviews their own work.',
+    'ex.e1.t1': 'Riera Clinic (group)', 'ex.e1.t2': '└ Operating room', 'ex.e1.t3': 'approvers: 2 nurses', 'ex.e1.t4': 'editors and readers: everyone else',
+    'ex.e2.k': 'Surgical block',
+    'ex.e2.h': 'One department, one workspace per specialty',
+    'ex.e2.p': 'Each specialty has its own trays, techniques and preferences. The nurse supervisor approves across all workspaces.',
+    'ex.e2.t1': 'Surgical block (group)', 'ex.e2.t2': '├ General surgery', 'ex.e2.t3': '├ Orthopedics', 'ex.e2.t4': '└ Urology', 'ex.e2.t5': 'approvers: supervisor + a lead for each specialty', 'ex.e2.t6': 'editors: scrub nurses · readers: everyone else',
+    'ex.e3.k': 'Hospital or network',
+    'ex.e3.h': 'Several specialties or several sites',
+    'ex.e3.p': 'As many workspaces as you need. If the hospital belongs to a network with several sites, “Chain network” lets you view (read-only) what the other sites have published.',
+    'ex.e3.t1': 'Hospital (group) ↔ other sites in the network', 'ex.e3.t2': '├ Main ORs: 6 workspaces', 'ex.e3.t3': '├ Day surgery', 'ex.e3.t4': '└ Sterilization', 'ex.e3.t5': 'administrators: block coordination', 'ex.e3.t6': 'roles by team: “Morning-shift scrub nurses”…',
+    'ex.e4.k': 'Education',
+    'ex.e4.h': 'Training center or university',
+    'ex.e4.p': 'A practice workspace where teachers approve and students view. Custom team quizzes and progress tracking for every student.',
+    'ex.e4.t1': 'Nursing School (group)', 'ex.e4.t2': '└ OR practice', 'ex.e4.t3': 'approvers: teaching staff', 'ex.e4.t4': 'readers: students (assigned by team)',
+    'doc.eyebrow': 'What you document',
+    'doc.h2': 'The block’s day-to-day, in one place',
+    'doc.d1.k': 'Procedures', 'doc.d1.h': 'Everything an operation needs', 'doc.d1.p': 'A procedure groups the tray, the technique or protocol and each surgeon’s preference cards, so nobody has to look for them separately.',
+    'doc.d2.k': 'Schedule and Radar', 'doc.d2.h': 'Today’s cases, ready', 'doc.d2.p': 'The surgical schedule links each booking to its procedure. Each case opens everything needed to prepare it, and the “Today” tab shows the day’s operations on the Radar.',
+    'doc.d3.k': 'Trays', 'doc.d3.h': 'Checklist, preparation and quality control', 'doc.d3.p': 'Instruments and quantities with photos, real preparation sessions and a quality check before a tray is signed off.',
+    'doc.d4.k': 'Techniques and protocols', 'doc.d4.h': 'Steps in the style of the WHO checklist', 'doc.d4.p': 'With versions and an approval workflow: every change is a draft someone reviews before it is published, and the history can always be restored.',
+    'doc.d5.k': 'Incidents', 'doc.d5.h': 'From incident to corrective action', 'doc.d5.p': 'Report an instrument incident, document the root cause and corrective action, and have it verified by someone other than the person who resolved it.',
+    'doc.d6.k': 'Public Library', 'doc.d6.h': 'Don’t start from scratch', 'doc.d6.p': 'Adopt community trays, techniques and protocols as a starting point and adapt them to your workspace. They go through your own approval workflow.',
+    'bp.eyebrow': 'Good practices',
+    'bp.h2': 'Good practices to get started right',
+    'bp.p1t': 'Workspaces by specialty or department, not by technique', 'bp.p1p': '“Orthopedics” or “OR 3”, yes. One workspace per protocol, no: you would end up with dozens of empty workspaces and repeated roles.',
+    'bp.p2t': 'At least two approvers per workspace', 'bp.p2p': 'That way nobody approves their own change, and reviews don’t stall when someone is on holiday.',
+    'bp.p3t': 'Start with your 3–5 most frequent procedures', 'bp.p3p': 'Better to have your everyday procedures well documented than fifty half-done. Expand once the team is used to it.',
+    'bp.p4t': 'Consistent names', 'bp.p4p': 'Use the same name for the procedure, the tray and the technique (“Laparoscopic cholecystectomy”), so search finds them first time.',
+    'bp.p5t': 'One preference card per surgeon and procedure', 'bp.p5p': 'Don’t mix several surgeons on one card: when someone changes their preference, only theirs needs editing.',
+    'bp.p6t': 'Don’t skip review', 'bp.p6p': 'The draft-and-approval workflow is what makes the content trustworthy. Use the version comparison before approving.',
+    'bp.p7t': 'Team knowledge, never patient data', 'bp.p7p': 'Instriq is for instruments, trays and ways of working. Do not enter patient data. And it does not replace your institution’s official protocols.',
+    'bp.p8t': 'Review incidents every week', 'bp.p8p': 'Open incidents appear in “Today” for whoever can resolve them. A weekly pass stops them piling up.',
+    'bp.p9t': 'Use the audit log', 'bp.p9p': 'Administrators find it under Profile › Manage group: who approved, who changed a role, and when.',
+    'bp.p10t': 'Prepare areas without coverage', 'bp.p10p': 'In Profile, “Download for offline use” keeps the catalog and your workspaces’ content on the device. Changes upload by themselves when the connection is back.',
+    'faq.eyebrow': 'Frequently asked questions',
+    'faq.h2': 'Before you start',
+    'faq.q1.q': 'How much does it cost?', 'faq.q1.a': 'Nothing. Every feature is free for any group, with no licenses or per-user fees. The code is open source (AGPL-3.0).',
+    'faq.q2.q': 'What about data?', 'faq.q2.a': 'Instriq stores no patient data. Everyone can export or delete their personal data at any time (GDPR), and your group’s private content is only visible to your group.',
+    'faq.q3.q': 'What happens if someone leaves the team?', 'faq.q3.a': 'An administrator removes their access. If they delete their account, the content they created or approved is kept, anonymized, for the team.',
+    'faq.q4.q': 'Is approving a protocol in Instriq a clinical validation?', 'faq.q4.a': 'No. It is your team’s internal review. It does not replace your institution’s official protocols or validation processes.',
+    'cta.h2': 'Create your group today',
+    'cta.p': 'Five minutes to have your group and first workspace. Questions? Write to us at <a href="mailto:hola@instriq.org">hola@instriq.org</a>.',
+    'footer.app': 'Open the app', 'footer.h1': 'Project', 'footer.l1': 'Mission and vision', 'footer.l2': 'Updates', 'footer.l6': 'Suggestions',
+    'footer.h2': 'Legal', 'footer.l4': 'Privacy policy', 'footer.l5': 'License (AGPL-3.0)', 'footer.h3': 'Contact',
+    'footer.fine': 'Instriq® — an open source project by and for the OR. Code under AGPL-3.0.'
+  } };
+
+  var CA_DEFAULTS = {};
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var attr = el.getAttribute('data-i18n-attr');
+    var key = el.getAttribute('data-i18n');
+    if (!(key in CA_DEFAULTS)) CA_DEFAULTS[key] = attr ? el.getAttribute(attr) : el.innerHTML;
+  });
+
+  function applyLang(lang, opts) {
+    opts = opts || {};
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      var attr = el.getAttribute('data-i18n-attr');
+      var value = lang === 'ca' ? CA_DEFAULTS[key] : (DICT[lang] && DICT[lang][key]) || CA_DEFAULTS[key];
+      if (attr) { el.setAttribute(attr, value); } else { el.innerHTML = value; }
+    });
+    document.title = lang === 'ca' ? CA_DEFAULTS['meta.title'] : (DICT[lang] && DICT[lang]['meta.title']) || CA_DEFAULTS['meta.title'];
+    document.querySelectorAll('#langSwitch button').forEach(function (b) {
+      var isActive = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/organizaciones' : 'https://instriq.org/organizaciones?lang=' + lang;
+    var canonicalEl = document.getElementById('canonicalLink');
+    if (canonicalEl) canonicalEl.setAttribute('href', canonicalUrl);
+    try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
+    if (opts.updateUrl) {
+      var url = new URL(window.location.href);
+      if (lang === 'ca') { url.searchParams.delete('lang'); } else { url.searchParams.set('lang', lang); }
+      window.history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
+    }
+  }
+
+  document.querySelectorAll('#langSwitch button').forEach(function (b) {
+    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), { updateUrl: true }); });
+  });
+
+  var validLangs = ['ca', 'es', 'en'];
+  var urlLang = null;
+  try {
+    var fromUrl = new URLSearchParams(window.location.search).get('lang');
+    if (fromUrl && validLangs.indexOf(fromUrl) !== -1) urlLang = fromUrl;
+  } catch (e) {}
+  var saved = null;
+  try { saved = localStorage.getItem('instriq_lang'); } catch (e) {}
+  applyLang(urlLang || saved || 'ca');
+
+  var els = document.querySelectorAll('.reveal');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) {
+    els.forEach(function (r) { r.classList.add('is-visible'); });
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (r) { observer.observe(r); });
+  }
+
+  var bar = document.getElementById('progressBar');
+  if (bar) {
+    function update() {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    }
+    document.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+})();
+</script>
+
+</body>
+</html>
