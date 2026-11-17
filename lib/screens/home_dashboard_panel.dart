@@ -7,6 +7,7 @@ import '../l10n/app_localizations.dart';
 import '../models/audit_entry.dart';
 import '../models/hospital_content_stats.dart';
 import '../models/instrument_incident.dart';
+import '../models/surgical_slot.dart';
 import '../models/usage_stats.dart';
 import '../models/work_mode.dart';
 import '../services/analytics_service.dart';
@@ -21,9 +22,11 @@ import '../services/public_document_service.dart';
 import '../services/public_instrument_service.dart';
 import '../services/public_tray_service.dart';
 import '../services/sterilization_service.dart';
+import '../services/surgical_slot_service.dart';
 import '../services/sync_queue_service.dart';
 import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
+import '../services/workspace_service.dart';
 import '../utils/audit_label.dart';
 import '../widgets/create_content_sheet.dart';
 import 'audit_log_screen.dart';
@@ -33,6 +36,8 @@ import 'knowledge_dashboard_screen.dart';
 import 'manage_teams_screen.dart';
 import 'review_inbox_screen.dart';
 import 'sterilization_review_queue_support.dart';
+import 'surgical_agenda_screen.dart';
+import 'surgical_case_screen.dart';
 import 'sync_issues_screen.dart';
 import 'team_progress_screen.dart';
 
@@ -88,6 +93,7 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
   Future<UsageStats?>? _usageFuture;
   Future<List<AuditEntry>>? _auditFuture;
   Future<List<InstrumentIncident>>? _openIncidentsFuture;
+  Future<List<SurgicalSlot>>? _radarFuture;
 
   // Mismo criterio de acceso que ReviewInboxScreen (no hay un único permiso
   // que cubra las 3 colas, ver el comentario de clase de esa pantalla).
@@ -112,7 +118,26 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
           : UsageAnalyticsService.instance.fetchStats(organizationId);
       _auditFuture = AuditService.instance.fetchAuditLog(organizationId: organizationId, limit: 4);
       _openIncidentsFuture = InstrumentIncidentService.instance.fetchForOrganization();
+      _radarFuture = organizationId == null
+          ? Future.value(const [])
+          : SurgicalSlotService.instance.fetchForDay(DateTime.now(), organizationId: organizationId);
     });
+  }
+
+  Future<void> _openCase(SurgicalSlot slot) async {
+    final myRole = await WorkspaceService.instance.fetchMyRole(slot.workspaceId);
+    if (!mounted) return;
+    await _open(SurgicalCaseScreen(slot: slot, myRole: myRole));
+  }
+
+  /// "Veure-ho tot" del Radar: l'agenda de l'espai del primer cas d'avui.
+  Future<void> _openAgendaFor(SurgicalSlot slot) async {
+    await WorkspaceService.instance.fetchWorkspaces();
+    final workspace = WorkspaceService.instance.workspaces.where((w) => w.id == slot.workspaceId).firstOrNull;
+    if (workspace == null) return;
+    final myRole = await WorkspaceService.instance.fetchMyRole(workspace.id);
+    if (!mounted) return;
+    await _open(SurgicalAgendaScreen(workspace: workspace, myRole: myRole));
   }
 
   Future<_PendingApprovalData> _loadPendingApproval() async {
@@ -217,6 +242,45 @@ class _HomeDashboardPanelState extends State<HomeDashboardPanel> {
 
   List<Widget> _buildTiles(BuildContext context, AppLocalizations l10n) {
     final tiles = <Widget>[];
+
+    // Radar primer, com a Inici: si avui hi ha cirurgies és el més urgent.
+    // Sense casos (o si falla la càrrega) la tile no surt, mateix criteri
+    // que la secció d'Inici.
+    tiles.add(FutureBuilder<List<SurgicalSlot>>(
+      future: _radarFuture,
+      builder: (context, snapshot) {
+        final slots = snapshot.data ?? const <SurgicalSlot>[];
+        if (slots.isEmpty) return const SizedBox.shrink();
+        String hm(DateTime d) => '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+        return _DashboardTile(
+          icon: Icons.radar,
+          title: l10n.radarTitle,
+          stat: l10n.radarSubtitle(slots.length),
+          onTap: () => _openAgendaFor(slots.first),
+          linkLabel: l10n.homeViewAllLabel,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (final slot in slots.take(5))
+                InkWell(
+                  onTap: () => _openCase(slot),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Text(
+                      [
+                        hm(slot.startsAt.toLocal()),
+                        if (slot.procedureName?.isNotEmpty == true) slot.procedureName!,
+                        if (slot.location?.isNotEmpty == true) slot.location!,
+                      ].join(' · '),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    ));
 
     if (ProfileService.instance.isAdmin || ProfileService.instance.canApproveAnyWorkspace) {
       tiles.add(FutureBuilder<_PendingApprovalData>(
