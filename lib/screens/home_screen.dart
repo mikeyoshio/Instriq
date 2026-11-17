@@ -16,6 +16,7 @@ import '../models/tray.dart';
 import '../models/work_mode.dart';
 import '../models/workspace.dart';
 import '../models/workspace_role.dart';
+import '../navigation/profile_button.dart';
 import '../services/auth_service.dart';
 import '../services/favorites_service.dart';
 import '../services/group_document_service.dart';
@@ -564,7 +565,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(actions: const [ProfileButton()]),
       body: SafeArea(
         child: showDashboard ? content : InstriqResponsiveContent(child: content),
       ),

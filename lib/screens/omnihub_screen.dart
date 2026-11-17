@@ -19,6 +19,7 @@ import '../models/surgeon.dart';
 import '../models/tag.dart';
 import '../models/tray.dart';
 import '../models/workspace_role.dart';
+import '../navigation/profile_button.dart';
 import '../services/custom_instrument_service.dart';
 import '../services/group_document_service.dart';
 import '../services/manufacturer_service.dart';
@@ -321,7 +322,7 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.omnihubTitle)),
+      appBar: AppBar(title: Text(l10n.omnihubTitle), actions: const [ProfileButton()]),
       body: SafeArea(
         child: InstriqResponsiveContent(
           child: Column(

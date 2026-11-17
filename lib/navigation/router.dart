@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../l10n/app_localizations.dart';
-import '../screens/activity_screen.dart';
 import '../screens/auth/accept_invitation_screen.dart';
 import '../screens/home_screen.dart';
-import '../screens/library_screen.dart';
+import '../screens/learn_hub_screen.dart';
 import '../screens/omnihub_screen.dart';
-import '../screens/profile_hub_screen.dart';
+import '../screens/team_screen.dart';
 import 'app_shell.dart';
 
 /// `AppRoot` nunca exige login: la ruta inicial entra directo al shell, sin
@@ -19,9 +18,8 @@ import 'app_shell.dart';
 /// dentro de cada destino.
 final _homeBranchKey = GlobalKey<NavigatorState>();
 final _searchBranchKey = GlobalKey<NavigatorState>();
-final _libraryBranchKey = GlobalKey<NavigatorState>();
-final _activityBranchKey = GlobalKey<NavigatorState>();
-final _profileBranchKey = GlobalKey<NavigatorState>();
+final _teamBranchKey = GlobalKey<NavigatorState>();
+final _learnBranchKey = GlobalKey<NavigatorState>();
 
 GoRouter buildRouter(GlobalKey<NavigatorState> rootNavigatorKey) {
   return GoRouter(
@@ -53,21 +51,15 @@ GoRouter buildRouter(GlobalKey<NavigatorState> rootNavigatorKey) {
             ],
           ),
           StatefulShellBranch(
-            navigatorKey: _libraryBranchKey,
+            navigatorKey: _teamBranchKey,
             routes: [
-              GoRoute(path: '/biblioteca', builder: (context, state) => const LibraryScreen()),
+              GoRoute(path: '/equipo', builder: (context, state) => const TeamScreen()),
             ],
           ),
           StatefulShellBranch(
-            navigatorKey: _activityBranchKey,
+            navigatorKey: _learnBranchKey,
             routes: [
-              GoRoute(path: '/actividad', builder: (context, state) => const ActivityScreen()),
-            ],
-          ),
-          StatefulShellBranch(
-            navigatorKey: _profileBranchKey,
-            routes: [
-              GoRoute(path: '/perfil', builder: (context, state) => const ProfileHubScreen()),
+              GoRoute(path: '/aprender', builder: (context, state) => const LearnHubScreen()),
             ],
           ),
         ],
@@ -76,8 +68,10 @@ GoRouter buildRouter(GlobalKey<NavigatorState> rootNavigatorKey) {
   );
 }
 
-/// Metadatos de los 5 destinos fijos, compartidos entre `NavigationBar`
-/// (< 840px) y `NavigationRail` (>= 840px) en [AppShell].
+/// Metadatos de los 4 destinos fijos (2.0: Hoy · Buscar · Mi equipo ·
+/// Aprender), compartidos entre `NavigationBar` (< 840px) y `NavigationRail`
+/// (>= 840px) en [AppShell]. El orden debe coincidir con el de las ramas.
+/// Perfil ya no es pestaña: es un botón en la cabecera del shell.
 class AppDestination {
   final IconData icon;
   final IconData selectedIcon;
@@ -87,35 +81,13 @@ class AppDestination {
 }
 
 const appDestinations = [
-  AppDestination(
-    icon: Icons.home_outlined,
-    selectedIcon: Icons.home,
-    label: _homeLabel,
-  ),
-  AppDestination(
-    icon: Icons.search_outlined,
-    selectedIcon: Icons.search,
-    label: _searchLabel,
-  ),
-  AppDestination(
-    icon: Icons.local_library_outlined,
-    selectedIcon: Icons.local_library,
-    label: _libraryLabel,
-  ),
-  AppDestination(
-    icon: Icons.notifications_outlined,
-    selectedIcon: Icons.notifications,
-    label: _activityLabel,
-  ),
-  AppDestination(
-    icon: Icons.person_outline,
-    selectedIcon: Icons.person,
-    label: _profileLabel,
-  ),
+  AppDestination(icon: Icons.today_outlined, selectedIcon: Icons.today, label: _todayLabel),
+  AppDestination(icon: Icons.search_outlined, selectedIcon: Icons.search, label: _searchLabel),
+  AppDestination(icon: Icons.groups_outlined, selectedIcon: Icons.groups, label: _teamLabel),
+  AppDestination(icon: Icons.school_outlined, selectedIcon: Icons.school, label: _learnLabel),
 ];
 
-String _homeLabel(AppLocalizations l10n) => l10n.navHome;
+String _todayLabel(AppLocalizations l10n) => l10n.navToday;
 String _searchLabel(AppLocalizations l10n) => l10n.navSearch;
-String _libraryLabel(AppLocalizations l10n) => l10n.navLibrary;
-String _activityLabel(AppLocalizations l10n) => l10n.navActivity;
-String _profileLabel(AppLocalizations l10n) => l10n.navProfile;
+String _teamLabel(AppLocalizations l10n) => l10n.navTeam;
+String _learnLabel(AppLocalizations l10n) => l10n.navLearn;
