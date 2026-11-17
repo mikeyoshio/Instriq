@@ -1223,7 +1223,7 @@
 
   "helpArticleLanguageTitle": "Canviar l'idioma",
   "helpArticleLanguageIntro": "Es pot canviar en qualsevol moment. Es desa en aquest dispositiu, no cal compte.",
-  "helpArticleLanguageStep1": "Obre Perfil i toca «Idioma».",
+  "helpArticleLanguageStep1": "Obre el Perfil (la icona de dalt a la dreta) i toca «Idioma».",
   "helpArticleLanguageStep2": "Tria català, castellà o anglès. El canvi és immediat, a tota l'app.",
 
   "helpArticleOnboardingTitle": "La benvinguda de primer ús",
@@ -1233,22 +1233,22 @@
 
   "helpArticleCatalogSearchTitle": "Buscar i filtrar instrumental",
   "helpArticleCatalogSearchIntro": "El Catàleg es pot explorar sense compte, amb cerca per nom i filtres per especialitat i categoria.",
-  "helpArticleCatalogSearchStep1": "Des de la pestanya «Cercar», escriu el nom d'un instrument o marca comercial.",
-  "helpArticleCatalogSearchStep2": "O toca una o més especialitats i categories per filtrar la llista sense escriure res.",
+  "helpArticleCatalogSearchStep1": "A la pestanya «Cercar», escriu el nom d'un instrument, una marca comercial o una tècnica.",
+  "helpArticleCatalogSearchStep2": "Per filtrar per especialitat i categoria sense escriure res, toca «Catàleg» a sota del cercador.",
 
   "helpArticleInstrumentDetailTitle": "Consultar la fitxa d'un instrument",
   "helpArticleInstrumentDetailIntro": "Cada instrument té una fitxa amb foto, descripció, ús principal i esterilització.",
   "helpArticleInstrumentDetailStep1": "Toca qualsevol instrument del Catàleg per obrir la seva fitxa completa.",
   "helpArticleInstrumentDetailStep2": "Més avall hi ha els mètodes d'esterilització compatibles i, si n'hi ha, la fitxa tècnica del fabricant.",
 
-  "helpArticleSuturesTitle": "Catàleg de sutures",
-  "helpArticleSuturesIntro": "Un catàleg de referència de materials i calibres de sutura, filtrable per material, independent de l'instrumental.",
-  "helpArticleSuturesStep1": "Des de l'inici, toca «Sutures». Filtra per material (seda, vicryl, nylon...) o cerca pel nom.",
-  "helpArticleSuturesStep2": "Cada sutura té la seva fitxa: descripció, ús principal i on s'utilitza (tècniques, protocols o safates).",
+  "helpArticleSuturesTitle": "Material de tancament de ferides",
+  "helpArticleSuturesIntro": "Un catàleg de referència de sutures, hemostàtics, segellants i tancament de pell, independent de l'instrumental.",
+  "helpArticleSuturesStep1": "A la pestanya «Cercar», toca «Material de tancament de ferides».",
+  "helpArticleSuturesStep2": "Toca qualsevol entrada per veure'n la fitxa: categoria, descripció, ús principal i, si n'hi ha, un consell pràctic.",
 
   "helpArticlePublicLibraryTitle": "Què és la Biblioteca Pública",
   "helpArticlePublicLibraryIntro": "Tècniques quirúrgiques i safates d'instrumental revisades i publicades per la comunitat, visibles per a tothom.",
-  "helpArticlePublicLibraryStep1": "Des de la pestanya «Biblioteca», toca «Biblioteca Pública».",
+  "helpArticlePublicLibraryStep1": "A la pestanya «El meu equip», toca «Biblioteca Pública» (és a dalt de tot).",
   "helpArticlePublicLibraryStep2": "Té dues pestanyes, tècniques i safates. Si encara no hi ha res publicat en una especialitat és perquè cap col·laborador ho ha enviat encara -- qualsevol s'hi pot convertir des de Perfil.",
 
   "helpCategoryOrganization": "Organització i espais de treball",
@@ -1256,7 +1256,7 @@
 
   "helpArticleWorkspacesTitle": "Consultar els espais de treball",
   "helpArticleWorkspacesIntro": "Si el teu hospital té més d'un equip o servei, cadascun pot tenir el seu propi espai amb contingut independent.",
-  "helpArticleWorkspacesStep1": "A Biblioteca, toca «Espais» per veure tots els espais del teu hospital.",
+  "helpArticleWorkspacesStep1": "A la pestanya «El meu equip», toca «Espais» per veure tots els espais del teu hospital.",
   "helpArticleWorkspacesStep2": "Cada espai té les seves pròpies safates, documents, tècniques, targetes de preferència i instrumental propi.",
 
   "helpArticleAccountTitle": "El teu compte: preferències, privacitat i sincronització",
@@ -1268,13 +1268,13 @@
 
   "helpArticleLearnModesTitle": "Flashcards i qüestionari",
   "helpArticleLearnModesIntro": "Repassa l'instrumental amb targetes de memòria o posa't a prova amb un qüestionari de deu preguntes, tot en mode convidat.",
-  "helpArticleLearnModesStep1": "Des de l'inici, toca «Aprèn» i tria «Flashcards» o «Qüestionari».",
+  "helpArticleLearnModesStep1": "A la pestanya «Aprèn», toca «Aprèn» i tria «Flashcards» o «Qüestionari».",
   "helpArticleLearnModesStep2": "A les flashcards, toca la targeta per veure la descripció i l'ús de l'instrument; «Marca com a après» ho suma al teu progrés.",
   "helpArticleLearnModesStep3": "Al qüestionari, cada resposta es marca a l'instant: verd si l'has encertat, vermell si no.",
 
   "helpArticleMyProgressTitle": "El meu progrés",
   "helpArticleMyProgressIntro": "Un resum de quant instrumental has après, per categoria, i la teva millor puntuació al qüestionari.",
-  "helpArticleMyProgressStep1": "Des de l'inici, toca «El meu progrés». El progrés es guarda en aquest dispositiu i, amb compte, també al servidor.",
+  "helpArticleMyProgressStep1": "A la pestanya «Aprèn», toca «El meu progrés». El progrés es guarda en aquest dispositiu i, amb compte, també al servidor.",
 
   "helpArticleTrayIdentificationTitle": "Practicar identificació de safates",
   "helpArticleTrayIdentificationIntro": "Posa a prova si reconeixes l'instrumental d'una safata sencera, no només instrument a instrument.",
@@ -1283,7 +1283,7 @@
 
   "helpArticleSendFeedbackTitle": "Enviar suggeriments o reportar un error",
   "helpArticleSendFeedbackIntro": "Pots avisar-nos d'un problema o proposar una millora directament des de l'app, sense sortir-ne i sense necessitat de tenir compte.",
-  "helpArticleSendFeedbackStep1": "Entra a Perfil i toca «Enviar suggeriment o reportar un error».",
+  "helpArticleSendFeedbackStep1": "Obre el Perfil (la icona de dalt a la dreta) i toca «Enviar suggeriment o reportar un error».",
   "helpArticleSendFeedbackStep2": "Tria la categoria (error, suggeriment o altre) i escriu el teu missatge. Funciona també en mode convidat.",
 
   "helpArticleContentCommentsTitle": "Comentar i proposar canvis al contingut de l'equip",
@@ -1299,14 +1299,14 @@
 
   "helpArticleWorkModesTitle": "Modes de treball (instrumentista, cirurgià, docent...)",
   "helpArticleWorkModesIntro": "El mode de treball adapta la fitxa d'instrument i l'inici al teu rol del dia, reordenant el que més fas servir primer. No canvia els teus permisos, només l'organització de la pantalla.",
-  "helpArticleWorkModesStep1": "Toca el selector de mode a la part superior de l'inici i tria el que millor descrigui el teu rol ara mateix.",
+  "helpArticleWorkModesStep1": "Toca el selector de mode a la part superior de la pantalla i tria el que millor descrigui el teu rol ara mateix.",
   "helpArticleWorkModesStep2": "Instrumentista: accessos directes a safates i preparació a quiròfan. Cirurgià: targetes de preferència i tècniques primer. Docent: seguiment del progrés del teu equip. Pots canviar de mode en qualsevol moment.",
 
   "helpArticleIncidentCapaTitle": "Reportar i resoldre una incidència d'instrumental",
   "helpArticleIncidentCapaIntro": "Si un instrument falla o no està en condicions, pots deixar-ne constància i seguir-ne la resolució fins que es verifiqui, amb causa arrel i acció correctiva (no és només un avís puntual).",
   "helpArticleIncidentCapaStep1": "Des de la fitxa de l'instrument (o després d'un control de qualitat fallit en preparar una safata), toca «Reportar incidència» i indica la gravetat i la descripció.",
   "helpArticleIncidentCapaStep2": "Un approver o administrator de l'espai la resol indicant causa arrel i acció correctiva.",
-  "helpArticleIncidentCapaStep3": "Una persona diferent de qui l'ha resolta l'ha de verificar per tancar-la del tot. Totes les incidències obertes de l'organització es veuen juntes al panell d'escriptori o a Activitat.",
+  "helpArticleIncidentCapaStep3": "Una persona diferent de qui l'ha resolta l'ha de verificar per tancar-la del tot. Les incidències obertes de l'organització surten a la pestanya «Avui» (i al panell d'escriptori), amb accés a la cua completa.",
 
   "staleContentWarning": "Aquest contingut no s'ha revisat des de fa {months} mesos. Comprova que encara sigui correcte.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
@@ -1331,8 +1331,8 @@
 
   "helpArticleTeamQuizzesTitle": "Qüestionaris d'equip",
   "helpArticleTeamQuizzesIntro": "Si ets supervisor o docent, pots preparar qüestionaris amb un conjunt concret d'instruments perquè el teu equip practiqui, en lloc del qüestionari aleatori de tot el catàleg.",
-  "helpArticleTeamQuizzesStep1": "Com a supervisor: entra a «El meu progrés» (o el panell de l'equip), tria l'equip i toca la icona de qüestionaris per crear-ne un de nou, cercant i afegint instruments un a un.",
-  "helpArticleTeamQuizzesStep2": "Com a membre de l'equip: des d'Aprenentatge, toca «Qüestionaris del meu equip», tria el teu equip i el qüestionari que vulguis fer. La teva millor puntuació també la veu qui l'ha preparat.",
+  "helpArticleTeamQuizzesStep1": "Com a supervisor: a la pestanya «El meu equip», toca «Progrés del meu equip», tria l'equip i toca la icona de qüestionaris per crear-ne un de nou, cercant i afegint instruments un a un.",
+  "helpArticleTeamQuizzesStep2": "Com a membre de l'equip: a la pestanya «Aprèn», toca «Aprèn» i després «Qüestionaris del meu equip», tria el teu equip i el qüestionari que vulguis fer. La teva millor puntuació també la veu qui l'ha preparat.",
 
   "exportPdfAction": "Exportar a PDF",
   "practiceTrayIdentificationAction": "Practicar identificació de la safata",

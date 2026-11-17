@@ -1221,7 +1221,7 @@
 
   "helpArticleLanguageTitle": "Change the language",
   "helpArticleLanguageIntro": "You can change it anytime. It's saved on this device -- no account needed.",
-  "helpArticleLanguageStep1": "Open Profile and tap \"Language\".",
+  "helpArticleLanguageStep1": "Open your Profile (the icon at the top right) and tap “Language”.",
   "helpArticleLanguageStep2": "Pick Catalan, Spanish or English. The change applies immediately, across the whole app.",
 
   "helpArticleOnboardingTitle": "The first-run welcome",
@@ -1231,22 +1231,22 @@
 
   "helpArticleCatalogSearchTitle": "Search and filter instruments",
   "helpArticleCatalogSearchIntro": "The Catalog can be browsed without an account, with search by name and filters by specialty and category.",
-  "helpArticleCatalogSearchStep1": "From the \"Search\" tab, type an instrument's name or brand.",
-  "helpArticleCatalogSearchStep2": "Or tap one or more specialties and categories to filter the list without typing anything.",
+  "helpArticleCatalogSearchStep1": "On the Search tab, type the name of an instrument, a brand or a technique.",
+  "helpArticleCatalogSearchStep2": "To filter by specialty and category without typing, tap “Catalog” below the search bar.",
 
   "helpArticleInstrumentDetailTitle": "View an instrument's detail page",
   "helpArticleInstrumentDetailIntro": "Every instrument has a detail page with a photo, description, main use, and sterilization.",
   "helpArticleInstrumentDetailStep1": "Tap any instrument in the Catalog to open its full detail page.",
   "helpArticleInstrumentDetailStep2": "Further down are the compatible sterilization methods and, when available, the manufacturer's technical sheet.",
 
-  "helpArticleSuturesTitle": "Suture catalog",
-  "helpArticleSuturesIntro": "A reference catalog of suture materials and gauges, filterable by material, separate from the instrument catalog.",
-  "helpArticleSuturesStep1": "From Home, tap \"Sutures\". Filter by material (silk, vicryl, nylon...) or search by name.",
-  "helpArticleSuturesStep2": "Each suture has its own detail page: description, main use, and where it's used (techniques, protocols or trays).",
+  "helpArticleSuturesTitle": "Wound closure materials",
+  "helpArticleSuturesIntro": "A reference catalog of sutures, hemostats, sealants and skin closure, separate from instruments.",
+  "helpArticleSuturesStep1": "On the Search tab, tap “Wound closure materials”.",
+  "helpArticleSuturesStep2": "Tap any entry to see its page: category, description, main use and, when available, a practical tip.",
 
   "helpArticlePublicLibraryTitle": "What the Public Library is",
   "helpArticlePublicLibraryIntro": "Surgical techniques and instrument trays reviewed and published by the community, visible to everyone.",
-  "helpArticlePublicLibraryStep1": "From the \"Library\" tab, tap \"Public Library\".",
+  "helpArticlePublicLibraryStep1": "On the My team tab, tap “Public Library” (it is at the very top).",
   "helpArticlePublicLibraryStep2": "It has two tabs, techniques and trays. If nothing is published yet for a specialty, it's simply because no contributor has submitted it yet -- anyone can become a contributor from Profile.",
 
   "helpCategoryOrganization": "Organization and workspaces",
@@ -1254,7 +1254,7 @@
 
   "helpArticleWorkspacesTitle": "View your workspaces",
   "helpArticleWorkspacesIntro": "If your hospital has more than one team or department, each can have its own workspace with independent content.",
-  "helpArticleWorkspacesStep1": "In Library, tap \"Workspaces\" to see every workspace in your hospital.",
+  "helpArticleWorkspacesStep1": "On the My team tab, tap “Spaces” to see all your hospital's workspaces.",
   "helpArticleWorkspacesStep2": "Each workspace has its own trays, documents, techniques, preference cards and custom instruments.",
 
   "helpArticleAccountTitle": "Your account: preferences, privacy and syncing",
@@ -1266,13 +1266,13 @@
 
   "helpArticleLearnModesTitle": "Flashcards and quiz",
   "helpArticleLearnModesIntro": "Review instruments with flashcards or test yourself with a ten-question quiz, all without an account.",
-  "helpArticleLearnModesStep1": "From Home, tap \"Learn\" and choose \"Flashcards\" or \"Quiz\".",
+  "helpArticleLearnModesStep1": "On the Learn tab, tap “Learn” and choose “Flashcards” or “Quiz”.",
   "helpArticleLearnModesStep2": "In flashcards, tap the card to see the instrument's description and use; \"Mark as learned\" adds it to your progress.",
   "helpArticleLearnModesStep3": "In the quiz, every answer is marked instantly: green if correct, red if not.",
 
   "helpArticleMyProgressTitle": "My progress",
   "helpArticleMyProgressIntro": "A summary of how much instrument knowledge you've learned, by category, and your best quiz score.",
-  "helpArticleMyProgressStep1": "From Home, tap \"My progress\". Progress is saved on this device and, with an account, also on the server.",
+  "helpArticleMyProgressStep1": "On the Learn tab, tap “My progress”. Progress is saved on this device and, with an account, on the server too.",
 
   "helpArticleTrayIdentificationTitle": "Practice tray identification",
   "helpArticleTrayIdentificationIntro": "Test whether you can recognize the instruments in a whole tray, not just one at a time.",
@@ -1281,7 +1281,7 @@
 
   "helpArticleSendFeedbackTitle": "Send feedback or report a bug",
   "helpArticleSendFeedbackIntro": "You can let us know about a problem or suggest an improvement directly from the app, without leaving it and without needing an account.",
-  "helpArticleSendFeedbackStep1": "Go to Profile and tap \"Send feedback or report a bug\".",
+  "helpArticleSendFeedbackStep1": "Open your Profile (the icon at the top right) and tap “Send feedback or report a bug”.",
   "helpArticleSendFeedbackStep2": "Choose a category (bug, suggestion or other) and write your message. This also works in guest mode.",
 
   "helpArticleContentCommentsTitle": "Comment and propose changes to your team's content",
@@ -1297,14 +1297,14 @@
 
   "helpArticleWorkModesTitle": "Work modes (instrumentist, surgeon, teacher...)",
   "helpArticleWorkModesIntro": "Work mode adapts the instrument page and the home screen to your role for the day, putting what you use most first. It doesn't change your permissions, only how the screen is organized.",
-  "helpArticleWorkModesStep1": "Tap the mode selector at the top of Home and choose the one that best describes your role right now.",
+  "helpArticleWorkModesStep1": "Tap the mode selector at the top of the screen and choose the one that best describes your role right now.",
   "helpArticleWorkModesStep2": "Instrumentist: shortcuts to trays and OR preparation. Surgeon: preference cards and techniques first. Teacher: tracking your team's progress. You can switch modes at any time.",
 
   "helpArticleIncidentCapaTitle": "Report and resolve an instrument incident",
   "helpArticleIncidentCapaIntro": "If an instrument fails or isn't in good condition, you can log it and track its resolution until it's verified, with root cause and corrective action (not just a one-off note).",
   "helpArticleIncidentCapaStep1": "From the instrument's page (or after a failed quality check while preparing a tray), tap \"Report incident\" and give its severity and description.",
   "helpArticleIncidentCapaStep2": "A workspace approver or administrator resolves it, giving the root cause and corrective action.",
-  "helpArticleIncidentCapaStep3": "Someone other than whoever resolved it must verify it to close it fully. All of the organization's open incidents show together in the desktop panel or in Activity.",
+  "helpArticleIncidentCapaStep3": "Someone other than the person who resolved it must verify it to close it for good. The organization's open incidents appear on the Today tab (and on the desktop panel), with access to the full queue.",
 
   "staleContentWarning": "This content hasn't been reviewed in {months} months. Check that it's still accurate.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
@@ -1329,8 +1329,8 @@
 
   "helpArticleTeamQuizzesTitle": "Team quizzes",
   "helpArticleTeamQuizzesIntro": "If you're a supervisor or teacher, you can prepare quizzes with a specific set of instruments for your team to practice, instead of the random quiz over the whole catalog.",
-  "helpArticleTeamQuizzesStep1": "As a supervisor: go to \"My progress\" (or the team panel), pick the team and tap the quiz icon to create a new one, searching and adding instruments one by one.",
-  "helpArticleTeamQuizzesStep2": "As a team member: from Learn, tap \"My team's quizzes\", pick your team and the quiz you want to take. Whoever prepared it can also see your best score.",
+  "helpArticleTeamQuizzesStep1": "As a supervisor: on the My team tab, tap “My team's progress”, choose the team and tap the quizzes icon to create a new one, searching for and adding instruments one by one.",
+  "helpArticleTeamQuizzesStep2": "As a team member: on the Learn tab, tap “Learn” and then “My team's quizzes”, choose your team and the quiz you want to take. Whoever prepared it can also see your best score.",
 
   "exportPdfAction": "Export to PDF",
   "practiceTrayIdentificationAction": "Practice tray identification",

@@ -1221,7 +1221,7 @@
 
   "helpArticleLanguageTitle": "Cambiar el idioma",
   "helpArticleLanguageIntro": "Se puede cambiar en cualquier momento. Se guarda en este dispositivo, no hace falta cuenta.",
-  "helpArticleLanguageStep1": "Abre Perfil y toca «Idioma».",
+  "helpArticleLanguageStep1": "Abre el Perfil (el icono de arriba a la derecha) y toca «Idioma».",
   "helpArticleLanguageStep2": "Elige català, castellano o inglés. El cambio es inmediato, en toda la app.",
 
   "helpArticleOnboardingTitle": "La bienvenida de primer uso",
@@ -1231,22 +1231,22 @@
 
   "helpArticleCatalogSearchTitle": "Buscar y filtrar instrumental",
   "helpArticleCatalogSearchIntro": "El Catálogo se puede explorar sin cuenta, con búsqueda por nombre y filtros por especialidad y categoría.",
-  "helpArticleCatalogSearchStep1": "Desde la pestaña «Buscar», escribe el nombre de un instrumento o marca comercial.",
-  "helpArticleCatalogSearchStep2": "O toca una o más especialidades y categorías para filtrar la lista sin escribir nada.",
+  "helpArticleCatalogSearchStep1": "En la pestaña «Buscar», escribe el nombre de un instrumento, una marca comercial o una técnica.",
+  "helpArticleCatalogSearchStep2": "Para filtrar por especialidad y categoría sin escribir nada, toca «Catálogo» debajo del buscador.",
 
   "helpArticleInstrumentDetailTitle": "Consultar la ficha de un instrumento",
   "helpArticleInstrumentDetailIntro": "Cada instrumento tiene una ficha con foto, descripción, uso principal y esterilización.",
   "helpArticleInstrumentDetailStep1": "Toca cualquier instrumento del Catálogo para abrir su ficha completa.",
   "helpArticleInstrumentDetailStep2": "Más abajo están los métodos de esterilización compatibles y, si los hay, la ficha técnica del fabricante.",
 
-  "helpArticleSuturesTitle": "Catálogo de suturas",
-  "helpArticleSuturesIntro": "Un catálogo de referencia de materiales y calibres de sutura, filtrable por material, independiente del instrumental.",
-  "helpArticleSuturesStep1": "Desde el inicio, toca «Suturas». Filtra por material (seda, vicryl, nylon...) o busca por el nombre.",
-  "helpArticleSuturesStep2": "Cada sutura tiene su ficha: descripción, uso principal y dónde se utiliza (técnicas, protocolos o bandejas).",
+  "helpArticleSuturesTitle": "Material de cierre de heridas",
+  "helpArticleSuturesIntro": "Un catálogo de referencia de suturas, hemostáticos, sellantes y cierre de piel, independiente del instrumental.",
+  "helpArticleSuturesStep1": "En la pestaña «Buscar», toca «Material de cierre de heridas».",
+  "helpArticleSuturesStep2": "Toca cualquier entrada para ver su ficha: categoría, descripción, uso principal y, si lo hay, un consejo práctico.",
 
   "helpArticlePublicLibraryTitle": "Qué es la Biblioteca Pública",
   "helpArticlePublicLibraryIntro": "Técnicas quirúrgicas y bandejas de instrumental revisadas y publicadas por la comunidad, visibles para todo el mundo.",
-  "helpArticlePublicLibraryStep1": "Desde la pestaña «Biblioteca», toca «Biblioteca Pública».",
+  "helpArticlePublicLibraryStep1": "En la pestaña «Mi equipo», toca «Biblioteca Pública» (está arriba del todo).",
   "helpArticlePublicLibraryStep2": "Tiene dos pestañas, técnicas y bandejas. Si aún no hay nada publicado en una especialidad es porque ningún colaborador lo ha enviado todavía -- cualquiera puede convertirse en colaborador desde Perfil.",
 
   "helpCategoryOrganization": "Organización y espacios de trabajo",
@@ -1254,7 +1254,7 @@
 
   "helpArticleWorkspacesTitle": "Consultar los espacios de trabajo",
   "helpArticleWorkspacesIntro": "Si tu hospital tiene más de un equipo o servicio, cada uno puede tener su propio espacio con contenido independiente.",
-  "helpArticleWorkspacesStep1": "En Biblioteca, toca «Espacios» para ver todos los espacios de tu hospital.",
+  "helpArticleWorkspacesStep1": "En la pestaña «Mi equipo», toca «Espacios» para ver todos los espacios de tu hospital.",
   "helpArticleWorkspacesStep2": "Cada espacio tiene sus propias bandejas, documentos, técnicas, tarjetas de preferencia e instrumental propio.",
 
   "helpArticleAccountTitle": "Tu cuenta: preferencias, privacidad y sincronización",
@@ -1266,13 +1266,13 @@
 
   "helpArticleLearnModesTitle": "Flashcards y cuestionario",
   "helpArticleLearnModesIntro": "Repasa el instrumental con tarjetas de memoria o ponte a prueba con un cuestionario de diez preguntas, todo en modo invitado.",
-  "helpArticleLearnModesStep1": "Desde el inicio, toca «Aprèn» y elige «Flashcards» o «Cuestionario».",
+  "helpArticleLearnModesStep1": "En la pestaña «Aprender», toca «Aprende» y elige «Flashcards» o «Quiz».",
   "helpArticleLearnModesStep2": "En las flashcards, toca la tarjeta para ver la descripción y el uso del instrumento; «Marcar como aprendido» lo suma a tu progreso.",
   "helpArticleLearnModesStep3": "En el cuestionario, cada respuesta se marca al instante: verde si aciertas, rojo si no.",
 
   "helpArticleMyProgressTitle": "Mi progreso",
   "helpArticleMyProgressIntro": "Un resumen de cuánto instrumental has aprendido, por categoría, y tu mejor puntuación en el cuestionario.",
-  "helpArticleMyProgressStep1": "Desde el inicio, toca «Mi progreso». El progreso se guarda en este dispositivo y, con cuenta, también en el servidor.",
+  "helpArticleMyProgressStep1": "En la pestaña «Aprender», toca «Mi progreso». El progreso se guarda en este dispositivo y, con cuenta, también en el servidor.",
 
   "helpArticleTrayIdentificationTitle": "Practicar identificación de bandejas",
   "helpArticleTrayIdentificationIntro": "Pon a prueba si reconoces el instrumental de una bandeja completa, no solo instrumento a instrumento.",
@@ -1281,7 +1281,7 @@
 
   "helpArticleSendFeedbackTitle": "Enviar sugerencias o reportar un error",
   "helpArticleSendFeedbackIntro": "Puedes avisarnos de un problema o proponer una mejora directamente desde la app, sin salir de ella y sin necesidad de tener cuenta.",
-  "helpArticleSendFeedbackStep1": "Entra en Perfil y toca «Enviar sugerencia o reportar un error».",
+  "helpArticleSendFeedbackStep1": "Abre el Perfil (el icono de arriba a la derecha) y toca «Enviar sugerencia o reportar un error».",
   "helpArticleSendFeedbackStep2": "Elige la categoría (error, sugerencia u otro) y escribe tu mensaje. Funciona también en modo invitado.",
 
   "helpArticleContentCommentsTitle": "Comentar y proponer cambios en el contenido del equipo",
@@ -1297,14 +1297,14 @@
 
   "helpArticleWorkModesTitle": "Modos de trabajo (instrumentista, cirujano, docente...)",
   "helpArticleWorkModesIntro": "El modo de trabajo adapta la ficha de instrumento y el inicio a tu rol del día, reordenando lo que más usas primero. No cambia tus permisos, solo la organización de la pantalla.",
-  "helpArticleWorkModesStep1": "Toca el selector de modo en la parte superior del inicio y elige el que mejor describa tu rol ahora mismo.",
+  "helpArticleWorkModesStep1": "Toca el selector de modo en la parte superior de la pantalla y elige el que mejor describa tu rol ahora mismo.",
   "helpArticleWorkModesStep2": "Instrumentista: accesos directos a bandejas y preparación en quirófano. Cirujano: tarjetas de preferencia y técnicas primero. Docente: seguimiento del progreso de tu equipo. Puedes cambiar de modo en cualquier momento.",
 
   "helpArticleIncidentCapaTitle": "Reportar y resolver una incidencia de instrumental",
   "helpArticleIncidentCapaIntro": "Si un instrumento falla o no está en condiciones, puedes dejar constancia y seguir su resolución hasta que se verifique, con causa raíz y acción correctiva (no es solo un aviso puntual).",
   "helpArticleIncidentCapaStep1": "Desde la ficha del instrumento (o tras un control de calidad fallido al preparar una bandeja), toca «Reportar incidencia» e indica la gravedad y la descripción.",
   "helpArticleIncidentCapaStep2": "Un approver o administrator del espacio la resuelve indicando causa raíz y acción correctiva.",
-  "helpArticleIncidentCapaStep3": "Una persona distinta de quien la resolvió debe verificarla para cerrarla del todo. Todas las incidencias abiertas de la organización se ven juntas en el panel de escritorio o en Actividad.",
+  "helpArticleIncidentCapaStep3": "Una persona distinta de quien la ha resuelto debe verificarla para cerrarla del todo. Las incidencias abiertas de la organización aparecen en la pestaña «Hoy» (y en el panel de escritorio), con acceso a la cola completa.",
 
   "staleContentWarning": "Este contenido no se ha revisado desde hace {months} meses. Comprueba que siga siendo correcto.",
   "@staleContentWarning": {"placeholders": {"months": {"type": "int"}}},
@@ -1329,8 +1329,8 @@
 
   "helpArticleTeamQuizzesTitle": "Cuestionarios de equipo",
   "helpArticleTeamQuizzesIntro": "Si eres supervisor o docente, puedes preparar cuestionarios con un conjunto concreto de instrumentos para que tu equipo practique, en vez del cuestionario aleatorio de todo el catálogo.",
-  "helpArticleTeamQuizzesStep1": "Como supervisor: entra en «Mi progreso» (o el panel del equipo), elige el equipo y toca el icono de cuestionarios para crear uno nuevo, buscando y añadiendo instrumentos uno a uno.",
-  "helpArticleTeamQuizzesStep2": "Como miembro del equipo: desde Aprender, toca «Cuestionarios de mi equipo», elige tu equipo y el cuestionario que quieras hacer. Tu mejor puntuación la ve también quien lo preparó.",
+  "helpArticleTeamQuizzesStep1": "Como supervisor: en la pestaña «Mi equipo», toca «Progreso de mi equipo», elige el equipo y toca el icono de cuestionarios para crear uno nuevo, buscando y añadiendo instrumentos uno a uno.",
+  "helpArticleTeamQuizzesStep2": "Como miembro del equipo: en la pestaña «Aprender», toca «Aprende» y luego «Cuestionarios de mi equipo», elige tu equipo y el cuestionario que quieras hacer. Tu mejor puntuación también la ve quien lo ha preparado.",
 
   "exportPdfAction": "Exportar a PDF",
   "practiceTrayIdentificationAction": "Practicar identificación de la bandeja",
