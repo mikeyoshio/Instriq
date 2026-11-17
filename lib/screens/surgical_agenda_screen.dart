@@ -9,11 +9,11 @@ import '../services/surgeon_service.dart';
 import '../services/surgical_slot_service.dart';
 import '../utils/relative_date_label.dart';
 import '../widgets/surgical_agenda_ics_dialog.dart';
+import 'surgical_case_screen.dart';
 import 'surgical_slot_form_screen.dart';
 
 /// Lista de la agenda quirúrgica de un espacio, agrupada por día. Calcada de
-/// [TraysScreen]; va directa al formulario al tocar una fila (ver
-/// `kind-spinning-comet.md`: sin pantalla de detalle separada).
+/// [TraysScreen]. Tocar una fila abre [SurgicalCaseScreen] (2.0-alfa).
 class SurgicalAgendaScreen extends StatefulWidget {
   final Workspace workspace;
   final WorkspaceRole? myRole;
@@ -65,6 +65,14 @@ class _SurgicalAgendaScreenState extends State<SurgicalAgendaScreen> {
       ),
     );
     if (changed == true) _load();
+  }
+
+  Future<void> _openCase(BuildContext context, SurgicalSlot slot) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => SurgicalCaseScreen(slot: slot, myRole: widget.myRole)),
+    );
+    // Des del cas es pot editar o cancel·lar la cita.
+    _load();
   }
 
   @override
@@ -182,7 +190,9 @@ class _SurgicalAgendaScreenState extends State<SurgicalAgendaScreen> {
                 backgroundColor: Theme.of(context).colorScheme.errorContainer,
               )
             : const Icon(Icons.chevron_right),
-        onTap: () => _openForm(context, existingSlot: slot),
+        // 2.0-alfa: tocar una cita obre la pàgina del cas (tot el material
+        // per preparar-la); l'edició hi és com a acció de la barra superior.
+        onTap: () => _openCase(context, slot),
       ),
     );
   }

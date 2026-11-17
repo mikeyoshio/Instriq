@@ -5,17 +5,20 @@ import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/preference_card.dart';
+import '../models/procedure.dart';
 import '../models/surgeon.dart';
 import '../models/surgical_slot.dart';
 import '../models/tray.dart';
 import '../models/workspace_role.dart';
 import '../services/group_document_service.dart';
 import '../services/preference_card_service.dart';
+import '../services/procedure_service.dart';
 import '../services/surgeon_service.dart';
 import '../services/surgical_slot_service.dart';
 import '../services/tray_service.dart';
 import 'group_document_detail_screen.dart';
 import 'preference_card_detail_screen.dart';
+import 'procedure_detail_screen.dart';
 import 'tray_detail_screen.dart';
 
 /// Crea, edita o muestra (solo lectura) un hueco de agenda quirúrgica. Una
@@ -53,6 +56,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
   String? _selectedPreferenceCardId;
   String? _selectedDocumentId;
   String? _selectedTrayId;
+  String? _selectedProcedureId;
   DateTime? _startsAt;
   DateTime? _endsAt;
 
@@ -62,6 +66,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
   List<PreferenceCard> _preferenceCards = [];
   List<GroupDocument> _documents = [];
   List<Tray> _trays = [];
+  List<Procedure> _procedures = [];
 
   bool get isEditing => widget.existingSlot != null;
   bool get canEdit => widget.myRole?.canEdit == true;
@@ -76,6 +81,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
     _selectedPreferenceCardId = slot?.preferenceCardId;
     _selectedDocumentId = slot?.documentId;
     _selectedTrayId = slot?.trayId;
+    _selectedProcedureId = slot?.procedureId;
     _startsAt = slot?.startsAt;
     _endsAt = slot?.endsAt;
     _loadOptions();
@@ -111,6 +117,13 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       ...GroupDocumentService.instance.documentsOfKind(DocumentKind.protocol, widget.workspaceId),
     ].where((d) => d.publishedVersion != null).toList();
     _trays = TrayService.instance.traysOfWorkspace(widget.workspaceId).where((t) => t.publishedVersion != null).toList();
+    try {
+      _procedures = await ProcedureService.instance.fetchForWorkspace(widget.workspaceId);
+    } catch (_) {
+      // Selector opcional: sense xarxa queda buit (el valor desat es manté
+      // com a opció "no disponible") en lloc de bloquejar el formulari.
+      _procedures = [];
+    }
     if (mounted) setState(() => _loading = false);
   }
 
@@ -164,9 +177,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
           procedureName: _emptyToNull(_procedureController.text),
           location: _emptyToNull(_locationController.text),
           notes: _emptyToNull(_notesController.text),
-          // L'RPC substitueix tots els camps: sense això, editar una cita
-          // esborraria el procediment enllaçat.
-          procedureId: widget.existingSlot!.procedureId,
+          procedureId: _selectedProcedureId,
         );
       } else {
         await SurgicalSlotService.instance.createSlot(
@@ -180,6 +191,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
           procedureName: _emptyToNull(_procedureController.text),
           location: _emptyToNull(_locationController.text),
           notes: _emptyToNull(_notesController.text),
+          procedureId: _selectedProcedureId,
         );
       }
       if (mounted) Navigator.pop(context, true);
@@ -249,6 +261,8 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
               _buildDateTimeRow(isStart: true, value: _startsAt, label: l10n.surgicalSlotStartLabel),
               const SizedBox(height: 12),
               _buildDateTimeRow(isStart: false, value: _endsAt, label: l10n.surgicalSlotEndLabel),
+              const SizedBox(height: 12),
+              _buildProcedureField(l10n),
               const SizedBox(height: 12),
               _buildTextField(_procedureController, l10n.surgicalSlotProcedureLabel),
               const SizedBox(height: 12),
@@ -400,6 +414,32 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       onView: (tray) => Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: widget.myRole)),
+      ),
+    );
+  }
+
+  Widget _buildProcedureField(AppLocalizations l10n) {
+    return _buildLinkedField<Procedure>(
+      label: l10n.surgicalSlotLinkedProcedureLabel,
+      selectedId: _selectedProcedureId,
+      options: _procedures,
+      idOf: (p) => p.id,
+      nameOf: (p) => p.name,
+      findById: (id) => _procedures.where((p) => p.id == id).firstOrNull,
+      onChanged: (id) => setState(() {
+        _selectedProcedureId = id;
+        // Omple el text lliure si encara és buit: és el que es veu a la
+        // llista de l'agenda i al feed .ics.
+        final picked = _procedures.where((p) => p.id == id).firstOrNull;
+        if (picked != null && _procedureController.text.trim().isEmpty) _procedureController.text = picked.name;
+      }),
+      viewLabel: l10n.surgicalSlotViewProcedure,
+      notAvailableLabel: l10n.surgicalSlotLinkedNotAvailable,
+      onView: (p) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ProcedureDetailScreen(procedureId: p.id, workspaceId: widget.workspaceId, myRole: widget.myRole),
+        ),
       ),
     );
   }

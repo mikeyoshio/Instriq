@@ -24,6 +24,11 @@ class SurgicalSlotService {
     return (rows as List<dynamic>).map((r) => SurgicalSlot.fromRow(r as Map<String, dynamic>)).toList();
   }
 
+  Future<SurgicalSlot?> fetchById(String id) async {
+    final row = await _client.from('surgical_slots').select().eq('id', id).maybeSingle();
+    return row == null ? null : SurgicalSlot.fromRow(row);
+  }
+
   /// Cites del dia local de [day] a tots els espais visibles de la meva
   /// organització, ordenades per hora. El filtre explícit per organització
   /// és defensa en profunditat: no depèn que la RLS de `surgical_slots` estigui
