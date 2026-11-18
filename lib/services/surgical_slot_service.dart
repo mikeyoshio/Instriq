@@ -17,7 +17,7 @@ class SurgicalSlotService {
   Future<List<SurgicalSlot>> fetchForWorkspace(String workspaceId, {bool includePast = false}) async {
     var query = _client.from('surgical_slots').select().eq('workspace_id', workspaceId);
     if (!includePast) {
-      final cutoff = DateTime.now().subtract(const Duration(days: 1)).toIso8601String();
+      final cutoff = DateTime.now().subtract(const Duration(days: 1)).toUtc().toIso8601String();
       query = query.gte('starts_at', cutoff);
     }
     final rows = await query.order('starts_at');
@@ -63,8 +63,8 @@ class SurgicalSlotService {
     final row = await _client.rpc('create_surgical_slot', params: {
       'p_workspace_id': workspaceId,
       'p_surgeon_id': surgeonId,
-      'p_starts_at': startsAt.toIso8601String(),
-      'p_ends_at': endsAt.toIso8601String(),
+      'p_starts_at': startsAt.toUtc().toIso8601String(),
+      'p_ends_at': endsAt.toUtc().toIso8601String(),
       'p_preference_card_id': preferenceCardId,
       'p_document_id': documentId,
       'p_tray_id': trayId,
@@ -92,8 +92,8 @@ class SurgicalSlotService {
     final row = await _client.rpc('update_surgical_slot', params: {
       'p_slot_id': slotId,
       'p_surgeon_id': surgeonId,
-      'p_starts_at': startsAt.toIso8601String(),
-      'p_ends_at': endsAt.toIso8601String(),
+      'p_starts_at': startsAt.toUtc().toIso8601String(),
+      'p_ends_at': endsAt.toUtc().toIso8601String(),
       'p_preference_card_id': preferenceCardId,
       'p_document_id': documentId,
       'p_tray_id': trayId,

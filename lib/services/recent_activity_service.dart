@@ -27,7 +27,7 @@ class RecentActivityService {
           'user_id': userId,
           'ref_type': refType,
           'ref_id': refId,
-          'viewed_at': DateTime.now().toIso8601String(),
+          'viewed_at': DateTime.now().toUtc().toIso8601String(),
         },
         onConflict: 'user_id,ref_type,ref_id',
       );

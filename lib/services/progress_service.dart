@@ -107,7 +107,7 @@ class ProgressService {
               'user_id': userId,
               'ref_type': 'catalog',
               'ref_id': id,
-              'learned_at': DateTime.now().toIso8601String(),
+              'learned_at': DateTime.now().toUtc().toIso8601String(),
             }, onConflict: 'user_id,ref_type,ref_id');
           } catch (_) {
             // Un id fallando no bloquea el resto de la migración.
@@ -152,7 +152,7 @@ class ProgressService {
             'user_id': userId,
             'ref_type': 'catalog',
             'ref_id': id,
-            'learned_at': DateTime.now().toIso8601String(),
+            'learned_at': DateTime.now().toUtc().toIso8601String(),
           }, onConflict: 'user_id,ref_type,ref_id');
         } else {
           await _client
@@ -266,7 +266,7 @@ class ProgressService {
         'ref_type': 'catalog',
         'ref_id': id,
         'box': newBox,
-        'next_review_at': nextReview.toIso8601String(),
+        'next_review_at': nextReview.toUtc().toIso8601String(),
       }, onConflict: 'user_id,ref_type,ref_id');
     } catch (_) {
       // Metadato de progreso: no crítico, no se reintenta con una cola.

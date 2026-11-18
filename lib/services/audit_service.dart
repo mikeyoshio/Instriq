@@ -31,7 +31,7 @@ class AuditService {
       query = query.eq('workspace_id', workspaceId);
     }
     if (since != null) {
-      query = query.gte('created_at', since.toIso8601String());
+      query = query.gte('created_at', since.toUtc().toIso8601String());
     }
     final ordered = query.order('created_at', ascending: false);
     final rows = await (limit != null ? ordered.limit(limit) : ordered);

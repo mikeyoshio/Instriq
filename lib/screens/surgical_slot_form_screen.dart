@@ -88,8 +88,9 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
     _selectedDocumentId = slot?.documentId;
     _selectedTrayId = slot?.trayId;
     _selectedProcedureId = slot?.procedureId;
-    _startsAt = slot?.startsAt;
-    _endsAt = slot?.endsAt;
+    // Es guarda en UTC: al formulari s'ha de veure i editar en hora local.
+    _startsAt = slot?.startsAt.toLocal();
+    _endsAt = slot?.endsAt.toLocal();
     _loadOptions();
   }
 

@@ -444,3 +444,9 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
   - Càrrega inicial: si falla, missatge i "Reintenta" (abans la pantalla es quedava carregant per sempre).
   - Desar i cancel·lar: també es capturen errors de xarxa/sessió amb un missatge clar, no només els de PostgREST.
   - **No verificat amb compte real** (exigeix hospital i rol editor). `flutter analyze` del fitxer i `flutter test` nets.
+
+- **Hora de les franjes de quiròfan desplaçada 1 h** (informe del propietari: una franja de les 18:45 sortia a les 19:xx al calendari). No era un arrodoniment: `SurgicalSlotService` enviava `startsAt.toIso8601String()` d'una hora local, sense zona horària, i Postgres la desava com a UTC (18:45 local → 18:45 UTC = 19:45 a Barcelona a l'hivern). L'app (que mostra `toLocal()`), el panell i el feed .ics ensenyaven l'hora desplaçada; i el formulari d'edició mostrava l'hora sense passar-la a local.
+  - Correcció: totes les dates que van al servidor s'envien en UTC (`toUtc().toIso8601String()`): franges (crear, editar, tall de "des d'ahir"), i de pas les altres amb el mateix error menor (vídeos revisats, progrés d'aprenentatge, activitat recent, filtre de l'auditoria). El formulari de franja mostra i edita en hora local.
+  - Dades existents: `schema_v70_surgical_slot_timezone_fix.sql` reinterpreta l'hora desada de les franges creades abans del 2026-11-18 11:00 UTC com a hora de Europe/Madrid (previsualització amb SELECT abans de l'UPDATE). **Pendent que l'executi el propietari.**
+  - Versió 1.2.1 (MSIX 1.2.1.0): el paquet 1.2.0 de Microsoft Store porta el bug; cal empaquetar i pujar la 1.2.1.
+  - `flutter analyze` de serveis i formulari i `flutter test` nets.

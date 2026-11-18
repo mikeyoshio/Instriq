@@ -60,7 +60,7 @@ class GroupDocumentVideoService {
         .update({
           'status': VideoStatus.approved.dbValue,
           'reviewed_by': userId,
-          'reviewed_at': DateTime.now().toIso8601String(),
+          'reviewed_at': DateTime.now().toUtc().toIso8601String(),
         })
         .eq('id', videoId)
         .select()
@@ -75,7 +75,7 @@ class GroupDocumentVideoService {
         .update({
           'status': VideoStatus.rejected.dbValue,
           'reviewed_by': userId,
-          'reviewed_at': DateTime.now().toIso8601String(),
+          'reviewed_at': DateTime.now().toUtc().toIso8601String(),
         })
         .eq('id', videoId)
         .select()
