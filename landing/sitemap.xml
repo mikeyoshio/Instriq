@@ -61,6 +61,16 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/collegium" />
   </url>
   <url>
+    <loc>https://instriq.org/transparencia</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/transparencia" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/transparencia?lang=es" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/transparencia?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/transparencia" />
+  </url>
+  <url>
     <loc>https://instriq.org/privacidad</loc>
     <lastmod>2026-10-18</lastmod>
     <changefreq>monthly</changefreq>

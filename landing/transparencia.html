@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16191a" media="(prefers-color-scheme: dark)">
+<title data-i18n="meta.title">Transparència — què costa Instriq</title>
+<meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Els costos reals d'Instriq i els seus ingressos, publicats tal com són: domini, eines, serveis i mecenes a Patreon.">
+<link rel="canonical" href="https://instriq.org/transparencia" id="canonicalLink">
+<link rel="alternate" hreflang="ca" href="https://instriq.org/transparencia">
+<link rel="alternate" hreflang="es" href="https://instriq.org/transparencia?lang=es">
+<link rel="alternate" hreflang="en" href="https://instriq.org/transparencia?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://instriq.org/transparencia">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://instriq.org/transparencia">
+<meta property="og:site_name" content="Instriq">
+<meta property="og:title" data-i18n-attr="content" data-i18n="meta.title" content="Transparència — què costa Instriq">
+<meta property="og:description" data-i18n-attr="content" data-i18n="meta.description" content="Els costos reals d'Instriq i els seus ingressos, publicats tal com són: domini, eines, serveis i mecenes a Patreon.">
+<meta property="og:image" content="https://instriq.org/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" data-i18n-attr="content" data-i18n="meta.title" content="Transparència — què costa Instriq">
+<meta name="twitter:description" data-i18n-attr="content" data-i18n="meta.description" content="Els costos reals d'Instriq i els seus ingressos, publicats tal com són: domini, eines, serveis i mecenes a Patreon.">
+<meta name="twitter:image" content="https://instriq.org/og-image.png">
+<style>
+  :root {
+    --paper: #f6f4f0; --paper-alt: #edeae2; --surface: #ffffff;
+    --ink: #201c17; --ink-muted: #6e6459; --rule: #e2ddd3;
+    --accent: #a34e1c; --accent-soft: #f1e3d7;
+    --max-w: 1120px; --measure: 720px;
+    --display: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, "Liberation Mono", monospace;
+    --body: "Iowan Old Style", "Palatino Linotype", "URW Palladio L", Georgia, "Times New Roman", serif;
+    --shadow-soft: 0 1px 2px rgba(32, 28, 23, 0.04), 0 10px 30px -12px rgba(32, 28, 23, 0.12);
+    --shadow-lift: 0 24px 60px -20px rgba(32, 28, 23, 0.22);
+    --grain-blend: multiply;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; }
+  }
+  :root[data-theme="dark"] { --paper: #16191a; --paper-alt: #1d2122; --surface: #202425; --ink: #f1ede6; --ink-muted: #a8a094; --rule: #2c3234; --accent: #e2915c; --accent-soft: #3a2a1f; --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px -12px rgba(0,0,0,0.5); --shadow-lift: 0 24px 60px -20px rgba(0,0,0,0.55); --grain-blend: overlay; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 72px; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 19px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  img { max-width: 100%; display: block; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 480px) { .wrap { padding: 0 16px; } }
+  .measure { max-width: var(--measure); }
+  header.site { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em; }
+  .brand img { width: 26px; height: 26px; border-radius: 7px; }
+  .nav-links { display: flex; gap: 20px; align-items: center; }
+  .nav-links a.plain { color: var(--ink-muted); text-decoration: none; font-size: 0.95rem; white-space: nowrap; transition: color 0.15s ease; }
+  .nav-links a.plain:hover { color: var(--accent); }
+  .lang-switch { display: flex; gap: 6px; font-family: var(--display); font-size: 0.78rem; }
+  .lang-switch button { background: none; border: none; color: var(--ink-muted); cursor: pointer; padding: 4px 6px; font-family: var(--display); font-size: 0.78rem; border-radius: 4px; }
+  .lang-switch button.active { color: var(--ink); font-weight: 700; background: var(--paper-alt); }
+  @media (max-width: 760px) { .nav-links a.plain { display: none; } .nav-links { gap: 12px; } }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; font-weight: 600; font-size: 0.95rem; font-family: var(--body); text-decoration: none; border-radius: 10px; cursor: pointer; border: 1px solid var(--ink); transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-ghost { background: none; color: var(--ink); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 480px) { .nav .btn { padding: 10px 14px; } }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .section { padding: 64px 0; }
+  .section-alt { background: var(--paper-alt); }
+  @media (max-width: 720px) { .section { padding: 44px 0; } }
+  .eyebrow { display: inline-block; font-family: var(--display); font-size: 0.8rem; font-weight: 600; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: 1.15; margin: 0 0 20px; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 16px; }
+  p { color: var(--ink-muted); margin: 0 0 18px; }
+  .lede { font-size: 1.15rem; line-height: 1.65; max-width: var(--measure); }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 32px; }
+  .feature-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 24px; box-shadow: var(--shadow-soft); }
+  .feature-card .icon { font-family: var(--display); font-size: 0.78rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .feature-card h3 { font-size: 1.08rem; margin: 0 0 8px; }
+  .feature-card p { margin: 0; font-size: 0.95rem; }
+  /* Pas a pas: una seqüència real, per això numerada. */
+  .steps { list-style: none; counter-reset: step; padding: 0; margin: 32px 0 0; max-width: var(--measure); }
+  .steps li { counter-increment: step; position: relative; padding: 0 0 22px 52px; }
+  .steps li::before { content: counter(step); position: absolute; left: 0; top: 2px; width: 34px; height: 34px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-family: var(--display); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+  .steps h3 { font-size: 1.02rem; margin: 0 0 4px; }
+  .steps p { margin: 0; font-size: 0.96rem; }
+  /* Estructura d'exemple: arbre de grup → espais → rols. */
+  .tree { margin: 16px 0 0; padding: 14px 16px; background: var(--paper-alt); border-radius: 10px; font-family: var(--display); font-size: 0.8rem; line-height: 1.6; color: var(--ink); overflow-x: auto; }
+  .tree div { white-space: nowrap; }
+  .tree .ws { padding-left: 14px; }
+  .tree .role { padding-left: 28px; color: var(--ink-muted); }
+  .practice { border-bottom: 1px solid var(--rule); padding: 18px 0; max-width: var(--measure); }
+  .practice h3 { font-size: 1.02rem; margin: 0 0 6px; }
+  .practice p { margin: 0; font-size: 0.96rem; }
+  .faq-item { border-bottom: 1px solid var(--rule); padding: 20px 0; max-width: var(--measure); }
+  .faq-item:first-child { padding-top: 0; }
+  .faq-item h3 { font-size: 1.05rem; margin: 0 0 8px; color: var(--ink); }
+  .faq-item p { margin: 0; }
+  footer.site { padding: 56px 0 36px; border-top: 1px solid var(--rule); }
+  footer.site .cols { display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; }
+  footer.site .col h4 { font-family: var(--display); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); margin: 0 0 12px; font-weight: 700; }
+  footer.site .col a { display: block; color: var(--ink-muted); text-decoration: none; font-size: 0.96rem; margin-bottom: 8px; transition: color 0.15s ease; }
+  footer.site .col a:hover { color: var(--accent); }
+  .fine { font-size: 0.85rem; color: var(--ink-muted); margin-top: 40px; }
+  .grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.045; mix-blend-mode: var(--grain-blend, multiply); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 30; width: 0%; }
+  .skip-link { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 0 0 8px 0; font-family: var(--display); font-size: 0.9rem; text-decoration: none; }
+  .skip-link:focus { left: 0; }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+  /* Transparència: xifres alineades i taula llegible a 390px. */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 32px; }
+  .tile { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 20px 22px; }
+  .tile .k { font-family: var(--display); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-muted); }
+  .tile .v { font-family: var(--display); font-size: 2rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 6px; line-height: 1.2; }
+  .tile .s { font-size: 0.9rem; color: var(--ink-muted); margin-top: 4px; }
+  .ledger-wrap { overflow-x: auto; margin-top: 28px; border: 1px solid var(--rule); border-radius: 12px; background: var(--surface); }
+  table.ledger { width: 100%; border-collapse: collapse; font-size: 0.95rem; min-width: 560px; }
+  .ledger th, .ledger td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .ledger th { font-family: var(--display); font-size: 0.74rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-muted); font-weight: 700; }
+  .ledger tr:last-child td { border-bottom: none; }
+  .ledger td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink); font-weight: 600; }
+  .ledger th.num { text-align: right; }
+  .ledger .what { color: var(--ink-muted); font-size: 0.88rem; display: block; }
+  .pill { display: inline-block; font-family: var(--display); font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+  .pill.free { background: var(--paper-alt); color: var(--ink-muted); }
+  .updated { font-family: var(--display); font-size: 0.8rem; color: var(--ink-muted); }
+</style>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c09082e3f96f44b59922839da897dcab"}'></script><!-- End Cloudflare Web Analytics -->
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<a href="#main" class="skip-link" data-i18n="a11y.skip">Saltar al contingut</a>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="index.html" class="brand"><img src="favicon.png" alt=""> Instriq</a>
+    <nav class="nav-links">
+      <a class="plain" href="index.html" data-i18n="nav.back">← Torna a l'inici</a>
+      <a class="plain" href="edu.html" data-i18n="nav.edu">Formació</a>
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="ca">CA</button><button data-lang="es">ES</button><button data-lang="en">EN</button>
+      </div>
+      <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=transparency" class="btn btn-primary" data-i18n="nav.cta">Obre l'app</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="hero.eyebrow">Transparència</span>
+    <h1 data-i18n="hero.h1">Què costa Instriq i qui el paga.</h1>
+    <p class="lede" data-i18n="hero.lede">Instriq és gratuït per a tothom i no té inversors, publicitat ni venda de dades. Aquí publiquem cada cost real i cada ingrés, tal com són. El mantenim nosaltres de la nostra butxaca, i les aportacions a Patreon serveixen per cobrir-ho.</p>
+    <p class="updated"><span data-i18n="hero.updated">Última actualització:</span> 18/11/2026</p>
+    <div class="tiles">
+      <div class="tile"><div class="k" data-i18n="t.costK">Costos al mes</div><div class="v"><span data-amt="20.71" data-cur="USD">20,71 USD</span></div><div class="s" data-i18n="t.costS">Mitjana mensual dels costos recurrents</div></div>
+      <div class="tile"><div class="k" data-i18n="t.incomeK">Ingressos al mes</div><div class="v"><span data-amt="0" data-cur="USD">0 USD</span></div><div class="s" data-i18n="t.incomeS">Aportacions a Patreon</div></div>
+      <div class="tile"><div class="k" data-i18n="t.patronsK">Mecenes a Patreon</div><div class="v">0</div><div class="s"><a href="https://patreon.com/Instriq?utm_source=landing&amp;utm_medium=transparency" data-i18n="t.patronsS">Fes-te mecenes →</a></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="costos">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="costs.eyebrow">Costos</span>
+    <h2 data-i18n="costs.h2">Què paguem</h2>
+    <p class="lede" data-i18n="costs.lede">Els imports són els preus oficials en dòlars, sense IVA. Els paguem en euros, així que el que surt al banc varia una mica segons el canvi i l'IVA. Els serveis amb pla gratuït hi surten igualment, perquè se sàpiga de què depèn Instriq.</p>
+    <div class="ledger-wrap">
+      <table class="ledger">
+        <thead><tr><th data-i18n="col.concept">Concepte</th><th data-i18n="col.provider">Proveïdor</th><th data-i18n="col.period">Periodicitat</th><th class="num" data-i18n="col.amount">Import</th></tr></thead>
+        <tbody>
+          <tr><td><span data-i18n="r.claude">Claude Pro</span><span class="what" data-i18n="r.claudeW">Assistent d'IA amb què desenvolupem Instriq. L'app no té funcions d'IA ni envia el teu contingut a cap IA.</span></td><td>Anthropic</td><td data-i18n="p.month">Mensual</td><td class="num"><span data-amt="20.0" data-cur="USD">20,00 USD</span></td></tr>
+          <tr><td><span data-i18n="r.domain">Domini instriq.org</span><span class="what" data-i18n="r.domainW">L'adreça de la web i de l'app. Renovació cada juliol.</span></td><td>Cloudflare</td><td data-i18n="p.year">Anual</td><td class="num"><span data-amt="8.5" data-cur="USD">8,50 USD</span></td></tr>
+          <tr><td><span data-i18n="r.play">Compte de desenvolupador de Google Play</span><span class="what" data-i18n="r.playW">Per publicar l'app d'Android.</span></td><td>Google</td><td data-i18n="p.once">Pagament únic</td><td class="num"><span data-amt="25" data-cur="USD">25,00 USD</span></td></tr>
+          <tr><td><span data-i18n="r.store">Compte de desenvolupador de Microsoft Store</span><span class="what" data-i18n="r.storeW">Per publicar l'app de Windows.</span></td><td>Microsoft</td><td>—</td><td class="num"><span class="pill free" data-i18n="free0">Gratuït</span></td></tr>
+          <tr><td><span data-i18n="r.web">Web i app web</span><span class="what" data-i18n="r.webW">On s'allotgen instriq.org i app.instriq.org.</span></td><td>Cloudflare, Vercel</td><td>—</td><td class="num"><span class="pill free" data-i18n="free">Pla gratuït</span></td></tr>
+          <tr><td><span data-i18n="r.db">Base de dades, fotos i comptes</span><span class="what" data-i18n="r.dbW">On es desa el contingut dels equips, les fotos i els inicis de sessió.</span></td><td>Supabase</td><td>—</td><td class="num"><span class="pill free" data-i18n="free">Pla gratuït</span></td></tr>
+          <tr><td><span data-i18n="r.push">Notificacions</span><span class="what" data-i18n="r.pushW">Avisos quan s'actualitza el contingut que segueixes.</span></td><td>Firebase</td><td>—</td><td class="num"><span class="pill free" data-i18n="free">Pla gratuït</span></td></tr>
+          <tr><td><span data-i18n="r.status">Pàgina d'estat</span><span class="what" data-i18n="r.statusW">status.instriq.org: avisa si algun servei cau.</span></td><td>Better Stack</td><td>—</td><td class="num"><span class="pill free" data-i18n="free">Pla gratuït</span></td></tr>
+          <tr><td><span data-i18n="r.code">Codi obert</span><span class="what" data-i18n="r.codeW">El repositori públic d'Instriq.</span></td><td>GitHub</td><td>—</td><td class="num"><span class="pill free" data-i18n="free">Pla gratuït</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ingressos">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="income.eyebrow">Ingressos</span>
+    <h2 data-i18n="income.h2">Què rebem</h2>
+    <div class="ledger-wrap">
+      <table class="ledger">
+        <thead><tr><th data-i18n="col.source">Font</th><th class="num" data-i18n="col.people">Persones</th><th class="num" data-i18n="col.monthly">Al mes</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://patreon.com/Instriq?utm_source=landing&amp;utm_medium=transparency">Patreon</a></td><td class="num">0</td><td class="num"><span data-amt="0" data-cur="USD">0 USD</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:20px" data-i18n="income.use">Els diners de Patreon serveixen primer per cobrir els costos d'aquesta pàgina. Si algun dia en sobren, publicarem aquí a què es destinen.</p>
+  </div>
+</section>
+
+<section class="section section-alt" id="creixement">
+  <div class="wrap">
+    <span class="eyebrow" data-i18n="growth.eyebrow">Si Instriq creix</span>
+    <h2 data-i18n="growth.h2">Què costaria amb més usuaris</h2>
+    <p class="lede" data-i18n="growth.lede">Avui tot cap als plans gratuïts. Si l'ús creix, algun d'aquests límits obligarà a passar a un pla de pagament. No posem dates: depèn de quan arribin els usuaris. És una estimació feta amb els preus públics de cada proveïdor, no un pressupost tancat.</p>
+    <h3 style="margin-top:28px" data-i18n="growth.limitsH">Límits dels plans gratuïts</h3>
+    <div class="ledger-wrap">
+      <table class="ledger">
+        <thead><tr><th data-i18n="col.service">Servei</th><th data-i18n="col.limit">Límit gratuït</th><th data-i18n="col.next">Pla següent</th></tr></thead>
+        <tbody>
+          <tr><td>Supabase</td><td data-i18n="l.supabase">50.000 usuaris actius al mes, 500 MB de base de dades, 1 GB de fotos i 5 GB de transferència al mes.</td><td data-i18n="n.supabase">Pro: des de 25 USD al mes (100.000 usuaris, 8 GB de base de dades, 100 GB de fotos, 250 GB de transferència).</td></tr>
+          <tr><td>Vercel</td><td data-i18n="l.vercel">100 GB de transferència i 1 milió de peticions al mes (app web).</td><td data-i18n="n.vercel">Pro: 20 USD al mes per persona (1 TB de transferència).</td></tr>
+          <tr><td>Cloudflare</td><td data-i18n="l.cloudflare">Web estàtica sense límit; 100.000 peticions al dia al codi del servidor.</td><td data-i18n="n.cloudflare">Workers Paid: 5 USD al mes (10 milions de peticions).</td></tr>
+          <tr><td>Firebase</td><td data-i18n="l.firebase">Les notificacions són gratuïtes sense límit d'ús.</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 style="margin-top:32px" data-i18n="growth.stagesH">Estimació per fases</h3>
+    <div class="ledger-wrap">
+      <table class="ledger">
+        <thead><tr><th data-i18n="col.stage">Usuaris actius al mes</th><th data-i18n="col.change">Què canvia</th><th class="num" data-i18n="col.infra">Infraestructura al mes</th></tr></thead>
+        <tbody>
+          <tr><td data-i18n="s1.u">Fins a uns 2.000</td><td data-i18n="s1.c">Res: tot cap als plans gratuïts.</td><td class="num"><span data-amt="0" data-cur="USD">0 USD</span></td></tr>
+          <tr><td data-i18n="s2.u">Uns 2.000 – 10.000</td><td data-i18n="s2.c">Supabase Pro. El primer límit que preveiem és l'espai de fotos (1 GB) i la transferència (5 GB), no el nombre d'usuaris.</td><td class="num"><span data-i18n="approx">aprox.</span> <span data-amt="25" data-cur="USD">25 USD</span></td></tr>
+          <tr><td data-i18n="s3.u">Uns 10.000 – 50.000</td><td data-i18n="s3.c">A més, Vercel Pro per la transferència de l'app web, i Cloudflare Workers Paid.</td><td class="num"><span data-i18n="approx">aprox.</span> <span data-amt="50" data-cur="USD">50 USD</span></td></tr>
+          <tr><td data-i18n="s4.u">Uns 50.000 – 100.000</td><td data-i18n="s4.c">Més capacitat de base de dades i més transferència dins dels mateixos plans.</td><td class="num" data-i18n="s4.a">100 – 200 USD</td></tr>
+          <tr><td data-i18n="s5.u">Més de 100.000</td><td data-i18n="s5.c">Cada usuari actiu de més costa 0,00325 USD a Supabase (per exemple, 150.000 usuaris són uns 163 USD més al mes).</td><td class="num" data-i18n="s5.a">200 USD o més</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:20px" data-i18n="growth.note">A tot això s'hi sumen els costos fixos de dalt. Revisarem aquesta estimació cada vegada que un proveïdor canviï preus o ens acostem a un límit, i ho publicarem aquí abans que afecti l'app.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="text-align:center">
+    <h2 data-i18n="cta.h2">Vols ajudar a sostenir Instriq?</h2>
+    <p class="lede" style="margin-left:auto;margin-right:auto" data-i18n="cta.p">Una aportació mensual a Patreon ajuda a cobrir aquests costos. També pots col·laborar amb contingut, traduccions o codi.</p>
+    <div class="hero-actions" style="justify-content:center">
+      <a href="https://patreon.com/Instriq?utm_source=landing&amp;utm_medium=transparency" class="btn btn-primary" data-i18n="cta.patreon">Fes-te mecenes a Patreon</a>
+      <a href="index.html#colabora" class="btn btn-ghost" data-i18n="cta.other">Altres maneres de col·laborar</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="cols">
+      <div class="col">
+        <h4>Instriq</h4>
+        <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=transparency" data-i18n="footer.app">Obre l'app</a>
+        <a href="edu.html" data-i18n="nav.edu">Formació</a>
+        <a href="https://github.com/mikeyoshio/Instriq">GitHub</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h1">Projecte</h4>
+        <a href="index.html#mision" data-i18n="footer.l1">Missió i visió</a>
+        <a href="novedades.html" data-i18n="footer.l2">Novetats</a>
+        <a href="sugerencias.html" data-i18n="footer.l6">Suggeriments</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h2">Legal</h4>
+        <a href="privacidad.html" data-i18n="footer.l4">Política de privacitat</a>
+        <a href="https://github.com/mikeyoshio/Instriq/blob/main/LICENSE" data-i18n="footer.l5">Llicència (AGPL-3.0)</a>
+      </div>
+      <div class="col">
+        <h4 data-i18n="footer.h3">Contacte</h4>
+        <a href="mailto:hola@instriq.org">hola@instriq.org</a>
+        <a href="https://www.instagram.com/instriq_org/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com/instriq_org" target="_blank" rel="noopener">X (Twitter)</a>
+      </div>
+    </div>
+    <p class="fine" data-i18n="footer.fine">Instriq® — projecte open source per i per al bloc quirúrgic. Codi sota AGPL-3.0.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Català: els textos de l'HTML són la font (es llegeixen en carregar, com a index.html).
+  var DICT = { es: {
+    'meta.title': 'Transparencia — qué cuesta Instriq',
+    'meta.description': 'Los costes reales de Instriq y sus ingresos, publicados tal como son, y cuánto costaría con más usuarios.',
+    'hero.eyebrow': 'Transparencia',
+    'hero.h1': 'Qué cuesta Instriq y quién lo paga.',
+    'hero.lede': 'Instriq es gratis para todo el mundo y no tiene inversores, publicidad ni venta de datos. Aquí publicamos cada coste real y cada ingreso, tal como son. Lo mantenemos nosotros de nuestro bolsillo, y las aportaciones en Patreon sirven para cubrirlo.',
+    'hero.updated': 'Última actualización:',
+    't.costK': 'Costes al mes',
+    't.costS': 'Media mensual de los costes recurrentes',
+    't.incomeK': 'Ingresos al mes',
+    't.incomeS': 'Aportaciones en Patreon',
+    't.patronsK': 'Mecenas en Patreon',
+    't.patronsS': 'Hazte mecenas →',
+    'costs.eyebrow': 'Costes',
+    'costs.h2': 'Qué pagamos',
+    'costs.lede': 'Los importes son los precios oficiales en dólares, sin IVA. Los pagamos en euros, así que lo que sale en el banco varía un poco según el cambio y el IVA. Los servicios con plan gratuito aparecen igualmente, para que se sepa de qué depende Instriq.',
+    'col.concept': 'Concepto',
+    'col.provider': 'Proveedor',
+    'col.period': 'Periodicidad',
+    'col.amount': 'Importe',
+    'r.claude': 'Claude Pro',
+    'r.claudeW': 'Asistente de IA con el que desarrollamos Instriq. La app no tiene funciones de IA ni envía tu contenido a ninguna IA.',
+    'r.domain': 'Dominio instriq.org',
+    'r.domainW': 'La dirección de la web y de la app. Se renueva cada julio.',
+    'r.play': 'Cuenta de desarrollador de Google Play',
+    'r.playW': 'Para publicar la app de Android.',
+    'r.store': 'Cuenta de desarrollador de Microsoft Store',
+    'r.storeW': 'Para publicar la app de Windows.',
+    'r.web': 'Web y app web',
+    'r.webW': 'Donde se alojan instriq.org y app.instriq.org.',
+    'r.db': 'Base de datos, fotos y cuentas',
+    'r.dbW': 'Donde se guarda el contenido de los equipos, las fotos y los inicios de sesión.',
+    'r.push': 'Notificaciones',
+    'r.pushW': 'Avisos cuando se actualiza el contenido que sigues.',
+    'r.status': 'Página de estado',
+    'r.statusW': 'status.instriq.org: avisa si algún servicio cae.',
+    'r.code': 'Código abierto',
+    'r.codeW': 'El repositorio público de Instriq.',
+    'p.year': 'Anual',
+    'p.month': 'Mensual',
+    'p.once': 'Pago único',
+    'free': 'Plan gratuito',
+    'free0': 'Gratuito',
+    'income.eyebrow': 'Ingresos',
+    'income.h2': 'Qué recibimos',
+    'col.source': 'Fuente',
+    'col.people': 'Personas',
+    'col.monthly': 'Al mes',
+    'income.use': 'El dinero de Patreon sirve primero para cubrir los costes de esta página. Si algún día sobra, publicaremos aquí a qué se destina.',
+    'growth.eyebrow': 'Si Instriq crece',
+    'growth.h2': 'Cuánto costaría con más usuarios',
+    'growth.lede': 'Hoy todo cabe en los planes gratuitos. Si el uso crece, alguno de estos límites obligará a pasar a un plan de pago. No ponemos fechas: depende de cuándo lleguen los usuarios. Es una estimación hecha con los precios públicos de cada proveedor, no un presupuesto cerrado.',
+    'growth.limitsH': 'Límites de los planes gratuitos',
+    'col.service': 'Servicio',
+    'col.limit': 'Límite gratuito',
+    'col.next': 'Plan siguiente',
+    'l.supabase': '50.000 usuarios activos al mes, 500 MB de base de datos, 1 GB de fotos y 5 GB de transferencia al mes.',
+    'n.supabase': 'Pro: desde 25 USD al mes (100.000 usuarios, 8 GB de base de datos, 100 GB de fotos, 250 GB de transferencia).',
+    'l.vercel': '100 GB de transferencia y 1 millón de peticiones al mes (app web).',
+    'n.vercel': 'Pro: 20 USD al mes por persona (1 TB de transferencia).',
+    'l.cloudflare': 'Web estática sin límite; 100.000 peticiones al día al código del servidor.',
+    'n.cloudflare': 'Workers Paid: 5 USD al mes (10 millones de peticiones).',
+    'l.firebase': 'Las notificaciones son gratuitas sin límite de uso.',
+    'growth.stagesH': 'Estimación por fases',
+    'col.stage': 'Usuarios activos al mes',
+    'col.change': 'Qué cambia',
+    'col.infra': 'Infraestructura al mes',
+    's1.u': 'Hasta unos 2.000',
+    's1.c': 'Nada: todo cabe en los planes gratuitos.',
+    's2.u': 'Unos 2.000 – 10.000',
+    's2.c': 'Supabase Pro. El primer límite que prevemos es el espacio de fotos (1 GB) y la transferencia (5 GB), no el número de usuarios.',
+    's3.u': 'Unos 10.000 – 50.000',
+    's3.c': 'Además, Vercel Pro por la transferencia de la app web, y Cloudflare Workers Paid.',
+    's4.u': 'Unos 50.000 – 100.000',
+    's4.c': 'Más capacidad de base de datos y más transferencia dentro de los mismos planes.',
+    's4.a': '100 – 200 USD',
+    's5.u': 'Más de 100.000',
+    's5.c': 'Cada usuario activo de más cuesta 0,00325 USD en Supabase (por ejemplo, 150.000 usuarios son unos 163 USD más al mes).',
+    's5.a': '200 USD o más',
+    'approx': 'aprox.',
+    'growth.note': 'A todo esto se suman los costes fijos de arriba. Revisaremos esta estimación cada vez que un proveedor cambie precios o nos acerquemos a un límite, y lo publicaremos aquí antes de que afecte a la app.',
+    'cta.h2': '¿Quieres ayudar a sostener Instriq?',
+    'cta.p': 'Una aportación mensual en Patreon ayuda a cubrir estos costes. También puedes colaborar con contenido, traducciones o código.',
+    'cta.patreon': 'Hazte mecenas en Patreon',
+    'cta.other': 'Otras formas de colaborar',
+    'a11y.skip': 'Saltar al contenido',
+    'nav.back': '← Volver al inicio',
+    'nav.edu': 'Formación',
+    'nav.cta': 'Abre la app',
+    'footer.app': 'Abre la app',
+    'footer.h1': 'Proyecto',
+    'footer.l1': 'Misión y visión',
+    'footer.l2': 'Novedades',
+    'footer.l6': 'Sugerencias',
+    'footer.h2': 'Legal',
+    'footer.l4': 'Política de privacidad',
+    'footer.l5': 'Licencia (AGPL-3.0)',
+    'footer.h3': 'Contacto',
+    'footer.fine': 'Instriq® — proyecto open source por y para el quirófano. Código bajo AGPL-3.0.'
+  }, en: {
+    'meta.title': 'Transparency — what Instriq costs',
+    'meta.description': 'Instriq\'s real costs and income, published as they are, and what it would cost with more users.',
+    'hero.eyebrow': 'Transparency',
+    'hero.h1': 'What Instriq costs and who pays for it.',
+    'hero.lede': 'Instriq is free for everyone and has no investors, no ads and no data sales. Here we publish every real cost and every bit of income, as they are. We pay for it out of our own pocket, and Patreon contributions help cover it.',
+    'hero.updated': 'Last updated:',
+    't.costK': 'Costs per month',
+    't.costS': 'Monthly average of recurring costs',
+    't.incomeK': 'Income per month',
+    't.incomeS': 'Patreon contributions',
+    't.patronsK': 'Patreon members',
+    't.patronsS': 'Become a member →',
+    'costs.eyebrow': 'Costs',
+    'costs.h2': 'What we pay for',
+    'costs.lede': 'Amounts are the official prices in US dollars, before VAT. We pay in euros, so what shows up at the bank varies slightly with the exchange rate and VAT. Services on a free plan are listed too, so it is clear what Instriq depends on.',
+    'col.concept': 'Item',
+    'col.provider': 'Provider',
+    'col.period': 'Billing',
+    'col.amount': 'Amount',
+    'r.claude': 'Claude Pro',
+    'r.claudeW': 'The AI assistant we use to develop Instriq. The app has no AI features and never sends your content to any AI.',
+    'r.domain': 'instriq.org domain',
+    'r.domainW': 'The address of the website and the app. Renews every July.',
+    'r.play': 'Google Play developer account',
+    'r.playW': 'To publish the Android app.',
+    'r.store': 'Microsoft Store developer account',
+    'r.storeW': 'To publish the Windows app.',
+    'r.web': 'Website and web app',
+    'r.webW': 'Where instriq.org and app.instriq.org are hosted.',
+    'r.db': 'Database, photos and accounts',
+    'r.dbW': 'Where teams\' content, photos and sign-ins are stored.',
+    'r.push': 'Notifications',
+    'r.pushW': 'Alerts when content you follow is updated.',
+    'r.status': 'Status page',
+    'r.statusW': 'status.instriq.org: tells you if a service goes down.',
+    'r.code': 'Open source code',
+    'r.codeW': 'Instriq\'s public repository.',
+    'p.year': 'Yearly',
+    'p.month': 'Monthly',
+    'p.once': 'One-time',
+    'free': 'Free plan',
+    'free0': 'Free',
+    'income.eyebrow': 'Income',
+    'income.h2': 'What we receive',
+    'col.source': 'Source',
+    'col.people': 'People',
+    'col.monthly': 'Per month',
+    'income.use': 'Patreon money goes first to cover the costs on this page. If there is ever any left over, we will publish here what it is used for.',
+    'growth.eyebrow': 'If Instriq grows',
+    'growth.h2': 'What it would cost with more users',
+    'growth.lede': 'Today everything fits in free plans. If usage grows, one of these limits will push us onto a paid plan. We do not give dates: it depends on when users arrive. This is an estimate based on each provider\'s public prices, not a fixed budget.',
+    'growth.limitsH': 'Free plan limits',
+    'col.service': 'Service',
+    'col.limit': 'Free limit',
+    'col.next': 'Next plan',
+    'l.supabase': '50,000 monthly active users, 500 MB database, 1 GB of photos and 5 GB of transfer per month.',
+    'n.supabase': 'Pro: from 25 USD per month (100,000 users, 8 GB database, 100 GB of photos, 250 GB of transfer).',
+    'l.vercel': '100 GB of transfer and 1 million requests per month (web app).',
+    'n.vercel': 'Pro: 20 USD per person per month (1 TB of transfer).',
+    'l.cloudflare': 'Unlimited static website; 100,000 requests per day to server code.',
+    'n.cloudflare': 'Workers Paid: 5 USD per month (10 million requests).',
+    'l.firebase': 'Notifications are free with no usage limit.',
+    'growth.stagesH': 'Estimate by stage',
+    'col.stage': 'Monthly active users',
+    'col.change': 'What changes',
+    'col.infra': 'Infrastructure per month',
+    's1.u': 'Up to about 2,000',
+    's1.c': 'Nothing: everything fits in free plans.',
+    's2.u': 'About 2,000 – 10,000',
+    's2.c': 'Supabase Pro. The first limit we expect to hit is photo storage (1 GB) and transfer (5 GB), not the number of users.',
+    's3.u': 'About 10,000 – 50,000',
+    's3.c': 'Also Vercel Pro for web app transfer, and Cloudflare Workers Paid.',
+    's4.u': 'About 50,000 – 100,000',
+    's4.c': 'More database capacity and more transfer within the same plans.',
+    's4.a': '100 – 200 USD',
+    's5.u': 'Over 100,000',
+    's5.c': 'Each extra active user costs 0.00325 USD on Supabase (for example, 150,000 users add about 163 USD a month).',
+    's5.a': '200 USD or more',
+    'approx': 'approx.',
+    'growth.note': 'The fixed costs above come on top of this. We will review this estimate whenever a provider changes prices or we get close to a limit, and publish it here before it affects the app.',
+    'cta.h2': 'Want to help keep Instriq going?',
+    'cta.p': 'A monthly Patreon contribution helps cover these costs. You can also contribute content, translations or code.',
+    'cta.patreon': 'Become a member on Patreon',
+    'cta.other': 'Other ways to contribute',
+    'a11y.skip': 'Skip to content',
+    'nav.back': '← Back to home',
+    'nav.edu': 'Education',
+    'nav.cta': 'Open the app',
+    'footer.app': 'Open the app',
+    'footer.h1': 'Project',
+    'footer.l1': 'Mission and vision',
+    'footer.l2': 'Updates',
+    'footer.l6': 'Suggestions',
+    'footer.h2': 'Legal',
+    'footer.l4': 'Privacy policy',
+    'footer.l5': 'License (AGPL-3.0)',
+    'footer.h3': 'Contact',
+    'footer.fine': 'Instriq® — an open source project by and for the OR. Code under AGPL-3.0.'
+  } };
+
+  var CA_DEFAULTS = {};
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var attr = el.getAttribute('data-i18n-attr');
+    var key = el.getAttribute('data-i18n');
+    if (!(key in CA_DEFAULTS)) CA_DEFAULTS[key] = attr ? el.getAttribute(attr) : el.innerHTML;
+  });
+
+  function applyLang(lang, opts) {
+    opts = opts || {};
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      var attr = el.getAttribute('data-i18n-attr');
+      var value = lang === 'ca' ? CA_DEFAULTS[key] : (DICT[lang] && DICT[lang][key]) || CA_DEFAULTS[key];
+      if (attr) { el.setAttribute(attr, value); } else { el.innerHTML = value; }
+    });
+    document.title = lang === 'ca' ? CA_DEFAULTS['meta.title'] : (DICT[lang] && DICT[lang]['meta.title']) || CA_DEFAULTS['meta.title'];
+    document.querySelectorAll('#langSwitch button').forEach(function (b) {
+      var isActive = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/transparencia' : 'https://instriq.org/transparencia?lang=' + lang;
+    var canonicalEl = document.getElementById('canonicalLink');
+    if (canonicalEl) canonicalEl.setAttribute('href', canonicalUrl);
+    document.querySelectorAll('[data-amt]').forEach(function (el) {
+      var n = parseFloat(el.getAttribute('data-amt'));
+      var cur = el.getAttribute('data-cur') || 'EUR';
+      el.textContent = new Intl.NumberFormat(lang === 'en' ? 'en-GB' : lang + '-ES', { style: 'currency', currency: cur, minimumFractionDigits: n % 1 ? 2 : 0 }).format(n);
+    });
+    try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
+    if (opts.updateUrl) {
+      var url = new URL(window.location.href);
+      if (lang === 'ca') { url.searchParams.delete('lang'); } else { url.searchParams.set('lang', lang); }
+      window.history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
+    }
+  }
+
+  document.querySelectorAll('#langSwitch button').forEach(function (b) {
+    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), { updateUrl: true }); });
+  });
+
+  var validLangs = ['ca', 'es', 'en'];
+  var urlLang = null;
+  try {
+    var fromUrl = new URLSearchParams(window.location.search).get('lang');
+    if (fromUrl && validLangs.indexOf(fromUrl) !== -1) urlLang = fromUrl;
+  } catch (e) {}
+  var saved = null;
+  try { saved = localStorage.getItem('instriq_lang'); } catch (e) {}
+  applyLang(urlLang || saved || 'ca');
+
+  var els = document.querySelectorAll('.reveal');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) {
+    els.forEach(function (r) { r.classList.add('is-visible'); });
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (r) { observer.observe(r); });
+  }
+
+  var bar = document.getElementById('progressBar');
+  if (bar) {
+    function update() {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    }
+    document.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+})();
+</script>
+
+</body>
+</html>
