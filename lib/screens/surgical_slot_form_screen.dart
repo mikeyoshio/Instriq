@@ -62,6 +62,12 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
 
   bool _loading = true;
   bool _saving = false;
+  // Error de càrrega de les dades del formulari (cirurgians, contingut de
+  // l'espai): abans una excepció aquí deixava la pantalla carregant per sempre.
+  bool _loadFailed = false;
+  bool _proceduresFailed = false;
+  // Els errors de camp només es mostren després del primer intent de desar.
+  bool _submitted = false;
 
   List<PreferenceCard> _preferenceCards = [];
   List<GroupDocument> _documents = [];
@@ -97,6 +103,28 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
   }
 
   Future<void> _loadOptions() async {
+    try {
+      await _loadOptionsUnsafe();
+      if (mounted) setState(() => _loading = false);
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _loadFailed = true;
+        });
+      }
+    }
+  }
+
+  void _retryLoad() {
+    setState(() {
+      _loading = true;
+      _loadFailed = false;
+    });
+    _loadOptions();
+  }
+
+  Future<void> _loadOptionsUnsafe() async {
     await Future.wait([
       SurgeonService.instance.fetchForOrganization(),
       PreferenceCardService.instance.fetchCards(widget.workspaceId),
@@ -119,12 +147,13 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
     _trays = TrayService.instance.traysOfWorkspace(widget.workspaceId).where((t) => t.publishedVersion != null).toList();
     try {
       _procedures = await ProcedureService.instance.fetchForWorkspace(widget.workspaceId);
+      _proceduresFailed = false;
     } catch (_) {
-      // Selector opcional: sense xarxa queda buit (el valor desat es manté
-      // com a opció "no disponible") en lloc de bloquejar el formulari.
+      // Selector opcional: si falla queda buit (el valor desat es manté com a
+      // opció "no disponible") i el camp ho explica, sense bloquejar el desat.
       _procedures = [];
+      _proceduresFailed = true;
     }
-    if (mounted) setState(() => _loading = false);
   }
 
   Future<void> _pickDateTime({required bool isStart}) async {
@@ -153,22 +182,40 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
+  String? get _surgeonError =>
+      _submitted && _surgeonFieldController.text.trim().isEmpty ? AppLocalizations.of(context)!.surgicalSlotSurgeonRequired : null;
+
+  String? _dateError({required bool isStart}) {
+    if (!_submitted) return null;
+    final l10n = AppLocalizations.of(context)!;
+    final value = isStart ? _startsAt : _endsAt;
+    if (value == null) return l10n.surgicalSlotDateRequired;
+    if (!isStart && _startsAt != null && !_endsAt!.isAfter(_startsAt!)) return l10n.surgicalSlotEndBeforeStart;
+    return null;
+  }
+
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
-    if (_selectedSurgeonId == null || _startsAt == null || _endsAt == null) {
-      _showSnackBar(l10n.errorLabel);
-      return;
-    }
-    if (!_endsAt!.isAfter(_startsAt!)) {
-      _showSnackBar(l10n.errorLabel);
+    setState(() => _submitted = true);
+    final surgeonName = _surgeonFieldController.text.trim();
+    if (_surgeonError != null || _dateError(isStart: true) != null || _dateError(isStart: false) != null) {
+      _showSnackBar(l10n.surgicalSlotFixErrors);
       return;
     }
     setState(() => _saving = true);
     try {
+      // Abans, escriure un nom sense triar-lo de la llista donava un "Error"
+      // genèric. Ara: si el text coincideix amb el cirurgià triat es fa
+      // servir; si no, es crea (o es reutilitza) com al formulari de targetes.
+      final cached = _selectedSurgeonId == null ? null : SurgeonService.instance.byId(_selectedSurgeonId!);
+      final surgeonId = (cached != null && cached.name == surgeonName)
+          ? cached.id
+          : (await SurgeonService.instance.createOrGet(surgeonName)).id;
+      _selectedSurgeonId = surgeonId;
       if (isEditing) {
         await SurgicalSlotService.instance.updateSlot(
           slotId: widget.existingSlot!.id,
-          surgeonId: _selectedSurgeonId!,
+          surgeonId: surgeonId,
           startsAt: _startsAt!,
           endsAt: _endsAt!,
           preferenceCardId: _selectedPreferenceCardId,
@@ -182,7 +229,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       } else {
         await SurgicalSlotService.instance.createSlot(
           workspaceId: widget.workspaceId,
-          surgeonId: _selectedSurgeonId!,
+          surgeonId: surgeonId,
           startsAt: _startsAt!,
           endsAt: _endsAt!,
           preferenceCardId: _selectedPreferenceCardId,
@@ -197,6 +244,10 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       if (mounted) Navigator.pop(context, true);
     } on PostgrestException catch (e) {
       _showSnackBar(e.message);
+    } catch (_) {
+      // Xarxa, sessió caducada o qualsevol altre error: missatge clar en lloc
+      // d'una excepció sense gestionar.
+      _showSnackBar(l10n.surgicalSlotSaveFailed);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -230,6 +281,9 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
     } on PostgrestException catch (e) {
       _showSnackBar(e.message);
       return;
+    } catch (_) {
+      _showSnackBar(l10n.surgicalSlotSaveFailed);
+      return;
     }
     // Pop #1 ya ocurrió al cerrar el diálogo arriba; pop #2 cierra esta
     // pantalla y vuelve a la lista con `true` para que refresque.
@@ -243,6 +297,25 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       return Scaffold(
         appBar: AppBar(title: Text(isEditing ? l10n.surgicalSlotFormTitleEdit : l10n.surgicalSlotFormTitleCreate)),
         body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_loadFailed) {
+      return Scaffold(
+        appBar: AppBar(title: Text(isEditing ? l10n.surgicalSlotFormTitleEdit : l10n.surgicalSlotFormTitleCreate)),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(l10n.surgicalSlotLoadFailed, textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                FilledButton(onPressed: _retryLoad, child: Text(l10n.retry)),
+              ],
+            ),
+          ),
+        ),
       );
     }
 
@@ -317,13 +390,20 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
         return TextField(
           controller: controller,
           focusNode: focusNode,
-          decoration: InputDecoration(labelText: l10n.surgicalSlotSurgeonLabel, border: const OutlineInputBorder()),
+          decoration: InputDecoration(
+            labelText: l10n.surgicalSlotSurgeonLabel,
+            helperText: l10n.surgicalSlotSurgeonHelper,
+            helperMaxLines: 2,
+            errorText: _surgeonError,
+            border: const OutlineInputBorder(),
+          ),
           onChanged: (value) {
             _surgeonFieldController.text = value;
             final cached = _selectedSurgeonId == null ? null : SurgeonService.instance.byId(_selectedSurgeonId!);
             if (cached != null && cached.name != value) {
               _selectedSurgeonId = null;
             }
+            if (_submitted) setState(() {});
           },
         );
       },
@@ -335,7 +415,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
     return InkWell(
       onTap: canEdit ? () => _pickDateTime(isStart: isStart) : null,
       child: InputDecorator(
-        decoration: InputDecoration(labelText: label, border: const OutlineInputBorder()),
+        decoration: InputDecoration(labelText: label, errorText: _dateError(isStart: isStart), border: const OutlineInputBorder()),
         child: Text(text),
       ),
     );
@@ -375,6 +455,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       onChanged: (id) => setState(() => _selectedPreferenceCardId = id),
       viewLabel: l10n.surgicalSlotViewPreferenceCard,
       notAvailableLabel: l10n.surgicalSlotLinkedNotAvailable,
+      emptyHint: l10n.surgicalSlotNoPublishedContent,
       onView: (card) => Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => PreferenceCardDetailScreen(card: card, myRole: widget.myRole)),
@@ -393,6 +474,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       onChanged: (id) => setState(() => _selectedDocumentId = id),
       viewLabel: l10n.surgicalSlotViewTechnique,
       notAvailableLabel: l10n.surgicalSlotLinkedNotAvailable,
+      emptyHint: l10n.surgicalSlotNoPublishedContent,
       onView: (doc) => Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => GroupDocumentDetailScreen(document: doc, myRole: widget.myRole)),
@@ -411,6 +493,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       onChanged: (id) => setState(() => _selectedTrayId = id),
       viewLabel: l10n.surgicalSlotViewTray,
       notAvailableLabel: l10n.surgicalSlotLinkedNotAvailable,
+      emptyHint: l10n.surgicalSlotNoPublishedContent,
       onView: (tray) => Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => TrayDetailScreen(tray: tray, myRole: widget.myRole)),
@@ -435,6 +518,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
       }),
       viewLabel: l10n.surgicalSlotViewProcedure,
       notAvailableLabel: l10n.surgicalSlotLinkedNotAvailable,
+      emptyHint: _proceduresFailed ? l10n.surgicalSlotProceduresLoadFailed : l10n.surgicalSlotNoProcedures,
       onView: (p) => Navigator.push(
         context,
         MaterialPageRoute(
@@ -465,6 +549,7 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
     required String viewLabel,
     required String notAvailableLabel,
     required void Function(T) onView,
+    String? emptyHint,
   }) {
     final items = <DropdownMenuItem<String?>>[
       const DropdownMenuItem<String?>(value: null, child: Text('—')),
@@ -485,7 +570,13 @@ class _SurgicalSlotFormScreenState extends State<SurgicalSlotFormScreen> {
         DropdownButtonFormField<String?>(
           initialValue: selectedId,
           isExpanded: true,
-          decoration: InputDecoration(labelText: label, border: const OutlineInputBorder()),
+          decoration: InputDecoration(
+            labelText: label,
+            // Un desplegable buit (només "—") semblava trencat: ara diu per què.
+            helperText: options.isEmpty ? emptyHint : null,
+            helperMaxLines: 3,
+            border: const OutlineInputBorder(),
+          ),
           items: items,
           onChanged: canEdit ? onChanged : null,
         ),

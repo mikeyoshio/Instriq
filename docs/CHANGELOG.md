@@ -436,3 +436,11 @@ Amb això es tanquen les 6 propostes confirmades com a reals pel document de pro
   - **El meu equip** (`/equipo`, abans `LibraryScreen`): Biblioteca Pública a dalt; amb grup, procediments, agenda, safates, tècniques, protocols, targetes, instrumental propi, espais, xarxa de grup i progrés de l'equip; sense grup, connectar-ne un.
   - **Aprèn** (`/aprender`, nova): ruta d'aprenentatge, Aprèn (targetes i qüestionaris) i el meu progrés (tret de Perfil, on era duplicat).
   - **Perfil** surt de la barra: icona a l'AppBar de cada pestanya. Guanya "Registre d'auditoria" (admin) a Gestionar grup. `ActivityScreen` eliminada; claus l10n orfes (`navHome`, `navLibrary`, `navActivity`, `activityAdminOnly`, `homeQuickAccessTitle`) esborrades. "Com funciona" descriu les 4 pestanyes noves.
+
+- **Franja de quiròfan: control d'errors al formulari** (informe del propietari: "Procediment de l'espai" en blanc i un error en desar).
+  - Cirurgià: escriure un nom sense triar-lo de la llista donava un "Error" genèric en desar. Ara, si no coincideix amb el triat, es crea (o es reutilitza) amb `SurgeonService.createOrGet`, com al formulari de targetes de preferència; el camp explica "Tria'l de la llista o escriu el nom per afegir-lo".
+  - Validació en línia (després del primer intent de desar): cirurgià buit, inici o fi sense triar, fi anterior a l'inici, cadascun amb el seu missatge al camp, i un avís "Revisa els camps marcats".
+  - Desplegables buits (procediment, targeta, tècnica, safata) expliquen per què: l'espai no té procediments (i on crear-los) o no hi ha res publicat. Si la càrrega de procediments falla, ho diu i deixa desar igualment.
+  - Càrrega inicial: si falla, missatge i "Reintenta" (abans la pantalla es quedava carregant per sempre).
+  - Desar i cancel·lar: també es capturen errors de xarxa/sessió amb un missatge clar, no només els de PostgREST.
+  - **No verificat amb compte real** (exigeix hospital i rol editor). `flutter analyze` del fitxer i `flutter test` nets.
