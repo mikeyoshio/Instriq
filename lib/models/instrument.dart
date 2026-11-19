@@ -54,6 +54,7 @@ enum Specialty {
   otorrino,
   vascular,
   maxilofacial,
+  odontologia,
   pediatrica,
   plastica,
   toracica,
@@ -91,6 +92,8 @@ extension SpecialtyLabel on Specialty {
         return l10n.catalogSpecialtyVascular;
       case Specialty.maxilofacial:
         return l10n.catalogSpecialtyMaxilofacial;
+      case Specialty.odontologia:
+        return l10n.catalogSpecialtyOdontologia;
       case Specialty.pediatrica:
         return l10n.catalogSpecialtyPediatrica;
       case Specialty.plastica:
