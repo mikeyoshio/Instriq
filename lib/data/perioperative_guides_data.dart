@@ -475,4 +475,534 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
       ),
     ],
   ),
+  PerioperativeGuide(
+    id: 'humo-quirurgico',
+    relatedItems: ['sistema-evacuacion-humo-quirurgico', 'respirador-ffp2-ffp3', 'generador-electrocirugia'],
+    name: LocalizedText(ca: 'Fum quirúrgic', es: 'Humo quirúrgico', en: 'Surgical smoke'),
+    aliases: ['Surgical smoke', 'Surgical plume', 'Humo de electrocirugía'],
+    area: GuideArea.seguridad,
+    summary: LocalizedText(
+      ca: 'El bisturí elèctric, el làser i els dispositius d\'ultrasons vaporitzen teixit i generen un fum amb partícules fines, gasos irritants i, de vegades, material biològic. L\'exposició és diària per a tot l\'equip.',
+      es: 'El bisturí eléctrico, el láser y los dispositivos de ultrasonidos vaporizan tejido y generan un humo con partículas finas, gases irritantes y, a veces, material biológico. La exposición es diaria para todo el equipo.',
+      en: 'Electrosurgery, lasers and ultrasonic devices vaporise tissue and produce smoke containing fine particles, irritant gases and sometimes biological material. The whole team is exposed every day.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Com es controla', es: 'Cómo se controla', en: 'How it is controlled'),
+        LocalizedText(
+          ca: '• Evacuador de fum amb la boca d\'aspiració a pocs centímetres d\'on es genera.\n• Llapis de bisturí amb aspiració integrada quan n\'hi ha.\n• En laparoscòpia, filtre a la sortida del gas en lloc d\'obrir la vàlvula al quiròfan.',
+          es: '• Evacuador de humo con la boca de aspiración a pocos centímetros de donde se genera.\n• Lápiz de bisturí con aspiración integrada cuando lo hay.\n• En laparoscopia, filtro en la salida del gas en vez de abrir la válvula al quirófano.',
+          en: '• Smoke evacuator with the nozzle a few centimetres from the source.\n• Electrosurgical pencil with built-in suction where available.\n• In laparoscopy, filter the outflow gas instead of venting it into the room.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Protecció personal', es: 'Protección personal', en: 'Personal protection'),
+        LocalizedText(
+          ca: 'La mascareta quirúrgica no filtra bé les partícules fines. En procediments amb molt de fum o amb risc de virus al fum (làser sobre berrugues, per exemple), el protocol pot indicar un respirador FFP2 o FFP3.',
+          es: 'La mascarilla quirúrgica no filtra bien las partículas finas. En procedimientos con mucho humo o con riesgo de virus en el humo (láser sobre verrugas, por ejemplo), el protocolo puede indicar un respirador FFP2 o FFP3.',
+          en: 'A surgical mask does not filter fine particles well. For smoky procedures or where the plume may carry virus (laser on warts, for example), protocol may call for an FFP2 or FFP3 respirator.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Manteniment', es: 'Mantenimiento', en: 'Maintenance'),
+        LocalizedText(
+          ca: 'Els filtres de l\'evacuador tenen una vida útil limitada: canviar-los segons l\'indicador o el fabricant, amb guants, i llençar-los com a residu biològic.',
+          es: 'Los filtros del evacuador tienen una vida útil limitada: cambiarlos según el indicador o el fabricante, con guantes, y desecharlos como residuo biológico.',
+          en: 'Evacuator filters have a limited life: change them per the indicator or manufacturer, wearing gloves, and discard as biological waste.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'radioproteccion',
+    relatedItems: ['arco-c', 'delantal-plomado', 'collar-tiroideo-plomado'],
+    name: LocalizedText(ca: 'Radioprotecció amb arc en C', es: 'Radioprotección con arco en C', en: 'Radiation protection with the C-arm'),
+    aliases: ['Radiation protection', 'C-arm safety', 'ALARA'],
+    area: GuideArea.seguridad,
+    summary: LocalizedText(
+      ca: 'La fluoroscòpia exposa el pacient i l\'equip a radiació ionitzant. La major part de la dosi de l\'equip ve de la radiació dispersa que surt del pacient, i es redueix amb temps, distància i blindatge.',
+      es: 'La fluoroscopia expone al paciente y al equipo a radiación ionizante. La mayor parte de la dosis del equipo procede de la radiación dispersa que sale del paciente, y se reduce con tiempo, distancia y blindaje.',
+      en: 'Fluoroscopy exposes patient and team to ionising radiation. Most of the staff dose is scatter from the patient, reduced by time, distance and shielding.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Temps, distància i blindatge', es: 'Tiempo, distancia y blindaje', en: 'Time, distance and shielding'),
+        LocalizedText(
+          ca: '• Polsos curts i imatge guardada en lloc de fluoroscòpia contínua.\n• Allunyar-se del pacient quan es dispara: la dosi baixa molt amb cada pas enrere.\n• Davantal plomat ben cordat, protector de tiroide i, si n\'hi ha, mampares i ulleres plomades.',
+          es: '• Pulsos cortos e imagen guardada en lugar de fluoroscopia continua.\n• Alejarse del paciente cuando se dispara: la dosis baja mucho con cada paso atrás.\n• Delantal plomado bien cerrado, protector de tiroides y, si los hay, mamparas y gafas plomadas.',
+          en: '• Short pulses and last-image hold instead of continuous screening.\n• Step away from the patient when screening: dose drops sharply with each step back.\n• Lead apron fastened, thyroid collar and, where available, shields and lead glasses.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Posició de l\'arc', es: 'Posición del arco', en: 'C-arm position'),
+        LocalizedText(
+          ca: 'El tub de raigs, a sota de la taula i l\'intensificador o detector, a sobre i a prop del pacient. La radiació dispersa és més alta al costat del tub: l\'equip es col·loca preferentment al costat del detector.',
+          es: 'El tubo de rayos, debajo de la mesa y el intensificador o detector, arriba y cerca del paciente. La radiación dispersa es mayor en el lado del tubo: el equipo se coloca preferentemente del lado del detector.',
+          en: 'X-ray tube under the table and the image intensifier or detector above and close to the patient. Scatter is highest on the tube side, so staff stand on the detector side where possible.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Persones i registre', es: 'Personas y registro', en: 'People and records'),
+        LocalizedText(
+          ca: '• Dosímetre personal on indiqui el servei de radioprotecció.\n• Avís abans de cada disparament; qui no cal, surt o s\'allunya.\n• Preguntar per l\'embaràs a les pacients en edat fèrtil segons el protocol.\n• Davantals penjats, mai doblegats: les esquerdes del plom no es veuen.',
+          es: '• Dosímetro personal donde indique el servicio de radioprotección.\n• Aviso antes de cada disparo; quien no hace falta, sale o se aleja.\n• Preguntar por embarazo a las pacientes en edad fértil según el protocolo.\n• Delantales colgados, nunca doblados: las grietas del plomo no se ven.',
+          en: '• Personal dosimeter worn where the radiation protection service says.\n• Warn before each exposure; anyone not needed leaves or steps back.\n• Ask about pregnancy in patients of childbearing age per protocol.\n• Hang aprons, never fold them: cracks in the lead are invisible.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'seguridad-laser',
+    relatedItems: ['gafas-proteccion-laser', 'tubo-laser-flex', 'laser-co2-laringeo'],
+    name: LocalizedText(ca: 'Seguretat làser', es: 'Seguridad láser', en: 'Laser safety'),
+    aliases: ['Laser safety', 'Seguridad láser'],
+    area: GuideArea.seguridad,
+    summary: LocalizedText(
+      ca: 'Els làsers quirúrgics poden cremar la retina, la pell i el material del camp, i encendre gasos rics en oxigen. Cada làser té la seva longitud d\'ona i necessita la seva protecció.',
+      es: 'Los láseres quirúrgicos pueden quemar la retina, la piel y el material del campo, y encender gases ricos en oxígeno. Cada láser tiene su longitud de onda y necesita su protección.',
+      en: 'Surgical lasers can burn the retina, skin and drapes and ignite oxygen-rich gases. Each laser has its own wavelength and needs matching protection.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Abans d\'activar-lo', es: 'Antes de activarlo', en: 'Before activation'),
+        LocalizedText(
+          ca: '• Rètol d\'avís a les portes i finestres tapades si el protocol ho demana.\n• Ulleres amb la longitud d\'ona del làser que s\'usa per a tothom a la sala, i protecció ocular per al pacient.\n• Làser en espera (standby) fins que el cirurgià l\'apunta al teixit.',
+          es: '• Cartel de aviso en las puertas y ventanas tapadas si el protocolo lo pide.\n• Gafas con la longitud de onda del láser en uso para todos en la sala, y protección ocular para el paciente.\n• Láser en espera (standby) hasta que el cirujano lo apunta al tejido.',
+          en: '• Warning sign on the doors and windows covered if protocol requires.\n• Glasses rated for that laser\'s wavelength for everyone in the room, and eye protection for the patient.\n• Laser on standby until the surgeon is aimed at tissue.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Foc', es: 'Fuego', en: 'Fire'),
+        LocalizedText(
+          ca: 'En cirurgia de via aèria, tub endotraqueal resistent al làser amb el globus ple de sèrum, la fracció d\'oxigen tan baixa com permeti l\'anestesiòleg i compreses humides al voltant del camp. Tenir sèrum a mà.',
+          es: 'En cirugía de vía aérea, tubo endotraqueal resistente al láser con el balón lleno de suero, la fracción de oxígeno tan baja como permita el anestesiólogo y compresas húmedas alrededor del campo. Tener suero a mano.',
+          en: 'In airway surgery, use a laser-resistant tracheal tube with the cuff filled with saline, oxygen as low as the anaesthetist allows and moist swabs around the field. Keep saline at hand.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Instrumental', es: 'Instrumental', en: 'Instruments'),
+        LocalizedText(
+          ca: 'Instruments mats o ennegrits perquè el feix no rebot. El fum del làser s\'aspira com qualsevol fum quirúrgic.',
+          es: 'Instrumental mate o ennegrecido para que el haz no rebote. El humo del láser se aspira como cualquier humo quirúrgico.',
+          en: 'Use matt or blackened instruments so the beam does not reflect. Laser plume is evacuated like any surgical smoke.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'alergia-latex',
+    name: LocalizedText(ca: 'Pacient al·lèrgic al làtex', es: 'Paciente alérgico al látex', en: 'Latex-allergic patient'),
+    aliases: ['Latex allergy', 'Latex-free theatre', 'Quirófano libre de látex'],
+    area: GuideArea.seguridad,
+    summary: LocalizedText(
+      ca: 'Una al·lèrgia al làtex pot provocar anafilaxi durant la intervenció. El risc és més alt en persones operades moltes vegades (espina bífida, malformacions urològiques), personal sanitari i al·lèrgics a fruites com el plàtan, l\'alvocat o el kiwi.',
+      es: 'Una alergia al látex puede provocar anafilaxia durante la intervención. El riesgo es mayor en personas operadas muchas veces (espina bífida, malformaciones urológicas), personal sanitario y alérgicos a frutas como el plátano, el aguacate o el kiwi.',
+      en: 'Latex allergy can cause anaphylaxis during surgery. Risk is higher in people with many previous operations (spina bifida, urological malformations), healthcare workers and those allergic to banana, avocado or kiwi.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Preparació del quiròfan', es: 'Preparación del quirófano', en: 'Preparing the theatre'),
+        LocalizedText(
+          ca: '• Primer de la llista del dia si el centre ho fa així, amb el quiròfan net.\n• Rètol de "lliure de làtex" a la porta i al llit.\n• Retirar o tapar tot el que en contingui: guants, sondes, drenatges, torniquets, manegots de pressió, tubs de goma, taps de vials.',
+          es: '• Primero de la lista del día si el centro lo hace así, con el quirófano limpio.\n• Cartel de "libre de látex" en la puerta y en la cama.\n• Retirar o tapar todo lo que lo contenga: guantes, sondas, drenajes, torniquetes, manguitos de presión, tubos de goma, tapones de viales.',
+          en: '• First on the list if that is local practice, in a clean theatre.\n• "Latex-free" sign on the door and bed.\n• Remove or cover anything containing latex: gloves, catheters, drains, tourniquets, BP cuffs, rubber tubing, vial stoppers.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Durant la intervenció', es: 'Durante la intervención', en: 'During surgery'),
+        LocalizedText(
+          ca: 'Tot l\'equip amb guants sense làtex. Si apareixen hipotensió, broncoespasme o vermellor sobtada sense una altra causa, avisar l\'anestesiòleg: pot ser anafilaxi.',
+          es: 'Todo el equipo con guantes sin látex. Si aparecen hipotensión, broncoespasmo o enrojecimiento súbito sin otra causa, avisar al anestesiólogo: puede ser anafilaxia.',
+          en: 'Whole team in latex-free gloves. Unexplained hypotension, bronchospasm or sudden flushing must be reported to the anaesthetist: it may be anaphylaxis.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Comprovació', es: 'Comprobación', en: 'Checking'),
+        LocalizedText(
+          ca: 'Mirar l\'etiqueta de cada producte (símbol de làtex) i, en cas de dubte, consultar la llista de material lliure de làtex del centre.',
+          es: 'Mirar la etiqueta de cada producto (símbolo de látex) y, en caso de duda, consultar el listado de material libre de látex del centro.',
+          en: 'Check each label for the latex symbol and, if in doubt, the hospital\'s latex-free product list.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'marcado-lateralidad',
+    name: LocalizedText(ca: 'Marcatge del lloc quirúrgic i lateralitat', es: 'Marcado del sitio quirúrgico y lateralidad', en: 'Surgical site marking and laterality'),
+    aliases: ['Site marking', 'Wrong-site surgery', 'Universal Protocol', 'Lateralidad'],
+    area: GuideArea.seguridad,
+    summary: LocalizedText(
+      ca: 'La cirurgia en lloc, costat o pacient equivocat és rara però greu i evitable. Es prevé amb tres passos: verificar, marcar i fer una pausa abans de la incisió.',
+      es: 'La cirugía en sitio, lado o paciente equivocado es rara pero grave y evitable. Se previene con tres pasos: verificar, marcar y hacer una pausa antes de la incisión.',
+      en: 'Wrong-site, wrong-side or wrong-patient surgery is rare but serious and preventable. Three steps prevent it: verify, mark and pause before incision.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Verificar', es: 'Verificar', en: 'Verify'),
+        LocalizedText(
+          ca: 'Contrastar el nom, el procediment i el costat amb el pacient (si pot parlar), el consentiment, la història i les proves d\'imatge, en cada traspàs: planta, recepció i quiròfan.',
+          es: 'Contrastar el nombre, el procedimiento y el lado con el paciente (si puede hablar), el consentimiento, la historia y las pruebas de imagen, en cada traspaso: planta, recepción y quirófano.',
+          en: 'Check name, procedure and side against the patient (if able to speak), consent, notes and imaging at every handover: ward, reception and theatre.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Marcar', es: 'Marcar', en: 'Mark'),
+        LocalizedText(
+          ca: '• Ho fa el cirurgià que opera o algú del seu equip, abans de la sedació i amb el pacient despert si és possible.\n• Amb retolador permanent que no s\'esborri en pintar, a la zona o a prop de la incisió, i que quedi visible després de vestir.\n• Si no es pot marcar (mucoses, dents, nadons), el centre ha de tenir un sistema alternatiu.',
+          es: '• Lo hace el cirujano que opera o alguien de su equipo, antes de la sedación y con el paciente despierto si es posible.\n• Con rotulador permanente que no se borre al pintar, en la zona o cerca de la incisión, y que quede visible tras vestir.\n• Si no se puede marcar (mucosas, dientes, neonatos), el centro debe tener un sistema alternativo.',
+          en: '• Done by the operating surgeon or their team, before sedation and with the patient awake if possible.\n• With a permanent marker that survives prepping, at or near the incision, visible after draping.\n• Where marking is impossible (mucosa, teeth, neonates), the hospital needs an alternative system.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Pausa', es: 'Pausa', en: 'Pause'),
+        LocalizedText(
+          ca: 'Just abans de la incisió, tot l\'equip s\'atura i confirma en veu alta pacient, procediment i costat, i que la marca es veu al camp. És el segon temps del checklist de l\'OMS.',
+          es: 'Justo antes de la incisión, todo el equipo se detiene y confirma en voz alta paciente, procedimiento y lado, y que la marca se ve en el campo. Es el segundo tiempo del checklist de la OMS.',
+          en: 'Right before incision the whole team stops and confirms aloud the patient, procedure and side, and that the mark is visible in the field. This is the second phase of the WHO checklist.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'via-aerea-dificil',
+    relatedItems: ['videolaringoscopio', 'fiador-intubacion', 'mascarilla-laringea-igel', 'fibrobroncoscopio-intubacion', 'capnografo'],
+    name: LocalizedText(ca: 'Carro de via aèria difícil', es: 'Carro de vía aérea difícil', en: 'Difficult airway trolley'),
+    aliases: ['Difficult airway trolley', 'Carro de vía aérea difícil', 'Difficult airway'],
+    area: GuideArea.seguridad,
+    summary: LocalizedText(
+      ca: 'Quan no es pot ventilar o intubar, cada segon compta. El carro de via aèria difícil reuneix el material en un ordre conegut per tot l\'equip, i la infermera ha de saber on és cada cosa sense buscar-la.',
+      es: 'Cuando no se puede ventilar o intubar, cada segundo cuenta. El carro de vía aérea difícil reúne el material en un orden conocido por todo el equipo, y la enfermera debe saber dónde está cada cosa sin buscarla.',
+      en: 'When ventilation or intubation fails, every second counts. The difficult airway trolley holds the kit in an order the whole team knows, and the nurse should find each item without searching.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Què hi ha', es: 'Qué hay', en: 'What is in it'),
+        LocalizedText(
+          ca: '• Videolaringoscopi i fulles de diverses mides; laringoscopi amb fulles alternatives.\n• Tubs endotraqueals de diverses mides, fiadors i bougie.\n• Dispositius supraglòtics (mascaretes laríngies de segona generació) de diverses mides.\n• Fibrobroncoscopi o endoscopi d\'intubació.\n• Material per a l\'accés frontal del coll (cricotirotomia): bisturí, bougie i tub petit amb globus.',
+          es: '• Videolaringoscopio y palas de varios tamaños; laringoscopio con palas alternativas.\n• Tubos endotraqueales de varios tamaños, fiadores y bougie.\n• Dispositivos supraglóticos (mascarillas laríngeas de segunda generación) de varios tamaños.\n• Fibrobroncoscopio o endoscopio de intubación.\n• Material para el acceso frontal del cuello (cricotiroidotomía): bisturí, bougie y tubo pequeño con balón.',
+          en: '• Videolaryngoscope with blades in several sizes; laryngoscope with alternative blades.\n• Tracheal tubes in several sizes, stylets and bougie.\n• Supraglottic devices (second-generation laryngeal masks) in several sizes.\n• Flexible intubation scope.\n• Front-of-neck access kit (cricothyroidotomy): scalpel, bougie and small cuffed tube.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Durant la crisi', es: 'Durante la crisis', en: 'During the crisis'),
+        LocalizedText(
+          ca: 'Demanar ajuda en veu alta, tenir l\'aspiració a punt i el capnògraf connectat: la corba de CO2 és la confirmació de la intubació. L\'anestesiòleg segueix l\'algoritme del centre; la infermera dona el material que demana i anota els temps.',
+          es: 'Pedir ayuda en voz alta, tener la aspiración preparada y el capnógrafo conectado: la curva de CO2 es la confirmación de la intubación. El anestesiólogo sigue el algoritmo del centro; la enfermera da el material que pide y anota los tiempos.',
+          en: 'Call for help aloud, have suction ready and the capnograph connected: the CO2 trace confirms intubation. The anaesthetist follows the local algorithm; the nurse passes what is asked for and records times.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Revisió', es: 'Revisión', en: 'Checking'),
+        LocalizedText(
+          ca: 'Revisar el carro cada dia o segons el protocol, precintar-lo i reposar-lo just després d\'usar-lo.',
+          es: 'Revisar el carro cada día o según el protocolo, precintarlo y reponerlo justo después de usarlo.',
+          en: 'Check the trolley daily or per protocol, seal it and restock it straight after use.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'hipertermia-maligna',
+    relatedItems: ['capnografo', 'calentador-fluidos-iv'],
+    name: LocalizedText(ca: 'Hipertèrmia maligna', es: 'Hipertermia maligna', en: 'Malignant hyperthermia'),
+    aliases: ['Malignant hyperthermia', 'MH', 'Hipertermia maligna'],
+    area: GuideArea.seguridad,
+    summary: LocalizedText(
+      ca: 'Reacció genètica rara als anestèsics inhalats i a la succinilcolina: el múscul entra en hipermetabolisme. És una emergència que es tracta amb dantrolè, el fàrmac específic, que ha d\'estar al bloc quirúrgic.',
+      es: 'Reacción genética rara a los anestésicos inhalados y a la succinilcolina: el músculo entra en hipermetabolismo. Es una emergencia que se trata con dantroleno, el fármaco específico, que debe estar en el bloque quirúrgico.',
+      en: 'A rare inherited reaction to volatile anaesthetics and suxamethonium that sends muscle into a hypermetabolic state. It is an emergency treated with dantrolene, the specific drug, which must be available in theatre.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Signes', es: 'Signos', en: 'Signs'),
+        LocalizedText(
+          ca: 'El primer acostuma a ser un augment del CO2 espirat que no baixa en ventilar més. Després: taquicàrdia, rigidesa muscular (sobretot del masseter), sudoració, i la temperatura puja més tard.',
+          es: 'El primero suele ser un aumento del CO2 espirado que no baja al ventilar más. Después: taquicardia, rigidez muscular (sobre todo del masetero), sudoración, y la temperatura sube más tarde.',
+          en: 'Usually the first sign is rising end-tidal CO2 that does not fall with more ventilation. Then tachycardia, muscle rigidity (especially masseter), sweating; temperature rises late.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Què fa la infermera', es: 'Qué hace la enfermera', en: 'What the nurse does'),
+        LocalizedText(
+          ca: '• Avisar i portar el carro d\'hipertèrmia maligna; demanar mans: preparar el dantrolè requereix diverses persones.\n• L\'anestesiòleg atura els halogenats i ventila amb oxigen a flux alt.\n• Refredar: sèrums freds, gel a aixelles i engonals, mantes fora.\n• Sonda vesical per controlar la diüresi i extreure analítiques que es demanin.',
+          es: '• Avisar y traer el carro de hipertermia maligna; pedir manos: preparar el dantroleno requiere varias personas.\n• El anestesiólogo suspende los halogenados y ventila con oxígeno a flujo alto.\n• Enfriar: sueros fríos, hielo en axilas e ingles, mantas fuera.\n• Sonda vesical para controlar la diuresis y extraer las analíticas que se pidan.',
+          en: '• Raise the alarm and bring the MH trolley; call for help: preparing dantrolene takes several people.\n• The anaesthetist stops volatile agents and ventilates with high-flow oxygen.\n• Cool the patient: cold fluids, ice to axillae and groins, warming off.\n• Urinary catheter for urine output and draw the blood tests requested.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Carro', es: 'Carro', en: 'Trolley'),
+        LocalizedText(
+          ca: 'Conté el dantrolè, aigua per a injecció per dissoldre\'l, xeringues i agulles grans, sèrums freds i material per a analítiques. La quantitat i la dosi les marca el protocol del centre; es revisa com qualsevol carro d\'emergència.',
+          es: 'Contiene el dantroleno, agua para inyección para disolverlo, jeringas y agujas grandes, sueros fríos y material para analíticas. La cantidad y la dosis las marca el protocolo del centro; se revisa como cualquier carro de emergencia.',
+          en: 'It holds dantrolene, water for injection to dissolve it, large syringes and needles, cold fluids and blood-test kit. Quantities and dosing follow the hospital protocol; check it like any emergency trolley.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'torre-laparoscopia',
+    relatedItems: ['unidad-camara-fuente-luz-endoscopia', 'insuflador-co2', 'laparoscopio', 'aguja-veress', 'trocar', 'sistema-evacuacion-humo-quirurgico'],
+    name: LocalizedText(ca: 'Muntatge de la torre de laparoscòpia', es: 'Montaje de la torre de laparoscopia', en: 'Setting up the laparoscopy tower'),
+    aliases: ['Laparoscopy tower setup', 'Montaje de torre de laparoscopia'],
+    area: GuideArea.material,
+    summary: LocalizedText(
+      ca: 'La torre reuneix la càmera, la font de llum, l\'insuflador i el monitor. Muntar-la i comprovar-la abans que el pacient entri evita esperes amb l\'abdomen obert i errors d\'insuflació.',
+      es: 'La torre reúne la cámara, la fuente de luz, el insuflador y el monitor. Montarla y comprobarla antes de que entre el paciente evita esperas con el abdomen abierto y errores de insuflación.',
+      en: 'The tower holds the camera, light source, insufflator and monitor. Setting it up and checking it before the patient arrives avoids delays and insufflation errors.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Abans d\'entrar el pacient', es: 'Antes de entrar al paciente', en: 'Before the patient arrives'),
+        LocalizedText(
+          ca: '• Torre al costat oposat al cirurgià, amb el monitor davant seu; un segon monitor per a l\'ajudant si cal.\n• Encendre els equips i comprovar que hi ha imatge.\n• Bombona de CO2 oberta i amb gas suficient, i una de recanvi a prop.\n• Pressió màxima d\'insuflació la que indiqui el cirurgià o el protocol.',
+          es: '• Torre en el lado opuesto al cirujano, con el monitor enfrente; un segundo monitor para el ayudante si hace falta.\n• Encender los equipos y comprobar que hay imagen.\n• Bombona de CO2 abierta y con gas suficiente, y una de recambio cerca.\n• Presión máxima de insuflación la que indique el cirujano o el protocolo.',
+          en: '• Tower opposite the surgeon with the monitor facing them; a second monitor for the assistant if needed.\n• Switch everything on and check there is a picture.\n• CO2 cylinder open with enough gas and a spare nearby.\n• Maximum insufflation pressure as set by the surgeon or protocol.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Al camp', es: 'En el campo', en: 'In the field'),
+        LocalizedText(
+          ca: 'Passar del camp a la torre el cable de càmera, el de llum i el tub d\'insuflació, amb un filtre si n\'hi ha. Fer el balanç de blancs amb una gasa blanca i enfocar abans d\'entrar a l\'abdomen. Escalfar l\'òptica o fer servir antiboira.',
+          es: 'Pasar del campo a la torre el cable de cámara, el de luz y el tubo de insuflación, con un filtro si lo hay. Hacer el balance de blancos con una gasa blanca y enfocar antes de entrar en el abdomen. Calentar la óptica o usar antivaho.',
+          en: 'Pass the camera cable, light cable and insufflation tubing from field to tower, with a filter if supplied. White-balance on a white swab and focus before entering the abdomen. Warm the scope or use anti-fog.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Seguretat', es: 'Seguridad', en: 'Safety'),
+        LocalizedText(
+          ca: '• La punta del cable de llum crema: mai sobre els camps sense òptica connectada, i la font en espera quan no s\'usa.\n• Vigilar la pressió i el flux a l\'insuflador i avisar si salta l\'alarma.\n• Tenir a punt el material de conversió a cirurgia oberta.',
+          es: '• La punta del cable de luz quema: nunca sobre los campos sin óptica conectada, y la fuente en espera cuando no se usa.\n• Vigilar la presión y el flujo en el insuflador y avisar si salta la alarma.\n• Tener preparado el material de conversión a cirugía abierta.',
+          en: '• The light cable tip burns: never leave it on the drapes without a scope attached; keep the source on standby when not in use.\n• Watch pressure and flow on the insufflator and report alarms.\n• Have the open conversion set ready.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'torre-artroscopia',
+    relatedItems: ['artroscopio', 'shaver-artroscopico', 'sistema-manejo-fluidos-distension', 'unidad-camara-fuente-luz-endoscopia', 'torniquete-neumatico'],
+    name: LocalizedText(ca: 'Muntatge d\'artroscòpia', es: 'Montaje de artroscopia', en: 'Setting up arthroscopy'),
+    aliases: ['Arthroscopy setup', 'Montaje de artroscopia'],
+    area: GuideArea.material,
+    summary: LocalizedText(
+      ca: 'L\'artroscòpia treballa dins d\'una articulació plena de líquid: a més de càmera i llum, cal una bomba o un sistema de gravetat per distendre-la, el shaver i, sovint, radiofreqüència.',
+      es: 'La artroscopia trabaja dentro de una articulación llena de líquido: además de cámara y luz, hace falta una bomba o un sistema de gravedad para distenderla, el shaver y, a menudo, radiofrecuencia.',
+      en: 'Arthroscopy works inside a fluid-filled joint: besides camera and light it needs a pump or gravity system to distend it, the shaver and often radiofrequency.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Abans de començar', es: 'Antes de empezar', en: 'Before starting'),
+        LocalizedText(
+          ca: '• Torre al costat oposat a l\'articulació, amb el monitor a la vista del cirurgià.\n• Bosses de sèrum suficients i ben a prop: s\'acaben de pressa.\n• Pressió de la bomba la que indiqui el cirurgià; pedal del shaver i de la radiofreqüència al seu peu.',
+          es: '• Torre en el lado opuesto a la articulación, con el monitor a la vista del cirujano.\n• Bolsas de suero suficientes y bien a mano: se acaban rápido.\n• Presión de la bomba la que indique el cirujano; pedal del shaver y de la radiofrecuencia a su pie.',
+          en: '• Tower opposite the joint with the monitor in the surgeon\'s line of sight.\n• Plenty of irrigation bags close by: they run out fast.\n• Pump pressure as the surgeon sets; shaver and radiofrequency pedals at their foot.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Durant la intervenció', es: 'Durante la intervención', en: 'During surgery'),
+        LocalizedText(
+          ca: 'Canviar les bosses abans que es buidin perquè no entri aire. Vigilar el volum de sortida i l\'extremitat: si el líquid s\'extravasa als teixits, l\'extremitat s\'infla i s\'ha d\'avisar.',
+          es: 'Cambiar las bolsas antes de que se vacíen para que no entre aire. Vigilar el volumen de salida y la extremidad: si el líquido se extravasa a los tejidos, la extremidad se hincha y hay que avisar.',
+          en: 'Change bags before they run dry so no air enters. Watch the outflow volume and the limb: fluid leaking into tissues makes it swell and must be reported.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'El terra', es: 'El suelo', en: 'The floor'),
+        LocalizedText(
+          ca: 'Es fa servir molt líquid: bossa recol·lectora als camps, aspiració del terra o estores absorbents per evitar relliscades.',
+          es: 'Se usa mucho líquido: bolsa colectora en los campos, aspiración de suelo o alfombras absorbentes para evitar resbalones.',
+          en: 'A lot of fluid is used: fluid-collection drapes, floor suction or absorbent mats prevent slips.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'microscopio-quirurgico',
+    relatedItems: ['microscopio-quirurgico'],
+    name: LocalizedText(ca: 'Preparació del microscopi quirúrgic', es: 'Preparación del microscopio quirúrgico', en: 'Preparing the operating microscope'),
+    aliases: ['Operating microscope setup', 'Preparación del microscopio'],
+    area: GuideArea.material,
+    summary: LocalizedText(
+      ca: 'El microscopi s\'usa en neurocirurgia, ORL, oftalmologia, cirurgia plàstica i microcirurgia. Ha d\'estar equilibrat, enfocat i enfundat abans que el cirurgià el necessiti.',
+      es: 'El microscopio se usa en neurocirugía, ORL, oftalmología, cirugía plástica y microcirugía. Debe estar equilibrado, enfocado y enfundado antes de que el cirujano lo necesite.',
+      en: 'The microscope is used in neurosurgery, ENT, ophthalmology, plastic surgery and microsurgery. It must be balanced, focused and draped before the surgeon needs it.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Abans de vestir-lo', es: 'Antes de vestirlo', en: 'Before draping'),
+        LocalizedText(
+          ca: '• Situar-lo al costat del cirurgià, amb els frens posats i fora del pas.\n• Encendre la llum i comprovar la intensitat; ajustar els oculars (dioptries i distància entre ulls) amb el cirurgià.\n• Equilibrar el braç per a la configuració que s\'usarà, amb l\'ocular de l\'ajudant si cal.',
+          es: '• Situarlo en el lado del cirujano, con los frenos puestos y fuera del paso.\n• Encender la luz y comprobar la intensidad; ajustar los oculares (dioptrías y distancia entre ojos) con el cirujano.\n• Equilibrar el brazo para la configuración que se usará, con el ocular del ayudante si hace falta.',
+          en: '• Position it on the surgeon\'s side, brakes on and out of the way.\n• Turn on the light and check intensity; set eyepieces (dioptres and interpupillary distance) with the surgeon.\n• Balance the arm for the configuration to be used, with the assistant\'s eyepiece if needed.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Funda', es: 'Funda', en: 'Drape'),
+        LocalizedText(
+          ca: 'La posen dues persones: la instrumentista estèril desplega la funda sobre el capçal i els braços sense tocar res no estèril, i la circulant ajuda des de fora. Posar la tapa de la lent sense bombolles.',
+          es: 'La ponen dos personas: la instrumentista estéril despliega la funda sobre el cabezal y los brazos sin tocar nada no estéril, y la circulante ayuda desde fuera. Colocar la tapa de la lente sin burbujas.',
+          en: 'Two people drape it: the scrub nurse unrolls the drape over the head and arms without touching anything unsterile, and the circulating nurse helps from outside. Fit the lens cover without bubbles.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Seguretat', es: 'Seguridad', en: 'Safety'),
+        LocalizedText(
+          ca: 'La llum és molt intensa: abaixar-la si el microscopi no apunta al camp perquè no cremi el teixit ni els camps. Bloquejar els frens en acabar i tornar-lo a la posició de transport.',
+          es: 'La luz es muy intensa: bajarla si el microscopio no apunta al campo para que no queme el tejido ni los campos. Bloquear los frenos al acabar y devolverlo a la posición de transporte.',
+          en: 'The light is very intense: turn it down when not aimed at the field so it does not burn tissue or drapes. Lock the brakes afterwards and return it to the transport position.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'paciente-pediatrico',
+    relatedItems: ['cuna-termica-radiante', 'manta-calentamiento-aire-forzado', 'trocar-laparoscopico-pediatrico'],
+    name: LocalizedText(ca: 'Pacient pediàtric al quiròfan', es: 'Paciente pediátrico en quirófano', en: 'Paediatric patient in theatre'),
+    aliases: ['Paediatric patient', 'Niño en quirófano'],
+    area: GuideArea.paciente,
+    summary: LocalizedText(
+      ca: 'Els nens no són adults petits: perden calor de pressa, toleren poc el dejuni i l\'error en una dosi o en un volum pesa molt més. Tot el material es tria segons el pes i l\'edat.',
+      es: 'Los niños no son adultos pequeños: pierden calor rápido, toleran poco el ayuno y un error en una dosis o en un volumen pesa mucho más. Todo el material se elige según el peso y la edad.',
+      en: 'Children are not small adults: they lose heat quickly, tolerate fasting poorly and any dose or volume error matters far more. All equipment is chosen by weight and age.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Temperatura', es: 'Temperatura', en: 'Temperature'),
+        LocalizedText(
+          ca: 'Quiròfan calent abans que arribi, bressol tèrmic o manta d\'aire, cap tapat en els més petits i líquids escalfats. Destapar només el que calgui.',
+          es: 'Quirófano caliente antes de que llegue, cuna térmica o manta de aire, cabeza cubierta en los más pequeños y líquidos calentados. Destapar solo lo necesario.',
+          en: 'Warm theatre before arrival, radiant warmer or forced-air blanket, head covered in the youngest and warmed fluids. Expose only what is needed.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Material', es: 'Material', en: 'Equipment'),
+        LocalizedText(
+          ca: '• Pes al dia, anotat i visible per a tot l\'equip.\n• Material de via aèria de la mida que toca i de les mides de sobre i de sota.\n• Placa de retorn pediàtrica o neonatal i instrumental de mida reduïda.\n• Sèrums en sistemes amb control de volum per evitar sobrecàrregues.',
+          es: '• Peso del día, anotado y visible para todo el equipo.\n• Material de vía aérea del tamaño que corresponde y de los tamaños de arriba y abajo.\n• Placa de retorno pediátrica o neonatal e instrumental de tamaño reducido.\n• Sueros en sistemas con control de volumen para evitar sobrecargas.',
+          en: '• Today\'s weight recorded and visible to everyone.\n• Airway equipment in the right size plus one size up and down.\n• Paediatric or neonatal return electrode and reduced-size instruments.\n• IV fluids through volume-controlled sets to avoid overload.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'La família', es: 'La familia', en: 'Family'),
+        LocalizedText(
+          ca: 'Si el centre ho permet, un dels pares pot acompanyar-lo fins a la inducció. Explicar al nen el que passarà amb paraules senzilles i deixar-li el seu objecte de confort.',
+          es: 'Si el centro lo permite, uno de los padres puede acompañarlo hasta la inducción. Explicar al niño lo que va a pasar con palabras sencillas y dejarle su objeto de apego.',
+          en: 'Where allowed, a parent may stay until induction. Explain what will happen in simple words and let the child keep a comfort object.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'paciente-obeso',
+    relatedItems: ['mesa-quirofano-electrohidraulica', 'colchon-vacio-posicionamiento', 'soporte-lateral-mesa', 'almohadilla-gel-posicionamiento', 'videolaringoscopio'],
+    name: LocalizedText(ca: 'Pacient amb obesitat', es: 'Paciente con obesidad', en: 'Patient with obesity'),
+    aliases: ['Bariatric patient', 'Obesity', 'Paciente bariátrico'],
+    area: GuideArea.paciente,
+    summary: LocalizedText(
+      ca: 'L\'obesitat greu canvia el trasllat, el posicionament, la via aèria i el risc de lesions per pressió. El material ha d\'estar homologat per al pes del pacient.',
+      es: 'La obesidad grave cambia el traslado, el posicionamiento, la vía aérea y el riesgo de lesiones por presión. El material debe estar homologado para el peso del paciente.',
+      en: 'Severe obesity changes transfer, positioning, airway management and pressure-injury risk. All equipment must be rated for the patient\'s weight.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Abans d\'entrar', es: 'Antes de entrar', en: 'Before arrival'),
+        LocalizedText(
+          ca: '• Comprovar el pes màxim de la taula, de les extensions laterals i de la llitera.\n• Matalàs de transferència o grua, i prou persones per al trasllat.\n• Manegot de pressió de la mida adequada, instrumental llarg i trocars llargs si és laparoscòpia.',
+          es: '• Comprobar el peso máximo de la mesa, de las extensiones laterales y de la camilla.\n• Colchón de transferencia o grúa, y suficientes personas para el traslado.\n• Manguito de presión del tamaño adecuado, instrumental largo y trocares largos si es laparoscopia.',
+          en: '• Check the weight limit of the table, side extensions and trolley.\n• Transfer mattress or hoist and enough staff for the transfer.\n• Correctly sized BP cuff, long instruments and long trocars for laparoscopy.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Via aèria', es: 'Vía aérea', en: 'Airway'),
+        LocalizedText(
+          ca: 'La intubació pot ser difícil i la desaturació, ràpida. Coixins o falca per elevar el tronc i el cap (posició en rampa) i carro de via aèria difícil a prop.',
+          es: 'La intubación puede ser difícil y la desaturación, rápida. Almohadas o cuña para elevar el tronco y la cabeza (posición en rampa) y carro de vía aérea difícil cerca.',
+          en: 'Intubation may be difficult and desaturation rapid. Pillows or a wedge to raise the trunk and head (ramped position) and the difficult airway trolley nearby.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Posicionament', es: 'Posicionamiento', en: 'Positioning'),
+        LocalizedText(
+          ca: 'Cinta de subjecció i suports laterals ben fixats abans d\'inclinar la taula. Coixinets a tots els punts de pressió i revisió dels plecs de la pell, on es poden fer lesions per humitat o per pressió.',
+          es: 'Cinta de sujeción y soportes laterales bien fijados antes de inclinar la mesa. Almohadillas en todos los puntos de presión y revisión de los pliegues de la piel, donde se pueden producir lesiones por humedad o por presión.',
+          en: 'Strap and side supports secured before tilting the table. Pad all pressure points and check skin folds for moisture and pressure injury.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'paciente-gestante',
+    relatedItems: ['rodillo-posicionamiento', 'doppler-fetal-manual'],
+    name: LocalizedText(ca: 'Gestant en cirurgia no obstètrica', es: 'Gestante en cirugía no obstétrica', en: 'Pregnant patient in non-obstetric surgery'),
+    aliases: ['Pregnant patient', 'Non-obstetric surgery in pregnancy', 'Embarazada'],
+    area: GuideArea.paciente,
+    summary: LocalizedText(
+      ca: 'De vegades una gestant s\'ha d\'operar d\'una urgència no obstètrica (apendicitis, colecistitis, traumatisme). Es tracten dos pacients: la mare i el fetus, que depèn del flux uterí.',
+      es: 'A veces una gestante debe operarse de una urgencia no obstétrica (apendicitis, colecistitis, traumatismo). Se tratan dos pacientes: la madre y el feto, que depende del flujo uterino.',
+      en: 'Sometimes a pregnant woman needs emergency non-obstetric surgery (appendicitis, cholecystitis, trauma). There are two patients: the mother and the fetus, who depends on uterine blood flow.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Posició', es: 'Posición', en: 'Position'),
+        LocalizedText(
+          ca: 'A partir de la segona meitat de l\'embaràs, l\'úter comprimeix la vena cava en decúbit supí. Desplaçar l\'úter cap a l\'esquerra amb una falca sota el maluc dret o inclinant la taula.',
+          es: 'A partir de la segunda mitad del embarazo, el útero comprime la vena cava en decúbito supino. Desplazar el útero hacia la izquierda con una cuña bajo la cadera derecha o inclinando la mesa.',
+          en: 'From mid-pregnancy the uterus compresses the vena cava when supine. Displace it to the left with a wedge under the right hip or by tilting the table.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Coordinació', es: 'Coordinación', en: 'Coordination'),
+        LocalizedText(
+          ca: '• Avisar obstetrícia i, segons les setmanes, neonatologia.\n• Control del fetus abans i després, i durant la intervenció si ho decideix l\'obstetra.\n• Risc d\'aspiració més alt: aspiració preparada per a la inducció.',
+          es: '• Avisar a obstetricia y, según las semanas, a neonatología.\n• Control del feto antes y después, y durante la intervención si lo decide el obstetra.\n• Riesgo de aspiración más alto: aspiración preparada para la inducción.',
+          en: '• Inform obstetrics and, depending on gestation, neonatology.\n• Fetal monitoring before and after, and during surgery if the obstetrician decides.\n• Higher aspiration risk: suction ready for induction.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Radiació i fàrmacs', es: 'Radiación y fármacos', en: 'Radiation and drugs'),
+        LocalizedText(
+          ca: 'Si cal escòpia, protegir l\'abdomen quan sigui possible i limitar el temps. La medicació la decideix l\'anestesiòleg tenint en compte l\'embaràs.',
+          es: 'Si hace falta escopia, proteger el abdomen cuando sea posible y limitar el tiempo. La medicación la decide el anestesiólogo teniendo en cuenta el embarazo.',
+          en: 'If fluoroscopy is needed, shield the abdomen where possible and keep screening short. Drugs are chosen by the anaesthetist with the pregnancy in mind.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'residuos-quirurgicos',
+    relatedItems: ['contenidor-objectes-punxants', 'contador-agujas'],
+    name: LocalizedText(ca: 'Residus i material després de la intervenció', es: 'Residuos y material tras la intervención', en: 'Waste and instruments after surgery'),
+    aliases: ['Theatre waste', 'Waste segregation', 'Gestión de residuos'],
+    area: GuideArea.material,
+    summary: LocalizedText(
+      ca: 'El quiròfan genera molts residus. Separar-los bé protegeix qui els manipula, compleix la normativa i redueix el cost i l\'impacte ambiental.',
+      es: 'El quirófano genera muchos residuos. Separarlos bien protege a quien los manipula, cumple la normativa y reduce el coste y el impacto ambiental.',
+      en: 'Theatres produce a lot of waste. Sorting it properly protects those who handle it, meets regulations and cuts cost and environmental impact.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Separació', es: 'Separación', en: 'Sorting'),
+        LocalizedText(
+          ca: '• Punxants i tallants, al contenidor rígid, mai a la bossa.\n• Material amb sang o fluids en quantitat, a residu sanitari de risc segons la normativa local.\n• Envasos i plàstics nets (embolcalls, caixes), a residu assimilable o reciclatge.\n• Citostàtics, químics i peces anatòmiques tenen el seu circuit propi.',
+          es: '• Punzantes y cortantes, al contenedor rígido, nunca a la bolsa.\n• Material con sangre o fluidos en cantidad, a residuo sanitario de riesgo según la normativa local.\n• Envases y plásticos limpios (envoltorios, cajas), a residuo asimilable o reciclaje.\n• Citostáticos, químicos y piezas anatómicas tienen su propio circuito.',
+          en: '• Sharps into the rigid container, never into a bag.\n• Items heavily soiled with blood or fluids into clinical waste per local rules.\n• Clean packaging and plastics into general waste or recycling.\n• Cytotoxics, chemicals and anatomical parts have their own pathway.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Instrumental', es: 'Instrumental', en: 'Instruments'),
+        LocalizedText(
+          ca: 'En acabar, la instrumentista retira les fulles i agulles, obre les pinces, separa les peces delicades i manté l\'instrumental humit (escuma o drap humit) perquè la sang no s\'assequi abans d\'arribar a esterilització. Comprovar que no hi falta cap peça de la caixa.',
+          es: 'Al terminar, la instrumentista retira hojas y agujas, abre las pinzas, separa las piezas delicadas y mantiene el instrumental húmedo (espuma o paño húmedo) para que la sangre no se seque antes de llegar a esterilización. Comprobar que no falta ninguna pieza de la caja.',
+          en: 'At the end the scrub nurse removes blades and needles, opens hinged instruments, separates delicate items and keeps instruments moist (foam or damp towel) so blood does not dry before reaching sterile services. Check no piece of the set is missing.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Al quiròfan', es: 'En el quirófano', en: 'In the theatre'),
+        LocalizedText(
+          ca: 'Llençar els líquids aspirats segons el protocol (sovint amb gelificant), no buidar-los a la pica. Netejar les superfícies abans del pacient següent.',
+          es: 'Desechar los líquidos aspirados según el protocolo (a menudo con gelificante), no vaciarlos en el fregadero. Limpiar las superficies antes del siguiente paciente.',
+          en: 'Dispose of suctioned fluid per protocol (often with a gelling agent), not down the sink. Clean surfaces before the next patient.',
+        ),
+      ),
+    ],
+  ),
 ];
