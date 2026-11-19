@@ -6,6 +6,7 @@ import '../data/perioperative_guides_data.dart';
 import '../data/surgical_positions_data.dart';
 import '../l10n/app_localizations.dart';
 import '../models/surgical_position.dart';
+import '../widgets/flip_deck.dart';
 import 'perioperative_guides_screen.dart';
 import 'surgical_position_catalog_screen.dart';
 
@@ -21,8 +22,6 @@ class ReferenceFlashcardsScreen extends StatefulWidget {
 
 class _ReferenceFlashcardsScreenState extends State<ReferenceFlashcardsScreen> {
   bool _guides = false;
-  int _index = 0;
-  bool _showBack = false;
 
   List<(String, String, String)> _cards(AppLocalizations l10n, String lang) => _guides
       ? [
@@ -41,18 +40,10 @@ class _ReferenceFlashcardsScreenState extends State<ReferenceFlashcardsScreen> {
             ),
         ];
 
-  void _go(int delta, int length) => setState(() {
-        _showBack = false;
-        _index = (_index + delta + length) % length;
-      });
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final lang = Localizations.localeOf(context).languageCode;
-    final theme = Theme.of(context);
-    final cards = _cards(l10n, lang);
-    final (tag, front, back) = cards[min(_index, cards.length - 1)];
     return Scaffold(
       appBar: AppBar(title: Text(l10n.referenceStudyTitle)),
       body: SafeArea(
@@ -66,50 +57,10 @@ class _ReferenceFlashcardsScreenState extends State<ReferenceFlashcardsScreen> {
                   ButtonSegment(value: true, label: Text(l10n.guidesCatalogTitle)),
                 ],
                 selected: {_guides},
-                onSelectionChanged: (v) => setState(() {
-                  _guides = v.first;
-                  _index = 0;
-                  _showBack = false;
-                }),
+                onSelectionChanged: (v) => setState(() => _guides = v.first),
               ),
               const SizedBox(height: 12),
-              Text(l10n.cardCounter(_index + 1, cards.length)),
-              const SizedBox(height: 12),
-              Expanded(
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () => setState(() => _showBack = !_showBack),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(24),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Chip(label: Text(tag)),
-                          const SizedBox(height: 16),
-                          Text(front, style: theme.textTheme.headlineSmall),
-                          const SizedBox(height: 16),
-                          if (_showBack)
-                            Text(back, style: theme.textTheme.bodyLarge)
-                          else
-                            Text(l10n.tapToFlip, style: theme.textTheme.bodySmall),
-                        ],
-                      ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton.outlined(onPressed: () => _go(-1, cards.length), icon: const Icon(Icons.arrow_back)),
-                  IconButton.outlined(onPressed: () => _go(1, cards.length), icon: const Icon(Icons.arrow_forward)),
-                ],
-              ),
+              Expanded(child: FlipDeck(key: ValueKey(_guides), cards: _cards(l10n, lang))),
             ],
           ),
         ),

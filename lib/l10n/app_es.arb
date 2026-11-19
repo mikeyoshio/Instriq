@@ -1464,5 +1464,15 @@
   "positionQuizTitle": "¿Qué posición?",
   "positionQuizSubtitle": "Adivina la posición a partir de las intervenciones",
   "positionQuizPrompt": "¿Qué posición se usa en estas intervenciones?",
-  "tapToFlip": "Toca para girar la tarjeta"
+  "tapToFlip": "Toca para girar la tarjeta",
+  "acronymsTitle": "Siglas",
+  "acronymsSubtitle": "URPA, ASA, BIS, CEC, RTU, VATS... y qué significan",
+  "acronymsSearchHint": "Busca una sigla o su significado...",
+  "acronymsReview": "Repasar",
+  "acronymsBrowse": "Consultar",
+  "acronymAreaTheatre": "Quirófano",
+  "acronymAreaAnaesthesia": "Anestesia",
+  "acronymAreaMonitoring": "Monitorización",
+  "acronymAreaProcedures": "Procedimientos",
+  "acronymAreaGeneral": "Clínica general"
 }

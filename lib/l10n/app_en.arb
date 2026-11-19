@@ -1464,5 +1464,15 @@
   "positionQuizTitle": "Which position?",
   "positionQuizSubtitle": "Guess the position from the procedures",
   "positionQuizPrompt": "Which position is used for these procedures?",
-  "tapToFlip": "Tap to flip the card"
+  "tapToFlip": "Tap to flip the card",
+  "acronymsTitle": "Abbreviations",
+  "acronymsSubtitle": "URPA, ASA, BIS, CEC, RTU, VATS... and what they mean",
+  "acronymsSearchHint": "Search an abbreviation or its meaning...",
+  "acronymsReview": "Review",
+  "acronymsBrowse": "Browse",
+  "acronymAreaTheatre": "Theatre",
+  "acronymAreaAnaesthesia": "Anaesthesia",
+  "acronymAreaMonitoring": "Monitoring",
+  "acronymAreaProcedures": "Procedures",
+  "acronymAreaGeneral": "General clinical"
 }

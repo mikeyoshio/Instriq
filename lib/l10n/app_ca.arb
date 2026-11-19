@@ -1468,5 +1468,15 @@
   "positionQuizTitle": "Quina postura?",
   "positionQuizSubtitle": "Endevina la postura a partir de les intervencions",
   "positionQuizPrompt": "Quina postura s'usa en aquestes intervencions?",
-  "tapToFlip": "Toca per girar la targeta"
+  "tapToFlip": "Toca per girar la targeta",
+  "acronymsTitle": "Sigles",
+  "acronymsSubtitle": "URPA, ASA, BIS, CEC, RTU, VATS... i què volen dir",
+  "acronymsSearchHint": "Cerca una sigla o el seu significat...",
+  "acronymsReview": "Repassar",
+  "acronymsBrowse": "Consultar",
+  "acronymAreaTheatre": "Quiròfan",
+  "acronymAreaAnaesthesia": "Anestèsia",
+  "acronymAreaMonitoring": "Monitoratge",
+  "acronymAreaProcedures": "Procediments",
+  "acronymAreaGeneral": "Clínica general"
 }
