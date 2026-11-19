@@ -1540,5 +1540,13 @@
   "ecgP": "P wave",
   "ecgQrs": "QRS",
   "ecgWhatYouDo": "What you do",
-  "ecgPracticePrompt": "Which rhythm is this?"
+  "ecgPracticePrompt": "Which rhythm is this?",
+  "myTechniquesTitle": "My techniques",
+  "myTechniquesSubtitle": "Track what you've done in theatre and how confident you feel",
+  "myTechniquesProgress": "{done} of {total} done · {confident} confident",
+  "techniqueMyPractice": "My practice",
+  "techniqueNotYet": "Not yet",
+  "techniquePractising": "Done, need more practice",
+  "techniqueConfident": "Done, feel confident",
+  "techniquePrivateNote": "Saved only on this device: never sent, nobody else sees it."
 }

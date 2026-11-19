@@ -4,6 +4,7 @@ import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import 'ecg_screen.dart';
 import 'flashcards_screen.dart';
+import 'my_techniques_screen.dart';
 import 'quiz_screen.dart';
 import 'reference_study_screen.dart';
 import 'team_quizzes_screen.dart';
@@ -61,6 +62,15 @@ class LearnScreen extends StatelessWidget {
                 subtitle: l10n.positionQuizSubtitle,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const PositionQuizScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _LearnCard(
+                icon: Icons.task_alt,
+                title: l10n.myTechniquesTitle,
+                subtitle: l10n.myTechniquesSubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MyTechniquesScreen()),
                 ),
               ),
               const SizedBox(height: 12),

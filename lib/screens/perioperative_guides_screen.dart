@@ -6,6 +6,7 @@ import '../models/perioperative_guide.dart';
 import '../services/usage_analytics_service.dart';
 import '../utils/fuzzy_match.dart';
 import '../widgets/related_items_section.dart';
+import '../widgets/technique_status_picker.dart';
 import '../widgets/report_content_error_button.dart';
 
 String guideAreaLabel(AppLocalizations l10n, GuideArea a) => switch (a) {
@@ -148,6 +149,7 @@ class _PerioperativeGuideDetailScreenState extends State<PerioperativeGuideDetai
               const SizedBox(height: 6),
               Text(s.body.forLanguageCode(lang), style: theme.textTheme.bodyLarge),
             ],
+            TechniqueStatusPicker(guideId: g.id),
             RelatedItemsSection(ids: g.relatedItems),
             const SizedBox(height: 12),
             ReportContentErrorButton(refType: 'guide', refId: g.id),

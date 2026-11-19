@@ -1546,5 +1546,14 @@
   "ecgP": "Ona P",
   "ecgQrs": "QRS",
   "ecgWhatYouDo": "Què fas tu",
-  "ecgPracticePrompt": "Quin ritme és?"
+  "ecgPracticePrompt": "Quin ritme és?",
+  "myTechniquesTitle": "Les meves tècniques",
+  "myTechniquesSubtitle": "Marca el que ja has fet a quiròfan i com t'hi sents",
+  "myTechniquesProgress": "{done} de {total} fetes · {confident} amb seguretat",
+  "@myTechniquesProgress": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}, "confident": {"type": "int"}}},
+  "techniqueMyPractice": "La meva pràctica",
+  "techniqueNotYet": "Encara no",
+  "techniquePractising": "Feta, l'he de practicar",
+  "techniqueConfident": "Feta, em sento segur/a",
+  "techniquePrivateNote": "Només es guarda en aquest dispositiu: no s'envia ni el veu ningú."
 }

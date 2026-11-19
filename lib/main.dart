@@ -22,6 +22,7 @@ import 'services/auth_service.dart';
 import 'services/connectivity_service.dart';
 import 'services/locale_service.dart';
 import 'services/progress_service.dart';
+import 'services/technique_log_service.dart';
 import 'services/push_notification_service.dart';
 import 'services/reminder_service.dart';
 import 'services/supabase_config.dart';
@@ -32,6 +33,7 @@ import 'services/usage_analytics_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ProgressService.instance.init();
+  await TechniqueLogService.instance.init();
   await ThemeService.instance.init();
   await LocaleService.instance.init();
   await ConnectivityService.instance.init();

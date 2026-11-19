@@ -1540,5 +1540,13 @@
   "ecgP": "Onda P",
   "ecgQrs": "QRS",
   "ecgWhatYouDo": "Qué haces tú",
-  "ecgPracticePrompt": "¿Qué ritmo es?"
+  "ecgPracticePrompt": "¿Qué ritmo es?",
+  "myTechniquesTitle": "Mis técnicas",
+  "myTechniquesSubtitle": "Marca lo que ya has hecho en quirófano y cómo te sientes",
+  "myTechniquesProgress": "{done} de {total} hechas · {confident} con seguridad",
+  "techniqueMyPractice": "Mi práctica",
+  "techniqueNotYet": "Aún no",
+  "techniquePractising": "Hecha, tengo que practicarla",
+  "techniqueConfident": "Hecha, me siento seguro/a",
+  "techniquePrivateNote": "Solo se guarda en este dispositivo: no se envía ni lo ve nadie."
 }
