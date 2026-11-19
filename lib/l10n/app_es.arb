@@ -1457,5 +1457,12 @@
   "guideAreaAsepsis": "Asepsia",
   "guideAreaSafety": "Seguridad",
   "guideAreaPatient": "Cuidados del paciente",
-  "guideAreaMaterial": "Material"
+  "guideAreaMaterial": "Material",
+  "relatedItemsLabel": "Material relacionado",
+  "referenceStudyTitle": "Posiciones y guías",
+  "referenceStudySubtitle": "Tarjetas para repasar posiciones quirúrgicas y guías perioperatorias",
+  "positionQuizTitle": "¿Qué posición?",
+  "positionQuizSubtitle": "Adivina la posición a partir de las intervenciones",
+  "positionQuizPrompt": "¿Qué posición se usa en estas intervenciones?",
+  "tapToFlip": "Toca para girar la tarjeta"
 }

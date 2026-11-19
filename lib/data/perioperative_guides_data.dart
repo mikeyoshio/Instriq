@@ -6,6 +6,7 @@ import '../models/perioperative_guide.dart';
 const List<PerioperativeGuide> kPerioperativeGuides = [
   PerioperativeGuide(
     id: 'lavado-quirurgico',
+    relatedItems: ['cepillo-lavado-quirurgico', 'bata-quirurgica'],
     name: LocalizedText(ca: 'Rentat quirúrgic de mans', es: 'Lavado quirúrgico de manos', en: 'Surgical hand antisepsis'),
     aliases: ['Surgical hand antisepsis', 'Surgical scrub', 'Lavado de manos quirúrgico'],
     area: GuideArea.asepsia,
@@ -51,6 +52,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'vestido-enguantado',
+    relatedItems: ['bata-quirurgica', 'guante-indicador-perforacion-doble'],
     name: LocalizedText(ca: 'Posar-se bata i guants estèrils', es: 'Vestido con bata y guantes estériles', en: 'Sterile gowning and gloving'),
     aliases: ['Gowning and gloving', 'Closed gloving', 'Doble guante'],
     area: GuideArea.asepsia,
@@ -96,6 +98,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'campo-esteril',
+    relatedItems: ['campo-quirurgico-generico', 'campo-quirurgico-fenestrado', 'campo-adhesivo-incisional-iodado', 'funda-mesa-mayo', 'suport-taula-mayo'],
     name: LocalizedText(ca: 'Camp estèril i muntatge de la taula', es: 'Campo estéril y montaje de la mesa', en: 'Sterile field and back table setup'),
     aliases: ['Sterile field', 'Back table setup', 'Aseptic technique', 'Mesa de instrumental'],
     area: GuideArea.asepsia,
@@ -133,6 +136,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'electrocirugia',
+    relatedItems: ['generador-electrocirugia', 'electrobisturi', 'electrodo-dispersivo-adhesivo', 'sistema-evacuacion-humo-quirurgico'],
     name: LocalizedText(ca: 'Seguretat amb el bisturí elèctric', es: 'Seguridad con el bisturí eléctrico', en: 'Electrosurgery safety'),
     aliases: ['Electrosurgery safety', 'Bisturí eléctrico', 'Placa neutra', 'Return electrode'],
     area: GuideArea.seguridad,
@@ -178,6 +182,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'recuento-quirurgico',
+    relatedItems: ['gasa-quirurgica-radiopaca', 'compresa-laparotomia', 'torunda-gasa', 'contador-agujas'],
     name: LocalizedText(ca: 'Recompte quirúrgic', es: 'Recuento quirúrgico', en: 'Surgical count'),
     aliases: ['Surgical count', 'Recuento de gasas', 'Retained surgical item'],
     area: GuideArea.seguridad,
@@ -252,6 +257,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'isquemia-manguito',
+    relatedItems: ['torniquete-neumatico', 'venda-esmarch'],
     name: LocalizedText(ca: 'Isquèmia amb maniguet pneumàtic', es: 'Isquemia con manguito neumático', en: 'Pneumatic tourniquet'),
     aliases: ['Pneumatic tourniquet', 'Torniquete', 'Manguito de isquemia', 'Esmarch'],
     area: GuideArea.paciente,
@@ -289,6 +295,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'drenajes-quirurgicos',
+    relatedItems: ['drenaje-redon', 'drenaje-jackson-pratt', 'drenaje-penrose', 'drenaje-kehr', 'drenaje-toracico-sello-agua'],
     name: LocalizedText(ca: 'Drenatges quirúrgics', es: 'Drenajes quirúrgicos', en: 'Surgical drains'),
     aliases: ['Surgical drains', 'Redon', 'Blake', 'Jackson-Pratt', 'Penrose', 'Drenaje torácico'],
     area: GuideArea.material,
@@ -326,6 +333,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'sondas',
+    relatedItems: ['sonda-foley', 'sonda-vesical-intermitent', 'bolsa-colectora-orina', 'sonda-nasogastrica'],
     name: LocalizedText(ca: 'Sondatge vesical i nasogàstric', es: 'Sondaje vesical y nasogástrico', en: 'Urinary and nasogastric catheters'),
     aliases: ['Urinary catheter', 'Sonda vesical', 'Nasogastric tube', 'Sonda nasogástrica'],
     area: GuideArea.material,
@@ -355,6 +363,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'apositos-quirurgicos',
+    relatedItems: ['aposito-adhesivo-herida', 'aposito-pelicula-transparente', 'aposito-tie-over'],
     name: LocalizedText(ca: 'Apòsits de la ferida quirúrgica', es: 'Apósitos de la herida quirúrgica', en: 'Surgical wound dressings'),
     aliases: ['Surgical dressings', 'Wound dressing', 'Apósito', 'NPWT', 'Terapia de presión negativa'],
     area: GuideArea.material,
@@ -392,6 +401,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'muestras-quirurgicas',
+    relatedItems: ['bolsa-extraccion-especimenes'],
     name: LocalizedText(ca: 'Maneig de mostres quirúrgiques', es: 'Manejo de muestras quirúrgicas', en: 'Handling surgical specimens'),
     aliases: ['Surgical specimens', 'Anatomía patológica', 'Biopsia intraoperatoria', 'Frozen section'],
     area: GuideArea.seguridad,
@@ -429,6 +439,7 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
   ),
   PerioperativeGuide(
     id: 'hipotermia-perioperatoria',
+    relatedItems: ['manta-calentamiento-aire-forzado', 'calentador-fluidos-iv', 'armario-calentador-mantas-sueros'],
     name: LocalizedText(ca: 'Prevenció de la hipotèrmia', es: 'Prevención de la hipotermia', en: 'Preventing perioperative hypothermia'),
     aliases: ['Perioperative hypothermia', 'Calentamiento del paciente', 'Forced-air warming'],
     area: GuideArea.paciente,

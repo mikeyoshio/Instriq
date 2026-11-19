@@ -6,6 +6,7 @@ import '../models/surgical_position.dart';
 const List<SurgicalPosition> kSurgicalPositions = [
   SurgicalPosition(
     id: 'decubito-supino',
+    relatedItems: ['soporte-brazo-mesa', 'rodete-cabeza', 'almohadilla-gel-posicionamiento', 'cinta-sujecion-paciente', 'arco-anestesia', 'mesa-quirofano-electrohidraulica'],
     name: LocalizedText(ca: 'Decúbit supí', es: 'Decúbito supino', en: 'Supine position'),
     aliases: ['Supine', 'Dorsal decubitus'],
     family: SurgicalPositionFamily.supino,
@@ -32,6 +33,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'trendelenburg',
+    relatedItems: ['soporte-hombros', 'colchon-vacio-posicionamiento', 'cinta-sujecion-paciente', 'mesa-quirofano-electrohidraulica'],
     name: LocalizedText(ca: 'Trendelenburg', es: 'Trendelenburg', en: 'Trendelenburg position'),
     aliases: ['Trendelenburg', 'Head-down'],
     family: SurgicalPositionFamily.supino,
@@ -58,6 +60,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'antitrendelenburg',
+    relatedItems: ['reposapies-mesa', 'cinta-sujecion-paciente', 'mesa-quirofano-electrohidraulica'],
     name: LocalizedText(ca: 'Antitrendelenburg', es: 'Antitrendelenburg (Trendelenburg invertido)', en: 'Reverse Trendelenburg position'),
     aliases: ['Reverse Trendelenburg', 'Head-up', 'Trendelenburg inverso'],
     family: SurgicalPositionFamily.supino,
@@ -84,6 +87,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'rose',
+    relatedItems: ['rodillo-posicionamiento', 'rodete-cabeza', 'soporte-brazo-mesa'],
     name: LocalizedText(ca: 'Posició de Rose (hiperextensió cervical)', es: 'Posición de Rose (hiperextensión cervical)', en: 'Rose position (neck hyperextension)'),
     aliases: ['Rose position', 'Neck extension'],
     family: SurgicalPositionFamily.supino,
@@ -110,6 +114,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'litotomia',
+    relatedItems: ['pernera-litotomia', 'almohadilla-gel-posicionamiento', 'soporte-brazo-mesa'],
     name: LocalizedText(ca: 'Litotomia (ginecològica)', es: 'Litotomía (ginecológica)', en: 'Lithotomy position'),
     aliases: ['Lithotomy', 'Gynaecological position'],
     family: SurgicalPositionFamily.supino,
@@ -136,6 +141,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'decubito-lateral',
+    relatedItems: ['colchon-vacio-posicionamiento', 'soporte-lateral-mesa', 'rodillo-posicionamiento', 'apoyabrazos-doble-lateral', 'almohadilla-gel-posicionamiento', 'cinta-sujecion-paciente'],
     name: LocalizedText(ca: 'Decúbit lateral', es: 'Decúbito lateral', en: 'Lateral decubitus position'),
     aliases: ['Lateral decubitus', 'Lateral position'],
     family: SurgicalPositionFamily.lateral,
@@ -162,6 +168,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'lumbotomia',
+    relatedItems: ['soporte-lateral-mesa', 'rodillo-posicionamiento', 'apoyabrazos-doble-lateral', 'cinta-sujecion-paciente', 'mesa-quirofano-electrohidraulica'],
     name: LocalizedText(ca: 'Posició de lumbotomia (renal)', es: 'Posición de lumbotomía (renal)', en: 'Kidney (flank) position'),
     aliases: ['Kidney position', 'Flank position', 'Lateral renal'],
     family: SurgicalPositionFamily.lateral,
@@ -188,6 +195,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'decubito-prono',
+    relatedItems: ['almohada-facial-prono', 'rodillo-posicionamiento', 'marco-wilson', 'cabezal-herradura', 'almohadilla-gel-posicionamiento', 'soporte-brazo-mesa'],
     name: LocalizedText(ca: 'Decúbit pron', es: 'Decúbito prono', en: 'Prone position'),
     aliases: ['Prone', 'Ventral decubitus'],
     family: SurgicalPositionFamily.prono,
@@ -214,6 +222,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'navaja-kraske',
+    relatedItems: ['almohada-facial-prono', 'rodillo-posicionamiento', 'almohadilla-gel-posicionamiento', 'cinta-sujecion-paciente'],
     name: LocalizedText(ca: 'Posició de navalla (Kraske)', es: 'Posición de navaja (Kraske)', en: 'Jackknife (Kraske) position'),
     aliases: ['Jackknife', 'Kraske position'],
     family: SurgicalPositionFamily.prono,
@@ -240,6 +249,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'genupectoral',
+    relatedItems: ['marco-wilson', 'almohada-facial-prono', 'almohadilla-gel-posicionamiento'],
     name: LocalizedText(ca: 'Genupectoral (genolls-pit)', es: 'Genupectoral (rodillas-pecho)', en: 'Knee-chest position'),
     aliases: ['Knee-chest position', 'Andrews frame position', 'Mohammedan position'],
     family: SurgicalPositionFamily.prono,
@@ -266,6 +276,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'fowler',
+    relatedItems: ['reposapies-mesa', 'almohadilla-gel-posicionamiento', 'cinta-sujecion-paciente'],
     name: LocalizedText(ca: 'Fowler (semiassegut)', es: 'Fowler (semisentado)', en: 'Fowler (semi-sitting) position'),
     aliases: ['Fowler', 'Semi-Fowler', 'Semi-sitting'],
     family: SurgicalPositionFamily.sentado,
@@ -292,6 +303,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'silla-playa',
+    relatedItems: ['respaldo-silla-playa', 'almohadilla-gel-posicionamiento', 'cinta-sujecion-paciente'],
     name: LocalizedText(ca: 'Cadira de platja', es: 'Silla de playa', en: 'Beach chair position'),
     aliases: ['Beach chair', 'Barber chair'],
     family: SurgicalPositionFamily.sentado,
@@ -318,6 +330,7 @@ const List<SurgicalPosition> kSurgicalPositions = [
   ),
   SurgicalPosition(
     id: 'sedestacion-neuroquirurgica',
+    relatedItems: ['cabezal-fijacion-mayfield', 'reposapies-mesa', 'almohadilla-gel-posicionamiento'],
     name: LocalizedText(ca: 'Posició asseguda (neurocirurgia)', es: 'Posición sentada (neurocirugía)', en: 'Neurosurgical sitting position'),
     aliases: ['Sitting position', 'Neurosurgical sitting position'],
     family: SurgicalPositionFamily.sentado,

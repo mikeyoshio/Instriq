@@ -5,6 +5,8 @@ import '../l10n/app_localizations.dart';
 import '../models/surgical_position.dart';
 import '../services/usage_analytics_service.dart';
 import '../utils/fuzzy_match.dart';
+import '../widgets/related_items_section.dart';
+import '../widgets/report_content_error_button.dart';
 
 String surgicalPositionFamilyLabel(AppLocalizations l10n, SurgicalPositionFamily f) => switch (f) {
       SurgicalPositionFamily.supino => l10n.positionFamilySupine,
@@ -162,6 +164,9 @@ class _SurgicalPositionDetailScreenState extends State<SurgicalPositionDetailScr
                 icon: Icons.warning_amber_outlined, color: theme.colorScheme.errorContainer),
             section(l10n.positionCareLabel, p.care.forLanguageCode(lang),
                 icon: Icons.checklist, color: theme.colorScheme.secondaryContainer),
+            RelatedItemsSection(ids: p.relatedItems),
+            const SizedBox(height: 12),
+            ReportContentErrorButton(refType: 'position', refId: p.id),
           ],
         ),
       ),

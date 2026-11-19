@@ -20,6 +20,9 @@ class PerioperativeGuide {
   final LocalizedText summary;
   final List<GuideSection> sections;
 
+  /// Ids de `kInstruments` del material que la guia esmenta.
+  final List<String> relatedItems;
+
   const PerioperativeGuide({
     required this.id,
     required this.name,
@@ -27,5 +30,6 @@ class PerioperativeGuide {
     required this.area,
     required this.summary,
     required this.sections,
+    this.relatedItems = const [],
   });
 }

@@ -24,6 +24,9 @@ class SurgicalPosition {
   /// Cures i comprovacions d'infermeria.
   final LocalizedText care;
 
+  /// Ids de `kInstruments` amb els accessoris de posicionament.
+  final List<String> relatedItems;
+
   const SurgicalPosition({
     required this.id,
     required this.name,
@@ -33,5 +36,6 @@ class SurgicalPosition {
     required this.procedures,
     required this.risks,
     required this.care,
+    this.relatedItems = const [],
   });
 }

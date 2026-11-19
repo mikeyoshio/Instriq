@@ -1457,5 +1457,12 @@
   "guideAreaAsepsis": "Asepsis",
   "guideAreaSafety": "Safety",
   "guideAreaPatient": "Patient care",
-  "guideAreaMaterial": "Equipment"
+  "guideAreaMaterial": "Equipment",
+  "relatedItemsLabel": "Related equipment",
+  "referenceStudyTitle": "Positions and guides",
+  "referenceStudySubtitle": "Cards to review surgical positions and perioperative guides",
+  "positionQuizTitle": "Which position?",
+  "positionQuizSubtitle": "Guess the position from the procedures",
+  "positionQuizPrompt": "Which position is used for these procedures?",
+  "tapToFlip": "Tap to flip the card"
 }

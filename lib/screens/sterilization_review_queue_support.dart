@@ -1,6 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../data/instruments_data.dart';
+import '../data/perioperative_guides_data.dart';
+import '../data/surgical_positions_data.dart';
 import '../models/instrument_sterilization.dart';
 import '../services/locale_service.dart';
 
@@ -120,7 +122,14 @@ Future<Map<String, String>> resolveInstrumentNames(Iterable<SterilizationHeaderI
   final names = <String, String>{};
   final customIds = <String>{};
   for (final h in headers) {
-    if (h.instrumentRefType == 'catalog') {
+    final lang = LocaleService.instance.locale.value.languageCode;
+    if (h.instrumentRefType == 'position') {
+      final p = kSurgicalPositions.where((x) => x.id == h.instrumentRefId).firstOrNull;
+      if (p != null) names[h.instrumentRefId] = p.name.forLanguageCode(lang);
+    } else if (h.instrumentRefType == 'guide') {
+      final g = kPerioperativeGuides.where((x) => x.id == h.instrumentRefId).firstOrNull;
+      if (g != null) names[h.instrumentRefId] = g.name.forLanguageCode(lang);
+    } else if (h.instrumentRefType == 'catalog') {
       for (final instrument in kInstruments) {
         if (instrument.id == h.instrumentRefId) {
           names[h.instrumentRefId] =

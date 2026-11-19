@@ -1461,5 +1461,12 @@
   "guideAreaAsepsis": "Asèpsia",
   "guideAreaSafety": "Seguretat",
   "guideAreaPatient": "Cures del pacient",
-  "guideAreaMaterial": "Material"
+  "guideAreaMaterial": "Material",
+  "relatedItemsLabel": "Material relacionat",
+  "referenceStudyTitle": "Postures i guies",
+  "referenceStudySubtitle": "Targetes per repassar postures quirúrgiques i guies perioperatòries",
+  "positionQuizTitle": "Quina postura?",
+  "positionQuizSubtitle": "Endevina la postura a partir de les intervencions",
+  "positionQuizPrompt": "Quina postura s'usa en aquestes intervencions?",
+  "tapToFlip": "Toca per girar la targeta"
 }
