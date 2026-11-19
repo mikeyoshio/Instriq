@@ -19,10 +19,11 @@ class LearnScreen extends StatelessWidget {
       appBar: AppBar(title: Text(l10n.learnTitle)),
       body: SafeArea(
         child: InstriqResponsiveContent(
+        // ListView: amb 7 targetes, en finestres baixes (portàtils de 768 px)
+        // les últimes quedaven tallades i no s'hi podia arribar.
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: ListView(
             children: [
               Text(
                 l10n.chooseReviewMode,
