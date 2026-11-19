@@ -4,6 +4,7 @@ import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
 import 'flashcards_screen.dart';
 import 'quiz_screen.dart';
+import 'reference_study_screen.dart';
 import 'team_quizzes_screen.dart';
 
 class LearnScreen extends StatelessWidget {
@@ -41,6 +42,24 @@ class LearnScreen extends StatelessWidget {
                 subtitle: l10n.quizSubtitle,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const QuizScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _LearnCard(
+                icon: Icons.airline_seat_flat_outlined,
+                title: l10n.referenceStudyTitle,
+                subtitle: l10n.referenceStudySubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ReferenceFlashcardsScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _LearnCard(
+                icon: Icons.help_outline,
+                title: l10n.positionQuizTitle,
+                subtitle: l10n.positionQuizSubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const PositionQuizScreen()),
                 ),
               ),
               const SizedBox(height: 12),
