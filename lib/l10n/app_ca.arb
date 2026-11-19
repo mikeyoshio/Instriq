@@ -1478,5 +1478,16 @@
   "acronymAreaAnaesthesia": "Anestèsia",
   "acronymAreaMonitoring": "Monitoratge",
   "acronymAreaProcedures": "Procediments",
-  "acronymAreaGeneral": "Clínica general"
+  "acronymAreaGeneral": "Clínica general",
+  "scalesTitle": "Escales de valoració",
+  "scalesSubtitle": "ASA, Mallampati, Aldrete, RASS, Glasgow, Braden... amb càlcul guiat",
+  "scaleAreaPreanaesthesia": "Preanestèsia",
+  "scaleAreaRecovery": "Recuperació i sedació",
+  "scaleAreaAssessment": "Valoració",
+  "scaleIncomplete": "Respon tots els apartats per veure el resultat.",
+  "scaleScore": "Puntuació: {score} de {max}",
+  "@scaleScore": {"placeholders": {"score": {"type": "int"}, "max": {"type": "int"}}},
+  "scaleReset": "Tornar a començar",
+  "scaleDisclaimer": "Eina de suport. La interpretació final i les decisions són de l'equip, segons el protocol del centre.",
+  "scaleReference": "Referència"
 }

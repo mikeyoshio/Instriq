@@ -1474,5 +1474,15 @@
   "acronymAreaAnaesthesia": "Anaesthesia",
   "acronymAreaMonitoring": "Monitoring",
   "acronymAreaProcedures": "Procedures",
-  "acronymAreaGeneral": "General clinical"
+  "acronymAreaGeneral": "General clinical",
+  "scalesTitle": "Assessment scales",
+  "scalesSubtitle": "ASA, Mallampati, Aldrete, RASS, Glasgow, Braden... with guided scoring",
+  "scaleAreaPreanaesthesia": "Pre-anaesthesia",
+  "scaleAreaRecovery": "Recovery and sedation",
+  "scaleAreaAssessment": "Assessment",
+  "scaleIncomplete": "Answer every item to see the result.",
+  "scaleScore": "Score: {score} out of {max}",
+  "scaleReset": "Start again",
+  "scaleDisclaimer": "Support tool. Final interpretation and decisions belong to the team, following your hospital's protocol.",
+  "scaleReference": "Reference"
 }
