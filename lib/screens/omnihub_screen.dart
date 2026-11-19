@@ -46,6 +46,7 @@ import 'public_entity_detail_screen.dart';
 import 'sterilization_reference_catalog_screen.dart';
 import 'perioperative_guides_screen.dart';
 import 'acronyms_screen.dart';
+import 'calculators_screen.dart';
 import 'clinical_scales_screen.dart';
 import 'surgical_position_catalog_screen.dart';
 import 'surgeon_detail_screen.dart';
@@ -396,6 +397,7 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
               const PerioperativeGuidesScreen()),
           (Icons.calculate_outlined, l10n.scalesTitle, l10n.scalesSubtitle, const ClinicalScalesScreen()),
           (Icons.abc, l10n.acronymsTitle, l10n.acronymsSubtitle, const AcronymsScreen()),
+          (Icons.functions, l10n.calcTitle, l10n.calcSubtitle, const CalculatorsScreen()),
         ]) ...[
           InstriqListItem(icon: icon, title: title, subtitle: subtitle, onTap: () => _push(screen)),
           const SizedBox(height: InstriqSpacing.sm),
