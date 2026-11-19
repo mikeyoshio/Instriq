@@ -1449,5 +1449,13 @@
   "positionProceduresLabel": "Dónde se utiliza",
   "positionRisksLabel": "Riesgos y puntos de presión",
   "positionCareLabel": "Cuidados y comprobaciones",
-  "positionsDisclaimer": "Referencia educativa: sigue siempre el protocolo de tu centro y las indicaciones del equipo de anestesia y cirugía."
+  "positionsDisclaimer": "Referencia educativa: sigue siempre el protocolo de tu centro y las indicaciones del equipo de anestesia y cirugía.",
+
+  "guidesCatalogTitle": "Guías perioperatorias",
+  "guidesCatalogSubtitle": "Asepsia, recuento, checklist de la OMS, drenajes, muestras…",
+  "guidesSearchHint": "Busca una guía…",
+  "guideAreaAsepsis": "Asepsia",
+  "guideAreaSafety": "Seguridad",
+  "guideAreaPatient": "Cuidados del paciente",
+  "guideAreaMaterial": "Material"
 }

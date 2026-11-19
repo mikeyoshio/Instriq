@@ -1453,5 +1453,13 @@
   "positionProceduresLabel": "On s'utilitza",
   "positionRisksLabel": "Riscos i punts de pressió",
   "positionCareLabel": "Cures i comprovacions",
-  "positionsDisclaimer": "Referència educativa: segueix sempre el protocol del teu centre i les indicacions de l'equip d'anestèsia i cirurgia."
+  "positionsDisclaimer": "Referència educativa: segueix sempre el protocol del teu centre i les indicacions de l'equip d'anestèsia i cirurgia.",
+
+  "guidesCatalogTitle": "Guies perioperatòries",
+  "guidesCatalogSubtitle": "Asèpsia, recompte, checklist de l'OMS, drenatges, mostres…",
+  "guidesSearchHint": "Cerca una guia…",
+  "guideAreaAsepsis": "Asèpsia",
+  "guideAreaSafety": "Seguretat",
+  "guideAreaPatient": "Cures del pacient",
+  "guideAreaMaterial": "Material"
 }

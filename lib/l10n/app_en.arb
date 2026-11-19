@@ -1449,5 +1449,13 @@
   "positionProceduresLabel": "Where it is used",
   "positionRisksLabel": "Risks and pressure points",
   "positionCareLabel": "Care and checks",
-  "positionsDisclaimer": "Educational reference: always follow your hospital's protocol and the anaesthesia and surgical team's instructions."
+  "positionsDisclaimer": "Educational reference: always follow your hospital's protocol and the anaesthesia and surgical team's instructions.",
+
+  "guidesCatalogTitle": "Perioperative guides",
+  "guidesCatalogSubtitle": "Asepsis, counts, WHO checklist, drains, specimens…",
+  "guidesSearchHint": "Search a guide…",
+  "guideAreaAsepsis": "Asepsis",
+  "guideAreaSafety": "Safety",
+  "guideAreaPatient": "Patient care",
+  "guideAreaMaterial": "Equipment"
 }
