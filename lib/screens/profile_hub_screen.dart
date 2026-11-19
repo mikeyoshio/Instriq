@@ -24,6 +24,7 @@ import 'auth/mfa_setup_screen.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'audit_log_screen.dart';
 import 'contributor_application_form_screen.dart';
+import 'data_collection_screen.dart';
 import 'contributor_profile_screen.dart';
 import 'global_catalog_review_queue_screen.dart';
 import 'help/help_hub_screen.dart';
@@ -261,6 +262,14 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                 icon: Icons.feedback_outlined,
                 title: l10n.sendFeedbackMenuTitle,
                 onTap: () => showSendFeedbackDialog(context),
+              ),
+              const SizedBox(height: InstriqSpacing.sm),
+              InstriqListItem(
+                icon: Icons.privacy_tip_outlined,
+                title: l10n.dataCollectionMenu,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const DataCollectionScreen()),
+                ),
               ),
               const SizedBox(height: InstriqSpacing.sm),
               ValueListenableBuilder<OfflineDownloadProgress?>(

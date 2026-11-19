@@ -1548,5 +1548,16 @@
   "techniqueNotYet": "Not yet",
   "techniquePractising": "Done, need more practice",
   "techniqueConfident": "Done, feel confident",
-  "techniquePrivateNote": "Saved only on this device: never sent, nobody else sees it."
+  "techniquePrivateNote": "Saved only on this device: never sent, nobody else sees it.",
+  "dataCollectionTitle": "What data Instriq collects",
+  "dataCollectionMenu": "What data Instriq collects",
+  "dataCollectionIntro": "Instriq counts how it is used to learn what is useful and what is missing from the catalog. It does so without knowing who you are: we see what everyone looks up, never what one person does.",
+  "dataCollectionCountedTitle": "What is counted",
+  "dataCollectionCountedBody": "• When the app is opened.\n• Which entries, guides and scales are viewed.\n• What is searched for (shortened), especially searches with no results, so we know what to add.",
+  "dataCollectionHowTitle": "How it is counted",
+  "dataCollectionHowBody": "Without your user and with the day only, no time. If you belong to a group, counts are linked to the group so your dashboard shows what is useful to you all; never to you.",
+  "dataCollectionNeverTitle": "What never leaves your device",
+  "dataCollectionNeverBody": "• My techniques and how confident you feel.\n• What you enter in the scales and calculators.\n• Your answers in review cards and quizzes.",
+  "dataCollectionAccountTitle": "If you have an account",
+  "dataCollectionAccountBody": "What you create or share (trays, techniques, preference cards, comments) is saved under your name so your team can see it. You can download it or delete your account under Account and privacy."
 }

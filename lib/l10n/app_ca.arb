@@ -1555,5 +1555,16 @@
   "techniqueNotYet": "Encara no",
   "techniquePractising": "Feta, l'he de practicar",
   "techniqueConfident": "Feta, em sento segur/a",
-  "techniquePrivateNote": "Només es guarda en aquest dispositiu: no s'envia ni el veu ningú."
+  "techniquePrivateNote": "Només es guarda en aquest dispositiu: no s'envia ni el veu ningú.",
+  "dataCollectionTitle": "Quines dades recull Instriq",
+  "dataCollectionMenu": "Quines dades recull Instriq",
+  "dataCollectionIntro": "Instriq compta com es fa servir per saber què és útil i què falta al catàleg. Ho fa sense saber qui ets: el que veiem és què consulta el conjunt, mai què fa una persona.",
+  "dataCollectionCountedTitle": "Què es compta",
+  "dataCollectionCountedBody": "• Quan s'obre l'app.\n• Quines fitxes, guies i escales es consulten.\n• Què es busca (retallat), sobretot les cerques sense resultat, per saber què hem d'afegir.",
+  "dataCollectionHowTitle": "Com es compta",
+  "dataCollectionHowBody": "Sense el teu usuari i només amb el dia, sense hora. Si formes part d'un grup, el compte s'associa al grup perquè el vostre panell mostri què us és útil; mai a tu.",
+  "dataCollectionNeverTitle": "Què no surt mai del teu dispositiu",
+  "dataCollectionNeverBody": "• Les meves tècniques i com et sents amb cadascuna.\n• El que marques a les escales i calculadores.\n• Les respostes de les targetes i els qüestionaris de repàs.",
+  "dataCollectionAccountTitle": "Si tens compte",
+  "dataCollectionAccountBody": "El que crees o comparteixes (safates, tècniques, targetes de preferència, comentaris) es guarda amb el teu nom perquè el teu equip ho vegi. Pots descarregar-ho o esborrar el compte des de Compte i privacitat."
 }

@@ -1548,5 +1548,16 @@
   "techniqueNotYet": "Aún no",
   "techniquePractising": "Hecha, tengo que practicarla",
   "techniqueConfident": "Hecha, me siento seguro/a",
-  "techniquePrivateNote": "Solo se guarda en este dispositivo: no se envía ni lo ve nadie."
+  "techniquePrivateNote": "Solo se guarda en este dispositivo: no se envía ni lo ve nadie.",
+  "dataCollectionTitle": "Qué datos recoge Instriq",
+  "dataCollectionMenu": "Qué datos recoge Instriq",
+  "dataCollectionIntro": "Instriq cuenta cómo se usa para saber qué es útil y qué falta en el catálogo. Lo hace sin saber quién eres: lo que vemos es qué consulta el conjunto, nunca qué hace una persona.",
+  "dataCollectionCountedTitle": "Qué se cuenta",
+  "dataCollectionCountedBody": "• Cuándo se abre la app.\n• Qué fichas, guías y escalas se consultan.\n• Qué se busca (recortado), sobre todo las búsquedas sin resultado, para saber qué tenemos que añadir.",
+  "dataCollectionHowTitle": "Cómo se cuenta",
+  "dataCollectionHowBody": "Sin tu usuario y solo con el día, sin hora. Si formas parte de un grupo, el recuento se asocia al grupo para que vuestro panel muestre qué os resulta útil; nunca a ti.",
+  "dataCollectionNeverTitle": "Qué no sale nunca de tu dispositivo",
+  "dataCollectionNeverBody": "• Mis técnicas y cómo te sientes con cada una.\n• Lo que marcas en las escalas y calculadoras.\n• Las respuestas de las tarjetas y los cuestionarios de repaso.",
+  "dataCollectionAccountTitle": "Si tienes cuenta",
+  "dataCollectionAccountBody": "Lo que creas o compartes (bandejas, técnicas, tarjetas de preferencia, comentarios) se guarda con tu nombre para que tu equipo lo vea. Puedes descargarlo o borrar la cuenta desde Cuenta y privacidad."
 }
