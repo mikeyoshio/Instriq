@@ -45,6 +45,7 @@ const specialtyOrder = [
   'otorrino',
   'vascular',
   'maxilofacial',
+  'odontologia',
   'pediatrica',
   'plastica',
   'toracica',
@@ -70,7 +71,7 @@ String unescapeDartString(String s) {
   final buf = StringBuffer();
   for (var i = 0; i < s.length; i++) {
     if (s[i] == '\\' && i + 1 < s.length) {
-      buf.write(s[i + 1]);
+      buf.write(s[i + 1] == 'n' ? '\n' : s[i + 1]);
       i++;
     } else {
       buf.write(s[i]);
@@ -909,6 +910,7 @@ String _renderHomePage({
 <p><a href="$_htmlLangBase/vademecum/$lang/metodologia/">${htmlEscape(t('methodologyLinkText', lang))}</a></p>
 <h2>${htmlEscape(t('allSpecialties', lang))} ($totalCount ${htmlEscape(t('instrumentsCount', lang))})</h2>
 <div class="spec-grid">$cards</div>
+${_referenceCardsHtml(lang)}
 ${_pharmaNoticeHtml(lang)}
 ''';
 
@@ -1166,6 +1168,8 @@ Future<void> main() async {
     for (final i in instruments) i.id,
     for (final spec in specialtyOrder) kebab(spec),
     'metodologia',
+    _positionsSlug,
+    _guidesSlug,
   };
   var prunedCount = 0;
   for (final lang in languages) {
@@ -1223,6 +1227,7 @@ Future<void> main() async {
     sitemapPaths.addAll([for (final l in languages) '/vademecum/$l/${kebab(spec)}/']);
   }
 
+  await prepareReferenceCounts(repoRoot);
   stdout.writeln('Generating home pages...');
   final countsBySpecialty = {for (final spec in specialtyOrder) spec: (bySpecialty[spec] ?? []).length};
   for (final lang in languages) {
@@ -1244,6 +1249,11 @@ Future<void> main() async {
   }
   sitemapPaths.addAll([for (final l in languages) '/vademecum/$l/metodologia/']);
 
+  stdout.writeln('Generating positions and guides pages...');
+  final reference = await generateReferencePages(repoRoot, vademecumDir, byId);
+  pageCount += reference.pages;
+  sitemapPaths.addAll(reference.paths);
+
   stdout.writeln('Writing sitemap-vademecum.xml...');
   final sitemap = _renderSitemap(sitemapPaths);
   await File('${landingDir.path}/sitemap-vademecum.xml').writeAsString(sitemap, encoding: utf8);
@@ -1263,4 +1273,312 @@ Future<void> main() async {
   );
 
   exit(0);
+}
+
+// ---------------------------------------------------------------------------
+// Postures quirúrgiques i guies perioperatòries
+// (lib/data/surgical_positions_data.dart, lib/data/perioperative_guides_data.dart)
+// Mateix criteri que l'instrumental: es llegeix el .dart com a text.
+// ---------------------------------------------------------------------------
+
+const _positionsSlug = 'posiciones';
+const _guidesSlug = 'guias';
+
+const _referenceChrome = <String, Tri>{
+  'referenceTitle': (ca: 'Referència perioperatòria', es: 'Referencia perioperatoria', en: 'Perioperative reference'),
+  'familyLabel': (ca: 'Família', es: 'Familia', en: 'Family'),
+  'areaLabel': (ca: 'Àrea', es: 'Área', en: 'Area'),
+  'positionsCount': (ca: 'postures', es: 'posiciones', en: 'positions'),
+  'guidesCount': (ca: 'guies', es: 'guías', en: 'guides'),
+  'authorship': (
+    ca: 'Text propi d\'Instriq a partir de recomanacions generals (OMS i guies d\'infermeria quirúrgica). Referència educativa: no substitueix el protocol del teu centre.',
+    es: 'Texto propio de Instriq a partir de recomendaciones generales (OMS y guías de enfermería quirúrgica). Referencia educativa: no sustituye el protocolo de tu centro.',
+    en: 'Instriq\'s own text, based on general recommendations (WHO and perioperative nursing guidelines). Educational reference: it does not replace your hospital\'s protocol.',
+  ),
+};
+
+String _rt(String key, String lang) => triFor(_referenceChrome[key]!, lang);
+
+typedef RefSection = ({Tri title, Tri body});
+typedef RefEntry = ({
+  String id,
+  Tri name,
+  List<String> aliases,
+  String group,
+  Tri summary,
+  List<RefSection> sections,
+  List<String> relatedItems,
+});
+
+final _triRe = RegExp('LocalizedText\\(\\s*ca:\\s*$_qp,\\s*es:\\s*$_qp,\\s*en:\\s*$_qp,?\\s*\\)', dotAll: true);
+
+Tri _tri(RegExpMatch m) =>
+    (ca: unescapeDartString(m.group(1)!), es: unescapeDartString(m.group(2)!), en: unescapeDartString(m.group(3)!));
+
+List<String> _parseIdList(String block, String field) {
+  final m = RegExp('$field:\\s*\\[(.*?)\\],', dotAll: true).firstMatch(block);
+  if (m == null) return [];
+  return RegExp(_qp).allMatches(m.group(1)!).map((x) => unescapeDartString(x.group(1)!)).toList();
+}
+
+List<String> _blocks(String source, String ctor) => source.split('\n  $ctor(\n').skip(1).toList();
+
+String _id(String block) => unescapeDartString(RegExp('id:\\s*$_qp').firstMatch(block)!.group(1)!);
+
+Tri _labelTri(Map<String, Map<String, String>> labels, String key) =>
+    (ca: labels['ca']![key]!, es: labels['es']![key]!, en: labels['en']![key]!);
+
+List<RefEntry> parsePositions(String source, Map<String, Map<String, String>> labels) => [
+      for (final b in _blocks(source, 'SurgicalPosition'))
+        (
+          id: _id(b),
+          name: _parseTri(b, 'name'),
+          aliases: _parseAliases(b),
+          group: RegExp(r'family:\s*SurgicalPositionFamily\.(\w+)').firstMatch(b)!.group(1)!,
+          summary: _parseTri(b, 'description'),
+          sections: [
+            (title: _labelTri(labels, 'positionProceduresLabel'), body: _parseTri(b, 'procedures')),
+            (title: _labelTri(labels, 'positionRisksLabel'), body: _parseTri(b, 'risks')),
+            (title: _labelTri(labels, 'positionCareLabel'), body: _parseTri(b, 'care')),
+          ],
+          relatedItems: _parseIdList(b, 'relatedItems'),
+        ),
+    ];
+
+List<RefEntry> parseGuides(String source) {
+  final out = <RefEntry>[];
+  for (final b in _blocks(source, 'PerioperativeGuide')) {
+    final sectionsSrc = b.substring(b.indexOf('sections: ['));
+    final tris = _triRe.allMatches(sectionsSrc).map(_tri).toList();
+    if (tris.length.isOdd) throw StateError('Odd section texts in guide ${_id(b)}');
+    out.add((
+      id: _id(b),
+      name: _parseTri(b, 'name'),
+      aliases: _parseAliases(b),
+      group: RegExp(r'area:\s*GuideArea\.(\w+)').firstMatch(b)!.group(1)!,
+      summary: _parseTri(b, 'summary'),
+      sections: [for (var i = 0; i < tris.length; i += 2) (title: tris[i], body: tris[i + 1])],
+      relatedItems: _parseIdList(b, 'relatedItems'),
+    ));
+  }
+  return out;
+}
+
+Future<Map<String, Map<String, String>>> _loadArb(Directory repoRoot) async => {
+      for (final lang in languages)
+        lang: (jsonDecode(await File('${repoRoot.path}/lib/l10n/app_$lang.arb').readAsString(encoding: utf8))
+                as Map<String, dynamic>)
+            .map((k, v) => MapEntry(k, v is String ? v : '')),
+    };
+
+const _familyKeys = {
+  'supino': 'positionFamilySupine',
+  'lateral': 'positionFamilyLateral',
+  'prono': 'positionFamilyProne',
+  'sentado': 'positionFamilySitting',
+};
+const _areaKeys = {
+  'asepsia': 'guideAreaAsepsis',
+  'seguridad': 'guideAreaSafety',
+  'paciente': 'guideAreaPatient',
+  'material': 'guideAreaMaterial',
+};
+
+/// Text amb salts de línia i línies "• " -> paràgrafs i llistes.
+String _richText(String text) {
+  final out = StringBuffer();
+  var inList = false;
+  for (final line in text.split('\n')) {
+    final l = line.trim();
+    if (l.isEmpty) continue;
+    if (l.startsWith('• ')) {
+      if (!inList) out.write('<ul>');
+      inList = true;
+      out.write('<li>${htmlEscape(l.substring(2))}</li>');
+    } else {
+      if (inList) out.write('</ul>');
+      inList = false;
+      out.write('<p>${htmlEscape(l)}</p>');
+    }
+  }
+  if (inList) out.write('</ul>');
+  return out.toString();
+}
+
+String _renderReferenceDetail({
+  required RefEntry e,
+  required String lang,
+  required String slug,
+  required String sectionTitle,
+  required String groupLabelKey,
+  required String groupLabel,
+  required String disclaimer,
+  required String relatedTitle,
+  required Map<String, Instr> byId,
+}) {
+  final name = triFor(e.name, lang);
+  final path = '/vademecum/$lang/$slug/${e.id}/';
+  final crumbs = '<a href="$_htmlLangBase/vademecum/$lang/">${htmlEscape(t('siteTitle', lang))}</a> &rsaquo; '
+      '<a href="$_htmlLangBase/vademecum/$lang/$slug/">${htmlEscape(sectionTitle)}</a> &rsaquo; ${htmlEscape(name)}';
+  final body = StringBuffer()
+    ..write('<h1>${htmlEscape(name)}</h1>')
+    ..write('<p><em>${htmlEscape(disclaimer)}</em></p>')
+    ..write('<dl><dt>${htmlEscape(_rt(groupLabelKey, lang))}</dt><dd>${htmlEscape(groupLabel)}</dd>');
+  if (e.aliases.isNotEmpty) {
+    body.write('<dt>${htmlEscape(t('aliases', lang))}</dt><dd>${htmlEscape(e.aliases.join(', '))}</dd>');
+  }
+  body
+    ..write('</dl>')
+    ..write(_richText(triFor(e.summary, lang)));
+  for (final s in e.sections) {
+    body.write('<h2>${htmlEscape(triFor(s.title, lang))}</h2>${_richText(triFor(s.body, lang))}');
+  }
+  final related = [for (final id in e.relatedItems) if (byId[id] != null) byId[id]!];
+  if (related.isNotEmpty) {
+    body.write('<h2>${htmlEscape(relatedTitle)}</h2><ul>');
+    for (final i in related) {
+      body.write('<li><a href="$_htmlLangBase/vademecum/$lang/${i.id}/">${htmlEscape(triFor(i.name, lang))}</a></li>');
+    }
+    body.write('</ul>');
+  }
+  body.write('<p><small>${htmlEscape(_rt('authorship', lang))}</small></p>');
+  return _pageShell(
+    lang: lang,
+    title: '$name · ${t('siteTitle', lang)}',
+    description: metaDescription(triFor(e.summary, lang)),
+    canonicalPath: path,
+    hreflangPaths: {for (final l in languages) l: '/vademecum/$l/$slug/${e.id}/'},
+    crumbsHtml: crumbs,
+    bodyHtml: body.toString(),
+    jsonLd: jsonEncode({
+      '@context': 'https://schema.org',
+      '@type': 'MedicalWebPage',
+      'inLanguage': lang,
+      'name': name,
+      'url': '$_htmlLangBase$path',
+      'description': triFor(e.summary, lang),
+    }),
+  );
+}
+
+String _renderReferenceIndex({
+  required List<RefEntry> entries,
+  required String lang,
+  required String slug,
+  required String title,
+  required String subtitle,
+  required List<String> groupOrder,
+  required String Function(String group) groupLabel,
+}) {
+  final crumbs = '<a href="$_htmlLangBase/vademecum/$lang/">${htmlEscape(t('siteTitle', lang))}</a> &rsaquo; ${htmlEscape(title)}';
+  final body = StringBuffer()..write('<h1>${htmlEscape(title)}</h1><p>${htmlEscape(subtitle)}</p>');
+  for (final g in groupOrder) {
+    final list = entries.where((e) => e.group == g).toList();
+    if (list.isEmpty) continue;
+    body.write('<h2>${htmlEscape(groupLabel(g))}</h2><ul class="list-plain">');
+    for (final e in list) {
+      body.write('<li><a href="$_htmlLangBase/vademecum/$lang/$slug/${e.id}/">${htmlEscape(triFor(e.name, lang))}</a></li>');
+    }
+    body.write('</ul>');
+  }
+  body.write('<p><small>${htmlEscape(_rt('authorship', lang))}</small></p>');
+  return _pageShell(
+    lang: lang,
+    title: '$title · ${t('siteTitle', lang)}',
+    description: metaDescription(subtitle),
+    canonicalPath: '/vademecum/$lang/$slug/',
+    hreflangPaths: {for (final l in languages) l: '/vademecum/$l/$slug/'},
+    crumbsHtml: crumbs,
+    bodyHtml: body.toString(),
+    jsonLd: jsonEncode({
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      'inLanguage': lang,
+      'name': title,
+      'url': '$_htmlLangBase/vademecum/$lang/$slug/',
+    }),
+  );
+}
+
+/// Omplert per [prepareReferenceCounts] abans de generar la portada.
+var _referenceCounts = (positions: 0, guides: 0);
+Map<String, Map<String, String>> _arbCache = {};
+
+String _referenceCardsHtml(String lang) {
+  if (_referenceCounts.positions == 0 && _referenceCounts.guides == 0) return '';
+  final arb = _arbCache[lang]!;
+  return '<h2>${htmlEscape(_rt('referenceTitle', lang))}</h2><div class="spec-grid">'
+      '<a class="spec-card" href="$_htmlLangBase/vademecum/$lang/$_positionsSlug/"><b>${htmlEscape(arb['positionsCatalogTitle']!)}</b>'
+      '<span>${_referenceCounts.positions} ${htmlEscape(_rt('positionsCount', lang))}</span></a>'
+      '<a class="spec-card" href="$_htmlLangBase/vademecum/$lang/$_guidesSlug/"><b>${htmlEscape(arb['guidesCatalogTitle']!)}</b>'
+      '<span>${_referenceCounts.guides} ${htmlEscape(_rt('guidesCount', lang))}</span></a></div>';
+}
+
+Future<void> prepareReferenceCounts(Directory repoRoot) async {
+  _arbCache = await _loadArb(repoRoot);
+  final pos = await File('${repoRoot.path}/lib/data/surgical_positions_data.dart').readAsString(encoding: utf8);
+  final gui = await File('${repoRoot.path}/lib/data/perioperative_guides_data.dart').readAsString(encoding: utf8);
+  _referenceCounts = (positions: _blocks(pos, 'SurgicalPosition').length, guides: _blocks(gui, 'PerioperativeGuide').length);
+}
+
+Future<({int pages, List<String> paths})> generateReferencePages(
+    Directory repoRoot, Directory vademecumDir, Map<String, Instr> byId) async {
+  final arb = _arbCache.isEmpty ? await _loadArb(repoRoot) : _arbCache;
+  final positions = parsePositions(
+      await File('${repoRoot.path}/lib/data/surgical_positions_data.dart').readAsString(encoding: utf8), arb);
+  final guides =
+      parseGuides(await File('${repoRoot.path}/lib/data/perioperative_guides_data.dart').readAsString(encoding: utf8));
+  for (final e in [...positions, ...guides]) {
+    for (final id in e.relatedItems) {
+      if (!byId.containsKey(id)) throw StateError('${e.id} links to unknown catalog id $id');
+    }
+  }
+  var pages = 0;
+  final paths = <String>[];
+  Future<void> write(String rel, String html) async {
+    final dir = Directory('${vademecumDir.path}/$rel');
+    dir.createSync(recursive: true);
+    await File('${dir.path}/index.html').writeAsString(html, encoding: utf8);
+    pages++;
+  }
+
+  for (final lang in languages) {
+    // Es regeneren sencers: així no queden pàgines òrfenes d'entrades esborrades.
+    for (final slug in [_positionsSlug, _guidesSlug]) {
+      final d = Directory('${vademecumDir.path}/$lang/$slug');
+      if (d.existsSync()) d.deleteSync(recursive: true);
+    }
+    final a = arb[lang]!;
+    final sets = [
+      (_positionsSlug, positions, a['positionsCatalogTitle']!, a['positionsCatalogSubtitle']!, 'familyLabel', _familyKeys),
+      (_guidesSlug, guides, a['guidesCatalogTitle']!, a['guidesCatalogSubtitle']!, 'areaLabel', _areaKeys),
+    ];
+    for (final (slug, entries, title, subtitle, groupKey, keys) in sets) {
+      await write('$lang/$slug', _renderReferenceIndex(
+        entries: entries,
+        lang: lang,
+        slug: slug,
+        title: title,
+        subtitle: subtitle,
+        groupOrder: keys.keys.toList(),
+        groupLabel: (g) => a[keys[g]]!,
+      ));
+      paths.add('/vademecum/$lang/$slug/');
+      for (final e in entries) {
+        await write('$lang/$slug/${e.id}', _renderReferenceDetail(
+          e: e,
+          lang: lang,
+          slug: slug,
+          sectionTitle: title,
+          groupLabelKey: groupKey,
+          groupLabel: a[keys[e.group]]!,
+          disclaimer: a['positionsDisclaimer']!,
+          relatedTitle: a['relatedItemsLabel']!,
+          byId: byId,
+        ));
+        paths.add('/vademecum/$lang/$slug/${e.id}/');
+      }
+    }
+  }
+  return (pages: pages, paths: paths);
 }
