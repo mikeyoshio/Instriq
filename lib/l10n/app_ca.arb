@@ -140,6 +140,7 @@
   "catalogSpecialtyOtorrino": "Otorinolaringologia",
   "catalogSpecialtyVascular": "Angiologia i Cirurgia Vascular",
   "catalogSpecialtyMaxilofacial": "Cirurgia Oral i Maxil·lofacial",
+  "catalogSpecialtyOdontologia": "Odontologia i Cirurgia Bucal",
   "catalogSpecialtyPediatrica": "Cirurgia Pediàtrica",
   "catalogSpecialtyPlastica": "Cirurgia Plàstica, Estètica i Reparadora",
   "catalogSpecialtyToracica": "Cirurgia Toràcica",
@@ -1440,5 +1441,17 @@
   "mfaDisabledSnack": "Verificació en dos passos desactivada",
   "mfaInvalidCode": "El codi no és correcte o ha caducat. Escriu el codi que mostra ara l'app.",
   "mfaChallengeBody": "Escriu el codi de 6 xifres de l'app d'autenticació per acabar d'iniciar sessió.",
-  "mfaLostDevice": "Si has perdut l'accés a l'app d'autenticació, escriu a Instriq per recuperar el compte."
+  "mfaLostDevice": "Si has perdut l'accés a l'app d'autenticació, escriu a Instriq per recuperar el compte.",
+
+  "positionsCatalogTitle": "Postures quirúrgiques",
+  "positionsCatalogSubtitle": "Com es col·loca el pacient, riscos i cures",
+  "positionsSearchHint": "Cerca una postura…",
+  "positionFamilySupine": "Supí",
+  "positionFamilyLateral": "Lateral",
+  "positionFamilyProne": "Pron",
+  "positionFamilySitting": "Asseguda",
+  "positionProceduresLabel": "On s'utilitza",
+  "positionRisksLabel": "Riscos i punts de pressió",
+  "positionCareLabel": "Cures i comprovacions",
+  "positionsDisclaimer": "Referència educativa: segueix sempre el protocol del teu centre i les indicacions de l'equip d'anestèsia i cirurgia."
 }

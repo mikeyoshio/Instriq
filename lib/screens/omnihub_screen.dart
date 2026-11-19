@@ -44,6 +44,7 @@ import 'manufacturer_detail_screen.dart';
 import 'procedure_detail_screen.dart';
 import 'public_entity_detail_screen.dart';
 import 'sterilization_reference_catalog_screen.dart';
+import 'surgical_position_catalog_screen.dart';
 import 'surgeon_detail_screen.dart';
 import 'tag_detail_screen.dart';
 import 'tray_detail_screen.dart';
@@ -377,7 +378,7 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
       children: [
         Text(l10n.omnihubIntro, style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: InstriqSpacing.lg),
-        // Els 4 catàlegs de referència viuen aquí (2.0-beta): abans eren a
+        // Els catàlegs de referència viuen aquí (2.0-beta): abans eren a
         // les Dreceres d'Inici.
         for (final (icon, title, subtitle, screen) in [
           (Icons.menu_book, l10n.catalogTitle, l10n.omnihubBrowseCatalog, const CatalogScreen() as Widget),
@@ -386,6 +387,8 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
               const WoundClosureCatalogScreen()),
           (Icons.cleaning_services_outlined, l10n.sterilizationReferenceCatalogTitle,
               l10n.sterilizationReferenceCatalogSubtitle, const SterilizationReferenceCatalogScreen()),
+          (Icons.airline_seat_flat_outlined, l10n.positionsCatalogTitle, l10n.positionsCatalogSubtitle,
+              const SurgicalPositionCatalogScreen()),
         ]) ...[
           InstriqListItem(icon: icon, title: title, subtitle: subtitle, onTap: () => _push(screen)),
           const SizedBox(height: InstriqSpacing.sm),

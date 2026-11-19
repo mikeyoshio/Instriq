@@ -139,6 +139,7 @@
   "catalogSpecialtyOtorrino": "Otolaryngology",
   "catalogSpecialtyVascular": "Vascular surgery",
   "catalogSpecialtyMaxilofacial": "Oral and maxillofacial surgery",
+  "catalogSpecialtyOdontologia": "Dentistry and oral surgery",
   "catalogSpecialtyPediatrica": "Pediatric surgery",
   "catalogSpecialtyPlastica": "Plastic, aesthetic and reconstructive surgery",
   "catalogSpecialtyToracica": "Thoracic surgery",
@@ -1436,5 +1437,17 @@
   "mfaDisabledSnack": "Two-step verification turned off",
   "mfaInvalidCode": "That code is wrong or has expired. Enter the code the app shows now.",
   "mfaChallengeBody": "Enter the 6-digit code from your authenticator app to finish signing in.",
-  "mfaLostDevice": "If you've lost access to your authenticator app, contact Instriq to recover your account."
+  "mfaLostDevice": "If you've lost access to your authenticator app, contact Instriq to recover your account.",
+
+  "positionsCatalogTitle": "Surgical positions",
+  "positionsCatalogSubtitle": "How to position the patient, risks and care",
+  "positionsSearchHint": "Search a position…",
+  "positionFamilySupine": "Supine",
+  "positionFamilyLateral": "Lateral",
+  "positionFamilyProne": "Prone",
+  "positionFamilySitting": "Sitting",
+  "positionProceduresLabel": "Where it is used",
+  "positionRisksLabel": "Risks and pressure points",
+  "positionCareLabel": "Care and checks",
+  "positionsDisclaimer": "Educational reference: always follow your hospital's protocol and the anaesthesia and surgical team's instructions."
 }

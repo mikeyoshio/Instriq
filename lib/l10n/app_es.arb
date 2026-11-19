@@ -139,6 +139,7 @@
   "catalogSpecialtyOtorrino": "Otorrinolaringología",
   "catalogSpecialtyVascular": "Angiología y Cirugía Vascular",
   "catalogSpecialtyMaxilofacial": "Cirugía Oral y Maxilofacial",
+  "catalogSpecialtyOdontologia": "Odontología y Cirugía Bucal",
   "catalogSpecialtyPediatrica": "Cirugía Pediátrica",
   "catalogSpecialtyPlastica": "Cirugía Plástica, Estética y Reparadora",
   "catalogSpecialtyToracica": "Cirugía Torácica",
@@ -1436,5 +1437,17 @@
   "mfaDisabledSnack": "Verificación en dos pasos desactivada",
   "mfaInvalidCode": "El código no es correcto o ha caducado. Escribe el código que muestra ahora la app.",
   "mfaChallengeBody": "Escribe el código de 6 cifras de la app de autenticación para terminar de iniciar sesión.",
-  "mfaLostDevice": "Si has perdido el acceso a la app de autenticación, escribe a Instriq para recuperar la cuenta."
+  "mfaLostDevice": "Si has perdido el acceso a la app de autenticación, escribe a Instriq para recuperar la cuenta.",
+
+  "positionsCatalogTitle": "Posiciones quirúrgicas",
+  "positionsCatalogSubtitle": "Cómo se coloca al paciente, riesgos y cuidados",
+  "positionsSearchHint": "Busca una posición…",
+  "positionFamilySupine": "Supino",
+  "positionFamilyLateral": "Lateral",
+  "positionFamilyProne": "Prono",
+  "positionFamilySitting": "Sentada",
+  "positionProceduresLabel": "Dónde se utiliza",
+  "positionRisksLabel": "Riesgos y puntos de presión",
+  "positionCareLabel": "Cuidados y comprobaciones",
+  "positionsDisclaimer": "Referencia educativa: sigue siempre el protocolo de tu centro y las indicaciones del equipo de anestesia y cirugía."
 }
