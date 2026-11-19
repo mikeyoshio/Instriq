@@ -14,6 +14,7 @@ import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'navigation/router.dart';
 import 'screens/app_root.dart';
+import 'screens/auth/mfa_challenge_screen.dart';
 import 'screens/auth/reset_password_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'services/app_version_service.dart';
@@ -69,8 +70,13 @@ class _InstriqAppState extends State<InstriqApp> {
         );
       }
       if (state.event == AuthChangeEvent.signedIn ||
-          state.event == AuthChangeEvent.initialSession) {
-        if (state.session != null) {
+          state.event == AuthChangeEvent.initialSession ||
+          state.event == AuthChangeEvent.mfaChallengeVerified) {
+        if (state.session != null && AuthService.instance.needsMfaChallenge) {
+          // Verificació en dos passos pendent: fins al codi la base de dades
+          // no retorna res (schema_v71). La resta es fa a mfaChallengeVerified.
+          _showMfaChallenge();
+        } else if (state.session != null) {
           PushNotificationService.instance.initForCurrentUser();
           // A diferencia de logLoginEvent, aquí sí interesa tanto en
           // signedIn como en initialSession: el progreso de servidor debe
@@ -97,6 +103,20 @@ class _InstriqAppState extends State<InstriqApp> {
       // de actualización -- el orden importa aquí, no son independientes.
       await _checkOnboarding();
       if (!kIsWeb) _checkForUpdate();
+    });
+  }
+
+  bool _mfaChallengeOpen = false;
+
+  void _showMfaChallenge() {
+    if (_mfaChallengeOpen) return;
+    _mfaChallengeOpen = true;
+    // A l'arrencada (initialSession) el Navigator encara no existeix.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _navigatorKey.currentState?.push(
+        MaterialPageRoute(builder: (_) => const MfaChallengeScreen()),
+      );
+      _mfaChallengeOpen = false;
     });
   }
 

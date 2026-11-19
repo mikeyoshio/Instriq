@@ -1417,5 +1417,24 @@
   "auditActionSurgicalSlotCreated": "Created a surgical agenda slot",
   "auditActionSurgicalSlotUpdated": "Updated a surgical agenda slot",
   "auditActionSurgicalSlotCancelled": "Cancelled a surgical agenda slot",
-  "auditActionSurgicalAgendaIcsTokenRegenerated": "Regenerated a surgeon's calendar link"
+  "auditActionSurgicalAgendaIcsTokenRegenerated": "Regenerated a surgeon's calendar link",
+
+  "mfaTitle": "Two-step verification",
+  "mfaMenuSubtitle": "Protect your account with a code from your phone",
+  "mfaIntro": "When you sign in, besides your password we'll ask for a 6-digit code from an authenticator app on your phone: Google Authenticator, Microsoft Authenticator, Apple Passwords, 1Password or similar. If someone gets your password, they still can't get in.",
+  "mfaEnable": "Turn on verification",
+  "mfaScanStep": "1. Open your authenticator app and scan this QR code.",
+  "mfaOpenApp": "Open authenticator app",
+  "mfaSecretLabel": "If you can't scan it, type this key into the app:",
+  "mfaCodeStep": "2. Enter the 6-digit code the app shows.",
+  "mfaCodeLabel": "6-digit code",
+  "mfaVerify": "Verify",
+  "mfaEnabledBody": "Two-step verification is on. Every time you sign in we'll ask for the code from your authenticator app.",
+  "mfaDisable": "Turn off verification",
+  "mfaDisableConfirm": "Your account will be protected by your password only. Turn off two-step verification?",
+  "mfaEnabledSnack": "Two-step verification turned on",
+  "mfaDisabledSnack": "Two-step verification turned off",
+  "mfaInvalidCode": "That code is wrong or has expired. Enter the code the app shows now.",
+  "mfaChallengeBody": "Enter the 6-digit code from your authenticator app to finish signing in.",
+  "mfaLostDevice": "If you've lost access to your authenticator app, contact Instriq to recover your account."
 }

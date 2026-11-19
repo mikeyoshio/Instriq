@@ -20,6 +20,7 @@ import '../services/theme_service.dart';
 import '../widgets/language_picker.dart';
 import '../widgets/send_feedback_dialog.dart';
 import 'account_privacy_screen.dart';
+import 'auth/mfa_setup_screen.dart';
 import 'admin/manage_hospital_screen.dart';
 import 'audit_log_screen.dart';
 import 'contributor_application_form_screen.dart';
@@ -296,6 +297,15 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
                   icon: Icons.privacy_tip_outlined,
                   title: l10n.accountTooltip,
                   onTap: _openAccountPrivacy,
+                ),
+                const SizedBox(height: InstriqSpacing.sm),
+                InstriqListItem(
+                  icon: Icons.shield_outlined,
+                  title: l10n.mfaTitle,
+                  subtitle: l10n.mfaMenuSubtitle,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const MfaSetupScreen()),
+                  ),
                 ),
                 const SizedBox(height: InstriqSpacing.sm),
                 ValueListenableBuilder<List<SyncFailure>>(

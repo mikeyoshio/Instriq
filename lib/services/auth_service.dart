@@ -65,6 +65,19 @@ class AuthService {
     );
   }
 
+  /// Verificació en dos passos (TOTP). Vegeu MfaSetupScreen i schema_v71.
+  GoTrueMFAApi get mfa => _client.auth.mfa;
+
+  /// La sessió ve només de la contrasenya (o Google/Microsoft/Apple) però el
+  /// compte té la verificació en dos passos activada: falta el codi.
+  bool get needsMfaChallenge {
+    final level = _client.auth.mfa.getAuthenticatorAssuranceLevel();
+    return level.nextLevel == AuthenticatorAssuranceLevels.aal2 &&
+        level.currentLevel != AuthenticatorAssuranceLevels.aal2;
+  }
+
+  Future<void> refreshSession() => _client.auth.refreshSession();
+
   Future<void> signOut() async {
     await _client.auth.signOut();
   }

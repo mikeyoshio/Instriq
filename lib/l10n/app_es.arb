@@ -1417,5 +1417,24 @@
   "auditActionSurgicalSlotCreated": "Ha creado un hueco de agenda quirúrgica",
   "auditActionSurgicalSlotUpdated": "Ha editado un hueco de agenda quirúrgica",
   "auditActionSurgicalSlotCancelled": "Ha cancelado un hueco de agenda quirúrgica",
-  "auditActionSurgicalAgendaIcsTokenRegenerated": "Ha regenerado el enlace de calendario de un cirujano"
+  "auditActionSurgicalAgendaIcsTokenRegenerated": "Ha regenerado el enlace de calendario de un cirujano",
+
+  "mfaTitle": "Verificación en dos pasos",
+  "mfaMenuSubtitle": "Protege la cuenta con un código del móvil",
+  "mfaIntro": "Al iniciar sesión, además de la contraseña te pediremos un código de 6 cifras de una app de autenticación del móvil: Google Authenticator, Microsoft Authenticator, Contraseñas de Apple, 1Password o similar. Así, si alguien consigue tu contraseña, no podrá entrar.",
+  "mfaEnable": "Activar la verificación",
+  "mfaScanStep": "1. Abre la app de autenticación y escanea este código QR.",
+  "mfaOpenApp": "Abrir la app de autenticación",
+  "mfaSecretLabel": "Si no puedes escanearlo, escribe esta clave en la app:",
+  "mfaCodeStep": "2. Escribe el código de 6 cifras que muestra la app.",
+  "mfaCodeLabel": "Código de 6 cifras",
+  "mfaVerify": "Verificar",
+  "mfaEnabledBody": "La verificación en dos pasos está activada. Cada vez que inicies sesión te pediremos el código de la app de autenticación.",
+  "mfaDisable": "Desactivar la verificación",
+  "mfaDisableConfirm": "La cuenta quedará protegida solo con la contraseña. ¿Quieres desactivar la verificación en dos pasos?",
+  "mfaEnabledSnack": "Verificación en dos pasos activada",
+  "mfaDisabledSnack": "Verificación en dos pasos desactivada",
+  "mfaInvalidCode": "El código no es correcto o ha caducado. Escribe el código que muestra ahora la app.",
+  "mfaChallengeBody": "Escribe el código de 6 cifras de la app de autenticación para terminar de iniciar sesión.",
+  "mfaLostDevice": "Si has perdido el acceso a la app de autenticación, escribe a Instriq para recuperar la cuenta."
 }

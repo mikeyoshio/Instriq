@@ -1421,5 +1421,24 @@
   "auditActionSurgicalSlotCreated": "Ha creat una franja d'agenda quirúrgica",
   "auditActionSurgicalSlotUpdated": "Ha editat una franja d'agenda quirúrgica",
   "auditActionSurgicalSlotCancelled": "Ha cancel·lat una franja d'agenda quirúrgica",
-  "auditActionSurgicalAgendaIcsTokenRegenerated": "Ha regenerat l'enllaç de calendari d'un cirurgià"
+  "auditActionSurgicalAgendaIcsTokenRegenerated": "Ha regenerat l'enllaç de calendari d'un cirurgià",
+
+  "mfaTitle": "Verificació en dos passos",
+  "mfaMenuSubtitle": "Protegeix el compte amb un codi del mòbil",
+  "mfaIntro": "Quan iniciïs sessió, a més de la contrasenya et demanarem un codi de 6 xifres d'una app d'autenticació del mòbil: Google Authenticator, Microsoft Authenticator, Contrasenyes d'Apple, 1Password o similar. Així, si algú aconsegueix la teva contrasenya, no podrà entrar.",
+  "mfaEnable": "Activa la verificació",
+  "mfaScanStep": "1. Obre l'app d'autenticació i escaneja aquest codi QR.",
+  "mfaOpenApp": "Obre l'app d'autenticació",
+  "mfaSecretLabel": "Si no pots escanejar-lo, escriu aquesta clau a l'app:",
+  "mfaCodeStep": "2. Escriu el codi de 6 xifres que mostra l'app.",
+  "mfaCodeLabel": "Codi de 6 xifres",
+  "mfaVerify": "Verifica",
+  "mfaEnabledBody": "La verificació en dos passos està activada. Cada vegada que iniciïs sessió et demanarem el codi de l'app d'autenticació.",
+  "mfaDisable": "Desactiva la verificació",
+  "mfaDisableConfirm": "El compte quedarà protegit només amb la contrasenya. Vols desactivar la verificació en dos passos?",
+  "mfaEnabledSnack": "Verificació en dos passos activada",
+  "mfaDisabledSnack": "Verificació en dos passos desactivada",
+  "mfaInvalidCode": "El codi no és correcte o ha caducat. Escriu el codi que mostra ara l'app.",
+  "mfaChallengeBody": "Escriu el codi de 6 xifres de l'app d'autenticació per acabar d'iniciar sessió.",
+  "mfaLostDevice": "Si has perdut l'accés a l'app d'autenticació, escriu a Instriq per recuperar el compte."
 }

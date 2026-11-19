@@ -47,6 +47,9 @@ dependencies:
   # Ja era transitiva (supabase): AuthService la fa servir per llegir quins
   # proveïdors de login (Google, Microsoft, Apple) estan activats.
   http: ^1.6.0
+  # Ja era transitiva (pdf): dibuixa en local el QR de la verificacio en
+  # dos passos, sense enviar el secret a cap servei extern.
+  qr: ^3.0.2
   url_launcher: ^6.3.0
   image_picker: ^1.1.2
   # cross_file: tipo que devuelve image_picker (XFile) -- ya era dependencia
