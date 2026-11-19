@@ -13,6 +13,8 @@ String guideAreaLabel(AppLocalizations l10n, GuideArea a) => switch (a) {
       GuideArea.seguridad => l10n.guideAreaSafety,
       GuideArea.paciente => l10n.guideAreaPatient,
       GuideArea.material => l10n.guideAreaMaterial,
+      GuideArea.tecnicas => l10n.guideAreaTechniques,
+      GuideArea.urgencias => l10n.guideAreaEmergency,
     };
 
 IconData _areaIcon(GuideArea a) => switch (a) {
@@ -20,6 +22,8 @@ IconData _areaIcon(GuideArea a) => switch (a) {
       GuideArea.seguridad => Icons.verified_user_outlined,
       GuideArea.paciente => Icons.personal_injury_outlined,
       GuideArea.material => Icons.inventory_2_outlined,
+      GuideArea.tecnicas => Icons.vaccines_outlined,
+      GuideArea.urgencias => Icons.monitor_heart_outlined,
     };
 
 /// Guies perioperatòries: mateix patró que SurgicalPositionCatalogScreen.

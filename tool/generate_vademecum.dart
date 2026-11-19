@@ -1382,6 +1382,8 @@ const _areaKeys = {
   'seguridad': 'guideAreaSafety',
   'paciente': 'guideAreaPatient',
   'material': 'guideAreaMaterial',
+  'tecnicas': 'guideAreaTechniques',
+  'urgencias': 'guideAreaEmergency',
 };
 
 /// Text amb salts de línia i línies "• " -> paràgrafs i llistes.

@@ -1489,5 +1489,7 @@
   "@scaleScore": {"placeholders": {"score": {"type": "int"}, "max": {"type": "int"}}},
   "scaleReset": "Tornar a començar",
   "scaleDisclaimer": "Eina de suport. La interpretació final i les decisions són de l'equip, segons el protocol del centre.",
-  "scaleReference": "Referència"
+  "scaleReference": "Referència",
+  "guideAreaTechniques": "Tècniques",
+  "guideAreaEmergency": "Urgències"
 }

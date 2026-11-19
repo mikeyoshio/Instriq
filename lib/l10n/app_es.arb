@@ -1484,5 +1484,7 @@
   "scaleScore": "Puntuación: {score} de {max}",
   "scaleReset": "Empezar de nuevo",
   "scaleDisclaimer": "Herramienta de apoyo. La interpretación final y las decisiones son del equipo, según el protocolo del centro.",
-  "scaleReference": "Referencia"
+  "scaleReference": "Referencia",
+  "guideAreaTechniques": "Técnicas",
+  "guideAreaEmergency": "Urgencias"
 }

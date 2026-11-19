@@ -1484,5 +1484,7 @@
   "scaleScore": "Score: {score} out of {max}",
   "scaleReset": "Start again",
   "scaleDisclaimer": "Support tool. Final interpretation and decisions belong to the team, following your hospital's protocol.",
-  "scaleReference": "Reference"
+  "scaleReference": "Reference",
+  "guideAreaTechniques": "Techniques",
+  "guideAreaEmergency": "Emergencies"
 }

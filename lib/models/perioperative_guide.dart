@@ -1,6 +1,6 @@
 import 'instrument.dart' show LocalizedText;
 
-enum GuideArea { asepsia, seguridad, paciente, material }
+enum GuideArea { asepsia, seguridad, paciente, material, tecnicas, urgencias }
 
 class GuideSection {
   final LocalizedText title;

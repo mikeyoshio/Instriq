@@ -1005,4 +1005,562 @@ const List<PerioperativeGuide> kPerioperativeGuides = [
       ),
     ],
   ),
+  PerioperativeGuide(
+    id: 'preparacion-paciente-quirurgico',
+    name: LocalizedText(ca: 'Preparació del pacient quirúrgic a planta', es: 'Preparación del paciente quirúrgico en planta', en: 'Preparing the surgical patient on the ward'),
+    aliases: ['Preoperative preparation', 'Preparación preoperatoria'],
+    area: GuideArea.tecnicas,
+    summary: LocalizedText(
+      ca: 'El que es fa a planta abans de baixar a quiròfan determina que la intervenció comenci a temps i sense riscos evitables. Cada centre té el seu protocol i llista de comprovació.',
+      es: 'Lo que se hace en planta antes de bajar a quirófano determina que la intervención empiece a tiempo y sin riesgos evitables. Cada centro tiene su protocolo y lista de comprobación.',
+      en: 'What happens on the ward before transfer decides whether surgery starts on time and without avoidable risk. Each hospital has its own protocol and checklist.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'La vigília i el matí', es: 'La víspera y la mañana', en: 'The day before and the morning'),
+        LocalizedText(
+          ca: '• Dejú segons les indicacions d\'anestèsia (sòlids i líquids clars tenen temps diferents).\n• Dutxa amb sabó, antisèptic si el protocol ho indica, i roba neta.\n• Si cal retirar pèl, amb maquineta elèctrica i el mateix dia, mai amb fulla.\n• Medicació habitual: la que l\'anestesiòleg hagi indicat mantenir o suspendre.',
+          es: '• Ayuno según las indicaciones de anestesia (sólidos y líquidos claros tienen tiempos distintos).\n• Ducha con jabón, antiséptico si el protocolo lo indica, y ropa limpia.\n• Si hay que retirar vello, con maquinilla eléctrica y el mismo día, nunca con cuchilla.\n• Medicación habitual: la que el anestesiólogo haya indicado mantener o suspender.',
+          en: '• Fasting as anaesthesia instructs (solids and clear fluids have different times).\n• Shower with soap, or antiseptic if protocol says so, and clean clothes.\n• If hair must be removed, use clippers on the day, never a razor.\n• Usual medication: continue or stop only as the anaesthetist indicated.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Abans de baixar', es: 'Antes de bajar', en: 'Before transfer'),
+        LocalizedText(
+          ca: '• Polsera d\'identificació, consentiments signats i història amb les proves.\n• Al·lèrgies registrades i visibles.\n• Marcatge del lloc quirúrgic si cal, fet pel cirurgià.\n• Sense joies, pírcings, maquillatge, esmalt ni ungles artificials; pròtesis dentals, ulleres i audiòfons retirats o anotats.\n• Bufeta buida, via venosa si el protocol la demana i constants anotades.',
+          es: '• Pulsera de identificación, consentimientos firmados e historia con las pruebas.\n• Alergias registradas y visibles.\n• Marcado del sitio quirúrgico si procede, hecho por el cirujano.\n• Sin joyas, piercings, maquillaje, esmalte ni uñas artificiales; prótesis dentales, gafas y audífonos retirados o anotados.\n• Vejiga vacía, vía venosa si el protocolo la pide y constantes anotadas.',
+          en: '• ID wristband, signed consents and notes with test results.\n• Allergies recorded and visible.\n• Surgical site marked by the surgeon if required.\n• No jewellery, piercings, make-up, nail polish or artificial nails; dentures, glasses and hearing aids removed or recorded.\n• Empty bladder, IV access if protocol requires, and observations recorded.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Traspàs', es: 'Traspaso', en: 'Handover'),
+        LocalizedText(
+          ca: 'En entregar el pacient al quiròfan es confirmen en veu alta identitat, procediment, costat, dejú, al·lèrgies i el que hi hagi pendent. Tot el que no consti al registre s\'ha de dir.',
+          es: 'Al entregar al paciente en quirófano se confirman en voz alta identidad, procedimiento, lado, ayuno, alergias y lo que haya pendiente. Todo lo que no conste en el registro hay que decirlo.',
+          en: 'At handover to theatre, confirm aloud identity, procedure, side, fasting, allergies and anything pending. Say whatever is not in the record.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'epi-colocacion-retirada',
+    relatedItems: ['respirador-ffp2-ffp3', 'bata-quirurgica'],
+    name: LocalizedText(ca: 'EPI: posar-se\'l i treure-se\'l', es: 'EPI: colocación y retirada', en: 'PPE: putting on and taking off'),
+    aliases: ['PPE donning and doffing', 'Colocación y retirada del EPI'],
+    area: GuideArea.asepsia,
+    summary: LocalizedText(
+      ca: 'L\'equip de protecció individual protegeix només si es posa en l\'ordre correcte i, sobretot, si es treu sense contaminar-se. La retirada és el moment de més risc.',
+      es: 'El equipo de protección individual protege solo si se pone en el orden correcto y, sobre todo, si se quita sin contaminarse. La retirada es el momento de más riesgo.',
+      en: 'Personal protective equipment only protects if put on in the right order and, above all, taken off without self-contamination. Removal is the riskiest moment.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Posar-se\'l', es: 'Ponérselo', en: 'Putting on'),
+        LocalizedText(
+          ca: '• Higiene de mans.\n• Bata, ben lligada.\n• Mascareta o respirador; en els respiradors, comprovar l\'ajust (que no fugi aire).\n• Ulleres o pantalla.\n• Guants, per sobre dels punys de la bata.',
+          es: '• Higiene de manos.\n• Bata, bien atada.\n• Mascarilla o respirador; en los respiradores, comprobar el ajuste (que no escape aire).\n• Gafas o pantalla.\n• Guantes, por encima de los puños de la bata.',
+          en: '• Hand hygiene.\n• Gown, tied securely.\n• Mask or respirator; for respirators, do a seal check.\n• Goggles or face shield.\n• Gloves, over the gown cuffs.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Treure-se\'l', es: 'Quitárselo', en: 'Taking off'),
+        LocalizedText(
+          ca: '• Guants (o guants i bata alhora, enrotllant-los cap a dins).\n• Higiene de mans.\n• Bata, tocant només l\'interior.\n• Ulleres o pantalla, per les patilles o la goma.\n• Mascareta o respirador, per les gomes, ja fora de la zona contaminada si el protocol ho indica.\n• Higiene de mans.',
+          es: '• Guantes (o guantes y bata a la vez, enrollándolos hacia dentro).\n• Higiene de manos.\n• Bata, tocando solo el interior.\n• Gafas o pantalla, por las patillas o la goma.\n• Mascarilla o respirador, por las gomas, ya fuera de la zona contaminada si el protocolo lo indica.\n• Higiene de manos.',
+          en: '• Gloves (or gloves and gown together, rolling them inside out).\n• Hand hygiene.\n• Gown, touching only the inside.\n• Goggles or shield, by the arms or strap.\n• Mask or respirator, by the straps, outside the contaminated area if protocol says so.\n• Hand hygiene.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Bones pràctiques', es: 'Buenas prácticas', en: 'Good practice'),
+        LocalizedText(
+          ca: 'Seguir la seqüència del centre, que pot variar segons el risc. Amb risc alt, retirada davant d\'un company que la supervisi. Mai tocar-se la cara amb els guants posats.',
+          es: 'Seguir la secuencia del centro, que puede variar según el riesgo. Con riesgo alto, retirada delante de un compañero que la supervise. Nunca tocarse la cara con los guantes puestos.',
+          en: 'Follow your hospital\'s sequence, which may vary with the risk. For high-risk situations, take it off with a colleague watching. Never touch your face with gloves on.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'via-venosa-periferica',
+    relatedItems: ['cateter-venoso-periferico', 'aposito-pelicula-transparente'],
+    name: LocalizedText(ca: 'Canalització de via venosa perifèrica', es: 'Canalización de vía venosa periférica', en: 'Peripheral IV cannulation'),
+    aliases: ['Peripheral IV cannulation', 'Canalización de vía venosa periférica', 'VVP'],
+    area: GuideArea.tecnicas,
+    summary: LocalizedText(
+      ca: 'La via venosa és la porta per a sèrums, fàrmacs i sang durant tota la intervenció. El calibre es tria segons l\'ús previst: més gros si pot caldre transfondre de pressa.',
+      es: 'La vía venosa es la puerta para sueros, fármacos y sangre durante toda la intervención. El calibre se elige según el uso previsto: más grueso si puede hacer falta transfundir rápido.',
+      en: 'The IV line carries fluids, drugs and blood throughout surgery. Choose the gauge for its expected use: larger if rapid transfusion may be needed.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Triar la vena', es: 'Elegir la vena', en: 'Choosing the vein'),
+        LocalizedText(
+          ca: '• De distal a proximal, al braç no dominant si és possible.\n• Evitar flexures, zones amb flebitis i el braç amb fístula arteriovenosa o limfadenectomia.\n• En cirurgia, al braç que quedarà accessible per a anestèsia.',
+          es: '• De distal a proximal, en el brazo no dominante si es posible.\n• Evitar flexuras, zonas con flebitis y el brazo con fístula arteriovenosa o linfadenectomía.\n• En cirugía, en el brazo que quedará accesible para anestesia.',
+          en: '• Distal to proximal, in the non-dominant arm if possible.\n• Avoid joints, inflamed veins and an arm with an AV fistula or lymph node clearance.\n• For surgery, in the arm that will stay accessible to anaesthesia.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Tècnica', es: 'Técnica', en: 'Technique'),
+        LocalizedText(
+          ca: '• Higiene de mans, guants i material a punt.\n• Compressor per sobre del punt; antisèptic (clorhexidina alcohòlica) i deixar-lo assecar sense tornar a palpar.\n• Tibar la pell, puncionar amb el bisell amunt en angle baix i, en veure reflux, avançar el catèter i retirar el fiador.\n• Treure el compressor, connectar, comprovar que flueix sense inflor i fixar amb apòsit transparent.\n• Fiador directament al contenidor de punxants; anotar data, calibre i lloc.',
+          es: '• Higiene de manos, guantes y material preparado.\n• Compresor por encima del punto; antiséptico (clorhexidina alcohólica) y dejarlo secar sin volver a palpar.\n• Tensar la piel, puncionar con el bisel hacia arriba en ángulo bajo y, al ver reflujo, avanzar el catéter y retirar el fiador.\n• Retirar el compresor, conectar, comprobar que fluye sin hinchazón y fijar con apósito transparente.\n• Fiador directamente al contenedor de punzantes; anotar fecha, calibre y lugar.',
+          en: '• Hand hygiene, gloves and kit ready.\n• Tourniquet above the site; antiseptic (alcoholic chlorhexidine), let it dry and do not re-palpate.\n• Stretch the skin, insert bevel up at a low angle and, on flashback, advance the cannula and withdraw the needle.\n• Release the tourniquet, connect, check it flows without swelling and secure with a transparent dressing.\n• Needle straight into the sharps bin; record date, gauge and site.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Vigilància', es: 'Vigilancia', en: 'Monitoring'),
+        LocalizedText(
+          ca: 'Revisar el punt cada torn i abans d\'administrar res: dolor, vermellor, induració o extravasació obliguen a retirar-la. Es canvia quan hi ha signes clínics o segons el protocol, no per rutina.',
+          es: 'Revisar el punto cada turno y antes de administrar nada: dolor, enrojecimiento, induración o extravasación obligan a retirarla. Se cambia cuando hay signos clínicos o según protocolo, no por rutina.',
+          en: 'Check the site every shift and before giving anything: pain, redness, induration or extravasation mean removal. Replace on clinical signs or per protocol, not routinely.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'canalizacion-arterial',
+    relatedItems: ['cateter-arterial'],
+    name: LocalizedText(ca: 'Línia arterial: preparació i monitoratge', es: 'Línea arterial: preparación y monitorización', en: 'Arterial line: set-up and monitoring'),
+    aliases: ['Arterial line', 'Línea arterial', 'Invasive blood pressure'],
+    area: GuideArea.tecnicas,
+    summary: LocalizedText(
+      ca: 'La línia arterial dona la pressió arterial batec a batec i permet extreure gasometries. La canalitza el metge; infermeria prepara el sistema, el calibra i el vigila.',
+      es: 'La línea arterial da la presión arterial latido a latido y permite extraer gasometrías. La canaliza el médico; enfermería prepara el sistema, lo calibra y lo vigila.',
+      en: 'An arterial line gives beat-to-beat blood pressure and allows blood gas sampling. The doctor inserts it; nursing prepares, calibrates and monitors the system.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Preparar el sistema', es: 'Preparar el sistema', en: 'Preparing the system'),
+        LocalizedText(
+          ca: '• Bossa de sèrum per al rentat segons protocol, dins d\'un manegot de pressió inflat a uns 300 mmHg.\n• Purgar tot el circuit i el transductor sense deixar cap bombolla.\n• Tenir a punt el material per a la punció, la fixació i l\'apòsit.',
+          es: '• Bolsa de suero para el lavado según protocolo, dentro de un manguito de presión inflado a unos 300 mmHg.\n• Purgar todo el circuito y el transductor sin dejar ninguna burbuja.\n• Tener preparado el material para la punción, la fijación y el apósito.',
+          en: '• Flush bag per protocol in a pressure bag inflated to about 300 mmHg.\n• Prime the whole circuit and transducer with no bubbles.\n• Have the puncture, securing and dressing kit ready.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Calibrar', es: 'Calibrar', en: 'Calibrating'),
+        LocalizedText(
+          ca: '• Transductor a l\'altura de l\'eix flebostàtic: quart espai intercostal, línia axil·lar mitjana.\n• Obrir a l\'aire i fer el zero; tornar a fer-lo si canvia la posició del pacient o de la taula.\n• Prova del rentat ràpid: la corba ha de tornar en una o dues oscil·lacions; si s\'aplana o oscil·la massa, revisar bombolles, colzes i connexions.',
+          es: '• Transductor a la altura del eje flebostático: cuarto espacio intercostal, línea axilar media.\n• Abrir al aire y hacer el cero; repetirlo si cambia la posición del paciente o de la mesa.\n• Prueba del lavado rápido: la curva debe volver en una o dos oscilaciones; si se aplana u oscila demasiado, revisar burbujas, acodamientos y conexiones.',
+          en: '• Transducer level with the phlebostatic axis: fourth intercostal space, mid-axillary line.\n• Open to air and zero; repeat if the patient or table position changes.\n• Fast-flush test: the trace should return within one or two oscillations; if damped or ringing, check bubbles, kinks and connections.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Seguretat', es: 'Seguridad', en: 'Safety'),
+        LocalizedText(
+          ca: 'Etiquetar-la com a arterial: mai s\'hi administra res. Vigilar el color, la temperatura i la sensibilitat de la mà o el peu. Una desconnexió pot sagnar molt de pressa: connexions ben roscades i visibles.',
+          es: 'Etiquetarla como arterial: nunca se administra nada por ella. Vigilar el color, la temperatura y la sensibilidad de la mano o el pie. Una desconexión puede sangrar muy rápido: conexiones bien enroscadas y visibles.',
+          en: 'Label it as arterial: never inject anything into it. Watch the colour, warmth and sensation of the hand or foot. A disconnection can bleed fast: keep connections tight and visible.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'cuidados-cvc',
+    relatedItems: ['cateter-venoso-central', 'aposito-pelicula-transparente'],
+    name: LocalizedText(ca: 'Cures del catèter venós central', es: 'Cuidados del catéter venoso central', en: 'Central venous catheter care'),
+    aliases: ['Central line care', 'CVC care', 'Cuidados del catéter venoso central'],
+    area: GuideArea.tecnicas,
+    summary: LocalizedText(
+      ca: 'Les infeccions de catèter central són greus i en gran part evitables. Les cures es fan amb tècnica asèptica i sempre de la mateixa manera.',
+      es: 'Las infecciones de catéter central son graves y en gran parte evitables. Los cuidados se hacen con técnica aséptica y siempre de la misma manera.',
+      en: 'Central line infections are serious and largely preventable. Care is aseptic and always done the same way.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Punt d\'inserció', es: 'Punto de inserción', en: 'Insertion site'),
+        LocalizedText(
+          ca: '• Higiene de mans i guants; antisèptic de clorhexidina alcohòlica i deixar assecar.\n• Apòsit transparent, canviat segons protocol o abans si està brut, moll o desenganxat.\n• Vigilar vermellor, supuració, dolor o febre sense altra causa.',
+          es: '• Higiene de manos y guantes; antiséptico de clorhexidina alcohólica y dejar secar.\n• Apósito transparente, cambiado según protocolo o antes si está sucio, mojado o despegado.\n• Vigilar enrojecimiento, supuración, dolor o fiebre sin otra causa.',
+          en: '• Hand hygiene and gloves; alcoholic chlorhexidine, allowed to dry.\n• Transparent dressing, changed per protocol or sooner if soiled, wet or loose.\n• Watch for redness, discharge, pain or unexplained fever.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Connexions', es: 'Conexiones', en: 'Connections'),
+        LocalizedText(
+          ca: 'Abans de cada accés, fregar el connector amb antisèptic i deixar-lo assecar. Mínim nombre de manipulacions, llums que no s\'usen tancades i sistemes canviats segons el que hi passa (lípids i sang tenen intervals més curts).',
+          es: 'Antes de cada acceso, frotar el conector con antiséptico y dejarlo secar. Mínimo número de manipulaciones, luces que no se usan cerradas y sistemas cambiados según lo que pasa por ellos (lípidos y sangre tienen intervalos más cortos).',
+          en: 'Scrub the hub with antiseptic and let it dry before every access. Handle it as little as possible, clamp unused lumens and change sets according to what runs through them (lipids and blood need shorter intervals).',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Retirada', es: 'Retirada', en: 'Removal'),
+        LocalizedText(
+          ca: 'Pacient estirat, amb el cap baix si és possible; demanar-li que aguanti la respiració en treure\'l i tapar immediatament amb un apòsit oclusiu per evitar l\'embòlia gasosa. Comprovar que el catèter surt sencer.',
+          es: 'Paciente tumbado, con la cabeza baja si es posible; pedirle que aguante la respiración al retirarlo y tapar inmediatamente con un apósito oclusivo para evitar la embolia gaseosa. Comprobar que el catéter sale entero.',
+          en: 'Patient lying flat, head down if possible; ask them to hold their breath as it comes out and cover at once with an occlusive dressing to prevent air embolism. Check the catheter is intact.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'tecnica-sutura',
+    relatedItems: ['portaagujas-mayo-hegar', 'pinza-adson-dientes', 'tijera-mayo', 'contador-agujas'],
+    name: LocalizedText(ca: 'Tècnica de sutura', es: 'Técnica de sutura', en: 'Suturing technique'),
+    aliases: ['Suturing technique', 'Técnica de sutura', 'Puntos de sutura'],
+    area: GuideArea.tecnicas,
+    summary: LocalizedText(
+      ca: 'Principis bàsics per suturar pell i per preparar i passar la sutura des de la taula. La tria del material (absorbible o no, calibre, agulla) depèn del teixit i del cirurgià.',
+      es: 'Principios básicos para suturar piel y para preparar y pasar la sutura desde la mesa. La elección del material (absorbible o no, calibre, aguja) depende del tejido y del cirujano.',
+      en: 'Basic principles for skin suturing and for loading and passing sutures from the table. Material choice (absorbable or not, size, needle) depends on the tissue and the surgeon.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Muntar i passar', es: 'Montar y pasar', en: 'Loading and passing'),
+        LocalizedText(
+          ca: '• L\'agulla es pren entre el terç mitjà i el posterior, mai per la punta ni per l\'encast.\n• El portaagulles es passa amb la punta de l\'agulla mirant cap al cirurgià i el fil controlat perquè no s\'enredi.\n• Cada agulla que surt de la taula s\'ha de recuperar i comptar.',
+          es: '• La aguja se toma entre el tercio medio y el posterior, nunca por la punta ni por el engarce.\n• El portaagujas se pasa con la punta de la aguja mirando hacia el cirujano y el hilo controlado para que no se enrede.\n• Cada aguja que sale de la mesa se tiene que recuperar y contar.',
+          en: '• Grip the needle between its middle and rear thirds, never at the point or the swage.\n• Pass the needle holder with the needle point towards the surgeon and the thread kept under control.\n• Every needle that leaves the table must come back and be counted.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Tipus de punts', es: 'Tipos de puntos', en: 'Stitch types'),
+        LocalizedText(
+          ca: '• Simple: el més habitual; cada punt independent.\n• Continu: més ràpid, però si es trenca s\'obre tot.\n• Matalasser vertical o horitzontal: evertint les vores en pell gruixuda o amb tensió.\n• Intradèrmic: deixa millor cicatriu, sense punts a la superfície.',
+          es: '• Simple: el más habitual; cada punto independiente.\n• Continuo: más rápido, pero si se rompe se abre todo.\n• Colchonero vertical u horizontal: evierte los bordes en piel gruesa o con tensión.\n• Intradérmico: deja mejor cicatriz, sin puntos en la superficie.',
+          en: '• Simple interrupted: the most common; each stitch separate.\n• Continuous: quicker, but if it breaks the whole line opens.\n• Vertical or horizontal mattress: everts the edges in thick or tense skin.\n• Subcuticular: better scar, no stitches on the surface.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Principis', es: 'Principios', en: 'Principles'),
+        LocalizedText(
+          ca: 'Entrar perpendicular a la pell, a la mateixa distància i profunditat a banda i banda, amb les vores lleugerament evertides i sense estrènyer: el teixit s\'inflarà. Nus pla i segur. La retirada orientativa va de 5 a 7 dies a la cara fins a 10-14 al tronc i les extremitats, segons el cirurgià.',
+          es: 'Entrar perpendicular a la piel, a la misma distancia y profundidad a ambos lados, con los bordes ligeramente evertidos y sin apretar: el tejido se hinchará. Nudo plano y seguro. La retirada orientativa va de 5 a 7 días en la cara a 10-14 en el tronco y las extremidades, según el cirujano.',
+          en: 'Enter perpendicular to the skin, at the same distance and depth on each side, edges slightly everted and not tight: tissue will swell. Square, secure knots. Removal is roughly 5-7 days on the face to 10-14 on the trunk and limbs, as the surgeon decides.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'cura-herida-quirurgica',
+    relatedItems: ['aposito-adhesivo-herida', 'aposito-pelicula-transparente'],
+    name: LocalizedText(ca: 'Cura de la ferida quirúrgica', es: 'Cura de la herida quirúrgica', en: 'Surgical wound care'),
+    aliases: ['Surgical wound care', 'Cura de herida quirúrgica'],
+    area: GuideArea.tecnicas,
+    summary: LocalizedText(
+      ca: 'Una ferida tancada en primera intenció necessita sobretot que no la toquin: l\'apòsit de quiròfan protegeix les primeres hores mentre la ferida se segella.',
+      es: 'Una herida cerrada por primera intención necesita sobre todo que no la toquen: el apósito de quirófano protege las primeras horas mientras la herida se sella.',
+      en: 'A primarily closed wound mainly needs to be left alone: the theatre dressing protects it while it seals over the first hours.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Quan es cura', es: 'Cuándo se cura', en: 'When to dress it'),
+        LocalizedText(
+          ca: 'L\'apòsit de quiròfan s\'acostuma a deixar unes 48 hores si està net i sec. Es canvia abans si està tacat, moll o desenganxat, o si hi ha signes d\'infecció.',
+          es: 'El apósito de quirófano suele dejarse unas 48 horas si está limpio y seco. Se cambia antes si está manchado, mojado o despegado, o si hay signos de infección.',
+          en: 'The theatre dressing is usually left for about 48 hours if clean and dry. Change it sooner if stained, wet or loose, or if there are signs of infection.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Tècnica', es: 'Técnica', en: 'Technique'),
+        LocalizedText(
+          ca: '• Higiene de mans; retirar l\'apòsit amb guants i llençar-lo.\n• Valorar la ferida abans de netejar: vores, color, inflor, exsudat i dolor.\n• Amb tècnica estèril, netejar amb sèrum fisiològic de la zona més neta a la més bruta, sense tornar enrere.\n• Assecar a tocs i posar l\'apòsit que indiqui el protocol.',
+          es: '• Higiene de manos; retirar el apósito con guantes y desecharlo.\n• Valorar la herida antes de limpiar: bordes, color, hinchazón, exudado y dolor.\n• Con técnica estéril, limpiar con suero fisiológico de la zona más limpia a la más sucia, sin volver atrás.\n• Secar a toques y poner el apósito que indique el protocolo.',
+          en: '• Hand hygiene; remove the dressing with gloves and discard it.\n• Assess the wound before cleaning: edges, colour, swelling, exudate and pain.\n• Using sterile technique, clean with saline from the cleanest to the dirtiest area, never back again.\n• Pat dry and apply the dressing protocol specifies.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Avisar si', es: 'Avisar si', en: 'Report if'),
+        LocalizedText(
+          ca: 'Vermellor que s\'estén, calor, dolor creixent, supuració, mal olor, separació de les vores o febre. Registrar sempre com es veu la ferida.',
+          es: 'Enrojecimiento que se extiende, calor, dolor creciente, supuración, mal olor, separación de los bordes o fiebre. Registrar siempre cómo se ve la herida.',
+          en: 'Spreading redness, warmth, increasing pain, pus, odour, edges separating or fever. Always record how the wound looks.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'vendajes-ferulas-yesos',
+    relatedItems: ['sierra-oscilante-yesos', 'separador-yesos', 'almohadilla-gel-posicionamiento'],
+    name: LocalizedText(ca: 'Benes, fèrules i guixos', es: 'Vendajes, férulas y yesos', en: 'Bandages, splints and casts'),
+    aliases: ['Bandaging', 'Splints and casts', 'Vendajes y yesos'],
+    area: GuideArea.tecnicas,
+    summary: LocalizedText(
+      ca: 'Immobilitzen i protegeixen, però mal posats poden comprimir. Al quiròfan de traumatologia es posen sovint just abans que el pacient desperti.',
+      es: 'Inmovilizan y protegen, pero mal colocados pueden comprimir. En el quirófano de traumatología se colocan a menudo justo antes de que el paciente despierte.',
+      en: 'They immobilise and protect, but poorly applied they compress. In trauma theatres they are often applied just before the patient wakes.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Principis', es: 'Principios', en: 'Principles'),
+        LocalizedText(
+          ca: '• De distal a proximal, amb pressió uniforme, deixant els dits a la vista.\n• Encoixinar les prominències òssies i separar les superfícies de pell que es toquen.\n• Extremitat en posició funcional, llevat que el cirurgià indiqui una altra cosa.',
+          es: '• De distal a proximal, con presión uniforme, dejando los dedos a la vista.\n• Almohadillar las prominencias óseas y separar las superficies de piel que se tocan.\n• Extremidad en posición funcional, salvo que el cirujano indique otra cosa.',
+          en: '• Distal to proximal, even pressure, fingers or toes left visible.\n• Pad bony prominences and separate skin surfaces that touch.\n• Limb in a functional position unless the surgeon says otherwise.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Guix i fèrules', es: 'Yeso y férulas', en: 'Plaster and splints'),
+        LocalizedText(
+          ca: 'Mullar les benes en aigua tèbia o freda: l\'aigua calenta accelera el fraguat i escalfa més. Modelar amb el palmell, mai amb els dits, que deixen marques que fan pressió. Després d\'una cirurgia o un traumatisme recent sovint es posa fèrula i no guix tancat, per deixar lloc a l\'edema.',
+          es: 'Mojar las vendas en agua tibia o fría: el agua caliente acelera el fraguado y calienta más. Moldear con la palma, nunca con los dedos, que dejan marcas que hacen presión. Tras una cirugía o un traumatismo reciente a menudo se pone férula y no yeso cerrado, para dejar sitio al edema.',
+          en: 'Wet the rolls in lukewarm or cold water: hot water speeds setting and gives off more heat. Mould with the palm, never fingertips, which leave pressure points. After surgery or recent injury a splint rather than a closed cast is often used to allow for swelling.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Vigilància neurovascular', es: 'Vigilancia neurovascular', en: 'Neurovascular checks'),
+        LocalizedText(
+          ca: 'Comprovar color, temperatura, pols, sensibilitat i mobilitat dels dits, i el dolor. Un dolor desproporcionat que augmenta en estirar els dits pot ser una síndrome compartimental: és una urgència, cal avisar i afluixar el vendatge.',
+          es: 'Comprobar color, temperatura, pulso, sensibilidad y movilidad de los dedos, y el dolor. Un dolor desproporcionado que aumenta al estirar los dedos puede ser un síndrome compartimental: es una urgencia, hay que avisar y aflojar el vendaje.',
+          en: 'Check colour, warmth, pulse, sensation and movement of the digits, and pain. Disproportionate pain that worsens on passive stretch may be compartment syndrome: an emergency — report it and loosen the dressing.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'balance-hidrico',
+    relatedItems: ['urimetro', 'sistema-aspiracion-pared', 'compresa-laparotomia', 'gasa-quirurgica-radiopaca'],
+    name: LocalizedText(ca: 'Balanç hídric i pèrdues al quiròfan', es: 'Balance hídrico y pérdidas en quirófano', en: 'Fluid balance and losses in theatre'),
+    aliases: ['Fluid balance', 'Balance hídrico', 'Pérdidas hemáticas'],
+    area: GuideArea.tecnicas,
+    summary: LocalizedText(
+      ca: 'Saber què entra i què surt ajuda l\'anestesiòleg a reposar líquids i sang. Al quiròfan, la infermera circulant és qui millor pot comptar les pèrdues.',
+      es: 'Saber qué entra y qué sale ayuda al anestesiólogo a reponer líquidos y sangre. En quirófano, la enfermera circulante es quien mejor puede contar las pérdidas.',
+      en: 'Knowing what goes in and out helps the anaesthetist replace fluid and blood. In theatre, the circulating nurse is best placed to measure losses.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Entrades', es: 'Entradas', en: 'Inputs'),
+        LocalizedText(
+          ca: 'Sèrums, hemoderivats i el volum de les dilucions de fàrmacs. En RTU, histeroscòpia o artroscòpia, controlar també el líquid d\'irrigació que entra i el que surt: la diferència pot passar a la circulació.',
+          es: 'Sueros, hemoderivados y el volumen de las diluciones de fármacos. En RTU, histeroscopia o artroscopia, controlar también el líquido de irrigación que entra y el que sale: la diferencia puede pasar a la circulación.',
+          en: 'Fluids, blood products and the volume of drug infusions. In TURP, hysteroscopy or arthroscopy, also track irrigation in and out: the difference may be absorbed.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Sortides', es: 'Salidas', en: 'Outputs'),
+        LocalizedText(
+          ca: '• Diüresi, si porta sonda, amb urímetre.\n• Sang aspirada: el volum del reservori menys el sèrum de rentat que s\'hi ha afegit.\n• Gases i compreses: pesar-les i restar el pes en sec (1 g equival aproximadament a 1 ml).\n• Drenatges i sonda nasogàstrica.',
+          es: '• Diuresis, si lleva sonda, con urímetro.\n• Sangre aspirada: el volumen del reservorio menos el suero de lavado añadido.\n• Gasas y compresas: pesarlas y restar el peso en seco (1 g equivale aproximadamente a 1 ml).\n• Drenajes y sonda nasogástrica.',
+          en: '• Urine output via catheter and urimeter.\n• Suctioned blood: canister volume minus the irrigation added.\n• Swabs and packs: weigh them and subtract the dry weight (1 g is roughly 1 ml).\n• Drains and nasogastric tube.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Registre', es: 'Registro', en: 'Recording'),
+        LocalizedText(
+          ca: 'Anotar per hores o en els moments que demani anestèsia, i en acabar, al full de quiròfan. Avisar si la diüresi baixa o si les pèrdues augmenten de pressa.',
+          es: 'Anotar por horas o en los momentos que pida anestesia, y al acabar, en la hoja de quirófano. Avisar si la diuresis baja o si las pérdidas aumentan deprisa.',
+          en: 'Record hourly or when anaesthesia asks, and at the end on the theatre record. Report falling urine output or rapidly rising losses.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'rcp-basica-adulto',
+    relatedItems: ['desfibrilador-monitor', 'bolsa-reanimacion-autoinflable'],
+    name: LocalizedText(ca: 'RCP bàsica en l\'adult', es: 'RCP básica en el adulto', en: 'Adult basic life support'),
+    aliases: ['Adult basic life support', 'RCP básica', 'SVB'],
+    area: GuideArea.urgencias,
+    summary: LocalizedText(
+      ca: 'Davant d\'una persona que no respon i no respira amb normalitat, cada minut sense compressions redueix la supervivència. Esquema de repàs segons les recomanacions de l\'European Resuscitation Council (ERC, guies 2025).',
+      es: 'Ante una persona que no responde y no respira con normalidad, cada minuto sin compresiones reduce la supervivencia. Esquema de repaso según las recomendaciones del European Resuscitation Council (ERC, guías 2025).',
+      en: 'When someone is unresponsive and not breathing normally, every minute without compressions reduces survival. Review summary based on the European Resuscitation Council (ERC 2025 guidelines).',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Reconèixer i avisar', es: 'Reconocer y avisar', en: 'Recognise and call'),
+        LocalizedText(
+          ca: '• Comprovar que l\'entorn és segur.\n• No respon i no respira amb normalitat (les boquejades no són respiració normal): parada.\n• Demanar ajuda, trucar al 112 o a l\'equip de parades i demanar un desfibril·lador.',
+          es: '• Comprobar que el entorno es seguro.\n• No responde y no respira con normalidad (las boqueadas no son respiración normal): parada.\n• Pedir ayuda, llamar al 112 o al equipo de paradas y pedir un desfibrilador.',
+          en: '• Make sure the scene is safe.\n• Unresponsive and not breathing normally (gasping is not normal breathing): cardiac arrest.\n• Shout for help, call 112 or the arrest team and ask for a defibrillator.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Compressions', es: 'Compresiones', en: 'Compressions'),
+        LocalizedText(
+          ca: '• Al centre del tòrax, braços estirats, sobre una superfície ferma.\n• Profunditat de 5 a 6 cm i ritme de 100 a 120 per minut, deixant que el tòrax torni del tot.\n• 30 compressions i 2 ventilacions si se sap i es pot ventilar; si no, compressions contínues.\n• Rellevar-se cada 2 minuts per no perdre qualitat.',
+          es: '• En el centro del tórax, brazos estirados, sobre una superficie firme.\n• Profundidad de 5 a 6 cm y ritmo de 100 a 120 por minuto, dejando que el tórax vuelva del todo.\n• 30 compresiones y 2 ventilaciones si se sabe y se puede ventilar; si no, compresiones continuas.\n• Relevarse cada 2 minutos para no perder calidad.',
+          en: '• Centre of the chest, arms straight, on a firm surface.\n• Depth 5-6 cm at 100-120 per minute, allowing full recoil.\n• 30 compressions to 2 breaths if trained and able; otherwise continuous compressions.\n• Swap every 2 minutes to keep quality up.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Desfibril·lador', es: 'Desfibrilador', en: 'Defibrillator'),
+        LocalizedText(
+          ca: 'Encendre\'l i seguir les instruccions tan bon punt arribi. Ningú no toca el pacient durant l\'anàlisi ni la descàrrega, i les compressions es reprenen immediatament.',
+          es: 'Encenderlo y seguir sus instrucciones en cuanto llegue. Nadie toca al paciente durante el análisis ni la descarga, y las compresiones se reanudan inmediatamente.',
+          en: 'Switch it on and follow its prompts as soon as it arrives. No one touches the patient during analysis or shock, and compressions restart immediately.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'rcp-quirofano',
+    relatedItems: ['desfibrilador-monitor', 'capnografo', 'bolsa-reanimacion-autoinflable', 'palas-desfibrilacion-internas'],
+    name: LocalizedText(ca: 'Aturada cardíaca al quiròfan', es: 'Parada cardíaca en quirófano', en: 'Cardiac arrest in theatre'),
+    aliases: ['Intraoperative cardiac arrest', 'Parada en quirófano'],
+    area: GuideArea.urgencias,
+    summary: LocalizedText(
+      ca: 'Al quiròfan la parada sol ser presenciada i monitorada, i les causes sovint són reversibles. L\'anestesiòleg lidera segons l\'algoritme de suport vital avançat de l\'ERC (guies 2025); aquí hi ha el paper de la resta de l\'equip.',
+      es: 'En quirófano la parada suele ser presenciada y monitorizada, y las causas a menudo son reversibles. El anestesiólogo lidera según el algoritmo de soporte vital avanzado del ERC (guías 2025); aquí está el papel del resto del equipo.',
+      en: 'In theatre, arrests are usually witnessed and monitored, and causes are often reversible. The anaesthetist leads using the ERC advanced life support algorithm (2025 guidelines); this covers the rest of the team\'s role.',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Primer minut', es: 'Primer minuto', en: 'First minute'),
+        LocalizedText(
+          ca: '• Dir-ho en veu alta i demanar ajuda i el carro de parades.\n• El cirurgià atura la intervenció; en laparoscòpia, es desinfla el pneumoperitoneu.\n• Compressions immediates; en decúbit prono es poden fer a l\'esquena mentre es prepara el gir.\n• Plaques del desfibril·lador fora del camp; si el tòrax està obert, pales internes.',
+          es: '• Decirlo en voz alta y pedir ayuda y el carro de paradas.\n• El cirujano detiene la intervención; en laparoscopia, se desinfla el neumoperitoneo.\n• Compresiones inmediatas; en decúbito prono se pueden hacer en la espalda mientras se prepara el giro.\n• Parches del desfibrilador fuera del campo; si el tórax está abierto, palas internas.',
+          en: '• Say it aloud and call for help and the arrest trolley.\n• The surgeon stops operating; in laparoscopy, the pneumoperitoneum is released.\n• Start compressions at once; in prone position they can be done on the back while preparing to turn.\n• Defibrillator pads outside the field; internal paddles if the chest is open.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Durant la reanimació', es: 'Durante la reanimación', en: 'During resuscitation'),
+        LocalizedText(
+          ca: '• Una persona porta el temps i anota fàrmacs, descàrregues i ritmes.\n• El CO2 espirat ajuda a valorar la qualitat de les compressions i a detectar la recuperació.\n• La medicació la prepara i l\'administra l\'equip d\'anestèsia segons l\'algoritme, verbalitzant-la.',
+          es: '• Una persona lleva el tiempo y anota fármacos, descargas y ritmos.\n• El CO2 espirado ayuda a valorar la calidad de las compresiones y a detectar la recuperación.\n• La medicación la prepara y la administra el equipo de anestesia según el algoritmo, verbalizándola.',
+          en: '• One person keeps time and records drugs, shocks and rhythms.\n• End-tidal CO2 helps judge compression quality and detect return of circulation.\n• Drugs are prepared and given by the anaesthesia team per the algorithm, said aloud.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Causes a buscar', es: 'Causas a buscar', en: 'Causes to look for'),
+        LocalizedText(
+          ca: 'Hemorràgia, hipoxèmia, pneumotòrax a tensió, anafilaxi, toxicitat per anestèsics locals, embòlia (gasosa, de ciment o pulmonar), alteracions de potassi, hipotèrmia i reflexos vagals. L\'equip quirúrgic pot ajudar a confirmar-les o resoldre-les.',
+          es: 'Hemorragia, hipoxemia, neumotórax a tensión, anafilaxia, toxicidad por anestésicos locales, embolia (gaseosa, de cemento o pulmonar), alteraciones del potasio, hipotermia y reflejos vagales. El equipo quirúrgico puede ayudar a confirmarlas o resolverlas.',
+          en: 'Haemorrhage, hypoxaemia, tension pneumothorax, anaphylaxis, local anaesthetic toxicity, embolism (air, cement or pulmonary), potassium disorders, hypothermia and vagal reflexes. The surgical team can help confirm or fix them.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'rcp-pediatrica',
+    relatedItems: ['bolsa-reanimacion-autoinflable', 'desfibrilador-monitor'],
+    name: LocalizedText(ca: 'RCP pediàtrica (lactant i nen)', es: 'RCP pediátrica (lactante y niño)', en: 'Paediatric basic life support'),
+    aliases: ['Paediatric basic life support', 'RCP pediátrica'],
+    area: GuideArea.urgencias,
+    summary: LocalizedText(
+      ca: 'En nens la parada sol ser per manca d\'oxigen, per això les ventilacions tenen més pes que en l\'adult. Esquema de repàs segons les guies de suport vital pediàtric de l\'ERC (2025).',
+      es: 'En niños la parada suele deberse a falta de oxígeno, por eso las ventilaciones pesan más que en el adulto. Esquema de repaso según las guías de soporte vital pediátrico del ERC (2025).',
+      en: 'In children, arrest is usually caused by lack of oxygen, so breaths matter more than in adults. Review summary based on the ERC paediatric life support guidelines (2025).',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Inici', es: 'Inicio', en: 'Start'),
+        LocalizedText(
+          ca: '• No respon i no respira amb normalitat: obrir la via aèria i fer 5 ventilacions de rescat.\n• Si no hi ha signes de vida, començar compressions.\n• Demanar ajuda; si s\'està sol, fer un minut de RCP abans d\'anar a buscar-ne.',
+          es: '• No responde y no respira con normalidad: abrir la vía aérea y dar 5 ventilaciones de rescate.\n• Si no hay signos de vida, empezar compresiones.\n• Pedir ayuda; si se está solo, hacer un minuto de RCP antes de ir a buscarla.',
+          en: '• Unresponsive and not breathing normally: open the airway and give 5 rescue breaths.\n• If there are no signs of life, start compressions.\n• Call for help; if alone, do one minute of CPR before going for help.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Compressions', es: 'Compresiones', en: 'Compressions'),
+        LocalizedText(
+          ca: '• Relació de 15 compressions i 2 ventilacions.\n• Enfonsar com a mínim un terç del tòrax: uns 4 cm en el lactant i uns 5 cm en el nen.\n• Ritme de 100 a 120 per minut.\n• Lactant: dos polzes amb les mans abraçant el tòrax, o dos dits; nen: una o dues mans.',
+          es: '• Relación de 15 compresiones y 2 ventilaciones.\n• Hundir al menos un tercio del tórax: unos 4 cm en el lactante y unos 5 cm en el niño.\n• Ritmo de 100 a 120 por minuto.\n• Lactante: dos pulgares con las manos abrazando el tórax, o dos dedos; niño: una o dos manos.',
+          en: '• Ratio of 15 compressions to 2 breaths.\n• Depress at least one third of the chest: about 4 cm in infants and 5 cm in children.\n• Rate 100-120 per minute.\n• Infant: two thumbs encircling the chest, or two fingers; child: one or two hands.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Via aèria', es: 'Vía aérea', en: 'Airway'),
+        LocalizedText(
+          ca: 'En el lactant, cap en posició neutra; en el nen, extensió moderada. La ventilació ha de fer pujar el tòrax visiblement, sense excés.',
+          es: 'En el lactante, cabeza en posición neutra; en el niño, extensión moderada. La ventilación debe hacer subir el tórax visiblemente, sin exceso.',
+          en: 'Infants: head in a neutral position; children: moderate head tilt. Each breath should visibly raise the chest, without overdoing it.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'atragantamiento-adulto',
+    name: LocalizedText(ca: 'Ennuegament en l\'adult', es: 'Atragantamiento en el adulto', en: 'Choking in adults'),
+    aliases: ['Choking adult', 'Obstrucción de la vía aérea por cuerpo extraño', 'OVACE'],
+    area: GuideArea.urgencias,
+    summary: LocalizedText(
+      ca: 'Obstrucció de la via aèria per un cos estrany. El primer és distingir si la persona encara pot tossir amb eficàcia. Segons les recomanacions de primers auxilis de l\'ERC (2025).',
+      es: 'Obstrucción de la vía aérea por un cuerpo extraño. Lo primero es distinguir si la persona todavía puede toser con eficacia. Según las recomendaciones de primeros auxilios del ERC (2025).',
+      en: 'Airway obstruction by a foreign body. First decide whether the person can still cough effectively. Based on the ERC first aid recommendations (2025).',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Si tus amb força', es: 'Si tose con fuerza', en: 'If coughing effectively'),
+        LocalizedText(
+          ca: 'Animar-la a continuar tossint i vigilar-la sense fer res més.',
+          es: 'Animarla a seguir tosiendo y vigilarla sin hacer nada más.',
+          en: 'Encourage them to keep coughing and watch closely, nothing more.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Si la tos és ineficaç', es: 'Si la tos es ineficaz', en: 'If the cough is ineffective'),
+        LocalizedText(
+          ca: '• Fins a 5 cops a l\'esquena, entre els omòplats, amb la persona inclinada endavant.\n• Si no surt, fins a 5 compressions abdominals.\n• Alternar-los fins que surti o la persona perdi la consciència.',
+          es: '• Hasta 5 golpes en la espalda, entre los omóplatos, con la persona inclinada hacia delante.\n• Si no sale, hasta 5 compresiones abdominales.\n• Alternarlos hasta que salga o la persona pierda la consciencia.',
+          en: '• Up to 5 back blows between the shoulder blades, with the person leaning forward.\n• If it does not clear, up to 5 abdominal thrusts.\n• Alternate until it clears or the person becomes unconscious.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Si perd la consciència', es: 'Si pierde la consciencia', en: 'If they become unconscious'),
+        LocalizedText(
+          ca: 'Estirar-la a terra, trucar al 112 i començar RCP. Qualsevol persona que hagi rebut compressions abdominals ha de ser valorada per un metge.',
+          es: 'Tumbarla en el suelo, llamar al 112 y empezar RCP. Toda persona que haya recibido compresiones abdominales debe ser valorada por un médico.',
+          en: 'Lay them down, call 112 and start CPR. Anyone who received abdominal thrusts must be seen by a doctor.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'atragantamiento-lactante',
+    name: LocalizedText(ca: 'Ennuegament en el lactant', es: 'Atragantamiento en el lactante', en: 'Choking in infants'),
+    aliases: ['Choking infant', 'Atragantamiento en el lactante'],
+    area: GuideArea.urgencias,
+    summary: LocalizedText(
+      ca: 'En menors d\'un any no es fan compressions abdominals: es combinen cops a l\'esquena i compressions toràciques. Segons les recomanacions de l\'ERC (2025).',
+      es: 'En menores de un año no se hacen compresiones abdominales: se combinan golpes en la espalda y compresiones torácicas. Según las recomendaciones del ERC (2025).',
+      en: 'Under one year, no abdominal thrusts: back blows are combined with chest thrusts. Based on the ERC recommendations (2025).',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Si tus amb força', es: 'Si tose con fuerza', en: 'If coughing effectively'),
+        LocalizedText(
+          ca: 'Deixar-lo tossir i vigilar-lo.',
+          es: 'Dejarle toser y vigilarle.',
+          en: 'Let the infant cough and watch closely.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Si la tos és ineficaç', es: 'Si la tos es ineficaz', en: 'If the cough is ineffective'),
+        LocalizedText(
+          ca: '• Bocaterrosa sobre l\'avantbraç, amb el cap més baix que el tronc i subjectant la mandíbula: fins a 5 cops a l\'esquena.\n• Girar-lo bocaamunt i fer fins a 5 compressions toràciques, al mateix lloc que en la RCP però més seques i lentes.\n• Mirar la boca i treure el cos estrany només si es veu; mai escombrar a cegues.',
+          es: '• Boca abajo sobre el antebrazo, con la cabeza más baja que el tronco y sujetando la mandíbula: hasta 5 golpes en la espalda.\n• Girarlo boca arriba y dar hasta 5 compresiones torácicas, en el mismo sitio que en la RCP pero más secas y lentas.\n• Mirar la boca y retirar el cuerpo extraño solo si se ve; nunca barrer a ciegas.',
+          en: '• Face down along the forearm, head lower than the body, supporting the jaw: up to 5 back blows.\n• Turn face up and give up to 5 chest thrusts, at the CPR position but sharper and slower.\n• Look in the mouth and remove the object only if visible; never do a blind finger sweep.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Si perd la consciència', es: 'Si pierde la consciencia', en: 'If the infant becomes unconscious'),
+        LocalizedText(
+          ca: 'Trucar al 112 i començar RCP pediàtrica amb les 5 ventilacions de rescat.',
+          es: 'Llamar al 112 y empezar RCP pediátrica con las 5 ventilaciones de rescate.',
+          en: 'Call 112 and start paediatric CPR with 5 rescue breaths.',
+        ),
+      ),
+    ],
+  ),
+  PerioperativeGuide(
+    id: 'posicion-lateral-seguridad',
+    name: LocalizedText(ca: 'Posició lateral de seguretat', es: 'Posición lateral de seguridad', en: 'Recovery position'),
+    aliases: ['Recovery position', 'Posición lateral de seguridad', 'PLS'],
+    area: GuideArea.urgencias,
+    summary: LocalizedText(
+      ca: 'Per a una persona inconscient que respira amb normalitat: manté la via aèria oberta i deixa sortir vòmits o secrecions. Segons les recomanacions de primers auxilis de l\'ERC (2025).',
+      es: 'Para una persona inconsciente que respira con normalidad: mantiene la vía aérea abierta y deja salir vómitos o secreciones. Según las recomendaciones de primeros auxilios del ERC (2025).',
+      en: 'For an unconscious person who is breathing normally: keeps the airway open and lets vomit or secretions drain. Based on the ERC first aid recommendations (2025).',
+    ),
+    sections: [
+      GuideSection(
+        LocalizedText(ca: 'Com es fa', es: 'Cómo se hace', en: 'How to do it'),
+        LocalizedText(
+          ca: '• Braç més proper en angle recte, amb el palmell amunt.\n• L\'altre braç creuat sobre el pit, amb el dors de la mà contra la galta.\n• Doblegar el genoll més llunyà i girar el pacient cap a nosaltres estirant-lo del genoll.\n• Cap lleugerament enrere perquè la via aèria quedi oberta.',
+          es: '• Brazo más cercano en ángulo recto, con la palma hacia arriba.\n• El otro brazo cruzado sobre el pecho, con el dorso de la mano contra la mejilla.\n• Doblar la rodilla más lejana y girar al paciente hacia nosotros tirando de la rodilla.\n• Cabeza ligeramente hacia atrás para que la vía aérea quede abierta.',
+          en: '• Nearest arm at a right angle, palm up.\n• Other arm across the chest, back of the hand against the cheek.\n• Bend the far knee and roll the person towards you by pulling on the knee.\n• Tilt the head slightly back to keep the airway open.',
+        ),
+      ),
+      GuideSection(
+        LocalizedText(ca: 'Després', es: 'Después', en: 'Afterwards'),
+        LocalizedText(
+          ca: 'Comprovar contínuament que respira amb normalitat. Si deixa de fer-ho, girar-lo bocaamunt i començar RCP. Si ha de quedar-s\'hi molta estona, canviar de costat periòdicament per evitar lesions per pressió al braç de sota.',
+          es: 'Comprobar continuamente que respira con normalidad. Si deja de hacerlo, girarlo boca arriba y empezar RCP. Si tiene que quedarse mucho rato, cambiar de lado periódicamente para evitar lesiones por presión en el brazo de abajo.',
+          en: 'Keep checking that breathing is normal. If it stops, turn the person on their back and start CPR. If they stay a long time, switch sides periodically to protect the lower arm from pressure.',
+        ),
+      ),
+    ],
+  ),
 ];
