@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
@@ -63,6 +64,9 @@ class _SignInScreenState extends State<SignInScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
+      // Avisa al navegador / gestor de contrasenyes que l'inici ha anat bé:
+      // és el que fa aparèixer "Desar contrasenya" a Chrome, Edge i iOS.
+      TextInput.finishAutofillContext();
       // HospitalConnectFlow reacciona al cambio de sesión y se refresca solo.
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
@@ -84,16 +88,27 @@ class _SignInScreenState extends State<SignInScreen> {
           children: [
             const Icon(Icons.medical_services, size: 64),
             const SizedBox(height: 24),
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: l10n.password, border: const OutlineInputBorder()),
+            AutofillGroup(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    autofillHints: const [AutofillHints.username, AutofillHints.email],
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    autofillHints: const [AutofillHints.password],
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => _loading ? null : _signIn(),
+                    decoration: InputDecoration(labelText: l10n.password, border: const OutlineInputBorder()),
+                  ),
+                ],
+              ),
             ),
             if (_error != null) ...[
               const SizedBox(height: 12),

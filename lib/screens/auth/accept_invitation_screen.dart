@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -72,6 +73,7 @@ class _AcceptInvitationScreenState extends State<AcceptInvitationScreen> {
     });
     try {
       await AuthService.instance.signUp(email: _preview!.email, password: _passwordController.text);
+      TextInput.finishAutofillContext();
       await _accept();
     } catch (e) {
       if (mounted) setState(() => _actionError = l10n.genericError(e.toString()));
@@ -130,7 +132,7 @@ class _AcceptInvitationScreenState extends State<AcceptInvitationScreen> {
             constraints: const BoxConstraints(maxWidth: 440),
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child: SingleChildScrollView(child: _buildBody(context, l10n)),
+              child: SingleChildScrollView(child: AutofillGroup(child: _buildBody(context, l10n))),
             ),
           ),
         ),
@@ -217,8 +219,12 @@ class _AcceptInvitationScreenState extends State<AcceptInvitationScreen> {
           Text(l10n.acceptInviteCreateAccountIntro, textAlign: TextAlign.center),
           const SizedBox(height: 16),
           TextField(
-            enabled: false,
+            // readOnly (no enabled: false): un camp desactivat no el llegeix
+            // el gestor de contrasenyes, i aleshores no sap a quin compte
+            // associar la contrasenya nova.
+            readOnly: true,
             controller: TextEditingController(text: preview.email),
+            autofillHints: const [AutofillHints.username, AutofillHints.email],
             decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
           ),
           const SizedBox(height: 12),
@@ -230,6 +236,7 @@ class _AcceptInvitationScreenState extends State<AcceptInvitationScreen> {
           TextField(
             controller: _passwordController,
             obscureText: true,
+            autofillHints: const [AutofillHints.newPassword],
             decoration: InputDecoration(labelText: l10n.passwordMinChars, border: const OutlineInputBorder()),
           ),
           const SizedBox(height: 20),

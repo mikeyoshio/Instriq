@@ -98,6 +98,7 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
+          TextInput.finishAutofillContext();
         } catch (e) {
           setState(() => _error = l10n.signUpError(e.toString()));
           return;
@@ -145,6 +146,7 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
+          TextInput.finishAutofillContext();
         } catch (e) {
           setState(() => _error = l10n.signUpError(e.toString()));
           return;
@@ -466,17 +468,26 @@ class _GroupEntryScreenState extends State<GroupEntryScreen> {
   List<Widget> _buildCredentialsFields(AppLocalizations l10n) {
     return [
       const SizedBox(height: 12),
-      TextField(
-        controller: _emailController,
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
-      ),
-      const SizedBox(height: 12),
-      TextField(
-        controller: _passwordController,
-        obscureText: true,
-        decoration:
-            InputDecoration(labelText: l10n.passwordMinChars, border: const OutlineInputBorder()),
+      AutofillGroup(
+        child: Column(
+          children: [
+            TextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              autofillHints: const [AutofillHints.username, AutofillHints.email],
+              decoration: InputDecoration(labelText: l10n.email, border: const OutlineInputBorder()),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              // newPassword: el gestor proposa una contrasenya forta i la desa.
+              autofillHints: const [AutofillHints.newPassword],
+              decoration:
+                  InputDecoration(labelText: l10n.passwordMinChars, border: const OutlineInputBorder()),
+            ),
+          ],
+        ),
       ),
     ];
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
@@ -30,6 +31,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     });
     try {
       await AuthService.instance.updatePassword(_passwordController.text);
+      TextInput.finishAutofillContext();
       setState(() => _done = true);
     } catch (e) {
       setState(() => _error = l10n.updatePasswordError(e.toString()));
@@ -67,6 +69,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
+                    autofillHints: const [AutofillHints.newPassword],
                     decoration:
                         InputDecoration(labelText: l10n.newPasswordTitle, border: const OutlineInputBorder()),
                   ),
