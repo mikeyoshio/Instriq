@@ -4689,6 +4689,12 @@ const List<Instrument> kInstruments = [
       es: 'Seguimiento estándar de una citología cervical o prueba de VPH anormal, para localizar la zona de una biopsia dirigida.',
       en: 'Standard follow-up to an abnormal cervical cytology or HPV test, to locate the area for a directed biopsy.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/32/Colposcope.jpg',
+      license: 'Public domain',
+      attribution: 'S. Kellam, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Colposcope.jpg',
+    ),
   ),
   Instrument(
     id: 'pesario-vaginal',
@@ -10545,6 +10551,12 @@ const List<Instrument> kInstruments = [
       es: 'Puede ampliarse con módulos opcionales (presión invasiva, capnografía, gasto cardíaco) conectados al mismo bastidor.',
       en: 'It can be expanded with optional modules (invasive pressure, capnography, cardiac output) plugged into the same rack.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Vital_signs_monitor_display.jpg',
+      license: 'Public domain',
+      attribution: 'Petty Officer 1st Class James Stenberg, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Vital_signs_monitor_display.jpg',
+    ),
   ),
   Instrument(
     id: 'bomba-infusion-volumetrica',
@@ -10569,6 +10581,12 @@ const List<Instrument> kInstruments = [
       es: 'La variante de jeringa se utiliza para volúmenes pequeños y fármacos de margen terapéutico estrecho (p. ej. vasoactivos); varios módulos pueden apilarse en un mismo soporte para pacientes polimedicados.',
       en: 'The syringe-pump variant is used for small volumes and drugs with a narrow therapeutic margin (e.g. vasoactive drugs); several modules can be stacked on the same stand for patients on multiple infusions.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Baxter_Colleague_CX_infusion_pump.JPG',
+      license: 'CC BY-SA 3.0',
+      attribution: 'BrokenSphere, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Baxter_Colleague_CX_infusion_pump.JPG',
+    ),
   ),
   Instrument(
     id: 'glucometro',
@@ -10592,6 +10610,12 @@ const List<Instrument> kInstruments = [
       ca: 'Alguns models combinats també mesuren cossos cetònics en sang capil·lar amb una tira diferent, útil per detectar cetoacidosi.',
       es: 'Algunos modelos combinados también miden cuerpos cetónicos en sangre capilar con una tira diferente, útil para detectar cetoacidosis.',
       en: 'Some combined models also measure capillary blood ketones with a different strip, useful for detecting ketoacidosis.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/af/%2820250417%29_Blood_glucose_meter_09.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Roy Zuo, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:(20250417)_Blood_glucose_meter_09.jpg',
     ),
   ),
   Instrument(
@@ -10760,6 +10784,12 @@ const List<Instrument> kInstruments = [
       ca: 'A diferència de la cànula orofaríngia de Guedel ja catalogada, es tolera millor en pacients semiconscients, però està contraindicada davant la sospita de fractura de base de crani.',
       es: 'A diferencia de la cánula orofaríngea de Guedel ya catalogada, se tolera mejor en pacientes semiconscientes, pero está contraindicada ante la sospecha de fractura de base de cráneo.',
       en: 'Unlike the already-catalogued Guedel oropharyngeal airway, it is better tolerated in semiconscious patients, but is contraindicated when a skull base fracture is suspected.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/A_R%C3%BCsch_Wirupren_Nasopharyngeal_Airway_displayed_in_the_size_28_Ch.jpg',
+      license: 'CC BY 4.0',
+      attribution: 'Struppig taucher, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:A_R%C3%BCsch_Wirupren_Nasopharyngeal_Airway_displayed_in_the_size_28_Ch.jpg',
     ),
   ),
   Instrument(
@@ -11193,6 +11223,12 @@ const List<Instrument> kInstruments = [
       es: 'Las bombonas de óxido nitroso comparten el mismo diseño general pero llevan un código de color diferente y nunca deben confundirse con las de oxígeno.',
       en: 'Nitrous oxide cylinders share the same general design but carry a different color code and must never be confused with oxygen ones.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/10ltr_oxygen_cylinder.png',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Pawar0365, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:10ltr_oxygen_cylinder.png',
+    ),
   ),
   Instrument(
     id: 'valvula-peep',
@@ -11264,6 +11300,12 @@ const List<Instrument> kInstruments = [
       ca: 'Cal insistir que l\'esforç ha de ser una inspiració lenta i mantinguda, no un cop ràpid, perquè les boles pugin de manera sostinguda i s\'obrin bé els alvèols.',
       es: 'Hay que insistir en que el esfuerzo debe ser una inspiración lenta y mantenida, no una bocanada rápida, para que las bolas suban de forma sostenida y se abran bien los alvéolos.',
       en: 'It must be stressed that the effort should be a slow, sustained inspiration, not a quick gasp, so the balls rise steadily and the alveoli open properly.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/32/Incentive_spirometer.jpg',
+      license: 'CC BY-SA 2.5',
+      attribution: 'Johntex, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Incentive_spirometer.jpg',
     ),
   ),
   Instrument(
@@ -16136,6 +16178,12 @@ const List<Instrument> kInstruments = [
       es: 'Normalmente se utiliza antes del ciclo de lavadora desinfectora, no como sustituto de esta.',
       en: 'Normally used before the washer-disinfector cycle, not as a replacement for it.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Bandelin-sonorex_hg.jpg',
+      license: 'CC BY 3.0',
+      attribution: 'Hannes Grobe, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bandelin-sonorex_hg.jpg',
+    ),
   ),
   Instrument(
     id: 'cistella-perforada-instrumental',
@@ -16436,6 +16484,12 @@ const List<Instrument> kInstruments = [
       es: 'Recoge gasas sucias, residuos o especímenes durante una intervención o procedimiento, y también se utiliza fuera de quirófano para recoger vómitos u otros fluidos.',
       en: 'Collects soiled swabs, waste or specimens during a procedure, and is also used outside the OR to catch vomit or other fluids.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/d/db/Metallic_Kidney_Dish.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Kiyok, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Metallic_Kidney_Dish.jpg',
+    ),
   ),
   Instrument(
     id: 'got-antiseptic-gallipot',
@@ -16533,6 +16587,12 @@ const List<Instrument> kInstruments = [
       es: 'Ausculta intermitentemente la frecuencia cardíaca fetal en consultas prenatales o durante el parto de bajo riesgo, como alternativa más sencilla a la monitorización continua por CTG.',
       en: 'Intermittently auscultates fetal heart rate at prenatal visits or during low-risk labour, as a simpler alternative to continuous CTG monitoring.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Doppler_fetal_monitor_%28Sonicaid%29.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Whispyhistory, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Doppler_fetal_monitor_(Sonicaid).jpg',
+    ),
   ),
   Instrument(
     id: 'estetoscop-pinard',
@@ -16551,6 +16611,12 @@ const List<Instrument> kInstruments = [
       ca: 'Auscultació fetal bàsica sense necessitat d\'electricitat ni gel conductor, encara usada com a mètode de baix cost o de reserva quan no hi ha Doppler disponible.',
       es: 'Auscultación fetal básica sin necesidad de electricidad ni gel conductor, aún usada como método de bajo coste o de reserva cuando no hay Doppler disponible.',
       en: 'Basic fetal auscultation with no need for electricity or conductive gel, still used as a low-cost or backup method when no Doppler is available.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/85/Pinard_horn.jpg',
+      license: 'CC0',
+      attribution: 'Sprinno, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pinard_horn.jpg',
     ),
   ),
   // ---- ODONTOLOGIA I MAXIL·LOFACIAL (ampliació 2026-11) ----
@@ -16576,6 +16642,12 @@ const List<Instrument> kInstruments = [
       es: 'Se empaña con el aliento del paciente: calentarlo ligeramente o frotarlo con antivaho antes de empezar.',
       en: 'It fogs with the patient\'s breath: warm it slightly or apply anti-fog before starting.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/0/04/Dental_Mirror_01.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'AfroBrazilian, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Dental_Mirror_01.jpg',
+    ),
     isNew: true,
   ),
   Instrument(
@@ -16600,6 +16672,12 @@ const List<Instrument> kInstruments = [
       es: 'No debe usarse para medir bolsas periodontales: para eso está la sonda periodontal milimetrada, de punta roma.',
       en: 'Do not use it to measure periodontal pockets: that is what the blunt-tipped graduated periodontal probe is for.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Dental_Explorer_11-12.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Toothscraper, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Dental_Explorer_11-12.jpg',
+    ),
     isNew: true,
   ),
   Instrument(
@@ -16623,6 +16701,12 @@ const List<Instrument> kInstruments = [
       ca: 'Es llisca suaument paral·lela a l\'eix de la dent, sense forçar: una pressió excessiva dona mesures falsament profundes.',
       es: 'Se desliza suavemente paralela al eje del diente, sin forzar: una presión excesiva da medidas falsamente profundas.',
       en: 'Slide it gently parallel to the long axis of the tooth: excessive pressure gives falsely deep readings.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/8/80/Periodontal_probe_01.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'AfroBrazilian, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Periodontal_probe_01.jpg',
     ),
     isNew: true,
   ),
@@ -17582,6 +17666,12 @@ const List<Instrument> kInstruments = [
       ca: 'Activar el buit un cop tancada la pell i comprovar que la manxa o l\'indicador del flascó queda comprimit; si s\'omple d\'aire, hi ha una fuga.',
       es: 'Activar el vacío una vez cerrada la piel y comprobar que el fuelle o el indicador del frasco queda comprimido; si se llena de aire, hay una fuga.',
       en: 'Activate suction once the skin is closed and check the bottle\'s bellows or indicator stays compressed; if it fills with air, there is a leak.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/6/65/Redon_Bottle.JPG',
+      license: 'CC0',
+      attribution: 'Stefan Bellini, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Redon_Bottle.JPG',
     ),
     isNew: true,
   ),
@@ -18713,6 +18803,12 @@ const List<Instrument> kInstruments = [
       es: 'Comprobar que el glande queda fuera de la ranura antes de cerrarla.',
       en: 'Make sure the glans is out of the slot before closing it.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/9/94/Mogen_clamp%2C_open.jpg',
+      license: 'CC BY-SA 4.0',
+      attribution: 'Dan Bollinger, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Mogen_clamp,_open.jpg',
+    ),
     isNew: true,
   ),
   Instrument(
@@ -18809,6 +18905,12 @@ const List<Instrument> kInstruments = [
       es: 'Abrirlo poco a poco para no fracturar costillas.',
       en: 'Open it gradually to avoid fracturing ribs.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Tuffier_Rib_Spreader_of_Dr._James_M._Whittico%2C_Jr._-_DPLA_-_116b0c3176dc20b549e31868df038677_%28page_3%29.jpg',
+      license: 'Public domain',
+      attribution: 'J. Sklar Manufacturing, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Tuffier_Rib_Spreader_of_Dr._James_M._Whittico,_Jr._-_DPLA_-_116b0c3176dc20b549e31868df038677_(page_3).jpg',
+    ),
     isNew: true,
   ),
   Instrument(
@@ -18881,6 +18983,12 @@ const List<Instrument> kInstruments = [
       es: 'Se cierra solo hasta el primer diente de la cremallera sobre el parénquima pulmonar.',
       en: 'Close it only to the first ratchet click on lung parenchyma.',
     ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/Pennington_forceps.jpg',
+      license: 'CC BY-SA 3.0',
+      attribution: 'Pascal666, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pennington_forceps.jpg',
+    ),
     isNew: true,
   ),
   Instrument(
@@ -18952,6 +19060,12 @@ const List<Instrument> kInstruments = [
       ca: 'Es controla amb un pedal o des de la peça de mà; la fulla s\'escull segons el teixit, i la fresa per a os.',
       es: 'Se controla con pedal o desde la pieza de mano; la cuchilla se elige según el tejido, y la fresa para hueso.',
       en: 'Controlled by foot pedal or on the handpiece; choose the blade by tissue and a burr for bone.',
+    ),
+    image: InstrumentImage(
+      url: 'https://upload.wikimedia.org/wikipedia/commons/0/06/Arthrex_Arthroscopic_Shaver_Handpiece.png',
+      license: 'CC0',
+      attribution: 'SPDarchive, Wikimedia Commons',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Arthrex_Arthroscopic_Shaver_Handpiece.png',
     ),
     isNew: true,
   ),
