@@ -223,5 +223,59 @@ List<HelpCategory> buildHelpCategories(AppLocalizations l10n) {
         ),
       ],
     ),
+    HelpCategory(
+      title: l10n.helpCategoryReference,
+      articles: [
+        HelpArticle(
+          id: 'guides_positions',
+          icon: Icons.fact_check_outlined,
+          title: l10n.helpArticleGuidesPositionsTitle,
+          intro: l10n.helpArticleGuidesPositionsIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleGuidesPositionsStep1, image: '$_imagesPath/guides_list.png'),
+            HelpStep(text: l10n.helpArticleGuidesPositionsStep2, image: '$_imagesPath/guide_detail.png'),
+          ],
+        ),
+        HelpArticle(
+          id: 'clinical_scales',
+          icon: Icons.calculate_outlined,
+          title: l10n.helpArticleScalesTitle,
+          intro: l10n.helpArticleScalesIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleScalesStep1, image: '$_imagesPath/scales_list.png'),
+            HelpStep(text: l10n.helpArticleScalesStep2, image: '$_imagesPath/scale_result.png'),
+          ],
+        ),
+        HelpArticle(
+          id: 'acronyms_calculators',
+          icon: Icons.abc,
+          title: l10n.helpArticleAcronymsCalculatorsTitle,
+          intro: l10n.helpArticleAcronymsCalculatorsIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleAcronymsCalculatorsStep1, image: '$_imagesPath/acronyms.png'),
+            HelpStep(text: l10n.helpArticleAcronymsCalculatorsStep2),
+          ],
+        ),
+        HelpArticle(
+          id: 'ecg',
+          icon: Icons.monitor_heart_outlined,
+          title: l10n.helpArticleEcgTitle,
+          intro: l10n.helpArticleEcgIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleEcgStep1, image: '$_imagesPath/ecg_rhythm.png'),
+            HelpStep(text: l10n.helpArticleEcgStep2, image: '$_imagesPath/ecg_practice.png'),
+          ],
+        ),
+        HelpArticle(
+          id: 'my_techniques',
+          icon: Icons.task_alt,
+          title: l10n.helpArticleMyTechniquesTitle,
+          intro: l10n.helpArticleMyTechniquesIntro,
+          steps: [
+            HelpStep(text: l10n.helpArticleMyTechniquesStep1, image: '$_imagesPath/my_techniques.png'),
+          ],
+        ),
+      ],
+    ),
   ];
 }
