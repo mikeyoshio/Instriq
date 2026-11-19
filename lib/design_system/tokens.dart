@@ -36,6 +36,18 @@ class InstriqColors {
   static const error = Color(0xFFBA1A1A);
   static const errorDark = Color(0xFFFFB4AB);
 
+  // Contenidors suaus (targetes de consell, avisos, botó segmentat triat):
+  // sense definir-los, Flutter usava el color intens (accent/error) amb el
+  // text per defecte, i el text quedava il·legible.
+  static const accentContainer = Color(0xFFCCFBF1);
+  static const onAccentContainer = Color(0xFF134E4A);
+  static const accentContainerDark = Color(0xFF134E4A);
+  static const onAccentContainerDark = Color(0xFFCCFBF1);
+  static const errorContainer = Color(0xFFFFDAD6);
+  static const onErrorContainer = Color(0xFF410002);
+  static const errorContainerDark = Color(0xFF93000A);
+  static const onErrorContainerDark = Color(0xFFFFDAD6);
+
   // Colores por estado de contenido (borrador/revisión/publicado/archivado).
   static const statusDraft = Color(0xFF78716C);
   static const statusInReview = Color(0xFFB45309);

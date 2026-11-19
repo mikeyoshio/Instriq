@@ -82,7 +82,9 @@ class _ReferenceFlashcardsScreenState extends State<ReferenceFlashcardsScreen> {
                     onTap: () => setState(() => _showBack = !_showBack),
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(24),
-                      child: Column(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Chip(label: Text(tag)),
@@ -94,6 +96,7 @@ class _ReferenceFlashcardsScreenState extends State<ReferenceFlashcardsScreen> {
                           else
                             Text(l10n.tapToFlip, style: theme.textTheme.bodySmall),
                         ],
+                      ),
                       ),
                     ),
                   ),
@@ -197,15 +200,19 @@ class _PositionQuizScreenState extends State<PositionQuizScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: _selected == null
-                        ? null
-                        : o.id == answer.id
-                            ? theme.colorScheme.primaryContainer
-                            : o.id == _selected!.id
-                                ? theme.colorScheme.errorContainer
-                                : null,
-                  ),
+                  style: _selected == null
+                      ? null
+                      : o.id == answer.id
+                          ? OutlinedButton.styleFrom(
+                              backgroundColor: theme.colorScheme.primaryContainer,
+                              foregroundColor: theme.colorScheme.onPrimaryContainer,
+                            )
+                          : o.id == _selected!.id
+                              ? OutlinedButton.styleFrom(
+                                  backgroundColor: theme.colorScheme.errorContainer,
+                                  foregroundColor: theme.colorScheme.onErrorContainer,
+                                )
+                              : null,
                   onPressed: () => _select(o),
                   child: Text(o.name.forLanguageCode(lang)),
                 ),

@@ -121,13 +121,13 @@ class _SurgicalPositionDetailScreenState extends State<SurgicalPositionDetailScr
     final lang = Localizations.localeOf(context).languageCode;
     final theme = Theme.of(context);
 
-    Widget section(String label, String text, {IconData? icon, Color? color}) {
+    Widget section(String label, String text, {IconData? icon, Color? color, Color? onColor}) {
       final body = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: theme.textTheme.labelLarge),
+          Text(label, style: theme.textTheme.labelLarge?.copyWith(color: onColor)),
           const SizedBox(height: 4),
-          Text(text, style: theme.textTheme.bodyLarge),
+          Text(text, style: theme.textTheme.bodyLarge?.copyWith(color: onColor)),
         ],
       );
       return Padding(
@@ -140,7 +140,7 @@ class _SurgicalPositionDetailScreenState extends State<SurgicalPositionDetailScr
                   padding: const EdgeInsets.all(12),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Icon(icon), const SizedBox(width: 8), Expanded(child: body)],
+                    children: [Icon(icon, color: onColor), const SizedBox(width: 8), Expanded(child: body)],
                   ),
                 ),
               ),
@@ -161,9 +161,13 @@ class _SurgicalPositionDetailScreenState extends State<SurgicalPositionDetailScr
             section(l10n.descriptionLabel, p.description.forLanguageCode(lang)),
             section(l10n.positionProceduresLabel, p.procedures.forLanguageCode(lang)),
             section(l10n.positionRisksLabel, p.risks.forLanguageCode(lang),
-                icon: Icons.warning_amber_outlined, color: theme.colorScheme.errorContainer),
+                icon: Icons.warning_amber_outlined,
+                color: theme.colorScheme.errorContainer,
+                onColor: theme.colorScheme.onErrorContainer),
             section(l10n.positionCareLabel, p.care.forLanguageCode(lang),
-                icon: Icons.checklist, color: theme.colorScheme.secondaryContainer),
+                icon: Icons.checklist,
+                color: theme.colorScheme.secondaryContainer,
+                onColor: theme.colorScheme.onSecondaryContainer),
             RelatedItemsSection(ids: p.relatedItems),
             const SizedBox(height: 12),
             ReportContentErrorButton(refType: 'position', refId: p.id),
