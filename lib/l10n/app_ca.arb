@@ -1535,5 +1535,16 @@
   "calcMacrodrip": "Macrogoteig (20 gotes/ml)",
   "calcMicrodrip": "Microgoteig (60 gotes/ml)",
   "calcDropsPerMin": "gotes/min",
-  "calcDripNote": "Comprova les gotes per ml a l'envàs del sistema: no tots els equips són de 20."
+  "calcDripNote": "Comprova les gotes per ml a l'envàs del sistema: no tots els equips són de 20.",
+  "ecgTitle": "Electrocardiograma",
+  "ecgSubtitle": "15 ritmes del monitor: com reconèixer-los, què fer i pràctica",
+  "ecgRhythms": "Ritmes",
+  "ecgPractice": "Practicar",
+  "ecgNote": "Tires dibuixades per l'app (derivació II, 25 mm/s, 10 mm/mV). Són netes a propòsit: una tira real té soroll i artefactes.",
+  "ecgRate": "Freqüència",
+  "ecgRegularity": "Ritme",
+  "ecgP": "Ona P",
+  "ecgQrs": "QRS",
+  "ecgWhatYouDo": "Què fas tu",
+  "ecgPracticePrompt": "Quin ritme és?"
 }

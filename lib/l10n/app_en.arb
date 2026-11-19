@@ -1529,5 +1529,16 @@
   "calcMacrodrip": "Macrodrip (20 drops/ml)",
   "calcMicrodrip": "Microdrip (60 drops/ml)",
   "calcDropsPerMin": "drops/min",
-  "calcDripNote": "Check the drops per ml on the giving-set packaging: not every set is 20."
+  "calcDripNote": "Check the drops per ml on the giving-set packaging: not every set is 20.",
+  "ecgTitle": "ECG",
+  "ecgSubtitle": "15 monitor rhythms: how to recognise them, what to do, and practice",
+  "ecgRhythms": "Rhythms",
+  "ecgPractice": "Practice",
+  "ecgNote": "Strips drawn by the app (lead II, 25 mm/s, 10 mm/mV). They are clean on purpose: real strips have noise and artefacts.",
+  "ecgRate": "Rate",
+  "ecgRegularity": "Rhythm",
+  "ecgP": "P wave",
+  "ecgQrs": "QRS",
+  "ecgWhatYouDo": "What you do",
+  "ecgPracticePrompt": "Which rhythm is this?"
 }

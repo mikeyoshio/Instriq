@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
 import '../l10n/app_localizations.dart';
+import 'ecg_screen.dart';
 import 'flashcards_screen.dart';
 import 'quiz_screen.dart';
 import 'reference_study_screen.dart';
@@ -60,6 +61,15 @@ class LearnScreen extends StatelessWidget {
                 subtitle: l10n.positionQuizSubtitle,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const PositionQuizScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _LearnCard(
+                icon: Icons.monitor_heart_outlined,
+                title: l10n.ecgTitle,
+                subtitle: l10n.ecgSubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const EcgScreen()),
                 ),
               ),
               const SizedBox(height: 12),

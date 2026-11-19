@@ -1529,5 +1529,16 @@
   "calcMacrodrip": "Macrogoteo (20 gotas/ml)",
   "calcMicrodrip": "Microgoteo (60 gotas/ml)",
   "calcDropsPerMin": "gotas/min",
-  "calcDripNote": "Comprueba las gotas por ml en el envase del sistema: no todos los equipos son de 20."
+  "calcDripNote": "Comprueba las gotas por ml en el envase del sistema: no todos los equipos son de 20.",
+  "ecgTitle": "Electrocardiograma",
+  "ecgSubtitle": "15 ritmos del monitor: cómo reconocerlos, qué hacer y práctica",
+  "ecgRhythms": "Ritmos",
+  "ecgPractice": "Practicar",
+  "ecgNote": "Tiras dibujadas por la app (derivación II, 25 mm/s, 10 mm/mV). Son limpias a propósito: una tira real tiene ruido y artefactos.",
+  "ecgRate": "Frecuencia",
+  "ecgRegularity": "Ritmo",
+  "ecgP": "Onda P",
+  "ecgQrs": "QRS",
+  "ecgWhatYouDo": "Qué haces tú",
+  "ecgPracticePrompt": "¿Qué ritmo es?"
 }
