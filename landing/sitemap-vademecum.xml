@@ -17665,22 +17665,127 @@
     <loc>https://instriq.org/vademecum/ca/guias/paciente-gestante/</loc>
     <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/paciente-gestante/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/residuos-quirurgicos/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/posiciones/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/preparacion-paciente-quirurgico/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/paciente-gestante/" />
   </url>
   <url>
     <loc>https://instriq.org/vademecum/ca/guias/residuos-quirurgicos/</loc>
     <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/paciente-gestante/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/residuos-quirurgicos/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/posiciones/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/preparacion-paciente-quirurgico/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/paciente-gestante/" />
   </url>
   <url>
-    <loc>https://instriq.org/vademecum/es/posiciones/</loc>
+    <loc>https://instriq.org/vademecum/ca/guias/preparacion-paciente-quirurgico/</loc>
     <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/paciente-gestante/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/residuos-quirurgicos/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/posiciones/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/preparacion-paciente-quirurgico/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/paciente-gestante/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/epi-colocacion-retirada/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/epi-colocacion-retirada/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/via-venosa-periferica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/epi-colocacion-retirada/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/canalizacion-arterial/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/epi-colocacion-retirada/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/cuidados-cvc/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/cuidados-cvc/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/tecnica-sutura/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/cuidados-cvc/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/cura-herida-quirurgica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/cuidados-cvc/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/vendajes-ferulas-yesos/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/vendajes-ferulas-yesos/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/balance-hidrico/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/vendajes-ferulas-yesos/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/rcp-basica-adulto/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/vendajes-ferulas-yesos/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/rcp-quirofano/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/rcp-quirofano/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/rcp-pediatrica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/rcp-quirofano/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/atragantamiento-adulto/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/rcp-quirofano/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/atragantamiento-lactante/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/posicion-lateral-seguridad/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/posiciones/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/atragantamiento-lactante/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/guias/posicion-lateral-seguridad/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/posicion-lateral-seguridad/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/posiciones/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/atragantamiento-lactante/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/posiciones/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/guias/posicion-lateral-seguridad/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/posiciones/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/guias/atragantamiento-lactante/" />
   </url>
   <url>
     <loc>https://instriq.org/vademecum/es/posiciones/decubito-supino/</loc>
@@ -17958,23 +18063,128 @@
   <url>
     <loc>https://instriq.org/vademecum/es/guias/residuos-quirurgicos/</loc>
     <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/preparacion-paciente-quirurgico/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/preparacion-paciente-quirurgico/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/preparacion-paciente-quirurgico/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/epi-colocacion-retirada/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/preparacion-paciente-quirurgico/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/via-venosa-periferica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/via-venosa-periferica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/canalizacion-arterial/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/via-venosa-periferica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/cuidados-cvc/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/via-venosa-periferica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/tecnica-sutura/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/tecnica-sutura/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/cura-herida-quirurgica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/tecnica-sutura/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/vendajes-ferulas-yesos/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/tecnica-sutura/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/balance-hidrico/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/balance-hidrico/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/rcp-basica-adulto/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/balance-hidrico/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/rcp-quirofano/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/balance-hidrico/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/rcp-pediatrica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/rcp-pediatrica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/atragantamiento-adulto/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/rcp-pediatrica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/atragantamiento-lactante/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/rcp-pediatrica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/guias/posicion-lateral-seguridad/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/posicion-lateral-seguridad/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/posiciones/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/posiciones/decubito-supino/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/posicion-lateral-seguridad/" />
   </url>
   <url>
     <loc>https://instriq.org/vademecum/en/posiciones/</loc>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/posicion-lateral-seguridad/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/posiciones/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/posiciones/decubito-supino/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/posicion-lateral-seguridad/" />
   </url>
   <url>
     <loc>https://instriq.org/vademecum/en/posiciones/decubito-supino/</loc>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/guias/posicion-lateral-seguridad/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/posiciones/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/posiciones/decubito-supino/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/residuos-quirurgicos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/guias/posicion-lateral-seguridad/" />
   </url>
   <url>
     <loc>https://instriq.org/vademecum/en/posiciones/trendelenburg/</loc>
@@ -18248,5 +18458,110 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/paciente-gestante/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/residuos-quirurgicos/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/paciente-obeso/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/preparacion-paciente-quirurgico/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/preparacion-paciente-quirurgico/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/preparacion-paciente-quirurgico/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/epi-colocacion-retirada/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/preparacion-paciente-quirurgico/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/preparacion-paciente-quirurgico/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/via-venosa-periferica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/preparacion-paciente-quirurgico/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/epi-colocacion-retirada/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/via-venosa-periferica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/preparacion-paciente-quirurgico/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/canalizacion-arterial/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/canalizacion-arterial/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/cuidados-cvc/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/canalizacion-arterial/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/tecnica-sutura/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/canalizacion-arterial/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/cuidados-cvc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/tecnica-sutura/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/canalizacion-arterial/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/cura-herida-quirurgica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/cura-herida-quirurgica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/vendajes-ferulas-yesos/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/cura-herida-quirurgica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/balance-hidrico/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/cura-herida-quirurgica/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/vendajes-ferulas-yesos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/balance-hidrico/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/cura-herida-quirurgica/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/rcp-basica-adulto/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/rcp-basica-adulto/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/rcp-quirofano/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/rcp-basica-adulto/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/rcp-pediatrica/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/rcp-basica-adulto/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/rcp-quirofano/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/rcp-pediatrica/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/rcp-basica-adulto/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/atragantamiento-adulto/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/posicion-lateral-seguridad/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/atragantamiento-adulto/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/atragantamiento-lactante/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/posicion-lateral-seguridad/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/atragantamiento-adulto/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/guias/posicion-lateral-seguridad/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/guias/atragantamiento-adulto/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/guias/atragantamiento-lactante/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/posicion-lateral-seguridad/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/atragantamiento-adulto/" />
   </url>
 </urlset>
