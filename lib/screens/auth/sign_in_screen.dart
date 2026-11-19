@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' show AuthChangeEvent, OAuthProvider;
 
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
@@ -16,6 +19,50 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
   bool _loading = false;
   String? _error;
+  List<OAuthProvider> _providers = const [];
+  StreamSubscription? _authSub;
+
+  @override
+  void initState() {
+    super.initState();
+    AuthService.instance.enabledOAuthProviders().then((p) {
+      if (mounted) setState(() => _providers = p);
+    });
+    // Tant amb contrasenya com amb Google/Microsoft/Apple (que a l'app nativa
+    // torna del navegador per l'enllaç instriq://) la sessió arriba aquí.
+    _authSub = AuthService.instance.authStateChanges.listen((state) {
+      if (state.event == AuthChangeEvent.signedIn && mounted) Navigator.of(context).pop();
+    });
+  }
+
+  @override
+  void dispose() {
+    _authSub?.cancel();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _oauth(OAuthProvider provider) async {
+    setState(() => _error = null);
+    try {
+      await AuthService.instance.signInWithOAuth(provider);
+    } catch (e) {
+      if (mounted) setState(() => _error = AppLocalizations.of(context)!.signInError(e.toString()));
+    }
+  }
+
+  static String _providerLabel(OAuthProvider p) => switch (p.name) {
+        'google' => 'Google',
+        'azure' => 'Microsoft',
+        _ => 'Apple',
+      };
+
+  static IconData _providerIcon(OAuthProvider p) => switch (p.name) {
+        'google' => Icons.g_mobiledata,
+        'azure' => Icons.window,
+        _ => Icons.apple,
+      };
 
   Future<void> _forgotPassword() async {
     final l10n = AppLocalizations.of(context)!;
@@ -67,8 +114,8 @@ class _SignInScreenState extends State<SignInScreen> {
       // Avisa al navegador / gestor de contrasenyes que l'inici ha anat bé:
       // és el que fa aparèixer "Desar contrasenya" a Chrome, Edge i iOS.
       TextInput.finishAutofillContext();
+      // El pop el fa el listener de signedIn (initState).
       // HospitalConnectFlow reacciona al cambio de sesión y se refresca solo.
-      if (mounted) Navigator.of(context).pop();
     } catch (e) {
       setState(() => _error = AppLocalizations.of(context)!.signInError(e.toString()));
     } finally {
@@ -81,10 +128,11 @@ class _SignInScreenState extends State<SignInScreen> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.signInTitle)),
-      body: Padding(
+      body: Center(
+        child: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.medical_services, size: 64),
             const SizedBox(height: 24),
@@ -129,7 +177,27 @@ class _SignInScreenState extends State<SignInScreen> {
               onPressed: _forgotPassword,
               child: Text(l10n.forgotPassword),
             ),
+            if (_providers.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Row(children: [
+                const Expanded(child: Divider()),
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(l10n.signInOr)),
+                const Expanded(child: Divider()),
+              ]),
+              for (final p in _providers) ...[
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: _loading ? null : () => _oauth(p),
+                    icon: Icon(_providerIcon(p)),
+                    label: Text(l10n.signInWithProvider(_providerLabel(p))),
+                  ),
+                ),
+              ],
+            ],
           ],
+        ),
         ),
       ),
     );

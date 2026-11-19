@@ -41,6 +41,9 @@
   "forgotSnackbar": "Si l'email existeix, rebràs un enllaç per restablir la contrasenya.",
   "signInError": "No s'ha pogut iniciar sessió: {error}",
   "@signInError": {"placeholders": {"error": {"type": "String"}}},
+  "signInOr": "o bé",
+  "signInWithProvider": "Continua amb {provider}",
+  "@signInWithProvider": {"placeholders": {"provider": {"type": "String"}}},
   "genericError": "Error: {error}",
   "@genericError": {"placeholders": {"error": {"type": "String"}}},
 

@@ -41,6 +41,8 @@
   "forgotSnackbar": "If the email exists, you'll get a link to reset your password.",
   "signInError": "Couldn't sign in: {error}",
   "@signInError": {"placeholders": {"error": {"type": "String"}}},
+  "signInOr": "or",
+  "signInWithProvider": "Continue with {provider}",
   "genericError": "Error: {error}",
   "@genericError": {"placeholders": {"error": {"type": "String"}}},
 

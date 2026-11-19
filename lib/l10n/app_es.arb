@@ -41,6 +41,8 @@
   "forgotSnackbar": "Si el email existe, te llegará un enlace para restablecer la contraseña.",
   "signInError": "No se pudo iniciar sesión: {error}",
   "@signInError": {"placeholders": {"error": {"type": "String"}}},
+  "signInOr": "o",
+  "signInWithProvider": "Continuar con {provider}",
   "genericError": "Error: {error}",
   "@genericError": {"placeholders": {"error": {"type": "String"}}},
 
