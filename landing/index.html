@@ -372,10 +372,14 @@
   /* Seccions de dues columnes: text + llista a un costat, l'app a l'altre. */
   .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 72px; align-items: center; }
   .split-rev { grid-template-columns: 0.9fr 1.1fr; }
+  .split-even { grid-template-columns: 0.85fr 1.15fr; gap: 56px; }
+  .app-shot.is-wide { max-width: none; justify-self: stretch; }
+  .app-shot.is-wide img { border-radius: 12px; width: 100%; height: auto; }
+  .learn-shot { margin: 8px auto 36px; max-width: 880px; }
   .split-copy .lede { margin-bottom: 8px; }
   .split-copy .btn { margin-top: 28px; }
   @media (max-width: 900px) {
-    .split, .split-rev { grid-template-columns: 1fr; gap: 40px; }
+    .split, .split-rev, .split-even { grid-template-columns: 1fr; gap: 40px; }
     .split-rev .deck-wrap { order: 2; }
   }
   .feature-list { list-style: none; padding: 0; margin: 24px 0 0; }
@@ -660,7 +664,7 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
 </section>
 
 <section id="consultar" class="section band reveal">
-  <div class="wrap split">
+  <div class="wrap split split-even">
     <div class="split-copy">
       <h2 data-i18n="consultar.h1">Explora el coneixement quirúrgic.</h2>
       <p class="lede" data-i18n="consultar.lede">El Vademècum públic d'Instriq reuneix l'instrumental i l'equipament del bloc quirúrgic, ordenat per especialitats — amb noms, sinònims, fabricants, mètodes d'esterilització i fitxa tècnica. També hi trobaràs les postures quirúrgiques i les guies perioperatòries, i a l'app, escales de valoració, sigles, calculadores i ECG. Es consulta sense compte ni registre.</p>
@@ -671,9 +675,9 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
       </ul>
       <a data-vdm href="/vademecum/ca/" class="btn btn-primary" data-i18n="consultar.cta">Explorar el Vademècum →</a>
     </div>
-    <figure class="app-shot">
-      <img src="screenshots/omnihub.png" data-i18n="alt.omnihub" data-i18n-attr="alt" alt="Omnihub, la cerca unificada d'Instriq" width="260" height="578" loading="lazy">
-      <figcaption data-i18n="hoy.fig0">Omnihub: una sola cerca per a tot Instriq.</figcaption>
+    <figure class="app-shot is-wide">
+      <img src="screenshots/ca/02_cataleg.webp" data-shot="02_cataleg" data-i18n="alt.cataleg" data-i18n-attr="alt" alt="Catàleg d'Instriq a l'ordinador: llista d'instrumental amb fotos, especialitat i categoria" width="1280" height="720" loading="lazy">
+      <figcaption data-i18n="consultar.fig">Catàleg amb fotos reals, filtrable per especialitat.</figcaption>
     </figure>
   </div>
 </section>
@@ -689,6 +693,10 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
         <li><h3 data-i18n="aprender.c2t">Pràctica de safates</h3><p data-i18n="aprender.c2p">Identificació d'una safata sencera, no només d'un instrument solt — per a qui ja forma part d'un equip.</p></li>
         <li><h3 data-i18n="aprender.c3t">Eines per a docents</h3><p data-i18n="aprender.c3p">Qüestionaris configurables per supervisor o docent, amb seguiment del progrés del seu equip o alumnat.</p></li>
     </ul>
+    <figure class="app-shot is-wide learn-shot">
+      <img src="screenshots/ca/09_ecg_practica.webp" data-shot="09_ecg_practica" data-i18n="alt.ecg" data-i18n-attr="alt" alt="Pràctica d'ECG a Instriq: una tira de monitor i quatre ritmes per triar" width="1280" height="720" loading="lazy">
+      <figcaption data-i18n="aprender.fig">Pràctica d'ECG: identifica el ritme de cada tira.</figcaption>
+    </figure>
     <a href="edu.html" class="btn btn-ghost" data-i18n="aprender.cta">Descobrir les eines d'aprenentatge →</a>
   </div>
 </section>
@@ -1026,6 +1034,9 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
 
   var DICT = {
     es: {
+      "alt.cataleg": "Catálogo de Instriq en el ordenador: lista de instrumental con fotos, especialidad y categoría",
+      "alt.ecg": "Práctica de ECG en Instriq: una tira de monitor y cuatro ritmos para elegir",
+      "aprender.fig": "Práctica de ECG: identifica el ritmo de cada tira.",
       "hero.access3": "Funciona en el navegador del móvil, la tablet o el ordenador, sin instalar nada ni crear cuenta. <a href=\"#comencar\">Cómo empezar →</a>",
       "hero.pathOrgT3": "Collegium: guía para poner en marcha el grupo de tu hospital",
       "paths.aria": "Para quién es Instriq",
@@ -1177,6 +1188,9 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
       "footer.fine": "Instriq® — proyecto open source por y para el bloque quirúrgico. Código bajo AGPL-3.0 y documentación bajo CC BY-SA 4.0; el nombre y la marca Instriq quedan reservados."
     },
     en: {
+      "alt.cataleg": "Instriq catalog on a computer: list of instruments with photos, specialty and category",
+      "alt.ecg": "ECG practice in Instriq: a monitor strip and four rhythms to choose from",
+      "aprender.fig": "ECG practice: identify the rhythm on each strip.",
       "hero.access3": "Works in the browser on your phone, tablet or computer, with nothing to install and no account. <a href=\"#comencar\">How to start →</a>",
       "hero.pathOrgT3": "Collegium: a guide to setting up your hospital's group",
       "paths.aria": "Who Instriq is for",
@@ -1363,6 +1377,7 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
     var localeCodes = { ca: 'ca_ES', es: 'es_ES', en: 'en_US' };
     if (ogLocaleEl) ogLocaleEl.setAttribute('content', localeCodes[lang] || localeCodes.ca);
     document.querySelectorAll('a[data-vdm]').forEach(function (a) { a.setAttribute('href', '/vademecum/' + lang + '/'); });
+    document.querySelectorAll('img[data-shot]').forEach(function (i) { i.setAttribute('src', 'screenshots/' + lang + '/' + i.getAttribute('data-shot') + '.webp'); });
     document.dispatchEvent(new Event('instriq:lang'));
     try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
     if (opts.updateUrl) {
