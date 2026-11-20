@@ -77,6 +77,9 @@ class _ClinicalScaleDetailScreenState extends State<ClinicalScaleDetailScreen> {
         ? [for (var i = 0; i < s.items.length; i++) s.items[i].options[_picked[i]!].points].fold(0, (a, b) => a + b)
         : null;
     final band = score == null ? null : s.bandFor(score);
+    final answered = _picked.where((p) => p != null).length;
+    final partial = [for (var i = 0; i < s.items.length; i++) if (_picked[i] != null) s.items[i].options[_picked[i]!].points]
+        .fold(0, (a, b) => a + b);
 
     String resultText() {
       if (score == null) return l10n.scaleIncomplete;
@@ -98,6 +101,21 @@ class _ClinicalScaleDetailScreenState extends State<ClinicalScaleDetailScreen> {
             onPressed: () => setState(() => _picked = List.filled(s.items.length, null)),
           ),
         ],
+      ),
+      // El resultat (o el parcial) sempre a la vista, també mentre es puntua
+      // un ítem que queda per sota de la pantalla.
+      bottomNavigationBar: Material(
+        color: complete ? theme.colorScheme.primaryContainer : theme.colorScheme.surfaceContainerHigh,
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Text(
+              complete || s.classification ? resultText() : l10n.scalePartial(partial, answered, s.items.length),
+              style: theme.textTheme.titleMedium?.copyWith(color: complete ? theme.colorScheme.onPrimaryContainer : null),
+            ),
+          ),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -124,19 +142,7 @@ class _ClinicalScaleDetailScreenState extends State<ClinicalScaleDetailScreen> {
               ),
             ),
           ],
-          const SizedBox(height: 16),
-          Card(
-            color: complete ? theme.colorScheme.primaryContainer : null,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                resultText(),
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(color: complete ? theme.colorScheme.onPrimaryContainer : null),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Text(l10n.scaleDisclaimer, style: theme.textTheme.bodySmall),
           const SizedBox(height: 8),
           Text('${l10n.scaleReference}: ${s.reference}', style: theme.textTheme.bodySmall),

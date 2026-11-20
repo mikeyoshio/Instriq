@@ -7,25 +7,28 @@ import '../services/locale_service.dart';
 /// el dispositivo vía [LocaleService]. Compartido entre `ProfileHubScreen`
 /// (icono "Idioma") y `OnboardingScreen` (splash de bienvenida): mismo
 /// diálogo exacto, evita duplicar las 3 opciones en dos sitios.
+/// Cada idioma escrit en la seva pròpia llengua: qui no entén l'idioma
+/// actual de l'app ha de poder trobar el seu.
+const kLanguageEndonyms = {'ca': 'Català', 'es': 'Español', 'en': 'English'};
+
 Future<void> pickLanguage(BuildContext context) async {
   final l10n = AppLocalizations.of(context)!;
+  final current = LocaleService.instance.locale.value.languageCode;
   final locale = await showDialog<Locale>(
     context: context,
     builder: (ctx) => SimpleDialog(
       title: Text(l10n.languageDialogTitle),
       children: [
-        SimpleDialogOption(
-          onPressed: () => Navigator.pop(ctx, const Locale('ca')),
-          child: Text(l10n.languageCatalan),
-        ),
-        SimpleDialogOption(
-          onPressed: () => Navigator.pop(ctx, const Locale('es')),
-          child: Text(l10n.languageSpanish),
-        ),
-        SimpleDialogOption(
-          onPressed: () => Navigator.pop(ctx, const Locale('en')),
-          child: Text(l10n.languageEnglish),
-        ),
+        for (final MapEntry(key: code, value: name) in kLanguageEndonyms.entries)
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, Locale(code)),
+            child: Row(
+              children: [
+                Expanded(child: Text(name)),
+                if (code == current) Icon(Icons.check, color: Theme.of(ctx).colorScheme.primary),
+              ],
+            ),
+          ),
       ],
     ),
   );

@@ -1580,5 +1580,10 @@
   "helpArticleMyTechniquesTitle": "My techniques",
   "helpArticleMyTechniquesIntro": "A log of the techniques you have done in theatre and how confident you feel. It stays on your device only.",
   "helpArticleMyTechniquesStep1": "In Learn → Learn → My techniques you see your progress across all guides. Set the status from each guide under \"My practice\".",
-  "quizWhichIsUsedFor": "Which instrument is used for this? {use}"
+  "quizWhichIsUsedFor": "Which instrument is used for this? {use}",
+  "scalePartial": "{score} points · {answered} of {total} answered",
+  "themeTitle": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeSystem": "System"
 }

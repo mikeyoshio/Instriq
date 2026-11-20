@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../tokens.dart';
 
@@ -44,6 +45,36 @@ class InstriqAnswerOption extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Tecles 1-4 per triar resposta i Intro per passar a la següent pregunta.
+class InstriqAnswerShortcuts extends StatelessWidget {
+  final int count;
+  final void Function(int index) onPick;
+  final VoidCallback? onNext;
+  final Widget child;
+
+  const InstriqAnswerShortcuts({super.key, required this.count, required this.onPick, this.onNext, required this.child});
+
+  static const _digits = [
+    LogicalKeyboardKey.digit1,
+    LogicalKeyboardKey.digit2,
+    LogicalKeyboardKey.digit3,
+    LogicalKeyboardKey.digit4,
+    LogicalKeyboardKey.digit5,
+    LogicalKeyboardKey.digit6,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return CallbackShortcuts(
+      bindings: {
+        for (var i = 0; i < count && i < _digits.length; i++) SingleActivator(_digits[i]): () => onPick(i),
+        if (onNext != null) const SingleActivator(LogicalKeyboardKey.enter): onNext!,
+      },
+      child: Focus(autofocus: true, child: child),
     );
   }
 }

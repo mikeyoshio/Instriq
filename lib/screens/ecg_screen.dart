@@ -148,12 +148,25 @@ class _EcgPracticeState extends State<_EcgPractice> {
     _picked = null;
   }
 
+  void _pick(int i) {
+    if (_picked != null) return;
+    setState(() {
+      _picked = i;
+      _total++;
+      if (i == _answer) _right++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final lang = Localizations.localeOf(context).languageCode;
     final theme = Theme.of(context);
-    return ListView(
+    return InstriqAnswerShortcuts(
+      count: _options.length,
+      onPick: (i) => _pick(_options[i]),
+      onNext: _picked != null ? () => setState(_next) : null,
+      child: ListView(
       padding: const EdgeInsets.all(16),
       children: [
         Text(l10n.ecgPracticePrompt, style: theme.textTheme.titleMedium),
@@ -171,11 +184,7 @@ class _EcgPracticeState extends State<_EcgPractice> {
                     : i == _picked
                         ? InstriqAnswerState.wrong
                         : InstriqAnswerState.other,
-            onPressed: () => setState(() {
-              _picked = i;
-              _total++;
-              if (i == _answer) _right++;
-            }),
+            onPressed: () => _pick(i),
           ),
         if (_picked != null) ...[
           Text(kEcgRhythms[_answer].recognise.forLanguageCode(lang)),
@@ -183,6 +192,7 @@ class _EcgPracticeState extends State<_EcgPractice> {
           FilledButton(onPressed: () => setState(_next), child: Text(l10n.next)),
         ],
       ],
+      ),
     );
   }
 }

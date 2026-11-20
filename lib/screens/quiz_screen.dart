@@ -172,7 +172,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.questionCounter(_current + 1, _questions.length))),
-      body: SafeArea(
+      body: InstriqAnswerShortcuts(
+        count: question.options.length,
+        onPick: (i) => _select(question.options[i]),
+        onNext: _selected != null ? _next : null,
+        child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -244,6 +248,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ],
           ),
         ),
+      ),
       ),
     );
   }

@@ -1580,5 +1580,10 @@
   "helpArticleMyTechniquesTitle": "Mis técnicas",
   "helpArticleMyTechniquesIntro": "Un registro de las técnicas que ya has hecho en quirófano y de cómo te sientes. Se guarda solo en tu dispositivo.",
   "helpArticleMyTechniquesStep1": "En Aprender → Aprender → Mis técnicas ves el progreso de todas las guías. Marca el estado desde cada guía, en «Mi práctica».",
-  "quizWhichIsUsedFor": "¿Qué instrumento se usa para esto? {use}"
+  "quizWhichIsUsedFor": "¿Qué instrumento se usa para esto? {use}",
+  "scalePartial": "{score} puntos · {answered} de {total} respondidos",
+  "themeTitle": "Tema",
+  "themeLight": "Claro",
+  "themeDark": "Oscuro",
+  "themeSystem": "Sistema"
 }

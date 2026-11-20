@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/deck_gestures.dart';
 
 class FlashcardsScreen extends StatefulWidget {
   const FlashcardsScreen({super.key});
@@ -81,7 +82,11 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
                 // así el volteo de la targeta és accessible per teclat (Tab +
                 // Intro/Espai) i té un label parlat per a lector de pantalla,
                 // no només el text germà de sota.
-                child: Semantics(
+                child: DeckGestures(
+                  onNext: _next,
+                  onPrevious: _prev,
+                  onFlip: () => setState(() => _showBack = !_showBack),
+                  child: Semantics(
                   button: true,
                   label: _showBack ? l10n.tapToSeeName : l10n.tapCardToSeeDetail,
                   child: Card(
@@ -101,6 +106,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
                       ),
                     ),
                   ),
+                ),
                 ),
               ),
               const SizedBox(height: 8),

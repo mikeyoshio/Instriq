@@ -1588,5 +1588,11 @@
   "helpArticleMyTechniquesIntro": "Un registre de les tècniques que ja has fet a quiròfan i de com t'hi sents. Es guarda només al teu dispositiu.",
   "helpArticleMyTechniquesStep1": "A Aprèn → Aprèn → Les meves tècniques veus el progrés de totes les guies. Marca l'estat des de cada guia, a «La meva pràctica».",
   "quizWhichIsUsedFor": "Quin instrument s'utilitza per a això? {use}",
-  "@quizWhichIsUsedFor": {"placeholders": {"use": {"type": "String"}}}
+  "@quizWhichIsUsedFor": {"placeholders": {"use": {"type": "String"}}},
+  "scalePartial": "{score} punts · {answered} de {total} respostos",
+  "@scalePartial": {"placeholders": {"score": {"type": "int"}, "answered": {"type": "int"}, "total": {"type": "int"}}},
+  "themeTitle": "Tema",
+  "themeLight": "Clar",
+  "themeDark": "Fosc",
+  "themeSystem": "Sistema"
 }

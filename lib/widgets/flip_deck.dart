@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import 'deck_gestures.dart';
 
 /// Baralla de targetes de repàs: (etiqueta, anvers, revers). Es gira tocant
 /// la targeta. Per reiniciar-la amb unes altres targetes, canvia-li la `key`.
@@ -36,7 +37,11 @@ class _FlipDeckState extends State<FlipDeck> {
         Text(l10n.cardCounter(_index + 1, cards.length)),
         const SizedBox(height: 12),
         Expanded(
-          child: Card(
+          child: DeckGestures(
+            onNext: () => _go(1),
+            onPrevious: () => _go(-1),
+            onFlip: () => setState(() => _showBack = !_showBack),
+            child: Card(
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: () => setState(() => _showBack = !_showBack),
@@ -59,6 +64,7 @@ class _FlipDeckState extends State<FlipDeck> {
                 ),
               ),
             ),
+          ),
           ),
         ),
         const SizedBox(height: 12),

@@ -140,7 +140,16 @@ class _PositionQuizScreenState extends State<PositionQuizScreen> {
     final (answer, options) = _questions[_current];
     return Scaffold(
       appBar: AppBar(title: Text(l10n.questionCounter(_current + 1, _questions.length))),
-      body: SafeArea(
+      body: InstriqAnswerShortcuts(
+        count: options.length,
+        onPick: (i) => _select(options[i]),
+        onNext: _selected != null
+            ? () => setState(() {
+                  _current++;
+                  _selected = null;
+                })
+            : null,
+        child: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
@@ -172,6 +181,7 @@ class _PositionQuizScreenState extends State<PositionQuizScreen> {
             ],
           ],
         ),
+      ),
       ),
     );
   }

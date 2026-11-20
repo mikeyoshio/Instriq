@@ -236,18 +236,30 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
               InstriqListItem(
                 icon: Icons.language,
                 title: l10n.languageTooltip,
+                subtitle: kLanguageEndonyms[Localizations.localeOf(context).languageCode],
                 onTap: () => pickLanguage(context),
               ),
               const SizedBox(height: InstriqSpacing.sm),
+              // Un selector, no una fila de navegació: es veu l'opció actual
+              // i "Sistema" segueix el tema del dispositiu.
               ValueListenableBuilder<ThemeMode>(
                 valueListenable: ThemeService.instance.themeMode,
                 builder: (context, mode, _) {
                   return InstriqListItem(
                     icon: Theme.of(context).brightness == Brightness.dark
-                        ? Icons.light_mode_outlined
-                        : Icons.dark_mode_outlined,
-                    title: l10n.themeToggleTooltip,
-                    onTap: () => ThemeService.instance.toggle(Theme.of(context).brightness),
+                        ? Icons.dark_mode_outlined
+                        : Icons.light_mode_outlined,
+                    title: l10n.themeTitle,
+                    trailing: SegmentedButton<ThemeMode>(
+                      showSelectedIcon: false,
+                      segments: [
+                        ButtonSegment(value: ThemeMode.light, label: Text(l10n.themeLight)),
+                        ButtonSegment(value: ThemeMode.dark, label: Text(l10n.themeDark)),
+                        ButtonSegment(value: ThemeMode.system, label: Text(l10n.themeSystem)),
+                      ],
+                      selected: {mode},
+                      onSelectionChanged: (s) => ThemeService.instance.setThemeMode(s.first),
+                    ),
                   );
                 },
               ),

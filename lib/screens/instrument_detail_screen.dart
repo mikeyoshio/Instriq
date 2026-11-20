@@ -34,6 +34,7 @@ import '../services/progress_service.dart';
 import '../services/public_document_service.dart';
 import '../services/public_tray_service.dart';
 import '../services/recent_activity_service.dart';
+import '../services/recent_instruments_service.dart';
 import '../services/reference_document_service.dart';
 import '../services/sterilization_service.dart';
 import '../services/tag_service.dart';
@@ -111,6 +112,7 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     // el tráfico mayoritario del catálogo (ver schema_v63, que hizo
     // organization_id nullable justo para esto). Se queda fuera del guard.
     UsageAnalyticsService.instance.recordView(_refType, widget.instrument.id);
+    RecentInstrumentsService.instance.add(widget.instrument.id);
     if (AuthService.instance.currentUser != null) {
       // Fire-and-forget: no debe bloquear ni fallar visiblemente si el
       // usuario es invitado o la RLS lo deniega (ver FavoritesService).

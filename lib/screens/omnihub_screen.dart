@@ -26,6 +26,7 @@ import '../services/manufacturer_service.dart';
 import '../services/procedure_service.dart';
 import '../services/profile_service.dart';
 import '../services/public_instrument_service.dart';
+import '../services/recent_instruments_service.dart';
 import '../services/specialty_service.dart';
 import '../services/sterilization_service.dart';
 import '../services/surgeon_service.dart';
@@ -279,6 +280,7 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
   void initState() {
     super.initState();
     _load();
+    _loadRecent();
     ProfileService.instance.profileRevision.addListener(_load);
   }
 
@@ -318,8 +320,19 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
     });
   }
 
-  Future<void> _push(Widget screen) =>
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  List<Instrument> _recent = const [];
+
+  Future<void> _loadRecent() async {
+    final ids = await RecentInstrumentsService.instance.ids();
+    if (!mounted) return;
+    final byId = {for (final i in kInstruments) i.id: i};
+    setState(() => _recent = [for (final id in ids) ?byId[id]]);
+  }
+
+  Future<void> _push(Widget screen) async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+    _loadRecent();
+  }
 
   Future<void> _pushWithRole(String workspaceId, Widget Function(WorkspaceRole? role) build) async {
     final myRole = await WorkspaceService.instance.fetchMyRole(workspaceId);
@@ -383,6 +396,14 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
       children: [
         Text(l10n.omnihubIntro, style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: InstriqSpacing.lg),
+        if (_recent.isNotEmpty) ...[
+          InstriqSectionHeader(l10n.homeRecentActivityTitle),
+          for (final i in _recent) ...[
+            InstrumentListTile(instrument: i, onTap: () => _push(InstrumentDetailScreen(instrument: i))),
+            const SizedBox(height: InstriqSpacing.sm),
+          ],
+          const SizedBox(height: InstriqSpacing.md),
+        ],
         // Els catàlegs de referència viuen aquí (2.0-beta): abans eren a
         // les Dreceres d'Inici.
         for (final (icon, title, subtitle, screen) in [
