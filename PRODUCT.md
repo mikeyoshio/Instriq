@@ -54,7 +54,7 @@ Una visita a instriq.org es un éxito si el visitante hace cualquiera de estas c
   - 12 escalas con cálculo guiado;
   - 103 siglas;
   - calculadoras clínicas;
-  - ECG con 15 ritmos y modo práctica.
+  - ECG con 20 ritmos y práctica con tiras siempre distintas.
 - **Aprendizaje**: ruta de aprendizaje, tarjetas, quiz, progreso y «Mis técnicas», que solo se guarda en el dispositivo.
 - **Grupos**:
   - espacios de trabajo;

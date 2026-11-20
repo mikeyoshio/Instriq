@@ -73,3 +73,5 @@ supabase/.temp/
 # Dades locals de la recategoritzacio; no es versionen.
 tool/recategorize_especiales.json
 schema_dump.sql
+
+landing/.wrangler/
