@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../data/surgical_positions_data.dart';
+import '../design_system/components/instriq_list_item.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/surgical_position.dart';
 import '../services/usage_analytics_service.dart';
@@ -79,11 +81,12 @@ class _SurgicalPositionCatalogScreenState extends State<SurgicalPositionCatalogS
                     itemCount: filtered.length,
                     itemBuilder: (context, i) {
                       final p = filtered[i];
-                      return Card(
-                        child: ListTile(
-                          leading: const Icon(Icons.airline_seat_flat_outlined),
-                          title: Text(p.name.forLanguageCode(lang)),
-                          subtitle: Text(surgicalPositionFamilyLabel(l10n, p.family)),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: InstriqSpacing.sm),
+                        child: InstriqListItem(
+                          icon: Icons.airline_seat_flat_outlined,
+                          title: p.name.forLanguageCode(lang),
+                          subtitle: surgicalPositionFamilyLabel(l10n, p.family),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => SurgicalPositionDetailScreen(position: p)),
                           ),

@@ -5,6 +5,7 @@ import 'package:qr/qr.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../design_system/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 
@@ -145,7 +146,7 @@ class _MfaSetupScreenState extends State<MfaSetupScreen> {
   List<Widget> _buildBody(AppLocalizations l10n) {
     if (_verified != null) {
       return [
-        const Icon(Icons.verified_user, size: 56, color: Colors.green),
+        const Icon(Icons.verified_user, size: 56, color: InstriqColors.statusPublished),
         const SizedBox(height: 16),
         Text(l10n.mfaEnabledBody, textAlign: TextAlign.center),
         const SizedBox(height: 24),

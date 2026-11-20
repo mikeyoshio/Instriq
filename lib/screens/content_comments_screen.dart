@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/editorial_comment.dart';
 import '../services/auth_service.dart';
@@ -96,7 +97,7 @@ class _ContentCommentsScreenState extends State<ContentCommentsScreen> {
                             return ListTile(
                               leading: Icon(
                                 comment.resolved ? Icons.check_circle : Icons.comment_outlined,
-                                color: comment.resolved ? Colors.green : null,
+                                color: comment.resolved ? InstriqColors.statusPublished : null,
                               ),
                               title: Text(comment.body),
                               subtitle: Text(comment.authorDisplayName ?? l10n.deletedUserLabel),

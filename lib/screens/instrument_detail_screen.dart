@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../design_system/components/instriq_badge.dart';
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/catalog_community_photo.dart';
 import '../models/group_document.dart';
@@ -1019,14 +1020,14 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
     bool canResolve,
   ) {
     final severityColor = switch (incident.severity) {
-      IncidentSeverity.low => Colors.green,
-      IncidentSeverity.medium => Colors.orange,
-      IncidentSeverity.high => Colors.red,
+      IncidentSeverity.low => InstriqColors.statusPublished,
+      IncidentSeverity.medium => InstriqColors.statusInReview,
+      IncidentSeverity.high => InstriqColors.error,
     };
     final statusColor = switch (incident.status) {
       IncidentStatus.open => Theme.of(context).colorScheme.error,
-      IncidentStatus.resolved => Colors.orange,
-      IncidentStatus.verified => Colors.green,
+      IncidentStatus.resolved => InstriqColors.statusInReview,
+      IncidentStatus.verified => InstriqColors.statusPublished,
     };
     return Card(
       margin: const EdgeInsets.only(bottom: 8),

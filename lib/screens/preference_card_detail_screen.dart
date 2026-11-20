@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/instruments_data.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/components/instriq_stale_content_banner.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document_version.dart' show GroupDocumentVersionStatus;
 import '../models/instrument.dart';
@@ -323,7 +324,7 @@ class _PreferenceCardDetailScreenState extends State<PreferenceCardDetailScreen>
                       ),
                       if (published.validatedBySurgeon)
                         Chip(
-                          avatar: const Icon(Icons.verified, color: Colors.green, size: 18),
+                          avatar: const Icon(Icons.verified, color: InstriqColors.statusPublished, size: 18),
                           label: Text(l10n.validatedBySurgeon),
                         ),
                     ],

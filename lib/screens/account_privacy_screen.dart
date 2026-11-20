@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/work_mode.dart';
 import '../services/account_service.dart';
@@ -98,7 +99,7 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l10n.cancel)),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            style: FilledButton.styleFrom(backgroundColor: InstriqColors.error),
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(l10n.deletePermanently),
           ),
@@ -162,7 +163,7 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
           ),
           if (_exportError != null) ...[
             const SizedBox(height: 8),
-            Text(_exportError!, style: const TextStyle(color: Colors.red)),
+            Text(_exportError!, style: const TextStyle(color: InstriqColors.error)),
           ],
           if (_exportedJson != null) ...[
             const SizedBox(height: 12),
@@ -196,11 +197,11 @@ class _AccountPrivacyScreenState extends State<AccountPrivacyScreen> {
           ),
           const SizedBox(height: 12),
           if (_deleteError != null) ...[
-            Text(_deleteError!, style: const TextStyle(color: Colors.red)),
+            Text(_deleteError!, style: const TextStyle(color: InstriqColors.error)),
             const SizedBox(height: 8),
           ],
           FilledButton.icon(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            style: FilledButton.styleFrom(backgroundColor: InstriqColors.error),
             onPressed: _deleting ? null : _confirmDelete,
             icon: _deleting
                 ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))

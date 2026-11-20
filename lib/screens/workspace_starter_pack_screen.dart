@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/public_tray.dart';
 import '../models/workspace.dart';
@@ -71,7 +72,7 @@ class _WorkspaceStarterPackScreenState extends State<WorkspaceStarterPackScreen>
           if (_error != null)
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Text(_error!, style: const TextStyle(color: Colors.red)),
+              child: Text(_error!, style: const TextStyle(color: InstriqColors.error)),
             ),
           Expanded(
             child: ListView.builder(

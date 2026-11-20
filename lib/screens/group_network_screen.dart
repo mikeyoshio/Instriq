@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/group_document.dart';
 import '../models/group_sibling_organization.dart';
@@ -61,7 +62,7 @@ class _GroupNetworkScreenState extends State<GroupNetworkScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  if (_error != null) Text(_error!, style: const TextStyle(color: Colors.red)),
+                  if (_error != null) Text(_error!, style: const TextStyle(color: InstriqColors.error)),
                   if (!_loading && _siblings.isEmpty)
                     Padding(
                       padding: const EdgeInsets.all(16),
@@ -132,7 +133,7 @@ class _GroupNetworkWorkspacesScreenState extends State<_GroupNetworkWorkspacesSc
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                if (_error != null) Text(_error!, style: const TextStyle(color: Colors.red)),
+                if (_error != null) Text(_error!, style: const TextStyle(color: InstriqColors.error)),
                 if (!_loading && _workspaces.isEmpty)
                   Padding(padding: const EdgeInsets.all(16), child: Text(l10n.groupNetworkNoWorkspaces))
                 else
@@ -207,7 +208,7 @@ class _GroupNetworkContentScreenState extends State<_GroupNetworkContentScreen> 
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                if (_error != null) Text(_error!, style: const TextStyle(color: Colors.red)),
+                if (_error != null) Text(_error!, style: const TextStyle(color: InstriqColors.error)),
                 if (!_loading && publishedTrays.isEmpty && publishedDocuments.isEmpty)
                   Padding(padding: const EdgeInsets.all(16), child: Text(l10n.groupNetworkNoContent)),
                 if (publishedTrays.isNotEmpty) ...[

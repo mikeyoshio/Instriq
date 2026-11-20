@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../data/instruments_data.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/components/instriq_stale_content_banner.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
@@ -392,11 +393,11 @@ class _TrayDetailScreenState extends State<TrayDetailScreen> {
   Color _syncStatusColor(TraySyncStatus status) {
     switch (status) {
       case TraySyncStatus.synced:
-        return Colors.green;
+        return InstriqColors.statusPublished;
       case TraySyncStatus.customized:
-        return Colors.orange;
+        return InstriqColors.statusInReview;
       case TraySyncStatus.independent:
-        return Colors.grey;
+        return InstriqColors.statusArchived;
     }
   }
 

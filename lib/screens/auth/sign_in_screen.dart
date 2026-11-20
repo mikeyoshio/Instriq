@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthChangeEvent, OAuthProvider;
 
+import '../../design_system/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 
@@ -160,7 +161,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             if (_error != null) ...[
               const SizedBox(height: 12),
-              Text(_error!, style: const TextStyle(color: Colors.red)),
+              Text(_error!, style: const TextStyle(color: InstriqColors.error)),
             ],
             const SizedBox(height: 20),
             SizedBox(

@@ -2,6 +2,7 @@
 import 'package:flutter/services.dart';
 
 import '../../design_system/components/instriq_responsive_content.dart';
+import '../../design_system/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/group_sibling_organization.dart';
 import '../../models/hospital.dart';
@@ -108,7 +109,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                 ),
                 if (dialogError != null) ...[
                   const SizedBox(height: 12),
-                  Text(dialogError!, style: const TextStyle(color: Colors.red)),
+                  Text(dialogError!, style: const TextStyle(color: InstriqColors.error)),
                 ],
               ],
             ),
@@ -420,9 +421,9 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                       };
                       final statusColor = switch (status) {
                         InvitationStatus.pending => null,
-                        InvitationStatus.accepted => Colors.green,
-                        InvitationStatus.revoked => Colors.grey,
-                        InvitationStatus.expired => Colors.orange,
+                        InvitationStatus.accepted => InstriqColors.statusPublished,
+                        InvitationStatus.revoked => InstriqColors.statusArchived,
+                        InvitationStatus.expired => InstriqColors.statusInReview,
                       };
                       return Card(
                         child: ListTile(
@@ -453,7 +454,7 @@ class _ManageHospitalScreenState extends State<ManageHospitalScreen> {
                   const SizedBox(height: 24),
                   Text(l10n.membersCountTitle(_members.length), style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 8),
-                  if (_error != null) Text(_error!, style: const TextStyle(color: Colors.red)),
+                  if (_error != null) Text(_error!, style: const TextStyle(color: InstriqColors.error)),
                   ..._members.map((m) {
                     final isMe = m.id == AuthService.instance.currentUser?.id;
                     final isOwner = m.id == profile.ownerId;

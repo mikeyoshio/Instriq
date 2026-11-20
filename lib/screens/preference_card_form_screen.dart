@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/instruments_data.dart';
 import '../design_system/components/instriq_autosave.dart';
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../models/preference_card.dart';
@@ -424,7 +425,7 @@ class _PreferenceCardFormScreenState extends State<PreferenceCardFormScreen> {
             ),
             if (_error != null) ...[
               const SizedBox(height: 12),
-              Text(_error!, style: const TextStyle(color: Colors.red)),
+              Text(_error!, style: const TextStyle(color: InstriqColors.error)),
             ],
             const SizedBox(height: 24),
             FilledButton(

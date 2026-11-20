@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../data/perioperative_guides_data.dart';
+import '../design_system/components/instriq_list_item.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/perioperative_guide.dart';
 import '../services/usage_analytics_service.dart';
@@ -90,11 +92,12 @@ class _PerioperativeGuidesScreenState extends State<PerioperativeGuidesScreen> {
                     itemCount: filtered.length,
                     itemBuilder: (context, i) {
                       final g = filtered[i];
-                      return Card(
-                        child: ListTile(
-                          leading: Icon(_areaIcon(g.area)),
-                          title: Text(g.name.forLanguageCode(lang)),
-                          subtitle: Text(guideAreaLabel(l10n, g.area)),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: InstriqSpacing.sm),
+                        child: InstriqListItem(
+                          icon: _areaIcon(g.area),
+                          title: g.name.forLanguageCode(lang),
+                          subtitle: guideAreaLabel(l10n, g.area),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => PerioperativeGuideDetailScreen(guide: g)),
                           ),

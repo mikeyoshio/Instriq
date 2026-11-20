@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../data/clinical_scales_data.dart';
+import '../design_system/components/instriq_list_item.dart';
+import '../design_system/components/instriq_section_header.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/clinical_scale.dart';
 import '../services/usage_analytics_service.dart';
@@ -19,23 +22,19 @@ class ClinicalScalesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final lang = Localizations.localeOf(context).languageCode;
-    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.scalesTitle)),
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [
           for (final area in ScaleArea.values) ...[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 12, 4, 8),
-              child: Text(scaleAreaLabel(l10n, area).toUpperCase(), style: theme.textTheme.labelLarge),
-            ),
+            InstriqSectionHeader(scaleAreaLabel(l10n, area)),
             for (final s in kClinicalScales.where((s) => s.area == area))
-              Card(
-                child: ListTile(
-                  leading: const Icon(Icons.calculate_outlined),
-                  title: Text(s.name.forLanguageCode(lang)),
-                  trailing: const Icon(Icons.chevron_right),
+              Padding(
+                padding: const EdgeInsets.only(bottom: InstriqSpacing.sm),
+                child: InstriqListItem(
+                  icon: Icons.calculate_outlined,
+                  title: s.name.forLanguageCode(lang),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => ClinicalScaleDetailScreen(scale: s)),
                   ),

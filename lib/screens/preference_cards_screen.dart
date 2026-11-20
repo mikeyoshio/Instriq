@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/preference_card.dart';
 import '../models/workspace.dart';
@@ -187,7 +188,7 @@ class _PreferenceCardsScreenState extends State<PreferenceCardsScreen> {
                                   if (published?.validatedBySurgeon ?? false)
                                     const Padding(
                                       padding: EdgeInsets.only(right: 4),
-                                      child: Icon(Icons.verified, color: Colors.green, size: 18),
+                                      child: Icon(Icons.verified, color: InstriqColors.statusPublished, size: 18),
                                     ),
                                   const Icon(Icons.chevron_right),
                                 ],

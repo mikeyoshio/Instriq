@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../design_system/components/instriq_async_view.dart';
 import '../design_system/components/instriq_badge.dart';
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument_incident.dart';
 import '../services/instrument_incident_service.dart';
@@ -53,14 +54,14 @@ class _IncidentCapaQueueScreenState extends State<IncidentCapaQueueScreen> {
 
   Widget _buildIncidentCard(BuildContext context, AppLocalizations l10n, InstrumentIncident incident, bool canAct) {
     final severityColor = switch (incident.severity) {
-      IncidentSeverity.low => Colors.green,
-      IncidentSeverity.medium => Colors.orange,
-      IncidentSeverity.high => Colors.red,
+      IncidentSeverity.low => InstriqColors.statusPublished,
+      IncidentSeverity.medium => InstriqColors.statusInReview,
+      IncidentSeverity.high => InstriqColors.error,
     };
     final statusColor = switch (incident.status) {
       IncidentStatus.open => Theme.of(context).colorScheme.error,
-      IncidentStatus.resolved => Colors.orange,
-      IncidentStatus.verified => Colors.green,
+      IncidentStatus.resolved => InstriqColors.statusInReview,
+      IncidentStatus.verified => InstriqColors.statusPublished,
     };
     final workspaceLabel =
         incident.workspaceId != null ? _workspaceNameById[incident.workspaceId] : l10n.incidentOrganizationScopeLabel;

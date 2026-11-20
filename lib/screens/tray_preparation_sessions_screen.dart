@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/tray.dart';
 import '../models/tray_preparation_session.dart';
@@ -42,11 +43,11 @@ class _TrayPreparationSessionsScreenState extends State<TrayPreparationSessionsS
   Color _statusColor(TrayPreparationStatus status) {
     switch (status) {
       case TrayPreparationStatus.prepared:
-        return Colors.orange;
+        return InstriqColors.statusInReview;
       case TrayPreparationStatus.qcPassed:
-        return Colors.green;
+        return InstriqColors.statusPublished;
       case TrayPreparationStatus.qcFailed:
-        return Colors.red;
+        return InstriqColors.error;
     }
   }
 
@@ -85,7 +86,7 @@ class _TrayPreparationSessionsScreenState extends State<TrayPreparationSessionsS
           TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.cancel)),
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.qcFailAction, style: const TextStyle(color: Colors.red)),
+            child: Text(l10n.qcFailAction, style: const TextStyle(color: InstriqColors.error)),
           ),
           FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.qcPassAction)),
         ],

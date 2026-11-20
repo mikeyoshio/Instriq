@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../design_system/components/instriq_autosave.dart';
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/specialty_entity.dart';
@@ -475,7 +476,7 @@ class _CustomInstrumentFormScreenState extends State<CustomInstrumentFormScreen>
             ),
             if (_error != null) ...[
               const SizedBox(height: 12),
-              Text(_error!, style: const TextStyle(color: Colors.red)),
+              Text(_error!, style: const TextStyle(color: InstriqColors.error)),
             ],
           ],
         ),

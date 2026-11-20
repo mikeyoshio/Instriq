@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../design_system/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 
@@ -51,7 +52,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: _done
               ? [
-                  const Icon(Icons.check_circle, color: Colors.green, size: 64),
+                  const Icon(Icons.check_circle, color: InstriqColors.statusPublished, size: 64),
                   const SizedBox(height: 16),
                   Text(l10n.passwordUpdated, textAlign: TextAlign.center),
                   const SizedBox(height: 20),
@@ -75,7 +76,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                   if (_error != null) ...[
                     const SizedBox(height: 12),
-                    Text(_error!, style: const TextStyle(color: Colors.red)),
+                    Text(_error!, style: const TextStyle(color: InstriqColors.error)),
                   ],
                   const SizedBox(height: 20),
                   FilledButton(

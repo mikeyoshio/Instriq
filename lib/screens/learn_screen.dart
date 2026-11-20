@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_list_item.dart';
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import 'ecg_screen.dart';
 import 'flashcards_screen.dart';
@@ -116,15 +118,9 @@ class _LearnCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(16),
-        leading: Icon(icon, size: 32),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: onTap,
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: InstriqSpacing.sm),
+      child: InstriqListItem(icon: icon, title: title, subtitle: subtitle, onTap: onTap),
     );
   }
 }

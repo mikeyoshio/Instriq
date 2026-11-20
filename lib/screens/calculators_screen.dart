@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../design_system/components/instriq_list_item.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/clinical_calc.dart';
 
@@ -26,11 +28,11 @@ class CalculatorsScreen extends StatelessWidget {
           Text(l10n.calcNoDoses, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 8),
           for (final (icon, title, page) in items)
-            Card(
-              child: ListTile(
-                leading: Icon(icon),
-                title: Text(title),
-                trailing: const Icon(Icons.chevron_right),
+            Padding(
+              padding: const EdgeInsets.only(bottom: InstriqSpacing.sm),
+              child: InstriqListItem(
+                icon: icon,
+                title: title,
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => Scaffold(
                     appBar: AppBar(title: Text(title)),

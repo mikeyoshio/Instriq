@@ -132,7 +132,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
               ? Center(
                   child: Padding(
                     padding: const EdgeInsets.all(24),
-                    child: Text(_error!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.red)),
+                    child: Text(_error!, textAlign: TextAlign.center, style: const TextStyle(color: InstriqColors.error)),
                   ),
                 )
               : RefreshIndicator(
@@ -151,7 +151,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
                       const SizedBox(height: 4),
                       Text(
                         l10n.knowledgeCoverageBySpecialtySubtitle,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                       const SizedBox(height: 8),
                       if (_stats!.bySpecialty.isEmpty)
@@ -166,7 +166,7 @@ class _KnowledgeDashboardScreenState extends State<KnowledgeDashboardScreen> {
                       const SizedBox(height: 4),
                       Text(
                         l10n.usageSectionSubtitle,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                       const SizedBox(height: 8),
                       _UsageSection(
@@ -313,7 +313,7 @@ class _SpecialtyList extends StatelessWidget {
                       const SizedBox(width: 10),
                       Text(
                         '· ${l10n.knowledgeCoveragePendingReviewCount(s.draftReviewCount)}',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ],
                   ],
@@ -356,7 +356,7 @@ class _UsageSection extends StatelessWidget {
     if (error != null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Text(l10n.usageLoadError(error!), style: const TextStyle(color: Colors.red)),
+        child: Text(l10n.usageLoadError(error!), style: const TextStyle(color: InstriqColors.error)),
       );
     }
     final data = stats;
@@ -440,7 +440,7 @@ class _UsageSubsection extends StatelessWidget {
         if (rows.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Text(emptyLabel, style: TextStyle(color: Colors.grey[600])),
+            child: Text(emptyLabel, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           )
         else
           for (final row in rows) ...[

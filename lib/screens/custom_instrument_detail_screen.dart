@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../design_system/components/instriq_badge.dart';
 import '../design_system/components/instriq_responsive_content.dart';
+import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/custom_instrument.dart';
 import '../models/group_document.dart';
@@ -943,14 +944,14 @@ class _CustomInstrumentDetailScreenState extends State<CustomInstrumentDetailScr
     bool canResolve,
   ) {
     final severityColor = switch (incident.severity) {
-      IncidentSeverity.low => Colors.green,
-      IncidentSeverity.medium => Colors.orange,
-      IncidentSeverity.high => Colors.red,
+      IncidentSeverity.low => InstriqColors.statusPublished,
+      IncidentSeverity.medium => InstriqColors.statusInReview,
+      IncidentSeverity.high => InstriqColors.error,
     };
     final statusColor = switch (incident.status) {
       IncidentStatus.open => Theme.of(context).colorScheme.error,
-      IncidentStatus.resolved => Colors.orange,
-      IncidentStatus.verified => Colors.green,
+      IncidentStatus.resolved => InstriqColors.statusInReview,
+      IncidentStatus.verified => InstriqColors.statusPublished,
     };
     return Card(
       margin: const EdgeInsets.only(bottom: 8),

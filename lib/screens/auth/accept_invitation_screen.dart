@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../design_system/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/invitation.dart';
 import '../../services/auth_service.dart';
@@ -200,7 +201,7 @@ class _AcceptInvitationScreenState extends State<AcceptInvitationScreen> {
         ),
         const SizedBox(height: 24),
         if (_actionError != null) ...[
-          Text(_actionError!, style: const TextStyle(color: Colors.red), textAlign: TextAlign.center),
+          Text(_actionError!, style: const TextStyle(color: InstriqColors.error), textAlign: TextAlign.center),
           const SizedBox(height: 12),
         ],
         if (loggedIn) ...[
