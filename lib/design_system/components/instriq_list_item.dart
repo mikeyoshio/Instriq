@@ -34,7 +34,12 @@ class InstriqListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    return InstriqSurface(
+    // Cada fila és un botó propi per al lector de pantalla: sense això, el
+    // contenidor de la pantalla ajuntava totes les files en una sola frase.
+    return Semantics(
+      container: true,
+      button: onTap != null,
+      child: InstriqSurface(
       child: InkWell(
         borderRadius: InstriqRadius.mdRadius,
         onTap: onTap,
@@ -69,6 +74,7 @@ class InstriqListItem extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

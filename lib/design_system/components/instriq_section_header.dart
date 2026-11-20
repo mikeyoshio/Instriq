@@ -9,12 +9,20 @@ class InstriqSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      label.toUpperCase(),
-      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            letterSpacing: 1.1,
-          ),
+    // Encapçalament per al lector de pantalla (navegable per títols), amb el
+    // text en minúscules perquè no el lletregi.
+    return Semantics(
+      header: true,
+      label: label,
+      child: ExcludeSemantics(
+        child: Text(
+          label.toUpperCase(),
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                letterSpacing: 1.1,
+              ),
+        ),
+      ),
     );
   }
 }

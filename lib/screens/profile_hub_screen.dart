@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../design_system/components/instriq_list_item.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/components/instriq_section_header.dart';
+import '../design_system/components/instriq_surface.dart';
 import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import '../models/contributor_application.dart';
@@ -245,20 +246,39 @@ class _ProfileHubScreenState extends State<ProfileHubScreen> {
               ValueListenableBuilder<ThemeMode>(
                 valueListenable: ThemeService.instance.themeMode,
                 builder: (context, mode, _) {
-                  return InstriqListItem(
-                    icon: Theme.of(context).brightness == Brightness.dark
-                        ? Icons.dark_mode_outlined
-                        : Icons.light_mode_outlined,
-                    title: l10n.themeTitle,
-                    trailing: SegmentedButton<ThemeMode>(
-                      showSelectedIcon: false,
-                      segments: [
-                        ButtonSegment(value: ThemeMode.light, label: Text(l10n.themeLight)),
-                        ButtonSegment(value: ThemeMode.dark, label: Text(l10n.themeDark)),
-                        ButtonSegment(value: ThemeMode.system, label: Text(l10n.themeSystem)),
-                      ],
-                      selected: {mode},
-                      onSelectionChanged: (s) => ThemeService.instance.setThemeMode(s.first),
+                  final scheme = Theme.of(context).colorScheme;
+                  return InstriqSurface(
+                    child: Padding(
+                      padding: const EdgeInsets.all(InstriqSpacing.lg),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Icons.dark_mode_outlined
+                                    : Icons.light_mode_outlined,
+                                size: 28,
+                                color: scheme.primary,
+                              ),
+                              const SizedBox(width: InstriqSpacing.lg),
+                              Text(l10n.themeTitle, style: Theme.of(context).textTheme.titleMedium),
+                            ],
+                          ),
+                          const SizedBox(height: InstriqSpacing.md),
+                          SegmentedButton<ThemeMode>(
+                            showSelectedIcon: false,
+                            segments: [
+                              ButtonSegment(value: ThemeMode.light, label: Text(l10n.themeLight)),
+                              ButtonSegment(value: ThemeMode.dark, label: Text(l10n.themeDark)),
+                              ButtonSegment(value: ThemeMode.system, label: Text(l10n.themeSystem)),
+                            ],
+                            selected: {mode},
+                            onSelectionChanged: (s) => ThemeService.instance.setThemeMode(s.first),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
