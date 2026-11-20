@@ -156,13 +156,13 @@
   .ms-store-badge[hidden] { display: none; }
   .btn-ghost { background: transparent; border-color: var(--rule); color: var(--ink); }
   .btn-ghost:hover { border-color: var(--ink); }
-  .ms-store-badge { display: inline-flex; align-items: center; gap: 12px; padding: 9px 18px; background: #0067b8; color: #fff; border: 1px solid #0067b8; border-radius: 8px; text-decoration: none; transition: background 0.15s ease, transform 0.15s ease; }
-  .ms-store-badge:hover { background: #005aa0; transform: translateY(-1px); }
+  .ms-store-badge { display: inline-flex; align-items: center; gap: 12px; padding: 9px 18px; background: transparent; color: var(--ink); border: 1px solid var(--rule); border-radius: 10px; text-decoration: none; transition: background 0.15s ease, transform 0.15s ease; }
+  .ms-store-badge:hover { border-color: var(--ink); transform: translateY(-1px); }
   .ms-store-badge-logo { width: 20px; height: 20px; flex-shrink: 0; }
-  .ms-store-badge-logo rect { fill: #fff; }
+  .ms-store-badge-logo rect:nth-child(1) { fill: #f25022; } .ms-store-badge-logo rect:nth-child(2) { fill: #7fba00; } .ms-store-badge-logo rect:nth-child(3) { fill: #00a4ef; } .ms-store-badge-logo rect:nth-child(4) { fill: #ffb900; }
   .ms-store-badge-text { display: flex; flex-direction: column; line-height: 1.2; }
-  .ms-store-badge-eyebrow { font-size: 0.72rem; font-weight: 400; color: #fff; opacity: 0.92; }
-  .ms-store-badge-title { font-size: 1.02rem; font-weight: 700; font-family: var(--body); color: #fff; }
+  .ms-store-badge-eyebrow { font-size: 0.72rem; font-weight: 400; color: var(--ink-muted); }
+  .ms-store-badge-title { font-size: 1.02rem; font-weight: 700; font-family: var(--body); color: var(--ink); }
   .section { padding: 100px 0; }
   .section.band { background: var(--paper-alt); }
   .section.spotlight { background: var(--accent-soft); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
@@ -178,7 +178,7 @@
   h3 { font-size: 1.15rem; margin: 0 0 8px; font-weight: 700; }
   p { color: var(--ink-muted); margin: 0 0 18px; text-wrap: pretty; }
   .lede { font-size: 1.22rem; line-height: 1.65; }
-  .hero { padding: 90px 0 70px; overflow: hidden; }
+  .hero { padding: 90px 0 70px; overflow-x: clip; position: relative; z-index: 2; }
   .hero-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 48px; align-items: center; }
   .hero-copy { text-align: left; }
   .hero-copy h1 { max-width: 600px; }
@@ -423,6 +423,25 @@
   @media (max-width: 760px) { .steps { grid-template-columns: 1fr; gap: 28px; } }
   .section.close .start-note { margin-top: 24px; }
   ::selection { background: var(--accent-soft); color: var(--ink); }
+
+  /* Buscador del Vademècum: la porta més directa per a qui busca una peça. */
+  .vdm-search { position: relative; max-width: 520px; margin: 4px 0 22px; }
+  .vdm-search label { display: block; font-family: var(--display); font-size: 0.85rem; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .vdm-field { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 0 14px; box-shadow: var(--shadow-soft); transition: border-color 0.15s ease; }
+  .vdm-field:focus-within { border-color: var(--accent); }
+  .vdm-field svg { width: 20px; height: 20px; color: var(--ink-muted); flex-shrink: 0; }
+  .vdm-field input { flex: 1; min-width: 0; border: none; background: none; color: var(--ink); font: inherit; font-size: 1.05rem; padding: 14px 0; outline: none; }
+  .vdm-field input::placeholder { color: var(--ink-muted); opacity: 1; }
+  .vdm-list { position: absolute; left: 0; right: 0; top: 100%; margin: 6px 0 0; padding: 6px; list-style: none; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; box-shadow: var(--shadow-lift); z-index: 5; max-height: 360px; overflow-y: auto; }
+  .vdm-list a { display: block; padding: 10px 12px; border-radius: 8px; color: var(--ink); text-decoration: none; line-height: 1.35; }
+  .vdm-list a small { display: block; color: var(--ink-muted); font-size: 0.82rem; }
+  .vdm-list a:hover, .vdm-list a[aria-selected="true"] { background: var(--paper-alt); }
+  .vdm-list .vdm-empty a { color: var(--accent); }
+  .data-row.stats { margin: 32px 0 0; }
+  /* Les captures de l'app són clares: en mode fosc s'atenuen una mica perquè no enlluernin. */
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .app-shot img { filter: brightness(0.86); } }
+  :root[data-theme="dark"] .app-shot img { filter: brightness(0.86); }
+  @media (max-width: 520px) { .data-row.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } }
 </style>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c09082e3f96f44b59922839da897dcab"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
@@ -462,9 +481,17 @@
       <h1 data-i18n="hero.h1">El coneixement de quiròfan,<br>obert i compartit.</h1>
       <p class="lede" data-i18n="hero.lede">Instriq reuneix instrumental, protocols i l'experiència real del bloc quirúrgic en un sol lloc — perquè aprendre a moure's al quiròfan no depengui d'una carpeta de paper desactualitzada.</p>
       <p class="hero-scope" data-i18n="hero.scope">Coneixement d'equip — instrumental, tècniques i protocols. <strong>No emmagatzema dades de pacients ni substitueix la història clínica.</strong></p>
+      <form class="vdm-search" id="vdmSearch" role="search" action="/vademecum/ca/" data-vdm-form>
+        <label for="vdmQ" data-i18n="search.label">Busca una peça al Vademècum</label>
+        <div class="vdm-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+          <input id="vdmQ" type="search" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="vdmList" data-i18n="search.ph" data-i18n-attr="placeholder" placeholder="Kelly, Metzenbaum, trocar…">
+        </div>
+        <ul class="vdm-list" id="vdmList" role="listbox" hidden></ul>
+        <span id="vdmNone" hidden data-i18n="search.none">Cap resultat: obre el Vademècum sencer →</span>
+      </form>
       <div class="hero-actions">
         <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=hero" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
-        <a data-vdm href="/vademecum/ca/" class="btn btn-ghost" data-i18n="hero.cta3">Explora el Vademècum</a>
         <a href="https://apps.microsoft.com/store/detail/9N1SJ4N98FG3?cid=DevShareMCLPCS" class="ms-store-badge" id="storeBadge" data-i18n-attr="aria-label" data-i18n="hero.cta4" aria-label="Descarrega'l a Microsoft Store">
           <svg class="ms-store-badge-logo" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="1" y="1" width="10" height="10"/>
@@ -478,15 +505,7 @@
           </span>
         </a>
       </div>
-      <p class="hero-access" data-i18n="hero.access3">Funciona al navegador del mòbil, la tauleta o l'ordinador, sense instal·lar res ni crear compte. <a href="#comencar">Com començar →</a></p>
-      <div class="data-row">
-        <div class="data-cell"><div class="num" data-count="554">0</div><div class="label" data-i18n="hero.stat1">Instrumental</div></div>
-        <div class="data-cell"><div class="num" data-count="20">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
-        <div class="data-cell"><div class="num" data-count="252">0</div><div class="label" data-i18n="hero.stat3">Equipament</div></div>
-        <div class="data-cell"><div class="num" data-count="102">0</div><div class="label" data-i18n="hero.stat5">Fàrmacs</div></div>
-        <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
-      </div>
-      <p class="hero-trust"><span data-i18n="hero.trustLine">Funciona sense connexió · Sense quotes ni llicències · Codi obert</span> <a href="#novedades" class="version-badge">v1.3.1</a></p>
+      <p class="hero-trust"><span data-i18n="hero.trustLine">Funciona sense connexió · Sense quotes ni llicències · Codi obert</span> <a href="novedades.html" class="version-badge">v1.3.1</a></p>
     </div>
     <div class="hero-visual iq-lamp-wrap">
       <style>
@@ -673,10 +692,20 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
         <li><h3 data-i18n="consultar.c2t">Fàrmacs i tancament de ferides</h3><p data-i18n="consultar.c2p">Consulta ràpida de fàrmacs, sense dosis, i del material de tancament: sutures, hemostàtics i segellants.</p></li>
         <li><h3 data-i18n="consultar.c3t">Esterilització i fitxa tècnica</h3><p data-i18n="consultar.c3p">Mètodes d'esterilització amb els seus paràmetres, fabricant, IFU, manteniment i vida útil.</p></li>
       </ul>
+      <div class="data-row stats">
+        <div class="data-cell"><div class="num" data-count="554">0</div><div class="label" data-i18n="hero.stat1">Instrumental</div></div>
+        <div class="data-cell"><div class="num" data-count="20">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
+        <div class="data-cell"><div class="num" data-count="252">0</div><div class="label" data-i18n="hero.stat3">Equipament</div></div>
+        <div class="data-cell"><div class="num" data-count="102">0</div><div class="label" data-i18n="hero.stat5">Fàrmacs</div></div>
+        <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
+      </div>
       <a data-vdm href="/vademecum/ca/" class="btn btn-primary" data-i18n="consultar.cta">Explorar el Vademècum →</a>
     </div>
     <figure class="app-shot is-wide">
-      <img src="screenshots/ca/02_cataleg.webp" data-shot="02_cataleg" data-i18n="alt.cataleg" data-i18n-attr="alt" alt="Catàleg d'Instriq a l'ordinador: llista d'instrumental amb fotos, especialitat i categoria" width="1280" height="720" loading="lazy">
+      <picture>
+        <source media="(max-width: 720px)" srcset="screenshots/ca/m_02_cataleg.webp" data-shot-m="02_cataleg" width="780" height="1120">
+        <img src="screenshots/ca/02_cataleg.webp" data-shot="02_cataleg" data-i18n="alt.cataleg" data-i18n-attr="alt" alt="Catàleg d'Instriq a l'ordinador: llista d'instrumental amb fotos, especialitat i categoria" width="1280" height="720" loading="lazy">
+      </picture>
       <figcaption data-i18n="consultar.fig">Catàleg amb fotos reals, filtrable per especialitat.</figcaption>
     </figure>
   </div>
@@ -694,7 +723,10 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
         <li><h3 data-i18n="aprender.c3t">Eines per a docents</h3><p data-i18n="aprender.c3p">Qüestionaris configurables per supervisor o docent, amb seguiment del progrés del seu equip o alumnat.</p></li>
     </ul>
     <figure class="app-shot is-wide learn-shot">
-      <img src="screenshots/ca/09_ecg_practica.webp" data-shot="09_ecg_practica" data-i18n="alt.ecg" data-i18n-attr="alt" alt="Pràctica d'ECG a Instriq: una tira de monitor i quatre ritmes per triar" width="1280" height="720" loading="lazy">
+      <picture>
+        <source media="(max-width: 720px)" srcset="screenshots/ca/m_09_ecg_practica.webp" data-shot-m="09_ecg_practica" width="780" height="900">
+        <img src="screenshots/ca/09_ecg_practica.webp" data-shot="09_ecg_practica" data-i18n="alt.ecg" data-i18n-attr="alt" alt="Pràctica d'ECG a Instriq: una tira de monitor i quatre ritmes per triar" width="1280" height="720" loading="lazy">
+      </picture>
       <figcaption data-i18n="aprender.fig">Pràctica d'ECG: identifica el ritme de cada tira.</figcaption>
     </figure>
     <a href="edu.html" class="btn btn-ghost" data-i18n="aprender.cta">Descobrir les eines d'aprenentatge →</a>
@@ -715,7 +747,10 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
             <li><span class="chk">✓</span> <span data-i18n="deck.c1s2">Creació del pneumoperitoneu</span></li>
             <li><span class="chk">✓</span> <span data-i18n="deck.c1s3">Dissecció del triangle de Calot</span></li>
             <li><span class="chk">4</span> <span data-i18n="deck.c1s4">Clipatge i secció del conducte cístic</span></li>
-          </ul>
+            <li><h3 data-i18n="funciones.c12t">Procediments i casos</h3><p data-i18n="funciones.c12p">Cada procediment reuneix la safata, la tècnica o el protocol i les preferències del cirurgià. Des de l'agenda quirúrgica, cada cas s'obre amb tot el que cal per preparar-lo.</p></li>
+        <li><h3 data-i18n="funciones.c5t">Mode sense connexió</h3><p data-i18n="funciones.c5p">Consulta i edita sense xarxa a tot arreu on t'ho permetin els teus permisos; els canvis es pugen sols en recuperar la connexió.</p></li>
+      </ul>
+      <p class="more-line" data-i18n="funciones.more">Rols, auditoria, incidències, xarxa de seus i més, a <a href="collegium.html">Collegium →</a></p>
           <span class="deck-chip"><span class="deck-dot-lead"></span> <span data-i18n="deck.c1chip">Aprovat per l'equip</span></span>
         </article>
 
@@ -794,57 +829,10 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
   </div>
 </section>
 
-<section id="funciones" class="section reveal">
-  <div class="wrap">
-    <div class="measure">
-      <h2 data-i18n="funciones.h1">Tot el que necessita un bloc quirúrgic, en un sol lloc.</h2>
-      <p class="lede" data-i18n="funciones.lede">Al voltant de consultar, aprendre, documentar i compartir, Instriq també cobreix el dia a dia operatiu d'un grup.</p>
-    </div>
-    <div class="cards cols-2">
-      <div class="card"><h3 data-i18n="funciones.c12t">Procediments i casos</h3><p data-i18n="funciones.c12p">Cada procediment reuneix la safata, la tècnica o el protocol i les preferències del cirurgià. Des de l'agenda quirúrgica, cada cas s'obre amb tot el que cal per preparar-lo.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c13t">Radar</h3><p data-i18n="funciones.c13p">A la pestanya Avui, els casos quirúrgics del dia de tota l'organització d'un cop d'ull, amb accés directe a cada cas.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c5t">Mode sense connexió</h3><p data-i18n="funciones.c5p">Consulta i edita sense xarxa a tot arreu on t'ho permetin els teus permisos; els canvis es pugen sols en recuperar la connexió.</p></div>
-      <div class="card"><h3 data-i18n="funciones.c4t">Espais de treball i rols</h3><p data-i18n="funciones.c4p">Organitza el grup per especialitat o servei. Rols granulars (lector, editor, aprovador, administrador) per espai, amb auditoria de cada canvi sensible.</p></div>
-    </div>
-    <p class="more-line" data-i18n="funciones.more">Rols, auditoria, incidències, xarxa de seus i més, a <a href="collegium.html">Collegium →</a></p>
-  </div>
-</section>
-
-<section id="pantalles" class="section band reveal">
-  <div class="wrap center">
-    <h2 data-i18n="pantalles.h1">El mateix Instriq, diferent segons qui l'obre.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="pantalles.lede">Dins del quiròfan, una checklist a pantalla completa pensada per tocar-la amb guants — i al despatx, un panell complet pensat per a qui coordina el grup sencer: <strong>pendents d'aprovació, cua de revisió i incidències, d'un cop d'ull</strong>.</p>
-    <div class="shot-grid">
-      <figure class="shot-card is-mobile">
-        <img src="screenshots/modo_quirofano.png" data-i18n="alt.quirofano" data-i18n-attr="alt" alt="Mode Quiròfan: checklist de preparació d'una safata d'instrumental" loading="lazy">
-        <figcaption data-i18n="pantalles.cap2"><b>Mode Quiròfan.</b> Checklist de preparació de safates a pantalla completa, pensada per usar-se amb guants.</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
 <section id="mision" class="section reveal">
   <div class="wrap measure center">
     <h2 data-i18n="mision.h1">Reduir la corba d'aprenentatge al quiròfan.</h2>
     <p class="lede" data-i18n="mision.p1">Incorporar-se a un bloc quirúrgic exigeix adquirir molt coneixement pràctic en poc temps. Instriq existeix perquè qualsevol instrumentista, infermera, auxiliar o membre de l'equip quirúrgic trobi informació fiable i actualitzada, basada en l'experiència real d'altres professionals — i volem que sigui la plataforma de referència del bloc quirúrgic arreu del món.</p>
-    <div class="values-row">
-      <div class="value-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
-        <div><h3 data-i18n="valores.c1t">Accés lliure</h3><p data-i18n="valores.c1p">Sense quota ni compte per al catàleg i l'aprenentatge bàsic.</p></div>
-      </div>
-      <div class="value-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7-10.5-7-10.5-7Z"/><circle cx="12" cy="12" r="2.8"/></svg>
-        <div><h3 data-i18n="valores.c2t">Transparència</h3><p data-i18n="valores.c2p">Codi obert i decisions públiques, sempre.</p></div>
-      </div>
-      <div class="value-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V21"/><circle cx="9.5" cy="7.5" r="3.5"/><path d="M22 21v-1.5a4 4 0 0 0-3-3.87"/><path d="M15.5 3.63a4 4 0 0 1 0 7.75"/></svg>
-        <div><h3 data-i18n="valores.c3t">Col·laboració real</h3><p data-i18n="valores.c3p">Professionals sanitaris i desenvolupadors voluntaris, no una empresa tancada.</p></div>
-      </div>
-      <div class="value-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 14.5l5-5"/><path d="M8 16a3.2 3.2 0 0 1 0-4.5l2-2"/><path d="M16 8a3.2 3.2 0 0 1 0 4.5l-2 2"/></svg>
-        <div><h3 data-i18n="valores.c4t">Estàndards oberts</h3><p data-i18n="valores.c4p">Dades i format oberts, preparats per interoperar amb altres sistemes si el projecte ho requereix.</p></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -878,22 +866,6 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
         <p data-i18n="colabora.c4p">Digues què trobes a faltar o vota les propostes d'altres persones.</p>
         <a href="sugerencias.html" class="btn btn-ghost" style="margin-top: 12px;" data-i18n="colabora.c4cta">Veure suggeriments →</a>
       </div>
-    </div>
-  </div>
-</section>
-
-<section id="novedades" class="section band reveal">
-  <div class="wrap center">
-    <h2 data-i18n="novedades.h1">Construït en obert, en públic.</h2>
-    <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="novedades.lede">Des del primer dia fins avui, sense amagar res — inclòs el que encara està previst.</p>
-    <!-- lastBadge/lastText (CA aquí + ES/EN més avall) s'ha d'actualitzar a mà
-         cada cop que novedades.html guanya una entrada nova -- es va trobar
-         desactualitzat (#54 quan la real ja anava per #69), sense cap procés
-         que ho sincronitzi sol. -->
-    <div class="novedades-teaser" id="novedadesTeaser">
-      <span class="timeline-badge" data-i18n="novedades.lastBadge">#101</span>
-      <p data-i18n="novedades.lastText"><strong>v1.3.1: referència perioperatòria</strong> — 41 guies, 13 postures, 12 escales amb càlcul guiat, sigles, calculadores, ECG i «Les meves tècniques», amb analítica d'ús anònima.</p>
-      <a href="novedades.html" class="btn btn-ghost" data-i18n="novedades.cta">Veure totes les novetats →</a>
     </div>
   </div>
 </section>
@@ -1034,6 +1006,9 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
 
   var DICT = {
     es: {
+      "search.label": "Busca una pieza en el Vademécum",
+      "search.ph": "Kelly, Metzenbaum, trócar…",
+      "search.none": "Sin resultados: abre el Vademécum completo →",
       "alt.cataleg": "Catálogo de Instriq en el ordenador: lista de instrumental con fotos, especialidad y categoría",
       "alt.ecg": "Práctica de ECG en Instriq: una tira de monitor y cuatro ritmos para elegir",
       "aprender.fig": "Práctica de ECG: identifica el ritmo de cada tira.",
@@ -1188,6 +1163,9 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
       "footer.fine": "Instriq® — proyecto open source por y para el bloque quirúrgico. Código bajo AGPL-3.0 y documentación bajo CC BY-SA 4.0; el nombre y la marca Instriq quedan reservados."
     },
     en: {
+      "search.label": "Find an instrument in the Vademecum",
+      "search.ph": "Kelly, Metzenbaum, trocar…",
+      "search.none": "No matches: open the full Vademecum →",
       "alt.cataleg": "Instriq catalog on a computer: list of instruments with photos, specialty and category",
       "alt.ecg": "ECG practice in Instriq: a monitor strip and four rhythms to choose from",
       "aprender.fig": "ECG practice: identify the rhythm on each strip.",
@@ -1378,6 +1356,9 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
     if (ogLocaleEl) ogLocaleEl.setAttribute('content', localeCodes[lang] || localeCodes.ca);
     document.querySelectorAll('a[data-vdm]').forEach(function (a) { a.setAttribute('href', '/vademecum/' + lang + '/'); });
     document.querySelectorAll('img[data-shot]').forEach(function (i) { i.setAttribute('src', 'screenshots/' + lang + '/' + i.getAttribute('data-shot') + '.webp'); });
+    document.querySelectorAll('source[data-shot-m]').forEach(function (so) { so.setAttribute('srcset', 'screenshots/' + lang + '/m_' + so.getAttribute('data-shot-m') + '.webp'); });
+    var deck = document.getElementById('deckStage');
+    if (deck) deck.setAttribute('aria-roledescription', lang === 'en' ? 'carousel' : 'carrusel');
     document.dispatchEvent(new Event('instriq:lang'));
     try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
     if (opts.updateUrl) {
@@ -1397,6 +1378,75 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
   // El distintiu de Microsoft Store només té sentit a Windows d'escriptori.
   var storeBadge = document.getElementById('storeBadge');
   if (storeBadge && !/Windows NT/i.test(navigator.userAgent)) storeBadge.hidden = true;
+
+  // Buscador del Vademècum: carrega l'índex de l'idioma actual en el primer
+  // focus i suggereix fins a 6 fitxes (nom o àlies, sense accents).
+  (function () {
+    var form = document.getElementById('vdmSearch');
+    if (!form) return;
+    var input = document.getElementById('vdmQ'), list = document.getElementById('vdmList');
+    var cache = {}, rows = null, active = -1;
+    function lang() { return document.documentElement.lang || 'ca'; }
+    function norm(t) { return String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+    function load() {
+      var l = lang();
+      if (cache[l]) { rows = cache[l]; return Promise.resolve(); }
+      return fetch('/vademecum/' + l + '/search.json').then(function (r) { return r.json(); }).then(function (data) {
+        cache[l] = data.map(function (d) { return { id: d[0], name: d[1], alias: d[2], key: norm(d[1]), akey: norm(d[2]) }; });
+        rows = cache[l];
+      }).catch(function () { rows = []; });
+    }
+    function close() { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; }
+    function render() {
+      var q = norm(input.value.trim());
+      if (!q || !rows) { close(); return; }
+      var words = q.split(/\s+/), starts = [], contains = [];
+      rows.forEach(function (r) {
+        var hay = r.key + ' ' + r.akey;
+        if (!words.every(function (w) { return hay.indexOf(w) !== -1; })) return;
+        (r.key.indexOf(q) === 0 ? starts : contains).push(r);
+      });
+      var hits = starts.concat(contains).slice(0, 6), base = '/vademecum/' + lang() + '/';
+      list.innerHTML = '';
+      hits.forEach(function (h, i) {
+        var li = document.createElement('li'), a = document.createElement('a');
+        li.setAttribute('role', 'presentation');
+        a.href = base + h.id + '/'; a.id = 'vdmOpt' + i; a.setAttribute('role', 'option');
+        a.textContent = h.name;
+        if (h.alias) { var sm = document.createElement('small'); sm.textContent = h.alias; a.appendChild(sm); }
+        li.appendChild(a); list.appendChild(li);
+      });
+      if (!hits.length) {
+        var li = document.createElement('li'), a = document.createElement('a');
+        li.className = 'vdm-empty'; a.href = base;
+        a.textContent = document.getElementById('vdmNone').textContent;
+        li.appendChild(a); list.appendChild(li);
+      }
+      active = -1; list.hidden = false; input.setAttribute('aria-expanded', 'true');
+    }
+    function move(d) {
+      var opts = list.querySelectorAll('a');
+      if (!opts.length) return;
+      active = (active + d + opts.length) % opts.length;
+      opts.forEach(function (o, i) { o.setAttribute('aria-selected', i === active ? 'true' : 'false'); });
+      input.setAttribute('aria-activedescendant', opts[active].id || '');
+    }
+    input.addEventListener('focus', function () { load().then(render); });
+    input.addEventListener('input', function () { load().then(render); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Escape') { close(); }
+    });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var opts = list.querySelectorAll('a');
+      var target = opts[active >= 0 ? active : 0];
+      window.location.href = target && input.value.trim() ? target.href : '/vademecum/' + lang() + '/';
+    });
+    document.addEventListener('click', function (e) { if (!form.contains(e.target)) close(); });
+    document.addEventListener('instriq:lang', function () { rows = null; close(); });
+  })();
 
   var validLangs = ['ca', 'es', 'en'];
   var urlLang = null;

@@ -1214,6 +1214,16 @@ Future<void> main() async {
     sitemapPaths.addAll([for (final l in languages) '/vademecum/$l/${instr.id}/']);
   }
 
+  // Índex de cerca per al buscador de la portada (landing/index.html): només
+  // id, nom i àlies, perquè pesi poc i no es desincronitzi mai del catàleg.
+  stdout.writeln('Writing search index...');
+  for (final lang in languages) {
+    final rows = [
+      for (final i in instruments) [i.id, triFor(i.name, lang), i.aliases.join(' · ')],
+    ];
+    await File('${vademecumDir.path}/$lang/search.json').writeAsString(jsonEncode(rows), encoding: utf8);
+  }
+
   stdout.writeln('Generating specialty index pages...');
   for (final spec in specialtyOrder) {
     final list = bySpecialty[spec] ?? [];
