@@ -179,7 +179,7 @@
   p { color: var(--ink-muted); margin: 0 0 18px; text-wrap: pretty; }
   .lede { font-size: 1.22rem; line-height: 1.65; }
   .hero { padding: 90px 0 70px; overflow: hidden; }
-  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
+  .hero-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 48px; align-items: center; }
   .hero-copy { text-align: left; }
   .hero-copy h1 { max-width: 600px; }
   .hero-copy .lede { max-width: 520px; margin-left: 0; margin-right: 0; }
@@ -354,7 +354,19 @@
   .hero-path:hover, .hero-path:focus-visible { background: var(--paper-alt); }
   .hero-path-k { text-transform: none; letter-spacing: 0; font-size: 0.9rem; color: var(--ink); }
   .hero-path-t { color: var(--ink-muted); }
-  .hero .data-row { margin-top: 36px; }
+  .hero .data-row { margin-top: 40px; }
+  .hero { padding-bottom: 56px; }
+  .paths-band { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--surface); }
+  .paths-band .hero-paths { display: grid; grid-template-columns: repeat(3, 1fr); max-width: none; margin: 0; border-top: none; }
+  .paths-band .hero-path { padding: 22px 24px; border-bottom: none; border-left: 1px solid var(--rule); }
+  .paths-band .hero-path:first-child { border-left: none; padding-left: 0; }
+  .paths-band .hero-path-k { font-size: 1rem; }
+  .paths-band .hero-path { align-content: start; }
+  @media (max-width: 820px) {
+    .paths-band .hero-paths { grid-template-columns: 1fr; }
+    .paths-band .hero-path, .paths-band .hero-path:first-child { border-left: none; border-top: 1px solid var(--rule); padding: 16px 0; }
+    .paths-band .hero-path:first-child { border-top: none; }
+  }
   .hero-trust { margin: 22px 0 0; font-size: 0.9rem; color: var(--ink-muted); display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
 
   /* Seccions de dues columnes: text + llista a un costat, l'app a l'altre. */
@@ -448,6 +460,7 @@
       <p class="hero-scope" data-i18n="hero.scope">Coneixement d'equip — instrumental, tècniques i protocols. <strong>No emmagatzema dades de pacients ni substitueix la història clínica.</strong></p>
       <div class="hero-actions">
         <a href="https://app.instriq.org?utm_source=landing&utm_medium=cta&utm_campaign=hero" class="btn btn-primary" data-i18n="hero.cta1">Obre l'app →</a>
+        <a data-vdm href="/vademecum/ca/" class="btn btn-ghost" data-i18n="hero.cta3">Explora el Vademècum</a>
         <a href="https://apps.microsoft.com/store/detail/9N1SJ4N98FG3?cid=DevShareMCLPCS" class="ms-store-badge" id="storeBadge" data-i18n-attr="aria-label" data-i18n="hero.cta4" aria-label="Descarrega'l a Microsoft Store">
           <svg class="ms-store-badge-logo" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="1" y="1" width="10" height="10"/>
@@ -461,12 +474,7 @@
           </span>
         </a>
       </div>
-      <p class="hero-access" data-i18n="hero.access2">Funciona al navegador del mòbil, la tauleta o l'ordinador, sense instal·lar res ni crear compte. <a href="/vademecum/ca/" data-vdm>Explora el Vademècum</a> · <a href="#comencar">Com començar</a></p>
-      <nav class="hero-paths" aria-label="Instriq">
-        <a href="#consultar" class="hero-path"><span class="hero-path-k" data-i18n="hero.pathNurseK">Infermeria i instrumentistes</span><span class="hero-path-t" data-i18n="hero.pathNurseT">Troba una peça, una tècnica o un protocol</span><span aria-hidden="true">→</span></a>
-        <a href="collegium.html" class="hero-path"><span class="hero-path-k" data-i18n="hero.pathOrgK">Supervisió de bloc</span><span class="hero-path-t" data-i18n="hero.pathOrgT2">Collegium: el teu hospital o equip, organitzat</span><span aria-hidden="true">→</span></a>
-        <a href="edu.html" class="hero-path"><span class="hero-path-k" data-i18n="hero.pathEduK">Formació</span><span class="hero-path-t" data-i18n="hero.pathEduT">Estudiant, resident o docent</span><span aria-hidden="true">→</span></a>
-      </nav>
+      <p class="hero-access" data-i18n="hero.access3">Funciona al navegador del mòbil, la tauleta o l'ordinador, sense instal·lar res ni crear compte. <a href="#comencar">Com començar →</a></p>
       <div class="data-row">
         <div class="data-cell"><div class="num" data-count="554">0</div><div class="label" data-i18n="hero.stat1">Instrumental</div></div>
         <div class="data-cell"><div class="num" data-count="20">0</div><div class="label" data-i18n="hero.stat2">Especialitats</div></div>
@@ -474,7 +482,7 @@
         <div class="data-cell"><div class="num" data-count="102">0</div><div class="label" data-i18n="hero.stat5">Fàrmacs</div></div>
         <div class="data-cell" id="growthCell" style="display:none;"><div class="num" id="growthNum">0</div><div class="label" data-i18n="hero.stat4">Equips actius</div></div>
       </div>
-      <p class="hero-trust"><span data-i18n="hero.trustLine">Funciona sense connexió · Sense quotes ni llicències · Codi obert AGPL-3.0</span> <a href="#novedades" class="version-badge">v1.3.1</a></p>
+      <p class="hero-trust"><span data-i18n="hero.trustLine">Funciona sense connexió · Sense quotes ni llicències · Codi obert</span> <a href="#novedades" class="version-badge">v1.3.1</a></p>
     </div>
     <div class="hero-visual iq-lamp-wrap">
       <style>
@@ -638,6 +646,16 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
 </script>
     
     </div>
+  </div>
+</section>
+
+<section class="paths-band">
+  <div class="wrap">
+    <nav class="hero-paths" data-i18n="paths.aria" data-i18n-attr="aria-label" aria-label="Per a qui és Instriq">
+      <a data-vdm href="/vademecum/ca/" class="hero-path"><span class="hero-path-k" data-i18n="hero.pathNurseK">Infermeria i instrumentistes</span><span class="hero-path-t" data-i18n="hero.pathNurseT">Troba una peça, una tècnica o un protocol</span><span aria-hidden="true">→</span></a>
+      <a href="collegium.html" class="hero-path"><span class="hero-path-k" data-i18n="hero.pathOrgK">Supervisió de bloc</span><span class="hero-path-t" data-i18n="hero.pathOrgT3">Collegium: guia per posar en marxa el grup del teu hospital</span><span aria-hidden="true">→</span></a>
+      <a href="edu.html" class="hero-path"><span class="hero-path-k" data-i18n="hero.pathEduK">Formació</span><span class="hero-path-t" data-i18n="hero.pathEduT">Estudiant, resident o docent</span><span aria-hidden="true">→</span></a>
+    </nav>
   </div>
 </section>
 
@@ -1008,6 +1026,9 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
 
   var DICT = {
     es: {
+      "hero.access3": "Funciona en el navegador del móvil, la tablet o el ordenador, sin instalar nada ni crear cuenta. <a href=\"#comencar\">Cómo empezar →</a>",
+      "hero.pathOrgT3": "Collegium: guía para poner en marcha el grupo de tu hospital",
+      "paths.aria": "Para quién es Instriq",
       "alt.omnihub": "Omnihub, la búsqueda unificada de Instriq",
       "alt.quirofano": "Modo Quirófano: checklist de preparación de una bandeja de instrumental",
       "nav.aria": "Secciones",
@@ -1016,7 +1037,7 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
       "hero.pathNurseT": "Encuentra una pieza, una técnica o un protocolo",
       "hero.pathOrgK": "Supervisión de bloque",
       "hero.pathOrgT2": "Collegium: tu hospital o equipo, organizado",
-      "hero.trustLine": "Funciona sin conexión · Sin cuotas ni licencias · Código abierto AGPL-3.0",
+      "hero.trustLine": "Funciona sin conexión · Sin cuotas ni licencias · Código abierto",
       "funciones.more": "Roles, auditoría, incidencias, red de sedes y más, en <a href=\"collegium.html\">Collegium →</a>",
       "deck.aria": "Ejemplos de contenido de Instriq",
       "deck.pause": "Pausa",
@@ -1156,6 +1177,9 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
       "footer.fine": "Instriq® — proyecto open source por y para el bloque quirúrgico. Código bajo AGPL-3.0 y documentación bajo CC BY-SA 4.0; el nombre y la marca Instriq quedan reservados."
     },
     en: {
+      "hero.access3": "Works in the browser on your phone, tablet or computer, with nothing to install and no account. <a href=\"#comencar\">How to start →</a>",
+      "hero.pathOrgT3": "Collegium: a guide to setting up your hospital's group",
+      "paths.aria": "Who Instriq is for",
       "alt.omnihub": "Omnihub, Instriq's unified search",
       "alt.quirofano": "Theatre Mode: checklist for preparing an instrument tray",
       "nav.aria": "Sections",
@@ -1164,7 +1188,7 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
       "hero.pathNurseT": "Find an instrument, a technique or a protocol",
       "hero.pathOrgK": "Theatre managers",
       "hero.pathOrgT2": "Collegium: your hospital or team, organised",
-      "hero.trustLine": "Works offline · No fees or licences · Open source, AGPL-3.0",
+      "hero.trustLine": "Works offline · No fees or licences · Open source",
       "funciones.more": "Roles, audit trail, incidents, multi-site networks and more in <a href=\"collegium.html\">Collegium →</a>",
       "deck.aria": "Examples of Instriq content",
       "deck.pause": "Pause",
