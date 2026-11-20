@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
+import '../design_system/components/instriq_answer_option.dart';
 import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
@@ -14,6 +15,38 @@ class _Question {
   final List<Instrument> options;
 
   _Question({required this.answer, required this.options});
+}
+
+/// Preguntes del quiz, separat de la pantalla perquè es pugui provar
+/// (`test/quiz_questions_test.dart`).
+///
+/// - Al quiz global només entren instruments amb foto: "Quin instrument és
+///   aquest?" sense foto no té resposta.
+/// - Amb [pool] (una safata), els que no tenen foto es pregunten pel seu ús.
+/// - Els distractors surten de la mateixa categoria i especialitat i, si no
+///   n'hi ha prou, de la mateixa categoria o la mateixa especialitat: mai un
+///   robot com a alternativa a un separador.
+List<({Instrument answer, List<Instrument> options})> buildQuizQuestions(List<Instrument>? pool, Random rnd, int count) {
+  final source = List<Instrument>.from(pool ?? kInstruments.where((i) => i.image != null))..shuffle(rnd);
+  return source.take(count).map((instrument) {
+    final distractors = <Instrument>[];
+    for (final ok in <bool Function(Instrument)>[
+      (i) => i.category == instrument.category && i.specialty == instrument.specialty,
+      (i) => i.category == instrument.category,
+      (i) => i.specialty == instrument.specialty,
+      (i) => true,
+    ]) {
+      final candidates = kInstruments
+          .where((i) => i.id != instrument.id && !distractors.contains(i) && ok(i))
+          // Noms iguals en l'idioma de l'usuari farien dues opcions idèntiques.
+          .where((i) => i.name.ca != instrument.name.ca && !distractors.any((d) => d.name.ca == i.name.ca))
+          .toList()
+        ..shuffle(rnd);
+      distractors.addAll(candidates.take(3 - distractors.length));
+      if (distractors.length == 3) break;
+    }
+    return (answer: instrument, options: [instrument, ...distractors]..shuffle(rnd));
+  }).toList();
 }
 
 class QuizScreen extends StatefulWidget {
@@ -59,29 +92,9 @@ class _QuizScreenState extends State<QuizScreen> {
     _questions = _buildQuestions();
   }
 
-  List<_Question> _buildQuestions() {
-    final rnd = Random();
-    final source = widget.pool ?? kInstruments;
-    final pool = List<Instrument>.from(source)..shuffle(rnd);
-    final selected = pool.take(_questionCount).toList();
-
-    return selected.map((instrument) {
-      final sameCategory = kInstruments
-          .where((i) => i.category == instrument.category && i.id != instrument.id)
-          .toList()
-        ..shuffle(rnd);
-      final others = kInstruments.where((i) => i.id != instrument.id).toList()
-        ..shuffle(rnd);
-      final distractors = <Instrument>[];
-      distractors.addAll(sameCategory.take(2));
-      for (final o in others) {
-        if (distractors.length >= 3) break;
-        if (!distractors.contains(o)) distractors.add(o);
-      }
-      final options = [instrument, ...distractors.take(3)]..shuffle(rnd);
-      return _Question(answer: instrument, options: options);
-    }).toList();
-  }
+  List<_Question> _buildQuestions() => buildQuizQuestions(widget.pool, Random(), _questionCount)
+      .map((q) => _Question(answer: q.answer, options: q.options))
+      .toList();
 
   void _select(Instrument option) {
     if (_selected != null) return;
@@ -165,20 +178,27 @@ class _QuizScreenState extends State<QuizScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              LinearProgressIndicator(value: (_current) / _questions.length),
+              LinearProgressIndicator(
+                value: (_current + (_selected != null ? 1 : 0)) / _questions.length,
+                minHeight: 6,
+                borderRadius: BorderRadius.circular(3),
+                color: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+              ),
               const SizedBox(height: 24),
               Center(
                 // Foto real cuando el catálogo la tiene, mismo criterio que
                 // flashcards_screen.dart (identificación visual de verdad,
                 // sin atribución -- aquí el objetivo es adivinar).
-                child: question.answer.image != null
-                    ? ClipRRect(
+                child: question.answer.image == null
+                    ? const SizedBox.shrink()
+                    : ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: CachedNetworkImage(
                           imageUrl: question.answer.image!.url,
-                          height: 100,
+                          height: 180,
                           fit: BoxFit.contain,
-                          memCacheHeight: (100 * MediaQuery.of(context).devicePixelRatio).round(),
+                          memCacheHeight: (180 * MediaQuery.of(context).devicePixelRatio).round(),
                           placeholder: (context, url) => InstrumentIcon(
                             iconKey: question.answer.icon,
                             category: question.answer.category,
@@ -190,64 +210,29 @@ class _QuizScreenState extends State<QuizScreen> {
                             size: 100,
                           ),
                         ),
-                      )
-                    : InstrumentIcon(
-                        iconKey: question.answer.icon,
-                        category: question.answer.category,
-                        size: 100,
                       ),
               ),
               const SizedBox(height: 12),
               Text(
-                l10n.whatInstrumentIsThis,
+                question.answer.image != null
+                    ? l10n.whatInstrumentIsThis
+                    : l10n.quizWhichIsUsedFor(question.answer.use.forLanguageCode(Localizations.localeOf(context).languageCode)),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 20),
-              ...question.options.map((option) {
-                final isSelected = _selected == option;
-                final isCorrect = option.id == question.answer.id;
-                // El color sol no basta -- un usuari daltònic (vermell-verd,
-                // la forma més comuna) no distingiria l'opció correcta de la
-                // incorrecta: s'afegeix una icona (✓/✗) com a senyal
-                // redundant, mai només el color.
-                Color? color;
-                IconData? icon;
-                if (_selected != null) {
-                  if (isCorrect) {
-                    color = Colors.green;
-                    icon = Icons.check_circle;
-                  } else if (isSelected) {
-                    color = Colors.red;
-                    icon = Icons.cancel;
-                  }
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: color != null ? BorderSide(color: color, width: 2) : null,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    onPressed: () => _select(option),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (icon != null) ...[
-                          Icon(icon, color: color, size: 20),
-                          const SizedBox(width: 8),
-                        ],
-                        Flexible(
-                          child: Text(
-                            option.name.forLanguageCode(Localizations.localeOf(context).languageCode),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
+              for (final option in question.options)
+                InstriqAnswerOption(
+                  label: option.name.forLanguageCode(Localizations.localeOf(context).languageCode),
+                  state: _selected == null
+                      ? InstriqAnswerState.idle
+                      : option.id == question.answer.id
+                          ? InstriqAnswerState.correct
+                          : _selected == option
+                              ? InstriqAnswerState.wrong
+                              : InstriqAnswerState.other,
+                  onPressed: () => _select(option),
+                ),
               const Spacer(),
               if (_selected != null)
                 FilledButton(

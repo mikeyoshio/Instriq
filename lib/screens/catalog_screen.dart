@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../data/instruments_data.dart';
@@ -14,7 +13,8 @@ import '../services/catalog_community_photo_service.dart';
 import '../services/profile_service.dart';
 import '../services/progress_service.dart';
 import '../utils/fuzzy_match.dart';
-import '../widgets/category_icon.dart';
+import '../utils/instrument_search.dart';
+import '../widgets/instrument_list_tile.dart';
 import 'community_photos_review_screen.dart';
 import 'instrument_detail_screen.dart';
 
@@ -206,16 +206,19 @@ class _CatalogScreenState extends State<CatalogScreen> {
     final l10n = AppLocalizations.of(context)!;
     final languageCode = Localizations.localeOf(context).languageCode;
 
-    final filteredInstruments = kInstruments
-        .where((i) => matchesInstrumentFilters(
-              i,
-              _query,
-              languageCode,
-              categories: _categoryFilters,
-              specialties: _specialtyFilters,
-              newOnly: _newOnlyFilter,
-            ))
-        .toList();
+    // Filtres primer; després el mateix rànquing que Omnihub (nom abans que àlies).
+    final filteredInstruments = rankInstruments(
+      kInstruments.where((i) => matchesInstrumentFilters(
+            i,
+            '',
+            languageCode,
+            categories: _categoryFilters,
+            specialties: _specialtyFilters,
+            newOnly: _newOnlyFilter,
+          )),
+      _query,
+      languageCode,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -285,66 +288,35 @@ class _CatalogScreenState extends State<CatalogScreen> {
                         final instrument = filteredInstruments[index];
                         final learningStatus = ProgressService.instance.learningStatusFor(instrument.id);
                         final thumbnailUrl = _thumbnailUrlFor(instrument);
-                        return Card(
-                          child: ListTile(
-                            leading: thumbnailUrl != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: CachedNetworkImage(
-                                      imageUrl: thumbnailUrl,
-                                      width: 48,
-                                      height: 48,
-                                      fit: BoxFit.cover,
-                                      memCacheWidth: (48 * MediaQuery.of(context).devicePixelRatio).round(),
-                                      placeholder: (context, url) => InstrumentIcon(
-                                        iconKey: instrument.icon,
-                                        category: instrument.category,
-                                        size: 48,
-                                      ),
-                                      errorWidget: (context, url, error) => InstrumentIcon(
-                                        iconKey: instrument.icon,
-                                        category: instrument.category,
-                                        size: 48,
-                                      ),
-                                    ),
-                                  )
-                                : InstrumentIcon(
-                                    iconKey: instrument.icon,
-                                    category: instrument.category,
-                                    size: 48,
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: InstriqSpacing.sm),
+                          child: InstrumentListTile(
+                            instrument: instrument,
+                            thumbnailUrl: thumbnailUrl,
+                            titleBadges: [
+                              if (instrument.isNew)
+                                InstriqBadge(label: l10n.catalogNewInstrumentBadge, color: InstriqColors.accent),
+                              if (!_hasAnyPhoto(instrument))
+                                Tooltip(
+                                  message: l10n.noPhotoBadgeTooltip,
+                                  child: Icon(
+                                    Icons.no_photography_outlined,
+                                    size: 16,
+                                    semanticLabel: l10n.noPhotoBadgeTooltip,
+                                    color: Theme.of(context).colorScheme.outline,
                                   ),
-                            title: Row(
-                              children: [
-                                Flexible(child: Text(instrument.name.forLanguageCode(languageCode))),
-                                if (instrument.isNew) ...[
-                                  const SizedBox(width: 6),
-                                  InstriqBadge(label: l10n.catalogNewInstrumentBadge, color: InstriqColors.accent),
-                                ],
-                                if (!_hasAnyPhoto(instrument)) ...[
-                                  const SizedBox(width: 6),
-                                  Tooltip(
-                                    message: l10n.noPhotoBadgeTooltip,
-                                    child: Icon(
-                                      Icons.no_photography_outlined,
-                                      size: 16,
-                                      color: Theme.of(context).colorScheme.outline,
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                            subtitle:
-                                Text('${instrument.specialty.label(l10n)} · ${instrument.category.label(l10n)}'),
+                                ),
+                            ],
                             trailing: switch (learningStatus) {
                               LearningStatus.mastered => Tooltip(
                                   message: l10n.learningStatusMastered,
-                                  child: const Icon(Icons.check_circle, color: Colors.green),
+                                  child: Icon(Icons.check_circle, color: InstriqColors.statusPublished),
                                 ),
                               LearningStatus.learning => Tooltip(
                                   message: l10n.learningStatusLearning,
                                   child: Icon(Icons.hourglass_bottom, color: Theme.of(context).colorScheme.tertiary),
                                 ),
-                              LearningStatus.pending => const Icon(Icons.chevron_right),
+                              LearningStatus.pending => null,
                             },
                             onTap: () async {
                               await Navigator.of(context).push(

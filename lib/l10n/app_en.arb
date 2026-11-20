@@ -1579,5 +1579,6 @@
   "helpArticleEcgStep2": "In \"Practice\", identify each strip. After you answer, the app reminds you of the key feature.",
   "helpArticleMyTechniquesTitle": "My techniques",
   "helpArticleMyTechniquesIntro": "A log of the techniques you have done in theatre and how confident you feel. It stays on your device only.",
-  "helpArticleMyTechniquesStep1": "In Learn → Learn → My techniques you see your progress across all guides. Set the status from each guide under \"My practice\"."
+  "helpArticleMyTechniquesStep1": "In Learn → Learn → My techniques you see your progress across all guides. Set the status from each guide under \"My practice\".",
+  "quizWhichIsUsedFor": "Which instrument is used for this? {use}"
 }

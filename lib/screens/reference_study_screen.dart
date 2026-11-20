@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../data/perioperative_guides_data.dart';
 import '../data/surgical_positions_data.dart';
+import '../design_system/components/instriq_answer_option.dart';
 import '../l10n/app_localizations.dart';
 import '../models/surgical_position.dart';
 import '../widgets/flip_deck.dart';
@@ -148,25 +149,16 @@ class _PositionQuizScreenState extends State<PositionQuizScreen> {
             Text(answer.procedures.forLanguageCode(lang), style: theme.textTheme.bodyLarge),
             const SizedBox(height: 20),
             for (final o in options)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: OutlinedButton(
-                  style: _selected == null
-                      ? null
-                      : o.id == answer.id
-                          ? OutlinedButton.styleFrom(
-                              backgroundColor: theme.colorScheme.primaryContainer,
-                              foregroundColor: theme.colorScheme.onPrimaryContainer,
-                            )
-                          : o.id == _selected!.id
-                              ? OutlinedButton.styleFrom(
-                                  backgroundColor: theme.colorScheme.errorContainer,
-                                  foregroundColor: theme.colorScheme.onErrorContainer,
-                                )
-                              : null,
-                  onPressed: () => _select(o),
-                  child: Text(o.name.forLanguageCode(lang)),
-                ),
+              InstriqAnswerOption(
+                label: o.name.forLanguageCode(lang),
+                state: _selected == null
+                    ? InstriqAnswerState.idle
+                    : o.id == answer.id
+                        ? InstriqAnswerState.correct
+                        : o.id == _selected!.id
+                            ? InstriqAnswerState.wrong
+                            : InstriqAnswerState.other,
+                onPressed: () => _select(o),
               ),
             if (_selected != null) ...[
               const SizedBox(height: 12),

@@ -1579,5 +1579,6 @@
   "helpArticleEcgStep2": "En «Practicar», adivina el ritmo de cada tira. Después de responder, la app te recuerda la clave.",
   "helpArticleMyTechniquesTitle": "Mis técnicas",
   "helpArticleMyTechniquesIntro": "Un registro de las técnicas que ya has hecho en quirófano y de cómo te sientes. Se guarda solo en tu dispositivo.",
-  "helpArticleMyTechniquesStep1": "En Aprender → Aprender → Mis técnicas ves el progreso de todas las guías. Marca el estado desde cada guía, en «Mi práctica»."
+  "helpArticleMyTechniquesStep1": "En Aprender → Aprender → Mis técnicas ves el progreso de todas las guías. Marca el estado desde cada guía, en «Mi práctica».",
+  "quizWhichIsUsedFor": "¿Qué instrumento se usa para esto? {use}"
 }

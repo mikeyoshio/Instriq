@@ -25,6 +25,10 @@ bool fuzzyContains(String haystack, String needle) {
   return false;
 }
 
+/// Minúscules i sense accents: la mateixa normalització que fa servir
+/// [fuzzyContains], per a qui necessiti comparar o ordenar.
+String normalizeForSearch(String value) => _normalize(value);
+
 String _normalize(String value) {
   final lower = value.toLowerCase();
   final buffer = StringBuffer();

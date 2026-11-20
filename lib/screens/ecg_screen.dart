@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../data/ecg_rhythms_data.dart';
+import '../design_system/components/instriq_answer_option.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/ecg_waveform.dart';
 
@@ -161,30 +162,20 @@ class _EcgPracticeState extends State<_EcgPractice> {
         EcgStripView(strip: ecgStripFor(kEcgRhythms[_answer].id, seed: _seed)),
         const SizedBox(height: 16),
         for (final i in _options)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: OutlinedButton(
-              style: _picked == null
-                  ? null
-                  : i == _answer
-                      ? OutlinedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primaryContainer,
-                          foregroundColor: theme.colorScheme.onPrimaryContainer)
-                      : i == _picked
-                          ? OutlinedButton.styleFrom(
-                              backgroundColor: theme.colorScheme.errorContainer,
-                              foregroundColor: theme.colorScheme.onErrorContainer)
-                          : null,
-              onPressed: () {
-                if (_picked != null) return;
-                setState(() {
-                  _picked = i;
-                  _total++;
-                  if (i == _answer) _right++;
-                });
-              },
-              child: Text(kEcgRhythms[i].name.forLanguageCode(lang)),
-            ),
+          InstriqAnswerOption(
+            label: kEcgRhythms[i].name.forLanguageCode(lang),
+            state: _picked == null
+                ? InstriqAnswerState.idle
+                : i == _answer
+                    ? InstriqAnswerState.correct
+                    : i == _picked
+                        ? InstriqAnswerState.wrong
+                        : InstriqAnswerState.other,
+            onPressed: () => setState(() {
+              _picked = i;
+              _total++;
+              if (i == _answer) _right++;
+            }),
           ),
         if (_picked != null) ...[
           Text(kEcgRhythms[_answer].recognise.forLanguageCode(lang)),

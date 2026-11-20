@@ -34,6 +34,8 @@ import '../services/tray_service.dart';
 import '../services/usage_analytics_service.dart';
 import '../services/workspace_service.dart';
 import '../utils/fuzzy_match.dart';
+import '../utils/instrument_search.dart';
+import '../widgets/instrument_list_tile.dart';
 import '../widgets/sterilization_method_label.dart';
 import 'catalog_screen.dart';
 import 'custom_instrument_detail_screen.dart';
@@ -192,7 +194,7 @@ class OmnihubIndex {
     final q = query.toLowerCase();
     return OmnihubResults(
       procedures: procedures.where((p) => fuzzyContains(p.name, q) || fuzzyContains(p.description ?? '', q)).toList(),
-      instruments: kInstruments.where((i) => _matchesInstrument(i, q, languageCode, l10n)).toList(),
+      instruments: rankInstruments(kInstruments, query, languageCode, extraText: (i) => _instrumentExtraText(i, languageCode, l10n)),
       techniques: techniques.where((d) => _matchesGroupDocument(d, q)).toList(),
       protocols: protocols.where((d) => _matchesGroupDocument(d, q)).toList(),
       trays: trays.where((t) => _matchesTray(t, q)).toList(),
@@ -204,16 +206,15 @@ class OmnihubIndex {
     );
   }
 
-  bool _matchesInstrument(Instrument instrument, String query, String languageCode, AppLocalizations l10n) {
-    return fuzzyContains(instrument.name.forLanguageCode(languageCode), query) ||
-        instrument.aliases.any((alias) => fuzzyContains(alias, query)) ||
-        fuzzyContains(instrument.description.forLanguageCode(languageCode), query) ||
-        fuzzyContains(instrument.use.forLanguageCode(languageCode), query) ||
-        fuzzyContains(instrument.specialty.label(l10n), query) ||
-        fuzzyContains(instrument.category.label(l10n), query) ||
-        (catalogSterilizationMethods[instrument.id] ?? const [])
-            .any((m) => fuzzyContains(sterilizationMethodValueLabel(l10n, m), query));
-  }
+  /// Text secundari on també es busca (amb menys prioritat que el nom i els
+  /// àlies, vegeu `instrument_search.dart`).
+  String _instrumentExtraText(Instrument instrument, String languageCode, AppLocalizations l10n) => [
+        instrument.description.forLanguageCode(languageCode),
+        instrument.use.forLanguageCode(languageCode),
+        instrument.specialty.label(l10n),
+        instrument.category.label(l10n),
+        for (final m in catalogSterilizationMethods[instrument.id] ?? const []) sterilizationMethodValueLabel(l10n, m),
+      ].join(' ');
 
   /// Especialitat resolta d'una versió publicada (`specialtyId` → label, o el
   /// text llegat `specialty` si la fila encara no es va migrar).
@@ -446,9 +447,8 @@ class _OmnihubScreenState extends State<OmnihubScreen> {
             (role) => ProcedureDetailScreen(procedureId: p.id, workspaceId: p.workspaceId, myRole: role),
           ),
         ));
-    addSection<Instrument>(l10n.homeSectionInstruments, results.instruments, (i) => InstriqListItem(
-          icon: Icons.build_outlined,
-          title: i.name.forLanguageCode(languageCode),
+    addSection<Instrument>(l10n.homeSectionInstruments, results.instruments, (i) => InstrumentListTile(
+          instrument: i,
           onTap: () => _push(InstrumentDetailScreen(instrument: i)),
         ));
     addSection<GroupDocument>(l10n.homeSectionTechniques, results.techniques, (d) => InstriqListItem(
