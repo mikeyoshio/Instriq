@@ -7,7 +7,7 @@ class EcgRhythm {
   const EcgRhythm(this.id, this.name, this.rate, this.regularity, this.pWave, this.qrs, this.recognise, this.action);
 }
 
-/// 15 ritmes per al monitor de quiròfan: com reconèixer-los i què fa
+/// 20 ritmes per al monitor de quiròfan: com reconèixer-los i què fa
 /// infermeria. Text propi; mai dosis.
 const List<EcgRhythm> kEcgRhythms = [
   EcgRhythm(
@@ -41,6 +41,26 @@ const List<EcgRhythm> kEcgRhythms = [
     LocalizedText(ca: 'Buscar la causa: dolor, plànol anestèsic superficial, sagnat, febre, hipovolèmia. Avisar l\'anestesiòleg, mirar el pacient (no només el monitor) i comprovar elèctrodes i cables.', es: 'Buscar la causa: dolor, plano anestésico superficial, sangrado, fiebre, hipovolemia. Avisar al anestesiólogo, mirar al paciente (no solo el monitor) y comprobar electrodos y cables.', en: 'Look for the cause: pain, light anaesthesia, bleeding, fever, hypovolaemia. Tell the anaesthetist, look at the patient (not just the monitor) and check electrodes and leads.'),
   ),
   EcgRhythm(
+    'arritmia-sinusal',
+    LocalizedText(ca: 'Arítmia sinusal', es: 'Arritmia sinusal', en: 'Sinus arrhythmia'),
+    LocalizedText(ca: '60-100', es: '60-100', en: '60-100'),
+    LocalizedText(ca: 'Irregular, de manera cíclica', es: 'Irregular, de forma cíclica', en: 'Cyclically irregular'),
+    LocalizedText(ca: 'Sí, una abans de cada QRS', es: 'Sí, una antes de cada QRS', en: 'Yes, one before every QRS'),
+    LocalizedText(ca: 'Estret', es: 'Estrecho', en: 'Narrow'),
+    LocalizedText(ca: 'Sinusal, però els QRS s\'acosten i s\'allunyen a poc a poc, seguint la respiració.', es: 'Sinusal, pero los QRS se acercan y se alejan poco a poco, siguiendo la respiración.', en: 'Sinus, but the QRS complexes drift closer and further apart with breathing.'),
+    LocalizedText(ca: 'Sol ser normal, sobretot en gent jove i amb ventilació mecànica. Anotar-lo; no cal cap acció si el pacient està bé.', es: 'Suele ser normal, sobre todo en gente joven y con ventilación mecánica. Anotarlo; no hace falta ninguna acción si el paciente está bien.', en: 'Usually normal, especially in young patients and during mechanical ventilation. Record it; no action is needed if the patient is well.'),
+  ),
+  EcgRhythm(
+    'extrasistole-auricular',
+    LocalizedText(ca: 'Extrasístoles auriculars', es: 'Extrasístoles auriculares', en: 'Atrial ectopics'),
+    LocalizedText(ca: 'La del ritme de base', es: 'La del ritmo de base', en: 'That of the underlying rhythm'),
+    LocalizedText(ca: 'Irregular per les extrasístoles', es: 'Irregular por las extrasístoles', en: 'Irregular because of the ectopics'),
+    LocalizedText(ca: 'Sí, avançada i a vegades diferent', es: 'Sí, adelantada y a veces distinta', en: 'Yes, early and sometimes different'),
+    LocalizedText(ca: 'Estret', es: 'Estrecho', en: 'Narrow'),
+    LocalizedText(ca: 'Un batec avançat però estret i amb la seva P; després el ritme continua sense pausa compensadora.', es: 'Un latido adelantado pero estrecho y con su P; después el ritmo sigue sin pausa compensadora.', en: 'An early but narrow beat with its own P wave; the rhythm then resumes without a compensatory pause.'),
+    LocalizedText(ca: 'Aïllades solen ser benignes. Avisar si són molt freqüents o si apareixen salves, que poden anunciar una fibril·lació auricular.', es: 'Aisladas suelen ser benignas. Avisar si son muy frecuentes o si aparecen salvas, que pueden anunciar una fibrilación auricular.', en: 'Isolated ones are usually benign. Speak up if they become frequent or come in runs, which may herald atrial fibrillation.'),
+  ),
+  EcgRhythm(
     'fibrilacion-auricular',
     LocalizedText(ca: 'Fibril·lació auricular', es: 'Fibrilación auricular', en: 'Atrial fibrillation'),
     LocalizedText(ca: 'Variable', es: 'Variable', en: 'Variable'),
@@ -71,6 +91,16 @@ const List<EcgRhythm> kEcgRhythms = [
     LocalizedText(ca: 'Avisar de seguida i valorar el pacient: si està inestable (hipotensió, mal perfusió), portar el desfibril·lador. Avisar l\'anestesiòleg, mirar el pacient (no només el monitor) i comprovar elèctrodes i cables.', es: 'Avisar enseguida y valorar al paciente: si está inestable (hipotensión, mala perfusión), traer el desfibrilador. Avisar al anestesiólogo, mirar al paciente (no solo el monitor) y comprobar electrodos y cables.', en: 'Raise the alarm and assess the patient: if unstable (hypotension, poor perfusion), bring the defibrillator. Tell the anaesthetist, look at the patient (not just the monitor) and check electrodes and leads.'),
   ),
   EcgRhythm(
+    'ritmo-nodal',
+    LocalizedText(ca: 'Ritme nodal (de la unió)', es: 'Ritmo nodal (de la unión)', en: 'Junctional rhythm'),
+    LocalizedText(ca: '40-60', es: '40-60', en: '40-60'),
+    LocalizedText(ca: 'Regular', es: 'Regular', en: 'Regular'),
+    LocalizedText(ca: 'No se\'n veuen, o invertides just abans o després del QRS', es: 'No se ven, o invertidas justo antes o después del QRS', en: 'Absent, or inverted just before or after the QRS'),
+    LocalizedText(ca: 'Estret', es: 'Estrecho', en: 'Narrow'),
+    LocalizedText(ca: 'Lent, regular i estret, però sense P normal al davant.', es: 'Lento, regular y estrecho, pero sin P normal delante.', en: 'Slow, regular and narrow, but with no normal P wave in front.'),
+    LocalizedText(ca: 'Avisar l\'anestesiòleg, mirar el pacient (no només el monitor) i comprovar elèctrodes i cables.', es: 'Avisar al anestesiólogo, mirar al paciente (no solo el monitor) y comprobar electrodos y cables.', en: 'Tell the anaesthetist, look at the patient (not just the monitor) and check electrodes and leads.'),
+  ),
+  EcgRhythm(
     'extrasistole-ventricular',
     LocalizedText(ca: 'Extrasístoles ventriculars', es: 'Extrasístoles ventriculares', en: 'Ventricular ectopics'),
     LocalizedText(ca: 'La del ritme de base', es: 'La del ritmo de base', en: 'That of the underlying rhythm'),
@@ -89,6 +119,16 @@ const List<EcgRhythm> kEcgRhythms = [
     LocalizedText(ca: 'Ample', es: 'Ancho', en: 'Wide'),
     LocalizedText(ca: 'QRS amples, ràpids i iguals, sense P al davant.', es: 'QRS anchos, rápidos e iguales, sin P delante.', en: 'Fast, identical wide QRS complexes with no P waves.'),
     LocalizedText(ca: 'Mirar si té pols. Sense pols és una aturada: començar RCP i portar el desfibril·lador. Amb pols, avisar de seguida i tenir el desfibril·lador a punt.', es: 'Mirar si tiene pulso. Sin pulso es una parada: empezar RCP y traer el desfibrilador. Con pulso, avisar enseguida y tener el desfibrilador preparado.', en: 'Check for a pulse. Pulseless means cardiac arrest: start CPR and get the defibrillator. With a pulse, raise the alarm and have the defibrillator ready.'),
+  ),
+  EcgRhythm(
+    'torsade-pointes',
+    LocalizedText(ca: 'Torsade de pointes', es: 'Torsade de pointes', en: 'Torsades de pointes'),
+    LocalizedText(ca: '200-250', es: '200-250', en: '200-250'),
+    LocalizedText(ca: 'Irregular', es: 'Irregular', en: 'Irregular'),
+    LocalizedText(ca: 'No se\'n veuen', es: 'No se ven', en: 'None visible'),
+    LocalizedText(ca: 'Ample i canviant', es: 'Ancho y cambiante', en: 'Wide and changing'),
+    LocalizedText(ca: 'Taquicàrdia ampla on l\'amplitud creix i decreix, com si la línia es retorcés al voltant de l\'eix.', es: 'Taquicardia ancha en la que la amplitud crece y decrece, como si la línea se retorciera alrededor del eje.', en: 'A wide tachycardia whose amplitude waxes and wanes, as if the line were twisting around its axis.'),
+    LocalizedText(ca: 'Mirar si té pols i portar el desfibril·lador. Sense pols és una aturada: RCP i desfibril·lar. Avisar l\'anestesiòleg, que en buscarà la causa.', es: 'Mirar si tiene pulso y traer el desfibrilador. Sin pulso es una parada: RCP y desfibrilar. Avisar al anestesiólogo, que buscará la causa.', en: 'Check for a pulse and bring the defibrillator. Without a pulse it is cardiac arrest: CPR and defibrillate. Tell the anaesthetist, who will look for the cause.'),
   ),
   EcgRhythm(
     'fibrilacion-ventricular',
@@ -149,6 +189,16 @@ const List<EcgRhythm> kEcgRhythms = [
     LocalizedText(ca: 'Sovint ample', es: 'A menudo ancho', en: 'Often wide'),
     LocalizedText(ca: 'Les P i els QRS van cadascun pel seu compte.', es: 'Las P y los QRS van cada uno por su cuenta.', en: 'P waves and QRS complexes march independently.'),
     LocalizedText(ca: 'Urgència: avisar, valorar la perfusió i preparar el marcapassos extern.', es: 'Urgencia: avisar, valorar la perfusión y preparar el marcapasos externo.', en: 'Emergency: raise the alarm, assess perfusion and prepare external pacing.'),
+  ),
+  EcgRhythm(
+    'ritmo-idioventricular',
+    LocalizedText(ca: 'Ritme idioventricular', es: 'Ritmo idioventricular', en: 'Idioventricular rhythm'),
+    LocalizedText(ca: '20-40', es: '20-40', en: '20-40'),
+    LocalizedText(ca: 'Regular', es: 'Regular', en: 'Regular'),
+    LocalizedText(ca: 'No se\'n veuen', es: 'No se ven', en: 'None visible'),
+    LocalizedText(ca: 'Ample', es: 'Ancho', en: 'Wide'),
+    LocalizedText(ca: 'Molt lent, amb QRS amples i sense P: el ventricle bat pel seu compte.', es: 'Muy lento, con QRS anchos y sin P: el ventrículo late por su cuenta.', en: 'Very slow, wide QRS complexes with no P waves: the ventricle is beating on its own.'),
+    LocalizedText(ca: 'Urgència: comprovar si té pols i la perfusió, avisar de seguida i preparar el marcapassos extern. Sense pols és una aturada: RCP.', es: 'Urgencia: comprobar si tiene pulso y la perfusión, avisar enseguida y preparar el marcapasos externo. Sin pulso es una parada: RCP.', en: 'Emergency: check for a pulse and perfusion, raise the alarm and prepare external pacing. Without a pulse it is cardiac arrest: CPR.'),
   ),
   EcgRhythm(
     'ritmo-marcapasos',

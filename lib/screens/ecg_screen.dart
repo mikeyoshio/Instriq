@@ -143,7 +143,7 @@ class _EcgPracticeState extends State<_EcgPractice> {
     _answer = _rnd.nextInt(kEcgRhythms.length);
     final others = [for (var i = 0; i < kEcgRhythms.length; i++) if (i != _answer) i]..shuffle(_rnd);
     _options = [...others.take(3), _answer]..shuffle(_rnd);
-    _seed = _rnd.nextInt(1000);
+    _seed = 1 + _rnd.nextInt(1 << 30); // 0 és la tira de llibre; la pràctica sempre en varia una
     _picked = null;
   }
 
