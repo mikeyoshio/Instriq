@@ -132,6 +132,7 @@
     .nav { flex-wrap: wrap; row-gap: 0; padding-bottom: 0; }
     .nav-sections { order: 3; flex: 0 0 100%; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; padding: 12px 0 14px; gap: 20px; }
     .nav-sections::-webkit-scrollbar { display: none; }
+    .nav-sections { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); padding-right: 32px; }
     section[id] { scroll-margin-top: 120px; }
   }
   @media (max-width: 520px) {
@@ -210,7 +211,7 @@
   .cards.cols-2 { grid-template-columns: 1fr; }
   .cards.cols-3 { grid-template-columns: 1fr; }
   @media (min-width: 720px) { .cards.cols-2 { grid-template-columns: 1fr 1fr; } .cards.cols-3 { grid-template-columns: repeat(3, 1fr); } .cards.cols-4 { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1000px) { .cards.cols-4 { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 1200px) { .cards.cols-4 { grid-template-columns: repeat(4, 1fr); } }
   .card { background: var(--surface); border-radius: 14px; padding: 30px; box-shadow: var(--shadow-soft); position: relative; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease; }
   .cards.plain { gap: 4px; }
   .cards.plain .card { background: none; box-shadow: none; padding: 16px 0; border-bottom: 1px solid var(--rule); border-radius: 0; }
@@ -389,11 +390,12 @@
   .deck-dot-lead { background: var(--app); }
   .deck-tag, .deck-chip { font-size: 0.72rem; }
   .deck-role { font-size: 0.72rem; }
-  .deck-wrap { position: relative; height: 480px; display: flex; flex-direction: column; }
+  .deck-wrap { position: relative; height: 540px; display: flex; flex-direction: column; }
+  .deck-wrap .deck-stage { -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); }
   .deck-wrap .deck-stage { flex: 1; }
   .deck-toggle { align-self: center; margin-top: 8px; min-height: 44px; padding: 0 16px; background: none; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-muted); font-family: var(--display); font-size: 0.8rem; cursor: pointer; }
   .deck-toggle:hover { border-color: var(--ink); color: var(--ink); }
-  @media (max-width: 900px) { .deck-wrap { height: 440px; } }
+  @media (max-width: 900px) { .deck-wrap { height: 470px; } }
 
   /* Tancament: com començar + les dues accions. */
   .section.close { background: var(--accent-soft); border-top: 1px solid var(--rule); }
@@ -417,8 +419,8 @@
 
 <header class="site">
   <div class="wrap nav">
-    <a href="#" class="brand"><img src="favicon.png" alt=""> Instriq</a>
-    <nav class="nav-sections" aria-label="Seccions">
+    <a href="/" class="brand"><img src="favicon.png" alt=""> Instriq</a>
+    <nav class="nav-sections" data-i18n="nav.aria" data-i18n-attr="aria-label" aria-label="Seccions">
       <a href="#consultar" data-i18n="nav.consultar">Consultar</a>
       <a href="#aprender" data-i18n="nav.aprender">Aprendre</a>
       <a href="#documentar" data-i18n="nav.documentar">Documentar</a>
@@ -629,6 +631,10 @@ stage.addEventListener("keydown", (event) => {
 });
 draw();
 document.addEventListener("instriq:lang", draw);
+const isoRoot = document.querySelector(".iq-lamp-wrap .iso");
+const darkMq = matchMedia("(prefers-color-scheme: dark)");
+const syncTheme = () => { const t = document.documentElement.dataset.theme || (darkMq.matches ? "dark" : "light"); isoRoot.setAttribute("data-theme", t); };
+syncTheme(); darkMq.addEventListener("change", syncTheme);
 </script>
     
     </div>
@@ -648,7 +654,7 @@ document.addEventListener("instriq:lang", draw);
       <a data-vdm href="/vademecum/ca/" class="btn btn-primary" data-i18n="consultar.cta">Explorar el Vademècum →</a>
     </div>
     <figure class="app-shot">
-      <img src="screenshots/omnihub.png" alt="Omnihub, la cerca unificada d'Instriq" width="260" height="578" loading="lazy">
+      <img src="screenshots/omnihub.png" data-i18n="alt.omnihub" data-i18n-attr="alt" alt="Omnihub, la cerca unificada d'Instriq" width="260" height="578" loading="lazy">
       <figcaption data-i18n="hoy.fig0">Omnihub: una sola cerca per a tot Instriq.</figcaption>
     </figure>
   </div>
@@ -700,8 +706,8 @@ document.addEventListener("instriq:lang", draw);
         </article>
 
         <article class="deck-card">
-          <span class="deck-tag" data-i18n="deck.c3tag">Safata · Bandeja general</span>
-          <div class="deck-title" data-i18n="deck.c3title">Bandeja Laparoscòpia Bàsica</div>
+          <span class="deck-tag" data-i18n="deck.c3tag">Safata · Cirurgia general</span>
+          <div class="deck-title" data-i18n="deck.c3title">Safata Laparoscòpia Bàsica</div>
           <p class="deck-sub" data-i18n="deck.c3sub">14 instruments · esterilitzada</p>
           <div class="deck-rule"></div>
           <div class="deck-row"><span data-i18n="deck.c3r1k">Última preparació</span><b data-i18n="deck.c3r1v">Avui, 07:42</b></div>
@@ -784,7 +790,7 @@ document.addEventListener("instriq:lang", draw);
     <p class="lede measure" style="margin-left:auto;margin-right:auto;" data-i18n="pantalles.lede">Dins del quiròfan, una checklist a pantalla completa pensada per tocar-la amb guants — i al despatx, un panell complet pensat per a qui coordina el grup sencer: <strong>pendents d'aprovació, cua de revisió i incidències, d'un cop d'ull</strong>.</p>
     <div class="shot-grid">
       <figure class="shot-card is-mobile">
-        <img src="screenshots/modo_quirofano.png" alt="Mode Quiròfan: checklist de preparació d'una safata d'instrumental" loading="lazy">
+        <img src="screenshots/modo_quirofano.png" data-i18n="alt.quirofano" data-i18n-attr="alt" alt="Mode Quiròfan: checklist de preparació d'una safata d'instrumental" loading="lazy">
         <figcaption data-i18n="pantalles.cap2"><b>Mode Quiròfan.</b> Checklist de preparació de safates a pantalla completa, pensada per usar-se amb guants.</figcaption>
       </figure>
     </div>
@@ -1002,6 +1008,9 @@ document.addEventListener("instriq:lang", draw);
 
   var DICT = {
     es: {
+      "alt.omnihub": "Omnihub, la búsqueda unificada de Instriq",
+      "alt.quirofano": "Modo Quirófano: checklist de preparación de una bandeja de instrumental",
+      "nav.aria": "Secciones",
       "hero.access2": "Funciona en el navegador del móvil, la tablet o el ordenador, sin instalar nada ni crear cuenta. <a href=\"/vademecum/es/\" data-vdm>Explora el Vademécum</a> · <a href=\"#comencar\">Cómo empezar</a>",
       "hero.pathNurseK": "Enfermería e instrumentistas",
       "hero.pathNurseT": "Encuentra una pieza, una técnica o un protocolo",
@@ -1043,7 +1052,7 @@ document.addEventListener("instriq:lang", draw);
       "deck.c2tag": "Instrumental · Catálogo", "deck.c2title": "Kelly recta 18cm", "deck.c2sub": "Aesculap · Pinza hemostática",
       "deck.c2r1k": "Esterilización", "deck.c2r1v": "Vapor 134°C", "deck.c2r2k": "Usado en", "deck.c2r2v": "Colecistectomía", "deck.c2r3k": "Compatible con", "deck.c2r3v": "Bandeja general", "deck.c2r4k": "Estado", "deck.c2r4v": "Publicado",
       "deck.c2chip": "Ficha técnica completa",
-      "deck.c3tag": "Bandeja · Bandeja general", "deck.c3title": "Bandeja Laparoscopia Básica", "deck.c3sub": "14 instrumentos · esterilizada",
+      "deck.c3tag": "Bandeja · Cirugía general", "deck.c3title": "Bandeja Laparoscopia Básica", "deck.c3sub": "14 instrumentos · esterilizada",
       "deck.c3r1k": "Última preparación", "deck.c3r1v": "Hoy, 07:42", "deck.c3r2k": "Control de calidad", "deck.c3r2v": "Validado", "deck.c3r3k": "Estado", "deck.c3r3v": "Publicada",
       "deck.c3chip": "Checklist completo",
       "deck.c4tag": "Tarjeta de preferencia", "deck.c4title": "Dr. Martí · Apendicectomía", "deck.c4sub": "Validada por el cirujano",
@@ -1116,7 +1125,7 @@ document.addEventListener("instriq:lang", draw);
       "novedades.lastBadge": "#101", "novedades.lastText": "<strong>v1.3.1: referencia perioperatoria</strong> — 41 guías, 13 posiciones, 12 escalas con cálculo guiado, siglas, calculadoras, ECG y «Mis técnicas», con analítica de uso anónima.",
       "novedades.cta": "Ver todas las novedades →",
       "colabora.eyebrow": "Colabora", "colabora.h1": "Instriq crece con quien lo usa.",
-      "colabora.lede": "Impulsado por un pequeño equipo, crece con profesionales sanitarios y desarrolladores que colaboran de forma voluntaria.",
+      "colabora.lede": "Impulsado por un pequeño equipo, crece con profesionales sanitarios y desarrolladores que colaboran de forma voluntaria. <a href=\"artifexs.html\">Conoce a los artífexs →</a>",
       "colabora.c1t": "Eres profesional sanitario", "colabora.c1p": "Comparte el instrumental y las técnicas de tu equipo, o ayúdanos a revisar el catálogo.", "colabora.c1cta": "Abrir la app →",
       "colabora.c2t": "Eres desarrolladora/or", "colabora.c2p": "El código es público: Flutter + Supabase. Empieza por el README del repositorio.", "colabora.c2cta": "Ir al repositorio →", "colabora.c2star": "Dale una estrella al repositorio",
       "colabora.c3t": "¿Quieres hacer una donación?", "colabora.c3p": "Instriq es gratuito y sin inversores. Una suscripción mensual en Patreon ayuda a cubrir el coste del proyecto.", "colabora.c3cta": "Hazte mecenas en Patreon →",
@@ -1147,6 +1156,9 @@ document.addEventListener("instriq:lang", draw);
       "footer.fine": "Instriq® — proyecto open source por y para el bloque quirúrgico. Código bajo AGPL-3.0 y documentación bajo CC BY-SA 4.0; el nombre y la marca Instriq quedan reservados."
     },
     en: {
+      "alt.omnihub": "Omnihub, Instriq's unified search",
+      "alt.quirofano": "Theatre Mode: checklist for preparing an instrument tray",
+      "nav.aria": "Sections",
       "hero.access2": "Works in the browser on your phone, tablet or computer, with nothing to install and no account. <a href=\"/vademecum/en/\" data-vdm>Explore the Vademecum</a> · <a href=\"#comencar\">How to start</a>",
       "hero.pathNurseK": "Theatre nurses and scrubs",
       "hero.pathNurseT": "Find an instrument, a technique or a protocol",
@@ -1188,7 +1200,7 @@ document.addEventListener("instriq:lang", draw);
       "deck.c2tag": "Instruments · Catalog", "deck.c2title": "Straight Kelly 18cm", "deck.c2sub": "Aesculap · Hemostatic forceps",
       "deck.c2r1k": "Sterilization", "deck.c2r1v": "Steam 134°C", "deck.c2r2k": "Used in", "deck.c2r2v": "Cholecystectomy", "deck.c2r3k": "Compatible with", "deck.c2r3v": "General tray", "deck.c2r4k": "Status", "deck.c2r4v": "Published",
       "deck.c2chip": "Full technical sheet",
-      "deck.c3tag": "Tray · General tray", "deck.c3title": "Basic Laparoscopy Tray", "deck.c3sub": "14 instruments · sterilized",
+      "deck.c3tag": "Tray · General surgery", "deck.c3title": "Basic Laparoscopy Tray", "deck.c3sub": "14 instruments · sterilized",
       "deck.c3r1k": "Last prep", "deck.c3r1v": "Today, 07:42", "deck.c3r2k": "Quality control", "deck.c3r2v": "Validated", "deck.c3r3k": "Status", "deck.c3r3v": "Published",
       "deck.c3chip": "Full checklist",
       "deck.c4tag": "Preference card", "deck.c4title": "Dr. Martí · Appendectomy", "deck.c4sub": "Validated by the surgeon",
@@ -1246,7 +1258,7 @@ document.addEventListener("instriq:lang", draw);
       "funciones.c14p": "If your hospital is part of a network, view (read-only) the trays, techniques and protocols published at the other sites.",
       "funciones.c11t": "Incidents and the road to ISO 9001", "funciones.c11p": "Report an instrument incident with root cause and corrective action, verified by someone other than whoever resolved it — with an audit trail.",
       "pantalles.eyebrow": "Adapts to where you use it", "pantalles.h1": "The same Instriq, different depending on who opens it.",
-      "pantalles.lede": "Inside the operating room, a full-screen checklist meant to be used with gloves on — and in the office, a full panel for whoever coordinates the whole group: <strong>pending approvals, the review queue and sync issues, at a glance</strong>.",
+      "pantalles.lede": "Inside the operating room, a full-screen checklist meant to be used with gloves on — and in the office, a full panel for whoever coordinates the whole group: <strong>pending approvals, the review queue and incidents, at a glance</strong>.",
       "pantalles.cap2": "<b>OR Mode.</b> A full-screen tray-preparation checklist, built to be used with gloves on.",
       "quien.eyebrow": "Who it's for", "quien.h1": "A group can be whatever you need it to be.",
       "quien.lede": "Instriq doesn't assume you're a large hospital. A group is any team that wants to document how it works — from a three-person practice to an entire hospital network. Start small and grow without switching tools.",
@@ -1261,7 +1273,7 @@ document.addEventListener("instriq:lang", draw);
       "novedades.lastBadge": "#101", "novedades.lastText": "<strong>v1.3.1: perioperative reference</strong> — 41 guides, 13 positions, 12 scales with guided scoring, abbreviations, calculators, ECG and \"My techniques\", with anonymous usage analytics.",
       "novedades.cta": "View all updates →",
       "colabora.eyebrow": "Contribute", "colabora.h1": "Instriq grows with the people who use it.",
-      "colabora.lede": "Driven by a small team, it grows with healthcare professionals and developers who contribute voluntarily.",
+      "colabora.lede": "Driven by a small team, it grows with healthcare professionals and developers who contribute voluntarily. <a href=\"artifexs.html\">Meet the artífexs →</a>",
       "colabora.c1t": "You're a healthcare professional", "colabora.c1p": "Share your team's instruments and techniques, or help us review the catalog.", "colabora.c1cta": "Open the app →",
       "colabora.c2t": "You're a developer", "colabora.c2p": "The code is public: Flutter + Supabase. Start with the repo's README.", "colabora.c2cta": "Go to the repository →", "colabora.c2star": "Star the repository",
       "colabora.c3t": "Want to make a donation?", "colabora.c3p": "Instriq is free and has no investors. A monthly Patreon membership helps cover the project's costs.", "colabora.c3cta": "Become a patron →",
@@ -1356,7 +1368,15 @@ document.addEventListener("instriq:lang", draw);
   } catch (e) {}
   var saved = null;
   try { saved = localStorage.getItem('instriq_lang'); } catch (e) {}
-  applyLang(urlLang || saved || 'ca');
+  var browserLang = null;
+  if (!/bot|crawl|spider|slurp|lighthouse/i.test(navigator.userAgent)) {
+    (navigator.languages || [navigator.language || '']).some(function (l) {
+      var c = String(l).slice(0, 2).toLowerCase();
+      if (validLangs.indexOf(c) !== -1) { browserLang = c; return true; }
+      return false;
+    });
+  }
+  applyLang(urlLang || saved || browserLang || 'ca');
 
   var els = document.querySelectorAll('.reveal');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
