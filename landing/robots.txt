@@ -6,5 +6,30 @@ User-agent: *
 Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 
+# Rastrejadors que nomes entrenen models (coherent amb ai-train=no). Els
+# cercadors i els agents que citen i enllacen (Googlebot, Bingbot, Applebot,
+# OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot)
+# continuen permesos per la regla general.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Meta-ExternalAgent
+User-agent: Amazonbot
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: Diffbot
+User-agent: cohere-training-data-crawler
+Disallow: /
+
+# Rastrejadors d'eines SEO: consumeixen sense portar visites.
+User-agent: SemrushBot
+User-agent: AhrefsBot
+User-agent: SERankingBacklinksBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: QlyzeBot
+Disallow: /
+
 Sitemap: https://instriq.org/sitemap.xml
 Sitemap: https://instriq.org/sitemap-vademecum.xml

@@ -20,12 +20,12 @@ Un **grup** (hospital, bloc quirúrgic o equip) conté un o diversos **espais de
 - App web: https://app.instriq.org
 - Windows (Microsoft Store): https://apps.microsoft.com/store/detail/9N1SJ4N98FG3
 - Vademècum: https://instriq.org/vademecum/ca/
-- Novetats: https://instriq.org/novedades.html
-- Centre d'ajuda: https://instriq.org/ayuda.html
+- Novetats: https://instriq.org/novedades
+- Centre d'ajuda: https://instriq.org/ayuda
 - Qui el fa: https://instriq.org/artifexs
 - Codi font: https://github.com/mikeyoshio/Instriq
 - Donar suport (Patreon): https://patreon.com/Instriq
-- Privacitat: https://instriq.org/privacidad.html
+- Privacitat: https://instriq.org/privacidad
 - Contacte: hola@instriq.org
 
 ## Ús per agents d'IA

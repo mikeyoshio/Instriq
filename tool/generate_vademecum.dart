@@ -346,6 +346,14 @@ String _extensionFor(String url) {
   return 'jpg';
 }
 
+/// Miniatura de [maxWidth] px d'una imatge de Wikimedia Commons, o null si
+/// l'URL no és de Commons o és un SVG.
+String? commonsThumbUrl(String url, {int maxWidth = 1280}) {
+  final m = RegExp(r'^https://upload\.wikimedia\.org/wikipedia/commons/([0-9a-f])/([0-9a-f]{2})/([^/]+)$').firstMatch(url);
+  if (m == null || url.toLowerCase().endsWith('.svg')) return null;
+  return 'https://upload.wikimedia.org/wikipedia/commons/thumb/${m[1]}/${m[2]}/${m[3]}/${maxWidth}px-${m[3]}';
+}
+
 Future<Map<String, String>> vendorImages(List<Instr> instruments, Directory imagesDir) async {
   // Returns: id -> local relative filename (e.g. "pinza-kocher.jpg")
   if (!imagesDir.existsSync()) imagesDir.createSync(recursive: true);
@@ -370,9 +378,13 @@ Future<Map<String, String>> vendorImages(List<Instr> instruments, Directory imag
     // sequential requests with no delay between them.
     await Future.delayed(const Duration(milliseconds: 1000));
     var ok = false;
+    // Primer la miniatura de 1280 px de Commons (les originals arribaven a
+    // 17 MB i el Vademècum en servia 300 MB); si no n'hi ha (foto més petita
+    // o fora de Commons), l'original.
+    var url = commonsThumbUrl(image.url) ?? image.url;
     for (var attempt = 1; attempt <= 5 && !ok; attempt++) {
       try {
-        final req = await client.getUrl(Uri.parse(image.url)).timeout(const Duration(seconds: 20));
+        final req = await client.getUrl(Uri.parse(url)).timeout(const Duration(seconds: 20));
         // Force a fresh connection per request -- avoids stale keep-alive
         // connection issues across many sequential downloads to one host.
         req.headers.set(HttpHeaders.connectionHeader, 'close');
@@ -386,8 +398,9 @@ Future<Map<String, String>> vendorImages(List<Instr> instruments, Directory imag
           continue;
         }
         if (resp.statusCode != 200) {
-          stderr.writeln('WARN (attempt $attempt): ${image.url} for ${instr.id}: HTTP ${resp.statusCode}');
+          stderr.writeln('WARN (attempt $attempt): $url for ${instr.id}: HTTP ${resp.statusCode}');
           await resp.drain<void>();
+          url = image.url;
           continue;
         }
         final bytes = await resp.fold<List<int>>(<int>[], (acc, chunk) => acc..addAll(chunk)).timeout(const Duration(seconds: 30));
