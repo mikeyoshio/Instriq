@@ -442,6 +442,21 @@ const chrome = <String, Tri>{
   'sources': (ca: 'Fonts', es: 'Fuentes', en: 'Sources'),
   'history': (ca: 'Historial', es: 'Historial', en: 'History'),
   'related': (ca: 'Instruments relacionats', es: 'Instrumentos relacionados', en: 'Related instruments'),
+  'recognise': (ca: 'Com reconèixer-lo', es: 'Cómo reconocerlo', en: 'How to recognise it'),
+  'lookalikes': (ca: 'No confondre amb', es: 'No confundir con', en: "Don't confuse with"),
+  'lookalikesTitle': (ca: 'Instruments que es confonen', es: 'Instrumentos que se confunden', en: 'Instruments that get mixed up'),
+  'lookalikesIntro': (
+    ca: "Famílies de peces que s'assemblen, amb el tret que distingeix cadascuna.",
+    es: 'Familias de piezas que se parecen, con el rasgo que distingue a cada una.',
+    en: 'Families of instruments that look alike, with the feature that tells each one apart.',
+  ),
+  'howToTellApart': (ca: 'com distingir-les', es: 'cómo distinguirlas', en: 'how to tell them apart'),
+  'seeComparison': (ca: 'Veure la comparativa', es: 'Ver la comparativa', en: 'See the comparison'),
+  'inReview': (
+    ca: "Contingut nou, en revisió. Si hi veus un error, escriu-nos a hola@instriq.org o reporta-ho des de l'app.",
+    es: 'Contenido nuevo, en revisión. Si ves un error, escríbenos a hola@instriq.org o repórtalo desde la app.',
+    en: 'New content, under review. If you spot a mistake, write to hola@instriq.org or report it from the app.',
+  ),
   'links': (ca: 'Enllaços d\'interès', es: 'Enlaces de interés', en: 'Links of interest'),
   'newBadge': (ca: 'Nou', es: 'Nuevo', en: 'New'),
   'instrumentsCount': (ca: 'instruments', es: 'instrumentos', en: 'instruments'),
@@ -670,6 +685,7 @@ String _renderInstrumentPage({
   required HistoryInfo? history,
   required Map<String, String> vendoredImages,
   required List<Instr> related,
+  String extraHtml = '',
 }) {
   final name = triFor(instr.name, lang);
   final desc = triFor(instr.description, lang);
@@ -758,6 +774,7 @@ String _renderInstrumentPage({
     <h2>${htmlEscape(t('use', lang))}</h2>
     <p>${htmlEscape(use)}</p>
     $tipHtml
+    $extraHtml
     <h2>${htmlEscape(t('sources', lang))}</h2>
     $sourcesHtml
     <h2>${htmlEscape(t('history', lang))}</h2>
@@ -893,6 +910,144 @@ String _renderSpecialtyPage({
     bodyHtml: body,
     jsonLd: jsonLd,
   );
+}
+
+// ---------------------------------------------------------------------------
+// Lookalikes (lib/data/lookalikes_data.dart) i «com reconèixer-lo»
+// (lib/data/instrument_recognition_data.dart)
+// ---------------------------------------------------------------------------
+
+typedef LookalikeFam = ({String id, Tri title, Tri tip, List<({String id, Tri clue})> members});
+
+const _lookalikeSlug = {'ca': 'semblants', 'es': 'parecidos', 'en': 'lookalikes'};
+
+/// Cadena Dart amb cometes simples o dobles (dos grups: un dels dos és null).
+final _anyQuoted = '(?:' r"'((?:[^'\\]|\\.)*)'" '|' r'"((?:[^"\\]|\\.)*)"' ')';
+final _lookTriRe = RegExp('LocalizedText\\(\\s*ca:\\s*$_anyQuoted,\\s*es:\\s*$_anyQuoted,\\s*en:\\s*$_anyQuoted,?\\s*\\)', dotAll: true);
+
+Tri _triFromMatch(Match m, [int offset = 0]) => (
+      ca: unescapeDartString((m.group(offset + 1) ?? m.group(offset + 2))!),
+      es: unescapeDartString((m.group(offset + 3) ?? m.group(offset + 4))!),
+      en: unescapeDartString((m.group(offset + 5) ?? m.group(offset + 6))!),
+    );
+
+List<LookalikeFam> parseLookalikes(String source) {
+  final start = source.indexOf('kLookalikeFamilies');
+  final chunks = source.substring(start).split(RegExp(r'\n  LookalikeFamily\(')).skip(1);
+  final memberRe = RegExp("LookalikeMember\\('([a-z0-9-]+)',\\s*(LocalizedText\\(.*?\\))\\),", dotAll: true);
+  return [
+    for (final chunk in chunks)
+      () {
+        final id = RegExp(r"'([a-z0-9-]+)'").firstMatch(chunk)!.group(1)!;
+        final members = [
+          for (final m in memberRe.allMatches(chunk)) (id: m.group(1)!, clue: _triFromMatch(_lookTriRe.firstMatch(m.group(2)!)!)),
+        ];
+        final head = chunk.substring(0, chunk.indexOf('LookalikeMember('));
+        final tris = _lookTriRe.allMatches(head).toList();
+        return (id: id, title: _triFromMatch(tris[0]), tip: _triFromMatch(tris[1]), members: members);
+      }(),
+  ];
+}
+
+Map<String, Tri> parseRecognition(String source) {
+  // Cada entrada acaba amb "\n  )," (els textos poden portar parèntesis).
+  final re = RegExp("'([a-z0-9-]+)':\\s*(LocalizedText\\(.*?\\n  \\)),", dotAll: true);
+  return {for (final m in re.allMatches(source)) m.group(1)!: _triFromMatch(_lookTriRe.firstMatch(m.group(2)!)!)};
+}
+
+/// Bloc «Com reconèixer-lo» + «No confondre amb» d'una fitxa.
+String lookalikeSectionHtml(Instr instr, String lang, List<LookalikeFam> families, Map<String, Tri> recognition, Map<String, Instr> byId) {
+  final mine = [for (final f in families) if (f.members.any((m) => m.id == instr.id)) f];
+  final rec = recognition[instr.id] ??
+      mine.expand((f) => f.members).where((m) => m.id == instr.id).map((m) => m.clue).firstOrNull;
+  if (rec == null && mine.isEmpty) return '';
+  final out = StringBuffer();
+  if (rec != null) out.write('<h2>${htmlEscape(t('recognise', lang))}</h2><p>${htmlEscape(triFor(rec, lang))}</p>');
+  if (mine.isNotEmpty) {
+    out.write('<h2>${htmlEscape(t('lookalikes', lang))}</h2><ul>');
+    for (final f in mine) {
+      for (final m in f.members) {
+        final other = byId[m.id];
+        if (m.id == instr.id || other == null) continue;
+        out.write('<li><a href="$_htmlLangBase/vademecum/$lang/${m.id}/">${htmlEscape(triFor(other.name, lang))}</a>: ${htmlEscape(triFor(m.clue, lang))}</li>');
+      }
+    }
+    out.write('</ul>');
+    for (final f in mine) {
+      out.write('<p><a href="$_htmlLangBase/vademecum/$lang/${_lookalikeSlug[lang]}/${f.id}/">${htmlEscape(t('seeComparison', lang))}: ${htmlEscape(triFor(f.title, lang))}</a></p>');
+    }
+  }
+  out.write('<p class="disclaimer">${htmlEscape(t('inReview', lang))}</p>');
+  return out.toString();
+}
+
+Future<({int pages, List<String> paths})> generateLookalikePages(
+  Directory vademecumDir,
+  List<LookalikeFam> families,
+  Map<String, Instr> byId,
+  Map<String, String> vendoredImages,
+) async {
+  var pages = 0;
+  final paths = <String>[];
+  for (final lang in languages) {
+    final slug = _lookalikeSlug[lang]!;
+    final indexItems = StringBuffer();
+    for (final f in families) {
+      final path = '/vademecum/$lang/$slug/${f.id}/';
+      final title = '${triFor(f.title, lang)}: ${t('howToTellApart', lang)}';
+      indexItems.write('<li><a href="$_htmlLangBase$path">${htmlEscape(triFor(f.title, lang))}</a> — '
+          '${f.members.map((m) => htmlEscape(triFor(byId[m.id]!.name, lang))).join(', ')}</li>');
+      final body = StringBuffer('<h1>${htmlEscape(title)}</h1><p>${htmlEscape(triFor(f.tip, lang))}</p>');
+      for (final m in f.members) {
+        final instr = byId[m.id]!;
+        final img = vendoredImages[m.id];
+        body.write('<h2><a href="$_htmlLangBase/vademecum/$lang/${m.id}/">${htmlEscape(triFor(instr.name, lang))}</a></h2>');
+        if (img != null) {
+          body.write('<p><img src="$_htmlLangBase/vademecum/assets/images/$img" alt="${attrEscape(triFor(instr.name, lang))}" loading="lazy" style="max-width:320px;max-height:220px;object-fit:contain"></p>');
+        }
+        body.write('<p>${htmlEscape(triFor(m.clue, lang))}</p>');
+      }
+      body.write('<p class="disclaimer">${htmlEscape(t('inReview', lang))}</p>');
+      final crumbs = '<a href="$_htmlLangBase/vademecum/$lang/">${htmlEscape(t('siteTitle', lang))}</a> &rsaquo; '
+          '<a href="$_htmlLangBase/vademecum/$lang/$slug/">${htmlEscape(t('lookalikesTitle', lang))}</a> &rsaquo; ${htmlEscape(triFor(f.title, lang))}';
+      final html = _pageShell(
+        lang: lang,
+        title: '$title · ${t('siteTitle', lang)}',
+        description: triFor(f.tip, lang),
+        canonicalPath: path,
+        hreflangPaths: {for (final l in languages) l: '/vademecum/$l/${_lookalikeSlug[l]}/${f.id}/'},
+        crumbsHtml: crumbs,
+        bodyHtml: body.toString(),
+        jsonLd: jsonEncode({
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          'inLanguage': lang,
+          'headline': title,
+          'url': '$_htmlLangBase$path',
+          'about': [for (final m in f.members) triFor(byId[m.id]!.name, lang)],
+        }),
+      );
+      final dir = Directory('${vademecumDir.path}/$lang/$slug/${f.id}')..createSync(recursive: true);
+      await File('${dir.path}/index.html').writeAsString(html, encoding: utf8);
+      pages++;
+      paths.add(path);
+    }
+    final indexHtml = _pageShell(
+      lang: lang,
+      title: '${t('lookalikesTitle', lang)} · ${t('siteTitle', lang)}',
+      description: t('lookalikesIntro', lang),
+      canonicalPath: '/vademecum/$lang/$slug/',
+      hreflangPaths: {for (final l in languages) l: '/vademecum/$l/${_lookalikeSlug[l]}/'},
+      crumbsHtml: '<a href="$_htmlLangBase/vademecum/$lang/">${htmlEscape(t('siteTitle', lang))}</a> &rsaquo; ${htmlEscape(t('lookalikesTitle', lang))}',
+      bodyHtml: '<h1>${htmlEscape(t('lookalikesTitle', lang))}</h1><p>${htmlEscape(t('lookalikesIntro', lang))}</p><ul class="list-plain">$indexItems</ul>',
+      jsonLd: null,
+    );
+    final dir = Directory('${vademecumDir.path}/$lang/$slug')..createSync(recursive: true);
+    await File('${dir.path}/index.html').writeAsString(indexHtml, encoding: utf8);
+    pages++;
+    paths.add('/vademecum/$lang/$slug/');
+  }
+  return (pages: pages, paths: paths);
 }
 
 // ---------------------------------------------------------------------------
@@ -1165,6 +1320,11 @@ Future<void> main() async {
   await File('${assetsDir.path}/vademecum.css').writeAsString(_sharedCss, encoding: utf8);
 
   final byId = {for (final i in instruments) i.id: i};
+  final lookalikeFamilies =
+      parseLookalikes(await File('${repoRoot.path}/lib/data/lookalikes_data.dart').readAsString(encoding: utf8));
+  final recognition =
+      parseRecognition(await File('${repoRoot.path}/lib/data/instrument_recognition_data.dart').readAsString(encoding: utf8));
+  stdout.writeln('Lookalikes: ${lookalikeFamilies.length} families, ${recognition.length} recognition entries.');
   final bySpecialty = <String, List<Instr>>{};
   for (final i in instruments) {
     bySpecialty.putIfAbsent(i.specialty, () => []).add(i);
@@ -1183,6 +1343,7 @@ Future<void> main() async {
     'metodologia',
     _positionsSlug,
     _guidesSlug,
+    ..._lookalikeSlug.values,
   };
   var prunedCount = 0;
   for (final lang in languages) {
@@ -1218,6 +1379,7 @@ Future<void> main() async {
         history: history[instr.id],
         vendoredImages: vendoredImages,
         related: siblings,
+        extraHtml: lookalikeSectionHtml(instr, lang, lookalikeFamilies, recognition, byId),
       );
       final dir = Directory('${vademecumDir.path}/$lang/${instr.id}');
       dir.createSync(recursive: true);
@@ -1276,6 +1438,11 @@ Future<void> main() async {
   final reference = await generateReferencePages(repoRoot, vademecumDir, byId);
   pageCount += reference.pages;
   sitemapPaths.addAll(reference.paths);
+
+  stdout.writeln('Generating lookalike pages...');
+  final lookalikePages = await generateLookalikePages(vademecumDir, lookalikeFamilies, byId, vendoredImages);
+  pageCount += lookalikePages.pages;
+  sitemapPaths.addAll(lookalikePages.paths);
 
   stdout.writeln('Writing sitemap-vademecum.xml...');
   final sitemap = _renderSitemap(sitemapPaths);

@@ -6,6 +6,7 @@ import '../design_system/tokens.dart';
 import '../l10n/app_localizations.dart';
 import 'ecg_screen.dart';
 import 'flashcards_screen.dart';
+import 'lookalike_quiz_screen.dart';
 import 'my_techniques_screen.dart';
 import 'quiz_screen.dart';
 import 'reference_study_screen.dart';
@@ -50,6 +51,14 @@ class LearnScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
+              _LearnCard(
+                icon: Icons.compare_outlined,
+                title: l10n.lookalikeQuizTitle,
+                subtitle: l10n.lookalikeQuizSubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const LookalikeQuizScreen()),
+                ),
+              ),
               _LearnCard(
                 icon: Icons.airline_seat_flat_outlined,
                 title: l10n.referenceStudyTitle,

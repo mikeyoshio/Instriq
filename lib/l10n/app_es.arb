@@ -1588,5 +1588,10 @@
   "themeSystem": "Sistema",
   "deckByBlock": "Por bloque",
   "deckBySpecialty": "Por especialidad",
-  "deckFilterTooltip": "Elige qué quieres repasar"
+  "deckFilterTooltip": "Elige qué quieres repasar",
+  "recognitionLabel": "Cómo reconocerlo",
+  "lookalikesLabel": "No confundir con",
+  "contentInReviewNote": "Contenido nuevo, en revisión. Si ves un error, repórtalo con «Reportar un error» al final de la ficha.",
+  "lookalikeQuizTitle": "Parecidos",
+  "lookalikeQuizSubtitle": "Distingue las piezas que más se confunden: Kelly, Pean, Kocher…"
 }

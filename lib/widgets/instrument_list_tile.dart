@@ -18,6 +18,9 @@ class InstrumentListTile extends StatelessWidget {
   final List<Widget> titleBadges;
   final Widget? trailing;
 
+  /// Substitueix "Especialitat · Categoria" (p. ex. la pista de «No confondre amb»).
+  final String? subtitle;
+
   const InstrumentListTile({
     super.key,
     required this.instrument,
@@ -25,6 +28,7 @@ class InstrumentListTile extends StatelessWidget {
     this.thumbnailUrl,
     this.titleBadges = const [],
     this.trailing,
+    this.subtitle,
   });
 
   @override
@@ -50,7 +54,7 @@ class InstrumentListTile extends StatelessWidget {
             ),
       title: instrument.name.forLanguageCode(languageCode),
       titleBadges: titleBadges,
-      subtitle: '${instrument.specialty.label(l10n)} · ${instrument.category.label(l10n)}',
+      subtitle: subtitle ?? '${instrument.specialty.label(l10n)} · ${instrument.category.label(l10n)}',
       trailing: trailing,
       onTap: onTap,
     );

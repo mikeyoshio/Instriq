@@ -18564,4 +18564,193 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/guias/posicion-lateral-seguridad/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/guias/atragantamiento-adulto/" />
   </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/tisores/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/pinces-disseccio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/hemostatiques/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/prensio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/portaagulles/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/separadors-manuals/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/separadors-autoestatics/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/separadors-autoestatics/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/aspiracio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/separadors-autoestatics/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/ca/semblants/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/ca/semblants/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/ca/semblants/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/ca/semblants/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/ca/semblants/separadors-autoestatics/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/tisores/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/pinces-disseccio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/hemostatiques/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/prensio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/portaagulles/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/separadors-manuals/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/separadors-autoestatics/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/separadors-autoestatics/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/aspiracio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/separadors-autoestatics/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/es/parecidos/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/es/parecidos/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/es/parecidos/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/es/parecidos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/es/parecidos/separadors-autoestatics/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/tisores/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/pinces-disseccio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/hemostatiques/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/tisores/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/pinces-disseccio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/hemostatiques/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/tisores/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/prensio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/portaagulles/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/separadors-manuals/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/prensio/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/portaagulles/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/separadors-manuals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/prensio/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/separadors-autoestatics/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/separadors-autoestatics/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/aspiracio/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/separadors-autoestatics/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/vademecum/en/lookalikes/</loc>
+    <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/vademecum/en/lookalikes/separadors-autoestatics/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/vademecum/en/lookalikes/aspiracio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/vademecum/en/lookalikes/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/vademecum/en/lookalikes/separadors-autoestatics/" />
+  </url>
 </urlset>

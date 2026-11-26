@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../data/instrument_recognition_data.dart';
+import '../data/instruments_data.dart';
+import '../data/lookalikes_data.dart';
 import '../design_system/components/instriq_badge.dart';
 import '../design_system/components/instriq_responsive_content.dart';
 import '../design_system/tokens.dart';
@@ -44,6 +47,7 @@ import '../widgets/category_icon.dart';
 import '../widgets/clinical_data_form_sheet.dart';
 import '../widgets/instrument_incident_dialogs.dart';
 import '../widgets/instrument_incident_label.dart';
+import '../widgets/instrument_list_tile.dart';
 import '../widgets/report_content_error_button.dart';
 import '../widgets/offline_banner.dart';
 import '../widgets/sterilization_method_label.dart';
@@ -681,9 +685,58 @@ class _InstrumentDetailScreenState extends State<InstrumentDetailScreen> {
           Text(l10n.descriptionLabel, style: Theme.of(context).textTheme.labelLarge),
           const SizedBox(height: 4),
           Text(instrument.description.forLanguageCode(languageCode), style: Theme.of(context).textTheme.bodyLarge),
+          ..._buildRecognitionAndLookalikes(context, l10n, languageCode),
         ],
       ),
     );
+  }
+
+  /// «Com reconèixer-lo» i «No confondre amb» (lookalikes_data.dart i
+  /// instrument_recognition_data.dart). Contingut nou: es marca en revisió.
+  List<Widget> _buildRecognitionAndLookalikes(BuildContext context, AppLocalizations l10n, String languageCode) {
+    final id = widget.instrument.id;
+    final recognition = recognitionOf(id);
+    final others = [
+      for (final f in lookalikeFamiliesOf(id))
+        for (final m in f.members)
+          if (m.instrumentId != id) m,
+    ];
+    final byId = {for (final i in kInstruments) i.id: i};
+    if (recognition == null && others.isEmpty) return const [];
+    final theme = Theme.of(context);
+    return [
+      if (recognition != null) ...[
+        const SizedBox(height: 16),
+        Text(l10n.recognitionLabel, style: theme.textTheme.labelLarge),
+        const SizedBox(height: 4),
+        Text(recognition.forLanguageCode(languageCode), style: theme.textTheme.bodyLarge),
+      ],
+      if (others.isNotEmpty) ...[
+        const SizedBox(height: 16),
+        Text(l10n.lookalikesLabel, style: theme.textTheme.labelLarge),
+        const SizedBox(height: 8),
+        for (final m in others)
+          if (byId[m.instrumentId] case final other?)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: InstrumentListTile(
+                instrument: other,
+                subtitle: m.clue.forLanguageCode(languageCode),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => InstrumentDetailScreen(instrument: other)),
+                ),
+              ),
+            ),
+      ],
+      const SizedBox(height: 4),
+      Row(
+        children: [
+          Icon(Icons.rate_review_outlined, size: 16, color: theme.colorScheme.onSurfaceVariant),
+          const SizedBox(width: 6),
+          Expanded(child: Text(l10n.contentInReviewNote, style: theme.textTheme.bodySmall)),
+        ],
+      ),
+    ];
   }
 
   Widget _buildUseSection(BuildContext context, AppLocalizations l10n) {

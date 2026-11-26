@@ -1588,5 +1588,10 @@
   "themeSystem": "System",
   "deckByBlock": "By group",
   "deckBySpecialty": "By specialty",
-  "deckFilterTooltip": "Choose what to review"
+  "deckFilterTooltip": "Choose what to review",
+  "recognitionLabel": "How to recognise it",
+  "lookalikesLabel": "Don't confuse with",
+  "contentInReviewNote": "New content, under review. If you spot a mistake, report it with \"Report an error\" at the end of this page.",
+  "lookalikeQuizTitle": "Lookalikes",
+  "lookalikeQuizSubtitle": "Tell apart the instruments people mix up: Kelly, Pean, Kocher…"
 }

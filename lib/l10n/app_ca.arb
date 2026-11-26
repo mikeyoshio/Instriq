@@ -1597,5 +1597,10 @@
   "themeSystem": "Sistema",
   "deckByBlock": "Per bloc",
   "deckBySpecialty": "Per especialitat",
-  "deckFilterTooltip": "Tria què vols repassar"
+  "deckFilterTooltip": "Tria què vols repassar",
+  "recognitionLabel": "Com reconèixer-lo",
+  "lookalikesLabel": "No confondre amb",
+  "contentInReviewNote": "Contingut nou, en revisió. Si hi veus un error, reporta-ho amb «Reportar un error» al final de la fitxa.",
+  "lookalikeQuizTitle": "Semblants",
+  "lookalikeQuizSubtitle": "Distingeix les peces que més es confonen: Kelly, Pean, Kocher…"
 }
