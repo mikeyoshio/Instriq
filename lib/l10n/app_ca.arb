@@ -1602,5 +1602,13 @@
   "lookalikesLabel": "No confondre amb",
   "contentInReviewNote": "Contingut nou, en revisió. Si hi veus un error, reporta-ho amb «Reportar un error» al final de la fitxa.",
   "lookalikeQuizTitle": "Semblants",
-  "lookalikeQuizSubtitle": "Distingeix les peces que més es confonen: Kelly, Pean, Kocher…"
+  "lookalikeQuizSubtitle": "Distingeix les peces que més es confonen: Kelly, Pean, Kocher…",
+  "mayoStandTitle": "Mesa de Mayo",
+  "mayoStandSubtitle": "Un muntatge bàsic i els principis per muntar-la",
+  "mayoStandIntro": "Exemple de muntatge bàsic per a cirurgia general, en l'ordre en què es fan servir les peces. Toca'n una per obrir-ne la fitxa.",
+  "mayoStandPrinciples": "Principis",
+  "orMapTitle": "Pla del quiròfan",
+  "orMapSubtitle": "Qui és on i què és cada cosa, vist des de dalt",
+  "orMapIntro": "Disposició habitual d'una laparotomia vista des de dalt. Toca un número per saber qui és o què és.",
+  "orMapNote": "La disposició canvia segons la intervenció, la postura i el centre."
 }

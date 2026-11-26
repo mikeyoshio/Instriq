@@ -1593,5 +1593,13 @@
   "lookalikesLabel": "Don't confuse with",
   "contentInReviewNote": "New content, under review. If you spot a mistake, report it with \"Report an error\" at the end of this page.",
   "lookalikeQuizTitle": "Lookalikes",
-  "lookalikeQuizSubtitle": "Tell apart the instruments people mix up: Kelly, Pean, Kocher…"
+  "lookalikeQuizSubtitle": "Tell apart the instruments people mix up: Kelly, Pean, Kocher…",
+  "mayoStandTitle": "Mayo stand",
+  "mayoStandSubtitle": "A basic set-up and the principles behind it",
+  "mayoStandIntro": "An example of a basic general surgery set-up, in the order the instruments are used. Tap one to open its entry.",
+  "mayoStandPrinciples": "Principles",
+  "orMapTitle": "Operating room map",
+  "orMapSubtitle": "Who stands where and what everything is, seen from above",
+  "orMapIntro": "A typical laparotomy layout seen from above. Tap a number to see who or what it is.",
+  "orMapNote": "The layout changes with the procedure, the patient position and the hospital."
 }

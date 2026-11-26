@@ -7,7 +7,9 @@ import '../l10n/app_localizations.dart';
 import 'ecg_screen.dart';
 import 'flashcards_screen.dart';
 import 'lookalike_quiz_screen.dart';
+import 'mayo_stand_screen.dart';
 import 'my_techniques_screen.dart';
+import 'or_map_screen.dart';
 import 'quiz_screen.dart';
 import 'reference_study_screen.dart';
 import 'team_quizzes_screen.dart';
@@ -57,6 +59,22 @@ class LearnScreen extends StatelessWidget {
                 subtitle: l10n.lookalikeQuizSubtitle,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const LookalikeQuizScreen()),
+                ),
+              ),
+              _LearnCard(
+                icon: Icons.table_restaurant_outlined,
+                title: l10n.mayoStandTitle,
+                subtitle: l10n.mayoStandSubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MayoStandScreen()),
+                ),
+              ),
+              _LearnCard(
+                icon: Icons.map_outlined,
+                title: l10n.orMapTitle,
+                subtitle: l10n.orMapSubtitle,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const OrMapScreen()),
                 ),
               ),
               _LearnCard(

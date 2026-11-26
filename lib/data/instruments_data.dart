@@ -210,7 +210,7 @@ const List<Instrument> kInstruments = [
   ),
   Instrument(
     id: 'pinza-mosquito',
-    name: LocalizedText(ca: 'Pinça mosquit (Halstead)', es: 'Pinza mosquito (Halstead)', en: 'Mosquito forceps (Halstead)'),
+    name: LocalizedText(ca: 'Pinça mosquit (Halsted)', es: 'Pinza mosquito (Halsted)', en: 'Mosquito forceps (Halsted)'),
     category: InstrumentCategory.diseccion,
     aliases: ['Mosquito forceps'],
     icon: 'pinch',

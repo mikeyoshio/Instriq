@@ -1593,5 +1593,13 @@
   "lookalikesLabel": "No confundir con",
   "contentInReviewNote": "Contenido nuevo, en revisión. Si ves un error, repórtalo con «Reportar un error» al final de la ficha.",
   "lookalikeQuizTitle": "Parecidos",
-  "lookalikeQuizSubtitle": "Distingue las piezas que más se confunden: Kelly, Pean, Kocher…"
+  "lookalikeQuizSubtitle": "Distingue las piezas que más se confunden: Kelly, Pean, Kocher…",
+  "mayoStandTitle": "Mesa de Mayo",
+  "mayoStandSubtitle": "Un montaje básico y los principios para montarla",
+  "mayoStandIntro": "Ejemplo de montaje básico para cirugía general, en el orden en que se usan las piezas. Toca una para abrir su ficha.",
+  "mayoStandPrinciples": "Principios",
+  "orMapTitle": "Plano del quirófano",
+  "orMapSubtitle": "Quién está dónde y qué es cada cosa, visto desde arriba",
+  "orMapIntro": "Disposición habitual de una laparotomía vista desde arriba. Toca un número para saber quién es o qué es.",
+  "orMapNote": "La disposición cambia según la intervención, la posición y el centro."
 }
