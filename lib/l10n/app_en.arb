@@ -1585,5 +1585,8 @@
   "themeTitle": "Theme",
   "themeLight": "Light",
   "themeDark": "Dark",
-  "themeSystem": "System"
+  "themeSystem": "System",
+  "deckByBlock": "By group",
+  "deckBySpecialty": "By specialty",
+  "deckFilterTooltip": "Choose what to review"
 }

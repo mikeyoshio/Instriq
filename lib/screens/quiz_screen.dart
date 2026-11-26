@@ -9,6 +9,7 @@ import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/deck_filter.dart';
 
 class _Question {
   final Instrument answer;
@@ -84,7 +85,11 @@ class _QuizScreenState extends State<QuizScreen> {
   Instrument? _selected;
   bool _finished = false;
 
-  bool get _savesScore => widget.pool == null || widget.scopeKey != null;
+  DeckFilter _filter = DeckFilter.all;
+
+  // Un quiz filtrat per bloc o especialitat és un repàs, no compta com a
+  // millor puntuació del quiz general.
+  bool get _savesScore => (widget.pool == null && _filter.isAll) || widget.scopeKey != null;
 
   @override
   void initState() {
@@ -92,7 +97,11 @@ class _QuizScreenState extends State<QuizScreen> {
     _questions = _buildQuestions();
   }
 
-  List<_Question> _buildQuestions() => buildQuizQuestions(widget.pool, Random(), _questionCount)
+  List<_Question> _buildQuestions() => buildQuizQuestions(
+        widget.pool ?? (_filter.isAll ? null : kInstruments.where((i) => i.image != null && _filter.matches(i)).toList()),
+        Random(),
+        _questionCount,
+      )
       .map((q) => _Question(answer: q.answer, options: q.options))
       .toList();
 
@@ -130,7 +139,17 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     if (_questions.isEmpty) {
-      return Scaffold(body: Center(child: Text(l10n.noCards)));
+      // Un filtre sense instruments amb foto: es pot canviar sense sortir.
+      return Scaffold(
+        appBar: AppBar(actions: [
+          if (widget.pool == null)
+            DeckFilterButton(value: _filter, onChanged: (f) {
+              _filter = f;
+              _restart();
+            }),
+        ]),
+        body: Center(child: Text(l10n.noCards)),
+      );
     }
     if (_finished) {
       final best = _savesScore ? ProgressService.instance.quizBestScore(widget.scopeKey) : null;
@@ -171,7 +190,19 @@ class _QuizScreenState extends State<QuizScreen> {
     final question = _questions[_current];
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.questionCounter(_current + 1, _questions.length))),
+      appBar: AppBar(
+        title: Text(l10n.questionCounter(_current + 1, _questions.length)),
+        actions: [
+          if (widget.pool == null)
+            DeckFilterButton(
+              value: _filter,
+              onChanged: (f) {
+                _filter = f;
+                _restart();
+              },
+            ),
+        ],
+      ),
       body: InstriqAnswerShortcuts(
         count: question.options.length,
         onPick: (i) => _select(question.options[i]),

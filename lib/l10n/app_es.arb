@@ -1585,5 +1585,8 @@
   "themeTitle": "Tema",
   "themeLight": "Claro",
   "themeDark": "Oscuro",
-  "themeSystem": "Sistema"
+  "themeSystem": "Sistema",
+  "deckByBlock": "Por bloque",
+  "deckBySpecialty": "Por especialidad",
+  "deckFilterTooltip": "Elige qué quieres repasar"
 }

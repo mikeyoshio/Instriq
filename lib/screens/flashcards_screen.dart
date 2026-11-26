@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../models/instrument.dart';
 import '../services/progress_service.dart';
 import '../widgets/category_icon.dart';
+import '../widgets/deck_filter.dart';
 import '../widgets/deck_gestures.dart';
 
 class FlashcardsScreen extends StatefulWidget {
@@ -18,13 +19,11 @@ class FlashcardsScreen extends StatefulWidget {
 }
 
 class _FlashcardsScreenState extends State<FlashcardsScreen> {
-  Specialty? _filter;
+  DeckFilter _filter = DeckFilter.all;
   int _index = 0;
   bool _showBack = false;
 
-  List<Instrument> get _cards => _filter == null
-      ? kInstruments
-      : kInstruments.where((i) => i.specialty == _filter).toList();
+  List<Instrument> get _cards => kInstruments.where(_filter.matches).toList();
 
   void _next() {
     setState(() {
@@ -54,19 +53,13 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
       appBar: AppBar(
         title: Text(l10n.flashcardsTitle),
         actions: [
-          PopupMenuButton<Specialty?>(
-            icon: const Icon(Icons.filter_list),
-            onSelected: (s) => setState(() {
-              _filter = s;
+          DeckFilterButton(
+            value: _filter,
+            onChanged: (f) => setState(() {
+              _filter = f;
               _index = 0;
               _showBack = false;
             }),
-            itemBuilder: (context) => [
-              PopupMenuItem(value: null, child: Text(l10n.allSpecialtiesLabel)),
-              ...Specialty.values.map(
-                (s) => PopupMenuItem(value: s, child: Text(s.label(l10n))),
-              ),
-            ],
           ),
         ],
       ),
@@ -75,7 +68,11 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Text(l10n.cardCounter(_index + 1, cards.length)),
+              Text(
+                _filter.isAll
+                    ? l10n.cardCounter(_index + 1, cards.length)
+                    : '${_filter.label(l10n)} · ${l10n.cardCounter(_index + 1, cards.length)}',
+              ),
               const SizedBox(height: 16),
               Expanded(
                 // Semantics + InkWell en vez de un GestureDetector pelado:
