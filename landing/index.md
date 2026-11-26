@@ -4,7 +4,11 @@
 
 Coneixement d'equip — instrumental, tècniques i protocols. **No emmagatzema dades de pacients ni substitueix la història clínica.** Projecte open source (codi AGPL-3.0, documentació CC BY-SA 4.0).
 
-Disponible en català, castellà i anglès: [instriq.org/?lang=es](https://instriq.org/?lang=es) · [instriq.org/?lang=en](https://instriq.org/?lang=en)
+Gratuït, sense anuncis i sense crear compte. Disponible en català, castellà i anglès: [instriq.org/es/](https://instriq.org/es/) · [instriq.org/en/](https://instriq.org/en/)
+
+**En castellano:** Instriq es una app y web gratuita, sin anuncios y sin cuenta, para aprender y consultar instrumental de quirófano: más de 800 entradas con fotos, tarjetas con repetición espaciada, cuestionarios con fotos reales, guías perioperatorias, escalas, ECG y modo sin conexión. Guía: [Cómo estudiar instrumental quirúrgico paso a paso](https://instriq.org/es/estudiar-instrumental).
+
+**In English:** Instriq is a free, ad-free surgical instrument reference and study app (no account needed): 800+ entries with photos, spaced-repetition flashcards, photo quizzes, perioperative guides, scales, ECG practice and offline mode. Guide: [How to learn surgical instruments, step by step](https://instriq.org/en/learn-surgical-instruments).
 
 ## Què s'hi pot fer
 
@@ -19,7 +23,8 @@ Un **grup** (hospital, bloc quirúrgic o equip) conté un o diversos **espais de
 
 - App web: https://app.instriq.org
 - Windows (Microsoft Store): https://apps.microsoft.com/store/detail/9N1SJ4N98FG3
-- Vademècum: https://instriq.org/vademecum/ca/
+- Vademècum: https://instriq.org/vademecum/ca/ · https://instriq.org/vademecum/es/ · https://instriq.org/vademecum/en/
+- Com estudiar instrumental: https://instriq.org/aprendre-instrumental
 - Novetats: https://instriq.org/novedades
 - Centre d'ajuda: https://instriq.org/ayuda
 - Qui el fa: https://instriq.org/artifexs
@@ -30,4 +35,4 @@ Un **grup** (hospital, bloc quirúrgic o equip) conté un o diversos **espais de
 
 ## Ús per agents d'IA
 
-Es permet indexar i usar aquest contingut per respondre preguntes citant-ne la font; no es permet usar-lo per entrenar models (vegeu `Content-Signal` a [robots.txt](https://instriq.org/robots.txt)).
+Es permet indexar aquest contingut, usar-lo per respondre preguntes (millor citant-ne la font) i entrenar-hi models: Instriq és obert (vegeu `Content-Signal` a [robots.txt](https://instriq.org/robots.txt)).

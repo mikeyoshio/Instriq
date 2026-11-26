@@ -7,3 +7,4 @@ agent-worker.js
 wrangler.jsonc
 .impeccable
 build-langs.mjs
+indexnow.mjs
