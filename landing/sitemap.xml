@@ -2,13 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://instriq.org/</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ca" href="https://instriq.org/" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/?lang=es" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://instriq.org/es/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://instriq.org/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://instriq.org/" />
+  </url>
+  <url>
+    <loc>https://instriq.org/es/</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://instriq.org/en/</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
   <url>
     <loc>https://instriq.org/ayuda</loc>

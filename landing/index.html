@@ -9,8 +9,8 @@
 <meta name="description" data-i18n-attr="content" data-i18n="meta.description" content="Catàleg d'instrumental, tècniques, protocols i targetes de preferència compartits entre professionals de quiròfan. Open source.">
 <link rel="canonical" href="https://instriq.org/" id="canonicalLink">
 <link rel="alternate" hreflang="ca" href="https://instriq.org/">
-<link rel="alternate" hreflang="es" href="https://instriq.org/?lang=es">
-<link rel="alternate" hreflang="en" href="https://instriq.org/?lang=en">
+<link rel="alternate" hreflang="es" href="https://instriq.org/es/">
+<link rel="alternate" hreflang="en" href="https://instriq.org/en/">
 <link rel="alternate" hreflang="x-default" href="https://instriq.org/">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -1345,31 +1345,34 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
       b.classList.toggle('active', isActive);
       b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
-    // Canonical i og:locale coherents amb l'idioma mostrat -- perquè cada
-    // variant (`/`, `?lang=es`, `?lang=en`) es referencii a si mateixa, no
-    // sempre a l'arrel, tal com demanen les etiquetes hreflang de <head>.
-    var canonicalUrl = lang === 'ca' ? 'https://instriq.org/' : 'https://instriq.org/?lang=' + lang;
+    // Canonical i og:locale coherents amb l'idioma mostrat: cada idioma té
+    // la seva pàgina estàtica (`/`, `/es/`, `/en/`, generades per
+    // build-langs.mjs) perquè els cercadors i els agents d'IA, que no
+    // executen JavaScript, vegin el castellà i l'anglès.
+    var canonicalUrl = 'https://instriq.org/' + (lang === 'ca' ? '' : lang + '/');
     var canonicalEl = document.getElementById('canonicalLink');
     if (canonicalEl) canonicalEl.setAttribute('href', canonicalUrl);
     var ogLocaleEl = document.getElementById('ogLocale');
     var localeCodes = { ca: 'ca_ES', es: 'es_ES', en: 'en_US' };
     if (ogLocaleEl) ogLocaleEl.setAttribute('content', localeCodes[lang] || localeCodes.ca);
     document.querySelectorAll('a[data-vdm]').forEach(function (a) { a.setAttribute('href', '/vademecum/' + lang + '/'); });
-    document.querySelectorAll('img[data-shot]').forEach(function (i) { i.setAttribute('src', 'screenshots/' + lang + '/' + i.getAttribute('data-shot') + '.webp'); });
-    document.querySelectorAll('source[data-shot-m]').forEach(function (so) { so.setAttribute('srcset', 'screenshots/' + lang + '/m_' + so.getAttribute('data-shot-m') + '.webp'); });
+    document.querySelectorAll('img[data-shot]').forEach(function (i) { i.setAttribute('src', '/screenshots/' + lang + '/' + i.getAttribute('data-shot') + '.webp'); });
+    document.querySelectorAll('source[data-shot-m]').forEach(function (so) { so.setAttribute('srcset', '/screenshots/' + lang + '/m_' + so.getAttribute('data-shot-m') + '.webp'); });
     var deck = document.getElementById('deckStage');
     if (deck) deck.setAttribute('aria-roledescription', lang === 'en' ? 'carousel' : 'carrusel');
     document.dispatchEvent(new Event('instriq:lang'));
     try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
-    if (opts.updateUrl) {
-      var url = new URL(window.location.href);
-      if (lang === 'ca') { url.searchParams.delete('lang'); } else { url.searchParams.set('lang', lang); }
-      window.history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
-    }
   }
 
+  // Canviar d'idioma és anar a la seva pàgina (/, /es/, /en/).
+  function langPath(lang) { return lang === 'ca' ? '/' : '/' + lang + '/'; }
+  var staticLang = document.documentElement.getAttribute('data-static-lang') || 'ca';
   document.querySelectorAll('#langSwitch button').forEach(function (b) {
-    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), { updateUrl: true }); });
+    b.addEventListener('click', function () {
+      var lang = b.getAttribute('data-lang');
+      try { localStorage.setItem('instriq_lang', lang); } catch (e) {}
+      if (lang !== staticLang) window.location.href = langPath(lang) + window.location.hash;
+    });
   });
 
   // Prioritat de l'idioma inicial: paràmetre ?lang= a l'URL (perquè un cercador
@@ -1465,7 +1468,15 @@ syncTheme(); darkMq.addEventListener("change", syncTheme);
       return false;
     });
   }
-  applyLang(urlLang || saved || browserLang || 'ca');
+  // A l'arrel (català), qui ve amb ?lang=, amb una preferència guardada o amb
+  // el navegador en castellà/anglès va a la seva pàgina. Les pàgines /es/ i
+  // /en/ ja venen traduïdes i no redirigeixen mai.
+  var wanted = urlLang || saved || browserLang || 'ca';
+  if (!document.documentElement.hasAttribute('data-static-lang') && wanted !== 'ca') {
+    window.location.replace(langPath(wanted) + window.location.hash);
+  } else {
+    applyLang(staticLang);
+  }
 
   var els = document.querySelectorAll('.reveal');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

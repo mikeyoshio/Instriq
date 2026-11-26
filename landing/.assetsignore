@@ -6,3 +6,4 @@ package-lock.json
 agent-worker.js
 wrangler.jsonc
 .impeccable
+build-langs.mjs

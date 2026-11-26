@@ -2,6 +2,8 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "instriq",
   "main": "agent-worker.js",
+  // Genera /es/ i /en/ a partir de index.html abans de cada deploy.
+  "build": { "command": "node build-langs.mjs" },
   "compatibility_date": "2026-07-27",
   "observability": {
     "enabled": true
